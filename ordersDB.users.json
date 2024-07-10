@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "66753de9d6c70ba841664f02"
+  },
+  "firstName": "Manas",
+  "lastName": "Rawat",
+  "email": "manasrawat13@gmail.com",
+  "role": "Sales",
+  "password": "$2b$10$yJbNJppNnln80qWN5zH63ujX5eKBL0sTIC2IXYrWClFOZ5/Mwznzy",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667a1c7e7fdd79c3711a034f"
+  },
+  "firstName": "DIPS",
+  "lastName": "PRA",
+  "email": "dipshikapradhan@gmail.com",
+  "role": "Support",
+  "password": "$2b$10$fCO1EVCferDiHIIWJFT2OOtTeW3al61X2u8HIJQ4YnrYqt1cR1Kqi",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667a86085cba851ed319aaae"
+  },
+  "firstName": "Shankar",
+  "lastName": "Dev",
+  "email": "spotops.digital@gmail.com",
+  "role": "Support",
+  "password": "1234567890",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667b97309bd393947c6e151d"
+  },
+  "email": "diksha@gmail.com",
+  "role": "Admin",
+  "password": "$2a$10$oZ1yk5223C33tcKd53wHJOy8c4dkoSQWaHWU6HTn6qoW8Br/dX6s.",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667bdedd151f921dbd5bf477"
+  },
+  "firstName": "DIPSIKHA",
+  "lastName": "PRADHAN",
+  "email": "dipshikapradhan2201@gmail.com",
+  "team": "Team Charlie",
+  "role": "Support",
+  "password": "Dipsikha@22",
+  "__v": 0
+}]

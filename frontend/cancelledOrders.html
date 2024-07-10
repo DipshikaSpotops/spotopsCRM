@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Dashboard</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+
+        #logoImg {
+            height: auto;
+            width: 150px;
+            margin: -16px 6px;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .navbar .user-info span {
+            margin-right: 10px;
+            color: black;
+        }
+
+        .navbar .user-icon {
+            color: black;
+            cursor: pointer;
+        }
+
+        .navbar {
+            background-color: white;
+            color: black;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 2;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .sidebar {
+            background-color: #006666;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 60px;
+            width: 14%;
+            height: 100vh;
+            padding: 50px 14px;
+        }
+
+        .sidebar .nav-link {
+            color: #ffffff;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .nav-link.active, .sidebar .nav-link.selected {
+            background-color: rgba(255, 255, 255, 0.2);
+            cursor: default;
+            border: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 14%;
+            margin-top: 60px;
+        }
+
+        .submenu {
+            display: none;
+        }
+
+        .chevron-icon {
+            margin-left: auto;
+            cursor: pointer;
+        }
+
+        .submenu .nav-link {
+            display: block;
+            margin-left: 20px;
+        }
+
+        .user-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        table.table td,
+        table.table th {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <img id="logoImg" src="/images/darkLogo.png" alt="Logo" />
+        <div class="user-info">
+            <span>Welcome <span id="user-name"></span></span>
+            <i class="fas fa-user-circle fa-2x user-icon"></i>
+        </div>
+    </div>
+
+    <div class="toggle-btn">
+        <span class="navbar-toggler-icon"></span>
+    </div>
+    <div class="close-btn">
+        <span>&times;</span>
+    </div>
+
+    <div class="sidebar" id="offcanvasSidebar">
+        <div class="offcanvas-body">
+            <nav class="nav flex-column">
+                <div class="nav-item">
+                    <a class="nav-link" href="#" id="default-link">
+                        <i class="fas fa-home"></i> Dashboards
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-dashboards">
+                        <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
+                        <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
+                        <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
+                        <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
+                        <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+                        <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-users"></i> Users
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-users">
+                        <a class="nav-link" href="createUser.html">Create User</a>
+                        <a class="nav-link" href="viewallUsers.html">View Users</a>
+                    </div>
+                </div>
+                <div class="nav-item teams">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-users-cog"></i> Teams
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-teams">
+                        <a class="nav-link" href="teams.html">View Teams</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-chart-bar"></i> Reports
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-reports">
+                        <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+                        <a class="nav-link" href="purchases.html">Purchases</a>
+                        <a class="nav-link" href="poReport.html">PO Report</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div id="default-content">
+            <h1 class="text-center">Cancelled Orders</h1>
+            <div class="table-responsive mx-auto" style="max-width: 85%;">
+                <table class="table table-bordered mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Order Date</th>
+                            <th scope="col">Order No.</th>
+                            <th scope="col">Agent Name</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Part Name</th>
+                            <th scope="col">Order Status</th>
+                            <th scope="col">Actions</th>
+                            <th scope="col">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cancelledOrdersTable">
+                        <!-- Information from the form will be appended here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(async function () {
+            const token = localStorage.getItem("token");
+            const team = localStorage.getItem("team");
+
+            try {
+                const response = await axios.get("http://localhost:3000/cancelledOrders", {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {},
+                });
+
+                if (response.status !== 200) {
+                    throw new Error("Failed to fetch cancelled orders");
+                }
+
+                const data = response.data;
+                data.forEach((item) => {
+                    $("#cancelledOrdersTable").append(
+                        `<tr>
+                            <td>${item.orderDate}</td>
+                            <td>${item.orderNo}</td>
+                            <td>${item.salesAgent}</td>
+                            <td>${item.customerName}</td>
+                            <td>${item.pReq || item.partName}</td>
+                            <td>${item.orderStatus}</td>
+                            <td>
+                                <button style="background-color:#28a745;" class="btn btn-primary btn-sm view-btn" data-id="${item.orderNo}">View</button>
+                            </td>
+                            <td>${item.email}</td>
+                        </tr>`
+                    );
+                });
+            } catch (error) {
+                console.error("Error fetching cancelled orders:", error);
+            }
+
+            $("#cancelledOrdersTable").on("click", ".view-btn", function () {
+                const orderNo = $(this).data("id");
+                console.log("Navigating to orderNo:", orderNo);
+                window.location.href = `form.html?orderNo=${orderNo}&cancelled=true`;
+            });
+
+            const firstName = localStorage.getItem("firstName");
+            if (firstName) {
+                $("#user-name").text(firstName);
+            }
+
+            // Apply team-based restrictions
+            if (team) {
+                switch (team) {
+                    case 'Team Charlie':
+                        $('.teams').addClass('disabled');
+                        $('.teamA-orders-link').addClass('disabled');
+                        $('.teamB-orders-link').addClass('disabled');
+                        break;
+                    case 'Team Mark':
+                        $('.teams').addClass('disabled');
+                        $('.add-order-link').addClass('disabled');
+                        $('.teamB-orders-link').addClass('disabled');
+                        break;
+                    case 'Team Sussane':
+                        $('.teams').addClass('disabled');
+                        $('.add-order-link').addClass('disabled');
+                        $('.teamA-orders-link').addClass('disabled');
+                        break;
+                }
+            }
+
+            $(".toggle-btn").on("click", function () {
+                $("#offcanvasSidebar").removeClass("hide");
+            });
+
+            $(".close-btn").on("click", function () {
+                $("#offcanvasSidebar").addClass("hide");
+            });
+
+            $(".nav-link").on("click", function () {
+                $(".nav-link").removeClass("active");
+                $(this).addClass("active");
+
+                const contentMap = {
+                    "default-link": "#default-content",
+                    "add-order-link": "#add-order-content",
+                    "view-order-link": "#view-order-content",
+                };
+
+                $(".main-content > div").addClass("d-none");
+                $(contentMap[this.id]).removeClass("d-none");
+                $("#offcanvasSidebar").addClass("hide");
+            });
+
+            $(".chevron-icon").on("click", function (event) {
+                event.stopPropagation();
+                const submenu = $(this).closest(".nav-item").find(".submenu");
+                submenu.toggle();
+                $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+            });
+        });
+    </script>
+</body>
+
+</html>

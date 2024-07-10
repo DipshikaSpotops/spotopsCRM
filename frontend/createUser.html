@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+        #logoImg {
+            height: auto;
+            width: 150px;
+            margin: -16px 6px;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .navbar .user-info span {
+            margin-right: 10px;
+            color: black;
+        }
+        .navbar .user-icon {
+            color: black;
+            cursor: pointer;
+        }
+        .navbar {
+            color: black;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 2;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .sidebar {
+            background-color: #006666;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            width: 14%;
+            height: 100vh;
+            padding: 50px 14px;
+        }
+        .sidebar .nav-link {
+            color: #ffffff;
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link.selected {
+            background-color: rgba(255, 255, 255, 0.2);
+            cursor: default;
+            border: none;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 14%;
+            margin-top: 60px;
+            width: 32%;
+        }
+        .submenu {
+            display: none;
+        }
+        .chevron-icon {
+            margin-left: auto;
+            cursor: pointer;
+        }
+        .submenu .nav-link {
+            display: block;
+            margin-left: 20px;
+        }
+        .disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <img id="logoImg" src="/images/darkLogo.png" alt="Logo" />
+        <div class="user-info">
+            <span>Welcome <span id="user-name"></span></span>
+            <i class="fas fa-user-circle fa-2x user-icon"></i>
+        </div>
+    </div>
+
+    <div class="sidebar" id="offcanvasSidebar">
+        <div class="offcanvas-body">
+            <nav class="nav flex-column">
+                <div class="nav-item dashboards">
+                    <a class="nav-link" href="#" id="default-link">
+                        <i class="fas fa-home"></i> Dashboards
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-dashboards">
+                        <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
+                        <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
+                        <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
+                        <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
+                        <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+                        <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                      <i class="fas fa-users"></i> Users
+                      <span class="chevron-icon"
+                        ><i class="fas fa-chevron-right"></i
+                      ></span>
+                    </a>
+                    <div class="submenu" id="submenu-users">
+                      <a class="nav-link" href="createUser.html">Create User</a>
+                      <a class="nav-link" href="viewallUsers.html">View Users</a>
+                    </div>
+                  </div>
+                <div class="nav-item teams">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-users"></i> Teams
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-teams">
+                        <a class="nav-link" href="teams.html">View Teams</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-chart-bar"></i> Reports
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-reports">
+                        <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+                        <a class="nav-link" href="purchases.html">Purchases</a>
+                        <a class="nav-link" href="poReport.html">PO Report</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Create User</h1>
+        <form id="create-user-form">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" id="firstName" required />
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" id="lastName" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="emailUser" required />
+            </div>
+            <div class="form-group">
+                <label for="team">Team</label>
+                <select class="form-control" id="team" required>
+                    <option>Choose</option>
+                    <option value="Team Charlie">Team Charlie</option>
+                    <option value="Team Mark">Team Mark</option>
+                    <option value="Team Sussane">Team Sussane</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select class="form-control" id="role" required>
+                    <option value="Admin">Admin</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Support">Support</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const token = localStorage.getItem("token");
+            const firstName = localStorage.getItem("firstName");
+            const team = localStorage.getItem("team");
+
+            if (firstName) {
+                $("#user-name").text(firstName);
+            }
+
+            // Apply team-based restrictions
+            if (team) {
+                switch (team) {
+                    case 'Team Charlie':
+                        $('.teams').addClass('disabled');
+                        $('.teamA-orders-link').addClass('disabled');
+                        $('.teamB-orders-link').addClass('disabled');
+                        break;
+                    case 'Team Mark':
+                        $('.teams').addClass('disabled');
+                        $('.add-order-link').addClass('disabled');
+                        $('.teamB-orders-link').addClass('disabled');
+                        break;
+                    case 'Team Sussane':
+                        $('.teams').addClass('disabled');
+                        $('.add-order-link').addClass('disabled');
+                        $('.teamA-orders-link').addClass('disabled');
+                        break;
+                }
+            }
+
+            $('#team').on('change', function() {
+                const selectedTeam = $(this).val();
+                if (selectedTeam === 'Team Charlie') {
+                    $('#role').val('Sales');
+                } else if (selectedTeam === 'Team Mark' || selectedTeam === 'Team Sussane') {
+                    $('#role').val('Support');
+                } else {
+                    $('#role').val('');
+                }
+            });
+
+            $('.chevron-icon').on('click', function(event) {
+                event.stopPropagation();
+                const submenu = $(this).closest('.nav-item').find('.submenu');
+                submenu.toggle();
+                $(this).find('i').toggleClass('fa-chevron-right fa-chevron-down');
+            });
+
+            $('#create-user-form').on('submit', function(event) {
+                event.preventDefault();
+
+                const formData = {
+                    firstName: $('#firstName').val(),
+                    lastName: $('#lastName').val(),
+                    email: $('#emailUser').val(),
+                    team: $('#team').val(),
+                    role: $('#role').val(),
+                    password: $('#password').val()
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:3000/users',
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        alert('User created successfully');
+                        $('#create-user-form')[0].reset();
+                    },
+                    error: function(error) {
+                        alert('Error creating user: ' + error.responseJSON.message);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teams</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            display: flex;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+        #logoImg {
+            height: auto;
+            width: 150px;
+            margin: -16px 6px;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .navbar .user-info span {
+            margin-right: 10px;
+            color: black;
+        }
+        .navbar .user-icon {
+            color: black;
+            cursor: pointer;
+        }
+        .navbar {
+            color: black;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 2;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .sidebar {
+            background-color: #006666;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            width: 14%;
+            height: 100vh;
+            padding: 50px 14px;
+        }
+        .sidebar .nav-link {
+            color: #ffffff;
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link.selected {
+            background-color: rgba(255, 255, 255, 0.2);
+            cursor: default;
+            border: none;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px 378px;
+            margin-left: 250px;
+            margin-top: 60px;
+        }
+        .submenu {
+            display: none;
+        }
+        .chevron-icon {
+            margin-left: auto;
+            cursor: pointer;
+        }
+        .submenu .nav-link {
+            display: block;
+            margin-left: 20px;
+        }
+        table.table td,
+        table.table th {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <img id="logoImg" src="/images/darkLogo.png" alt="Logo" />
+        <div class="user-info">
+            <span>Welcome <span id="user-name"></span></span>
+            <i class="fas fa-user-circle fa-2x user-icon"></i>
+        </div>
+    </div>
+
+    <div class="sidebar" id="offcanvasSidebar">
+        <div class="offcanvas-body">
+            <nav class="nav flex-column">
+                <div class="nav-item">
+                    <a class="nav-link" href="#" id="default-link">
+                        <i class="fas fa-home"></i> Dashboards
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-dashboards">
+                        <a class="nav-link" href="form.html?newEntry=true">Add New Order</a>
+                        <a class="nav-link" href="orders.html">View Orders</a>
+                        <a class="nav-link" href="ordersMark.html">TeamA Orders</a>
+                        <a class="nav-link" href="ordersSussane.html">TeamB Orders</a>
+                        <a class="nav-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link" href="cancelledOrders.html">Cancelled Orders</a>
+                        <a class="nav-link" href="yardInfo.html">Yard Details</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-users"></i> Users
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-users">
+                        <a class="nav-link" href="createUser.html">Create User</a>
+                        <a class="nav-link" href="viewallUsers.html">View Users</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-users-cog"></i> Teams
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-teams">
+                        <a class="nav-link" href="teams.html">View Teams</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-chart-bar"></i> Reports
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-reports">
+                        <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+                        <a class="nav-link" href="purchases.html">Purchases</a>
+                        <a class="nav-link" href="poReport.html">PO Report</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Teams</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Team Charlie</th>
+                    <th>Team Mark</th>
+                    <th>Team Sussane</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="team-charlie"></td>
+                    <td id="team-mark"></td>
+                    <td id="team-sussane"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $(".chevron-icon").on("click", function(event) {
+                event.stopPropagation();
+                const submenu = $(this).closest(".nav-item").find(".submenu");
+                submenu.toggle();
+                $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+            });
+
+            // Fetch and display teams data
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:3000/teams",
+                success: function(teams) {
+                    teams.forEach((team) => {
+                        const teamRow = `
+                            ${team.name}<br>
+                            ${team.team}<br>
+                            ${team.role}<br><br>
+                        `;
+                        if (team.team === "Team Charlie") {
+                            $("#team-charlie").append(teamRow);
+                        } else if (team.team === "Team Mark") {
+                            $("#team-mark").append(teamRow);
+                        } else if (team.team === "Team Sussane") {
+                            $("#team-sussane").append(teamRow);
+                        }
+                    });
+                },
+                error: function(error) {
+                    alert("Error fetching teams: " + error.responseJSON.message);
+                },
+            });
+        });
+    </script>
+</body>
+</html>
