@@ -347,10 +347,14 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
                                 const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
                                 totalPartPrice += partPrice;
                                 totalShipping += shippingCharge;
+                                var fName = localStorage.getItem("firstName");
+                                var date = new Date().toLocaleString();
 
                                 yardInfoHtml += `<td>
-                                    ${item.additionalInfo[i].yardName || ""} | $${item.additionalInfo[i].partPrice || "0"}<br>
-                                    ${item.additionalInfo[i].shippingMethod || ""} ($${item.additionalInfo[i].shippingDetails || "0"})<br>
+                                    ${item.additionalInfo[i].yardName || ""} | $${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
+                                    Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${item.additionalInfo[i].shippingDetails || "0"})<br>
+                                    PO sent by ${fName} at ${date} <br>
+                                    
                                 </td>`;
                             } else {
                                 yardInfoHtml += "<td></td>";
