@@ -1563,7 +1563,13 @@
                   })
                   .then((data) => {
                     updateOrderHistory(data.orderHistory); // Update order history
+                    const team = localStorage.getItem("team");
+                    console.log("teamU",team);
+                    if (team === "Team Charlie"){
+                      window.location.href = "individualOrders.html";
+                    }else{
                     window.location.href = "orders.html";
+                    }
                   })
                   .catch((error) => {
                     console.error("Error:", error);
@@ -1671,15 +1677,21 @@
             })
               .then((response) => response.json())
               .then((data) => {
-                const team = data.team;
+                const team = localStorage.getItem("team");
                 console.log("Team assigned:", team);
                 // if (team === "Mark") {
                 //   window.location.href = "ordersMark.html";
                 // } else if (team === "Sussane") {
                 //   window.location.href = "ordersSussane.html";
                 // } else {
+                  console.log("teamU",team);
                 alert(`Order No ${newOrderNo} has been placed.`);
-                window.location.href = "orders.html";
+                
+                if (team === "Team Charlie"){
+                      window.location.href = "individualOrders.html";
+                    }else{
+                    window.location.href = "orders.html";
+                    }
                 // }
               })
               .catch((error) => {
@@ -2306,22 +2318,3 @@ $("#editYardInfo").on("click", function () {
     </script>
   </body>
 </html>
-<!-- 
-# Initialize the repository (if not already initialized)
-git init
-
-# Add all files
-git add .
-
-# Commit the changes
-git commit -m "Initial commit"
-
-# Add the remote repository
-git remote add origin https://github.com/DipshikaSpotops/spotopsCRM.git
-
-# Verify the remote was added successfully
-git remote -v
-
-# Push to the remote repository
-git push -u origin main
- -->
