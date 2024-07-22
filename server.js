@@ -9,6 +9,7 @@ const fs = require("fs");
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 require("dotenv").config();
 const OrderNumber = require("./backend/models/OrderNo");
+// console.log(OrderNumber)
 
 const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
@@ -62,7 +63,8 @@ app.post("/orders", async (req, res) => {
       grossProfit,
       orderStatus,
       vin,
-      issueOrder,
+      last4digits,
+      notes,
       orderHistory,
     } = req.body;
 
@@ -88,7 +90,8 @@ app.post("/orders", async (req, res) => {
       grossProfit,
       orderStatus,
       vin,
-      issueOrder,
+      last4digits,
+      notes,
       orderHistory,
     });
 
@@ -107,6 +110,7 @@ app.post("/orders", async (req, res) => {
 
     // Save the new order to the database
     await newOrder.save();
+    
 
     // Generate an invoice for the new order
     await generateInvoice(newOrder.orderNo, newOrder);
@@ -123,7 +127,7 @@ app.post("/orders", async (req, res) => {
 app.post("/users", async (req, res) => {
   try {
     const { firstName, lastName, email, team, role, password } = req.body;
-    console.log("Received data:", req.body);
+    // console.log("Received data:", req.body);
 
     const newUser = new User({
       firstName,
@@ -180,37 +184,6 @@ app.get("/teams", async (req, res) => {
 
 // Cancelled Orders Schema
 const CancelledOrderSchema = new mongoose.Schema({
-  orderNo: Number,
-  orderDate: String,
-  salesAgent: String,
-  customerName: String,
-  bAddress: String,
-  sAddress: String,
-  email: String,
-  phone: String,
-  make: String,
-  model: String,
-  year: Number,
-  pReq: String,
-  desc: String,
-  warranty: Number,
-  soldP: Number,
-  costP: Number,
-  shippingFee: Number,
-  salestax: Number,
-  grossProfit: Number,
-  orderStatus: String,
-  vin: Number,
-  issueOrder: String,
-  additionalInfo: Array,
-  trackingInfo: String,
-  orderHistory: [String],
-  isCancelled: { type: Boolean, default: true },
-});
-
-const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
-
-const OrderSchema = new mongoose.Schema({
   orderNo: String,
   orderDate: String,
   salesAgent: String,
@@ -236,9 +209,43 @@ const OrderSchema = new mongoose.Schema({
   additionalInfo: Array,
   trackingInfo: String,
   orderHistory: [String],
+  isCancelled: { type: Boolean, default: true },
+  last4digits:String,
+  notes: String
+});
+
+const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
+
+const OrderSchema = new mongoose.Schema({
+  orderNo: String,
+  orderDate: String,
+  salesAgent: String,
+  customerName: String,
+  bAddress: String,
+  sAddress: String,
+  email: String,
+  phone: String,
+  make: String,
+  model: String,
+  year: Number,
+  pReq: String,
+  desc: String,
+  warranty: Number,
+  soldP: Number,
+  costP: Number,
+  shippingFee: Number,
+  salestax: Number,
+  grossProfit: Number,
+  orderStatus: String,
+  vin: String,
+  last4digits: String,
+  additionalInfo: Array,
+  trackingInfo: String,
+  orderHistory: [String],
   notes: String,
   isCancelled: { type: Boolean, default: false },
-  teamOrder:String
+  teamOrder:String,
+  actualGP:Number
 });
 
 const Order = mongoose.model("Order", OrderSchema);
@@ -262,12 +269,13 @@ app.put("/orders/:orderNo", async (req, res) => {
       Object.assign(order, req.body);
 
       const firstName = req.body.firstName; // Get firstName from the request body
+      console.log("loggein user",firstName);
 
       // Add timestamp to order history only if the status has changed
       if (oldStatus !== order.orderStatus) {
-          const timestamp = new Date().toLocaleString();
+          const timestamp = new Date().toLocaleString()
           order.orderHistory.push(
-              `Order status updated to "${order.orderStatus}" by ${firstName} on ${timestamp}`
+              `Order status updated to "${order.orderStatus}" by "${firstName}" on ${timestamp}`
           );
       }
 
@@ -277,34 +285,43 @@ app.put("/orders/:orderNo", async (req, res) => {
       res.status(400).send(err.message);
   }
 });
-
-
-app.post("/orders/:orderNo/additionalInfo", async (req, res) => {
+// 
+app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
+  console.log("additionalInfo");
   try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
+      const order = await Order.findOne({ orderNo: req.params.orderNo });
 
-    if (!order) return res.status(404).send("Order not found");
+      if (!order) return res.status(404).send('Order not found');
 
-    // Count the number of existing yards
-    const countYard = order.additionalInfo.length + 1;
+      // Count the number of existing yards
+      const countYard = order.additionalInfo.length + 1;
+      console.log(countYard,"countyard")
+       
 
-    order.additionalInfo.push(req.body);
+      order.additionalInfo.push(req.body);
+      console.log("additional updated",order)
+      var pp = order.additionalInfo[countYard].partPrice;
+      var yardname = order.additionalInfo[countYard].yardName;
+      var shipping = order.additionalInfo[countYard].shippingMethod;
+      var others = order.additionalInfo[countYard].others;
 
-    // Add timestamp to order history
-    const timestamp = new Date();
-    order.orderHistory.push(`Yard ${countYard} PO Sent by ${firstName} on ${new Date().toLocaleString()}`);
+      // Add timestamp to order history
+      const timestamp = new Date().toLocaleString();
+      order.orderHistory.push(`Yard ${countYard} PO sent Yard Name-${yardname} PP-${pp} ${shipping} Others-${others}   by Dipshika on ${timestamp}`);
 
-    await order.save();
-
-    res.json(order);
+      await order.save();
+      
+      res.json(order);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+      res.status(500).json({ message: 'Server error', error });
   }
 });
+// //update average GP
+// app.put("/orders/:orderNo")
 
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   try {
-    console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
+    // console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
     const order = await Order.findOne({ orderNo: req.params.orderNo });
     const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
     console.log("Order found:", order);
@@ -347,29 +364,33 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
 
 
 
-// Delete the order and save into cancelled orders
 app.delete("/orders/:orderNo", async (req, res) => {
-  console.log("inside delete mongo");
+  console.log("Received request to delete order:", req.params);
   try {
-    const orderNo = parseInt(req.params.orderNo, 10);
-    if (isNaN(orderNo)) {
-      return res.status(400).json({ message: "Invalid order number" });
-    }
+    const orderNo = req.params.orderNo;
+    console.log("Order No to delete:", orderNo);
 
     const order = await Order.findOne({ orderNo });
+    console.log("Order found:", order);
+
     if (!order) {
+      console.log("Order not found with orderNo:", orderNo);
       return res.status(404).json({ message: "Order not found" });
     }
 
     const cancelledOrder = new CancelledOrder(order.toObject()); // Create a new CancelledOrder document
+    console.log("Saving cancelled order:", cancelledOrder);
+
     await cancelledOrder.save(); // Save the cancelled order
+    console.log("Cancelled order saved");
 
     await Order.deleteOne({ orderNo });
+    console.log("Order deleted");
+
     res.json({ message: "Order canceled and saved as cancelled" });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error deleting order", error: err.message });
+    console.error("Error deleting order:", err);
+    res.status(500).json({ message: "Error deleting order", error: err.message });
   }
 });
 
@@ -672,16 +693,16 @@ app.post("/orders/sendTrackingInfo/:orderNo", async (req, res) => {
     const mailOptions = {
       from: "dipshikapradhan2201@gmail.com",
       to: `${order.email}`,
-      subject: `TraFwd: Tracking Details / Order No. ${req.params.orderNo}`,
+      subject: `Tracking Details / Order No. ${req.params.orderNo}`,
       html: `<p>Hi ${order.customerName},</p>
                   <p>This email is regarding the order you placed with 50 stars auto parts, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
                   <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website; you may check again if you do not find the ETA.</p>
                   <p>Please call us if you have any questions.</p>
                   <p>${shipperName} - ${trackingNo}</p>
-                  <p>ETD - ${eta}</p>
+                  <p>ETD - ${eta} days</p>
                   <p>Link - <a href="${link}">${link}</a></p>
                   <p><img src="cid:myImg" alt="logo" style="max-width: 100%; height: auto;"></p>
-                  <p>Mark Becker<br>Customer Success<br>+1 (469) 899-0684<br>50starsautoparts.com<br>5306 Blaney Way, Dallas, Texas, 75227</p>`,
+                  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
       attachments: [
         {
           filename: "logo.png",
@@ -729,33 +750,9 @@ app.get("/ordersteamB", async (req, res) => {
   }
 });
 
-// Endpoint to fetch the highest order number
-app.get("/orders/highestOrderNo", async (req, res) => {
-  console.log("getting latest order");
-  try {
-    let orderNoDoc = await OrderNumber.findOne();
-    if (!orderNoDoc) {
-      // Initialize the order number if it doesn't exist
-      orderNoDoc = new OrderNo({ latestOrderNo: "50STARS0000" });
-      await orderNoDoc.save();
-    }
-    res.json({ latestOrderNo: orderNoDoc.latestOrderNo });
-  } catch (err) {
-    console.error("Error fetching highest order number:", err);
-    res.status(500).json({
-      message: "Error fetching highest order number",
-      error: err.message,
-    });
-  }
-});
 
-// Helper function to increment the order number
-function incrementOrderNo(orderNo) {
-  const prefix = "50STARS";
-  const orderNumber = parseInt(orderNo.replace(prefix, ""), 10);
-  const nextOrderNumber = orderNumber + 1;
-  return `${prefix}${nextOrderNumber.toString().padStart(5, "0")}`;
-}
+
+
 
 // function to edit the yard details
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
@@ -800,3 +797,53 @@ app.post("/orders/:orderNo/notes", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
+
+// Mock function to simulate token retrieval from the database
+const getTokenFromDatabase = async (userId) => {
+  // Implement your logic to retrieve the token from the database based on the userId
+  return 'your_token_here';
+};
+
+app.get('/auth/token', async (req, res) => {
+  console.log("token fetching");
+  try {
+    const userId = req.query.userId; // Assume you pass userId as a query parameter\
+    console.log("userId",userId)
+    const token = await getTokenFromDatabase(userId);
+    if (!token) {
+      return res.status(404).json({ error: 'Token not found' });
+    }
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get token' });
+  }
+});
+
+
+
+
+
+// Route to update actualGP
+app.put('/orders/updateActualGP/:orderNo', async (req, res) => {
+  const { orderNo } = req.params;
+  const { actualGP } = req.body;
+
+  try {
+    const order = await Order.findOne({ orderNo });
+
+    if (!order) {
+      return res.status(404).send('Order not found');
+    }
+
+    const lastIndex = order.additionalInfo.length - 1;
+    order.actualGP = actualGP;
+    console.log("actualGP",actualGP,order);
+    await order.save();
+    // console.log("saved actualGP")
+    res.status(200).send('Actual GP updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating actual GP');
+  }
+});
+

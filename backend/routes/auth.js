@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
         await token.save();
         console.log("Token saved to database:", token);
 
-        res.json({ token: tokenValue, firstName: user.firstName,team: user.team });
+        res.json({ token: tokenValue, firstName: user.firstName, team: user.team, lastName: user.lastName, role: user.role, email: user.email,});
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Error logging in user', error: err.message });
@@ -70,6 +70,7 @@ module.exports = router;
 
 
 router.get('/me', authMiddleware, async (req, res) => {
+    console.log("routes/me");
     try {
         const user = await User.findById(req.user.userId).select('-password');
         if (!user) {

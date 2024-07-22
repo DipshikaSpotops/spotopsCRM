@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Report</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            display: flex;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+        .navbar {
+            color: black;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 2;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        #logoImg {
+            height: auto;
+            width: 150px;
+            margin: -16px 6px;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .user-info span {
+            margin-right: 10px;
+            color: black;
+        }
+        .navbar .user-icon {
+            color: black;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+        .sidebar {
+            background-color: #006666;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            width: 14%;
+            height: 100vh;
+            padding: 50px 14px;
+        }
+        .sidebar .nav-link {
+            color: #ffffff;
+        }
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .sidebar .nav-link.active,
+        .sidebar .nav-link.selected {
+            background-color: rgba(255, 255, 255, 0.2);
+            cursor: default;
+            border: none;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 14%;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .chart-container {
+            width: 70%;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .stats-container {
+            width: 28%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            margin-left: 14%;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            height: 35vh;
+            margin-top: 64px;
+        }
+        .stats-box {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .orders-table-container {
+            margin-top: 30px;
+        }
+        .brand-table-container {
+            margin-top: 30px;
+        }
+        .form-group {
+            width: 10%;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img id="logoImg" src="/images/darkLogo.png" alt="Logo" />
+        </div>
+        <div class="user-info dropdown">
+            <span>Welcome <span id="user-name"></span></span>
+            <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                <a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user"></i> My Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar" id="offcanvasSidebar">
+        <div class="offcanvas-body">
+            <nav class="nav flex-column">
+                <div class="nav-item dashboards">
+                    <a class="nav-link" href="#" id="default-link">
+                        <i class="fas fa-home"></i> Dashboards
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-dashboards">
+                        <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
+                        <a class="nav-link view-orders-link" href="individualOrders.html">View My Orders</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-chart-bar"></i> Reports
+                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="submenu" id="submenu-reports">
+                        <a class="nav-link" href="salesReport.html">My Sales Report</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Sales Report</h1>
+        <div class="form-group">
+            <label for="salesFilter">Filter:</label>
+            <select class="form-control" id="salesFilter">
+                <option value="daily">Daily</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+
+            <div class="stats-container">
+                <div class="stats-box" id="totalOrders">Total Orders: 0</div>
+                <div class="stats-box" id="estimatedGP">Estimated GP: $0</div>
+                <div class="stats-box" id="estimatedHighestGP">Highest GP: $0</div>
+                <div class="stats-box" id="estimatedAverageGP">Average GP: $0</div>
+                <div class="stats-box" id="AverageGP">Actual GP: $0</div>
+            </div>
+        </div>
+
+        <div class="orders-table-container">
+            <h3>Recent Orders</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Order No</th>
+                        <th>Customer Name</th>
+                        <th>Order Date</th>
+                        <th>Est. GP</th>
+                    </tr>
+                </thead>
+                <tbody id="recentOrdersTable">
+                    <!-- Recent orders will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="brand-table-container">
+            <h3>Brand Orders Summary</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Number of Orders</th>
+                        <th>Est. GP</th>
+                    </tr>
+                </thead>
+                <tbody id="brandSummaryTable">
+                    <!-- Brand summary will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="profileFirstName">First Name</label>
+                            <input type="text" class="form-control" id="profileFirstName" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="profileLastName">Last Name</label>
+                            <input type="text" class="form-control" id="profileLastName" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEmail">Email</label>
+                            <input type="email" class="form-control" id="profileEmail" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="profileRole">Role</label>
+                            <input type="text" class="form-control" id="profileRole" readonly />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(async function () {
+            const firstName = localStorage.getItem("firstName");
+            const lastName = localStorage.getItem("lastName");
+            const email = localStorage.getItem("email");
+            const role = localStorage.getItem("role");
+            const token = localStorage.getItem("token");
+
+            if (firstName) {
+                $("#user-name").text(firstName);
+            }
+
+            $("#profileLink").click(function () {
+                $("#profileFirstName").val(firstName);
+                $("#profileLastName").val(lastName);
+                $("#profileEmail").val(email);
+                $("#profileRole").val(role);
+                $("#profileModal").modal("show");
+            });
+
+            $(".close").click(function () {
+                location.reload();
+            });
+
+            $("#logoutLink").click(function () {
+                localStorage.removeItem("token");
+                localStorage.removeItem("firstName");
+                localStorage.removeItem("lastName");
+                localStorage.removeItem("role");
+                localStorage.removeItem("email");
+                window.location.href = "login_signup.html";
+            });
+
+            async function fetchSalesData(filter) {
+                try {
+                    const response = await axios.get(`http://localhost:3000/orders`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    if (response.status !== 200) {
+                        throw new Error("Failed to fetch orders");
+                    }
+
+                    const data = response.data.filter(
+                        (order) => order.salesAgent === firstName
+                    );
+                    console.log("data0", data);
+                    const salesData = [];
+                    const labels =
+                        filter === "daily"
+                            ? getDaysInMonth(new Date().getMonth(), new Date().getFullYear())
+                            : [
+                                "Jan",
+                                "Feb",
+                                "Mar",
+                                "Apr",
+                                "May",
+                                "Jun",
+                                "Jul",
+                                "Aug",
+                                "Sep",
+                                "Oct",
+                                "Nov",
+                                "Dec",
+                            ];
+
+                    let totalOrders = 0;
+                    let estimatedGP = 0;
+                    let estimatedGPArr = [];
+                    let estimatedHighestGP = 0;
+                    let estimatedAverageGP = 0;
+                    let totalP = 0;
+                    let totalR = 0;
+                    let averageGP = 0;
+                    let actualAGParr = [];
+                    let totalAgp = 0;
+                    let highestGP = 0;
+                    let validOrdersCount = 0; // Counter for valid orders
+
+                    const orderCounts = {};
+
+                    labels.forEach((label) => {
+                        orderCounts[label] = { count: 0, grossProfit: 0 };
+                    });
+
+                    for (const order of data) {
+                        salePrice = order.soldP;
+                        var orderNo = order.orderNo;
+                        console.log("orderNo", orderNo);
+                        salestax = order.salestax || 0; // Adding a fallback value
+                        var estGP = order.grossProfit;
+                        estimatedGPArr.push(estGP);
+                        console.log("estGp arr", estimatedGPArr);
+                        estimatedGP = estimatedGPArr.reduce(
+                            (partialSum, e) => partialSum + e,
+                            0
+                        );
+                        console.log(
+                            "SP and tax",
+                            salePrice,
+                            salestax,
+                            "total est GP",
+                            estimatedGP
+                        );
+                        const orderDate = new Date(order.orderDate);
+                        const label =
+                            filter === "daily"
+                                ? orderDate.getDate().toString()
+                                : orderDate.toLocaleDateString("en-US", { month: "short" });
+
+                        totalOrders += 1; // Increment total orders for every order
+                        console.log("totalOrders", totalOrders);
+                        var addArray = order.additionalInfo.length;
+                        console.log("length of addi", addArray);
+                        let overallSpendingArr = []; // Initialize the array here for each order
+
+                        if (order.additionalInfo && order.additionalInfo.length > 0) {
+                            let validOrder = false;
+                            validOrdersCount++; // Increment valid orders count
+                            orderCounts[label].count += 1;
+                            orderCounts[label].grossProfit += order.grossProfit;
+                            const info = order.additionalInfo;
+                            console.log("yardInfo array", info);
+                            const taxedSP = salePrice - salestax;
+
+                            for (let d = 0; d < info.length; d++) {
+                                const shippingCharge = info[d].shippingDetails || 0;
+                                const partprice = info[d].partPrice || 0;
+                                const otherC = info[d].others || 0;
+                                totalP = Number(shippingCharge) + Number(partprice) + Number(otherC);
+                                totalR = info[d].refundedAmount || 0;
+
+                                if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
+                                    validOrder = true;
+                                    overallSpendingArr.push(totalP - totalR);
+                                }
+                            }
+
+                            if (validOrder) {
+                                var overallSpending = overallSpendingArr.reduce(
+                                    (partialSum, o) => partialSum + o,
+                                    0
+                                );
+                                console.log("overallSpendingadd", overallSpending);
+                                actualGP = taxedSP - overallSpending;
+                                console.log("final AGP", actualGP);
+
+                                await axios.put(
+                                    `http://localhost:3000/orders/updateActualGP/${order.orderNo}`,
+                                    { actualGP },
+                                    {
+                                        headers: { Authorization: `Bearer ${token}` },
+                                    }
+                                );
+
+                                actualAGParr.push(actualGP);
+                                console.log("actual agp array", actualAGParr);
+                                highestGP = Math.max(...actualAGParr);
+                            }
+                        }
+                        // Ensure all labels have data
+                        salesData[labels.indexOf(label)] =
+                            (salesData[labels.indexOf(label)] || 0) + 1;
+                    }
+
+                    totalAgp = actualAGParr.reduce(
+                        (partialSum, c) => partialSum + c,
+                        0
+                    );
+                    estimatedAverageGP = totalAgp / validOrdersCount;
+
+                    console.log("totalAGP", totalAgp);
+                    console.log("highestGP", highestGP);
+                    console.log("averageGP", estimatedAverageGP);
+
+                    updateStats({
+                        totalOrders,
+                        estimatedGP,
+                        highestGP,
+                        estimatedAverageGP,
+                        totalAgp,
+                    });
+                    updateSalesChart(salesData, labels, filter);
+                    updateRecentOrders(data);
+                    updateBrandSummary(data);
+                } catch (error) {
+                    console.error("Error fetching sales data:", error);
+                }
+            }
+
+            function getDaysInMonth(month, year) {
+                const date = new Date(year, month, 1);
+                const days = [];
+                while (date.getMonth() === month) {
+                    days.push(date.getDate().toString());
+                    date.setDate(date.getDate() + 1);
+                }
+                return days;
+            }
+
+            function updateStats(stats) {
+                $("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
+                $("#estimatedGP").text(
+                    `Estimated GP: $${stats.estimatedGP.toFixed(2)}`
+                );
+                $("#estimatedHighestGP").text(
+                    `Highest GP: $${stats.highestGP.toFixed(2)}`
+                );
+                $("#estimatedAverageGP").text(
+                    `Average GP: $${stats.estimatedAverageGP.toFixed(2)}`
+                );
+                $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
+            }
+
+            function updateSalesChart(salesData, labels, filter) {
+                console.log("updating sales data");
+                const ctx = document.getElementById("salesChart").getContext("2d");
+                if (window.salesChart instanceof Chart) {
+                    window.salesChart.destroy();
+                }
+                window.salesChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Number of Orders",
+                                data: salesData,
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                borderColor: "rgba(75, 192, 192, 1)",
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: filter === "daily" ? "Days of the Month" : "Months",
+                                },
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: "Number of Orders",
+                                },
+                                ticks: {
+                                    stepSize: 1,
+                                    beginAtZero: true,
+                                },
+                            },
+                        },
+                    },
+                });
+            }
+
+            function updateRecentOrders(orders) {
+                const recentOrdersTable = $("#recentOrdersTable");
+                recentOrdersTable.empty();
+                orders.forEach((order) => {
+                    recentOrdersTable.append(`
+                        <tr>
+                            <td>${order.orderNo}</td>
+                            <td>${order.customerName}</td>
+                            <td>${order.orderDate}</td>
+                            <td>$${order.grossProfit.toFixed(2)}</td>
+                        </tr>
+                    `);
+                });
+            }
+
+            function updateBrandSummary(data) {
+                const brandSummary = data.reduce((acc, order) => {
+                    if (!acc[order.make]) {
+                        acc[order.make] = { count: 0, grossProfit: 0 };
+                    }
+                    acc[order.make].count += 1;
+                    acc[order.make].grossProfit += order.grossProfit;
+                    return acc;
+                }, {});
+
+                const brandSummaryTable = $("#brandSummaryTable");
+                brandSummaryTable.empty();
+                for (const brand in brandSummary) {
+                    brandSummaryTable.append(`
+                        <tr>
+                            <td>${brand}</td>
+                            <td>${brandSummary[brand].count}</td>
+                            <td>$${brandSummary[brand].grossProfit.toFixed(2)}</td>
+                    `);
+                }
+            }
+
+            $("#salesFilter").on("change", function () {
+                const filter = $(this).val();
+                fetchSalesData(filter);
+            });
+
+            // Initial fetch
+            fetchSalesData("daily");
+
+            $(".toggle-btn").on("click", function () {
+                $("#offcanvasSidebar").removeClass("hide");
+            });
+
+            $(".close-btn").on("click", function () {
+                $("#offcanvasSidebar").addClass("hide");
+            });
+
+            $(document).click(function (event) {
+                if (!$(event.target).closest("#offcanvasSidebar, .toggle-btn").length) {
+                    $("#offcanvasSidebar").addClass("hide");
+                }
+            });
+
+            $(".nav-link").on("click", function () {
+                const submenu = $(this).next(".submenu");
+                if (submenu.length) {
+                    submenu.slideToggle();
+                    $(this).find(".chevron-icon i").toggleClass("fa-chevron-right fa-chevron-down");
+                } else {
+                    $(".nav-link").removeClass("active");
+                    $(this).addClass("active");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -23,6 +23,7 @@
       top: 0;
       z-index: 2;
       border-bottom: 1px solid #e0e0e0;
+      background: linear-gradient(to right, #006666 12.8%, white 11.5%);
     }
     .navbar .user-info {
       display: flex;
@@ -51,6 +52,7 @@
       width: 14%;
       height: 100vh;
       padding: 50px 14px;
+      margin: 0 -21px;
     }
     .sidebar .nav-link {
       color: #ffffff;
@@ -192,9 +194,10 @@
           <div class="submenu" id="submenu-dashboards">
             <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
             <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
+            <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
             <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
             <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
-            <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
+           
             <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
             <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
           </div>
@@ -226,6 +229,7 @@
             <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
           </a>
           <div class="submenu" id="submenu-reports">
+            <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
             <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
             <a class="nav-link" href="purchases.html">Purchases</a>
             <a class="nav-link" href="poReport.html">PO Report</a>
@@ -313,30 +317,56 @@
     </div>
   </div>
 
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="profileForm">
+            <div class="form-group">
+              <label for="profileFirstName">First Name</label>
+              <input type="text" class="form-control" id="profileFirstName" readonly>
+            </div>
+            <div class="form-group">
+              <label for="profileLastName">Last Name</label>
+              <input type="text" class="form-control" id="profileLastName" readonly>
+            </div>
+            <div class="form-group">
+              <label for="profileEmail">Email</label>
+              <input type="email" class="form-control" id="profileEmail" readonly>
+            </div>
+            <div class="form-group">
+              <label for="profileRole">Role</label>
+              <input type="text" class="form-control" id="profileRole" readonly>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     $(document).ready(async function () {
       const firstName = localStorage.getItem("firstName");
+      const lastName = localStorage.getItem("lastName");
+      const email = localStorage.getItem("email");
+      const role = localStorage.getItem("role");
+      const team = localStorage.getItem("team");
+
       if (firstName) {
         $("#user-name").text(firstName);
       }
 
       const token = localStorage.getItem("token");
-      const team = localStorage.getItem("team");
-
-      if (token) {
-        try {
-          const response = await axios.get("http://localhost:3000/auth/me", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (response.status !== 200) {
-            throw new Error("Failed to fetch user data");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          localStorage.removeItem("token");
-        }
-      }
 
       // Apply team-based restrictions
       if (team) {
@@ -370,6 +400,7 @@
 
         const data = response.data;
         data.forEach((item) => {
+          // console.log("item",item);
           const actions = `
             <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
             <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
@@ -383,7 +414,7 @@
             <tr>
               <td>${item.orderDate}</td>
               <td>${item.orderNo}</td>
-              <td>${item.agentName}</td>
+              <td>${item.salesAgent}</td>
               <td>${item.customerName}</td>
               <td>${item.pReq || item.partName}</td>
               <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[0].yardName : ""}</td>
@@ -417,18 +448,29 @@
 
       $("#infoTable").on("click", ".cancel-btn", function () {
         const id = $(this).data("id");
+        console.log(`Cancel button clicked for order ID: ${id}`); // Added log
         if (confirm(`Are you sure you want to cancel order ${id}?`)) {
           fetch(`http://localhost:3000/orders/${id}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
           })
-            .then((response) => response.json())
+            .then((response) => {
+              if (!response.ok) {
+                console.error("Failed to delete order", response);
+                throw new Error("Failed to delete order");
+              }
+              return response.json();
+            })
             .then((data) => {
+              console.log("Order cancelled successfully", data); // Added log
               window.location.reload();
+            })
+            .catch((error) => {
+              console.error("Error cancelling order:", error);
             });
         }
       });
-
+     
       $("#infoTable").on("click", ".send-invoice-btn", function () {
         const id = $(this).data("id");
         fetch(`http://localhost:3000/orders/sendInvoice/${id}`, {
@@ -483,7 +525,55 @@
           $("#offcanvasSidebar").addClass("hide");
         }
       });
+
+      $('#profileLink').click(function () {
+        $('#profileFirstName').val(firstName);
+        $('#profileLastName').val(lastName);
+        $('#profileEmail').val(email);
+        $('#profileRole').val(role);
+        $('#profileModal').modal('show');
+      });
+
+      $('.close').click(function () {
+        console.log("close button clicked");
+        location.reload()
+      })
+
+      $('#logoutLink').click(function () {
+        localStorage.removeItem("token");
+        localStorage.removeItem("firstName" );
+        localStorage.removeItem("lastName");
+        localStorage.removeItem("role");
+        localStorage.removeItem("email");
+        localStorage.removeItem("team");
+        window.location.href = 'login_signup.html';
+      });
+      // Apply team-based restrictions
+      if (team === "Team Charlie") {
+        // Hide specific reports links
+        $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
+        // Hide specific dashboards links
+        $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
+        $(".nav-item:has(#submenu-teams)").hide();
+        $(".nav-item:has(#submenu-users)").hide();
+      } else if (team === "Team Mark") {
+        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+        $(".nav-item:has(#submenu-teams)").hide();
+        $(".nav-item:has(#submenu-users)").hide();
+        $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
+      } else if (team === "Team Sussane") {
+        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+        $(".nav-item:has(#submenu-teams)").hide();
+        $(".nav-item:has(#submenu-users)").hide();
+        $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
+      } else if (role === "Admin") {
+        // Hide specific reports links for Admin
+        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+        // Hide specific dashboards links for Admin
+        $('#submenu-dashboards .view-individualOrders-link').hide();
+      }
     });
   </script>
 </body>
 </html>
+

@@ -16,13 +16,14 @@ const orderSchema = new mongoose.Schema({
     desc: String,
     warranty: Number,
     soldP: Number,
-    costP: Number,
-    shippingFee: Number,
+    estcostP: Number,
+    estshippingFee: Number,
     salestax: Number,
-    grossProfit: Number,
+    estgrossProfit: Number,
     orderStatus: String,
-    vin: Number,
-    issueOrder: String,
+    vin: String,
+    last4digits: String,
+    notes:String,
     additionalInfo: Array,
     trackingInfo: String,
     notes: String,
@@ -30,7 +31,8 @@ const orderSchema = new mongoose.Schema({
     team: { type: String, enum: ['Mark', 'Sussane'], required: true },
     isCancelled: { type: Boolean, default: false },
     isOrdered:{ type: String, enum : ['Mark', 'Sussane'],required: true},
-    teamOrder: { type: String } 
+    teamOrder: { type: String },
+    actualGP:Number 
 });
 
 module.exports = mongoose.models.Order || mongoose.model('Order', orderSchema);

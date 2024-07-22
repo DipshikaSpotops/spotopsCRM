@@ -35,10 +35,14 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
     try {
         const response = await axios.post('http://localhost:3000/auth/login', { email, password });
         if (response.status === 200) {
+            console.log("data res",response.data);
             localStorage.clear();
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('firstName', response.data.firstName);
+            localStorage.setItem('lastName', response.data.lastName);
             localStorage.setItem('team',response.data.team);
+            localStorage.setItem('role',response.data.role)
+            localStorage.setItem('email',response.data.email);
             Swal.fire({
                 icon: 'success',
                 title: 'Logged in successfully',

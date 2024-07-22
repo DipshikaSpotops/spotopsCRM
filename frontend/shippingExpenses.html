@@ -1,7 +1,3 @@
-<!-- if team from localStorage is null, all the class="nav-item" should be enabled
-if team from local Storage is Team Charlie, Teams class should be compleltely disabled and from the Dashboards, TeamA Orders and teamB Orders should be disbled
-if team from local Storage is Team Mark, Teams class should be compleltely disabled and from the Dashboards, Add New Order and TeamB Orders should be disabled
-if team from local Storage is Team Sussane, Teams class should be compleltely disabled and from the Dashboards, Add New Order and TeamA Orders should be disabled -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +36,7 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
             top: 0;
             z-index: 2;
             border-bottom: 1px solid #e0e0e0;
+            background: linear-gradient(to right, #006666 12.8%, white 11.5%);
         }
         .sidebar {
             background-color: #006666;
@@ -52,6 +49,7 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
             width: 14%;
             height: 100vh;
             padding: 50px 14px;
+            margin: 0 -21px;
         }
         .sidebar .nav-link {
             color: #ffffff;
@@ -181,49 +179,50 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
     <div class="sidebar" id="offcanvasSidebar">
         <div class="offcanvas-body">
             <nav class="nav flex-column">
-                <div class="nav-item">
-                    <a class="nav-link" href="#" id="default-link">
+                <div class="nav-item dashboards">
+                    <a class="nav-link dashboards-link" href="#">
                         <i class="fas fa-home"></i> Dashboards
                         <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
                     </a>
-                    <div class="submenu" id="submenu-dashboards">
-                        <a class="nav-link" href="form.html?newEntry=true">Add New Order</a>
-                        <a class="nav-link" href="orders.html">View Orders</a>
-                        <a class="nav-link" href="ordersMark.html">TeamA Orders</a>
-                        <a class="nav-link" href="ordersSussane.html">TeamB Orders</a>
-                        <a class="nav-link" href="placedOrders.html">Placed Orders</a>
-                        <a class="nav-link" href="cancelledOrders.html">Cancelled Orders</a>
-                        <a class="nav-link" href="yardInfo.html">Yard Details</a>
+                    <div class="submenu dashboards-submenu" id="submenu-dashboards">
+                        <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
+                        <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
+                        <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
+                        <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
+                        <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
+                        <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+                        <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
                     </div>
                 </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">
+                <div class="nav-item users">
+                    <a class="nav-link users-link" href="#">
                         <i class="fas fa-users"></i> Users
                         <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
                     </a>
-                    <div class="submenu" id="submenu-users">
-                        <a class="nav-link" href="createUser.html">Create User</a>
-                        <a class="nav-link" href="viewallUsers.html">View Users</a>
+                    <div class="submenu users-submenu" id="submenu-users">
+                        <a class="nav-link create-user-link" href="createUser.html">Create User</a>
+                        <a class="nav-link view-users-link" href="viewallUsers.html">View Users</a>
                     </div>
                 </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">
+                <div class="nav-item teams">
+                    <a class="nav-link teams-link" href="#">
                         <i class="fas fa-users-cog"></i> Teams
                         <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
                     </a>
-                    <div class="submenu" id="submenu-teams">
-                        <a class="nav-link" href="teams.html">View Teams</a>
+                    <div class="submenu teams-submenu" id="submenu-teams">
+                        <a class="nav-link view-teams-link" href="teams.html">View Teams</a>
                     </div>
                 </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">
+                <div class="nav-item reports">
+                    <a class="nav-link reports-link" href="#">
                         <i class="fas fa-chart-bar"></i> Reports
                         <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
                     </a>
-                    <div class="submenu" id="submenu-reports">
-                        <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
-                        <a class="nav-link" href="purchases.html">Purchases</a>
-                        <a class="nav-link" href="poReport.html">PO Report</a>
+                    <div class="submenu reports-submenu" id="submenu-reports">
+                        <a class="nav-link shipping-expenses-link" href="shippingExpenses.html">Shipping Expenses</a>
+                        <a class="nav-link purchases-link" href="purchases.html">Purchases</a>
+                        <a class="nav-link po-report-link" href="poReport.html">PO Report</a>
                     </div>
                 </div>
             </nav>
@@ -269,8 +268,10 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
         <div id="profile-content" class="d-none">
             <h1>User Profile</h1>
             <div class="profile-table">
-                <label for="profileName">Name:</label>
-                <input type="text" id="profileName" readonly />
+                <label for="profileFirstName">First Name:</label>
+                <input type="text" id="profileFirstName" readonly />
+                <label for="profileLastName">Last Name:</label>
+                <input type="text" id="profileLastName" readonly />
                 <label for="profileRole">Team:</label>
                 <input type="text" id="profileRole" readonly />
                 <label for="profileEmail">Email Id:</label>
@@ -280,11 +281,83 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
         </div>
     </div>
 
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">User Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="profileFirstName">First Name:</label>
+                        <input type="text" class="form-control" id="profileFirstName" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="profileLastName">Last Name:</label>
+                        <input type="text" class="form-control" id="profileLastName" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="profileRole">Team:</label>
+                        <input type="text" class="form-control" id="profileRole" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email Id:</label>
+                        <input type="text" class="form-control" id="profileEmail" readonly />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(async function () {
             const token = localStorage.getItem("token");
+            const firstName = localStorage.getItem("firstName");
+            const lastName = localStorage.getItem("lastName");
+            const role = localStorage.getItem("role");
+            const email = localStorage.getItem("email");
+            const team = localStorage.getItem("team");
             console.log("token", token);
             let yardData = [];
+
+            // Function to apply team-based restrictions
+            function applyTeamRestrictions() {
+                if (!team) return;
+
+                if (team === "Team Charlie") {
+                // Hide specific reports links
+                $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
+                // Hide specific dashboards links
+                $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
+                $(".nav-item:has(#submenu-teams)").hide();
+                $(".nav-item:has(#submenu-users)").hide();
+            }else if(team === "Team Mark"){
+                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+                $(".nav-item:has(#submenu-teams)").hide();
+                $(".nav-item:has(#submenu-users)").hide();
+                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
+
+            }
+            else if(team === "Team Sussane"){
+                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+                $(".nav-item:has(#submenu-teams)").hide();
+                $(".nav-item:has(#submenu-users)").hide();
+                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
+
+            }else if (role === "Admin") {
+                // Hide specific reports links for Admin
+                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+                // Hide specific dashboards links for Admin
+                $('#submenu-dashboards .view-individualOrders-link').hide();
+            }
+            }
 
             async function fetchData() {
                 try {
@@ -395,30 +468,25 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
 
             await fetchData();
 
-            const firstName = localStorage.getItem("firstName");
-            const role = localStorage.getItem("role");
-            const email = localStorage.getItem("email");
-
             if (firstName) {
                 $("#user-name").text(firstName);
             }
 
+            // Apply team-based restrictions
+            applyTeamRestrictions();
+
             $("#profileLink").click(function () {
-                $("#profileName").val(firstName);
+                $("#profileFirstName").val(firstName);
+                $("#profileLastName").val(lastName);
                 $("#profileRole").val(role);
                 $("#profileEmail").val(email);
-                $("#yard-info-content").addClass("d-none");
-                $("#profile-content").removeClass("d-none");
-            });
-
-            $("#backToOrders").click(function () {
-                $("#profile-content").addClass("d-none");
-                $("#yard-info-content").removeClass("d-none");
+                $("#profileModal").modal('show');
             });
 
             $("#logoutLink").click(function () {
                 localStorage.removeItem("token");
                 localStorage.removeItem("firstName");
+                localStorage.removeItem("lastName");
                 localStorage.removeItem("role");
                 localStorage.removeItem("email");
                 window.location.href = "login_signup.html";
@@ -453,6 +521,15 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
                 submenu.toggle();
                 $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
             });
+            // Apply team-based restrictions
+            if (team === "Team Charlie") {
+                // Hide specific reports links
+                $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
+                // Hide specific dashboards links
+                $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
+                $(".nav-item:has(#submenu-teams)").hide();
+                $(".nav-item:has(#submenu-users)").hide();
+            }
         });
     </script>
 </body>

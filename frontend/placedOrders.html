@@ -151,7 +151,7 @@
       <div class="user-info dropdown">
         <span>Welcome <span id="user-name"></span></span>
         <i
-          class="fas fa-user-circle fa-2x user-icon "
+          class="fas fa-user-circle fa-2x user-icon"
           id="userMenu"
           data-toggle="dropdown"
           aria-haspopup="true"
@@ -244,11 +244,12 @@
               <th>Agent Name</th>
               <th>Customer Name</th>
               <th>Part Name</th>
-              <th>Yard</th>
+              <!-- <th>Yard</th> -->
               <th>Order Status</th>
-              <th>Actions</th>
-              <th>Send Invoice</th>
+              
+              <!-- <th>Send Invoice</th> -->
               <th>Email</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="infoTable">
@@ -277,32 +278,39 @@
         const firstName = localStorage.getItem("firstName");
         const role = localStorage.getItem("role");
         const email = localStorage.getItem("email");
+        let token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+
+        console.log("token", token);
 
         if (firstName) {
           $("#user-name").text(firstName);
         }
 
-        const token = localStorage.getItem("token");
         let userRole = null;
         let userEmail = null;
 
-        if (token) {
+        async function fetchToken() {
           try {
-            const response = await axios.get("http://localhost:3000/auth/me", {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-
-            if (response.status !== 200) {
-              throw new Error("Failed to fetch user data");
+            const response = await axios.get(
+              `http://localhost:3000/auth/token/${userId}`
+            );
+            if (response.status === 200) {
+              token = response.data.token;
+              console.log("Fetched token from DB:", token);
+            } else {
+              throw new Error("Failed to fetch token");
             }
-
-            userRole = response.data.role;
-            userEmail = response.data.email;
           } catch (error) {
-            console.error("Error fetching user data:", error);
-            localStorage.removeItem("token");
+            console.error("Error fetching token:", error);
           }
         }
+
+        if (!token) {
+          await fetchToken();
+        }
+
+        
 
         // Populate profile information
         $('#profileLink').click(function () {
@@ -318,14 +326,7 @@
           $('#placed-order-content').removeClass('d-none');
         });
 
-        // Logout functionality
-        $('#logoutLink').click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("role");
-          localStorage.removeItem("email");
-          window.location.href = 'login_signup.html';
-        });
+      
 
         try {
           const response = await axios.get(
@@ -344,48 +345,42 @@
             let actions = "";
             let sendInvoice = "";
 
-            if (userRole === "Admin") {
-              actions = `
-                            <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
-                            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
-                            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-                        `;
-              sendInvoice = `
-                            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: coral;color: white;">Send Invoice</button>
-                        `;
-            } else if (userRole === "Sales") {
-              actions = `
-                            <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
-                            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-                        `;
-            } else if (userRole === "Support") {
-              actions = `
-                            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
-                            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-                        `;
-              sendInvoice = `
-                            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: coral;color: white;">Send Invoice</button>
-                        `;
-            }
-            if (item.orderStatus === "placed") {
+            // if (userRole === "Admin") {
+            //   actions = `
+            //     <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
+            //     <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
+            //     <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
+            //   `;
+            //   sendInvoice = `
+            //     <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: coral;color: white;">Send Invoice</button>
+            //   `;
+            // } else if (userRole === "Sales") {
+            //   actions = `
+            //     <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
+            //     <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
+            //   `;
+            // } else if (userRole === "Support") {
+            //   actions = `
+            //     <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
+            //     <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
+            //   `;
+            //   sendInvoice = `
+            //     <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: coral;color: white;">Send Invoice</button>
+            //   `;
+            // }
+            if (item.orderStatus === "Placed") {
+              console.log("inside placed",item);
               $("#infoTable").append(
                 `<tr>
-                                <td>${item.orderDate}</td>
-                                <td>${item.orderNo}</td>
-                                <td>${item.agentName}</td>
-                                <td>${item.customerName}</td>
-                                <td>${item.pReq || item.partName}</td>
-                                <td>${
-                                  item.additionalInfo &&
-                                  item.additionalInfo.length > 0
-                                    ? item.additionalInfo[0].yardName
-                                    : ""
-                                }</td>
-                                <td>${item.orderStatus}</td>
-                                <td>${actions}</td>
-                                <td>${sendInvoice}</td>
-                                <td style="display:none">${item.email}</td>
-                            </tr>`
+                  <td>${item.orderDate}</td>
+                  <td>${item.orderNo}</td>
+                  <td>${item.salesAgent}</td>
+                  <td>${item.customerName}</td>
+                  <td>${item.pReq || item.partName}</td>
+                  <td>${item.orderStatus}</td>
+                  <td>${item.email}</td>
+                  <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
+                </tr>`
               );
             }
           });
@@ -472,6 +467,15 @@
           $("#infoTable tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
           });
+        });
+          // Logout functionality
+          $('#logoutLink').click(function () {
+          localStorage.removeItem("token");
+          localStorage.removeItem("firstName");
+          localStorage.removeItem("role");
+          localStorage.removeItem("email");
+          localStorage.removeItem("userId");
+          window.location.href = 'login_signup.html';
         });
       });
     </script>

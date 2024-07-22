@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Order = require('../models/order');
+const Order = require('../models/Order');
 const OrderNo = require('../models/OrderNo');
 const authMiddleware = require('../middleware/auth');
 
@@ -31,6 +31,7 @@ router.get('/team/:teamName', async (req, res) => {
 // Route to create a new order
 router.post('/', authMiddleware, async (req, res) => {
     const newOrder = new Order(req.body);
+    console.log("newOrder-orders.js",newOrder); 
     newOrder.team = currentTeam; // Assign current team
 
     try {

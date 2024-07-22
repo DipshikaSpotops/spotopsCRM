@@ -34,8 +34,9 @@
         }
 
         .navbar {
-            background-color: white;
+            /* background-color: white; */
             color: black;
+            background: linear-gradient(to right, #006666 12.8%, white 11.5%);
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
@@ -49,6 +50,7 @@
 
         .sidebar {
             background-color: #006666;
+            
             position: fixed;
             z-index: 1;
             top: 0;
@@ -58,6 +60,7 @@
             width: 14%;
             height: 100vh;
             padding: 50px 14px;
+            margin: 0 -21px;
         }
 
         .sidebar .nav-link {
@@ -120,7 +123,12 @@
         <img id="logoImg" src="/images/darkLogo.png" alt="Logo" />
         <div class="user-info">
             <span>Welcome <span id="user-name"></span></span>
-            <i class="fas fa-user-circle fa-2x user-icon"></i>
+            <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                <a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user"></i> My Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+            </div>
         </div>
     </div>
 
@@ -142,6 +150,7 @@
                     <div class="submenu" id="submenu-dashboards">
                         <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
                         <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
+                        <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
                         <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
                         <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
                         <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
@@ -208,6 +217,35 @@
         </div>
     </div>
 
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">User Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="profile-table">
+                        <label for="profileFirstName">First Name:</label>
+                        <input type="text" id="profileFirstName" class="form-control" readonly />
+                        <label for="profileLastName">Last Name:</label>
+                        <input type="text" id="profileLastName" class="form-control" readonly />
+                        <label for="profileEmail">Email:</label>
+                        <input type="text" id="profileEmail" class="form-control" readonly />
+                        <label for="profileRole">Role:</label>
+                        <input type="text" id="profileRole" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(async function () {
             const token = localStorage.getItem("token");
@@ -231,7 +269,7 @@
                             <td>${item.salesAgent}</td>
                             <td>${item.customerName}</td>
                             <td>${item.pReq || item.partName}</td>
-                            <td>${item.orderStatus}</td>
+                            <td>Cancelled</td>
                             <td>
                                 <button style="background-color:#28a745;" class="btn btn-primary btn-sm view-btn" data-id="${item.orderNo}">View</button>
                             </td>
@@ -250,6 +288,10 @@
             });
 
             const firstName = localStorage.getItem("firstName");
+            const lastName = localStorage.getItem("lastName");
+            const email = localStorage.getItem("email");
+            const role = localStorage.getItem("role");
+
             if (firstName) {
                 $("#user-name").text(firstName);
             }
@@ -304,8 +346,49 @@
                 submenu.toggle();
                 $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
             });
+
+            $('#profileLink').on('click', function() {
+                $('#profileFirstName').val(firstName);
+                $('#profileLastName').val(lastName);
+                $('#profileEmail').val(email);
+                $('#profileRole').val(role);
+                $('#profileModal').modal('show');
+            });
+
+            $('#logoutLink').on('click', function() {
+                localStorage.removeItem("token");
+                localStorage.removeItem("firstName");
+                localStorage.removeItem("lastName");
+                localStorage.removeItem("email");
+                localStorage.removeItem("role");
+                localStorage.removeItem("team");
+                window.location.href = 'login_signup.html';
+            });
+            if (role === "Admin") {
+                // Hide specific reports links for Admin
+                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+                // Hide specific dashboards links for Admin
+                $('#submenu-dashboards .view-individualOrders-link').hide();
+            }
+            else if(team === "Team Mark"){
+                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+                $(".nav-item:has(#submenu-teams)").hide();
+                $(".nav-item:has(#submenu-users)").hide();
+                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
+
+            }
+            else if(team === "Team Sussane"){
+                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+                $(".nav-item:has(#submenu-teams)").hide();
+                $(".nav-item:has(#submenu-users)").hide();
+                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
+
+            }
+
+
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-
 </html>

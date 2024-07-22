@@ -45,6 +45,10 @@
         padding: 74px;
         width: 46%;
       }
+      .centered-form {
+        margin: auto;
+        width: 50%;
+      }
       .container {
         display: flex;
         flex-direction: column;
@@ -152,6 +156,7 @@
       }
       .navbar {
         color: black;
+        background-color: white;
         padding: 10px 20px;
         display: flex;
         justify-content: space-between;
@@ -161,6 +166,7 @@
         top: 0;
         z-index: 2;
         border-bottom: 1px solid #e0e0e0;
+        background: linear-gradient(to right, #006666 12.8%, white 11.5%);
       }
       #logoImg {
         height: auto;
@@ -194,6 +200,7 @@
         width: 14%;
         height: 100vh;
         padding: 50px 14px;
+        margin: 0px -29px;
       }
       .sidebar .nav-link {
         color: #ffffff;
@@ -201,7 +208,6 @@
       .sidebar .nav-link:hover {
         background-color: rgba(255, 255, 255, 0.2);
       }
-
       .sidebar .nav-link.active,
       .sidebar .nav-link.selected {
         background-color: rgba(255, 255, 255, 0.2);
@@ -318,7 +324,7 @@
     <div class="sidebar" id="offcanvasSidebar">
       <div class="offcanvas-body">
         <nav class="nav flex-column">
-          <div class="nav-item">
+          <div class="nav-item dashboards">
             <a class="nav-link" href="#" id="default-link">
               <i class="fas fa-home"></i> Dashboards
               <span class="chevron-icon"
@@ -326,20 +332,37 @@
               ></span>
             </a>
             <div class="submenu" id="submenu-dashboards">
-              <a class="nav-link" href="form.html?newEntry=true"
+              <a class="nav-link add-order-link" href="form.html?newEntry=true"
                 >Add New Order</a
               >
-              <a class="nav-link" href="orders.html">View Orders</a>
-              <a class="nav-link" href="ordersMark.html">TeamA Orders</a>
-              <a class="nav-link" href="ordersSussane.html">TeamB Orders</a>
-              <a class="nav-link" href="placedOrders.html">Placed Orders</a>
-              <a class="nav-link" href="cancelledOrders.html"
+              <a class="nav-link view-orders-link" href="orders.html"
+                >View Orders</a
+              >
+              <a
+                class="nav-link view-individualOrders-link"
+                href="individualOrders.html"
+                >View My Orders</a
+              >
+              <a class="nav-link teamA-orders-link" href="ordersMark.html"
+                >TeamA Orders</a
+              >
+              <a class="nav-link teamB-orders-link" href="ordersSussane.html"
+                >TeamB Orders</a
+              >
+              <a class="nav-link placed-orders-link" href="placedOrders.html"
+                >Placed Orders</a
+              >
+              <a
+                class="nav-link cancelled-orders-link"
+                href="cancelledOrders.html"
                 >Cancelled Orders</a
               >
-              <a class="nav-link" href="yardInfo.html">Yard Details</a>
+              <a class="nav-link yard-info-link" href="yardInfo.html"
+                >Yard Details</a
+              >
             </div>
           </div>
-          <div class="nav-item">
+          <div class="nav-item" id="users-section">
             <a class="nav-link" href="#">
               <i class="fas fa-users"></i> Users
               <span class="chevron-icon"
@@ -351,7 +374,7 @@
               <a class="nav-link" href="viewallUsers.html">View Users</a>
             </div>
           </div>
-          <div class="nav-item">
+          <div class="nav-item" id="teams-section">
             <a class="nav-link" href="#">
               <i class="fas fa-users-cog"></i> Teams
               <span class="chevron-icon"
@@ -375,47 +398,39 @@
               >
               <a class="nav-link" href="purchases.html">Purchases</a>
               <a class="nav-link" href="poReport.html">PO Report</a>
+              <a class="nav-link" href="salesReport.html">My Sales Report</a>
             </div>
           </div>
         </nav>
       </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
       <form id="crmForm">
         <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="orderNo">Order No</label>
-            <input type="text" class="form-control" id="orderNo" required />
-          </div>
           <div class="form-group col-md-6">
             <label for="orderDate">Order Date</label>
             <input type="date" class="form-control" id="orderDate" required />
           </div>
+          <div class="form-group col-md-6">
+            <label for="salesAgent">Sales Agent</label>
+            <input type="text" class="form-control" id="salesAgent" required />
+          </div>
         </div>
         <div class="form-group">
-          <label for="salesAgent">Sales Agent</label>
-          <input type="text" class="form-control" id="salesAgent" required />
-        </div>
-        <div class="form-group">
-          <label for="customerInfo">Customer Info</label>
+          <div id="custInfo" style="border: 1px solid grey">
+            <label for="customerInfo" style="font-size: 18px; margin: 8px 260px"
+              >CUSTOMER INFO</label
+            >
+          </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="customerName">Customer Name</label>
-              <input
-                type="text"
-                class="form-control"
-                id="customerName"
-                required
-              />
+              <label for="firstName">First Name</label>
+              <input type="text" class="form-control" id="firstName" required />
             </div>
             <div class="form-group col-md-6">
-              <label for="bAddress">Billing Address</label>
-              <input type="text" class="form-control" id="bAddress" required />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="sAddress">Shipping Address</label>
-              <input type="text" class="form-control" id="sAddress" required />
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" id="lastname" required />
             </div>
           </div>
           <div class="form-row">
@@ -428,9 +443,25 @@
               <input type="number" class="form-control" id="phone" required />
             </div>
           </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="bAddress">Billing Address</label>
+              <input type="text" class="form-control" id="bAddress" required />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="sAddress">Shipping Address</label>
+              <input type="text" class="form-control" id="sAddress" required />
+            </div>
+          </div>
         </div>
         <div class="form-group">
-          <label for="partDescription">Part Description</label>
+          <div id="partDesc" style="border: 1px solid grey">
+            <label
+              for="partDescription"
+              style="font-size: 18px; margin: 8px 254px"
+              >PART DESCRIPTION</label
+            >
+          </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="make">Make</label>
@@ -448,7 +479,12 @@
             </div>
             <div class="form-group col-md-6">
               <label for="pReq">Part Required</label>
-              <input type="text" class="form-control" id="pReq" required />
+              <!-- <input type="text" class="form-control" id="pReq" required /> actualGP for the particular order  -->
+              <select class="form-control" id="pReq" required>
+                <option value="ABS Pump">ABS Pump</option>
+                <option value="ABS Module">ABS Module</option>
+                <option value="Transmission">Transmission</option>
+              </select>
             </div>
           </div>
           <div class="form-row">
@@ -463,7 +499,13 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="priceProfit">Price and Profit Information</label>
+          <div class="pricenGp" style="border: 1px solid grey">
+            <label
+              for="priceProfit"
+              style="font-size: 18px; margin: 8px 220px; white-space: nowrap"
+              >PRICE AND GP INFORMATION</label
+            >
+          </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="soldP">Quoted Price</label>
@@ -486,7 +528,7 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="shippingFee">Shipping</label>
+              <label for="shippingFee">Est. Shipping</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">$</span>
@@ -516,7 +558,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="grossProfit">Gross Profit</label>
+            <label for="grossProfit">Est. GP</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">$</span>
@@ -551,11 +593,15 @@
         </div>
         <div class="form-group">
           <label for="vin">VIN No.</label>
-          <input type="number" class="form-control" id="vin" required />
+          <input type="text" class="form-control" id="vin" required />
         </div>
         <div class="form-group">
-          <label for="issueOrder">Issue Order</label>
+          <label for="issueOrder">Last 4 Digits</label>
           <input type="text" class="form-control" id="issueOrder" required />
+        </div>
+        <div class="form-group">
+          <label for="notesForm">Notes</label>
+          <input type="text" class="form-control" id="notes" required />
         </div>
         <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
           Submit
@@ -653,7 +699,7 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <input
                   type="text"
                   class="form-control"
@@ -661,12 +707,20 @@
                   placeholder="Agent Name"
                 />
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <input
                   type="number"
                   class="form-control"
                   id="partPrice"
                   placeholder="Part Price"
+                />
+              </div>
+              <div class="form-group col-md-4">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="others"
+                  placeholder="Others"
                 />
               </div>
             </div>
@@ -754,15 +808,40 @@
               <select class="form-control" id="refund">
                 <option value="">Choose</option>
                 <option value="Yard PO Sent">Yard PO Sent</option>
-                <option value="Card charged">Card Charged</option>
                 <option value="Part shipped">Part Shipped</option>
                 <option value="Part delivered">Part Delivered</option>
-                <option value="Bad part">Bad Part</option>
+                <option value="Bad part">Defective Part</option>
                 <option value="In return">In Return</option>
                 <option value="Collect refund">Collect Refund</option>
-                <option value="Refund collected">Refund Collected</option>
                 <option value="Part returned">Refund Done</option>
+                <option value="PO cancelled">PO cancelled</option>
               </select>
+              <label for="paymentStatusCard">Card Charged:</label>
+              <select class="form-control paymentStatus">
+                <option value="">Choose</option>
+                <option value="Card charged">Yes</option>
+                <option value="">No</option>
+              </select>
+              <label for="paymentStatusRefund">Refund Collected:</label>
+              <select
+                class="form-control paymentStatus"
+                id="paymentStatusSelect"
+              >
+                <option value="">Choose</option>
+                <option value="Refund collected">Yes</option>
+                <option value="">No</option>
+              </select>
+
+              <div id="refundedAmountContainer" style="display: none">
+                <label for="refundedAmount">Refunded Amount:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="refundedAmount"
+                  placeholder="Enter refunded amount"
+                />
+              </div>
+
               <div id="notesContainer" style="display: none">
                 <label for="notesInput">Notes</label>
                 <input type="text" id="notesInput" class="form-control" />
@@ -980,6 +1059,15 @@
                   placeholder="Part Price"
                 />
               </div>
+              <div class="form-group col-md-4">
+                <label for="editOthers">Additional Charges</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="editOthers"
+                  placeholder="Others"
+                />
+              </div>
             </div>
             <div class="form-group">
               <div class="form-row">
@@ -1036,89 +1124,148 @@
       </div>
     </div>
 
+    <!-- Profile Modal -->
+    <div
+      class="modal fade"
+      id="profileModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="profileModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="profileForm">
+              <div class="form-group">
+                <label for="profileFirstName">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="profileFirstName"
+                  readonly
+                />
+              </div>
+              <div class="form-group">
+                <label for="profileLastName">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="profileLastName"
+                  readonly
+                />
+              </div>
+              <div class="form-group">
+                <label for="profileEmail">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="profileEmail"
+                  readonly
+                />
+              </div>
+              <div class="form-group">
+                <label for="profileRole">Role</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="profileRole"
+                  readonly
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
+      var firstName;
       $(document).ready(async function () {
         // Navbar and sidebar functionalities
-        const firstName = localStorage.getItem("firstName");
-        const role = localStorage.getItem("role");
+        firstName = localStorage.getItem("firstName");
+        const lastName = localStorage.getItem("lastName");
+        const token = localStorage.getItem("token");
         const email = localStorage.getItem("email");
+        const role = localStorage.getItem("role");
+        const team = localStorage.getItem("team");
         const urlParams = new URLSearchParams(window.location.search);
         const orderNo = urlParams.get("orderNo");
         const process = urlParams.get("process");
         const newEntry = urlParams.get("newEntry");
-        const team = localStorage.getItem("team");
 
         console.log("orderNo:", orderNo); // Debugging: Check if orderNo is retrieved correctly
         console.log("process:", process); // Debugging: Check if process is retrieved correctly
         console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
-        console.log("team", team);
-
-        // Fetch the token from the server
-        let token = null;
-        async function fetchToken() {
-          try {
-            const response = await axios.get(
-              "http://localhost:3000/auth/token"
-            );
-            if (response.status === 200) {
-              token = response.data.token;
-              console.log("token form", token);
-            } else {
-              throw new Error("Failed to fetch token");
-            }
-          } catch (error) {
-            console.error("Error fetching token:", error);
-          }
-        }
-
-        await fetchToken();
+        console.log("team", team, token);
 
         if (firstName) {
           $("#user-name").text(firstName);
+          $("#salesAgent").val(firstName);
         }
 
         let userRole = null;
         let userEmail = null;
 
-        if (token) {
-          try {
-            const response = await axios.get("http://localhost:3000/auth/me", {
-              headers: { Authorization: `Bearer ${token}` },
-            });
+        // Hide specific sections based on team
+        // Apply team-based restrictions
+        if (team === "Team Charlie") {
+          // Hide specific reports links
+          $("#submenu-reports .nav-link")
+            .not(':contains("My Sales Report")')
+            .hide();
+          // Hide specific dashboards links
+          $(
+            "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+          ).hide();
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+        }
+        if (role === "Admin") {
+          // Hide specific reports links for Admin
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          // Hide specific dashboards links for Admin
+          $("#submenu-dashboards .view-individualOrders-link").hide();
+        }
 
-            if (response.status !== 200) {
-              throw new Error("Failed to fetch user data");
-            }
-
-            userRole = response.data.role;
-            userEmail = response.data.email;
-          } catch (error) {
-            console.error("Error fetching user data:", error);
-            localStorage.removeItem("token");
-          }
+        // Hide Order History and Yard button for Admin and Charlie
+        if (role === "Admin" && team === "Team Charlie") {
+          $(".sidebarOrder").hide();
+          $(".add-yard-btn").hide();
         }
 
         // Populate profile information
         $("#profileLink").click(function () {
-          $("#profileName").val(firstName);
-          $("#profileRole").val(role);
+          $("#profileFirstName").val(firstName);
+          $("#profileLastName").val(lastName);
           $("#profileEmail").val(email);
-          $("#placed-order-content").addClass("d-none");
-          $("#profile-content").removeClass("d-none");
+          $("#profileRole").val(role);
+          $("#profileModal").modal("show");
         });
 
         $("#backToOrders").click(function () {
           $("#profile-content").addClass("d-none");
           $("#placed-order-content").removeClass("d-none");
-        });
-
-        // Logout functionality
-        $("#logoutLink").click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("role");
-          localStorage.removeItem("email");
-          window.location.href = "login_signup.html";
         });
 
         $(".toggle-btn").on("click", function () {
@@ -1162,10 +1309,10 @@
 
             teams.forEach((team) => {
               const teamHtml = `
-                ${team.name}<br>
-                ${team.team}<br>
-                ${team.role}
-              `;
+                            ${team.name}<br>
+                            ${team.team}<br>
+                            ${team.role}
+                        `;
               if (team.team === "Team Charlie") {
                 teamCharlie.append(teamHtml);
               } else if (team.team === "Team Mark") {
@@ -1205,9 +1352,9 @@
 
         function addYardButton(yardIndex, buttonText) {
           const buttonHtml = `
-            <button type="button" class="btn btn-info yard-btn" data-yard-index="${yardIndex}">${buttonText}</button>
-            <div class="yard-details" id="yard-details-${yardIndex}"></div>
-          `;
+                    <button type="button" class="btn btn-info yard-btn" data-yard-index="${yardIndex}">${buttonText}</button>
+                    <div class="yard-details" id="yard-details-${yardIndex}"></div>
+                `;
           $("#yardInfoContainer").append(buttonHtml);
         }
 
@@ -1227,18 +1374,20 @@
                 }
                 const yardData = data.additionalInfo[yardIndex - 1];
                 let yardDetailsHtml = `
-                  <table class="table table-bordered">
-                    <tr>
-                      <td colspan="2">${formatYardData(yardData)}</td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <button type="button" class="btn btn-secondary edit-yard" data-yard-index="${yardIndex}">Edit Yard Status</button>
-                        <button type="button" class="btn btn-secondary edit-yard-details" data-yard-index="${yardIndex}">Edit Yard Details</button>
-                      </td>
-                    </tr>
-                  </table>
-                `;
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td colspan="2">${formatYardData(
+                                          yardData
+                                        )}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <button type="button" class="btn btn-secondary edit-yard" data-yard-index="${yardIndex}">Edit Yard Status</button>
+                                            <button type="button" class="btn btn-secondary edit-yard-details" data-yard-index="${yardIndex}">Edit Yard Details</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `;
                 yardDetails.html(yardDetailsHtml).show();
               });
           }
@@ -1246,14 +1395,15 @@
 
         function formatYardData(yardData) {
           let yardInfo = `
-            Yard Name: ${yardData.yardName}<br>
-            Address: ${yardData.address}<br>
-            Email: ${yardData.email}<br>
-            Phone No: ${yardData.phone}<br>
-            Agent Name: ${yardData.agentName}<br>
-            Part Price: ${yardData.partPrice}<br>
-            Shipping Method: ${yardData.shippingMethod} (${yardData.shippingDetails})<br>
-          `;
+                    Yard Name: ${yardData.yardName}<br>
+                    Address: ${yardData.address}<br>
+                    Email: ${yardData.email}<br>
+                    Phone No: ${yardData.phone}<br>
+                    Agent Name: ${yardData.agentName}<br>
+                    Part Price: ${yardData.partPrice}<br>
+                    Shipping Method: ${yardData.shippingMethod} (${yardData.shippingDetails})<br>
+                    Others: ${yardData.others}<br>
+                `;
 
           if (yardData.status) {
             yardInfo += `Status: ${yardData.status}<br>`;
@@ -1280,27 +1430,42 @@
           orderHistory.forEach((historyItem) => {
             const [heading, ...details] = historyItem.split(" by ");
             const listItem = `
-              <li class="timeline-item">
-                <div class="timeline-panel">
-                  <div class="timeline-heading">${heading}</div>
-                  <div class="timeline-body">
-                    <p>${details.join(" by ")}</p>
-                  </div>
-                </div>
-              </li>`;
+                        <li class="timeline-item">
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">${heading}</div>
+                                <div class="timeline-body">
+                                    <p>${details.join(" by ")}</p>
+                                </div>
+                            </div>
+                        </li>`;
             orderHistoryList.append(listItem);
           });
         }
-
+        var vinNo = document.getElementById("vin").value;
+        console.log("vin");
         if (orderNo) {
           fetch(`http://localhost:3000/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
-              $("#orderNo").val(data.orderNo);
+              console.log("Fetched order data:", data);
+              var customerNameE = data.customerName;
+              console.log("cusName", customerNameE);
+
+              // Split the full name by space
+              const nameParts = customerNameE.split(" ");
+
+              // Assign the first part to firstName and the second part to lastName
+              const firstNameE = nameParts[0];
+              const lastNameE = nameParts[1];
+
+              console.log("First Name:", firstName); // Output: DIPSIKHA
+              console.log("Last Name:", lastName);
+              orderNo;
               $("#orderDate").val(data.orderDate);
               $("#salesAgent").val(data.salesAgent);
-              $("#customerName").val(data.customerName);
               $("#bAddress").val(data.bAddress);
+              $("#firstName").val(firstNameE);
+              $("#lastname").val(lastNameE);
               $("#sAddress").val(data.sAddress);
               $("#email").val(data.email);
               $("#phone").val(data.phone);
@@ -1317,6 +1482,8 @@
               $("#grossProfit").val(data.grossProfit);
               $("#orderStatus").val(data.orderStatus);
               $("#vin").val(data.vin);
+              $("#issueOrder").val(data.last4digits);
+              $("#notes").val(data.notes);
               $("#issueOrder").val(data.issueOrder);
 
               data.additionalInfo.forEach((info, index) => {
@@ -1349,12 +1516,16 @@
               $("#crmForm").on("submit", function (e) {
                 e.preventDefault();
                 const firstName = localStorage.getItem("firstName");
+                var cusFName = document.getElementById("firstName").value;
+                var cuLName = document.getElementById("lastname").value;
+                console.log(cusFName, cuLName);
+                var customerName = cusFName + " " + cuLName;
 
                 const updatedData = {
-                  orderNo: $("#orderNo").val(),
+                  orderNo: orderNo,
                   orderDate: $("#orderDate").val(),
                   salesAgent: $("#salesAgent").val(),
-                  customerName: $("#customerName").val(),
+                  customerName: customerName,
                   bAddress: $("#bAddress").val(),
                   sAddress: $("#sAddress").val(),
                   email: $("#email").val(),
@@ -1371,8 +1542,9 @@
                   salestax: $("#salestax").val(),
                   grossProfit: $("#grossProfit").val(),
                   orderStatus: $("#orderStatus").val(),
-                  vin: $("#vin").val(),
-                  issueOrder: $("#issueOrder").val(),
+                  vin: document.getElementById("vin").value,
+                  last4digits: $("#issueOrder").val(),
+                  notes: $("#notes").val(),
                   firstName: firstName, // Include firstName in the request body
                 };
 
@@ -1400,24 +1572,72 @@
 
               // part desc
               partDesc = `
-                Year: ${data.year}
-                Make: ${data.make}
-                Model: ${data.model}
-                Part required: ${data.pReq}
-                Desc: ${data.desc}
-                VIN: ${data.vin}
-                Warranty: ${data.warranty}`;
+                            Year: ${data.year}
+                            Make: ${data.make}
+                            Model: ${data.model}
+                            Part required: ${data.pReq}
+                            Desc: ${data.desc}
+                            VIN: ${data.vin}
+                            Warranty: ${data.warranty}`;
             });
-        } else if (newEntry) {
+        } else var newOrderNo;
+        if (newEntry) {
+          // Hide order history and add yard button
+          $(".sidebarOrder").hide();
+          $(".add-yard-btn").hide();
+
+          // Set order status to "Placed" and disable the dropdown
+          $("#orderStatus").val("Placed");
+          $("#orderStatus").prop("disabled", true);
+          // Center the form
+          $("#mainContent").addClass("centered-form");
+
+          axios
+            .get(`http://localhost:3000/orders`)
+            .then((orders) => orders)
+            .then((data) => {
+              var orderArr = data.data;
+              // orderArr.slice(-1)[0];
+              var lastElement = orderArr[orderArr.length - 1];
+              console.log("lastElement", lastElement);
+              if(lastElement){
+              var existingOrderNo = lastElement.orderNo  ;
+              }else{
+                var  existingOrderNo = "50STARS0000"
+              }
+              console.log("orderNo", existingOrderNo);
+              //for new orderNo
+              // Extract the numerical part
+              var prefix = existingOrderNo.slice(0, 7); // '50STARS'
+              var numberPart = existingOrderNo.slice(7); // '0005'
+
+              // Convert the number part to an integer and increment it
+              var incrementedNumber = parseInt(numberPart, 10) + 1;
+
+              // Pad the incremented number with leading zeros to maintain the format
+              var incrementedNumberStr = incrementedNumber
+                .toString()
+                .padStart(4, "0");
+
+              // Concatenate the prefix with the new number part
+              newOrderNo = prefix + incrementedNumberStr;
+              console.log("newOrderNo", newOrderNo);
+            })
+            .catch((error) => {
+              console.error("Error fetching latest order:", error);
+            });
           $("#crmForm").on("submit", function (e) {
             e.preventDefault();
-            const firstName = localStorage.getItem("firstName");
-
+             firstName = localStorage.getItem("firstName");
+            var cusFName = document.getElementById("firstName").value;
+            var cusLName = document.getElementById("lastname").value;
+            console.log("name", cusFName, cusLName);
+            var customerName = cusFName + " " + cusLName;
             const newOrder = {
-              orderNo: $("#orderNo").val(),
+              orderNo: newOrderNo,
               orderDate: $("#orderDate").val(),
               salesAgent: $("#salesAgent").val(),
-              customerName: $("#customerName").val(),
+              customerName: customerName,
               bAddress: $("#bAddress").val(),
               sAddress: $("#sAddress").val(),
               email: $("#email").val(),
@@ -1435,7 +1655,8 @@
               grossProfit: $("#grossProfit").val(),
               orderStatus: $("#orderStatus").val(),
               vin: $("#vin").val(),
-              issueOrder: $("#issueOrder").val(),
+              last4digits: $("#issueOrder").val(),
+              notes: $("#notes").val(),
               orderHistory: [
                 `Order placed by ${firstName} on ${new Date().toLocaleString()}`,
               ],
@@ -1452,23 +1673,19 @@
               .then((data) => {
                 const team = data.team;
                 console.log("Team assigned:", team);
-                if (team === "Mark") {
-                  window.location.href = "ordersMark.html";
-                } else if (team === "Sussane") {
-                  window.location.href = "ordersSussane.html";
-                }
+                // if (team === "Mark") {
+                //   window.location.href = "ordersMark.html";
+                // } else if (team === "Sussane") {
+                //   window.location.href = "ordersSussane.html";
+                // } else {
+                alert(`Order No ${newOrderNo} has been placed.`);
+                window.location.href = "orders.html";
+                // }
               })
               .catch((error) => {
                 console.error("Error:", error);
               });
           });
-        }
-
-        function incrementOrderNo(orderNo) {
-          const prefix = "50STARS";
-          const orderNumber = parseInt(orderNo.replace(prefix, ""), 10);
-          const nextOrderNumber = orderNumber + 1;
-          return `${prefix}${nextOrderNumber.toString().padStart(5, "0")}`;
         }
 
         $("#orderStatus").on("change", function () {
@@ -1499,8 +1716,10 @@
           $("#orderStatus").val(newOrderStatus);
 
           // Update the order status in the database
-          const orderNo = $("#orderNo").val(); // Ensure orderNo is retrieved correctly
-          const updatedData = { orderStatus: newOrderStatus };
+          console.log("orderNo", orderNo); // Ensure orderNo is retrieved correctly
+          const updatedData = { orderStatus: newOrderStatus,
+                                firstName:firstName
+           };
 
           fetch(`http://localhost:3000/orders/${orderNo}`, {
             method: "PUT",
@@ -1525,12 +1744,99 @@
             });
         });
 
-        $("#yardInfoContainer").on("click", ".edit-yard", function () {
-          const yardIndex = $(this).data("yard-index");
-          $("#editYardInfo").data("yard-index", yardIndex); // Store yardIndex in the edit button
-          $("#yardIndexEdit").val(yardIndex); // Set the yard index in the hidden input
-          showModal("#editYardModal");
-        });
+        // $("#yardInfoContainer").on("click", ".edit-yard", function () {
+        //   const yardIndex = $(this).data("yard-index");
+        //   $("#editYardInfo").data("yard-index", yardIndex); // Store yardIndex in the edit button
+        //   $("#yardIndexEdit").val(yardIndex); // Set the yard index in the hidden input
+        //   showModal("#editYardModal");
+        // });
+        // Function to show Edit Yard Status modal with current yard information
+$("#yardInfoContainer").on("click", ".edit-yard", function () {
+  const yardIndex = $(this).data("yard-index");
+  fetch(`http://localhost:3000/orders/${orderNo}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+        return;
+      }
+      const yardData = data.additionalInfo[yardIndex - 1];
+
+      // Set the current values in the modal
+      $("#refund").val(yardData.status);
+      $("#paymentStatusCard").val(
+        yardData.paymentStatus.includes("Card charged") ? "Card charged" : ""
+      );
+      $("#paymentStatusSelect").val(
+        yardData.paymentStatus.includes("Refund collected") ? "Refund collected" : ""
+      );
+
+      if (yardData.paymentStatus.includes("Refund collected")) {
+        $("#refundedAmountContainer").show();
+        $("#refundedAmount").val(yardData.refundedAmount);
+      } else {
+        $("#refundedAmountContainer").hide();
+        $("#refundedAmount").val("");
+      }
+
+      $("#editYardInfo").data("yard-index", yardIndex); // Store yardIndex in the edit button
+      $("#yardIndexEdit").val(yardIndex); // Set the yard index in the hidden input
+      $("#editYardModal").modal("show");
+    })
+    .catch((error) => {
+      console.error("Error fetching yard data:", error);
+    });
+});
+
+// Function to save updated yard status
+$("#editYardInfo").on("click", function () {
+  const yardIndex = $(this).data("yard-index");
+  const status = $("#refund").val();
+  const paymentStatus = $(".paymentStatus")
+    .map(function () {
+      return $(this).val();
+    })
+    .get()
+    .filter(function (value) {
+      return value !== "";
+    })
+    .join(",");
+
+  const refundedAmount = $("#refundedAmount").val();
+
+  const data = {
+    status: status,
+    paymentStatus: paymentStatus,
+    firstName:firstName,
+    refundedAmount: refundedAmount ? parseFloat(refundedAmount) : null,
+  };
+
+  fetch(
+    `http://localhost:3000/orders/${orderNo}/additionalInfo/${yardIndex}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      $("#editYardModal").modal("hide");
+      updateOrderHistory(data.orderHistory); // Update order history
+      showYardDetails(yardIndex); // Refresh the yard details
+      fetchAndUpdateYardInfo(); // Fetch and update yard info in yardInfo.html
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+
 
         //to update yardInfo.html
         async function fetchAndUpdateYardInfo() {
@@ -1551,6 +1857,8 @@
           const email = $("#email").val();
           const agentName = $("#agentName").val();
           const partPrice = $("#partPrice").val();
+          const others = document.getElementById("others").value;
+          console.log("others", others);
           const shippingMethod = $(
             "input[name='shippingMethod']:checked"
           ).val();
@@ -1568,6 +1876,7 @@
             partPrice: partPrice,
             shippingMethod: shippingMethod,
             shippingDetails: shippingDetails,
+            others: others,
           };
 
           fetch(`http://localhost:3000/orders/${orderNo}/additionalInfo`, {
@@ -1601,21 +1910,23 @@
         $("#editYardInfo").on("click", async function () {
           const yardIndex = $(this).data("yard-index");
           const status = $("#refund").val();
-          const paymentStatus = $("#paymentStatus").val();
-          const paymentDetails = $("#paymentInput").val();
-          const trackingNo = $("#trackingNoEdit").val();
-          const shipperName = $("#shipperNameEdit").val();
-          const shippingAddress = $("#shippingAddress").val();
-          const firstName = localStorage.getItem("firstName");
+          const paymentStatus = $(".paymentStatus")
+            .map(function () {
+              return $(this).val();
+            })
+            .get()
+            .filter(function (value) {
+              return value !== "";
+            })
+            .join();
+
+          const refundedAmount = $("#refundedAmount").val();
 
           const data1 = {
             status: status,
-            trackingNo: trackingNo,
-            shipperName: shipperName,
             paymentStatus: paymentStatus,
-            paymentDetails: paymentDetails,
-            shippingAddress: shippingAddress,
-            firstName: firstName, // Include firstName in the request body
+            refundedAmount: refundedAmount ? parseFloat(refundedAmount) : null,
+            firstName:firstName,
           };
 
           fetch(
@@ -1646,7 +1957,6 @@
         });
 
         async function fetchYardInfo(token) {
-          console.log("")
           const response = await axios.get("http://localhost:3000/yardInfo", {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -1688,10 +1998,10 @@
 
             yardInfoTable.append(
               `<tr>
-                <td>${item.orderNo}</td>
-                <td>${item.customerName}</td>
-                ${yardInfoHtml}
-              </tr>`
+                            <td>${item.orderNo}</td>
+                            <td>${item.customerName}</td>
+                            ${yardInfoHtml}
+                        </tr>`
             );
           });
         }
@@ -1713,7 +2023,7 @@
             return;
           }
 
-          const orderNo = $("#orderNo").val(); // Ensure orderNo is retrieved correctly
+          // const orderNo = $("#orderNo").val(); // Ensure orderNo is retrieved correctly
 
           fetch(`http://localhost:3000/orders/${orderNo}/notes`, {
             method: "POST",
@@ -1768,6 +2078,8 @@
             refundStatus === "Yard PO Sent"
           ) {
             newOrderStatus = "Yard Processing";
+          } else if (refundStatus === "PO cancelled") {
+            $(".edit-yard, .edit-yard-details").prop("disabled", true);
           } else {
             $("#divTrackingEdit").hide();
             $("#sendEmailButton").hide();
@@ -1799,15 +2111,29 @@
             });
         });
 
-        $("#paymentStatus").on("change", function () {
+        $(".paymentStatus").on("change", function () {
           const paymentStatus = $(this).val();
           if (
-            paymentStatus === "Refund collected" ||
-            paymentStatus === "Collect refund"
+            paymentStatus === "Card charged" ||
+            paymentStatus === "Refund collected"
           ) {
-            $("#paymentInput").show();
+            $("#paymentOptions").show();
           } else {
-            $("#paymentInputTxt").show();
+            $("#paymentOptions").hide();
+          }
+        });
+
+        $("#paymentYesNo").on("change", function () {
+          const paymentYesNo = $(this).val();
+          const paymentStatus = $(".paymentStatus").val();
+          if (paymentYesNo === "Yes") {
+            if (paymentStatus === "Card charged") {
+              $("#payment").val("Card charged");
+            } else if (paymentStatus === "Refund collected") {
+              $("#payment").val("Refund collected");
+            }
+          } else {
+            $("#payment").val("");
           }
         });
 
@@ -1854,6 +2180,7 @@
                 return;
               }
               const yardData = data.additionalInfo[yardIndex - 1];
+              console.log("yardData",yardData.others);
               $("#editYardName").val(yardData.yardName);
               $("#editAddress").val(yardData.address);
               const addressParts = yardData.address.split(" ");
@@ -1869,6 +2196,7 @@
                   yardData.shippingMethod +
                   "']"
               ).prop("checked", true);
+              $("#editOthers").val(yardData.others);
               if (yardData.shippingMethod === "Own shipping") {
                 $("#editOwnShippingInput").val(yardData.shippingDetails).show();
                 $("#editYardShippingInput").hide();
@@ -1877,6 +2205,21 @@
                   .val(yardData.shippingDetails)
                   .show();
                 $("#editOwnShippingInput").hide();
+              }
+
+              // Set the status and payment status dropdowns
+              $("#refund").val(yardData.status);
+              const paymentStatuses = yardData.paymentStatus.split(",");
+              $(".paymentStatus").each(function () {
+                if (paymentStatuses.includes($(this).val())) {
+                  $(this).prop("checked", true);
+                }
+              });
+              $("#paymentStatusSelect").val(yardData.paymentStatus);
+
+              if (yardData.paymentStatus === "Refund collected") {
+                $("#refundedAmountContainer").show();
+                $("#refundedAmount").val(yardData.refundedAmount);
               }
 
               $("#editYardDetailsModal").modal("show");
@@ -1894,6 +2237,7 @@
             email: $("#editEmail").val(),
             agentName: $("#editAgentName").val(),
             partPrice: $("#editPartPrice").val(),
+            others:$("#editOthers").val(),
             shippingMethod: $("input[name='editShippingMethod']:checked").val(),
             shippingDetails:
               $("input[name='editShippingMethod']:checked").val() ===
@@ -1938,6 +2282,25 @@
             $("#editYardShippingInput").show();
             $("#editOwnShippingInput").hide();
           }
+        });
+      });
+      // to show/hide refunded amount input box
+      $("#paymentStatusSelect").on("change", function () {
+        if ($(this).val() === "Refund collected") {
+          $("#refundedAmountContainer").show();
+        } else {
+          $("#refundedAmountContainer").hide();
+          $("#stringInput");
+        }
+
+        // Logout functionality
+        $("#logoutLink").click(function () {
+          localStorage.removeItem("token");
+          localStorage.removeItem("firstName");
+          localStorage.removeItem("lastName");
+          localStorage.removeItem("role");
+          localStorage.removeItem("email");
+          window.location.href = "login_signup.html";
         });
       });
     </script>
