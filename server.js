@@ -14,7 +14,7 @@ const OrderNumber = require("./backend/models/OrderNo");
 const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
 
-const port = 4000;
+const port = 3000;
 const app = express();
 
 app.use(cors());
@@ -300,11 +300,11 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
 
       order.additionalInfo.push(req.body);
       console.log("additional updated",order)
-      var pp = order.additionalInfo[countYard].partPrice;
-      var yardname = order.additionalInfo[countYard].yardName;
-      var shipping = order.additionalInfo[countYard].shippingMethod;
-      var others = order.additionalInfo[countYard].others;
-
+      var pp = order.additionalInfo[countYard -1 ].partPrice;
+      var yardname = order.additionalInfo[countYard - 1].yardName;
+      var shipping = order.additionalInfo[countYard - 1].shippingMethod;
+      var others = order.additionalInfo[countYard - 1].others;
+      console.log("yard details",pp,yardname,shipping,others);
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
       order.orderHistory.push(`Yard ${countYard} PO sent Yard Name-${yardname} PP-${pp} ${shipping} Others-${others}   by Dipshika on ${timestamp}`);
