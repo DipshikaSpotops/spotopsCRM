@@ -13,7 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #4070f4;
+    background-color: grey;
     column-gap: 30px;
 }
 .form{
@@ -81,7 +81,7 @@ form{
 }
 .field button{
     color: #fff;
-    background-color: #0171d3;
+    background-color: black;
     transition: all 0.3s ease;
     cursor: pointer;
 }
