@@ -176,7 +176,6 @@
                         <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
                         <a class="nav-link team-a-orders-link" href="ordersMark.html">TeamA Orders</a>
                         <a class="nav-link team-b-orders-link" href="ordersSussane.html">TeamB Orders</a>
-                        
                         <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
                         <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
                         <a class="nav-link customer-approved-link" href="customerApproved.html">Customer Approved</a>
@@ -219,7 +218,7 @@
 
     <div class="main-content">
         <div id="yard-info-content">
-            <h1>Yard Information</h1>
+            <h1>Collect Refund</h1>
             <div class="table-responsive mx-auto" style="max-width: 90%">
                 <table class="table table-bordered mt-4">
                     <thead>
@@ -293,17 +292,14 @@
             const role = localStorage.getItem("role");
             const email = localStorage.getItem("email");
             const team = localStorage.getItem("team");
-            // Function to disable specific elements based on team
+
             function applyTeamRestrictions() {
-                
-                
                 if (!team) {
                     return;
                 }
-                
-                // Disable all team-related links if team is not null
+
                 $(".teams-item").hide();
-                
+
                 if (team === "Team Charlie") {
                     $(".team-a-orders-link, .team-b-orders-link").hide();
                 } else if (team === "Team Mark") {
@@ -311,18 +307,13 @@
                 } else if (team === "Team Sussane") {
                     $(".add-new-order-link, .team-a-orders-link").hide();
                 }
-                else if (role === "Admin") {
-                // Hide specific reports links for Admin
-                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-                // Hide specific dashboards links for Admin
-                $('#submenu-dashboards .view-individualOrders-link').hide();
-            }
             }
 
             applyTeamRestrictions();
 
             const token = localStorage.getItem("token");
             console.log("token", token);
+
             try {
                 const response = await axios.get("http://localhost:3000/yardInfo", {
                     headers: { Authorization: `Bearer ${token}` },
@@ -335,7 +326,6 @@
                 const data = response.data;
                 console.log("data", data);
 
-                // Determine the maximum number of yards
                 let maxYards = 0;
                 data.forEach((item) => {
                     if (item.additionalInfo.length > maxYards) {
@@ -343,51 +333,54 @@
                     }
                 });
 
-                // Update the table header to include the correct number of Yard columns
                 const tableHeader = $("#tableHeader");
                 for (let i = 1; i <= maxYards; i++) {
                     tableHeader.append(`<th scope="col">Yard ${i}</th>`);
                 }
 
-                // Append the yard information to the table body
                 data.forEach((item) => {
-                    if (item.additionalInfo.length > 0) {
-                        let yardInfoHtml = "";
-                        for (let i = 0; i < maxYards; i++) {
-                            if (item.additionalInfo[i]) {
-                                const paymentStatus =
-                                    item.additionalInfo[i].paymentStatus === "Card charged"
-                                        ? `<span class="highlight-red-button">${item.additionalInfo[i].paymentStatus}</span>`
-                                        : item.additionalInfo[i].paymentStatus;
+                    let cardChargedCount = 0;
+                    let yardInfoHtml = "";
 
-                                const yardInfo = [
-                                    item.additionalInfo[i].yardName || "",
-                                    item.additionalInfo[i].address || "",
-                                    item.additionalInfo[i].phone || "",
-                                ].filter(Boolean).join(" | ");
-
-                                const contactInfo = [
-                                    item.additionalInfo[i].email || "",
-                                    item.additionalInfo[i].agentName || "",
-                                    item.additionalInfo[i].partPrice || "",
-                                    item.additionalInfo[i].shippingMethod || "",
-                                    item.additionalInfo[i].shippingDetails ? `(${item.additionalInfo[i].shippingDetails})` : "",
-                                ].filter(Boolean).join(" | ");
-
-                                const statusInfo = [
-                                    item.additionalInfo[i].status || "",
-                                    paymentStatus,
-                                    item.additionalInfo[i].paymentDetails || "",
-                                    item.additionalInfo[i].trackingNo || "",
-                                    item.additionalInfo[i].shipperName || "",
-                                ].filter(Boolean).join(" | ");
-
-                                yardInfoHtml += `<td>${yardInfo}<br>${contactInfo}<br>${statusInfo}</td>`;
-                            } else {
-                                yardInfoHtml += "<td></td>";
+                    for (let i = 0; i < maxYards; i++) {
+                        if (item.additionalInfo[i]) {
+                            if (item.additionalInfo[i].paymentStatus === "Card charged") {
+                                cardChargedCount++;
                             }
-                        }
 
+                            const paymentStatus = item.additionalInfo[i].paymentStatus === "Card charged"
+                                ? `<span class="highlight-red-button">${item.additionalInfo[i].paymentStatus}</span>`
+                                : item.additionalInfo[i].paymentStatus;
+
+                            const yardInfo = [
+                                item.additionalInfo[i].yardName || "",
+                                item.additionalInfo[i].address || "",
+                                item.additionalInfo[i].phone || "",
+                            ].filter(Boolean).join(" | ");
+
+                            const contactInfo = [
+                                item.additionalInfo[i].email || "",
+                                item.additionalInfo[i].agentName || "",
+                                item.additionalInfo[i].partPrice || "",
+                                item.additionalInfo[i].shippingMethod || "",
+                                item.additionalInfo[i].shippingDetails ? `(${item.additionalInfo[i].shippingDetails})` : "",
+                            ].filter(Boolean).join(" | ");
+
+                            const statusInfo = [
+                                item.additionalInfo[i].status || "",
+                                paymentStatus,
+                                item.additionalInfo[i].paymentDetails || "",
+                                item.additionalInfo[i].trackingNo || "",
+                                item.additionalInfo[i].shipperName || "",
+                            ].filter(Boolean).join(" | ");
+
+                            yardInfoHtml += `<td>${yardInfo}<br>${contactInfo}<br>${statusInfo}</td>`;
+                        } else {
+                            yardInfoHtml += "<td></td>";
+                        }
+                    }
+
+                    if (cardChargedCount >= 2) {
                         $("#yardInfoTable").append(
                             `<tr>
                                 <td>${item.orderNo}</td>
@@ -402,13 +395,10 @@
                 alert("Error fetching yard information: " + error.message);
             }
 
-            
-
             if (firstName) {
                 $("#user-name").text(firstName);
             }
 
-            // Populate profile information and show modal
             $("#profileLink").click(function () {
                 $("#profileFirstName").val(firstName);
                 $("#profileLastName").val(lastName);
@@ -421,8 +411,6 @@
                 $("#profile-content").addClass("d-none");
                 $("#yard-info-content").removeClass("d-none");
             });
-
-            
 
             $(".toggle-btn").on("click", function () {
                 $("#offcanvasSidebar").removeClass("hide");
@@ -453,34 +441,7 @@
                 submenu.toggle();
                 $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
             });
-            // Apply team-based restrictions
-            if (team === "Team Charlie") {
-                // Hide specific reports links
-                $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
-                // Hide specific dashboards links
-                $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
-                $(".nav-item:has(#submenu-teams)").hide();
-                $(".nav-item:has(#submenu-users)").hide();
-            }else if(team === "Team Mark"){
-                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-                $(".nav-item:has(#submenu-teams)").hide();
-                $(".nav-item:has(#submenu-users)").hide();
-                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
 
-            }
-            else if(team === "Team Sussane"){
-                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-                $(".nav-item:has(#submenu-teams)").hide();
-                $(".nav-item:has(#submenu-users)").hide();
-                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
-
-            } else if (role === "Admin") {
-                // Hide specific reports links for Admin
-                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-                // Hide specific dashboards links for Admin
-                $('#submenu-dashboards .view-individualOrders-link').hide();
-            }
-            // Logout functionality
             $("#logoutLink").click(function () {
                 localStorage.removeItem("token");
                 localStorage.removeItem("firstName");
@@ -490,7 +451,6 @@
                 window.location.href = "login_signup.html";
             });
         });
-        
     </script>
 </body>
 </html>

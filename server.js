@@ -35,6 +35,9 @@ mongoose
 
 let orderCount = 0;
 
+
+
+
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
   console.log("adding new order");
@@ -211,10 +214,29 @@ const CancelledOrderSchema = new mongoose.Schema({
   orderHistory: [String],
   isCancelled: { type: Boolean, default: true },
   last4digits:String,
-  notes: String
+  notes: [String]
 });
 
 const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
+const additionalInfoSchema = new mongoose.Schema({
+  yardName: String,
+  address: String,
+  phone: String,
+  email: String,
+  agentName: String,
+  partPrice: Number,
+  shippingMethod: String,
+  shippingDetails: String,
+  others: String,
+  status: String,
+  paymentStatus: String,
+  refundedAmount: Number,
+  escalationCause: String,
+  escalationProcess: String,
+  returnShipping: String,
+  returnShippingCharge: Number,
+  notes: [String] // Ensure notes field is an array of strings
+});
 
 const OrderSchema = new mongoose.Schema({
   orderNo: String,
@@ -239,10 +261,10 @@ const OrderSchema = new mongoose.Schema({
   orderStatus: String,
   vin: String,
   last4digits: String,
-  additionalInfo: Array,
+  additionalInfo: [additionalInfoSchema],
   trackingInfo: String,
   orderHistory: [String],
-  notes: String,
+  notes: [String],
   isCancelled: { type: Boolean, default: false },
   teamOrder:String,
   actualGP:Number
@@ -300,11 +322,11 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
 
       order.additionalInfo.push(req.body);
       console.log("additional updated",order)
-      var pp = order.additionalInfo[countYard].partPrice;
-      var yardname = order.additionalInfo[countYard].yardName;
-      var shipping = order.additionalInfo[countYard].shippingMethod;
-      var others = order.additionalInfo[countYard].others;
-
+      var pp = order.additionalInfo[countYard -1 ].partPrice;
+      var yardname = order.additionalInfo[countYard - 1].yardName;
+      var shipping = order.additionalInfo[countYard - 1].shippingMethod;
+      var others = order.additionalInfo[countYard - 1].others;
+      console.log("yard details",pp,yardname,shipping,others);
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
       order.orderHistory.push(`Yard ${countYard} PO sent Yard Name-${yardname} PP-${pp} ${shipping} Others-${others}   by Dipshika on ${timestamp}`);
@@ -774,30 +796,94 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   }
 });
 
-// update notes
-app.post("/orders/:orderNo/notes", async (req, res) => {
-  try {
-    const { orderNo } = req.params;
-    const { note } = req.body;
 
-    console.log(`Received request to add note to order ${orderNo}: ${note}`);
+//notes section
+// Update notes in additionalInfo of a specific yardIndex
+app.post('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
+  console.log('Received request to add note');
+  try {
+    const { orderNo, yardIndex } = req.params;
+    const { note } = req.body;
+    const yardIndexInt = parseInt(yardIndex, 10); // Convert to integer
+
+    console.log(`Received request to add note to order ${orderNo}, yardIndex ${yardIndexInt}: ${note}`);
 
     const order = await Order.findOne({ orderNo });
     if (!order) {
       console.log(`Order ${orderNo} not found`);
-      return res.status(404).send("Order not found");
+      return res.status(404).send('Order not found');
     }
 
-    order.notes = note;
+    if (!order.additionalInfo || !order.additionalInfo[yardIndexInt]) {
+      console.log(`YardIndex ${yardIndexInt} not found in order ${orderNo}`);
+      return res.status(404).send('YardIndex not found');
+    }
+
+    if (!order.additionalInfo[yardIndexInt].notes) {
+      console.log("Initializing notes array");
+      order.additionalInfo[yardIndexInt].notes = [];
+    }
+
+    order.additionalInfo[yardIndexInt].notes.push(note);
+
+    console.log("Order before save:", JSON.stringify(order, null, 2));
 
     await order.save();
-    res.json(order);
+
+    console.log("Order after save:", JSON.stringify(order, null, 2));
+    res.json(order.additionalInfo[yardIndexInt].notes);
   } catch (error) {
-    console.error("Error updating notes:", error);
-    res.status(500).json({ message: "Server error", error });
+    console.error('Error updating notes:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+ 
+
+
+app.get('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
+  console.log("fetch notes data")
+  try {
+    const { orderNo, yardIndex } = req.params;
+    const order = await Order.findOne({ orderNo });
+    if (!order) {
+      return res.status(404).send('Order not found');
+    }
+
+    const notes = order.additionalInfo[yardIndex].notes || [];
+    res.json(notes);
+  } catch (error) {
+    console.error('Error fetching notes:', error);
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 
+//notes section till here
+
+
+// update notes and append notes
+
+// Update order status and append notes specifically for Customer Approved
+app.put('/orders/:orderNo/notes', async (req, res) => {
+  console.log("put note/update notes")
+  var body = req.body;
+  console.log("body",body);
+  const { orderNo } = body.orderNo;
+  const { notes } = body.notes;
+  const { orderStatus } = body.status;
+  try {
+      const order = await Order.findOneAndUpdate(
+          { orderNo: orderNo },
+          { $set: { orderStatus: 'Customer approved' }, $push: { notes: notes } },
+          { new: true }
+      );
+      if (!order) {
+          return res.status(404).json({ message: 'Order not found' });
+      }
+      res.status(200).json(order);
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
+});
 
 // Mock function to simulate token retrieval from the database
 const getTokenFromDatabase = async (userId) => {
