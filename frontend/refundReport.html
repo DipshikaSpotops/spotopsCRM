@@ -193,6 +193,7 @@
                         <a class="nav-link" href="placedOrders.html">Placed Orders</a>
                         <a class="nav-link" href="cancelledOrders.html">Cancelled Orders</a>
                         <a class="nav-link" href="yardInfo.html">Yard Details</a>
+                        <a class="nav-link customer-approved-link" href="customerApproved.html">Customer Approved</a>
                     </div>
                 </div>
                 <div class="nav-item">
@@ -372,8 +373,8 @@
                     let totalShipping = 0;
 
                     for (let i = 0; i < maxYards; i++) {
-                        if (item.additionalInfo[i] && item.additionalInfo[i].status === "Refund collected") {
-                            appendOrder = true; // set flag to true if any additionalInfo has status "Card charged"
+                        if (item.additionalInfo[i] && item.additionalInfo[i].paymentStatus === "Refund collected") {
+                            appendOrder = true; 
                             const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
                             const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
                             totalPartPrice += partPrice;

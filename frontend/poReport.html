@@ -197,6 +197,7 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
                         <a class="nav-link" href="placedOrders.html">Placed Orders</a>
                         <a class="nav-link" href="cancelledOrders.html">Cancelled Orders</a>
                         <a class="nav-link" href="yardInfo.html">Yard Details</a>
+                        <a class="nav-link customer-approved-link" href="customerApproved.html">Customer Approved</a>
                     </div>
                 </div>
                 <div class="nav-item">
@@ -343,14 +344,21 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
 
                         for (let i = 0; i < maxYards; i++) {
                             if (item.additionalInfo[i]) {
+                                console.log("add",item.additionalInfo[i]);
                                 const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
                                 const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
+                                var yEmail = item.additionalInfo[i].email || "0"
+                                console.log("yemail",yEmail);
                                 totalPartPrice += partPrice;
                                 totalShipping += shippingCharge;
+                                var fName = localStorage.getItem("firstName");
+                                var date = new Date().toLocaleString();
 
                                 yardInfoHtml += `<td>
-                                    ${item.additionalInfo[i].yardName || ""} | $${item.additionalInfo[i].partPrice || "0"}<br>
-                                    ${item.additionalInfo[i].shippingMethod || ""} ($${item.additionalInfo[i].shippingDetails || "0"})<br>
+                                    ${item.additionalInfo[i].yardName || ""} | ${yEmail} | ${item.additionalInfo[i].phone || ""}<br>
+                                    Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${item.additionalInfo[i].shippingDetails || "0"}) | ${item.additionalInfo[i].status || ""} Others: $${item.additionalInfo[i].others || ""} <br>
+                                    PO sent by ${fName} at ${date} <br>
+                                    
                                 </td>`;
                             } else {
                                 yardInfoHtml += "<td></td>";
@@ -471,6 +479,7 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
                 $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
             });
             // Apply team-based restrictions
+            var team = localStorage.getItem("team");
             if (team === "Team Charlie") {
                 // Hide specific reports links
                 $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();

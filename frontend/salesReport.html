@@ -385,7 +385,8 @@
                                 const shippingCharge = info[d].shippingDetails || 0;
                                 const partprice = info[d].partPrice || 0;
                                 const otherC = info[d].others || 0;
-                                totalP = Number(shippingCharge) + Number(partprice) + Number(otherC);
+                                const returnShippingCharge = info[d].returnShippingCharge || 0;
+                                totalP = Number(shippingCharge) + Number(partprice) + Number(otherC) + returnShippingCharge;
                                 totalR = info[d].refundedAmount || 0;
 
                                 if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
