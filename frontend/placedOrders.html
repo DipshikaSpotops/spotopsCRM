@@ -290,210 +290,169 @@
     </div>
 
     <script>
-      $(document).ready(async function () {
-        const firstName = localStorage.getItem("firstName");
-        const role = localStorage.getItem("role");
-        const email = localStorage.getItem("email");
-        let token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId");
+        $(document).ready(async function () {
+          $(document).ready(async function () {
+    const firstName = localStorage.getItem("firstName");
+    const role = localStorage.getItem("role");
+    const email = localStorage.getItem("email");
+    let token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
 
-        console.log("token", token);
+    console.log("token", token);
 
-        if (firstName) {
-          $("#user-name").text(firstName);
-        }
+    if (firstName) {
+        $("#user-name").text(firstName);
+    }
 
-        let userRole = null;
-        let userEmail = null;
+    let userRole = null;
+    let userEmail = null;
 
-        async function fetchToken() {
-          try {
+    async function fetchToken() {
+        try {
             const response = await axios.get(
-              `http://localhost:3000/auth/token/${userId}`
+                `http://localhost:3000/auth/token/${userId}`
             );
             if (response.status === 200) {
-              token = response.data.token;
-              console.log("Fetched token from DB:", token);
+                token = response.data.token;
+                console.log("Fetched token from DB:", token);
             } else {
-              throw new Error("Failed to fetch token");
+                throw new Error("Failed to fetch token");
             }
-          } catch (error) {
+        } catch (error) {
             console.error("Error fetching token:", error);
-          }
         }
+    }
 
-        if (!token) {
-          await fetchToken();
-        }
+    if (!token) {
+        await fetchToken();
+    }
 
-        
+    // Populate profile information
+    $('#profileLink').click(function () {
+        $('#profileName').val(firstName);
+        $('#profileRole').val(role);
+        $('#profileEmail').val(email);
+        $('#placed-order-content').addClass('d-none');
+        $('#profile-content').removeClass('d-none');
+    });
 
-        // Populate profile information
-        $('#profileLink').click(function () {
-          $('#profileName').val(firstName);
-          $('#profileRole').val(role);
-          $('#profileEmail').val(email);
-          $('#placed-order-content').addClass('d-none');
-          $('#profile-content').removeClass('d-none');
-        });
+    $('#backToOrders').click(function () {
+        $('#profile-content').addClass('d-none');
+        $('#placed-order-content').removeClass('d-none');
+    });
 
-        $('#backToOrders').click(function () {
-          $('#profile-content').addClass('d-none');
-          $('#placed-order-content').removeClass('d-none');
-        });
-
-      
-
-        try {
-          const response = await axios.get(
+    try {
+        const response = await axios.get(
             "http://localhost:3000/orders?status=placed",
             {
-              headers: token ? { Authorization: `Bearer ${token}` } : {},
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
             }
-          );
+        );
 
-          if (response.status !== 200) {
+        if (response.status !== 200) {
             throw new Error("Failed to fetch orders");
-          }
-
-          const data = response.data;
-          data.forEach((item) => {
-            let actions = "";
-            let sendInvoice = "";
-
-            // if (userRole === "Admin") {
-            //   actions = `
-            //     <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
-            //     <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
-            //     <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-            //   `;
-            //   sendInvoice = `
-            //     <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: coral;color: white;">Send Invoice</button>
-            //   `;
-            // } else if (userRole === "Sales") {
-            //   actions = `
-            //     <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
-            //     <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-            //   `;
-            // } else if (userRole === "Support") {
-            //   actions = `
-            //     <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
-            //     <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-            //   `;
-            //   sendInvoice = `
-            //     <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: coral;color: white;">Send Invoice</button>
-            //   `;
-            // }
-            if (item.orderStatus === "Placed") {
-              console.log("inside placed",item);
-              $("#infoTable").append(
-                `<tr>
-                  <td>${item.orderDate}</td>
-                  <td>${item.orderNo}</td>
-                  <td>${item.salesAgent}</td>
-                  <td>${item.customerName}</td>
-                  <td>${item.pReq || item.partName}</td>
-                  <td>${item.orderStatus}</td>
-                  <td>${item.email}</td>
-                  <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
-                </tr>`
-              );
-            }
-          });
-        } catch (error) {
-          console.error("Error fetching orders:", error);
         }
 
-        $("#infoTable").on("click", ".edit-btn", function () {
-          const id = $(this).data("id");
-          window.location.href = `form.html?orderNo=${id}&role=${userRole}`;
+        const data = response.data;
+        data.forEach((item) => {
+            if (item.orderStatus === "Placed") {
+                $("#infoTable").append(
+                    `<tr>
+                        <td>${item.orderDate}</td>
+                        <td>${item.orderNo}</td>
+                        <td>${item.salesAgent}</td>
+                        <td>${item.customerName}</td>
+                        <td>${item.pReq || item.partName}</td>
+                        <td>${item.orderStatus}</td>
+                        <td>${item.email}</td>
+                        <td><button class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">Approve</button></td>
+                    </tr>`
+                );
+            }
         });
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+    }
 
-        $("#infoTable").on("click", ".process-btn", function () {
-          const id = $(this).data("id");
-          window.location.href = `form.html?orderNo=${id}&process=true&role=${userRole}`;
-        });
+    $("#infoTable").on("click", ".approve-btn", async function () {
+        const orderNo = $(this).data('id');
+        console.log("orderNo", orderNo);
+        const updatedData = { orderStatus: "Customer approved", firstName: firstName };
 
-        $("#infoTable").on("click", ".cancel-btn", function () {
-          const id = $(this).data("id");
-          if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-            fetch(`http://localhost:3000/orders/${id}/cancel`, {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                $(this).closest("tr").remove(); // Remove the row from the table
-              });
-          }
-        });
-
-        $("#infoTable").on("click", ".send-invoice-btn", function () {
-          const id = $(this).data("id");
-          fetch(`http://localhost:3000/orders/sendInvoice/${id}`, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              alert(data.message);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
+        try {
+            const response = await fetch(`http://localhost:3000/orders/${orderNo}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedData)
             });
-        });
 
-        $("#addNewEntry").on("click", function (e) {
-          e.preventDefault();
-          window.location.href = "form.html?newEntry=true";
-        });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
 
-        $(".toggle-btn").on("click", function () {
-          $("#offcanvasSidebar").removeClass("hide");
-        });
+            const data = await response.json();
+            // Update the order status in the table
+            $(this).closest("tr").find("td:eq(5)").text("Customer approved");
+            $(this).remove(); // Remove the approve button after approval
 
-        $(".close-btn").on("click", function () {
-          $("#offcanvasSidebar").addClass("hide");
-        });
+            console.log("Order status updated successfully:", data);
+        } catch (error) {
+            console.error("Error updating order status:", error);
+        }
+    });
 
-        $(".nav-link").on("click", function () {
-          $(".nav-link").removeClass("active");
-          $(this).addClass("active");
+    $(".toggle-btn").on("click", function () {
+        $("#offcanvasSidebar").removeClass("hide");
+    });
 
-          const contentMap = {
+    $(".close-btn").on("click", function () {
+        $("#offcanvasSidebar").addClass("hide");
+    });
+
+    $(".nav-link").on("click", function () {
+        $(".nav-link").removeClass("active");
+        $(this).addClass("active");
+
+        const contentMap = {
             "default-link": "#default-content",
             "add-order-link": "#add-order-content",
             "view-order-link": "#view-order-content",
-          };
+        };
 
-          $(".main-content > div").addClass("d-none");
-          $(contentMap[this.id]).removeClass("d-none");
-          $("#offcanvasSidebar").addClass("hide");
-        });
+        $(".main-content > div").addClass("d-none");
+        $(contentMap[this.id]).removeClass("d-none");
+        $("#offcanvasSidebar").addClass("hide");
+    });
 
-        $(".chevron-icon").on("click", function (event) {
-          event.stopPropagation();
-          const submenu = $(this).closest(".nav-item").find(".submenu");
-          submenu.toggle();
-          $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-        });
+    $(".chevron-icon").on("click", function (event) {
+        event.stopPropagation();
+        const submenu = $(this).closest(".nav-item").find(".submenu");
+        submenu.toggle();
+        $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+    });
 
-        $("#searchInput").on("keyup", function () {
-          let value = $(this).val().toLowerCase();
-          $("#infoTable tr").filter(function () {
+    $("#searchInput").on("keyup", function () {
+        let value = $(this).val().toLowerCase();
+        $("#infoTable tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-          });
         });
-          // Logout functionality
-          $('#logoutLink').click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("role");
-          localStorage.removeItem("email");
-          localStorage.removeItem("userId");
-          window.location.href = 'login_signup.html';
+    });
+
+    // Logout functionality
+    $('#logoutLink').click(function () {
+        localStorage.removeItem("token");
+        localStorage.removeItem("firstName");
+        localStorage.removeItem("role");
+        localStorage.removeItem("email");
+        localStorage.removeItem("userId");
+        window.location.href = 'login_signup.html';
+    });
+});
+
         });
-      });
     </script>
 </body>
 </html>
