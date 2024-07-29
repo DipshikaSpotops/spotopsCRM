@@ -1746,7 +1746,13 @@
                   })
                   .then((data) => {
                     updateOrderHistory(data.orderHistory); // Update order history
+                    const team = localStorage.getItem("team");
+                    console.log("teamU",team);
+                    if (team === "Team Charlie"){
+                      window.location.href = "individualOrders.html";
+                    }else{
                     window.location.href = "orders.html";
+                    }
                   })
                   .catch((error) => {
                     console.error("Error:", error);
@@ -1853,15 +1859,21 @@
             })
               .then((response) => response.json())
               .then((data) => {
-                const team = data.team;
+                const team = localStorage.getItem("team");
                 console.log("Team assigned:", team);
                 // if (team === "Mark") {
                 //   window.location.href = "ordersMark.html";
                 // } else if (team === "Sussane") {
                 //   window.location.href = "ordersSussane.html";
                 // } else {
+                  console.log("teamU",team);
                 alert(`Order No ${newOrderNo} has been placed.`);
-                window.location.href = "orders.html";
+                
+                if (team === "Team Charlie"){
+                      window.location.href = "individualOrders.html";
+                    }else{
+                    window.location.href = "orders.html";
+                    }
                 // }
               })
               .catch((error) => {
