@@ -355,10 +355,8 @@ if team from local Storage is Team Sussane, Teams class should be compleltely di
                                 var date = new Date().toLocaleString();
 
                                 yardInfoHtml += `<td>
-                                    ${item.additionalInfo[i].yardName || ""} | ${yEmail} | ${item.additionalInfo[i].phone || ""}<br>
-                                    Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${item.additionalInfo[i].shippingDetails || "0"}) | ${item.additionalInfo[i].status || ""} Others: $${item.additionalInfo[i].others || ""} <br>
-                                    PO sent by ${fName} at ${date} <br>
-                                    
+                                    ${item.additionalInfo[i].yardName || ""} | $${item.additionalInfo[i].partPrice || "0"}<br>
+                                    ${item.additionalInfo[i].shippingMethod || ""} ($${item.additionalInfo[i].shippingDetails || "0"})<br>
                                 </td>`;
                             } else {
                                 yardInfoHtml += "<td></td>";
