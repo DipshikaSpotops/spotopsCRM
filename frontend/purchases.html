@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CRM Dashboard</title>
+    <title>Purchases</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
     <style>
@@ -19,14 +19,26 @@
         }
         .navbar .user-info span {
             margin-right: 10px;
-            color: black;
+            color: white;
         }
         .navbar .user-icon {
-            color: black;
+            color: white;
             cursor: pointer;
         }
+        #searchInput {
+        width: 40%;
+        border-radius: 30px;
+        border: 1px solid grey;
+        text-align: center;
+        margin: 1% 28%;
+        background: white url(/images/magnify.png) 5px center no-repeat;
+        background-size: 20px 20px;
+        padding-left: 35px;
+        height: 40px;
+      }
         .navbar {
-            color: black;
+            color: white;
+            background-color: black;
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
@@ -36,23 +48,23 @@
             top: 0;
             z-index: 2;
             border-bottom: 1px solid #e0e0e0;
-            background: linear-gradient(to right, #006666 12.8%, white 11.5%);
         }
         .sidebar {
-            background-color: #006666;
+            background-color: black;
             position: fixed;
             z-index: 1;
             top: 0;
             left: 0;
             overflow-x: hidden;
             padding-top: 20px;
-            width: 14%;
+            width: 13%;
             height: 100vh;
-            padding: 50px 14px;
-            margin: 0 -21px;
+            padding: 50px 0px;
+            transition: transform 0.3s ease;
         }
         .sidebar .nav-link {
             color: #ffffff;
+            cursor: pointer;
         }
         .sidebar .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -67,30 +79,10 @@
             padding: 20px;
             margin-left: 14%;
             margin-top: 60px;
-        }
-        .toggle-btn,
-        .close-btn {
-            position: fixed;
-            top: 75px;
-            z-index: 1030;
-            cursor: pointer;
-            color: #fff;
-        }
-        .toggle-btn {
-            left: 15px;
-        }
-        .close-btn {
-            left: 220px;
-            display: none;
-        }
-        .sidebar.hide {
-            transform: translateX(-100%);
+            transition: margin-left 0.3s ease;
         }
         .submenu {
-            display: none;
-        }
-        .nav-link.collapsed + .submenu {
-            display: block;
+            display: block; /* Show all submenus by default */
         }
         .nav-item > .submenu {
             padding-left: 20px;
@@ -111,42 +103,32 @@
             display: block;
             margin-left: 20px;
         }
+        .toggle-sidebar {
+            display: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 70%;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .toggle-sidebar {
+                display: block;
+            }
+        }
         table.table td,
         table.table th {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-        .highlight-red-button {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 0px 6px;
-            border-radius: 5px;
-            cursor: default;
-            display: inline-block;
-            font-size: 0.875rem;
-        }
-        .profile-table {
-            width: 50%;
-            margin: 20px auto;
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        .profile-table input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .date-filter {
-            margin-bottom: 20px;
-        }
-        .date-filter label {
-            margin-right: 10px;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -157,6 +139,9 @@
     <div class="navbar">
         <div class="logo">
             <img id="logoImg" src="/images/darkLogo.png" alt="Logo" />
+        </div>
+        <div class="toggle-sidebar">
+            <i class="fas fa-bars"></i>
         </div>
         <div class="user-info dropdown">
             <span>Welcome <span id="user-name"></span></span>
@@ -169,13 +154,6 @@
         </div>
     </div>
 
-    <div class="toggle-btn">
-        <span class="navbar-toggler-icon"></span>
-    </div>
-    <div class="close-btn">
-        <span>&times;</span>
-    </div>
-
     <div class="sidebar" id="offcanvasSidebar">
         <div class="offcanvas-body">
             <nav class="nav flex-column">
@@ -185,13 +163,14 @@
                         <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
                     </a>
                     <div class="submenu" id="submenu-dashboards">
-                        <a class="nav-link" href="form.html?newEntry=true">Add New Order</a>
-                        <a class="nav-link" href="orders.html">View Orders</a>
+                        <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
+                        <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
                         <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
-                        <a class="nav-link" href="ordersMark.html">TeamA Orders</a>
-                        <a class="nav-link" href="ordersSussane.html">TeamB Orders</a>
-                        <a class="nav-link" href="cancelledOrders.html">Cancelled Orders</a>
-                        <a class="nav-link" href="yardInfo.html">Yard Details</a>
+                        <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
+                        <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
+                        <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+                        <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
                         <a class="nav-link customer-approved-link" href="customerApproved.html">Customer Approved</a>
                     </div>
                 </div>
@@ -220,11 +199,13 @@
                         <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
                     </a>
                     <div class="submenu" id="submenu-reports">
-                        <a class="nav-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
                         <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
                         <a class="nav-link" href="purchases.html">Purchases</a>
                         <a class="nav-link" href="poReport.html">PO Report</a>
-                        <!-- <a class="nav-link" href="refundReport.html">Refund Report</a> -->
+                        <a class="nav-link" href="refundReport.html">Refund Report</a>
+                        <a class="nav-link" href="salesReport.html">My Sales Report</a>
+                        <a class="nav-link" href="moreThan2CardC.html">Collect Refund</a>
                     </div>
                 </div>
             </nav>
@@ -232,19 +213,16 @@
     </div>
 
     <div class="main-content">
-        <div id="yard-info-content">
-            <h1>Purchases</h1>
-            <div class="date-filter">
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate">
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate">
-                <button class="btn btn-primary" id="filterBtn">Filter</button>
-            </div>
+        <div id="purchases-content">
+            <h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Purchases</h1>
+            
+                <div style="align-items: center; justify-content: center">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search..." />
+                  </div>
             <div class="table-responsive mx-auto" style="max-width: 90%">
                 <table class="table table-bordered mt-4">
                     <thead>
-                        <tr id="tableHeader">
+                        <tr id="tableHeader" style="background-color: #f2f2f2;">
                             <th scope="col">Order No</th>
                             <th scope="col">Order Date</th>
                         </tr>
@@ -271,43 +249,6 @@
                 <label for="profileEmail">Email Id:</label>
                 <input type="text" id="profileEmail" readonly />
                 <button class="btn btn-primary" id="backToOrders">Back</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="profileForm">
-                        <div class="form-group">
-                            <label for="profileFirstName">First Name</label>
-                            <input type="text" class="form-control" id="profileFirstName" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileLastName">Last Name</label>
-                            <input type="text" class="form-control" id="profileLastName" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileEmail">Email</label>
-                            <input type="email" class="form-control" id="profileEmail" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileRole">Role</label>
-                            <input type="text" class="form-control" id="profileRole" readonly>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
     </div>
@@ -464,6 +405,14 @@
                 $("#user-name").text(firstName);
             }
 
+            // Highlight active link based on current URL
+        const currentPath = window.location.pathname;
+        $(".nav-link").each(function () {
+          if (currentPath.includes($(this).attr("href"))) {
+            $(this).addClass("active");
+          }
+        });
+
             // Populate profile information and show modal
             $("#profileLink").click(function () {
                 $("#profileFirstName").val(firstName);
@@ -475,8 +424,15 @@
 
             $("#backToOrders").click(function () {
                 $("#profile-content").addClass("d-none");
-                $("#yard-info-content").removeClass("d-none");
+                $("#purchases-content").removeClass("d-none");
             });
+
+            $("#searchInput").on("keyup", function () {
+          let value = $(this).val().toLowerCase();
+          $("#yardInfoTable tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+          });
+        }); 
 
             $("#logoutLink").click(function () {
                 localStorage.removeItem("token");
@@ -487,37 +443,34 @@
                 window.location.href = "login_signup.html";
             });
 
-            $(".toggle-btn").on("click", function () {
-                $("#offcanvasSidebar").removeClass("hide");
-            });
-
-            $(".close-btn").on("click", function () {
-                $("#offcanvasSidebar").addClass("hide");
+            $(".toggle-sidebar").on("click", function () {
+                $("#offcanvasSidebar").toggleClass("show");
             });
 
             $(".nav-link").on("click", function () {
-                $(".nav-link").removeClass("active");
-                $(this).addClass("active");
+                $(".nav-link").removeClass("active selected");
+                $(this).addClass("selected");
 
                 const contentMap = {
-                    "default-link": "#default-content",
+                    "default-link": "#purchases-content",
                     "add-order-link": "#add-order-content",
                     "view-order-link": "#view-order-content",
                 };
 
                 $(".main-content > div").addClass("d-none");
                 $(contentMap[this.id]).removeClass("d-none");
-                $("#offcanvasSidebar").addClass("hide");
+                $("#offcanvasSidebar").removeClass("show");
             });
 
-            $(".chevron-icon").on("click", function (event) {
+            $(".chevron-icon, .nav-link").on("click", function (event) {
                 event.stopPropagation();
                 const submenu = $(this).closest(".nav-item").find(".submenu");
                 submenu.toggle();
                 $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+                $(this).closest(".nav-link").toggleClass("selected");
             });
             // Apply team-based restrictions
-             team = localStorage.getItem("item");
+             team = localStorage.getItem("team");
             if (team === "Team Charlie") {
                 // Hide specific reports links
                 $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Placed Orders</title>
+    <title>Customer Approved Orders</title>
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -19,7 +19,8 @@
         flex-direction: column;
       }
       .navbar {
-        color: black;
+        color: white;
+        background-color: black;
         padding: 10px 20px;
         display: flex;
         justify-content: space-between;
@@ -29,6 +30,17 @@
         top: 0;
         z-index: 2;
         border-bottom: 1px solid #e0e0e0;
+      }
+      #searchInput {
+        width: 40%;
+        border-radius: 30px;
+        border: 1px solid grey;
+        text-align: center;
+        margin: 1% 28%;
+        background: white url(/images/magnify.png) 5px center no-repeat;
+        background-size: 20px 20px;
+        padding-left: 35px;
+        height: 40px;
       }
       #logoImg {
         height: auto;
@@ -41,10 +53,10 @@
       }
       .navbar .user-info span {
         margin-right: 10px;
-        color: black;
+        color: white;
       }
       .navbar .user-icon {
-        color: black;
+        color: white;
         cursor: pointer;
       }
       .dropdown-menu {
@@ -52,51 +64,40 @@
         left: auto;
       }
       .sidebar {
-        background-color: #006666;
+        background-color: black;
         position: fixed;
         z-index: 1;
-        top: 0; /* Sidebar starts from the top */
+        top: 0;
         left: 0;
         overflow-x: hidden;
         padding-top: 20px;
-        width: 14%;
-        height: 100vh; /* Full height */
-        padding: 50px 14px;
-        /* border-radius: 10px; */
+        width: 13%;
+        height: 100vh;
+        padding: 50px 0px;
+        transition: transform 0.3s ease;
       }
       .sidebar .nav-link {
         color: #ffffff;
+        cursor: pointer;
       }
-      .sidebar .nav-link.active {
+      .sidebar .nav-link:hover {
         background-color: rgba(255, 255, 255, 0.2);
+      }
+      .sidebar .nav-link.active,
+      .sidebar .nav-link.selected {
+        background-color: rgba(255, 255, 255, 0.2);
+        cursor: default;
+        border: none;
       }
       .main-content {
         flex-grow: 1;
         padding: 20px;
-        margin-left: 14%; /* Offset for the sidebar */
-        margin-top: 60px; /* Adjusted for navbar */
-        overflow-x: auto;
-      }
-      .toggle-btn,
-      .close-btn {
-        position: fixed;
-        top: 15px; /* Adjusted for navbar */
-        z-index: 1030;
-        cursor: pointer;
-        color: #fff;
-      }
-      .toggle-btn {
-        left: 15px;
-      }
-      .close-btn {
-        left: 220px;
-        display: none;
-      }
-      .sidebar.hide {
-        transform: translateX(-100%);
+        margin-left: 14%;
+        margin-top: 20px;
+        transition: margin-left 0.3s ease;
       }
       .submenu {
-        display: none;
+        display: block; /* Show all submenus by default */
       }
       .nav-item > .submenu {
         padding-left: 20px;
@@ -116,6 +117,24 @@
       .submenu .nav-link {
         display: block;
         margin-left: 20px;
+      }
+      .toggle-btn,
+      .close-btn {
+        position: fixed;
+        top: 15px;
+        z-index: 1030;
+        cursor: pointer;
+        color: #fff;
+      }
+      .toggle-btn {
+        left: 15px;
+      }
+      .close-btn {
+        left: 220px;
+        display: none;
+      }
+      .sidebar.hide {
+        transform: translateX(-100%);
       }
       .profile-table {
         width: 50%;
@@ -174,82 +193,76 @@
 
     <div class="sidebar" id="offcanvasSidebar">
       <div class="offcanvas-body">
-          <nav class="nav flex-column">
-              <div class="nav-item">
-                  <a class="nav-link" href="#" id="default-link">
-                      <i class="fas fa-home"></i> Dashboards
-                      <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
-                  </a>
-                  <div class="submenu" id="submenu-dashboards">
-                      <a class="nav-link" href="form.html?newEntry=true">Add New Order</a>
-                      <a class="nav-link" href="orders.html">View Orders</a>
-                      <a class="nav-link" href="ordersMark.html">TeamA Orders</a>
-                      <a class="nav-link" href="ordersSussane.html">TeamB Orders</a>
-                      <a class="nav-link" href="placedOrders.html">Placed Orders</a>
-                      <a class="nav-link" href="cancelledOrders.html">Cancelled Orders</a>
-                      <a class="nav-link" href="yardInfo.html">Yard Details</a>
-                  </div>
-              </div>
-              <div class="nav-item">
-                  <a class="nav-link" href="#">
-                      <i class="fas fa-users"></i> Users
-                      <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
-                  </a>
-                  <div class="submenu" id="submenu-users">
-                      <a class="nav-link" href="createUser.html">Create User</a>
-                      <a class="nav-link" href="viewallUsers.html">View Users</a>
-                  </div>
-              </div>
-              <div class="nav-item">
-                  <a class="nav-link" href="#">
-                      <i class="fas fa-users-cog"></i> Teams
-                      <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
-                  </a>
-                  <div class="submenu" id="submenu-teams">
-                      <a class="nav-link" href="teams.html">View Teams</a>
-                  </div>
-              </div>
-              <div class="nav-item">
-                  <a class="nav-link" href="#">
-                      <i class="fas fa-chart-bar"></i> Reports
-                      <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
-                  </a>
-                  <div class="submenu" id="submenu-reports">
-                      <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
-                      <a class="nav-link" href="purchases.html">Purchases</a>
-                      <a class="nav-link" href="poReport.html">PO Report</a>
-                  </div>
-              </div>
-          </nav>
+        <nav class="nav flex-column">
+          <div class="nav-item dashboards">
+            <a class="nav-link menu" href="#" id="default-link">
+              <i class="fas fa-home"></i> Dashboards
+              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+            </a>
+            <div class="submenu" id="submenu-dashboards">
+              <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
+              <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
+              <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
+              <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
+              <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
+              <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
+              <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+              <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
+              <a class="nav-link customer-approved-link" href="customerApproved.html">Customer Approved</a>
+            </div>
+          </div>
+          <div class="nav-item">
+            <a class="nav-link menu" href="#">
+              <i class="fas fa-users"></i> Users
+              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+            </a>
+            <div class="submenu" id="submenu-users">
+              <a class="nav-link" href="createUser.html">Create User</a>
+              <a class="nav-link" href="viewallUsers.html">View Users</a>
+            </div>
+          </div>
+          <div class="nav-item teams">
+            <a class="nav-link menu" href="#">
+              <i class="fas fa-users"></i> Teams
+              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+            </a>
+            <div class="submenu" id="submenu-teams">
+              <a class="nav-link" href="teams.html">View Teams</a>
+            </div>
+          </div>
+          <div class="nav-item">
+            <a class="nav-link menu" href="#">
+              <i class="fas fa-chart-bar"></i> Reports
+              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+            </a>
+            <div class="submenu" id="submenu-reports">
+              <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+              <a class="nav-link" href="purchases.html">Purchases</a>
+              <a class="nav-link" href="refundReport.html">Refund Report</a>
+              <a class="nav-link" href="poReport.html">PO Report</a>
+            </div>
+          </div>
+        </nav>
       </div>
-  </div>
+    </div>
 
     <div class="main-content">
       <div id="placed-order-content">
-        <div style="display: flex;">
-        <h1>Customer Approved Orders</h1>
-        <!-- Search Bar -->
-        <div class="form-group mx-auto" style="max-width: 400px">
-          <input
-            type="text"
-            class="form-control"
-            id="searchInput"
-            placeholder="Search..."
-          />
-        </div>
+        <div >
+          <h1 style="text-align: center; margin-right: 90px; margin-top: 20px">Customer Approved Orders</h1>
+      <div style="align-items: center; justify-content: center">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search..." />
       </div>
+        </div>
         <table class="table table-bordered">
           <thead>
-            <tr>
+            <tr style="background-color: #f2f2f2;">
               <th>Order Date</th>
               <th>Order No</th>
               <th>Agent Name</th>
               <th>Customer Name</th>
               <th>Part Name</th>
-              <!-- <th>Yard</th> -->
               <th>Order Status</th>
-              
-              <!-- <th>Send Invoice</th> -->
               <th>Email</th>
               <th>Actions</th>
             </tr>
@@ -312,8 +325,6 @@
           await fetchToken();
         }
 
-        
-
         // Populate profile information
         $('#profileLink').click(function () {
           $('#profileName').val(firstName);
@@ -327,8 +338,6 @@
           $('#profile-content').addClass('d-none');
           $('#placed-order-content').removeClass('d-none');
         });
-
-      
 
         try {
           const response = await axios.get(
@@ -344,11 +353,7 @@
 
           const data = response.data;
           data.forEach((item) => {
-            let actions = "";
-            let sendInvoice = "";
-            console.log("orderStatus",item.orderStatus);
             if (item.orderStatus === "Customer approved") {
-              console.log("inside placed",item);
               $("#infoTable").append(
                 `<tr>
                   <td>${item.orderDate}</td>
@@ -358,7 +363,7 @@
                   <td>${item.pReq || item.partName}</td>
                   <td>${item.orderStatus}</td>
                   <td>${item.email}</td>
-                  <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}"  style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
+                  <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
                 </tr>`
               );
             }
@@ -419,19 +424,11 @@
           $("#offcanvasSidebar").addClass("hide");
         });
 
-        $(".nav-link").on("click", function () {
-          $(".nav-link").removeClass("active");
-          $(this).addClass("active");
-
-          const contentMap = {
-            "default-link": "#default-content",
-            "add-order-link": "#add-order-content",
-            "view-order-link": "#view-order-content",
-          };
-
-          $(".main-content > div").addClass("d-none");
-          $(contentMap[this.id]).removeClass("d-none");
-          $("#offcanvasSidebar").addClass("hide");
+        $(".nav-link.menu").on("click", function (event) {
+          event.preventDefault(); // Prevent the default action
+          const submenu = $(this).closest(".nav-item").find(".submenu");
+          submenu.toggle();
+          $(this).find(".chevron-icon i").toggleClass("fa-chevron-right fa-chevron-down");
         });
 
         $(".chevron-icon").on("click", function (event) {
@@ -447,8 +444,15 @@
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
           });
         });
-          // Logout functionality
-          $('#logoutLink').click(function () {
+        // Highlight active link based on current URL
+        const currentPath = window.location.pathname;
+        $(".nav-link").each(function () {
+          if (currentPath.includes($(this).attr("href"))) {
+            $(this).addClass("active");
+          }
+        });
+        // Logout functionality
+        $('#logoutLink').click(function () {
           localStorage.removeItem("token");
           localStorage.removeItem("firstName");
           localStorage.removeItem("role");
