@@ -120,7 +120,7 @@ app.post("/orders", async (req, res) => {
 
     res.status(201).json({ newOrder, team: newOrder.team });
   } catch (error) {
-    console.error("Error creating order:", error);
+    console.error("Error in invoice creation:", error);
     res.status(500).json({ message: "Error creating order", error: error.message });
   }
 });
@@ -267,7 +267,8 @@ const OrderSchema = new mongoose.Schema({
   notes: [String],
   isCancelled: { type: Boolean, default: false },
   teamOrder:String,
-  actualGP:Number
+  actualGP:Number,
+  supportNotes:[String]
 });
 
 const Order = mongoose.model("Order", OrderSchema);
@@ -777,33 +778,51 @@ app.get("/ordersteamB", async (req, res) => {
 
 
 // function to edit the yard details
-app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
-  console.log("inside edit yard details");
-  const { orderNo, yardIndex } = req.params;
-  const updatedYardInfo = req.body;
+// app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
+//   console.log("inside edit yard details");
+//   const { orderNo, yardIndex } = req.params;
+//   const updatedYardInfo = req.body;
 
-  try {
-    const order = await Order.findOne({ orderNo });
-    if (!order) {
-      return res.status(404).send("Order not found");
-    }
+//   try {
+//     const order = await Order.findOne({ orderNo });
+//     if (!order) {
+//       return res.status(404).send("Order not found");
+//     }
 
-    order.additionalInfo[yardIndex] = updatedYardInfo;
-    await order.save();
-    res.status(200).json(order);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+//     order.additionalInfo[yardIndex] = updatedYardInfo;
+//     await order.save();
+//     res.status(200).json(order);
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   }
+// });
 
 
 //notes section
+// app.get('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
+//   console.log("Received request for notes with params:", req.params); // Log the request parameters
+//   try {
+//     const { orderNo, yardIndex } = req.params;
+//     const order = await Order.findOne({ orderNo });
+//     if (!order) {
+//       return res.status(404).send('Order not found');
+//     }
+//     var yIndex = parseInt(yardIndex, 10);
+//     console.log("yIndex",yIndex);
+//     const notes = order.additionalInfo[yardIndex]?.notes || [];
+//     console.log("get notes",notes);
+//     res.json({ notes });
+//   } catch (error) {
+//     console.error('Error fetching notes:', error);
+//     res.status(500).json({ message: 'Server error', error });
+//   }
+// });
 // Update notes in additionalInfo of a specific yardIndex
 app.post('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
   console.log('Received request to add note');
   try {
     const { orderNo, yardIndex } = req.params;
-    const { note } = req.body;
+    const { note, author, timestamp } = req.body;
     const yardIndexInt = parseInt(yardIndex, 10); // Convert to integer
 
     console.log(`Received request to add note to order ${orderNo}, yardIndex ${yardIndexInt}: ${note}`);
@@ -824,7 +843,16 @@ app.post('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
       order.additionalInfo[yardIndexInt].notes = [];
     }
 
-    order.additionalInfo[yardIndexInt].notes.push(note);
+    // Create the new note object
+    const newNote = {
+      note: note,
+      author: author,
+      timestamp: timestamp
+    };
+    var nNote = `${author},${timestamp} : ${note}`
+    console.log("mNote",nNote);
+    // Add the new note to the notes array
+    order.additionalInfo[yardIndexInt].notes.push(nNote);
 
     console.log("Order before save:", JSON.stringify(order, null, 2));
 
@@ -837,26 +865,27 @@ app.post('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
- 
 
-
-app.get('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
-  console.log("fetch notes data")
+// Update support notes
+app.put('/orders/:orderNo/supportNotes', async (req, res) => {
+  const { orderNo } = req.params;
+  const { note, author, timestamp } = req.body;
+  var supportNote = `${author},${timestamp} : ${note}` 
   try {
-    const { orderNo, yardIndex } = req.params;
     const order = await Order.findOne({ orderNo });
-    if (!order) {
-      return res.status(404).send('Order not found');
-    }
 
-    const notes = order.additionalInfo[yardIndex].notes || [];
-    res.json(notes);
+    if (order) {
+
+      order.supportNotes.push(supportNote);
+      await order.save();
+      res.status(200).json({ message: 'Support comments updated successfully.' });
+    } else {
+      res.status(404).json({ message: 'Order not found.' });
+    }
   } catch (error) {
-    console.error('Error fetching notes:', error);
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: 'Failed to update support comments.', error });
   }
 });
-
 //notes section till here
 
 
@@ -933,3 +962,37 @@ app.put('/orders/updateActualGP/:orderNo', async (req, res) => {
   }
 });
 
+
+// to delete a user
+app.delete('/users/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findByIdAndDelete(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+//edit user details
+
+app.put('/users/:id', async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
