@@ -33,7 +33,7 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
     console.log("Login data:", { email, password });
 
     try {
-        const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+        const response = await axios.post('https://spotops360.com/auth/login', { email, password });
         if (response.status === 200) {
             console.log("data res",response.data);
             localStorage.clear();
@@ -71,7 +71,7 @@ document.querySelector('.signup-btn').addEventListener('click', async (e) => {
     console.log("Signup data:", { fName, lName, email, password, role });
 
     try {
-        const response = await axios.post('http://localhost:3000/auth/signup', {
+        const response = await axios.post('https://spotops360.com/auth/signup', {
             fName, lName, email, password, role
         });
 
