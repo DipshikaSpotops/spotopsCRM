@@ -555,15 +555,7 @@
           location.reload();
         });
 
-        $('#logoutLink').click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("lastName");
-          localStorage.removeItem("role");
-          localStorage.removeItem("email");
-          localStorage.removeItem("team");
-          window.location.href = 'login_signup.html';
-        });
+        
 
         // Apply team-based and role-based restrictions
         if (team === "Team Charlie") {
@@ -607,6 +599,11 @@
           if (currentPath.includes($(this).attr("href"))) {
             $(this).addClass("active");
           }
+        });
+
+        $('#logoutLink').click(function () {
+          window.localStorage.clear();
+          window.location.href = 'login_signup.html';
         });
       });
     </script>
