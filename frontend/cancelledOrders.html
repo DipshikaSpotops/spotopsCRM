@@ -288,7 +288,7 @@
             const team = localStorage.getItem("team");
 
             try {
-                const response = await axios.get("https://spotops360.com/cancelledOrders", {
+                const response = await axios.get("https://www.spotops360.com/cancelledOrders", {
                     headers: token ? { Authorization: `Bearer ${token}` } : {},
                 });
 

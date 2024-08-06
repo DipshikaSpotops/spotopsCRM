@@ -421,7 +421,7 @@
         const token = localStorage.getItem("token");
 
         try {
-          const response = await axios.get("https://spotops360.com/orders", {
+          const response = await axios.get("https://www.spotops360.com/orders", {
             headers: token ? {
               Authorization: `Bearer ${token}`
             } : {},
@@ -486,7 +486,7 @@
           const id = $(this).data("id");
           console.log(`Cancel button clicked for order ID: ${id}`); // Added log
           if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-            fetch(`https://spotops360.com/orders/${id}`, {
+            fetch(`https://www.spotops360.com/orders/${id}`, {
               method: "DELETE",
               headers: {
                 Authorization: `Bearer ${token}`
@@ -511,7 +511,7 @@
 
         $("#infoTable").on("click", ".send-invoice-btn", function () {
           const id = $(this).data("id");
-          fetch(`https://spotops360.com/orders/sendInvoice/${id}`, {
+          fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`
