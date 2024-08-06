@@ -291,7 +291,7 @@
 
             async function fetchSalesData(filter) {
                 try {
-                    const response = await axios.get(`http://localhost:3000/orders`, {
+                    const response = await axios.get(`https://spotops360.com/orders`, {
                         headers: { Authorization: `Bearer ${token}` },
                     });
 
@@ -405,7 +405,7 @@
                                 console.log("final AGP", actualGP);
 
                                 await axios.put(
-                                    `http://localhost:3000/orders/updateActualGP/${order.orderNo}`,
+                                    `https://spotops360.com/orders/updateActualGP/${order.orderNo}`,
                                     { actualGP },
                                     {
                                         headers: { Authorization: `Bearer ${token}` },

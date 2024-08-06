@@ -365,7 +365,7 @@
 
         $.ajax({
           type: "GET",
-          url: "http://localhost:3000/orders",
+          url: "https://spotops360.com/orders",
           headers: { Authorization: `Bearer ${token}` },
           success: function (orders) {
             console.log("Orders fetched for Sussane's team:", orders); // Debugging line
@@ -402,7 +402,7 @@
         $("#infoTable").on("click", ".cancel-btn", function () {
           const id = $(this).data("id");
           if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-            fetch(`http://localhost:3000/orders/${id}`, {
+            fetch(`https://spotops360.com/orders/${id}`, {
               method: "DELETE",
               headers: { Authorization: `Bearer ${token}` },
             })
