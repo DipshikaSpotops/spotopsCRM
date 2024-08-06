@@ -277,6 +277,9 @@
         if (firstName) {
           $("#user-name").text(firstName);
         }
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
         const token = localStorage.getItem("token");
 
@@ -349,15 +352,7 @@
           }
         });
 
-        $("#logoutLink").click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("lastName");
-          localStorage.removeItem("role");
-          localStorage.removeItem("email");
-          localStorage.removeItem("team");
-          window.location.href = "login_signup.html";
-        });
+       
 
         if (firstName) {
           $("#user-name").text(firstName);
@@ -413,15 +408,10 @@
           }
         });
 
-        $("#logoutLink").click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("lastName");
-          localStorage.removeItem("email");
-          localStorage.removeItem("role");
-          localStorage.removeItem("team");
-          window.location.href = "login_signup.html";
-        });
+        $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
+            });
       });
     </script>
   </body>

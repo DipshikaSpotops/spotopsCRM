@@ -331,6 +331,9 @@
             if (firstName) {
                 $("#user-name").text(firstName);
             }
+            if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
             $("#searchInput").on("keyup", function () {
                 let value = $(this).val().toLowerCase();
@@ -403,15 +406,7 @@
           }
         });
 
-            $('#logoutLink').on('click', function() {
-                localStorage.removeItem("token");
-                localStorage.removeItem("firstName");
-                localStorage.removeItem("lastName");
-                localStorage.removeItem("email");
-                localStorage.removeItem("role");
-                localStorage.removeItem("team");
-                window.location.href = 'login_signup.html';
-            });
+            
             
             if (role === "Admin") {
                 // Hide specific reports links for Admin
@@ -429,6 +424,11 @@
                 $(".nav-item:has(#submenu-users)").hide();
                 $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
             }
+
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
+            });
         });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

@@ -301,6 +301,9 @@
         if (firstName) {
           $("#user-name").text(firstName);
         }
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
         let userRole = null;
         let userEmail = null;
@@ -452,14 +455,10 @@
           }
         });
         // Logout functionality
-        $('#logoutLink').click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("role");
-          localStorage.removeItem("email");
-          localStorage.removeItem("userId");
-          window.location.href = 'login_signup.html';
-        });
+        $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
+            });
       });
     </script>
   </body>

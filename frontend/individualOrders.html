@@ -41,19 +41,21 @@
             left: auto;
         }
         .sidebar {
-            background-color: #006666;
+            background-color: black;
             position: fixed;
             z-index: 1;
             top: 0;
             left: 0;
             overflow-x: hidden;
             padding-top: 20px;
-            width: 14%;
+            width: 13%;
             height: 100vh;
-            padding: 50px 14px;
+            padding: 50px 0px;
+            transition: transform 0.3s ease;
         }
         .sidebar .nav-link {
             color: #ffffff;
+            cursor: pointer;
         }
         .sidebar .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -89,7 +91,7 @@
             transform: translateX(-100%);
         }
         .submenu {
-            display: none;
+            display: block; /* Show submenus by default */
         }
         .nav-item > .submenu {
             padding-left: 20px;
@@ -131,6 +133,8 @@
         <div class="logo">
             <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
         </div>
+        <div class="toggle-btn">
+        </div>
         <div class="user-info dropdown">
             <span>Welcome <span id="user-name"></span></span>
             <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
@@ -142,20 +146,13 @@
         </div>
     </div>
 
-    <div class="toggle-btn">
-        <span class="navbar-toggler-icon"></span>
-    </div>
-    <div class="close-btn">
-        <span>&times;</span>
-    </div>
-
     <div class="sidebar" id="offcanvasSidebar">
         <div class="offcanvas-body">
             <nav class="nav flex-column">
                 <div class="nav-item dashboards">
-                    <a class="nav-link" href="#" id="default-link">
+                    <a class="nav-link menu" href="#" id="default-link">
                         <i class="fas fa-home"></i> Dashboards
-                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
                     <div class="submenu" id="submenu-dashboards">
                         <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
@@ -165,7 +162,7 @@
                 <div class="nav-item" id="reports-section">
                     <a class="nav-link" href="#">
                         <i class="fas fa-chart-bar"></i> Reports
-                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
                     <div class="submenu" id="submenu-reports">
                         <a class="nav-link" href="salesReport.html">My Sales Report</a>
@@ -191,7 +188,6 @@
                     <th>Est. GP</th>
                     <th>Actual GP</th>
                     <th>Order Status</th>
-                    
                 </tr>
             </thead>
             <tbody id="infoTable">
@@ -248,6 +244,9 @@
             if (firstName) {
                 $("#user-name").text(firstName);
             }
+            if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
             // Hide specific sections based on team
             const team = localStorage.getItem("team");
@@ -259,15 +258,13 @@
                 // Hide teams and users sections for Team Charlie
                 $(".nav-item:has(#submenu-teams)").hide();
                 $(".nav-item:has(#submenu-users)").hide();
-            }
-            else if(team === "Team Mark"){
+            } else if (team === "Team Mark") {
                 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
                 $(".nav-item:has(#submenu-teams)").hide();
                 $(".nav-item:has(#submenu-users)").hide();
                 $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
 
-            }
-            else if(team === "Team Sussane"){
+            } else if (team === "Team Sussane") {
                 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
                 $(".nav-item:has(#submenu-teams)").hide();
                 $(".nav-item:has(#submenu-users)").hide();
@@ -316,44 +313,16 @@
                 });
             });
 
-            $("#addNewEntry").on("click", function (e) {
-                e.preventDefault();
-                window.location.href = "form.html?newEntry=true";
-            });
-
             $(".toggle-btn").on("click", function () {
-                $("#offcanvasSidebar").removeClass("hide");
+                $("#offcanvasSidebar").toggleClass("show");
             });
 
-            $(".close-btn").on("click", function () {
-                $("#offcanvasSidebar").addClass("hide");
-            });
-
-            $(document).click(function (event) {
-                if (!$(event.target).closest("#offcanvasSidebar, .toggle-btn").length) {
-                    $("#offcanvasSidebar").addClass("hide");
-                }
-            });
-
-            $(".nav-link").on("click", function () {
-                const submenu = $(this).next(".submenu");
-                if (submenu.length) {
-                    submenu.slideToggle();
-                    $(this).find(".chevron-icon i").toggleClass("fa-chevron-right fa-chevron-down");
-                } else {
-                    $(".nav-link").removeClass("active");
-                    $(this).addClass("active");
-
-                    const contentMap = {
-                        "default-link": "#default-content",
-                        "add-order-link": "#add-order-content",
-                        "view-order-link": "#view-order-content",
-                    };
-
-                    $(".main-content > div").addClass("d-none");
-                    $(contentMap[this.id]).removeClass("d-none");
-                    $("#offcanvasSidebar").addClass("hide");
-                }
+            $(".chevron-icon, .nav-link").on("click", function (event) {
+                event.stopPropagation();
+                const submenu = $(this).closest(".nav-item").find(".submenu");
+                submenu.toggle();
+                $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+                $(this).closest(".nav-link").toggleClass("selected");
             });
 
             $('#profileLink').click(function () {
@@ -367,13 +336,16 @@
             $('.close').click(function () {
                 location.reload();
             });
+            // Highlight active link based on current URL
+        const currentPath = window.location.pathname;
+        $(".nav-link").each(function () {
+          if (currentPath.includes($(this).attr("href"))) {
+            $(this).addClass("active");
+          }
+        });
 
-            $('#logoutLink').click(function () {
-                localStorage.removeItem("token");
-                localStorage.removeItem("firstName");
-                localStorage.removeItem("lastName");
-                localStorage.removeItem("role");
-                localStorage.removeItem("email");
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
                 window.location.href = 'login_signup.html';
             });
         });
