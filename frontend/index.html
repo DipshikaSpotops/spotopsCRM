@@ -381,6 +381,10 @@
         const role = localStorage.getItem("role");
         const team = localStorage.getItem("team");
 
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
+
         if (firstName) {
           $("#user-name").text(firstName);
         }
@@ -465,13 +469,7 @@
         });
 
         $("#logoutLink").click(function () {
-          localStorage.removeItem("token");
-          localStorage.removeItem("firstName");
-          localStorage.removeItem("lastName");
-          localStorage.removeItem("role");
-          localStorage.removeItem("email");
-          localStorage.removeItem("team");
-          localStorage.setEmail
+          window.localStorage.clear();
           window.location.href = "login_signup.html";
         });
 
