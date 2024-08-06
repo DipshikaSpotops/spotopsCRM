@@ -1837,7 +1837,7 @@
         // Fetch and display teams data
         $.ajax({
           type: "GET",
-          url: "https://spotops360.com/teams",
+          url: "https://www.spotops360.com/teams",
           success: function (teams) {
             const teamCharlie = $("#team-charlie");
             const teamMark = $("#team-mark");
@@ -1899,7 +1899,7 @@
           if (yardDetails.is(":visible")) {
             yardDetails.hide();
           } else {
-            fetch(`https://spotops360.com/orders/${orderNo}`)
+            fetch(`https://www.spotops360.com/orders/${orderNo}`)
               .then((response) => response.json())
               .then((data) => {
                 if (
@@ -1989,7 +1989,7 @@
         var vinNo = document.getElementById("vin").value;
         console.log("vin");
         if (orderNo) {
-          fetch(`https://spotops360.com/orders/${orderNo}`)
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
               console.log("Fetched order data:", data);
@@ -2094,7 +2094,7 @@
                   firstName: firstName, // Include firstName in the request body
                 };
 
-                fetch(`https://spotops360.com/orders/${orderNo}`, {
+                fetch(`https://www.spotops360.com/orders/${orderNo}`, {
                   method: "PUT",
                   headers: {
                     "Content-Type": "application/json",
@@ -2148,7 +2148,7 @@
           $("#mainContent").addClass("centered-form");
 
           axios
-            .get(`https://spotops360.com/orders`)
+            .get(`https://www.spotops360.com/orders`)
             .then((orders) => orders)
             .then((data) => {
               var orderArr = data.data;
@@ -2222,7 +2222,7 @@
               ],
             };
 
-            fetch("https://spotops360.com/orders", {
+            fetch("https://www.spotops360.com/orders", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -2299,7 +2299,7 @@
           });
 
           function fetchAndDisplaySaleNotes() {
-          fetch(`https://spotops360.com/orders/${orderNo}`)
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
               const notes = data.notes;
@@ -2350,7 +2350,7 @@
           console.log("orderNo", orderNo); // Ensure orderNo is retrieved correctly
           const updatedData = { orderStatus: newOrderStatus };
 
-          fetch(`https://spotops360.com/orders/${orderNo}`, {
+          fetch(`https://www.spotops360.com/orders/${orderNo}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -2381,7 +2381,7 @@
           $("#yardIndexEdit").val(yardIndex);
           $("#submit").data("yard-index", yardIndex);
 
-          fetch(`https://spotops360.com/orders/${orderNo}`)
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
               if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
@@ -2422,7 +2422,7 @@
           console.log("yIndex", yardIndex, "oNo", orderNo);
           console.log("Fetching and displaying notes...");
 
-          fetch(`https://spotops360.com/orders/${orderNo}`)
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
               console.log(
@@ -2478,7 +2478,7 @@
             others: others,
           };
 
-          fetch(`https://spotops360.com/orders/${orderNo}/additionalInfo`, {
+          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -2560,7 +2560,7 @@
           };
 
           fetch(
-            `https://spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
             {
               method: "PUT",
               headers: {
@@ -2587,7 +2587,7 @@
         });
 
         async function fetchYardInfo(token) {
-          const response = await axios.get("https://spotops360.com/yardInfo", {
+          const response = await axios.get("https://www.spotops360.com/yardInfo", {
             headers: { Authorization: `Bearer ${token}` },
           });
 
@@ -2723,7 +2723,7 @@
           // Update the Order Status in the MongoDB
           const updatedData = { orderStatus: newOrderStatus };
 
-          fetch(`https://spotops360.com/orders/${orderNo}`, {
+          fetch(`https://www.spotops360.com/orders/${orderNo}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -2784,7 +2784,7 @@
               link: link,
             };
 
-            fetch(`https://spotops360.com/orders/sendTrackingInfo/${orderNo}`, {
+            fetch(`https://www.spotops360.com/orders/sendTrackingInfo/${orderNo}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -2807,7 +2807,7 @@
         // Function to show Edit Yard Details modal with current yard information
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
           yardIndex = $(this).data("yard-index");
-          fetch(`https://spotops360.com/orders/${orderNo}`)
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
               if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
@@ -2893,7 +2893,7 @@
           };
 
           fetch(
-            `https://spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
             {
               method: "PUT",
               headers: {
@@ -2961,7 +2961,7 @@
         if (content.length > 0) {
           axios
             .post(
-              `https://spotops360.com/orders/${orderNo}/notes/${yardIndex}`,
+              `https://www.spotops360.com/orders/${orderNo}/notes/${yardIndex}`,
               {
                 note: content,
                 author: firstName,
@@ -3042,7 +3042,7 @@
           if (content1.length > 0) {
             axios
               .put(
-                `https://spotops360.com/orders/${orderNo}/supportNotes`,
+                `https://www.spotops360.com/orders/${orderNo}/supportNotes`,
                 {
                   note: content1,
                   author: firstName1,
@@ -3064,7 +3064,7 @@
         async function fetchSupportComment() {
           console.log("Fetching and displaying support comments...");
 
-          fetch(`https://spotops360.com/orders/${orderNo}`)
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
               console.log("Fetched notes:", data.supportNotes);
