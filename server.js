@@ -17,7 +17,11 @@ const Team = require("./backend/models/Team"); // Import Team model
 const port = 3000;
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://spotops360.com', // Replace with your frontend's domain
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  credentials: true
+}));
 app.use(bodyParser.json());
 
 // Corrected connection string with the '@' character properly URL-encoded
