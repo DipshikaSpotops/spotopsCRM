@@ -34,7 +34,7 @@
 
       .nav-item .dropdown-menu {
         position: absolute;
-        top: 100%; /* Adjust to the correct value if needed */
+        top: 100%;
         left: 0;
         z-index: 9999;
         display: none;
@@ -72,16 +72,16 @@
         margin: -3% 32% 3% 3%;
       }
 
-      #submitComments{
+      #submitComments {
         float: left;
-    color: white;
-    border: none;
-    background-color: grey;
-    border-radius: 20px;
-    margin: -16% -1% 0% 70%;
-    height: 4vh;
-    width: 30%;
-    text-align: center;
+        color: white;
+        border: none;
+        background-color: grey;
+        border-radius: 20px;
+        margin: -16% -1% 0% 70%;
+        height: 4vh;
+        width: 30%;
+        text-align: center;
       }
 
       .btn {
@@ -90,11 +90,11 @@
         align-items: center;
         margin-top: 10px;
       }
-      #comment-boxSupport{
+      #comment-boxSupport {
         height: 600px;
         width: 100%;
         border: 1px solid rgb(168, 164, 164);
-        overflow-y :scroll;
+        overflow-y: scroll;
       }
 
       #comment-box {
@@ -130,19 +130,14 @@
         border-color: #004085;
       }
 
-      #saleNote{
+      #saleNote {
         border: 1px solid rgb(168, 164, 164);
         margin-bottom: 1%;
         padding: 10px 20px 10px 20px;
       }
       #saleNote p {
         text-align: center;
-        /* padding: 10px; */
-      
       }
-      /* #comment-boxSupport p{
-        padding: 5px;
-      } */
       textarea {
         width: 543%;
         height: 60px;
@@ -152,15 +147,8 @@
         margin: -10% 2% 2% -222%;
         border: 1px solid black;
       }
-      textarea1 {
-        width: 80%;
-        height: 30px;
-        border: 1px solid black;
-      }
-
       textarea#notes {
         height: 150px;
-        /* Increase the height of the notes textarea */
       }
 
       .modal-header {
@@ -277,7 +265,6 @@
 
       .btn-primary {
         background-color: grey;
-        /* border-color: #007bff; */
         border: none;
       }
 
@@ -378,7 +365,6 @@
         top: 0;
         z-index: 2;
         border-bottom: 1px solid #e0e0e0;
-        /* background: linear-gradient(to right, #006666 12%, white 11.5%); */
         height: 60px; /* Set a fixed height for the navbar */
       }
 
@@ -608,7 +594,7 @@
   <body>
     <div class="navbar" id="navbar" style="display: flex">
       <div class="logo">
-        <img id="logoImg" src="/images/darkLogo.png" alt="Logo" />
+        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
       </div>
       <div class="navbar-nav">
         <div class="nav-item dropdown">
@@ -776,7 +762,6 @@
         </nav>
       </div>
     </div>
-    
 
     <div style="display: flex">
       <div class="main-content" id="mainContent">
@@ -1038,29 +1023,38 @@
         </form>
       </div>
 
-                          <div class="sidebarOrder">
-                            <h2>Order History</h2>
-                            <ul id="orderHistoryList" class="timeline"></ul>
-                          </div>
+      <div class="sidebarOrder">
+        <h2>Order History</h2>
+        <ul id="orderHistoryList" class="timeline"></ul>
+      </div>
 
-                          <div class="new-div">
-                           <div id="saleNote"> <h2 style="padding-left: 10px;text-align: center;font-weight: 600;">Sale Note</h2></div>
-                            <div id="comment-boxSupport" style="padding: 10px 20px 20px 10px;">
-                              <h2 style="text-align: center;font-weight: 600;">Comments</h2>
-                            </div>
-                            <div class="commentsInput" id="commentsContainer">
-                              <!-- <h1>Comments:</h1> -->
-                              <div id="comment-boxSuppot" style="padding:10px"></div>
-                            </div>
-                            <div class="containers">
-                              <form>
-                                <input id="commentInput" placeholder="Type Your Comments here..."></input>
-                                <div class="btn">
-                                  <input id="submitComments" type="submitComments" value="Update Comments" />
-                                </div>
-                              </form>
-                            </div>
-                          </div>
+      <div class="new-div">
+        <div id="saleNote">
+          <h2 style="padding-left: 10px;text-align: center;font-weight: 600;">
+            Sale Note
+          </h2>
+        </div>
+        <div
+          id="comment-boxSupport"
+          style="padding: 10px 20px 20px 10px"
+        ></div>
+        <div class="commentsInput" id="commentsContainer"></div>
+        <div class="containers">
+          <form>
+            <input
+              id="commentInput"
+              placeholder="Type Your Comments here..."
+            ></input>
+            <div class="btn">
+              <input
+                id="submitComments"
+                type="submitComments"
+                value="Update Comments"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <div1
@@ -1227,7 +1221,6 @@
       </div>
     </div1>
 
-    <!-- Edit Yard status Modal starts here-->
     <div id="editYardPopup" style="display: none">
       <div class="modal-header">
         <button
@@ -1252,7 +1245,6 @@
               background-color: black;
               color: white;
             "
-            ;
           >
             <option value="">Choose</option>
             <option value="Yard located">Yard Located</option>
@@ -1376,9 +1368,7 @@
             </div>
           </div>
         </div>
-        <div class="inputForCust">
-          <!-- <input type="number" /> -->
-        </div>
+        <div class="inputForCust"></div>
         <div class="form-group" id="divTrackingEdit">
           <label>Tracking Information:</label>
           <table class="table table-bordered" id="trackingTableEdit">
@@ -1466,9 +1456,7 @@
       </div>
       <input type="hidden" id="yardIndexEdit" />
     </div>
-    <!-- Edit Yard status ends Modal -->
 
-    <!-- Edit Yard Details Modal -->
     <div
       class="modal fade"
       id="editYardDetailsModal"
@@ -1644,7 +1632,6 @@
       </div>
     </div>
 
-    <!-- Profile Modal -->
     <div
       class="modal fade"
       id="profileModal"
@@ -1721,7 +1708,6 @@
 
     <script>
       $(document).ready(async function () {
-        // Navbar and sidebar functionalities
         const firstName = localStorage.getItem("firstName");
         const lastName = localStorage.getItem("lastName");
         const token = localStorage.getItem("token");
@@ -1747,14 +1733,10 @@
         let userRole = null;
         let userEmail = null;
 
-        // Hide specific sections based on team
-        // Apply team-based restrictions
         if (team === "Team Charlie") {
-          // Hide specific reports links
           $("#submenu-reports .nav-link")
             .not(':contains("My Sales Report")')
             .hide();
-          // Hide specific dashboards links
           $(
             "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
           ).hide();
@@ -1762,19 +1744,15 @@
           $(".nav-item:has(#submenu-users)").hide();
         }
         if (role === "Admin") {
-          // Hide specific reports links for Admin
           $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-          // Hide specific dashboards links for Admin
           $("#submenu-dashboards .view-individualOrders-link").hide();
         }
 
-        // Hide Order History and Yard button for Admin and Charlie
         if (role === "Admin" && team === "Team Charlie") {
           $(".sidebarOrder").hide();
           $(".add-yard-btn").hide();
         }
 
-        // Populate profile information
         $("#profileLink").click(function () {
           $("#profileFirstName").val(firstName);
           $("#profileLastName").val(lastName);
@@ -1797,8 +1775,8 @@
         });
 
         $(".nav-link").on("click", function () {
-          $(".nav-link").removeClass("active");
-          $(this).addClass("active");
+          $(".nav-link").removeClass("active selected");
+          $(this).addClass("selected");
 
           const contentMap = {
             "default-link": "#default-content",
@@ -1834,7 +1812,6 @@
           }
         });
 
-        // Fetch and display teams data
         $.ajax({
           type: "GET",
           url: "https://www.spotops360.com/teams",
@@ -1863,7 +1840,6 @@
           },
         });
 
-        // Other existing functionalities (form submission, yard info, etc.)
         function calculateProfit() {
           const quotedPrice = parseFloat($("#soldP").val()) || 0;
           const yardPrice = parseFloat($("#costP").val()) || 0;
@@ -1997,14 +1973,11 @@
               console.log("cusName", customerNameE);
               // updateOrderNotes(data);
 
-              // Split the full name by space
               const nameParts = customerNameE.split(" ");
-
-              // Assign the first part to firstName and the second part to lastName
               const firstNameE = nameParts[0];
               const lastNameE = nameParts[1];
 
-              console.log("First Name:", firstName); // Output: DIPSIKHA
+              console.log("First Name:", firstName);
               console.log("Last Name:", lastName);
               orderNo;
               $("#orderDate").val(data.orderDate);
@@ -2040,7 +2013,6 @@
                 $("#trackingInfoContainer").html(data.trackingInfo);
               }
 
-              // Update order history
               updateOrderHistory(data.orderHistory);
 
               if (process) {
@@ -2091,7 +2063,7 @@
                   vin: document.getElementById("vin").value,
                   last4digits: $("#issueOrder").val(),
                   notes: $("#notes").val(),
-                  firstName: firstName, // Include firstName in the request body
+                  firstName: firstName,
                 };
 
                 fetch(`https://www.spotops360.com/orders/${orderNo}`, {
@@ -2108,7 +2080,7 @@
                     return response.json();
                   })
                   .then((data) => {
-                    updateOrderHistory(data.orderHistory); // Update order history
+                    updateOrderHistory(data.orderHistory);
                     const team = localStorage.getItem("team");
                     console.log("teamU", team);
                     if (team === "Team Charlie") {
@@ -2122,7 +2094,6 @@
                   });
               });
 
-              // part desc
               partDesc = `
                             Year: ${data.year}
                             Make: ${data.make}
@@ -2134,17 +2105,14 @@
             });
         } else var newOrderNo;
         if (newEntry) {
-          // Hide order history and add yard button
-          $('.navbar-nav').hide(); // Hide the entire navbar
-          $('#offcanvasSidebar').show(); // Ensure the sidebar is displayed
+          $('.navbar-nav').hide();
+          $('#offcanvasSidebar').show();
           $(".sidebarOrder").hide();
           $(".add-yard-btn").hide();
           $(".new-div").hide();
 
-          // Set order status to "Placed" and disable the dropdown
           $("#orderStatus").val("Placed");
           $("#orderStatus").prop("disabled", true);
-          // Center the form
           $("#mainContent").addClass("centered-form");
 
           axios
@@ -2152,7 +2120,6 @@
             .then((orders) => orders)
             .then((data) => {
               var orderArr = data.data;
-              // orderArr.slice(-1)[0];
               var lastElement = orderArr[orderArr.length - 1];
               console.log("lastElement", lastElement);
               if (lastElement) {
@@ -2161,20 +2128,15 @@
                 var existingOrderNo = "50STARS0000";
               }
               console.log("orderNo", existingOrderNo);
-              //for new orderNo
-              // Extract the numerical part
-              var prefix = existingOrderNo.slice(0, 7); // '50STARS'
-              var numberPart = existingOrderNo.slice(7); // '0005'
+              var prefix = existingOrderNo.slice(0, 7);
+              var numberPart = existingOrderNo.slice(7);
 
-              // Convert the number part to an integer and increment it
               var incrementedNumber = parseInt(numberPart, 10) + 1;
 
-              // Pad the incremented number with leading zeros to maintain the format
               var incrementedNumberStr = incrementedNumber
                 .toString()
                 .padStart(4, "0");
 
-              // Concatenate the prefix with the new number part
               newOrderNo = prefix + incrementedNumberStr;
               console.log("newOrderNo", newOrderNo);
             })
@@ -2233,11 +2195,6 @@
               .then((data) => {
                 const team = localStorage.getItem("team");
                 console.log("Team assigned:", team);
-                // if (team === "Mark") {
-                //   window.location.href = "ordersMark.html";
-                // } else if (team === "Sussane") {
-                //   window.location.href = "ordersSussane.html";
-                // } else {
                 console.log("teamU", team);
                 alert(`Order No ${newOrderNo} has been placed.`);
 
@@ -2246,14 +2203,12 @@
                 } else {
                   window.location.href = "orders.html";
                 }
-                // }
               })
               .catch((error) => {
                 console.error("Error:", error);
               });
           });
         }
-        // if newEntry is null
         else {
           $("#offcanvasSidebar").hide();
           $("#navbar-nav").show();
@@ -2268,7 +2223,6 @@
           $(".main-content").css("width", "70%");
           $("#mainContent").removeClass("centered-form");
 
-          // Change navbar background to black and text to white
           $(".navbar").css({
             "background-color": "black",
             color: "white",
@@ -2283,11 +2237,9 @@
             color: "white",
           });
 
-          // Create new navbar items based on sidebar links
           const sidebarLinks = $(".sidebar .nav-link").clone();
           $(".navbar").append(sidebarLinks);
 
-          // Apply chevron icon functionality
           $(".nav-link").on("click", function () {
             const submenu = $(this).next(".submenu");
             if (submenu.length) {
@@ -2312,7 +2264,6 @@
             });
         }
 
-        // Call the function to fetch and display sale notes
         fetchAndDisplaySaleNotes();
         }
 
@@ -2323,9 +2274,8 @@
           }
           if ($(this).val() === "Part shipped") {
             $("#divTrackingEdit").show();
-            $("#sendEmailButton").show(); // Show the Send Email button
+            $("#sendEmailButton").show();
           }
-          // if ($("Part Delivered"))
           else {
             $("#divTrackingEdit").hide();
             $("#sendEmailButton").hide();
@@ -2343,11 +2293,9 @@
 
           console.log("new order status", newOrderStatus);
 
-          // Update the order status in the UI
           $("#orderStatus").val(newOrderStatus);
 
-          // Update the order status in the database
-          console.log("orderNo", orderNo); // Ensure orderNo is retrieved correctly
+          console.log("orderNo", orderNo);
           const updatedData = { orderStatus: newOrderStatus };
 
           fetch(`https://www.spotops360.com/orders/${orderNo}`, {
@@ -2364,8 +2312,7 @@
               return response.json();
             })
             .then((data) => {
-              // Update order history and other necessary parts of the UI
-              updateOrderHistory(data.orderHistory); // Update order history
+              updateOrderHistory(data.orderHistory);
               console.log("Order status updated successfully:", data);
             })
             .catch((error) => {
@@ -2373,7 +2320,6 @@
             });
         });
 
-        // Fetch and display notes on clicking the edit-yard button
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
           yardIndex = $(this).data("yard-index");
@@ -2408,7 +2354,6 @@
 
               $("#editYardModal").modal("show");
 
-              // Fetch and display notes for the yard
               fetchAndDisplayNotes(yardIndex);
             })
             .catch((error) => {
@@ -2417,7 +2362,6 @@
         });
 
 
-        // Fetch and display notes
         async function fetchAndDisplayNotes(yardIndex) {
           console.log("yIndex", yardIndex, "oNo", orderNo);
           console.log("Fetching and displaying notes...");
@@ -2436,14 +2380,12 @@
             });
         }
 
-        //to update yardInfo.html
         async function fetchAndUpdateYardInfo() {
           const token =
             "d7efef519360bf1ae968db97c52855fcdfbfab171af45c4720f8b648cf2814f3069a696b70ad12bba620b5394ee11b076f4fc31bd07baee18ace4fb4c8bfed34"; // Use your provided token here
           await fetchYardInfo(token);
         }
 
-        // Existing addYardInfo code with fetchAndUpdateYardInfo call
         $("#addYardInfo").on("click", async function () {
           $("#refund").val("Yard located").change();
           const yardName = $("#yardName").val();
@@ -2497,15 +2439,14 @@
                 data.additionalInfo.length,
                 `Yard ${data.additionalInfo.length}`
               );
-              updateOrderHistory(data.orderHistory); // Update order history
-              fetchAndUpdateYardInfo(); // Fetch and update yard info in yardInfo.html
+              updateOrderHistory(data.orderHistory);
+              fetchAndUpdateYardInfo();
             })
             .catch((error) => {
               console.error("Error:", error);
             });
         });
 
-        // Existing editYardInfo code with fetchAndUpdateYardInfo call
         $("#editYardInfo").on("click", async function () {
           console.log("clicking n save");
           yardIndex = $(this).data("yard-index");
@@ -2517,7 +2458,7 @@
             "input[name='returnValue']:checked"
           ).val();
           console.log("shippinfR", returnShippingMethod);
-          // const returnCharges =
+
           const paymentStatus = $(".paymentStatus")
             .map(function () {
               return $(this).val();
@@ -2577,9 +2518,9 @@
             })
             .then((data) => {
               $("#editYardModal").modal("hide");
-              updateOrderHistory(data.orderHistory); // Update order history
-              showYardDetails(yardIndex); // Refresh the yard details
-              fetchAndUpdateYardInfo(); // Fetch and update yard info in yardInfo.html
+              updateOrderHistory(data.orderHistory);
+              showYardDetails(yardIndex);
+              fetchAndUpdateYardInfo();
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -2597,7 +2538,6 @@
 
           const data = response.data;
 
-          // Determine the maximum number of yards
           let maxYards = 0;
           data.forEach((item) => {
             if (item.additionalInfo.length > maxYards) {
@@ -2605,13 +2545,11 @@
             }
           });
 
-          // Update the table header to include the correct number of Yard columns
           const tableHeader = $("#tableHeader");
           for (let i = 1; i <= maxYards; i++) {
             tableHeader.append(`<th scope="col">Yard ${i}</th>`);
           }
 
-          // Append the yard information to the table body
           const yardInfoTable = $("#yardInfoTable");
           yardInfoTable.empty();
           data.forEach((item) => {
@@ -2636,7 +2574,6 @@
           });
         }
 
-        // to show input box for own shipping/yard shipping
         $("input[name='shippingMethod']").on("change", function () {
           if ($(this).val() === "Own shipping") {
             $("#ownShippingInput").show();
@@ -2646,7 +2583,6 @@
             $("#ownShippingInput").hide();
           }
         });
-        // to show input box for our/customer shipping
         $("input[name='returnValue']").on("change", function () {
           console.log("our/cust clicked");
           if ($(this).val() === "Our shipping") {
@@ -2675,22 +2611,22 @@
           if (refundStatus === "Part shipped") {
             newOrderStatus = "In Transit";
             $("#divTrackingEdit").show();
-            $("#sendEmailButton").show(); // Show the Send Email button
+            $("#sendEmailButton").show();
             $("#notesContainer").hide();
           } else if (refundStatus === "PO confirmed") {
             $("#escalation").hide();
             $("#divTrackingEdit").hide();
-            $("#sendEmailButton").hide(); // Show the Send Email button
+            $("#sendEmailButton").hide();
             $("#notesContainer").hide();
             $("#cardCharged").hide();
           } else if (refundStatus === "Escalation") {
             $("#escalation").show();
             $("#divTrackingEdit").hide();
-            $("#sendEmailButton").hide(); // Show the Send Email button
+            $("#sendEmailButton").hide();
             $("#notesContainer").hide();
           } else if (refundStatus === "PO cancelled") {
             $("#divTrackingEdit").hide();
-            $("#sendEmailButton").hide(); // Show the Send Email button
+            $("#sendEmailButton").hide();
             $("#notesContainer").hide();
             $("#cardCharged").show();
           } else if (refundStatus === "Part delivered") {
@@ -2720,7 +2656,6 @@
             $("#notesContainer").hide();
           }
 
-          // Update the Order Status in the MongoDB
           const updatedData = { orderStatus: newOrderStatus };
 
           fetch(`https://www.spotops360.com/orders/${orderNo}`, {
@@ -2738,7 +2673,7 @@
             })
             .then((data) => {
               $("#orderStatus").val(newOrderStatus);
-              updateOrderHistory(data.orderHistory); // Update order history
+              updateOrderHistory(data.orderHistory);
             })
             .catch((error) => {
               console.error("Error updating order status:", error);
@@ -2804,7 +2739,6 @@
           }
         });
 
-        // Function to show Edit Yard Details modal with current yard information
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
           yardIndex = $(this).data("yard-index");
           fetch(`https://www.spotops360.com/orders/${orderNo}`)
@@ -2840,11 +2774,9 @@
                 $("#editOwnShippingInput").hide();
               }
 
-              // Set the status and payment status dropdowns
               $("#refund").val(yardData.status);
               $("#paymentStatusSelect").val(yardData.paymentStatus);
 
-              // Show/hide the refunded amount input based on payment status
               if (yardData.paymentStatus === "Refund collected") {
                 $("#refundedAmountContainer").show();
                 $("#refundedAmount").val(yardData.refundedAmount);
@@ -2852,11 +2784,9 @@
                 $("#refundedAmountContainer").hide();
               }
 
-              // Set the reason and escalation process dropdowns
               $("#esc").val(yardData.escalationCause);
               $("#escProcess").val(yardData.escalationProcess);
 
-              // Show/hide escalation process based on status
               if (yardData.status === "Escalation") {
                 $("#escalation").show();
               } else {
@@ -2868,7 +2798,6 @@
             });
         });
 
-        // Function to save updated yard details
         $("#saveYardDetails").on("click", function () {
           yardIndex = $(this).data("yard-index");
           const updatedData = {
@@ -2910,16 +2839,15 @@
             })
             .then((data) => {
               $("#editYardDetailsModal").modal("hide");
-              updateOrderHistory(data.orderHistory); // Update order history
-              showYardDetails(yardIndex); // Refresh the yard details
-              fetchAndUpdateYardInfo(); // Fetch and update yard info in yardInfo.html
+              updateOrderHistory(data.orderHistory);
+              showYardDetails(yardIndex);
+              fetchAndUpdateYardInfo();
             })
             .catch((error) => {
               console.error("Error:", error);
             });
         });
 
-        // Show/Hide shipping inputs based on selected shipping method
         $("input[name='editShippingMethod']").on("change", function () {
           if ($(this).val() === "Own shipping") {
             $("#editOwnShippingInput").show();
@@ -2930,7 +2858,6 @@
           }
         });
       });
-      // to show/hide refunded amount input box
       $("#paymentStatusSelect").on("change", function () {
         if ($(this).val() === "Refund collected") {
           $("#refundedAmountContainer").show();
@@ -2944,13 +2871,11 @@
       const btn = document.querySelector(".btn");
       const clear = document.getElementById("clear");
       const submit = document.querySelector("#submit");
-      // const comments = document.querySelector('#comment-box')
       const comments = document.getElementById("comment-box");
       const orderNo = new URLSearchParams(window.location.search).get(
         "orderNo"
       );
 
-      // Handle form submission for adding notes for yards
       $("#submit").on("click", function (event) {
         event.preventDefault();
         const content = $("#noteInput").val();
@@ -2970,8 +2895,8 @@
             )
             .then((response) => {
               alert("Notes updated successfully.");
-              $("#noteInput").val(""); // Clear the input field
-              fetchAndDisplayNotes(yardIndex); // Refresh notes after adding new one
+              $("#noteInput").val("");
+              fetchAndDisplayNotes(yardIndex);
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -2979,7 +2904,6 @@
             });
         }
       });
-// for yards
       function displayComments(notes) {
         const commentBox = $("#comment-box");
         commentBox.empty();
@@ -2987,7 +2911,6 @@
         if (Array.isArray(notes)) {
           console.log("notes", notes);
           notes.forEach((note) => {
-            // Using <pre> to preserve the formatting of the comment
             const noteHtml = `<p>${note}</p>`;
             console.log("htmlNote", noteHtml);
             commentBox.append(noteHtml);
@@ -2998,16 +2921,13 @@
         }
       }
 
-      // Fetch notes when modal is shown
       $("#editYardPopup").on("show.bs.modal", function () {
-        const yardIndex = $("#yardIndexEdit").val(); // Get yard index from hidden input
+        const yardIndex = $("#yardIndexEdit").val();
         fetchAndDisplayNotes(yardIndex);
       });
 
-      // array to store the comments
       const comments_arr = [];
 
-      // to generate html list based on comments array
       const display_comments = () => {
         let list = "<ul>";
         comments_arr.forEach((comment) => {
@@ -3024,13 +2944,10 @@
         
       });
       
-      // Close popup on clicking close buttons
       $("#closeBtnEditYard, .close").on("click", function () {
         $("#editYardPopup").hide();
       });
 
-      //for supportNotes
-      // form submission for supportTeam note
          const commentSupport = document.getElementById("comment-boxSupport");
         $("#submitComments").on("click", function (event) {
           event.preventDefault();
@@ -3051,8 +2968,8 @@
               )
               .then((response) => {
                 alert("Support comments updated successfully.");
-                $("#commentInput").val(""); // Clear the input field
-                fetchSupportComment(yardIndex1); // Refresh notes after adding new one
+                $("#commentInput").val("");
+                fetchSupportComment(yardIndex1);
               })
               .catch((error) => {
                 console.error("Error:", error);
@@ -3094,44 +3011,33 @@
 
         fetchSupportComment();
 
-      //till here is the supportNotes
       $('.toggle-btn').on('click', function () {
     $('.sidebar').toggleClass('hide');
   });
   $('.close-btn').on('click', function () {
     $('.sidebar').addClass('hide');
   });
-   // Toggle submenu visibility
-   $('.nav-link').on('click', function () {
-    const submenu = $(this).next('.submenu');
-    if (submenu.length) {
-      submenu.slideToggle();
-      $(this).find('.chevron-icon i').toggleClass('fa-chevron-right fa-chevron-down');
+
+   $(".chevron-icon, .nav-link").on("click", function (event) {
+    event.stopPropagation();
+    const submenu = $(this).closest(".nav-item").find(".submenu");
+    submenu.toggle();
+    $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+    $(this).closest(".nav-link").toggleClass("selected");
+  });
+
+ 
+   const currentPath = window.location.pathname;
+  $(".nav-link").each(function () {
+    if (currentPath.includes($(this).attr("href"))) {
+      $(this).addClass("active");
     }
   });
 
-  // Highlight active menu item
-  $('.nav-link').on('click', function () {
-    $('.nav-link').removeClass('active');
-    $(this).addClass('active');
-  });
-      // Logout functionality
       $("#logoutLink").click(function () {
-        localStorage.removeItem("token");
-        localStorage.removeItem("firstName");
-        localStorage.removeItem("lastName");
-        localStorage.removeItem("role");
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
+        window.localStorage.clear();
         window.location.href = "login_signup.html";
       });
     </script>
   </body>   
 </html>
-
-
-
-  
-
- 
-
