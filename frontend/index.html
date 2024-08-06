@@ -45,7 +45,6 @@
         border-bottom: 1px solid #e0e0e0;
       }
       .sidebar {
-        /* background-color: #006666; */
         background-color: black;
         position: fixed;
         z-index: 1;
@@ -125,6 +124,14 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const firstName = localStorage.getItem("firstName");
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
+      });
+    </script>
   </head>
   <body>
     <div class="navbar">
@@ -169,7 +176,7 @@
               ></span>
             </a>
             <div class="submenu" id="submenu-dashboards">
-              <a class="nav-link add-order-link" href="form.html?newEntry=true"
+              <a class="nav-link add-order-link" href="addOrders.html?newEntry=true"
                 >Add New Order</a
               >
               <a class="nav-link view-orders-link" href="orders.html"
