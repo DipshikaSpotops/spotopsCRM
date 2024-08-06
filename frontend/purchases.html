@@ -404,6 +404,9 @@
             if (firstName) {
                 $("#user-name").text(firstName);
             }
+            if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
             // Highlight active link based on current URL
         const currentPath = window.location.pathname;
@@ -434,14 +437,7 @@
           });
         }); 
 
-            $("#logoutLink").click(function () {
-                localStorage.removeItem("token");
-                localStorage.removeItem("firstName");
-                localStorage.removeItem("lastName");
-                localStorage.removeItem("role");
-                localStorage.removeItem("email");
-                window.location.href = "login_signup.html";
-            });
+            
 
             $(".toggle-sidebar").on("click", function () {
                 $("#offcanvasSidebar").toggleClass("show");
@@ -497,6 +493,11 @@
                 $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
 
             }
+
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
+            });
         });
     </script>
 </body>

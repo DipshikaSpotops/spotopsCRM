@@ -288,7 +288,9 @@
             if (firstName) {
                 $("#user-name").text(firstName);
             }
-
+            if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
             // Apply team-based restrictions
             if (team) {
                 switch (team) {
@@ -378,15 +380,7 @@
                 $('#profileModal').modal('show');
             });
 
-            $('#logoutLink').on('click', function() {
-                localStorage.removeItem("token");
-                localStorage.removeItem("firstName");
-                localStorage.removeItem("lastName");
-                localStorage.removeItem("email");
-                localStorage.removeItem("role");
-                localStorage.removeItem("team");
-                window.location.href = 'login_signup.html';
-            });
+            
 
             // Toggle sidebar visibility on smaller screens
             $(".toggle-sidebar").on("click", function () {
@@ -422,6 +416,11 @@
                 if (currentPath.includes($(this).attr("href"))) {
                     $(this).addClass("active");
                 }
+            });
+
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
             });
         });
     </script>

@@ -267,6 +267,9 @@
             if (firstName) {
                 $("#user-name").text(firstName);
             }
+            if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
             $("#profileLink").click(function () {
                 $("#profileFirstName").val(firstName);
@@ -280,14 +283,7 @@
                 location.reload();
             });
 
-            $("#logoutLink").click(function () {
-                localStorage.removeItem("token");
-                localStorage.removeItem("firstName");
-                localStorage.removeItem("lastName");
-                localStorage.removeItem("role");
-                localStorage.removeItem("email");
-                window.location.href = "login_signup.html";
-            });
+           
 
             async function fetchSalesData(filter) {
                 try {
@@ -585,6 +581,19 @@
                     $(".nav-link").removeClass("active");
                     $(this).addClass("active");
                 }
+            });
+
+            // Highlight active link based on current URL
+        const currentPath = window.location.pathname;
+        $(".nav-link").each(function () {
+          if (currentPath.includes($(this).attr("href"))) {
+            $(this).addClass("active");
+          }
+        });
+
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
             });
         });
     </script>

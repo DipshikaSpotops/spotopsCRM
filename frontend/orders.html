@@ -417,6 +417,9 @@
         if (firstName) {
           $("#user-name").text(firstName);
         }
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
         const token = localStorage.getItem("token");
 

@@ -1729,6 +1729,9 @@
           $("#user-name").text(firstName);
           $("#salesAgent").val(firstName);
         }
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
         let userRole = null;
         let userEmail = null;

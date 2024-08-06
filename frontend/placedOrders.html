@@ -315,6 +315,9 @@
             if (firstName) {
                 $("#user-name").text(firstName);
             }
+            if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
 
             async function fetchToken() {
                 try {
@@ -406,16 +409,7 @@
           }
         });
 
-            $("#logoutLink").click(function () {
-                localStorage.removeItem("token");
-                localStorage.removeItem("firstName");
-                localStorage.removeItem("lastName");
-                localStorage.removeItem("email");
-                localStorage.removeItem("role");
-                localStorage.removeItem("team");
-                localStorage.removeItem("userId");
-                window.location.href = 'login_signup.html';
-            });
+            
 
             try {
                 const response = await axios.get(
@@ -476,6 +470,10 @@
                 } catch (error) {
                     console.error("Error updating order status:", error);
                 }
+            });
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
             });
         });
     </script>
