@@ -376,7 +376,8 @@
     </div>
 
     <script>
-      $(document).ready(async function () {
+
+       $(document).ready(async function () {
         const firstName = localStorage.getItem("firstName");
         const lastName = localStorage.getItem("lastName");
         const email = localStorage.getItem("email");
@@ -387,10 +388,10 @@
           window.location.href = "login_signup.html";
         }
 
+        
         if (firstName) {
-          $("#user-name").text(firstName);
-        }
-
+                $("#user-name").text(firstName);
+            }
         const token = localStorage.getItem("token");
 
         // Apply team-based and role-based restrictions
