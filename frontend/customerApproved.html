@@ -308,7 +308,7 @@
         async function fetchToken() {
           try {
             const response = await axios.get(
-              `http://localhost:3000/auth/token/${userId}`
+              `https://spotops360.com/auth/token/${userId}`
             );
             if (response.status === 200) {
               token = response.data.token;
@@ -341,7 +341,7 @@
 
         try {
           const response = await axios.get(
-            "http://localhost:3000/orders?status=placed",
+            "https://spotops360.com/orders?status=placed",
             {
               headers: token ? { Authorization: `Bearer ${token}` } : {},
             }
@@ -385,7 +385,7 @@
         $("#infoTable").on("click", ".cancel-btn", function () {
           const id = $(this).data("id");
           if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-            fetch(`http://localhost:3000/orders/${id}/cancel`, {
+            fetch(`https://spotops360.com/orders/${id}/cancel`, {
               method: "POST",
               headers: { Authorization: `Bearer ${token}` },
             })
@@ -398,7 +398,7 @@
 
         $("#infoTable").on("click", ".send-invoice-btn", function () {
           const id = $(this).data("id");
-          fetch(`http://localhost:3000/orders/sendInvoice/${id}`, {
+          fetch(`https://spotops360.com/orders/sendInvoice/${id}`, {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
           })
