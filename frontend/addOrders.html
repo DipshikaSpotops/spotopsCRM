@@ -515,12 +515,13 @@ const today = new Date().toISOString().split('T')[0];
                 console.log("Team assigned:", team);
                 console.log("teamU", team);
                 alert(`Order No ${newOrderNo} has been placed.`);
+                window.location.reload();
 
-                if (team === "Team Charlie") {
-                  window.location.href = "individualOrders.html";
-                } else {
-                  window.location.href = "orders.html";
-                }
+                // if (team === "Team Charlie") {
+                //   window.location.href = "individualOrders.html";
+                // } else {
+                //   window.location.href = "orders.html";
+                // }
               })
               .catch((error) => {
                 console.error("Error:", error);
