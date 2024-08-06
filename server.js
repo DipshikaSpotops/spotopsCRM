@@ -732,8 +732,8 @@ app.post("/orders/sendTrackingInfo/:orderNo", async (req, res) => {
                   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
       attachments: [
         {
-          filename: "logo.png",
-          path: path.join(__dirname, "logo.png"),
+          filename: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+          path: path.join(__dirname, "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png"),
           cid: "myImg",
         },
       ],
