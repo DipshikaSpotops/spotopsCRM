@@ -610,7 +610,7 @@
             Dashboards
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownDashboards">
-            <a class="dropdown-item" href="addOrders.html.html?newEntry=true"
+            <a class="dropdown-item" href="form.html?newEntry=true"
               >Add New Order</a
             >
             <a class="dropdown-item" href="orders.html">View Orders</a>
@@ -2389,7 +2389,6 @@
 
         $("#addYardInfo").on("click", async function () {
           $("#refund").val("Yard located").change();
-          $("#editYardPopup").hide();
           const yardName = $("#yardName").val();
           const address = $("#address").val();
           const city = $("#city").val();
