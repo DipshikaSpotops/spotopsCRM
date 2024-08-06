@@ -382,15 +382,14 @@
     <script>
 
        $(document).ready(async function () {
+        console.log("ready function")
         const firstName = localStorage.getItem("firstName");
         const lastName = localStorage.getItem("lastName");
         const email = localStorage.getItem("email");
         const role = localStorage.getItem("role");
         const team = localStorage.getItem("team");
 
-        if (!firstName) {
-          window.location.href = "login_signup.html";
-        }
+       
 
         
         if (firstName) {
