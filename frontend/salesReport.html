@@ -118,6 +118,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const firstName = localStorage.getItem("firstName");
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
+      </script>
 </head>
 <body>
     <div class="navbar">
