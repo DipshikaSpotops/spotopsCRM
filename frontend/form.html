@@ -610,7 +610,7 @@
             Dashboards
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownDashboards">
-            <a class="dropdown-item" href="form.html?newEntry=true"
+            <a class="dropdown-item" href="addOrders.html.html?newEntry=true"
               >Add New Order</a
             >
             <a class="dropdown-item" href="orders.html">View Orders</a>
@@ -1729,9 +1729,7 @@
           $("#user-name").text(firstName);
           $("#salesAgent").val(firstName);
         }
-        if (!firstName) {
-          window.location.href = "login_signup.html";
-        }
+        
 
         let userRole = null;
         let userEmail = null;
@@ -2391,6 +2389,7 @@
 
         $("#addYardInfo").on("click", async function () {
           $("#refund").val("Yard located").change();
+          $("#editYardPopup").hide();
           const yardName = $("#yardName").val();
           const address = $("#address").val();
           const city = $("#city").val();
