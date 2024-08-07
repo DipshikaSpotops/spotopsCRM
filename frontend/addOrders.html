@@ -30,7 +30,7 @@
       }
       .priceRow {
         padding: 21px;
-        border: 1px solid #c0c0c0;
+        border: 1px solid c0c0c0;
         border-radius: 10px;
         width: 105%;
         margin: 0% 0% 2% -13%;
@@ -255,47 +255,47 @@
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
             <div class="submenu" id="submenu-dashboards">
-              <a class="nav-link add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
-              <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
-              <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
-              <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
-              <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
-              <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
-              <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
-              <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
-              <a class="nav-link customer-approved-link" href="customerApproved.html">Customer Approved</a>
+              <a class="nav-link add-order-link" id="add-order-link">Add New Order</a>
+              <a class="nav-link view-orders-link" id="view-orders-link">View Orders</a>
+              <a class="nav-link view-individualOrders-link" id="view-individualOrders-link">View My Orders</a>
+              <a class="nav-link teamA-orders-link" id="teamA-orders-link">TeamA Orders</a>
+              <a class="nav-link teamB-orders-link" id="teamB-orders-link">TeamB Orders</a>
+              <a class="nav-link placed-orders-link" id="placed-orders-link">Placed Orders</a>
+              <a class="nav-link cancelled-orders-link" id="cancelled-orders-link">Cancelled Orders</a>
+              <a class="nav-link yard-info-link" id="yard-info-link">Yard Details</a>
+              <a class="nav-link customer-approved-link" id="customer-approved-link">Customer Approved</a>
             </div>
           </div>
           <div class="nav-item">
-            <a class="nav-link menu" href="#">
+            <a class="nav-link menu" href="#" id="users-link">
               <i class="fas fa-users"></i> Users
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
             <div class="submenu" id="submenu-users">
-              <a class="nav-link" href="createUser.html">Create User</a>
-              <a class="nav-link" href="viewallUsers.html">View Users</a>
+              <a class="nav-link" id="create-user-link">Create User</a>
+              <a class="nav-link" id="view-users-link">View Users</a>
             </div>
           </div>
           <div class="nav-item teams">
-            <a class="nav-link menu" href="#">
+            <a class="nav-link menu" href="#" id="teams-link">
               <i class="fas fa-users"></i> Teams
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
             <div class="submenu" id="submenu-teams">
-              <a class="nav-link" href="teams.html">View Teams</a>
+              <a class="nav-link" id="view-teams-link">View Teams</a>
             </div>
           </div>
           <div class="nav-item">
-            <a class="nav-link menu" href="#">
+            <a class="nav-link menu" href="#" id="reports-link">
               <i class="fas fa-chart-bar"></i> Reports
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
             <div class="submenu" id="submenu-reports">
-              <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
-              <a class="nav-link" href="purchases.html">Purchases</a>
-              <a class="nav-link" href="refundReport.html">Refund Report</a>
-              <a class="nav-link" href="poReport.html">PO Report</a>
-              <a class="nav-link" href="moreThan2CardC.html">Collect Refund</a>
+              <a class="nav-link" id="shipping-expenses-link">Shipping Expenses</a>
+              <a class="nav-link" id="purchases-link">Purchases</a>
+              <a class="nav-link" id="refund-report-link">Refund Report</a>
+              <a class="nav-link" id="po-report-link">PO Report</a>
+              <a class="nav-link" id="collect-refund-link">Collect Refund</a>
             </div>
           </div>
         </nav>
@@ -619,7 +619,8 @@
           $("#offcanvasSidebar").toggleClass("show");
         });
 
-        $(".nav-link").on("click", function () {
+        $(".nav-link").on("click", function (e) {
+          e.preventDefault(); // Prevent the default action
           $(".nav-link").removeClass("active selected");
           $(this).addClass("selected");
 
@@ -641,6 +642,7 @@
           $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
           $(this).closest(".nav-link").toggleClass("selected");
         });
+        
 
         $("#profile").click(function () {
           $("#profileFirstName").val(firstName);
