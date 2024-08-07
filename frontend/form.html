@@ -2415,6 +2415,8 @@
               ? $("#ownShippingInput").val()
               : $("#yardShippingInput").val();
 
+
+           const firstName = localStorage.getItem("firstName");    
           const data = {
             yardName: yardName,
             address: addedAddress,
@@ -2427,7 +2429,7 @@
             others: others,
           };
 
-          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo`, {
+          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

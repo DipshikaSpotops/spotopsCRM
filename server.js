@@ -305,7 +305,7 @@ app.put("/orders/:orderNo", async (req, res) => {
       if (oldStatus !== order.orderStatus) {
           const timestamp = new Date().toLocaleString()
           order.orderHistory.push(
-              `Order status updated to "${order.orderStatus}" by "${firstName}" on ${timestamp}`
+              `Order status updated to ${order.orderStatus} by "${firstName}" on ${timestamp}`
           );
       }
 
@@ -320,7 +320,8 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
   console.log("additionalInfo");
   try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
-
+      var firstName = req.params.firstName;
+      console.log("fName",firstName);
       if (!order) return res.status(404).send('Order not found');
 
       // Count the number of existing yards
@@ -334,10 +335,11 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
       var yardname = order.additionalInfo[countYard - 1].yardName;
       var shipping = order.additionalInfo[countYard - 1].shippingMethod;
       var others = order.additionalInfo[countYard - 1].others;
+      
       console.log("yard details",pp,yardname,shipping,others);
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
-      order.orderHistory.push(`Yard ${countYard} PO sent Yard Name-${yardname} PP-${pp} ${shipping} Others-${others}   by Dipshika on ${timestamp}`);
+      order.orderHistory.push(`Yard ${countYard} Located Yard Name-${yardname} PP-${pp} ${shipping} Others-${others}   by ${firstName} on ${timestamp}`);
 
       await order.save();
       
