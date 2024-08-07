@@ -423,6 +423,8 @@
                   success: function (response) {
                     alert("User deleted successfully");
                     $(`#user-table-body tr[data-id="${userId}"]`).remove();
+                    window.localStorage.clear();
+                    window.location.href = 'login_signup.html';
                   },
                   error: function (error) {
                     alert("Error deleting user: " + error.responseJSON.message);
