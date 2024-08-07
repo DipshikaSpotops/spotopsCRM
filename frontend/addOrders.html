@@ -619,6 +619,7 @@
 
       $(".nav-link").on("click", function (e) {
         e.preventDefault(); // Prevent the default action
+        window.location.reload();
         $(".nav-link").removeClass("active selected");
         $(this).addClass("selected");
 
