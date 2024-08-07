@@ -52,11 +52,19 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
                 window.location.href = 'index.html';
             });
         } else {
-            alert(response.data.msg || response.data.errors.map(error => error.msg).join(', '));
+            Swal.fire({
+                icon: 'failure',
+                title: 'Invalid email or password',
+                showConfirmButton: true,
+                timer: 1500
+            }).then(() => {
+                window.location.reload()
+            });
+            // alert(response.data.msg || response.data.errors.map(error => error.msg).join(', '));
         }
     } catch (error) {
         console.error('Login error:', error);
-        alert('An error occurred. Please try again.');
+        alert('Invalid Username or Password. Please try again.');
     }
 });
 
