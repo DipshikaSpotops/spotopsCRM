@@ -617,24 +617,24 @@
         $("#offcanvasSidebar").toggleClass("show");
       });
 
-      $(".nav-link").on("click", function (e) {
-        e.preventDefault(); // Prevent the default action
-        window.location.reload();
-        $(".nav-link").removeClass("active selected");
-        $(this).addClass("selected");
+    //   $(".nav-link").on("click", function (e) {
+    //     e.preventDefault(); // Prevent the default action
+    //     window.location.reload();
+    //     $(".nav-link").removeClass("active selected");
+    //     $(this).addClass("selected");
 
-        const targetId = $(this).attr('id');
-        // Handle the content change based on the clicked link
-        if (targetId === 'default-link') {
-          window.location.reload(); // Reload the page for the dashboard link
-        } else {
-          // Hide all sections
-          $(".main-content > div").addClass("d-none");
-          // Show the relevant section
-          $("#" + targetId).removeClass("d-none");
-        }
-        $("#offcanvasSidebar").removeClass("show");
-      });
+    //     const targetId = $(this).attr('id');
+    //     // Handle the content change based on the clicked link
+    //     if (targetId === 'default-link') {
+    //       window.location.reload(); // Reload the page for the dashboard link
+    //     } else {
+    //       // Hide all sections
+    //       $(".main-content > div").addClass("d-none");
+    //       // Show the relevant section
+    //       $("#" + targetId).removeClass("d-none");
+    //     }
+    //     $("#offcanvasSidebar").removeClass("show");
+    //   });
 
       $(".chevron-icon, .nav-link").on("click", function (event) {
         event.stopPropagation();
