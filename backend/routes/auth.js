@@ -49,10 +49,10 @@ router.post('/login', async (req, res) => {
         }
 
         // Uncomment the password checking code if needed
-        // const isMatch = await bcrypt.compare(password, user.password);
-        // if (!isMatch) {
-        //     return res.status(400).json({ msg: 'Invalid email or password' });
-        // }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'Invalid email or password' });
+        }
 
         const tokenValue = generateToken();
         const token = new Token({ token: tokenValue, userId: user._id });
