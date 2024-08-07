@@ -30,7 +30,7 @@
       }
       .priceRow {
         padding: 21px;
-        border: 1px solid c0c0c0;
+        border: 1px solid #c0c0c0;
         border-radius: 10px;
         width: 105%;
         margin: 0% 0% 2% -13%;
@@ -250,7 +250,7 @@
       <div class="offcanvas-body">
         <nav class="nav flex-column">
           <div class="nav-item dashboards">
-            <a class="nav-link menu" href="#" id="default-link">
+            <a class="nav-link menu" id="default-link">
               <i class="fas fa-home"></i> Dashboards
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
@@ -267,7 +267,7 @@
             </div>
           </div>
           <div class="nav-item">
-            <a class="nav-link menu" href="#" id="users-link">
+            <a class="nav-link menu" id="users-link">
               <i class="fas fa-users"></i> Users
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
@@ -277,7 +277,7 @@
             </div>
           </div>
           <div class="nav-item teams">
-            <a class="nav-link menu" href="#" id="teams-link">
+            <a class="nav-link menu" id="teams-link">
               <i class="fas fa-users"></i> Teams
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
@@ -286,7 +286,7 @@
             </div>
           </div>
           <div class="nav-item">
-            <a class="nav-link menu" href="#" id="reports-link">
+            <a class="nav-link menu" id="reports-link">
               <i class="fas fa-chart-bar"></i> Reports
               <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
             </a>
@@ -302,7 +302,7 @@
       </div>
     </div>
 
-    <div>
+    <div id="content-area">
       <h2 style="margin: 4% 5% -2% 26%; color: grey;">ADD NEW ORDER</h2>
       <div id="firstRow" style="display: flex; margin: 0% 28%;">
         <div>
@@ -316,164 +316,162 @@
 
     <form id="newOrderForm">
       <div class="main-content">
-        <form id="newOrderForm">
-          <div class="firstRow" id="customer">
-            <h6 style="text-align: center; margin-top: -1%;">Customer Info</h6>
-            <div class="form-row firstFive">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="firstName" placeholder="First Name" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="lastName" placeholder="Last Name" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="email" class="form-control" id="email" placeholder="Email Address" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="phone" placeholder="Phone No." required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" placeholder="Alt Phone No" id="altPhone" />
-              </div>
+        <div class="firstRow" id="customer">
+          <h6 style="text-align: center; margin-top: -1%;">Customer Info</h6>
+          <div class="form-row firstFive">
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="firstName" placeholder="First Name" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="lastName" placeholder="Last Name" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="email" class="form-control" id="email" placeholder="Email Address" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="phone" placeholder="Phone No." required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" placeholder="Alt Phone No" id="altPhone" />
             </div>
           </div>
+        </div>
 
-          <div class="firstRow" id="billing">
-            <h6 style="text-align: center; margin-top: -1%;">Billing Info</h6>
-            <div class="form-row firstFive">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bAddress" placeholder="Street Address" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bCity" placeholder="City" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bState" placeholder="State" required />
-              </div>
-              <div class="form-group col-md-2">
-                <select class="form-control" id="bCountry" required>
-                  <option value="">Country</option>
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
-              </div>
+        <div class="firstRow" id="billing">
+          <h6 style="text-align: center; margin-top: -1%;">Billing Info</h6>
+          <div class="form-row firstFive">
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bAddress" placeholder="Street Address" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bCity" placeholder="City" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bState" placeholder="State" required />
+            </div>
+            <div class="form-group col-md-2">
+              <select class="form-control" id="bCountry" required>
+                <option value="">Country</option>
+                <option value="USA">USA</option>
+                <option value="Canada">Canada</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
             </div>
           </div>
+        </div>
 
-          <div class="firstRow" id="shipping">
-            <h6 style="text-align: center; margin-top: -1%;">Shipping Info</h6>
-            <div class="form-row firstFive">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sAddress" placeholder="Street Address" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sCity" placeholder="City" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sState" placeholder="State" required />
-              </div>
-              <div class="form-group col-md-2">
-                <select class="form-control" id="sCountry" required>
-                  <option value="">Country</option>
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sZip" placeholder="Zip Code" required />
-              </div>
+        <div class="firstRow" id="shipping">
+          <h6 style="text-align: center; margin-top: -1%;">Shipping Info</h6>
+          <div class="form-row firstFive">
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="sAddress" placeholder="Street Address" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="sCity" placeholder="City" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="sState" placeholder="State" required />
+            </div>
+            <div class="form-group col-md-2">
+              <select class="form-control" id="sCountry" required>
+                <option value="">Country</option>
+                <option value="USA">USA</option>
+                <option value="Canada">Canada</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="sZip" placeholder="Zip Code" required />
             </div>
           </div>
+        </div>
 
-          <div class="firstRow" id="partInfo">
-            <h6 style="text-align: center; margin-top: -1%;">Part Information</h6>
-            <div class="form-row firstFive">
+        <div class="firstRow" id="partInfo">
+          <h6 style="text-align: center; margin-top: -1%;">Part Information</h6>
+          <div class="form-row firstFive">
+            <div class="form-group col-md-2">
+              <select class="form-control" id="pReq" required>
+                <option value="ABS Pump">ABS Pump</option>
+                <option value="ABS Module">ABS Module</option>
+                <option value="Transmission">Transmission</option>
+                <option value="ABS Module">ABS Module</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="year" placeholder="Year" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="make" placeholder="Make" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="model" placeholder="Model" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="warranty" placeholder="Warranty" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="desc" placeholder="Description" />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="vin" required placeholder="VIN No." />
+            </div>
+          </div>
+        </div>
+
+        <div class="container mt-4">
+          <div class="priceRow">
+            <h6 class="text-center;" style="margin-top: -1%; text-align: center;">Price and GP Information</h6>
+            <div class="form-row">
               <div class="form-group col-md-2">
-                <select class="form-control" id="pReq" required>
-                  <option value="ABS Pump">ABS Pump</option>
-                  <option value="ABS Module">ABS Module</option>
-                  <option value="Transmission">Transmission</option>
-                  <option value="ABS Module">ABS Module</option>
-                </select>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
+                </div>
               </div>
               <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="year" placeholder="Year" required />
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
+                </div>
               </div>
               <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="make" placeholder="Make" required />
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
+                </div>
               </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="model" placeholder="Model" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="warranty" placeholder="Warranty" required />
+              <div class="form-group col-md-6">
+                <textarea class="form-control" id="notes" rows="2" required placeholder="Order Notes"></textarea>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="desc" placeholder="Description" />
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">%</span>
+                  </div>
+                  <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
+                </div>
               </div>
               <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="vin" required placeholder="VIN No." />
+                <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
+              </div>
+              <div class="form-group col-md-2">
+                <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
               </div>
             </div>
           </div>
-
-          <div class="container mt-4">
-            <div class="priceRow">
-              <h6 class="text-center;" style="margin-top: -1%; text-align: center;">Price and GP Information</h6>
-              <div class="form-row">
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">$</span>
-                    </div>
-                    <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">$</span>
-                    </div>
-                    <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">$</span>
-                    </div>
-                    <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <textarea class="form-control" id="notes" rows="2" required placeholder="Order Notes"></textarea>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">%</span>
-                    </div>
-                    <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
-                </div>
-                <div class="form-group col-md-2">
-                  <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="b" id="addoBtn">Add New Order</button>
-        </form>
+        </div>
+        <button type="submit" class="b" id="addoBtn">Add New Order</button>
       </div>
     </form>
 
@@ -642,7 +640,6 @@
           $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
           $(this).closest(".nav-link").toggleClass("selected");
         });
-        
 
         $("#profile").click(function () {
           $("#profileFirstName").val(firstName);
