@@ -62,9 +62,7 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
             title: 'Invalid email or password',
             showConfirmButton: true,
             timer: 1500
-        }).then(() => {
-            window.location.reload()
-        });
+        })
         // alert('Invalid Username or Password. Please try again.');
     }
 });
