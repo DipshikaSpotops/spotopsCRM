@@ -470,199 +470,196 @@
         </form>
       </div>
     </form>
-  </body>
-</html>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-  $(document).ready(async function () {
-    const firstName = localStorage.getItem("firstName");
-    const lastName = localStorage.getItem("lastName");
-    const email = localStorage.getItem("email");
-    const role = localStorage.getItem("role");
-    const team = localStorage.getItem("team");
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      $(document).ready(async function () {
+        const firstName = localStorage.getItem("firstName");
+        const lastName = localStorage.getItem("lastName");
+        const email = localStorage.getItem("email");
+        const role = localStorage.getItem("role");
+        const team = localStorage.getItem("team");
 
-    if (firstName) {
-      $("#user-name").text(firstName);
-      $("#salesAgent").val(firstName);
-    }
+        if (firstName) {
+          $("#user-name").text(firstName);
+          $("#salesAgent").val(firstName);
+        }
 
-    const today = new Date().toISOString().split('T')[0];
-    $("#orderDate").val(today);
+        const today = new Date().toISOString().split('T')[0];
+        $("#orderDate").val(today);
 
-    const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
 
-    function calculateProfit() {
-      const quotedPrice = parseFloat($("#soldP").val()) || 0;
-      const yardPrice = parseFloat($("#costP").val()) || 0;
-      const shipping = parseFloat($("#shippingFee").val()) || 0;
+        function calculateProfit() {
+          const quotedPrice = parseFloat($("#soldP").val()) || 0;
+          const yardPrice = parseFloat($("#costP").val()) || 0;
+          const shipping = parseFloat($("#shippingFee").val()) || 0;
 
-      const salesTax = 0.035 * quotedPrice;
-      const grossProfit = quotedPrice - yardPrice - shipping - salesTax;
+          const salesTax = 0.035 * quotedPrice;
+          const grossProfit = quotedPrice - yardPrice - shipping - salesTax;
 
-      $("#salestax").val(salesTax.toFixed(2));
-      $("#grossProfit").val(grossProfit.toFixed(2));
-    }
+          $("#salestax").val(salesTax.toFixed(2));
+          $("#grossProfit").val(grossProfit.toFixed(2));
+        }
 
-    $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
+        $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
 
-    $("#newOrderForm").on("submit", function (e) {
-      e.preventDefault();
-      const firstName = localStorage.getItem("firstName");
-      const cusFName = $("#firstName").val();
-      const cusLName = $("#lastName").val();
-      const customerName = cusFName + " " + cusLName;
-      const timestamp = new Date().toLocaleString();
-      const note = $("#notes").val();
-      const orderNote = `${note}<br>${firstName},${timestamp} : `;
-      
-      const bStreet = $("#bAddress").val();
-      const bCity = $("#bCity").val();
-      const bState = $("#bState").val();
-      const bCountry = $("#bCountry").val();
-      const bZip = $("#bZip").val();
-      const billingInfo = `${bStreet}\n${bCity}\n${bState}\n${bCountry}\n${bZip}`;
+        $("#newOrderForm").on("submit", function (e) {
+          e.preventDefault();
+          const firstName = localStorage.getItem("firstName");
+          const cusFName = $("#firstName").val();
+          const cusLName = $("#lastName").val();
+          const customerName = cusFName + " " + cusLName;
+          const timestamp = new Date().toLocaleString();
+          const note = $("#notes").val();
+          const orderNote = `${note}<br>${firstName},${timestamp} : `;
+          
+          const bStreet = $("#bAddress").val();
+          const bCity = $("#bCity").val();
+          const bState = $("#bState").val();
+          const bCountry = $("#bCountry").val();
+          const bZip = $("#bZip").val();
+          const billingInfo = `${bStreet}\n${bCity}\n${bState}\n${bCountry}\n${bZip}`;
 
-      const sStreet = $("#sAddress").val();
-      const sCity = $("#sCity").val();
-      const sState = $("#sState").val();
-      const sCountry = $("#sCountry").val();
-      const sZip = $("#sZip").val();
-      const shippingInfo = `${sStreet}\n${sCity}\n${sState}\n${sCountry}\n${sZip}`;
+          const sStreet = $("#sAddress").val();
+          const sCity = $("#sCity").val();
+          const sState = $("#sState").val();
+          const sCountry = $("#sCountry").val();
+          const sZip = $("#sZip").val();
+          const shippingInfo = `${sStreet}\n${sCity}\n${sState}\n${sCountry}\n${sZip}`;
 
-      axios
-        .get("https://www.spotops360.com/orders")
-        .then((orders) => orders.data)
-        .then((orderArr) => {
-          const lastElement = orderArr[orderArr.length - 1];
-          const existingOrderNo = lastElement ? lastElement.orderNo : "50STARS0000";
-          const prefix = existingOrderNo.slice(0, 7);
-          const numberPart = existingOrderNo.slice(7);
-          const incrementedNumber = parseInt(numberPart, 10) + 1;
-          const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
-          const newOrderNo = prefix + incrementedNumberStr;
+          axios
+            .get("https://www.spotops360.com/orders")
+            .then((orders) => orders.data)
+            .then((orderArr) => {
+              const lastElement = orderArr[orderArr.length - 1];
+              const existingOrderNo = lastElement ? lastElement.orderNo : "50STARS0000";
+              const prefix = existingOrderNo.slice(0, 7);
+              const numberPart = existingOrderNo.slice(7);
+              const incrementedNumber = parseInt(numberPart, 10) + 1;
+              const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
+              const newOrderNo = prefix + incrementedNumberStr;
 
-          const newOrder = {
-            orderNo: newOrderNo,
-            orderDate: $("#orderDate").val(),
-            salesAgent: $("#salesAgent").val(),
-            customerName: customerName,
-            bAddress: billingInfo,
-            sAddress: shippingInfo,
-            email: $("#email").val(),
-            phone: $("#phone").val(),
-            altPhone: $("#altPhone").val(),
-            make: $("#make").val(),
-            model: $("#model").val(),
-            year: $("#year").val(),
-            pReq: $("#pReq").val(),
-            desc: $("#desc").val(),
-            warranty: $("#warranty").val(),
-            soldP: $("#soldP").val(),
-            costP: $("#costP").val(),
-            shippingFee: $("#shippingFee").val(),
-            salestax: $("#salestax").val(),
-            grossProfit: $("#grossProfit").val(),
-            orderStatus: "Placed",
-            vin: $("#vin").val(),
-            last4digits: $("#issueOrder").val(),
-            notes: orderNote,
-            orderHistory: [`Order placed by ${firstName} on ${new Date().toLocaleString()}`],
+              const newOrder = {
+                orderNo: newOrderNo,
+                orderDate: $("#orderDate").val(),
+                salesAgent: $("#salesAgent").val(),
+                customerName: customerName,
+                bAddress: billingInfo,
+                sAddress: shippingInfo,
+                email: $("#email").val(),
+                phone: $("#phone").val(),
+                altPhone: $("#altPhone").val(),
+                make: $("#make").val(),
+                model: $("#model").val(),
+                year: $("#year").val(),
+                pReq: $("#pReq").val(),
+                desc: $("#desc").val(),
+                warranty: $("#warranty").val(),
+                soldP: $("#soldP").val(),
+                costP: $("#costP").val(),
+                shippingFee: $("#shippingFee").val(),
+                salestax: $("#salestax").val(),
+                grossProfit: $("#grossProfit").val(),
+                orderStatus: "Placed",
+                vin: $("#vin").val(),
+                last4digits: $("#issueOrder").val(),
+                notes: orderNote,
+                orderHistory: [`Order placed by ${firstName} on ${new Date().toLocaleString()}`],
+              };
+
+              return axios.post("https://www.spotops360.com/orders", newOrder).then(() => {
+                alert(`Order No. ${newOrderNo} has been placed successfully.`);
+                window.location.reload();
+              });
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+
+        if (team === "Team Charlie") {
+          $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
+          $(
+            "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+          ).hide();
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+        } else if (team === "Team Mark") {
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+          $(
+            "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+          ).hide();
+        } else if (team === "Team Sussane") {
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+          $(
+            "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+          ).hide();
+        } else if (role === "Admin") {
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          $('#submenu-reports .nav-link:contains("Refund Report")').show();
+          $('#submenu-reports .nav-link:contains("Collect Refund")').show();
+          $("#submenu-dashboards .view-individualOrders-link").hide();
+        }
+
+        $(".toggle-sidebar").on("click", function () {
+          $("#offcanvasSidebar").toggleClass("show");
+        });
+
+        $(".nav-link").on("click", function () {
+          $(".nav-link").removeClass("active selected");
+          $(this).addClass("selected");
+
+          const contentMap = {
+            "default-link": "#default-content",
+            "add-order-link": "#add-order-content",
+            "view-order-link": "#view-order-content",
           };
 
-          return axios.post("https://www.spotops360.com/orders", newOrder);
-        })
-        .then(() => {
-          alert(`Order No.${newOrderNo} has been placed successfully.`);
-          window.location.href = "individualOrders.html";
-        })
-        .catch((error) => {
-          console.error("Error:", error);
+          $(".main-content > div").addClass("d-none");
+          $(contentMap[this.id]).removeClass("d-none");
+          $("#offcanvasSidebar").removeClass("show");
         });
-    });
 
-    if (team === "Team Charlie") {
-      $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
-      $(
-        "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-      ).hide();
-      $(".nav-item:has(#submenu-teams)").hide();
-      $(".nav-item:has(#submenu-users)").hide();
-    } else if (team === "Team Mark") {
-      $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-      $(".nav-item:has(#submenu-teams)").hide();
-      $(".nav-item:has(#submenu-users)").hide();
-      $(
-        "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
-      ).hide();
-    } else if (team === "Team Sussane") {
-      $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-      $(".nav-item:has(#submenu-teams)").hide();
-      $(".nav-item:has(#submenu-users)").hide();
-      $(
-        "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
-      ).hide();
-    } else if (role === "Admin") {
-      $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-      $('#submenu-reports .nav-link:contains("Refund Report")').show();
-      $('#submenu-reports .nav-link:contains("Collect Refund")').show();
-      $("#submenu-dashboards .view-individualOrders-link").hide();
-    }
+        $(".chevron-icon, .nav-link").on("click", function (event) {
+          event.stopPropagation();
+          const submenu = $(this).closest(".nav-item").find(".submenu");
+          submenu.toggle();
+          $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+          $(this).closest(".nav-link").toggleClass("selected");
+        });
 
-    $(".toggle-sidebar").on("click", function () {
-      $("#offcanvasSidebar").toggleClass("show");
-    });
+        $("#profile").click(function () {
+          $("#profileFirstName").val(firstName);
+          $("#profileLastName").val(lastName);
+          $("#profileEmail").val(email);
+          $("#profileRole").val(role);
+          $("#profileModal").modal("show");
+        });
 
-    $(".nav-link").on("click", function () {
-      $(".nav-link").removeClass("active selected");
-      $(this).addClass("selected");
+        $(".close").click(function () {
+          console.log("close button clicked");
+          location.reload();
+        });
 
-      const contentMap = {
-        "default-link": "#default-content",
-        "add-order-link": "#add-order-content",
-        "view-order-link": "#view-order-content",
-      };
+        $("#logoutLink").click(function () {
+          window.localStorage.clear();
+          window.location.href = "login_signup.html";
+        });
 
-      $(".main-content > div").addClass("d-none");
-      $(contentMap[this.id]).removeClass("d-none");
-      $("#offcanvasSidebar").removeClass("show");
-    });
-
-    $(".chevron-icon, .nav-link").on("click", function (event) {
-      event.stopPropagation();
-      const submenu = $(this).closest(".nav-item").find(".submenu");
-      submenu.toggle();
-      $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-      $(this).closest(".nav-link").toggleClass("selected");
-    });
-
-    $("#profile").click(function () {
-      $("#profileFirstName").val(firstName);
-      $("#profileLastName").val(lastName);
-      $("#profileEmail").val(email);
-      $("#profileRole").val(role);
-      $("#profileModal").modal("show");
-    });
-
-    $(".close").click(function () {
-      console.log("close button clicked");
-      location.reload();
-    });
-
-    $("#logoutLink").click(function () {
-      window.localStorage.clear();
-      window.location.href = "login_signup.html";
-    });
-
-    const currentPath = window.location.pathname;
-    $(".nav-link").each(function () {
-      if (currentPath.includes($(this).attr("href"))) {
-        $(this).addClass("active");
-      }
-    });
-  });
-</script>
+        const currentPath = window.location.pathname;
+        $(".nav-link").each(function () {
+          if (currentPath.includes($(this).attr("href"))) {
+            $(this).addClass("active");
+          }
+        });
+      });
+    </script>
   </body>
 </html>
