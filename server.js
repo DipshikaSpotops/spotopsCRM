@@ -122,7 +122,7 @@ app.post("/orders", async (req, res) => {
     
 
     // Generate an invoice for the new order
-    await generateInvoice(newOrder.orderNo, newOrder);
+    // await generateInvoice(newOrder.orderNo, newOrder);
 
     res.status(201).json({ newOrder, team: newOrder.team });
   } catch (error) {
