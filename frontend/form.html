@@ -2160,8 +2160,8 @@
             var note = $("#notes").val()
             var salesAgent = $("#salesAgent").val();
             const timestamp = new Date().toLocaleString();
-            var orderNote = ` ${note}<br>
-                                 ${salesAgent},${timestamp} :  `
+            var orderNote = ` ${note}</br>
+                              ${salesAgent},${timestamp} :`
             const newOrder = {
               orderNo: newOrderNo,
               orderDate: $("#orderDate").val(),
