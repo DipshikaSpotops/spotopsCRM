@@ -320,7 +320,7 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
   console.log("additionalInfo");
   try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
-      var firstName = req.params.firstName;
+      const firstName = req.query.firstname;
       console.log("fName",firstName);
       if (!order) return res.status(404).send('Order not found');
 
