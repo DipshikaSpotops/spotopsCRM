@@ -419,7 +419,7 @@
 
             try {
                 const response = await axios.get(
-                    "https://www.spotops360.com/orders?status=placed",
+                    "https://www.spotops360.com/orders?status=Placed",
                     {
                         headers: token ? { Authorization: `Bearer ${token}` } : {},
                     }
