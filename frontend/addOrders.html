@@ -220,6 +220,12 @@
         margin-top: -1%;
       }
     </style>
+     <script>
+        const firstName = localStorage.getItem("firstName");
+        if (!firstName) {
+          window.location.href = "login_signup.html";
+        }
+      </script>
   </head>
   <body>
     <div class="navbar">
