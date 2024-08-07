@@ -529,6 +529,7 @@
           const sCountry = $("#sCountry").val();
           const sZip = $("#sZip").val();
           const shippingInfo = `${sStreet}\n${sCity}\n${sState}\n${sCountry}\n${sZip}`;
+          var newOrderNo;
 
           axios
             .get("https://www.spotops360.com/orders")
@@ -540,7 +541,7 @@
               const numberPart = existingOrderNo.slice(7);
               const incrementedNumber = parseInt(numberPart, 10) + 1;
               const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
-              const newOrderNo = prefix + incrementedNumberStr;
+               newOrderNo = prefix + incrementedNumberStr;
 
               const newOrder = {
                 orderNo: newOrderNo,
