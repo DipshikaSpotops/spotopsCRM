@@ -56,7 +56,7 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
         }
     } catch (error) {
         console.error('Login error:', error);
-        alert('Invalid Username or Password. Please try again.');
+        alert('An error occurred. Please try again.');
     }
 });
 
