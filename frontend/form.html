@@ -586,11 +586,11 @@
         display: none;
       }
 
-      /* Added CSS for blurring background when the modal is open */
-      .blur-background {
-        filter: blur(5px);
-        pointer-events: none;
-      }
+      .blur {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -2330,6 +2330,7 @@
   
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
+          $("#mainContent").addClass("blur");
           yardIndex = $(this).data("yard-index");
           $("#editYardInfo").data("yard-index", yardIndex);
           $("#yardIndexEdit").val(yardIndex);
