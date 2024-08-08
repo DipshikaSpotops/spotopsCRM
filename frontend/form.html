@@ -594,10 +594,7 @@
   filter: blur(5px);
   pointer-events: none;
 }
-#refund{
-  font-size: 25px;
-    margin: 4%;
-}
+
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -1253,7 +1250,8 @@
       </div>
       <div class="modal-body">
         <div class="form-group" id="editPopInfo">
-          <label for="refund">Status:</label>
+          <label for="refund"  style="font-size: 25px;
+    margin: 4%;">Status:</label>
           <select
             class="form-control"
             id="refund"
@@ -2342,6 +2340,7 @@
 
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
+          $(".mainDiv").addClass("blur");
           yardIndex = $(this).data("yard-index");
           $("#editYardInfo").data("yard-index", yardIndex);
           $("#yardIndexEdit").val(yardIndex);
