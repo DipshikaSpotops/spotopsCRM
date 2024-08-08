@@ -204,8 +204,9 @@
       }
 
       .yard-btn {
-        margin-right: 10px;
-      }
+  margin: 0 5px;
+  flex: 1;
+}
 
       .sidebarOrder,
       .main-content,
@@ -610,6 +611,23 @@
       .blur {
   filter: blur(5px);
   pointer-events: none;
+}
+
+#yardButtonsContainer {
+  width: 100%;
+}
+#yardInfoContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* Fix input box disabling issue */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: #e9ecef; /* Ensure disabled inputs are visually distinguishable */
+  opacity: 1; /* Fix opacity to make it look consistent */
+  cursor: not-allowed; /* Show a not-allowed cursor */
 }
 
     </style>
@@ -1047,10 +1065,10 @@
               ></textarea>
             </div>
           </div>
-          <div id="yardButtonsContainer" class="d-flex">
-            <div id="yardInfoContainer" class="mr-3"></div>
+          <div id="yardButtonsContainer" class="d-flex flex-column align-items-center">
+            <div id="yardInfoContainer" class="d-flex flex-row mb-3"></div>
             <button type="button" class="btn add-yard-btn">+</button>
-          </div>
+          </div>          
           <div id="trackingInfoContainer"></div>
           <button
             type="submit"
@@ -2998,4 +3016,3 @@
     </script>
   </body>   
 </html>
-
