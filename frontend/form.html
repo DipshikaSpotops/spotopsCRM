@@ -1096,169 +1096,192 @@
       </div>
     </div>
 
-    <div1
+    <div
       class="modal fade"
       id="yardModal"
       tabindex="-1"
       aria-labelledby="yardModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="yardModalLabel">Yard Information</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="yardName"
-                  placeholder="Yard Name"
-                />
-              </div>
-              <div class="form-group col-md-6">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="address"
-                  placeholder="Address"
-                />
-              </div>
+    <div
+    class="modal fade"
+    id="yardModal"
+    tabindex="-1"
+    aria-labelledby="yardModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="yardModalLabel">Add New Yard</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <input
+                type="text"
+                class="form-control"
+                id="yardName"
+                placeholder="Yard Name"
+              />
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="city"
-                  placeholder="City"
-                />
-              </div>
-              <div class="form-group col-md-4">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="state"
-                  placeholder="State"
-                />
-              </div>
-              <div class="form-group col-md-4">
-                <input
-                  type="number"
-                  class="form-control"
-                  id="zip"
-                  placeholder="Zip Code"
-                />
-              </div>
+            <div class="form-group col-md-4">
+              <input
+                type="text"
+                class="form-control"
+                id="agentName"
+                placeholder="Agent Name"
+              />
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="phone"
-                  placeholder="Phone Number"
-                />
-              </div>
-              <div class="form-group col-md-6">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  placeholder="Email"
-                />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="agentName"
-                  placeholder="Agent Name"
-                />
-              </div>
-              <div class="form-group col-md-4">
-                <input
-                  type="number"
-                  class="form-control"
-                  id="partPrice"
-                  placeholder="Part Price"
-                />
-              </div>
-              <div class="form-group col-md4">
-                <input
-                  type="number"
-                  class="form-control"
-                  id="others"
-                  placeholder="Others"
-                />
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="form-row">
-                <div class="col-md-6">
-                  <label class="radio-inline">
-                    <input
-                      type="radio"
-                      name="shippingMethod"
-                      value="Own shipping"
-                    />
-                    Own Shipping
-                  </label>
-                  <input
-                    type="number"
-                    class="form-control shipping-input"
-                    id="ownShippingInput"
-                    placeholder="Own Shipping Price"
-                    style="display: none"
-                  />
-                </div>
-                <div class="col-md-6">
-                  <label class="radio-inline">
-                    <input
-                      type="radio"
-                      name="shippingMethod"
-                      value="yard_shipping"
-                    />
-                    Yard Shipping
-                  </label>
-                  <input
-                    type="number"
-                    class="form-control shipping-input"
-                    id="yardShippingInput"
-                    placeholder="Yard Shipping Price"
-                    style="display: none"
-                  />
-                </div>
-              </div>
+            <div class="form-group col-md-4">
+              <input
+                type="text"
+                class="form-control"
+                id="yardRating"
+                placeholder="Yard Rating Info"
+              />
             </div>
           </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary" id="addYardInfo">
-              Add
-            </button>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <input
+                type="text"
+                class="form-control"
+                id="phone"
+                placeholder="Phone Number"
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <input
+                type="text"
+                class="form-control"
+                id="altPhone"
+                placeholder="Alt. Phone Number"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Email Id"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <input
+                type="text"
+                class="form-control"
+                id="address"
+                placeholder="Street Address"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <input
+                type="text"
+                class="form-control"
+                id="city"
+                placeholder="Enter City"
+              />
+            </div>
+            <div class="form-group col-md-4">
+              <input
+                type="text"
+                class="form-control"
+                id="state"
+                placeholder="Enter State"
+              />
+            </div>
+            <div class="form-group col-md-4">
+              <input
+                type="number"
+                class="form-control"
+                id="zip"
+                placeholder="Enter Zipcode"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <select class="form-control" id="country">
+                <option selected>Select Country</option>
+                <option value="USA">USA</option>
+                <option value="Canada">Canada</option>
+                <!-- Add more options as needed -->
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <input
+                type="number"
+                class="form-control"
+                id="partPrice"
+                placeholder="Part Price"
+              />
+            </div>
+            <div class="form-group col-md-4">
+              <input
+                type="number"
+                class="form-control"
+                id="ownShipping"
+                placeholder="Own Shipping"
+              />
+            </div>
+            <div class="form-group col-md-4">
+              <input
+                type="number"
+                class="form-control"
+                id="yardShipping"
+                placeholder="Yard Shipping"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <input
+                type="number"
+                class="form-control"
+                id="others"
+                placeholder="Other Charges"
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label class="form-control" id="totalSpending">
+                Total Yard Spending: $100.25
+              </label>
+            </div>
           </div>
         </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-primary" id="addYardInfo">
+            Submit
+          </button>
+        </div>
       </div>
-    </div1>
+    </div>
+  </div>
+  
 
     <div id="editYardPopup" style="display: none">
       <div >
