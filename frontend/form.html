@@ -585,6 +585,3066 @@
       .nav-link {
         display: none;
       }
+      .blur {
+  filter: blur(5px);
+  pointer-events: none;
+}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const firstName = localStorage.getItem("firstName");
+      if (!firstName) {
+        window.location.href = "login_signup.html";
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="navbar" id="navbar" style="display: flex">
+      <div class="logo">
+        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+      </div>
+      <div class="navbar-nav">
+        <div class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownDashboards"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Dashboards
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownDashboards">
+            <a class="dropdown-item" href="form.html?newEntry=true"
+              >Add New Order</a
+            >
+            <a class="dropdown-item" href="orders.html">View Orders</a>
+            <a class="dropdown-item" href="individualOrders.html"
+              >View My Orders</a
+            >
+            <a class="dropdown-item" href="ordersMark.html">TeamA Orders</a>
+            <a class="dropdown-item" href="ordersSussane.html">TeamB Orders</a>
+            <a class="dropdown-item" href="placedOrders.html">Placed Orders</a>
+            <a class="dropdown-item" href="cancelledOrders.html"
+              >Cancelled Orders</a
+            >
+            <a class="dropdown-item" href="yardInfo.html">Yard Details</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownUsers"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Users
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownUsers">
+            <a class="dropdown-item" href="createUser.html">Create User</a>
+            <a class="dropdown-item" href="viewallUsers.html">View Users</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownTeams"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Teams
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownTeams">
+            <a class="dropdown-item" href="teams.html">View Teams</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdownReports"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Reports
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownReports">
+            <a class="dropdown-item" href="shippingExpenses.html"
+              >Shipping Expenses</a
+            >
+            <a class="dropdown-item" href="purchases.html">Purchases</a>
+            <a class="dropdown-item" href="poReport.html">PO Report</a>
+            <a class="dropdown-item" href="salesReport.html">My Sales Report</a>
+          </div>
+        </div>
+      </div>
+      <div class="user-info dropdown">
+        <span>Welcome <span id="user-name">Shankar</span></span>
+        <i
+          class="fas fa-user-circle fa-2x user-icon"
+          id="userMenu"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        ></i>
+        <div
+          class="dropdown-menu dropdown-menu-right"
+          aria-labelledby="userMenu"
+        >
+          <a class="dropdown-item" href="#" id="profileLink"
+            ><i class="fas fa-user"></i> My Profile</a
+          >
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" id="logoutLink"
+            ><i class="fas fa-sign-out-alt"></i> Log Out</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="close-btn">
+      <span>&times;</span>
+    </div>
+
+    <div class="sidebar" id="offcanvasSidebar">
+      <div class="offcanvas-body">
+        <nav class="nav flex-column">
+          <div class="nav-item dashboards">
+            <a class="nav-link" href="#" id="default-link">
+              <i class="fas fa-home"></i> Dashboards
+              <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            <div class="submenu" id="submenu-dashboards">
+              <a class="nav-link add-order-link" href="form.html?newEntry=true">Add New Order</a>
+              <a class="nav-link view-orders-link" href="orders.html">View Orders</a>
+              <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
+              <a class="nav-link teamA-orders-link" href="ordersMark.html">TeamA Orders</a>
+              <a class="nav-link teamB-orders-link" href="ordersSussane.html">TeamB Orders</a>
+              <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
+              <a class="nav-link cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+              <a class="nav-link yard-info-link" href="yardInfo.html">Yard Details</a>
+            </div>
+          </div>
+          <div class="nav-item" id="users-section">
+            <a class="nav-link" href="#">
+              <i class="fas fa-users"></i> Users
+              <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            <div class="submenu" id="submenu-users">
+              <a class="nav-link" href="createUser.html">Create User</a>
+              <a class="nav-link" href="viewallUsers.html">View Users</a>
+            </div>
+          </div>
+          <div class="nav-item" id="teams-section">
+            <a class="nav-link" href="#">
+              <i class="fas fa-users-cog"></i> Teams
+              <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            <div class="submenu" id="submenu-teams">
+              <a class="nav-link" href="teams.html">View Teams</a>
+            </div>
+          </div>
+          <div class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-chart-bar"></i> Reports
+              <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            <div class="submenu" id="submenu-reports">
+              <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+              <a class="nav-link" href="purchases.html">Purchases</a>
+              <a class="nav-link" href="poReport.html">PO Report</a>
+              <a class="nav-link" href="salesReport.html">My Sales Report</a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div style="display: flex">
+      <div class="main-content" id="mainContent">
+        <form id="crmForm" class="form-container">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="orderDate">Order Date</label>
+              <input type="date" class="form-control" id="orderDate" required />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="salesAgent">Sales Agent</label>
+              <input
+                type="text"
+                class="form-control"
+                id="salesAgent"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <div id="custInfo" style="border: 1px solid grey">
+              <label
+                for="customerInfo"
+                class="d-block text-center font-weight-bold py-2"
+                >CUSTOMER INFO</label
+              >
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="firstName">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  required
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="lastName">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastname"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" required />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="phone">Phone</label>
+                <input type="number" class="form-control" id="phone" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="bAddress">Billing Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="bAddress"
+                  required
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="sAddress">Shipping Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="sAddress"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div id="partDesc" style="border: 1px solid grey">
+              <label
+                for="partDescription"
+                class="d-block text-center font-weight-bold py-2"
+                >PART DESCRIPTION</label
+              >
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="make">Make</label>
+                <input type="text" class="form-control" id="make" required />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="model">Model</label>
+                <input type="text" class="form-control" id="model" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="year">Year</label>
+                <input type="number" class="form-control" id="year" required />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="pReq">Part Required</label>
+                <select class="form-control" id="pReq" required>
+                  <option value="ABS Pump">ABS Pump</option>
+                  <option value="ABS Module">ABS Module</option>
+                  <option value="Transmission">Transmission</option>
+                  <option value="ABS Module"></option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="desc">Description</label>
+                <input type="text" class="form-control" id="desc" />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="warranty">Warranty</label>
+                <input type="number" class="form-control" id="warranty" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="pricenGp" style="border: 1px solid grey">
+              <label
+                for="priceProfit"
+                class="d-block text-center font-weight-bold py-2"
+                >PRICE AND GP INFORMATION</label
+              >
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="soldP">Quoted Price</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="soldP"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="costP">Yard Price</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="costP"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="shippingFee">Est. Shipping</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="shippingFee"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="salestax">Sales Tax(%)</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="salestax"
+                    readonly
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="grossProfit">Est. GP</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">$</span>
+                </div>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="grossProfit"
+                  readonly
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="orderStatus">Order Status</label>
+              <select class="form-control" id="orderStatus" required>
+                <option value="Placed">Order Placed</option>
+                <option value="Customer approved">Customer Approved</option>
+                <option value="Yard Processing">Yard Processing</option>
+                <option value="In Transit">In Transit</option>
+                <option value="Escalation">Escalation</option>
+                <option value="Order Fulfilled">Order Fulfilled</option>
+                <option value="Order Cancelled">Order Cancelled</option>
+                <option value="Part Delivered">Part Delivered</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="vin">VIN No.</label>
+              <input type="text" class="form-control" id="vin" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="issueOrder">Last 4 Digits</label>
+              <input
+                type="text"
+                class="form-control"
+                id="issueOrder"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="notesForm">Notes</label>
+              <textarea
+                class="form-control"
+                id="notes"
+                required
+                style="margin: 0% -1%; height: 83px"
+              ></textarea>
+            </div>
+          </div>
+          <div id="yardButtonsContainer" class="d-flex">
+            <div id="yardInfoContainer" class="mr-3"></div>
+            <button type="button" class="btn add-yard-btn">+</button>
+          </div>
+          <div id="trackingInfoContainer"></div>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            id="submitBtn"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+
+      <div class="sidebarOrder">
+        <h2>Order History</h2>
+        <ul id="orderHistoryList" class="timeline"></ul>
+      </div>
+
+      <div class="new-div">
+        <div id="saleNote">
+          <h2 style="padding-left: 10px;text-align: center;font-weight: 600;">
+            Sale Note
+          </h2>
+        </div>
+        <div
+          id="comment-boxSupport"
+          style="padding: 10px 20px 20px 10px"
+        ></div>
+        <div class="commentsInput" id="commentsContainer"></div>
+        <div class="containers">
+          <form>
+            <input
+              id="commentInput"
+              placeholder="Type Your Comments here..."
+            ></input>
+            <div class="btn">
+              <input
+                id="submitComments"
+                type="submitComments"
+                value="Update Comments"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div1
+      class="modal fade"
+      id="yardModal"
+      tabindex="-1"
+      aria-labelledby="yardModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="yardModalLabel">Yard Information</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="yardName"
+                  placeholder="Yard Name"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address"
+                  placeholder="Address"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  placeholder="City"
+                />
+              </div>
+              <div class="form-group col-md-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="state"
+                  placeholder="State"
+                />
+              </div>
+              <div class="form-group col-md-4">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="zip"
+                  placeholder="Zip Code"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  placeholder="Phone Number"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="Email"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="agentName"
+                  placeholder="Agent Name"
+                />
+              </div>
+              <div class="form-group col-md-4">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="partPrice"
+                  placeholder="Part Price"
+                />
+              </div>
+              <div class="form-group col-md4">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="others"
+                  placeholder="Others"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label class="radio-inline">
+                    <input
+                      type="radio"
+                      name="shippingMethod"
+                      value="Own shipping"
+                    />
+                    Own Shipping
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control shipping-input"
+                    id="ownShippingInput"
+                    placeholder="Own Shipping Price"
+                    style="display: none"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="radio-inline">
+                    <input
+                      type="radio"
+                      name="shippingMethod"
+                      value="yard_shipping"
+                    />
+                    Yard Shipping
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control shipping-input"
+                    id="yardShippingInput"
+                    placeholder="Yard Shipping Price"
+                    style="display: none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" id="addYardInfo">
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div1>
+
+    <div id="editYardPopup" style="display: none">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span id="crossBtnEditYard" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" id="editPopInfo">
+          <label for="refund">Status:</label>
+          <select
+            class="form-control"
+            id="refund"
+            style="
+              width: 75%;
+              border-radius: 20px;
+              margin: 2% 2% 5% -3%;
+              background-color: black;
+              color: white;
+            "
+          >
+            <option value="">Choose</option>
+            <option value="Yard located">Yard Located</option>
+            <option value="Yard PO Sent">PO Sent</option>
+            <option value="PO confirmed">PO Confirmed</option>
+            <option value="PO cancelled">PO Cancelled</option>
+            <option value="Part shipped">Part Shipped</option>
+            <option value="Part delivered">Part Delivered</option>
+            <option value="Escalation">Escalation</option>
+          </select>
+          <div id="cardCharged">
+            <label for="paymentStatusCard">Card Charged:</label>
+            <select class="form-control paymentStatus">
+              <option value="">Choose</option>
+              <option value="Card charged">Charged</option>
+              <option value="">Not charged</option>
+            </select>
+          </div>
+          <label for="paymentStatusRefund" style="display: none"
+            >Refund Collected:</label
+          >
+          <select
+            class="form-control paymentStatus"
+            id="paymentStatusSelect"
+            style="display: none"
+          >
+            <option value="">Choose</option>
+            <option value="Refund collected">Yes</option>
+            <option value="">No</option>
+          </select>
+          <div id="refundedAmountContainer">
+            <label for="refundedAmount">Refunded Amount:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="refundedAmount"
+              placeholder="Enter refunded amount"
+            />
+          </div>
+          <div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="editYardInfo"
+              style="
+                border-radius: 20px;
+                align-items: center;
+                margin: 3% 2% 8% 0%;
+                width: 138%;
+              "
+            >
+              Save
+            </button>
+          </div>
+        </div>
+
+        <div id="escalation">
+          <div style="margin: 2% 0 2% 25%">
+            <label for="reason1">Reason:</label>
+            <select
+              name="esc"
+              id="esc"
+              style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4"
+            >
+              <option value="">Choose</option>
+              <option value="Damaged">Damaged</option>
+              <option value="Defective">Defective</option>
+              <option value="Incorrect">Incorrect</option>
+              <option value="Not programming">Not programming</option>
+            </select>
+          </div>
+          <div id="escRMA" style="margin: 2% 0 2% 25%">
+            <label for="reason">Escalation Process:</label>
+            <select
+              name="esc"
+              id="escProcess"
+              style="padding: 0.6%; width: 51.8%; border: 1px solid #d9d4d4"
+            >
+              <option value="">Choose</option>
+              <option value="RMA Sent">RMA Sent</option>
+              <option value="RMA signed">RMA signed</option>
+              <option value="Return tracking sent">Return Tracking Sent</option>
+              <option value="Return part In transit">
+                Return Part In Transit
+              </option>
+            </select>
+          </div>
+        </div>
+        <div id="shipping_own_cust">
+          <div class="form-group">
+            <div class="form-row">
+              <div class="col-md-6">
+                <label class="radio-inline">
+                  <input type="radio" name="returnValue" value="Our shipping" />
+                  Our Shipping
+                </label>
+                <input
+                  type="number"
+                  class="returnShipment"
+                  id="ourShippingInput"
+                  placeholder="Our Shipping Price"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="radio-inline">
+                  <input
+                    type="radio"
+                    value="Customer shipping"
+                    name="returnValue"
+                  />
+                  Customer Shipping
+                </label>
+                <input
+                  type="number"
+                  class="returnShipment"
+                  value="0"
+                  id="customerShippingInput"
+                  placeholder="Customer Shipping Price"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="inputForCust"></div>
+        <div class="form-group" id="divTrackingEdit">
+          <label>Tracking Information:</label>
+          <table class="table table-bordered" id="trackingTableEdit">
+            <thead>
+              <tr>
+                <th>Tracking No</th>
+                <th>ETA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="trackingNoEdit"
+                    placeholder="Enter Tracking No"
+                    required
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="etaEdit"
+                    placeholder="Enter ETA"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <select class="form-control" id="shipperNameEdit" required>
+                    <option value="" disabled selected>Select Shipper</option>
+                    <option value="UPS">UPS</option>
+                    <option value="World Wide Express">
+                      World Wide Express
+                    </option>
+                    <option value="FedEx">FedEx</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <input
+                    type="url"
+                    class="form-control"
+                    id="linkInput"
+                    placeholder="Enter Link"
+                    required
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-primary" id="sendEmailButton">
+            Send Email
+          </button>
+        </div>
+        <div class="comments" id="notesContainer">
+          <h2>Yard Notes</h2>
+          <div id="comment-box;"></div>
+        </div>
+        <div class="container">
+          <form>
+            <textarea
+              id="noteInput"
+              placeholder="Type Your Notes here..."
+            ></textarea>
+            <div class="btn">
+              <input
+                id="submit"
+                type="submit"
+                value="Update Notes"
+                style="
+                  margin: -60% 0% 7% 540%;
+                  border-radius: 20px;
+                  background-color: grey;
+                  border: none;
+                "
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+      <input type="hidden" id="yardIndexEdit" />
+    </div>
+
+    <div
+      class="modal fade"
+      id="editYardDetailsModal"
+      tabindex="-1"
+      aria-labelledby="editYardDetailsModalLabel"
+      aria-hidden="true"
+    >
+      <div>
+        <div>
+          <div class="modal-header">
+            <h5 class="modal-title" id="editYardDetailsModalLabel">
+              Edit Yard Details
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="margin: 1px 82px">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="editYardName">Yard Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editYardName"
+                  placeholder="Yard Name"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="editAddress">Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editAddress"
+                  placeholder="Address"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="editCity">City</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editCity"
+                  placeholder="City"
+                />
+              </div>
+              <div class="form-group col-md-4">
+                <label for="editState">State</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editState"
+                  placeholder="State"
+                />
+              </div>
+              <div class="form-group col-md-4">
+                <label for="editZip">Zip Code</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="editZip"
+                  placeholder="Zip Code"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="editPhone">Phone Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editPhone"
+                  placeholder="Phone Number"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="editEmail">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="editEmail"
+                  placeholder="Email"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="editAgentName">Agent Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editAgentName"
+                  placeholder="Agent Name"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="editPartPrice">Part Price</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="editPartPrice"
+                  placeholder="Part Price"
+                />
+              </div>
+              <div class="form-group col-md-4">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="editOthers"
+                  placeholder="Others"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label class="radio-inline">
+                    <input
+                      type="radio"
+                      name="editShippingMethod"
+                      value="Own shipping"
+                    />
+                    Own Shipping
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control shipping-input"
+                    id="editOwnShippingInput"
+                    placeholder="Own Shipping Price"
+                    style="display: none"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="radio-inline">
+                    <input
+                      type="radio"
+                      name="editShippingMethod"
+                      value="Yard shipping"
+                    />
+                    Yard Shipping
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control shipping-input"
+                    id="editYardShippingInput"
+                    placeholder="Yard Shipping Price"
+                    style="display: none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" id="saveYardDetails">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="profileModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="profileModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="profileForm">
+              <div class="form-group">
+                <label for="profileFirstName">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="profileFirstName"
+                  readonly
+                />
+              </div>
+              <div class="form-group">
+                <label for="profileLastName">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="profileLastName"
+                  readonly
+                />
+              </div>
+              <div class="form-group">
+                <label for="profileEmail">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="profileEmail"
+                  readonly
+                />
+              </div>
+              <div class="form-group">
+                <label for="profileRole">Role</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="profileRole"
+                  readonly
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(async function () {
+        const firstName = localStorage.getItem("firstName");
+        const lastName = localStorage.getItem("lastName");
+        const token = localStorage.getItem("token");
+        const email = localStorage.getItem("email");
+        const role = localStorage.getItem("role");
+        const team = localStorage.getItem("team");
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderNo = urlParams.get("orderNo");
+        const process = urlParams.get("process");
+        const newEntry = urlParams.get("newEntry");
+        var yardIndex;
+
+        console.log("orderNo:", orderNo); // Debugging: Check if orderNo is retrieved correctly
+        console.log("process:", process); // Debugging: Check if process is retrieved correctly
+        console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
+        console.log("team", team, token);
+
+        if (firstName) {
+          $("#user-name").text(firstName);
+          $("#salesAgent").val(firstName);
+        }
+        
+
+        let userRole = null;
+        let userEmail = null;
+
+        if (team === "Team Charlie") {
+          $("#submenu-reports .nav-link")
+            .not(':contains("My Sales Report")')
+            .hide();
+          $(
+            "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+          ).hide();
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+        }
+        if (role === "Admin") {
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          $("#submenu-dashboards .view-individualOrders-link").hide();
+        }
+
+        if (role === "Admin" && team === "Team Charlie") {
+          $(".sidebarOrder").hide();
+          $(".add-yard-btn").hide();
+        }
+
+        $("#profileLink").click(function () {
+          $("#profileFirstName").val(firstName);
+          $("#profileLastName").val(lastName);
+          $("#profileEmail").val(email);
+          $("#profileRole").val(role);
+          $("#profileModal").modal("show");
+        });
+
+        $("#backToOrders").click(function () {
+          $("#profile-content").addClass("d-none");
+          $("#placed-order-content").removeClass("d-none");
+        });
+
+        $(".toggle-btn").on("click", function () {
+          $("#offcanvasSidebar").toggleClass("hide");
+        });
+
+        $(".close-btn").on("click", function () {
+          $("#offcanvasSidebar").toggleClass("hide");
+        });
+
+        $(".nav-link").on("click", function () {
+          $(".nav-link").removeClass("active selected");
+          $(this).addClass("selected");
+
+          const contentMap = {
+            "default-link": "#default-content",
+            "add-order-link": "#add-order-content",
+            "view-order-link": "#view-order-content",
+          };
+
+          $(".main-content > div").addClass("d-none");
+          $(contentMap[this.id]).removeClass("d-none");
+          $("#offcanvasSidebar").addClass("hide");
+        });
+
+        $(".nav-link").on("click", function () {
+          const submenu = $(this).next(".submenu");
+          if (submenu.length) {
+            submenu.slideToggle();
+            $(this)
+              .find(".chevron-icon i")
+              .toggleClass("fa-chevron-right fa-chevron-down");
+          } else {
+            $(".nav-link").removeClass("active");
+            $(this).addClass("active");
+
+            const contentMap = {
+              "default-link": "#default-content",
+              "add-order-link": "#add-order-content",
+              "view-order-link": "#view-order-content",
+            };
+
+            $(".main-content>div").addClass("d-none");
+            $(contentMap[this.id]).removeClass("d-none");
+            $("#offcanvasSidebar").addClass("hide");
+          }
+        });
+
+        $.ajax({
+          type: "GET",
+          url: "https://www.spotops360.com/teams",
+          success: function (teams) {
+            const teamCharlie = $("#team-charlie");
+            const teamMark = $("#team-mark");
+            const teamSussane = $("#team-sussane");
+
+            teams.forEach((team) => {
+              const teamHtml = `
+                            ${team.name}<br>
+                            ${team.team}<br>
+                            ${team.role}
+                        `;
+              if (team.team === "Team Charlie") {
+                teamCharlie.append(teamHtml);
+              } else if (team.team === "Team Mark") {
+                teamMark.append(teamHtml);
+              } else if (team.team === "Team Sussane") {
+                teamSussane.append(teamHtml);
+              }
+            });
+          },
+          error: function (error) {
+            alert("Error fetching teams: " + error.responseJSON.message);
+          },
+        });
+
+        function calculateProfit() {
+          const quotedPrice = parseFloat($("#soldP").val()) || 0;
+          const yardPrice = parseFloat($("#costP").val()) || 0;
+          const shipping = parseFloat($("#shippingFee").val()) || 0;
+
+          const salesTax = 0.035 * quotedPrice;
+          const grossProfit = quotedPrice - yardPrice;
+          const netProfit = grossProfit - shipping - salesTax;
+
+          $("#salestax").val(salesTax.toFixed(2));
+          $("#grossProfit").val(netProfit.toFixed(2));
+        }
+
+        const today = new Date().toISOString().split("T")[0];
+        $("#orderDate").val(today);
+
+        $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
+
+        function showModal(modalId) {
+          $(modalId).modal("show");
+        }
+
+        function addYardButton(yardIndex, buttonText) {
+          const buttonHtml = `
+                    <button type="button" class="btn btn-info yard-btn" data-yard-index="${yardIndex}">${buttonText}</button>
+                    <div class="yard-details" id="yard-details-${yardIndex}"></div>
+                `;
+          $("#yardInfoContainer").append(buttonHtml);
+        }
+
+        function showYardDetails(yardIndex) {
+          const yardDetails = $(`#yard-details-${yardIndex}`);
+          if (yardDetails.is(":visible")) {
+            yardDetails.hide();
+          } else {
+            fetch(`https://www.spotops360.com/orders/${orderNo}`)
+              .then((response) => response.json())
+              .then((data) => {
+                if (
+                  !data.additionalInfo ||
+                  !data.additionalInfo[yardIndex - 1]
+                ) {
+                  return;
+                }
+                const yardData = data.additionalInfo[yardIndex - 1];
+                let yardDetailsHtml = `
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td colspan="2">${formatYardData(
+                                          yardData
+                                        )}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <button type="button" class="btn btn-secondary edit-yard" data-yard-index="${yardIndex}">Edit Yard Status</button>
+                                            <button type="button" class="btn btn-secondary edit-yard-details" data-yard-index="${yardIndex}">Edit Yard Details</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `;
+                yardDetails.html(yardDetailsHtml).show();
+              });
+          }
+        }
+
+        function formatYardData(yardData) {
+          let yardInfo = `
+                    Yard Name: ${yardData.yardName}<br>
+                    Address: ${yardData.address}<br>
+                    Email: ${yardData.email}<br>
+                    Phone No: ${yardData.phone}<br>
+                    Agent Name: ${yardData.agentName}<br>
+                    Part Price: $${yardData.partPrice}<br>
+                    Shipping Method: ${yardData.shippingMethod} (${yardData.shippingDetails})<br>
+                    Others: $${yardData.others}<br>
+                `;
+
+          if (yardData.status) {
+            yardInfo += `Status: ${yardData.status}<br>`;
+          }
+          if (yardData.paymentStatus) {
+            yardInfo += `Payment Status: ${yardData.paymentStatus}<br>`;
+          }
+          if (yardData.paymentDetails) {
+            yardInfo += `Payment Details: ${yardData.paymentDetails}<br>`;
+          }
+          if (yardData.trackingNo) {
+            yardInfo += `Tracking No: ${yardData.trackingNo}<br>`;
+          }
+          if (yardData.escalationCause) {
+            yardInfo += `Escalation Reason: ${yardData.escalationCause}<br>`;
+          }
+          if (yardData.escalationProcess) {
+            yardInfo += `Escalation Process: ${yardData.escalationProcess}<br>`;
+          }
+          if (yardData.returnShipping) {
+            yardInfo += `Return Shipping type: ${yardData.returnShipping}<br>`;
+          }
+          if (yardData.returnShippingCharge) {
+            yardInfo += `Return shipping amount: ${yardData.returnShippingCharge}<br>`;
+          }
+
+          return yardInfo;
+        }
+
+        function updateOrderHistory(orderHistory) {
+          const orderHistoryList = $("#orderHistoryList");
+          orderHistoryList.empty();
+          orderHistory.forEach((historyItem) => {
+            const [heading, ...details] = historyItem.split(" by ");
+            const listItem = `
+                        <li class="timeline-item">
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">${heading}</div>
+                                <div class="timeline-body">
+                                    <p>${details.join(" by ")}</p>
+                                </div>
+                            </div>
+                        </li>`;
+            orderHistoryList.append(listItem);
+          });
+        }
+        var vinNo = document.getElementById("vin").value;
+        console.log("vin");
+        if (orderNo) {
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Fetched order data:", data);
+              var customerNameE = data.customerName;
+              console.log("cusName", customerNameE);
+              // updateOrderNotes(data);
+
+              const nameParts = customerNameE.split(" ");
+              const firstNameE = nameParts[0];
+              const lastNameE = nameParts[1];
+
+              console.log("First Name:", firstName);
+              console.log("Last Name:", lastName);
+              orderNo;
+              $("#orderDate").val(data.orderDate);
+              $("#salesAgent").val(data.salesAgent);
+              $("#bAddress").val(data.bAddress);
+              $("#firstName").val(firstNameE);
+              $("#lastname").val(lastNameE);
+              $("#sAddress").val(data.sAddress);
+              $("#email").val(data.email);
+              $("#phone").val(data.phone);
+              $("#make").val(data.make);
+              $("#model").val(data.model);
+              $("#year").val(data.year);
+              $("#pReq").val(data.pReq);
+              $("#desc").val(data.desc);
+              $("#warranty").val(data.warranty);
+              $("#soldP").val(data.soldP);
+              $("#costP").val(data.costP);
+              $("#shippingFee").val(data.shippingFee);
+              $("#salestax").val(data.salestax);
+              $("#grossProfit").val(data.grossProfit);
+              $("#orderStatus").val(data.orderStatus);
+              $("#vin").val(data.vin);
+              $("#issueOrder").val(data.last4digits);
+              $("#notes").val(data.notes);
+              $("#issueOrder").val(data.issueOrder);
+
+              data.additionalInfo.forEach((info, index) => {
+                addYardButton(index + 1, `Yard ${index + 1}`);
+              });
+
+              if (data.trackingInfo) {
+                $("#trackingInfoContainer").html(data.trackingInfo);
+              }
+
+              updateOrderHistory(data.orderHistory);
+
+              if (process) {
+                $("#crmForm input, #crmForm select").attr("disabled", true);
+                $("#orderStatus").attr("disabled", false);
+              }
+
+              if (process) {
+                $("#orderStatus").on("change", function () {
+                  if ($(this).val() === "yardPoSent") {
+                    showModal("#yardModal");
+                  }
+                  if ($(this).val() === "trackingInfoSent") {
+                    showModal("#trackingModal");
+                  }
+                });
+              }
+
+              $("#crmForm").on("submit", function (e) {
+                e.preventDefault();
+                const firstName = localStorage.getItem("firstName");
+                var cusFName = document.getElementById("firstName").value;
+                var cuLName = document.getElementById("lastname").value;
+                console.log(cusFName, cuLName);
+                var customerName = cusFName + " " + cuLName;
+
+                const updatedData = {
+                  orderNo: orderNo,
+                  orderDate: $("#orderDate").val(),
+                  salesAgent: $("#salesAgent").val(),
+                  customerName: customerName,
+                  bAddress: $("#bAddress").val(),
+                  sAddress: $("#sAddress").val(),
+                  email: $("#email").val(),
+                  phone: $("#phone").val(),
+                  make: $("#make").val(),
+                  model: $("#model").val(),
+                  year: $("#year").val(),
+                  pReq: $("#pReq").val(),
+                  desc: $("#desc").val(),
+                  warranty: $("#warranty").val(),
+                  soldP: $("#soldP").val(),
+                  costP: $("#costP").val(),
+                  shippingFee: $("#shippingFee").val(),
+                  salestax: $("#salestax").val(),
+                  grossProfit: $("#grossProfit").val(),
+                  orderStatus: $("#orderStatus").val(),
+                  vin: document.getElementById("vin").value,
+                  last4digits: $("#issueOrder").val(),
+                  notes: $("#notes").val(),
+                  firstName: firstName,
+                };
+
+                fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(updatedData),
+                })
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                  })
+                  .then((data) => {
+                    updateOrderHistory(data.orderHistory);
+                    const team = localStorage.getItem("team");
+                    console.log("teamU", team);
+                    if (team === "Team Charlie") {
+                      window.location.href = "individualOrders.html";
+                    } else {
+                      window.location.href = "orders.html";
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                  });
+              });
+
+              partDesc = `
+                            Year: ${data.year}
+                            Make: ${data.make}
+                            Model: ${data.model}
+                            Part required: ${data.pReq}
+                            Desc: ${data.desc}
+                            VIN: ${data.vin}
+                            Warranty: ${data.warranty}`;
+            });
+        } else var newOrderNo;
+        if (newEntry) {
+          $('.navbar-nav').hide();
+          $('#offcanvasSidebar').show();
+          $(".sidebarOrder").hide();
+          $(".add-yard-btn").hide();
+          $(".new-div").hide();
+
+          $("#orderStatus").val("Placed");
+          $("#orderStatus").prop("disabled", true);
+          $("#mainContent").addClass("centered-form");
+
+          axios
+            .get(`https://www.spotops360.com/orders`)
+            .then((orders) => orders)
+            .then((data) => {
+              var orderArr = data.data;
+              var lastElement = orderArr[orderArr.length - 1];
+              console.log("lastElement", lastElement);
+              if (lastElement) {
+                var existingOrderNo = lastElement.orderNo;
+              } else {
+                var existingOrderNo = "50STARS0000";
+              }
+              console.log("orderNo", existingOrderNo);
+              var prefix = existingOrderNo.slice(0, 7);
+              var numberPart = existingOrderNo.slice(7);
+
+              var incrementedNumber = parseInt(numberPart, 10) + 1;
+
+              var incrementedNumberStr = incrementedNumber
+                .toString()
+                .padStart(4, "0");
+
+              newOrderNo = prefix + incrementedNumberStr;
+              console.log("newOrderNo", newOrderNo);
+            })
+            .catch((error) => {
+              console.error("Error fetching latest order:", error);
+            });
+          $("#crmForm").on("submit", function (e) {
+            e.preventDefault();
+            const firstName = localStorage.getItem("firstName");
+            var cusFName = document.getElementById("firstName").value;
+            var cusLName = document.getElementById("lastname").value;
+            console.log("name", cusFName, cusLName);
+            var customerName = cusFName + " " + cusLName;
+            var note = $("#notes").val()
+            var salesAgent = $("#salesAgent").val();
+            const timestamp = new Date().toLocaleString();
+            var orderNote = ` ${note}</br>
+                              ${salesAgent},${timestamp} :`
+            const newOrder = {
+              orderNo: newOrderNo,
+              orderDate: $("#orderDate").val(),
+              salesAgent: $("#salesAgent").val(),
+              customerName: customerName,
+              bAddress: $("#bAddress").val(),
+              sAddress: $("#sAddress").val(),
+              email: $("#email").val(),
+              phone: $("#phone").val(),
+              make: $("#make").val(),
+              model: $("#model").val(),
+              year: $("#year").val(),
+              pReq: $("#pReq").val(),
+              desc: $("#desc").val(),
+              warranty: $("#warranty").val(),
+              soldP: $("#soldP").val(),
+              costP: $("#costP").val(),
+              shippingFee: $("#shippingFee").val(),
+              salestax: $("#salestax").val(),
+              grossProfit: $("#grossProfit").val(),
+              orderStatus: $("#orderStatus").val(),
+              vin: $("#vin").val(),
+              last4digits: $("#issueOrder").val(),
+              notes: orderNote,
+              orderHistory: [
+                `Order placed by ${firstName} on ${new Date().toLocaleString()}`,
+              ],
+            };
+
+            fetch("https://www.spotops360.com/orders", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newOrder),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                const team = localStorage.getItem("team");
+                console.log("Team assigned:", team);
+                console.log("teamU", team);
+                alert(`Order No ${newOrderNo} has been placed.`);
+
+                if (team === "Team Charlie") {
+                  window.location.href = "individualOrders.html";
+                } else {
+                  window.location.href = "orders.html";
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+        }
+        else {
+          $("#offcanvasSidebar").hide();
+          $("#navbar-nav").show();
+          $(".navbar-nav").css({
+            "flex-direction": "row",
+            "justify-content": "center",
+            "align-items": "center",
+            "margin-left": "62%",
+          });
+          $(".nav-item").addClass("mx-2");
+          $(".sidebar").hide();
+          $(".main-content").css("width", "70%");
+          $("#mainContent").removeClass("centered-form");
+
+          $(".navbar").css({
+            "background-color": "black",
+            color: "white",
+          });
+          $(".navbar .nav-link").css({
+            color: "white",
+          });
+          $(".navbar .user-info span").css({
+            color: "white",
+          });
+          $(".navbar .user-icon").css({
+            color: "white",
+          });
+
+          const sidebarLinks = $(".sidebar .nav-link").clone();
+          $(".navbar").append(sidebarLinks);
+
+          $(".nav-link").on("click", function () {
+            const submenu = $(this).next(".submenu");
+            if (submenu.length) {
+              submenu.slideToggle();
+              $(this)
+                .find(".chevron-icon i")
+                .toggleClass("fa-chevron-right fa-chevron-down");
+            }
+          });
+
+          function fetchAndDisplaySaleNotes() {
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+              const notes = data.notes;
+              const saleNoteDiv = $("#saleNote");
+              const noteHtml = `<p>${notes}</p>`;
+              saleNoteDiv.append(noteHtml);
+            })
+            .catch((error) => {
+              console.error("Error fetching sale notes:", error);
+            });
+        }
+
+        fetchAndDisplaySaleNotes();
+        }
+
+        $("#orderStatus").on("change", function () {
+          if ($(this).val() === "Yard PO sent") {
+            showModal("#yardModal");
+            $("#divTrackingEdit").hide();
+          }
+          if ($(this).val() === "Part shipped") {
+            $("#divTrackingEdit").show();
+            $("#sendEmailButton").show();
+          }
+          else {
+            $("#divTrackingEdit").hide();
+            $("#sendEmailButton").hide();
+          }
+        });
+
+        $("#yardInfoContainer").on("click", ".yard-btn", function () {
+          yardIndex = $(this).data("yard-index");
+          showYardDetails(yardIndex);
+        });
+
+        $(".add-yard-btn").on("click", function () {
+          showModal("#yardModal");
+          const newOrderStatus = "Yard Processing";
+
+          console.log("new order status", newOrderStatus);
+
+          $("#orderStatus").val(newOrderStatus);
+
+          console.log("orderNo", orderNo);
+          const updatedData = { orderStatus: newOrderStatus };
+
+          fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              updateOrderHistory(data.orderHistory);
+              console.log("Order status updated successfully:", data);
+            })
+            .catch((error) => {
+              console.error("Error updating order status:", error);
+            });
+        });
+
+        $("#yardInfoContainer").on("click", ".edit-yard", function () {
+          $("#editYardPopup").show();
+          yardIndex = $(this).data("yard-index");
+          $("#editYardInfo").data("yard-index", yardIndex);
+          $("#yardIndexEdit").val(yardIndex);
+          $("#submit").data("yard-index", yardIndex);
+
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+                return;
+              }
+              const yardData = data.additionalInfo[yardIndex - 1];
+              $("#refund").val(yardData.status);
+              $("#cardCharged").val(yardData.paymentStatus);
+              $("#paymentStatusSelect").val(yardData.paymentStatus);
+              $("#refundedAmount").val(yardData.refundedAmount);
+              $("#esc").val(yardData.escalationCause);
+              $("#escProcess").val(yardData.escalationProcess);
+
+              if (yardData.status === "Escalation") {
+                $("#escalation").show();
+              } else {
+                $("#escalation").hide();
+              }
+              if (yardData.status === "PO cancelled") {
+                $("#cardCharged").show();
+              } else {
+                $("#cardCharged").hide();
+              }
+
+              $("#editYardModal").modal("show");
+
+              fetchAndDisplayNotes(yardIndex);
+            })
+            .catch((error) => {
+              console.error("Error fetching yard data:", error);
+            });
+        });
+
+
+        async function fetchAndDisplayNotes(yardIndex) {
+          console.log("yIndex", yardIndex, "oNo", orderNo);
+          console.log("Fetching and displaying notes...");
+
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(
+                "Fetched notes:",
+                data.additionalInfo[yardIndex - 1].notes
+              );
+              displayComments(data.additionalInfo[yardIndex - 1].notes);
+            })
+            .catch((error) => {
+              console.error("Error fetching notes:", error);
+            });
+        }
+
+        async function fetchAndUpdateYardInfo() {
+          const token =
+            "d7efef519360bf1ae968db97c52855fcdfbfab171af45c4720f8b648cf2814f3069a696b70ad12bba620b5394ee11b076f4fc31bd07baee18ace4fb4c8bfed34"; // Use your provided token here
+          await fetchYardInfo(token);
+        }
+
+        $("#addYardInfo").on("click", async function () {
+          $("#refund").val("Yard located").change();
+          const yardName = $("#yardName").val();
+          const address = $("#address").val();
+          const city = $("#city").val();
+          const state = $("#state").val();
+          const zipcode = $("#zip").val();
+          const addedAddress = city + "  " + state + "  " + zipcode;
+          const phone = $("#phone").val();
+          const email = $("#email").val();
+          const agentName = $("#agentName").val();
+          const partPrice = $("#partPrice").val();
+          const others = document.getElementById("others").value;
+          console.log("others", others);
+          const shippingMethod = $(
+            "input[name='shippingMethod']:checked"
+          ).val();
+          const shippingDetails =
+            shippingMethod === "Own shipping"
+              ? $("#ownShippingInput").val()
+              : $("#yardShippingInput").val();
+
+
+           const firstName = localStorage.getItem("firstName");    
+          const data = {
+            yardName: yardName,
+            address: addedAddress,
+            phone: phone,
+            email: email,
+            agentName: agentName,
+            partPrice: partPrice,
+            status: "Yard located",
+            shippingMethod: shippingMethod,
+            shippingDetails: shippingDetails,
+            others: others,
+          };
+
+          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              $("#editYardPopup").hide();
+              addYardButton(
+                data.additionalInfo.length,
+                `Yard ${data.additionalInfo.length}`
+              );
+              updateOrderHistory(data.orderHistory);
+              fetchAndUpdateYardInfo();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+
+        $("#editYardInfo").on("click", async function () {
+          console.log("clicking n save");
+          $('#editYardPopup').hide();
+          $(".mainDiv").removeClass("blur");
+          yardIndex = $(this).data("yard-index");
+          const status = $("#refund").val();
+          const returnCharges = $(".returnShipment").val();
+          console.log("returnshipp", returnCharges);
+
+          const returnShippingMethod = $(
+            "input[name='returnValue']:checked"
+          ).val();
+          console.log("shippinfR", returnShippingMethod);
+
+          const paymentStatus = $(".paymentStatus")
+            .map(function () {
+              return $(this).val();
+            })
+            .get()
+            .filter(function (value) {
+              return value !== "";
+            })
+            .join();
+
+          const escCause = $("#esc")
+            .map(function () {
+              return $(this).val();
+            })
+            .get()
+            .filter(function (value) {
+              return value !== "";
+            })
+            .join();
+          const escProcess = $("#escProcess")
+            .map(function () {
+              return $(this).val();
+            })
+            .get()
+            .filter(function (value) {
+              return value !== "";
+            })
+            .join();
+          console.log("escCause", escCause, "escProcess", escProcess);
+          const refundedAmount = $("#refundedAmount").val();
+
+          const data1 = {
+            status: status,
+            paymentStatus: paymentStatus,
+            refundedAmount: refundedAmount ? parseFloat(refundedAmount) : null,
+            escalationCause: escCause,
+            escalationProcess: escProcess,
+            returnShipping: returnShippingMethod,
+            returnShippingCharge: returnCharges,
+          };
+
+          fetch(
+            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data1),
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              $("#editYardModal").modal("hide");
+              updateOrderHistory(data.orderHistory);
+              showYardDetails(yardIndex);
+              fetchAndUpdateYardInfo();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+
+        async function fetchYardInfo(token) {
+          const response = await axios.get("https://www.spotops360.com/yardInfo", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (response.status !== 200) {
+            throw new Error("Failed to fetch yard information");
+          }
+
+          const data = response.data;
+
+          let maxYards = 0;
+          data.forEach((item) => {
+            if (item.additionalInfo.length > maxYards) {
+              maxYards = item.additionalInfo.length;
+            }
+          });
+
+          const tableHeader = $("#tableHeader");
+          for (let i = 1; i <= maxYards; i++) {
+            tableHeader.append(`<th scope="col">Yard ${i}</th>`);
+          }
+
+          const yardInfoTable = $("#yardInfoTable");
+          yardInfoTable.empty();
+          data.forEach((item) => {
+            let yardInfoHtml = "";
+            for (let i = 0; i < maxYards; i++) {
+              const yardClass =
+                item.additionalInfo[i]?.paymentStatus === "Card charged"
+                  ? "highlight-red"
+                  : "";
+              yardInfoHtml += `<td class="${yardClass}">${
+                item.additionalInfo[i]?.yardName || ""
+              }: ${item.additionalInfo[i]?.status || ""}</td>`;
+            }
+
+            yardInfoTable.append(
+              `<tr>
+                            <td>${item.orderNo}</td>
+                            <td>${item.customerName}</td>
+                            ${yardInfoHtml}
+                        </tr>`
+            );
+          });
+        }
+
+        $("input[name='shippingMethod']").on("change", function () {
+          if ($(this).val() === "Own shipping") {
+            $("#ownShippingInput").show();
+            $("#yardShippingInput").hide();
+          } else if ($(this).val() === "yard_shipping") {
+            $("#yardShippingInput").show();
+            $("#ownShippingInput").hide();
+          }
+        });
+        $("input[name='returnValue']").on("change", function () {
+          console.log("our/cust clicked");
+          if ($(this).val() === "Our shipping") {
+            $("#ourShippingInput").show();
+            $("#customerShippingInput").hide();
+          } else if ($(this).val() === "Customer shipping") {
+            $("#customerShippingInput").show();
+            $("#ourShippingInput").hide();
+          }
+        });
+
+        $("#escProcess").on("change", function () {
+          var escpMethod = $("#escProcess").val();
+          console.log("method", escpMethod);
+          if (escpMethod === "Return tracking sent") {
+            $("#shipping_own_cust").show();
+          }
+        });
+
+        $("#refund").on("change", function () {
+          const refundStatus = $(this).val();
+          const orderStatus = $("#orderStatus").val();
+
+          let newOrderStatus = orderStatus;
+
+          if (refundStatus === "Part shipped") {
+            newOrderStatus = "In Transit";
+            $("#divTrackingEdit").show();
+            $("#sendEmailButton").show();
+            $("#notesContainer").hide();
+          } else if (refundStatus === "PO confirmed") {
+            $("#escalation").hide();
+            $("#divTrackingEdit").hide();
+            $("#sendEmailButton").hide();
+            $("#notesContainer").hide();
+            $("#cardCharged").hide();
+          } else if (refundStatus === "Escalation") {
+            $("#escalation").show();
+            $("#divTrackingEdit").hide();
+            $("#sendEmailButton").hide();
+            $("#notesContainer").hide();
+          } else if (refundStatus === "PO cancelled") {
+            $("#divTrackingEdit").hide();
+            $("#sendEmailButton").hide();
+            $("#notesContainer").hide();
+            $("#cardCharged").show();
+          } else if (refundStatus === "Part delivered") {
+            newOrderStatus = "Order Fulfilled";
+            $("#notesContainer").show();
+            $("#divTrackingEdit").hide();
+          } else if (
+            refundStatus === "Bad part" ||
+            refundStatus === "In return"
+          ) {
+            newOrderStatus = "Escalation";
+            $("#notesContainer").show();
+            $("#divTrackingEdit").hide();
+            $("#cardCharged").hide();
+          } else if (
+            refundStatus === "Card charged" ||
+            refundStatus === "Yard PO Sent"
+          ) {
+            newOrderStatus = "Yard Processing";
+            $("#escalation").hide();
+            $("#divTrackingEdit").hide();
+          } else if (refundStatus === "Yard located") {
+            $("#divTrackingEdit").hide();
+          } else {
+            $("#divTrackingEdit").hide();
+            $("#sendEmailButton").hide();
+            $("#notesContainer").hide();
+          }
+
+          const updatedData = { orderStatus: newOrderStatus };
+
+          fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              $("#orderStatus").val(newOrderStatus);
+              updateOrderHistory(data.orderHistory);
+            })
+            .catch((error) => {
+              console.error("Error updating order status:", error);
+            });
+        });
+
+        $(".paymentStatus").on("change", function () {
+          const paymentStatus = $(this).val();
+          if (
+            paymentStatus === "Card charged" ||
+            paymentStatus === "Refund collected"
+          ) {
+            $("#paymentOptions").show();
+          } else {
+            $("#paymentOptions").hide();
+          }
+        });
+
+        $("#paymentYesNo").on("change", function () {
+          const paymentYesNo = $(this).val();
+          const paymentStatus = $(".paymentStatus").val();
+          if (paymentYesNo === "Yes") {
+            if (paymentStatus === "Card charged") {
+              $("#payment").val("Card charged");
+            } else if (paymentStatus === "Refund collected") {
+              $("#payment").val("Refund collected");
+            }
+          } else {
+            $("#payment").val("");
+          }
+        });
+
+        $("#sendEmailButton").on("click", function () {
+          const trackingNo = $("#trackingNoEdit").val();
+          const eta = $("#etaEdit").val();
+          const shipperName = $("#shipperNameEdit").val();
+          const link = $("#linkInput").val();
+          if (trackingNo && eta && shipperName && link) {
+            const data = {
+              trackingNo: trackingNo,
+              eta: eta,
+              shipperName: shipperName,
+              link: link,
+            };
+
+            fetch(`https://www.spotops360.com/orders/sendTrackingInfo/${orderNo}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((result) => {
+                alert("Tracking details sent to the customer");
+                console.log("Success:", result);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          } else {
+            alert("Please fill in all the tracking information fields.");
+          }
+        });
+
+        $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
+          yardIndex = $(this).data("yard-index");
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+                return;
+              }
+              const yardData = data.additionalInfo[yardIndex - 1];
+              $("#editYardName").val(yardData.yardName);
+              $("#editAddress").val(yardData.address);
+              const addressParts = yardData.address.split(" ");
+              $("#editCity").val(addressParts[0]);
+              $("#editState").val(addressParts[1]);
+              $("#editZip").val(addressParts[2]);
+              $("#editPhone").val(yardData.phone);
+              $("#editEmail").val(yardData.email);
+              $("#editAgentName").val(yardData.agentName);
+              $("#editPartPrice").val(yardData.partPrice);
+              $(
+                "input[name='editShippingMethod'][value='" +
+                  yardData.shippingMethod +
+                  "']"
+              ).prop("checked", true);
+              $("#editOthers").val(yardData.others);
+              if (yardData.shippingMethod === "Own shipping") {
+                $("#editOwnShippingInput").val(yardData.shippingDetails).show();
+                $("#editYardShippingInput").hide();
+              } else {
+                $("#editYardShippingInput")
+                  .val(yardData.shippingDetails)
+                  .show();
+                $("#editOwnShippingInput").hide();
+              }
+
+              $("#refund").val(yardData.status);
+              $("#paymentStatusSelect").val(yardData.paymentStatus);
+
+              if (yardData.paymentStatus === "Refund collected") {
+                $("#refundedAmountContainer").show();
+                $("#refundedAmount").val(yardData.refundedAmount);
+              } else {
+                $("#refundedAmountContainer").hide();
+              }
+
+              $("#esc").val(yardData.escalationCause);
+              $("#escProcess").val(yardData.escalationProcess);
+
+              if (yardData.status === "Escalation") {
+                $("#escalation").show();
+              } else {
+                $("#escalation").hide();
+              }
+
+              $("#editYardDetailsModal").modal("show");
+              $("#saveYardDetails").data("yard-index", yardIndex);
+            });
+        });
+
+        $("#saveYardDetails").on("click", function () {
+          yardIndex = $(this).data("yard-index");
+          const updatedData = {
+            yardName: $("#editYardName").val(),
+            address: $("#editAddress").val(),
+            phone: $("#editPhone").val(),
+            email: $("#editEmail").val(),
+            agentName: $("#editAgentName").val(),
+            partPrice: $("#editPartPrice").val(),
+            others: $("#editOthers").val(),
+            shippingMethod: $("input[name='editShippingMethod']:checked").val(),
+            shippingDetails:
+              $("input[name='editShippingMethod']:checked").val() ===
+              "Own shipping"
+                ? $("#editOwnShippingInput").val()
+                : $("#editYardShippingInput").val(),
+            status: $("#refund").val(),
+            paymentStatus: $("#paymentStatusSelect").val(),
+            refundedAmount: $("#refundedAmount").val(),
+            escalationCause: $("#esc").val(),
+            escalationProcess: $("#escProcess").val(),
+          };
+
+          fetch(
+            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedData),
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              $("#editYardDetailsModal").modal("hide");
+              updateOrderHistory(data.orderHistory);
+              showYardDetails(yardIndex);
+              fetchAndUpdateYardInfo();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+
+        $("input[name='editShippingMethod']").on("change", function () {
+          if ($(this).val() === "Own shipping") {
+            $("#editOwnShippingInput").show();
+            $("#editYardShippingInput").hide();
+          } else {
+            $("#editYardShippingInput").show();
+            $("#editOwnShippingInput").hide();
+          }
+        });
+      });
+      $("#paymentStatusSelect").on("change", function () {
+        if ($(this).val() === "Refund collected") {
+          $("#refundedAmountContainer").show();
+        } else {
+          $("#refundedAmountContainer").hide();
+        }
+      });
+
+      const field = document.querySelector("textarea");
+      const backUp = field.getAttribute("placeholder");
+      const btn = document.querySelector(".btn");
+      const clear = document.getElementById("clear");
+      const submit = document.querySelector("#submit");
+      const comments = document.getElementById("comment-box");
+      const orderNo = new URLSearchParams(window.location.search).get(
+        "orderNo"
+      );
+
+      $("#submit").on("click", function (event) {
+        event.preventDefault();
+        const content = $("#noteInput").val();
+        const yardIndex = $("#submit").data("yard-index") - 1;
+        const firstName = localStorage.getItem("firstName");
+        const timestamp = new Date().toLocaleString();
+
+        if (content.length > 0) {
+          axios
+            .post(
+              `https://www.spotops360.com/orders/${orderNo}/notes/${yardIndex}`,
+              {
+                note: content,
+                author: firstName,
+                timestamp: timestamp,
+              }
+            )
+            .then((response) => {
+              alert("Notes updated successfully.");
+              $("#noteInput").val("");
+              fetchAndDisplayNotes(yardIndex);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert(`Failed to update notes: ${error.message}`);
+            });
+        }
+      });
+      function displayComments(notes) {
+        const commentBox = $("#comment-box");
+        commentBox.empty();
+
+        if (Array.isArray(notes)) {
+          console.log("notes", notes);
+          notes.forEach((note) => {
+            const noteHtml = `<p>${note}</p>`;
+            console.log("htmlNote", noteHtml);
+            commentBox.append(noteHtml);
+            console.log("comment", commentBox);
+          });
+        } else {
+          console.error("Expected notes to be an array, but got:", notes);
+        }
+      }
+
+      $("#editYardPopup").on("show.bs.modal", function () {
+        const yardIndex = $("#yardIndexEdit").val();
+        fetchAndDisplayNotes(yardIndex);
+      });
+
+      const comments_arr = [];
+
+      const display_comments = () => {
+        let list = "<ul>";
+        comments_arr.forEach((comment) => {
+          list += `<li>${comment}</li>`;
+        });
+        list += "</ul>";
+        comments.innerHTML = list;
+      };
+
+     
+      
+      $("#closeBtnEditYard, .close").on("click", function () {
+        $("#editYardPopup").hide();
+      });
+
+         const commentSupport = document.getElementById("comment-boxSupport");
+        $("#submitComments").on("click", function (event) {
+          event.preventDefault();
+          const content1 = $("#commentInput").val();
+          const yardIndex1 = $("#submit").data("yard-index") - 1;
+          const firstName1 = localStorage.getItem("firstName");
+          const timestamp1 = new Date().toLocaleString();
+
+          if (content1.length > 0) {
+            axios
+              .put(
+                `https://www.spotops360.com/orders/${orderNo}/supportNotes`,
+                {
+                  note: content1,
+                  author: firstName1,
+                  timestamp: timestamp1,
+                }
+              )
+              .then((response) => {
+                alert("Support comments updated successfully.");
+                $("#commentInput").val("");
+                fetchSupportComment(yardIndex1);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert(`Failed to update notes: ${error.message}`);
+              });
+          }
+        });
+
+        async function fetchSupportComment() {
+          console.log("Fetching and displaying support comments...");
+
+          fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Fetched notes:", data.supportNotes);
+              displaySnotes(data.supportNotes);
+            })
+            .catch((error) => {
+              console.error("Error fetching notes:", error);
+            });
+        }
+
+        function displaySnotes(notes) {
+  const commentBox1 = $("#comment-boxSupport");
+  commentBox1.empty();
+
+  if (Array.isArray(notes)) {
+    console.log("support notes", notes);
+    notes.forEach((note) => {
+      const noteHtml = `<p>${note}</p>`;
+      commentBox1.append(`<h2 style="text-align: center;font-weight: 600;">Comments</h2>`);
+      commentBox1.append(noteHtml);
+    });
+  } else {
+    console.error("Expected notes to be an array, but got:", notes);
+  }
+}
+
+
+        fetchSupportComment();
+
+      $('.toggle-btn').on('click', function () {
+    $('.sidebar').toggleClass('hide');
+  });
+  $('.close-btn').on('click', function () {
+    $('.sidebar').addClass('hide');
+  });
+
+   $(".chevron-icon, .nav-link").on("click", function (event) {
+    event.stopPropagation();
+    const submenu = $(this).closest(".nav-item").find(".submenu");
+    submenu.toggle();
+    $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+    $(this).closest(".nav-link").toggleClass("selected");
+  });
+
+ 
+   const currentPath = window.location.pathname;
+  $(".nav-link").each(function () {
+    if (currentPath.includes($(this).attr("href"))) {
+      $(this).addClass("active");
+    }
+  });
+  $('#crossBtnEditYard').on('click', function(e) {
+          $('#editYardPopup').hide();
+          $(".mainDiv").removeClass("blur");
+        });
+
+      $("#logoutLink").click(function () {
+        window.localStorage.clear();
+        window.location.href = "login_signup.html";
+      });
+    </script>
+  </body>   
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRM Form</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      #cardCharged,
+      #paymentStatusRefund,
+      #refundedAmountContainer,
+      #escalation,
+      #shipping_own_cust,
+      #divTrackingEdit {
+        display: none;
+      }
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        overflow-x: hidden;
+        flex-direction: column;
+        font-family: Arial, sans-serif;
+      }
+      #notesContainer {
+        margin: 2% 10% 1% 35%;
+      }
+
+      .nav-item .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 9999;
+        display: none;
+      }
+
+      #editYardPopup {
+        display: block;
+        background-color: white;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 85vh;
+        width: 60%;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1050;
+      }
+
+      .modal-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .comments {
+        width: 100%;
+        margin-top: 20px;
+      }
+      .comments h2 {
+        text-align: center;
+        margin: -3% 32% 3% 3%;
+      }
+
+      #submitComments {
+        float: left;
+        color: white;
+        border: none;
+        background-color: grey;
+        border-radius: 20px;
+        margin: -16% -1% 0% 70%;
+        height: 4vh;
+        width: 30%;
+        text-align: center;
+      }
+
+      .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+      #comment-boxSupport {
+        height: 600px;
+        width: 100%;
+        border: 1px solid rgb(168, 164, 164);
+        overflow-y: scroll;
+      }
+
+      #comment-box {
+        width: 101%;
+        height: 570px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        overflow-y: scroll;
+        margin: -2% 5% 0% -13%;
+        padding: 10px;
+        background: #f8f9fa;
+        border: 1px solid black;
+      }
+
+      #comment-box li {
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        margin-bottom: 5px;
+        padding: 10px;
+        border-radius: 4px;
+      }
+
+      #submit {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #submit:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+      }
+
+      #saleNote {
+        border: 1px solid rgb(168, 164, 164);
+        margin-bottom: 1%;
+        padding: 10px 20px 10px 20px;
+      }
+      #saleNote p {
+        text-align: center;
+      }
+      textarea {
+        width: 543%;
+        height: 60px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin: -10% 2% 2% -222%;
+        border: 1px solid black;
+      }
+      textarea#notes {
+        height: 150px;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+      }
+      .modal-header button {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      #editPopInfo {
+        margin: -6% 30% 1% 19%;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-group-text {
+        font-weight: bold;
+      }
+
+      .shipping-input,
+      .status-input,
+      .payment-input,
+      .tracking-input {
+        margin-top: 10px;
+      }
+
+      .yard-details {
+        display: none;
+      }
+
+      .yard-btn {
+        margin-right: 10px;
+      }
+
+      .sidebarOrder,
+      .main-content,
+      .new-div {
+        width: calc(33.3333% - 20px);
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-left: 1px solid #ddd;
+        overflow-y: auto;
+        margin-top: 75px;
+        flex: 1;
+        box-sizing: border-box;
+      }
+
+      .new-div {
+        width: 33%;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-left: 1px solid #ddd;
+        overflow-y: auto;
+        margin-top: 75px;
+        flex: 1;
+        box-sizing: border-box;
+        display: block; /* Ensure it's displayed */
+      }
+      #commentInput {
+        width: 100%;
+        height: 60px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+      }
+
+      .centered-form {
+        margin: 2% 50% 0% 11%;
+        width: 40%;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        overflow-x: hidden;
+        flex-direction: column;
+      }
+
+      .form-container {
+        max-width: 100%;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin: 10px 0;
+      }
+
+      .form-control {
+        height: calc(2.25rem + 2px);
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        width: 100%;
+      }
+
+      .btn-primary {
+        background-color: grey;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+      }
+
+      .timeline {
+        position: relative;
+        padding: 21px 0;
+        list-style: none;
+        text-align: left;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: transparent;
+        border-left: 2px dotted grey;
+        left: 20px;
+        margin: 34px 12px -1px;
+      }
+
+      .timeline-item {
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .timeline-item::before,
+      .timeline-item::after {
+        content: "";
+        display: table;
+      }
+
+      .timeline-item::after {
+        clear: both;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 15px;
+        width: 14px;
+        height: 14px;
+        transform: rotate(45deg);
+        background: #5f9f9f;
+        border: 4px solid #c5c5c5;
+        margin: 12px;
+        transition: transform 0.4s ease;
+      }
+
+      .timeline-item:hover::before {
+        transform: rotate(405deg);
+      }
+
+      .timeline-item .timeline-panel {
+        position: relative;
+        width: calc(100% - 75px);
+        float: right;
+        padding: 0 20px;
+        text-align: left;
+        border-radius: 2px;
+      }
+
+      .timeline-item .timeline-panel .timeline-heading {
+        font-weight: normal;
+        margin-bottom: 10px;
+        color: black;
+        background-color: #cce0e0;
+        padding: 10px;
+        border-radius: 2px;
+      }
+
+      .timeline-item .timeline-panel .timeline-body {
+        color: black;
+        padding: 10px;
+        border-radius: 2px;
+      }
+
+      .timeline-item:hover .timeline-heading {
+        background: #f8da69;
+      }
+
+      .navbar {
+        color: white;
+        background-color: black;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 2;
+        border-bottom: 1px solid #e0e0e0;
+        height: 60px; /* Set a fixed height for the navbar */
+      }
+
+      .navbar.black {
+        background-color: black;
+        color: white;
+      }
+
+      .navbar.black a {
+        color: white;
+      }
+
+      #logoImg {
+        height: auto;
+        width: 150px;
+        margin: -16px 6px;
+      }
+
+      .navbar .user-info {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+      }
+
+      .navbar .user-info span {
+        margin-right: 10px;
+        color: black;
+      }
+
+      .navbar .user-icon {
+        color: black;
+        cursor: pointer;
+      }
+
+      .dropdown-menu {
+        position: absolute; /* Position dropdown menus absolutely */
+        top: 60px; /* Align dropdowns with the bottom of the navbar */
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        display: none; /* Initially hide dropdowns */
+      }
+
+      .navbar .dropdown:hover .dropdown-menu {
+        display: block; /* Show dropdowns on hover */
+      }
+
+      .sidebar {
+        background-color: black;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+        width: 250px;
+        height: 100vh;
+        padding: 50px 14px;
+        margin: 0 -22px;
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar .nav-link {
+        color: #ffffff;
+      }
+
+      .sidebar .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .form-group label {
+        font-weight: bold;
+      }
+
+      .sidebar .nav-link.active,
+      .sidebar .nav-link.selected {
+        background-color: rgba(255, 255, 255, 0.2);
+        cursor: default;
+        border: none;
+      }
+
+      .toggle-btn,
+      .close-btn {
+        position: fixed;
+        top: 75px;
+        z-index: 1030;
+        cursor: pointer;
+        color: #fff;
+      }
+
+      .toggle-btn {
+        left: 15px;
+      }
+
+      .close-btn {
+        left: 220px;
+        display: none;
+      }
+
+      .sidebar.hide {
+        transform: translateX(-100%);
+      }
+
+      .submenu {
+        display: none;
+      }
+
+      .nav-item > .submenu {
+        padding-left: 20px;
+      }
+
+      .nav-item .nav-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-item .nav-link i {
+        margin-right: 10px;
+      }
+
+      .chevron-icon {
+        margin-left: auto;
+        cursor: pointer;
+      }
+
+      .submenu .nav-link {
+        display: block;
+        margin-left: 20px;
+      }
+
+      .profile-table {
+        width: 50%;
+        margin: 20px auto;
+        border: 1px solid #e0e0e0;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-table input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      table.table td,
+      table.table th {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .add-yard-btn {
+        margin-left: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+        }
+
+        .sidebarOrder,
+        .main-content,
+        .new-div {
+          width: 100%;
+          margin-top: 20px;
+          padding: 10px;
+        }
+
+        .navbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .toggle-btn,
+        .close-btn {
+          left: 10px;
+        }
+        select.form-control,
+        input.form-control {
+          width: 90%;
+          margin: auto;
+        }
+
+        .sidebar.hide {
+          transform: translateX(-100%);
+        }
+
+        .sidebar.show {
+          transform: translateX(0);
+        }
+      }
+
+      .horizontal-sidebar {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        overflow-x: auto;
+        padding: 10px;
+        position: static;
+        top: auto;
+        left: auto;
+        height: auto;
+        background-color: #006666;
+      }
+
+      .horizontal-sidebar .nav-link {
+        flex: 1;
+        text-align: center;
+      }
+      .nav-link {
+        display: none;
+      }
 
       .blur {
   filter: blur(5px);
@@ -3147,4 +6207,4 @@
       });
     </script>
       </body>   
-</html>
+</html> -->
