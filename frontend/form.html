@@ -67,6 +67,10 @@
       #editYardDetailsModal{
         background-color: white;
     margin: 5% 35%;
+    padding-right: 17px;
+    display: block;
+    width: 40%;
+    height: 72vh;
       }
       .modal-body {
         display: flex;
@@ -214,6 +218,7 @@
         margin-top: 75px;
         flex: 1;
         box-sizing: border-box;
+        height: 100vh;
       }
 
       .new-div {
@@ -1493,14 +1498,14 @@
             <h5  id="editYardDetailsModalLabel">
               Edit Yard Details
             </h5>
-            <button
+            <!-- <button
               type="button"
               class="close"
               data-dismiss="modal"
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
-            </button>
+            </button> -->
           
           <div class="modal-body" style="margin: 1px 82px">
             <div class="form-row">
@@ -1644,6 +1649,7 @@
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
+              id="edityardDetailsbtn"
             >
               Close
             </button>
@@ -2768,6 +2774,7 @@
 
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
           yardIndex = $(this).data("yard-index");
+          $(".mainDiv").addClass("blur");
           fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
