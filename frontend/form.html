@@ -29,11 +29,12 @@
         font-family: Arial, sans-serif;
       }
       #notesContainer {
-        margin: 2% 10% 1% 35%;
-        display: block;
-        border: 1px solid #c0c0c0;
-        height: 5vh;
-        
+        margin: 4% 22% 1% 22%;
+    display: block;
+    border: 1px solid #c0c0c0;
+    height: 58vh;
+    width: 100%;
+
       }
 
       .nav-item .dropdown-menu {
@@ -73,7 +74,7 @@
       }
       .comments h2 {
         text-align: center;
-        margin: -3% 32% 3% 3%;
+        margin: -5% 10% 3% 3%;
       }
 
       #submitComments {
@@ -143,13 +144,13 @@
         text-align: center;
       }
       textarea {
-        width: 543%;
-        height: 60px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 10px;
-        margin: -10% 2% 2% -222%;
-        border: 1px solid black;
+        width: 539%;
+    height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin: -10% 0% 2% -220%;
+    border: 1px solid #c0c0c0
       }
       textarea#notes {
         height: 150px;
@@ -593,6 +594,10 @@
   filter: blur(5px);
   pointer-events: none;
 }
+#refund{
+  font-size: 25px;
+    margin: 4%;
+}
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -777,7 +782,7 @@
       </div>
     </div>
 
-    <div style="display: flex">
+    <div style="display: flex" class="mainDiv">
       <div class="main-content" id="mainContent">
         <form id="crmForm" class="form-container">
           <div class="form-row">
@@ -1253,11 +1258,11 @@
             class="form-control"
             id="refund"
             style="
-              width: 75%;
-              border-radius: 20px;
-              margin: 2% 2% 5% -3%;
-              background-color: black;
-              color: white;
+                  width: 75%;
+    border-radius: 20px;
+    margin: 5% 2% 5% -3%;
+    background-color: black;
+    color: white;
             "
           >
             <option value="">Choose</option>
@@ -1304,10 +1309,10 @@
               class="btn btn-primary"
               id="editYardInfo"
               style="
-                border-radius: 20px;
-                align-items: center;
-                margin: 3% 2% 8% 0%;
-                width: 138%;
+                    border-radius: 20px;
+    align-items: center;
+    margin: 6% 2% 8% 0%;
+    width: 138%;
               "
             >
               Save
