@@ -2464,6 +2464,8 @@
   
         $("#editYardInfo").on("click", async function () {
           console.log("clicking n save");
+          $('#editYardPopup').hide();
+          $(".mainDiv").removeClass("blur");
           yardIndex = $(this).data("yard-index");
           const status = $("#refund").val();
           const returnCharges = $(".returnShipment").val();
