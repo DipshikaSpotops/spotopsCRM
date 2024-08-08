@@ -1432,176 +1432,91 @@ select:disabled {
       <input type="hidden" id="yardIndexEdit" />
     </div>
 
-    <div
-      class="modal fade"
-      id="editYardDetailsModal"
-      tabindex="-1"
-      aria-labelledby="editYardDetailsModalLabel"
-      aria-hidden="true"
-    style="display: none;">
-      
-            <h5  id="editYardDetailsModalLabel">
-              Edit Yard Details
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+    <!-- edit yard details -->
+    <div class="modal fade" id="editYardDetailsModal" tabindex="-1" aria-labelledby="editYardDetailsModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content" style="margin: 19% -43%;width: 202%;height: 80vh;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 41%;font-weight: bold;">Edit Yard Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-          
-          <!-- <div class="modal-body" style="margin: 1px 82px"> -->
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="editYardName">Yard Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="editYardName"
-                  placeholder="Yard Name"
-                />
+          </div>
+          <div class="modal-body">
+            <div class="form-row addNewId">
+              <div class="form-group col-md-4">
+                <input type="text" class="form-control" id="editYardName" placeholder="Yard Name" />
               </div>
-              <div class="form-group col-md-6">
-                <label for="editAddress">Address</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="editAddress"
-                  placeholder="Address"
-                />
+              <div class="form-group col-md-4">
+                <input type="text" class="form-control" id="editAgentName" placeholder="Agent Name" />
+              </div>
+              <div class="form-group col-md-4">
+                <input type="text" class="form-control" id="editYardRating" placeholder="Yard Rating Info" />
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row addNewId">
               <div class="form-group col-md-4">
-                <label for="editCity">City</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="editCity"
-                  placeholder="City"
-                />
+                <input type="text" class="form-control" id="editPhone" placeholder="Phone Number" />
               </div>
               <div class="form-group col-md-4">
-                <label for="editState">State</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="editState"
-                  placeholder="State"
-                />
+                <input type="text" class="form-control" id="editAltPhone" placeholder="Alt. Phone Number" />
               </div>
               <div class="form-group col-md-4">
-                <label for="editZip">Zip Code</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="editZip"
-                  placeholder="Zip Code"
-                />
+                <input type="email" class="form-control" id="editEmail" placeholder="Email Id" />
               </div>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="editPhone">Phone Number</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="editPhone"
-                  placeholder="Phone Number"
-                />
+            <div class="form-row" style="margin: 4% 10% 1% 10%;width: 88%;">
+              <div class="form-group col-md-4">
+                <input type="text" class="form-control" id="editAddress" placeholder="Street Address" />
               </div>
-              <div class="form-group col-md-6">
-                <label for="editEmail">Email</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="editEmail"
-                  placeholder="Email"
-                />
+              <div class="form-group col-md-4">
+                <input type="text" class="form-control" id="editCity" placeholder="Enter City" />
+              </div>
+              <div class="form-group col-md-4">
+                <input type="text" class="form-control" id="editState" placeholder="Enter State" />
+              </div>
+            </div>
+            <div class="form-row addNewId">
+              <div class="form-group col-md-4">
+                <select class="form-control" id="editCountry">
+                  <option selected>Select Country</option>
+                  <option value="USA">USA</option>
+                  <option value="Canada">Canada</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <input type="number" class="form-control" id="editZip" placeholder="Enter Zipcode" />
+              </div>
+            </div>
+            <div class="form-row addNewId">
+              <div class="form-group col-md-4">
+                <input type="number" class="form-control" id="editPartPrice" placeholder="Part Price" />
+              </div>
+              <div class="form-group col-md-4">
+                <input type="number" class="form-control" id="editOwnShipping" placeholder="Own Shipping" />
+              </div>
+              <div class="form-group col-md-4">
+                <input type="number" class="form-control" id="editYardShipping" placeholder="Yard Shipping" />
               </div>
             </div>
             <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="editAgentName">Agent Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="editAgentName"
-                  placeholder="Agent Name"
-                />
+              <div class="form-group " style="margin:3% 46% 5% -34%;width: 275px;">
+                <input type="number" class="form-control" id="editOthers" placeholder="Other Charges" />
               </div>
-              <div class="form-group col-md-6">
-                <label for="editPartPrice">Part Price</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="editPartPrice"
-                  placeholder="Part Price"
-                />
-              </div>
-              <div class="form-group col-md-4">
-                <input
-                  type="number"
-                  class="form-control"
-                  id="editOthers"
-                  placeholder="Others"
-                />
+              <div class="form">
+                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;">Total Yard Spending: $100.25</label>
               </div>
             </div>
-            <div class="form-group">
-              <div class="form-row">
-                <div class="col-md-6">
-                  <label class="radio-inline">
-                    <input
-                      type="radio"
-                      name="editShippingMethod"
-                      value="Own shipping"
-                    />
-                    Own Shipping
-                  </label>
-                  <input
-                    type="number"
-                    class="form-control shipping-input"
-                    id="editOwnShippingInput"
-                    placeholder="Own Shipping Price"
-                    style="display: none"
-                  />
-                </div>
-                <div class="col-md-6">
-                  <label class="radio-inline">
-                    <input
-                      type="radio"
-                      name="editShippingMethod"
-                      value="Yard shipping"
-                    />
-                    Yard Shipping
-                  </label>
-                  <input
-                    type="number"
-                    class="form-control shipping-input"
-                    id="editYardShippingInput"
-                    placeholder="Yard Shipping Price"
-                    style="display: none"
-                  />
-                </div>
-              </div>
-            </div>
-          <!-- </div> -->
+          </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary" id="saveYardDetails">
-              Save
-            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveYardDetails">Save</button>
+          </div>
+        </div>
       </div>
     </div>
+    
+    <!-- edit yard details ends here -->
 
     <div
       class="modal fade"
@@ -3021,3 +2936,4 @@ select:disabled {
     </script>
   </body>   
 </html>
+
