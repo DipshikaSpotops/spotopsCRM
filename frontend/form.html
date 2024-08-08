@@ -3133,6 +3133,11 @@
               console.error("Error:", error);
             });
         });
+      
+        $('#crossBtnEditYard').on('click', function(e) {
+          $('#editYardPopup').hide();
+          $(".mainDiv").removeClass("blur");
+        } )
       });
     </script>
       </body>   
