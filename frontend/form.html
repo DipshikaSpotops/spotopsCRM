@@ -30,6 +30,10 @@
       }
       #notesContainer {
         margin: 2% 10% 1% 35%;
+        display: block;
+        border: 1px solid #c0c0c0;
+        height: 5vh;
+        
       }
 
       .nav-item .dropdown-menu {
@@ -2463,8 +2467,7 @@
 
         $("#editYardInfo").on("click", async function () {
           console.log("clicking n save");
-          $('#editYardPopup').hide();
-          $(".mainDiv").removeClass("blur");
+          $(".mainDiv").addClass("blur");
           yardIndex = $(this).data("yard-index");
           const status = $("#refund").val();
           const returnCharges = $(".returnShipment").val();
