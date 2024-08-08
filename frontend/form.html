@@ -70,7 +70,7 @@
     padding-right: 17px;
     display: block;
     width: 40%;
-    height: 72vh;
+    height: 70vh;
       }
       .modal-body {
         display: flex;
@@ -98,7 +98,6 @@
         height: 4vh;
         width: 30%;
         text-align: center;
-        cursor: pointer;
       }
 
       .btn {
@@ -1499,14 +1498,14 @@
             <h5  id="editYardDetailsModalLabel">
               Edit Yard Details
             </h5>
-            <!-- <button
+            <button
               type="button"
               class="close"
               data-dismiss="modal"
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
-            </button> -->
+            </button>
           
           <div class="modal-body" style="margin: 1px 82px">
             <div class="form-row">
@@ -1650,7 +1649,6 @@
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
-              id="edityardDetailsbtn"
             >
               Close
             </button>
@@ -2775,7 +2773,6 @@
 
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
           yardIndex = $(this).data("yard-index");
-          $(".mainDiv").addClass("blur");
           fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
