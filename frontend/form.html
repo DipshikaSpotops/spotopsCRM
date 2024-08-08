@@ -775,7 +775,7 @@
       </div>
     </div>
 
-    <div style="display: flex">
+    <div style="display: flex" class="mainDiv">
       <div class="main-content" id="mainContent">
         <form id="crmForm" class="form-container">
           <div class="form-row">
@@ -2330,7 +2330,7 @@
   
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
-          $("#mainContent").addClass("blur");
+          $(".mainDiv").addClass("blur");
           yardIndex = $(this).data("yard-index");
           $("#editYardInfo").data("yard-index", yardIndex);
           $("#yardIndexEdit").val(yardIndex);
