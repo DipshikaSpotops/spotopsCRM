@@ -66,11 +66,11 @@
       }
       #editYardDetailsModal{
         background-color: white;
-    margin: 5% 35%;
+    margin: 6% 22%;
     padding-right: 17px;
-    display: block;
-    width: 40%;
-    height: 70vh
+    /* display: block; */
+    width: 60%;
+    height: 87vh
       }
       .modal-body {
         display: flex;
@@ -201,11 +201,19 @@
 
       .yard-details {
         display: none;
+        width: 100%; /* Yard details take full width available */
+        margin-top: 10px; /* Add some space between button and details */
       }
 
       .yard-btn {
-  margin: 0 5px;
-  flex: 1;
+        height: 40px; /* Set a fixed height for the buttons */
+  width: 120px; /* Set a fixed width for the buttons */
+  margin: 5px; /* Add margin between buttons */
+  white-space: nowrap; /* Prevent text wrapping inside the buttons */
+  overflow: hidden; /* Hide any overflow text */
+  text-overflow: ellipsis; /* Show ellipsis for overflow text */
+  display: inline-block; /* Ensure buttons are displayed inline */
+  vertical-align: middle; /* Align buttons vertically to the middle */
 }
 
       .sidebarOrder,
@@ -1435,7 +1443,7 @@ select:disabled {
     <!-- edit yard details -->
     <div class="modal fade" id="editYardDetailsModal" tabindex="-1" aria-labelledby="editYardDetailsModalLabel" aria-hidden="true" style="display: none;">
       <div class="modal-dialog">
-        <div class="modal-content" style="margin: 19% -43%;width: 202%;height: 80vh;">
+        <div class="modal-content" >
           <div class="modal-header">
             <h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 41%;font-weight: bold;">Edit Yard Details</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -2936,4 +2944,3 @@ select:disabled {
     </script>
   </body>   
 </html>
-
