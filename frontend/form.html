@@ -2526,7 +2526,8 @@ select:disabled {
             newOrderStatus = "In Transit";
             $("#divTrackingEdit").show();
             $("#sendEmailButton").show();
-            $("#notesContainer").hide();
+            $("#notesContainer").show();
+            $("#cardCharged").hide();
           } else if (refundStatus === "PO confirmed") {
             $("#escalation").hide();
             $("#divTrackingEdit").hide();
@@ -2538,6 +2539,7 @@ select:disabled {
             $("#divTrackingEdit").hide();
             $("#sendEmailButton").hide();
             $("#notesContainer").show();
+            $("#cardCharged").hide();
           } else if (refundStatus === "PO cancelled") {
             $("#divTrackingEdit").hide();
             $("#sendEmailButton").hide();
@@ -2547,6 +2549,7 @@ select:disabled {
             newOrderStatus = "Order Fulfilled";
             $("#notesContainer").show();
             $("#divTrackingEdit").hide();
+            $("#cardCharged").hide();
           } else if (
             refundStatus === "Bad part" ||
             refundStatus === "In return"
