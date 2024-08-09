@@ -2426,7 +2426,7 @@ select:disabled {
            
 
            const firstName = localStorage.getItem("firstName");    
-          const data = {
+          const data222 = {
             yardName: yardName,
             agentName: agentName,
             yardRating: yardRating,
@@ -2447,7 +2447,7 @@ select:disabled {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data222),
           })
             .then((response) => {
               if (!response.ok) {
