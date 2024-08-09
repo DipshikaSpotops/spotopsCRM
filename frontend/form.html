@@ -2264,13 +2264,16 @@ select:disabled {
         });
 
         $("#yardInfoContainer").on("click", ".cardcharged", function () {
+          
     console.log("card charged fn()");
     $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
+    $(".mainDiv").addClass("blur");
   });
   });
 
   $("#closeCardCharged").on("click", function () {
     $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
+          $(".mainDiv").removeClass("blur");
   });
 
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
