@@ -2954,8 +2954,9 @@ select:disabled {
           $(".mainDiv").removeClass("blur");
         });
   $('#EYdetails') .on('click', function(e){
-    $(".mainDiv").removeClass("blur");
+    // $(".mainDiv").removeClass("blur");
     $('#editYardDetailsModal').hide();
+    window.location.reload();
   })     
 
       $("#logoutLink").click(function () {
