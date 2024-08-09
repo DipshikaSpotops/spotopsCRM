@@ -13,7 +13,6 @@
       rel="stylesheet"
     />
     <style>
-      #cardCharged,
       #paymentStatusRefund,
       #refundedAmountContainer,
       #escalation,
@@ -48,6 +47,28 @@
         z-index: 9999;
         display: none;
       }
+
+      #cardCharged {
+  display: none; /* Initially hidden */
+  position: fixed; /* Fixed position relative to the viewport */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); 
+  background-color: white; 
+  padding: 20px; 
+  border-radius: 8px; 
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000; 
+  width: 300px;
+}
+
+#cardCharged label, 
+#cardCharged select {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 
       #editYardPopup {
         display: block;
@@ -1536,15 +1557,17 @@ select:disabled {
     <!-- edit yard details ends here -->
 
     <!-- card charged div starts here -->
-    <div id="cardCharged">
-      <label for="paymentStatusCard">Card Charged:</label>
-      <select class="form-control paymentStatus">
-        <option value="">Choose</option>
-        <option value="Card charged">Charged</option>
-        <option value="">Not charged</option>
-      </select>
-    </div>
-     <!-- card charged div ends here -->
+<div id="cardCharged">
+  <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+  <label for="paymentStatusCard">Card Charged:</label>
+  <select class="form-control paymentStatus">
+    <option value="">Choose</option>
+    <option value="Card charged">Charged</option>
+    <option value="">Not charged</option>
+  </select>
+</div>
+<!-- card charged div ends here -->
+
 
 
     <div
@@ -2241,9 +2264,14 @@ select:disabled {
         });
 
         $("#yardInfoContainer").on("click", ".cardcharged", function () {
-          console.log("card charged fn()");
-          $("#cardCharged").show();
-        });
+    console.log("card charged fn()");
+    $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
+  });
+  });
+
+  $("#closeCardCharged").on("click", function () {
+    $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
+  });
 
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
