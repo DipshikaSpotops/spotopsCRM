@@ -70,7 +70,7 @@
     padding-right: 17px;
     /* display: block; */
     width: 60%;
-    height: 87vh
+    height: 82vh;
       }
       .modal-body {
         display: flex;
@@ -1517,8 +1517,8 @@ select:disabled {
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="saveYardDetails">Save</button>
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+            <button type="button" class="btn save" id="saveYardDetails">Save</button>
           </div>
         <!-- </div> -->
       <!-- </div> -->
@@ -2643,6 +2643,7 @@ select:disabled {
         });
 
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
+          $(".mainDiv").addClass("blur");
           yardIndex = $(this).data("yard-index");
           fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
@@ -2702,6 +2703,8 @@ select:disabled {
         });
 
         $("#saveYardDetails").on("click", function () {
+          $('#editYardDetailsModal').hide();
+          $(".mainDiv").removeClass("blur");
           yardIndex = $(this).data("yard-index");
           const updatedData = {
             yardName: $("#editYardName").val(),
