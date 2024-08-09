@@ -1254,14 +1254,14 @@ select:disabled {
             <option value="Part delivered">Part Delivered</option>
             <option value="Escalation">Escalation</option>
           </select>
-          <div id="cardCharged">
+          <!-- <div id="cardCharged">
             <label for="paymentStatusCard">Card Charged:</label>
             <select class="form-control paymentStatus">
               <option value="">Choose</option>
               <option value="Card charged">Charged</option>
               <option value="">Not charged</option>
             </select>
-          </div>
+          </div> -->
           <label for="paymentStatusRefund" style="display: none"
             >Refund Collected:</label
           >
@@ -1533,8 +1533,19 @@ select:disabled {
         <!-- </div> -->
       <!-- </div> -->
     </div>
-    
     <!-- edit yard details ends here -->
+
+    <!-- card charged div starts here -->
+    <div id="cardCharged" style="display: none;">
+      <label for="paymentStatusCard">Card Charged:</label>
+      <select class="form-control paymentStatus">
+        <option value="">Choose</option>
+        <option value="Card charged">Charged</option>
+        <option value="">Not charged</option>
+      </select>
+    </div>
+     <!-- card charged div ends here -->
+
 
     <div
       class="modal fade"
