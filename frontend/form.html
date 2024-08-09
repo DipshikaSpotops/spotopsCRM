@@ -1871,6 +1871,11 @@ select:disabled {
               const nameParts = customerNameE.split(" ");
               const firstNameE = nameParts[0];
               const lastNameE = nameParts[1];
+              var notes = data.notes;
+              var resultNotes = input_string.split('</br>')[0];
+              var onlyNotes = resultNotes.strip();
+              console.log(onlyNotes);
+
 
               console.log("First Name:", firstName);
               console.log("Last Name:", lastName);
@@ -1897,9 +1902,8 @@ select:disabled {
               $("#orderStatus").val(data.orderStatus);
               $("#vin").val(data.vin);
               $("#issueOrder").val(data.last4digits);
-              $("#notes").val(data.notes);
+              $("#notes").val(`${onlyNotes}`);
               $("#issueOrder").val(data.issueOrder);
-
               data.additionalInfo.forEach((info, index) => {
                 addYardButton(index + 1, `Yard ${index + 1}`);
               });
