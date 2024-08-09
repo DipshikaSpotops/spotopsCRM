@@ -2394,6 +2394,7 @@ select:disabled {
           await fetchYardInfo(token);
         }
 
+        var shippingMethod;
         $("#addYardInfo").on("click", async function () {
           $("#refund").val("Yard located").change();
           const yardName = $("#yardName").val();
@@ -2414,9 +2415,9 @@ select:disabled {
           const others = document.getElementById("others").value;
           console.log("others", others);
           if (ownShip){
-          const shippingMethod =`Own shipping: $${ownShip} `;
+           shippingMethod =`Own shipping: $${ownShip} `;
           }else if (yardShip){
-            const shippingMethod = `Yard shipping: $${yardShip}`;
+             shippingMethod = `Yard shipping: $${yardShip}`;
           }
           // const shippingDetails =
           //   shippingMethod === "Own shipping"
@@ -2436,7 +2437,7 @@ select:disabled {
             country: country,
             partPrice: partPrice,
             status: "Yard located",
-            shippingMethod: shippingMethod,
+            shippingDetails: shippingMethod,
             // shippingDetails: shippingDetails,
             others: others,
           };
