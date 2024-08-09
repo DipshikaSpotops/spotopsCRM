@@ -327,6 +327,7 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
       // Count the number of existing yards
       const countYard = order.additionalInfo.length + 1;
       console.log(countYard,"countyard")
+      console.log("body",req.body);
        
 
       order.additionalInfo.push(req.body);
