@@ -2897,7 +2897,7 @@ select:disabled {
 
       //card charged part starts here
       $('#cardChargedSbmit').on('click', function() {
-        const yardIndex = $("#submit").data("yard-index") - 1;
+        yardIndex = $(this).data("yard-index");
         console.log("in card charged", Number(yardIndex), "oNo", orderNo);
         const paymentStatus = $(".paymentStatus")
             .map(function () {
