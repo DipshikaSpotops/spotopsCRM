@@ -1219,10 +1219,10 @@ select:disabled {
                 <input type="number" class="form-control" id="partPrice" placeholder="Part Price" />
               </div>
               <div class="form-group col-md-4">
-                <input type="number" class="form-control" id="ownShipping" placeholder="Own Shipping" />
+                <input type="number" class="form-control" id="ownShipping" placeholder="Own Shipping" value = "Own Shipping: $ " />
               </div>
               <div class="form-group col-md-4">
-                <input type="number" class="form-control" id="yardShipping" placeholder="Yard Shipping" />
+                <input type="number" class="form-control" id="yardShipping" placeholder="Yard Shipping" value = "Yard Shipping: $ " />
               </div>
             </div>
             <div class="form-row">
@@ -2397,37 +2397,43 @@ select:disabled {
         $("#addYardInfo").on("click", async function () {
           $("#refund").val("Yard located").change();
           const yardName = $("#yardName").val();
+          const agentName = $("#agentName").val();
+          const yardRating = $("#yardRating").val();
+          const phone = $("#phone").val();
+          const altPhone = $("#altPhone").val();
+          const email = $("#email").val();
           const address = $("#address").val();
           const city = $("#city").val();
           const state = $("#state").val();
+          const country = $("#country").val();
           const zipcode = $("#zip").val();
           const addedAddress = city + "  " + state + "  " + zipcode;
-          const phone = $("#phone").val();
-          const email = $("#email").val();
-          const agentName = $("#agentName").val();
           const partPrice = $("#partPrice").val();
+          const ownShip = $("#ownShipping").val();
+          const yardShip = $("#yardShipping").val();
           const others = document.getElementById("others").value;
           console.log("others", others);
-          const shippingMethod = $(
-            "input[name='shippingMethod']:checked"
-          ).val();
-          const shippingDetails =
-            shippingMethod === "Own shipping"
-              ? $("#ownShippingInput").val()
-              : $("#yardShippingInput").val();
+          const shippingMethod = ownShip || yardShip ;
+          // const shippingDetails =
+          //   shippingMethod === "Own shipping"
+          //     ? $("#ownShippingInput").val()
+          //     : $("#yardShippingInput").val();
 
 
            const firstName = localStorage.getItem("firstName");    
           const data = {
             yardName: yardName,
-            address: addedAddress,
-            phone: phone,
-            email: email,
             agentName: agentName,
+            yardRating: yardRating,
+            phone: phone,
+            altPhone: altPhone,
+            email: email,
+            address: addedAddress,
+            country: country,
             partPrice: partPrice,
             status: "Yard located",
             shippingMethod: shippingMethod,
-            shippingDetails: shippingDetails,
+            // shippingDetails: shippingDetails,
             others: others,
           };
 
