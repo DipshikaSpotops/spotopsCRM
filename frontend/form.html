@@ -1457,7 +1457,7 @@ select:disabled {
         <!-- <div class="modal-content" > -->
           <div class="modal-header">
             <h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 41%;font-weight: bold;">Edit Yard Details</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="EYdetails" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -2953,6 +2953,10 @@ select:disabled {
           $('#editYardPopup').hide();
           $(".mainDiv").removeClass("blur");
         });
+  $('#EYdetails') .on('click', function(e){
+    $(".mainDiv").removeClass("blur");
+    $('#editYardDetailsModal').hide();
+  })     
 
       $("#logoutLink").click(function () {
         window.localStorage.clear();
