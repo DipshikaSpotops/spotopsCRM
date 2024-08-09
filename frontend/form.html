@@ -1236,8 +1236,8 @@ select:disabled {
             
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="addYardInfo">Submit</button>
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+            <button type="button" class="btn save" id="addYardInfo">Submit</button>
           </div>
         </div>
       </div>
@@ -2777,6 +2777,7 @@ select:disabled {
               const yardData = data.additionalInfo[yardIndex - 1];
               $("#editYardName").val(yardData.yardName);
               $("#editAddress").val(yardData.address);
+              $("#editYardRating").val(yardData.yardRating);
               const addressParts = yardData.address.split(" ");
               $("#editCity").val(addressParts[0]);
               $("#editState").val(addressParts[1]);
