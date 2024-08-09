@@ -2298,7 +2298,7 @@ select:disabled {
     };
 
     fetch(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex-1}`,
       {
         method: "PUT",
         headers: {
@@ -2943,52 +2943,7 @@ select:disabled {
         fetchAndDisplayNotes(yardIndex);
       });
 
-      //card charged part starts here
-      $('#cardChargedSbmit').on('click', function() {
-        yardIndex = $(this).data("yard-index");
-        console.log("in card charged", yardIndex, "oNo", orderNo);
-        const paymentStatus = $(".paymentStatus")
-            .map(function () {
-              return $(this).val();
-            })
-            .get()
-            .filter(function (value) {
-              return value !== "";
-            })
-            .join();
-            const data1 = {
-            paymentStatus: paymentStatus
-          };
-
-          fetch(
-            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data1),
-            }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              updateOrderHistory(data.orderHistory);
-              showYardDetails(yardIndex);
-              fetchAndUpdateYardInfo();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
-      // card charged part ends here
-
-
-
+      
       // const comments_arr = [];
 
       // const display_comments = () => {
