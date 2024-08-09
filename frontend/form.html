@@ -1872,11 +1872,10 @@ select:disabled {
               const firstNameE = nameParts[0];
               const lastNameE = nameParts[1];
               var notes = data.notes;
-              var resultNotes = notes.split('</br>')[0];
-              var onlyNotes = resultNotes.strip();
+              var notes1 = notes.toString();
+              var resultNotes = notes1.split('</br>')[0];
+              var onlyNotes = resultNotes.trim();
               console.log(onlyNotes);
-
-
               console.log("First Name:", firstName);
               console.log("Last Name:", lastName);
               orderNo;
