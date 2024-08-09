@@ -2229,6 +2229,10 @@ select:disabled {
             });
         });
 
+        $("#yardInfoContainer").on("click", ".cardcharged", function () {
+          $("#cardCharged").show();
+        });
+
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
           $(".mainDiv").addClass("blur");
