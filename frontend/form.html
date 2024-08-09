@@ -684,7 +684,7 @@ select:disabled {
             Dashboards
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownDashboards">
-            <a class="dropdown-item" href="form.html?newEntry=true"
+            <a class="dropdown-item" href="addOrders.html?newEntry=true"
               >Add New Order</a
             >
             <a class="dropdown-item" href="orders.html">View Orders</a>
@@ -1238,8 +1238,13 @@ select:disabled {
         <div class="form-group" id="editPopInfo">
           <label for="refund"  style="font-size: 25px;
     margin: 4%;">Status:</label>
-          <select id="refund" style=" width: 75%;border-radius: 20px;margin: 5% 2% 5% 2%;background-color: black;color: white;padding: 15px 8px 15px 8px;text-align: center;"
-          >
+          <select id="refund" style="    width: 66%;
+          border-radius: 25px;
+          margin: 5% -12% 6% 0%;
+          background-color: black;
+          color: white;
+          padding: 15px 8px 15px 8px;
+          text-align: center;">
             <!-- <option value="">Choose</option> -->
             <option value="Yard located">Yard Located</option>
             <option value="Yard PO Sent">PO Sent</option>
@@ -1283,13 +1288,7 @@ select:disabled {
               type="button"
               class="btn save"
               id="editYardInfo"
-              style="
-                    border-radius: 20px;
-    align-items: center;
-    margin: 6% 2% 8% 0%;
-    width: 138%;
-              "
-            >
+              style="border-radius: 22px;align-items: center;margin: 6% 2% 8% 72%;width: 170%;height: 5vh;">
               Save
             </button>
           </div>
@@ -1798,10 +1797,11 @@ select:disabled {
                                           yardData
                                         )}</td>
                                     </tr>
-                                    <tr>
+                                    <tr style="display:flex">
                                         <td colspan="2">
-                                            <button type="button" class="btn btn-secondary edit-yard" data-yard-index="${yardIndex}">Edit Yard Status</button>
-                                            <button type="button" class="btn btn-secondary edit-yard-details" data-yard-index="${yardIndex}">Edit Yard Details</button>
+                                            <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
+                                            <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
+                                            <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
                                         </td>
                                     </tr>
                                 </table>
