@@ -2282,6 +2282,8 @@ select:disabled {
 
   // On clicking the submit button inside the popup
   $('#cardChargedSbmit').on('click', function() {
+    $('#cardCharged').hide();
+    $(".mainDiv").removeClass("blur");
     console.log("in card charged", selectedYardIndex, "oNo", orderNo);
     const paymentStatus = $(".paymentStatus")
       .map(function () {
