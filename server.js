@@ -226,12 +226,13 @@ const CancelledOrderSchema = new mongoose.Schema({
 const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
 const additionalInfoSchema = new mongoose.Schema({
   yardName: String,
-  address: String,
-  phone: String,
-  email: String,
   agentName: String,
+  yardRating:String,
+  phone: String,
+  altNo: String,
+  email: String,
+  address: String,
   partPrice: Number,
-  shippingMethod: String,
   shippingDetails: String,
   others: String,
   status: String,
