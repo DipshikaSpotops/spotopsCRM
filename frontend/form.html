@@ -2265,9 +2265,10 @@ select:disabled {
         });
 
         $("#yardInfoContainer").on("click", ".cardcharged", function () {
-          
+          yardIndex = $(this).data("yard-index");
+          console.log("yard index",yardIndex);
     console.log("card charged fn()");
-    $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
+    $("#cardCharged").fadeIn(yardIndex); // Show the #cardCharged div with a fade-in effect
     $(".mainDiv").addClass("blur");
   });
   });
@@ -2898,7 +2899,7 @@ select:disabled {
       //card charged part starts here
       $('#cardChargedSbmit').on('click', function() {
         yardIndex = $(this).data("yard-index");
-        console.log("in card charged", Number(yardIndex), "oNo", orderNo);
+        console.log("in card charged", yardIndex, "oNo", orderNo);
         const paymentStatus = $(".paymentStatus")
             .map(function () {
               return $(this).val();
