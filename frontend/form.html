@@ -2531,17 +2531,17 @@ select:disabled {
             $("#escalation").hide();
             $("#divTrackingEdit").hide();
             $("#sendEmailButton").hide();
-            $("#notesContainer").hide();
+            $("#notesContainer").show();
             $("#cardCharged").hide();
           } else if (refundStatus === "Escalation") {
             $("#escalation").show();
             $("#divTrackingEdit").hide();
             $("#sendEmailButton").hide();
-            $("#notesContainer").hide();
+            $("#notesContainer").show();
           } else if (refundStatus === "PO cancelled") {
             $("#divTrackingEdit").hide();
             $("#sendEmailButton").hide();
-            $("#notesContainer").hide();
+            $("#notesContainer").show();
             $("#cardCharged").show();
           } else if (refundStatus === "Part delivered") {
             newOrderStatus = "Order Fulfilled";
