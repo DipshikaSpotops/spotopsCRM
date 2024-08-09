@@ -2264,19 +2264,80 @@ select:disabled {
             });
         });
 
-        $("#yardInfoContainer").on("click", ".cardcharged", function () {
-          yardIndex = $(this).data("yard-index");
-          console.log("yard index",yardIndex);
-    console.log("card charged fn()");
-    $("#cardCharged").fadeIn(yardIndex); // Show the #cardCharged div with a fade-in effect
+  //       $("#yardInfoContainer").on("click", ".cardcharged", function () {
+  //         yardIndex = $(this).data("yard-index");
+  //         console.log("yard index",yardIndex);
+  //   console.log("card charged fn()");
+  //   $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
+  //   $(".mainDiv").addClass("blur");
+  
+  // });
+
+  // $("#closeCardCharged").on("click", function () {
+  //   $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
+  //         $(".mainDiv").removeClass("blur");
+  // });
+
+  //card charged part starts here
+  let selectedYardIndex;
+
+  $("#yardInfoContainer").on("click", ".cardcharged", function () {
+    selectedYardIndex = $(this).data("yard-index");
+    console.log("yard index", selectedYardIndex);
+    $("#cardCharged").fadeIn(); 
     $(".mainDiv").addClass("blur");
   });
-  });
-
   $("#closeCardCharged").on("click", function () {
     $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
           $(".mainDiv").removeClass("blur");
   });
+
+  // On clicking the submit button inside the popup
+  $('#cardChargedSbmit').on('click', function() {
+    console.log("in card charged", selectedYardIndex, "oNo", orderNo);
+    const paymentStatus = $(".paymentStatus")
+      .map(function () {
+        return $(this).val();
+      })
+      .get()
+      .filter(function (value) {
+        return value !== "";
+      })
+      .join();
+      
+    const data1 = {
+      paymentStatus: paymentStatus
+    };
+
+    fetch(
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data1),
+      }
+    )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      updateOrderHistory(data.orderHistory);
+      showYardDetails(selectedYardIndex);
+      fetchAndUpdateYardInfo();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  });
+  // card chargde part ends here
+
+
+
 
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
@@ -2896,49 +2957,6 @@ select:disabled {
         fetchAndDisplayNotes(yardIndex);
       });
 
-      //card charged part starts here
-      $('#cardChargedSbmit').on('click', function() {
-        yardIndex = $(this).data("yard-index");
-        console.log("in card charged", yardIndex, "oNo", orderNo);
-        const paymentStatus = $(".paymentStatus")
-            .map(function () {
-              return $(this).val();
-            })
-            .get()
-            .filter(function (value) {
-              return value !== "";
-            })
-            .join();
-            const data1 = {
-            paymentStatus: paymentStatus
-          };
-
-          fetch(
-            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data1),
-            }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              updateOrderHistory(data.orderHistory);
-              showYardDetails(yardIndex);
-              fetchAndUpdateYardInfo();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
-      // card charged part ends here
 
 
 
