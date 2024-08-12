@@ -2796,11 +2796,11 @@ select:disabled {
       // Check the shippingDetails value and set the appropriate field
       const shippingDetails = yardData.shippingDetails;
       if (shippingDetails.includes("Own shipping")) {
-        const ownShippingValue = shippingDetails.split(": $")[1];
+        const ownShippingValue = shippingDetails.split(": ")[1]; // Extract the value after ": "
         $("#editOwnShipping").val(ownShippingValue);
         $("#editYardShipping").val('');  // Clear the Yard Shipping field
       } else if (shippingDetails.includes("Yard shipping")) {
-        const yardShippingValue = shippingDetails.split(": $")[1];
+        const yardShippingValue = shippingDetails.split(": ")[1]; // Extract the value after ": "
         $("#editYardShipping").val(yardShippingValue);
         $("#editOwnShipping").val('');  // Clear the Own Shipping field
       }
@@ -3117,5 +3117,4 @@ function fetchOrderDetails(orderNo) {
     </script>
   </body>   
 </html>
-
 
