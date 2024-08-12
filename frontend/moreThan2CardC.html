@@ -153,110 +153,86 @@
         </div>
     </div>
 
-    <div class="sidebar" id="offcanvasSidebar">
+    <div class="sidebar show" id="offcanvasSidebar">
         <div class="offcanvas-body">
-            <nav class="nav flex-column">
-                <div class="nav-item">
-                    <a class="nav-link" href="#" id="default-link">
-                        <i class="fas fa-home"></i> Dashboards
-                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-                    </a>
-                    <div class="submenu" id="submenu-dashboards">
-                        <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
-            <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
-            <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
-            <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
-            <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
-            <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
-            <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
-            <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
-            <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-users"></i> Users
-                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-                    </a>
-                    <div class="submenu" id="submenu-users">
-                        <a class="nav-link" href="#" id="create-user-link">Create User</a>
-                        <a class="nav-link" href="#" id="view-users-link">View Users</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-users-cog"></i> Teams
-                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-                    </a>
-                    <div class="submenu" id="submenu-teams">
-                        <a class="nav-link" href="#" id="view-teams-link">View Teams</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-chart-bar"></i> Reports
-                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-                    </a>
-                    <div class="submenu" id="submenu-reports">
-                        <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
-                        <a class="nav-link" href="purchases.html">Purchases</a>
-                        <a class="nav-link" href="refundReport.html">Refund Report</a>
-                        <a class="nav-link" href="poReport.html">PO Report</a>
-                        <a class="nav-link" href="salesReport.html">My Sales Report</a>
-                        <a class="nav-link" href="moreThan2CardC.html">Collect Refund</a>
-                    </div>
-                </div>
-            </nav>
+          <nav class="nav flex-column">
+            <div class="nav-item dashboards-item">
+              <a class="nav-link dashboards-link" href="#">
+                <i class="fas fa-home"></i> Dashboards
+                <span class="chevron-icon"
+                  ><i class="fas fa-chevron-down"></i
+                ></span>
+              </a>
+              <div class="submenu dashboards-submenu" id="submenu-dashboards">
+                <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
+              <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+              <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
+              <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
+              <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
+              <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
+              <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
+              <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+              <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
+              </div>
+            </div>
+            <div class="nav-item users-item">
+              <a class="nav-link users-link" href="#">
+                <i class="fas fa-users"></i> Users
+                <span class="chevron-icon"
+                  ><i class="fas fa-chevron-down"></i
+                ></span>
+              </a>
+              <div class="submenu users-submenu" id="submenu-users">
+                <a class="nav-link create-user-link" href="createUser.html"
+                  >Create User</a
+                >
+                <a class="nav-link view-users-link" href="viewallUsers.html"
+                  >View Users</a
+                >
+              </div>
+            </div>
+            <div class="nav-item teams-item">
+              <a class="nav-link teams-link" href="#">
+                <i class="fas fa-users-cog"></i> Teams
+                <span class="chevron-icon"
+                  ><i class="fas fa-chevron-down"></i
+                ></span>
+              </a>
+              <div class="submenu teams-submenu" id="submenu-teams">
+                <a class="nav-link view-teams-link" href="teams.html"
+                  >View Teams</a
+                >
+              </div>
+            </div>
+            <div class="nav-item reports-item">
+              <a class="nav-link reports-link" href="#">
+                <i class="fas fa-chart-bar"></i> Reports
+                <span class="chevron-icon"
+                  ><i class="fas fa-chevron-down"></i
+                ></span>
+              </a>
+              <div class="submenu reports-submenu" id="submenu-reports">
+                <a class="nav-link placed-orders-link" href="placedOrders.html"
+                  >Placed Orders</a
+                >
+                <a
+                  class="nav-link shipping-expenses-link"
+                  href="shippingExpenses.html"
+                  >Shipping Expenses</a
+                >
+                <a class="nav-link purchases-link" href="purchases.html"
+                  >Purchases</a
+                >
+                <a class="nav-link po-report-link" href="poReport.html"
+                  >PO Report</a
+                >
+              </div>
+            </div>
+          </nav>
         </div>
-    </div>
+      </div>
 
     <div class="main-content">
-        
-        <!-- <div id="add-order-content" class="content-section d-none">
-            <h1>Add New Order</h1>
-        </div>
-        <div id="view-order-content" class="content-section d-none">
-            <h1>View Orders</h1>
-        </div>
-        <div id="view-my-orders-content" class="content-section d-none">
-            <h1>View My Orders</h1>
-        </div>
-        <div id="team-a-orders-content" class="content-section d-none">
-            <h1>TeamA Orders</h1>
-        </div>
-        <div id="team-b-orders-content" class="content-section d-none">
-            <h1>TeamB Orders</h1>
-        </div>
-        <div id="placed-orders-content" class="content-section d-none">
-            <h1>Placed Orders</h1>
-        </div>
-        <div id="cancelled-orders-content" class="content-section d-none">
-            <h1>Cancelled Orders</h1>
-        </div>
-        <div id="yard-details-content" class="content-section d-none">
-            <h1>Yard Details</h1>
-        </div>
-        <div id="customer-approved-content" class="content-section d-none">
-            <h1>Customer Approved</h1>
-        </div>
-        <div id="create-user-content" class="content-section d-none">
-            <h1>Create User</h1>
-        </div>
-        <div id="view-users-content" class="content-section d-none">
-            <h1>View Users</h1>
-        </div>
-        <div id="view-teams-content" class="content-section d-none">
-            <h1>View Teams</h1>
-        </div>
-        <div id="shipping-expenses-content" class="content-section d-none">
-            <h1>Shipping Expenses</h1>
-        </div>
-        <div id="purchases-content" class="content-section d-none">
-            <h1>Purchases</h1>
-        </div>
-        <div id="po-report-content" class="content-section d-none">
-            <h1>PO Report</h1>
-        </div> -->
         <div id="yard-info-content">
             <h1 style="text-align: center; margin-right: 90px; margin-top: 20px">Collect Refund</h1>
             <div style="align-items: center; justify-content: center">
