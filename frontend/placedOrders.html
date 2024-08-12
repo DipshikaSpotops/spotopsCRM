@@ -358,13 +358,19 @@
     </div>
 
     <!-- Approve Modal popup -->
-   
-          <div id="modalDiv">
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
             <p>The order has been approved</p>
             <button type="button" class="btn btn-primary" id="okButton">
               OK
             </button>
-          </div>
+    </div>
 
     <script>
       $(document).ready(async function () {
@@ -519,7 +525,7 @@
         }
 
         $("#infoTable").on("click", ".approve-btn", async function () {
-          $("#modalDiv").modal("show");
+          $("#myModal").modal("show");
 
           // On click of the OK button, reload the window
           $("#okButton").click(function () {
