@@ -103,6 +103,9 @@
     .sidebar .nav-link {
       color: #ffffff;
       cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-weight: normal;
+      font-size: 1rem;
     }
     .sidebar .nav-link:hover {
       background-color: rgba(255, 255, 255, 0.2);
@@ -219,6 +222,15 @@
       height: 12vh;
       margin-top: -1%;
     }
+    .sidebar .nav-link.active,
+    .sidebar .nav-link.selected {
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: default;
+    border: none;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    font-size: 1rem;
+   }
   </style>
   <script>
     const firstName = localStorage.getItem("firstName");
@@ -662,3 +674,10 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
