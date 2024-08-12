@@ -2771,65 +2771,65 @@ select:disabled {
         });
 
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
-          $(".mainDiv").addClass("blur");
-          yardIndex = $(this).data("yard-index");
-          fetch(`https://www.spotops360.com/orders/${orderNo}`)
-            .then((response) => response.json())
-            .then((data) => {
-              if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-                return;
-              }
-              const yardData = data.additionalInfo[yardIndex - 1];
-              $("#editYardName").val(yardData.yardName);
-              $("#editAddress").val(yardData.address);
-              $("#editYardRating").val(yardData.yardRating);
-              const addressParts = yardData.address.split(" ");
-              $("#editCity").val(addressParts[0]);
-              $("#editState").val(addressParts[1]);
-              $("#editZip").val(addressParts[2]);
-              $("#editPhone").val(yardData.phone);
-              $("#editEmail").val(yardData.email);
-              $("#editAgentName").val(yardData.agentName);
-              $("#editPartPrice").val(yardData.partPrice);
-              $(
-                "input[name='editShippingMethod'][value='" +
-                  yardData.shippingMethod +
-                  "']"
-              ).prop("checked", true);
-              $("#editOthers").val(yardData.others);
-              if (yardData.shippingMethod === "Own shipping") {
-                $("#editOwnShippingInput").val(yardData.shippingDetails).show();
-                $("#editYardShippingInput").hide();
-              } else {
-                $("#editYardShippingInput")
-                  .val(yardData.shippingDetails)
-                  .show();
-                $("#editOwnShippingInput").hide();
-              }
+  $(".mainDiv").addClass("blur");
+  yardIndex = $(this).data("yard-index");
+  fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+        return;
+      }
+      const yardData = data.additionalInfo[yardIndex - 1];
+      $("#editYardName").val(yardData.yardName);
+      $("#editAddress").val(yardData.address);
+      $("#editYardRating").val(yardData.yardRating);
+      const addressParts = yardData.address.split(" ");
+      $("#editCity").val(addressParts[0]);
+      $("#editState").val(addressParts[1]);
+      $("#editZip").val(addressParts[2]);
+      $("#editPhone").val(yardData.phone);
+      $("#editEmail").val(yardData.email);
+      $("#editAgentName").val(yardData.agentName);
+      $("#editPartPrice").val(yardData.partPrice);
+      $("#editOthers").val(yardData.others);
 
-              $("#refund").val(yardData.status);
-              $("#paymentStatusSelect").val(yardData.paymentStatus);
+      // Check the shippingDetails value and set the appropriate field
+      const shippingDetails = yardData.shippingDetails;
+      if (shippingDetails.includes("Own shipping")) {
+        const ownShippingValue = shippingDetails.split(": $")[1];
+        $("#editOwnShipping").val(ownShippingValue);
+        $("#editYardShipping").val('');  // Clear the Yard Shipping field
+      } else if (shippingDetails.includes("Yard shipping")) {
+        const yardShippingValue = shippingDetails.split(": $")[1];
+        $("#editYardShipping").val(yardShippingValue);
+        $("#editOwnShipping").val('');  // Clear the Own Shipping field
+      }
 
-              if (yardData.paymentStatus === "Refund collected") {
-                $("#refundedAmountContainer").show();
-                $("#refundedAmount").val(yardData.refundedAmount);
-              } else {
-                $("#refundedAmountContainer").hide();
-              }
+      // Set other fields as needed
+      $("#refund").val(yardData.status);
+      $("#paymentStatusSelect").val(yardData.paymentStatus);
 
-              $("#esc").val(yardData.escalationCause);
-              $("#escProcess").val(yardData.escalationProcess);
+      if (yardData.paymentStatus === "Refund collected") {
+        $("#refundedAmountContainer").show();
+        $("#refundedAmount").val(yardData.refundedAmount);
+      } else {
+        $("#refundedAmountContainer").hide();
+      }
 
-              if (yardData.status === "Escalation") {
-                $("#escalation").show();
-              } else {
-                $("#escalation").hide();
-              }
+      $("#esc").val(yardData.escalationCause);
+      $("#escProcess").val(yardData.escalationProcess);
 
-              $("#editYardDetailsModal").modal("show");
-              $("#saveYardDetails").data("yard-index", yardIndex);
-            });
-        });
+      if (yardData.status === "Escalation") {
+        $("#escalation").show();
+      } else {
+        $("#escalation").hide();
+      }
+
+      $("#editYardDetailsModal").modal("show");
+      $("#saveYardDetails").data("yard-index", yardIndex);
+    });
+});
+
 
         $("#saveYardDetails").on("click", function () {
           $('#editYardDetailsModal').hide();
@@ -3117,8 +3117,5 @@ function fetchOrderDetails(orderNo) {
     </script>
   </body>   
 </html>
-
-
-
 
 
