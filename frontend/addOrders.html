@@ -103,9 +103,6 @@
     .sidebar .nav-link {
       color: #ffffff;
       cursor: pointer;
-      font-family: Arial, sans-serif;
-      font-weight: normal;
-      font-size: 1rem;
     }
     .sidebar .nav-link:hover {
       background-color: rgba(255, 255, 255, 0.2);
@@ -119,7 +116,7 @@
     .main-content {
       flex-grow: 1;
       margin-left: 14%;
-      margin-top: 60px;
+      margin-top: 30px;
       transition: margin-left 0.3s ease;
     }
     .submenu {
@@ -165,72 +162,6 @@
         display: block;
       }
     }
-    .form-container {
-      background: white;
-      border-radius: 8px;
-    }
-    .form-group {
-      margin: 10px 0;
-    }
-    .form-control {
-      height: calc(2.25rem + 2px);
-      padding: 0.375rem 0.75rem;
-      font-size: 1rem;
-      line-height: 1.5;
-      border-radius: 0.25rem;
-      width: 100%;
-    }
-    .btn-primary {
-      background-color: grey;
-      border: none;
-    }
-    .btn-primary:hover {
-      background-color: #0056b3;
-      border-color: #004085;
-    }
-    .form-container .form-group label {
-      font-weight: bold;
-    }
-    .d-none {
-      display: none;
-    }
-    #addoBtn {
-      color: white;
-      background-color: black;
-      align-items: center;
-      margin: -1% 35%;
-      border-radius: 10px;
-      width: 11%;
-      height: 4vh;
-    }
-    #saleNdate {
-      display: block;
-    }
-    #billing {
-      margin-top: -3.5%;
-      height: 12vh;
-    }
-    #shipping {
-      margin-top: -3.5%;
-      height: 12vh;
-    }
-    #partInfo {
-      margin-top: -3.5%;
-      height: 19vh;
-    }
-    #customer {
-      height: 12vh;
-      margin-top: -1%;
-    }
-    .sidebar .nav-link.active,
-    .sidebar .nav-link.selected {
-    background-color: rgba(255, 255, 255, 0.2);
-    cursor: default;
-    border: none;
-    font-family: Arial, sans-serif;
-    font-weight: normal;
-    font-size: 1rem;
-   }
   </style>
   <script>
     const firstName = localStorage.getItem("firstName");
@@ -271,12 +202,9 @@
             <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
             <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
             <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
-            <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
-            <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
-            <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
             <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
             <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
-            </div>
+          </div>
         </div>
         <div class="nav-item">
           <a class="nav-link menu" id="users-link">
@@ -307,7 +235,6 @@
             <a class="nav-link" id="purchases-link" href="purchases.html">Purchases</a>
             <a class="nav-link" id="refund-report-link" href="refundReport.html">Refund Report</a>
             <a class="nav-link" id="po-report-link" href="poReport.html">PO Report</a>
-            <!-- <a class="nav-link" id="collect-refund-link" href="moreThan2CardC.html">Collect Refund</a> -->
           </div>
         </div>
       </nav>
@@ -406,7 +333,6 @@
                 <option value="ABS Pump">ABS Pump</option>
                 <option value="ABS Module">ABS Module</option>
                 <option value="Transmission">Transmission</option>
-                <option value="ABS Module">ABS Module</option>
               </select>
             </div>
             <div class="form-group col-md-2">
@@ -674,10 +600,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
