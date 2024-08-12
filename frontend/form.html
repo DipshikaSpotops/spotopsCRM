@@ -3074,7 +3074,37 @@ select:disabled {
     // $(".mainDiv").removeClass("blur");
     $('#editYardDetailsModal').hide();
     window.location.reload();
-  })     
+  });
+  
+
+  //part desc
+  // Fetch the necessary data after the order details are loaded
+  fetchOrderDetails(orderNo)
+    .then((order) => {
+      // Extract necessary details
+      const year = order.year;
+      const make = order.make;
+      const model = order.model;
+      const description = order.desc;
+      const partRequired = order.pReq;
+
+      // Format the part description
+      const partDescriptionText = `Part Required: ${partRequired} - For ${year} ${make} ${model} - Desc: ${description}`;
+
+      // Insert the part description into the appropriate div
+      $(".partDescFY.descBar").text(partDescriptionText);
+    })
+    .catch((error) => {
+      console.error("Error fetching order details:", error);
+    });
+});
+  function fetchOrderDetails(orderNo) {
+  return fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
+    });
+}
 
       $("#logoutLink").click(function () {
         window.localStorage.clear();
@@ -3084,5 +3114,3 @@ select:disabled {
     </script>
   </body>   
 </html>
-<!-- when editYardPopup opens, i want it to be scrollable and height to be auto because when the options like part shipped ,escalation is chosen some divs opens
-so the height should increase accordingly , so the backgroun -->
