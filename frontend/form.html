@@ -1236,7 +1236,7 @@ select:disabled {
                 <input type="number" class="form-control" id="others" placeholder="Other Charges" />
               </div>
               <div class="form" >
-                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;">Total Yard Spending: $100.25</label>
+                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;"></label>
               </div>
             </div>
             
@@ -2421,7 +2421,6 @@ select:disabled {
           const ownShip = $("#ownShipping").val();
           const yardShip = $("#yardShipping").val();
           const others = document.getElementById("others").value;
-          const totalYardSpending = calculateTotalYardSpending();
           console.log("others", others);
           if (ownShip){
            shippingMethod =`Own shipping: ${ownShip} `;
@@ -2449,7 +2448,6 @@ select:disabled {
             shippingDetails: shippingMethod,
             // shippingDetails: shippingDetails,
             others: others,
-            totalYardSpending: totalYardSpending
           };
 
           fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
@@ -3139,31 +3137,7 @@ function fetchOrderDetails(orderNo) {
     });
 }
 //for descBar ends here
-
-// calculate Total yard spending
 function calculateTotalYardSpending() {
-  const partPrice = parseFloat($("#partPrice").val()) || 0;
-  const ownShipping = parseFloat($("#ownShipping").val()) || 0;
-  const yardShipping = parseFloat($("#yardShipping").val()) || 0;
-  const others = parseFloat($("#others").val()) || 0;
-
-  // Sum of partPrice + either ownShipping or yardShipping + others
-  const totalYardSpending = partPrice + (ownShipping || yardShipping) + others;
-
-  // Update the total spending label
-  $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
-
-  return totalYardSpending;
-}
-$("#partPrice, #ownShipping, #yardShipping, #others").on("input", calculateTotalYardSpending);
-
-
-    });
-    </script>
-  </body>   
-</html>
-
-<!-- function calculateTotalYardSpending() {
   const partPrice = parseFloat($("#partPrice").val()) || 0;
   const ownShipping = parseFloat($("#ownShipping").val()) || 0;
   const yardShipping = parseFloat($("#yardShipping").val()) || 0;
@@ -3179,44 +3153,10 @@ $("#partPrice, #ownShipping, #yardShipping, #others").on("input", calculateTotal
 }
 
 // Event listeners for input changes
-$("#partPrice, #ownShipping, #yardShipping, #others").on("input", calculateTotalYardSpending);
+$
 
-// When submitting the form, include totalYardSpending in the data sent to MongoDB
-$("#addYardInfo").on("click", function () {
-  const totalYardSpending = calculateTotalYardSpending();
-  
-  const data = {
-    yardName: $("#yardName").val(),
-    agentName: $("#agentName").val(),
-    yardRating: $("#yardRating").val(),
-    phone: $("#phone").val(),
-    altPhone: $("#altPhone").val(),
-    email: $("#email").val(),
-    address: $("#address").val() + " " + $("#city").val() + " " + $("#state").val() + " " + $("#zip").val(),
-    country: $("#country").val(),
-    partPrice: $("#partPrice").val(),
-    ownShipping: $("#ownShipping").val(),
-    yardShipping: $("#yardShipping").val(),
-    others: $("#others").val(),
-    totalYardSpending: totalYardSpending, // Include the total yard spending
-  };
+    });
+    </script>
+  </body>   
+</html>
 
-  // Send the data to MongoDB
-  fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    alert("Yard info added successfully.");
-    // Additional actions after successful addition...
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-    alert(`Failed to add yard info: ${error.message}`);
-  });
-});
- -->
