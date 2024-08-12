@@ -232,6 +232,7 @@ const additionalInfoSchema = new mongoose.Schema({
   altNo: String,
   email: String,
   address: String,
+  country:String,
   partPrice: Number,
   shippingDetails: String,
   others: String,
