@@ -3093,7 +3093,7 @@ select:disabled {
       const partRequired = order.pReq;
 
       // Format the part description
-      const partDescriptionText = `${partRequired} - For ${year} ${make} ${model} - ${description}`;
+      const partDescriptionText = `Part Required: ${partRequired} - For ${year} Make:${make} Model: ${model} - Desc: ${description}`;
 
       // Insert the part description into the appropriate div
       $(".partDescFY.descBar").text(partDescriptionText);
