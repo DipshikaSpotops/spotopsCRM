@@ -2883,16 +2883,17 @@ $("#saveYardDetails").on("click", function () {
     }
   )
     .then((response) => {
+      alert("Yard details have been updated");
+      $("#editYardDetailsModal").modal("hide");
+      $(".mainDiv").removeClass("blur");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       return response.json();
     })
     .then((data) => {
-      alert("Yard details have been updated");
       $("#editYardDetailsModal").modal("hide");
-      $(".mainDiv").removeClass("blur");
-
+      
       updateOrderHistory(data.orderHistory);
       showYardDetails(yardIndex);
       fetchAndUpdateYardInfo();
