@@ -2789,8 +2789,10 @@ select:disabled {
       $("#editState").val(addressParts[1]);
       $("#editZip").val(addressParts[2]);
       $("#editPhone").val(yardData.phone);
+      $("#editAltPhone").val(yardData.altPhone);
       $("#editEmail").val(yardData.email);
       $("#editAgentName").val(yardData.agentName);
+      $("#editCountry").val(yardData.country);
       $("#editPartPrice").val(yardData.partPrice);
       $("#editOthers").val(yardData.others);
 
@@ -2835,57 +2837,68 @@ if (shippingDetails.includes("Own shipping")) {
 });
 
 
-        $("#saveYardDetails").on("click", function () {
-          $('#editYardDetailsModal').hide();
-          $(".mainDiv").removeClass("blur");
-          yardIndex = $(this).data("yard-index");
-          const updatedData = {
-            yardName: $("#editYardName").val(),
-            address: $("#editAddress").val(),
-            phone: $("#editPhone").val(),
-            email: $("#editEmail").val(),
-            agentName: $("#editAgentName").val(),
-            partPrice: $("#editPartPrice").val(),
-            others: $("#editOthers").val(),
-            shippingMethod: $("input[name='editShippingMethod']:checked").val(),
-            shippingDetails:
-              $("input[name='editShippingMethod']:checked").val() ===
-              "Own shipping"
-                ? $("#editOwnShippingInput").val()
-                : $("#editYardShippingInput").val(),
-            status: $("#refund").val(),
-            paymentStatus: $("#paymentStatusSelect").val(),
-            refundedAmount: $("#refundedAmount").val(),
-            escalationCause: $("#esc").val(),
-            escalationProcess: $("#escProcess").val(),
-          };
+$("#saveYardDetails").on("click", function () {
+  $('#editYardDetailsModal').hide();
+  $(".mainDiv").removeClass("blur");
+  yardIndex = $(this).data("yard-index");
 
-          fetch(
-            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(updatedData),
-            }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              $("#editYardDetailsModal").modal("hide");
-              updateOrderHistory(data.orderHistory);
-              showYardDetails(yardIndex);
-              fetchAndUpdateYardInfo();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
+  // Determine the type of shipping and update the shipping details accordingly
+  let shippingDetails = "";
+
+  if ($("#editOwnShipping").val()) {
+    shippingDetails = `Own shipping: ${$("#editOwnShipping").val()}`;
+    console.log("oSHip",shippingDetails);
+  } else if ($("#editYardShipping").val()) {
+    shippingDetails = `Yard shipping: ${$("#editYardShipping").val()}`;
+    console.log("ySHip",shippingDetails);
+  }
+
+  const updatedData = {
+    yardName: $("#editYardName").val(),
+    agentName: $("#editAgentName").val(),
+    yardRating: $("#editYardRating").val(),
+    phone: $("#editPhone").val(),
+    editAlt: $("#editAltPhone").val(),
+    address: $("#editAddress").val(),
+    email: $("#editEmail").val(),
+    country: $("#editCountry").val(),
+    partPrice: $("#editPartPrice").val(),
+    others: $("#editOthers").val(),
+    shippingDetails: shippingDetails,
+    status: $("#refund").val(),
+    paymentStatus: $("#paymentStatusSelect").val(),
+    refundedAmount: $("#refundedAmount").val(),
+    escalationCause: $("#esc").val(),
+    escalationProcess: $("#escProcess").val(),
+  };
+
+  fetch(
+    `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      $("#editYardDetailsModal").modal("hide");
+      updateOrderHistory(data.orderHistory);
+      showYardDetails(yardIndex);
+      fetchAndUpdateYardInfo();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+
 
         $("input[name='editShippingMethod']").on("change", function () {
           if ($(this).val() === "Own shipping") {
