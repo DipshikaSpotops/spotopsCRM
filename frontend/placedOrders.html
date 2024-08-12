@@ -359,7 +359,7 @@
 
     <!-- Approve Modal popup -->
    
-          <div class="modalDiv">
+          <div id="modalDiv">
             <p>The order has been approved</p>
             <button type="button" class="btn btn-primary" id="okButton">
               OK
@@ -519,7 +519,7 @@
         }
 
         $("#infoTable").on("click", ".approve-btn", async function () {
-          $("#myModal").modal("show");
+          $("#modalDiv").modal("show");
 
           // On click of the OK button, reload the window
           $("#okButton").click(function () {
