@@ -2793,16 +2793,18 @@ select:disabled {
       $("#editPartPrice").val(yardData.partPrice);
       $("#editOthers").val(yardData.others);
 
-      // Check the shippingDetails value and set the appropriate field
+      // Check the shippingDetails value
       const shippingDetails = yardData.shippingDetails;
       if (shippingDetails.includes("Own shipping")) {
-        const ownShippingValue = shippingDetails.split(": ")[1]; // Extract the value after ": "
+        const ownShippingValue = shippingDetails.split(": ")[1]; 
+        console.log("own ship",ownShippingValue);
         $("#editOwnShipping").val(ownShippingValue);
-        $("#editYardShipping").val('');  // Clear the Yard Shipping field
+        $("#editYardShipping").val('');  
       } else if (shippingDetails.includes("Yard shipping")) {
-        const yardShippingValue = shippingDetails.split(": ")[1]; // Extract the value after ": "
+        const yardShippingValue = shippingDetails.split(": ")[1];
+        console.log("yard ship",yardShippingValue);
         $("#editYardShipping").val(yardShippingValue);
-        $("#editOwnShipping").val('');  // Clear the Own Shipping field
+        $("#editOwnShipping").val('');  
       }
 
       // Set other fields as needed
