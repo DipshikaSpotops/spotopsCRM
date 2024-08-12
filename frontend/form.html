@@ -2794,19 +2794,20 @@ select:disabled {
       $("#editPartPrice").val(yardData.partPrice);
       $("#editOthers").val(yardData.others);
 
-      // Check the shippingDetails value
       const shippingDetails = yardData.shippingDetails;
-      if (shippingDetails.includes("Own shipping")) {
-        const ownShippingValue = shippingDetails.split(": ")[1]; 
-        console.log("own ship",ownShippingValue);
-        $("#editOwnShipping").val(ownShippingValue);
-        $("#editYardShipping").val('');  
-      } else if (shippingDetails.includes("Yard shipping")) {
-        const yardShippingValue = shippingDetails.split(": ")[1];
-        console.log("yard ship",yardShippingValue);
-        $("#editYardShipping").val(yardShippingValue);
-        $("#editOwnShipping").val('');  
-      }
+console.log("shippingDetails:", shippingDetails);
+if (shippingDetails.includes("Own shipping")) {
+    const ownShippingValue = shippingDetails.split(":")[1].trim(); 
+    console.log("own ship", ownShippingValue);
+    $("#editOwnShipping").val(ownShippingValue);
+    $("#editYardShipping").val('');  
+} else if (shippingDetails.includes("Yard shipping")) {
+    const yardShippingValue = shippingDetails.split(":")[1].trim();
+    console.log("yard ship", yardShippingValue);
+    $("#editYardShipping").val(yardShippingValue);
+    $("#editOwnShipping").val('');  
+}
+
 
       // Set other fields as needed
       $("#refund").val(yardData.status);
