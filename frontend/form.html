@@ -1236,7 +1236,7 @@ select:disabled {
                 <input type="number" class="form-control" id="others" placeholder="Other Charges" />
               </div>
               <div class="form" >
-                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;"></label>
+                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;">Total Yard Spending: $100.25</label>
               </div>
             </div>
             
@@ -3137,23 +3137,7 @@ function fetchOrderDetails(orderNo) {
     });
 }
 //for descBar ends here
-function calculateTotalYardSpending() {
-  const partPrice = parseFloat($("#partPrice").val()) || 0;
-  const ownShipping = parseFloat($("#ownShipping").val()) || 0;
-  const yardShipping = parseFloat($("#yardShipping").val()) || 0;
-  const others = parseFloat($("#others").val()) || 0;
 
-  // Sum of partPrice + either ownShipping or yardShipping + others
-  const totalYardSpending = partPrice + (ownShipping || yardShipping) + others;
-
-  // Update the total spending label
-  $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
-
-  return totalYardSpending;
-}
-
-// Event listeners for input changes
-$
 
     });
     </script>
