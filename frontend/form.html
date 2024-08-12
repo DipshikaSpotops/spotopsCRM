@@ -76,23 +76,21 @@
 }
 
 
-#editYardPopup {
-    display: block;
-    background-color: white;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60%;
-    max-height: 80vh; /* Set a maximum height */
-    overflow-y: auto;  /* Enable vertical scrolling */
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1050;
-}
-
+      #editYardPopup {
+        display: block;
+        background-color: white;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: auto;
+        width: 60%;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1050;
+      }
       #editYardDetailsModal{
         background-color: white;
     margin: 6% 22%;
@@ -102,13 +100,11 @@
     height: 82vh;
       }
       .modal-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;  /* Ensure the content takes up the full width */
-    margin-top: 20px;
-}
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
 
       .comments {
         width: 100%;
@@ -1250,49 +1246,232 @@ select:disabled {
     </div>
 <!-- add yard ends here -->
 
-<div id="editYardPopup">
-  <div>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span id="crossBtnEditYard" aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="form-group" id="editPopInfo">
-      <label for="refund" style="font-size: 25px; margin: 4%;">Status:</label>
-      <select id="refund" style="width: 66%; border-radius: 25px; margin: 5% -12% 6% 0%; background-color: black; color: white; padding: 15px 8px 15px 8px; text-align: center;">
-        <option value="Yard located">Yard Located</option>
-        <option value="Yard PO Sent">PO Sent</option>
-        <option value="PO confirmed">PO Confirmed</option>
-        <option value="PO cancelled">PO Cancelled</option>
-        <option value="Part shipped">Part Shipped</option>
-        <option value="Part delivered">Part Delivered</option>
-        <option value="Escalation">Escalation</option>
-      </select>
-    </div>
-    <!-- Additional dynamic content here -->
-    <div id="escalation" style="display: none;">
-      <label for="reason1">Reason:</label>
-      <select id="esc" style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4">
-        <option value="">Choose</option>
-        <option value="Damaged">Damaged</option>
-        <option value="Defective">Defective</option>
-        <option value="Incorrect">Incorrect</option>
-        <option value="Not programming">Not programming</option>
-      </select>
-    </div>
-    <!-- More dynamic fields -->
-    <div id="divTrackingEdit" style="display: none;">
-      <!-- Tracking information fields -->
-    </div>
-    <!-- Any other fields that might be displayed based on the selection -->
-  </div>
-  <div>
-    <button type="button" class="btn save" id="editYardInfo" style="border-radius: 22px; align-items: center; margin: 6% 2% 8% 72%; width: 170%; height: 5vh;">
-      Save
-    </button>
-  </div>
-</div>
+    <div id="editYardPopup" style="display: none">
+      <div >
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span id="crossBtnEditYard" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" id="editPopInfo">
+          <label for="refund"  style="font-size: 25px;
+    margin: 4%;">Status:</label>
+          <select id="refund" style="    width: 66%;
+          border-radius: 25px;
+          margin: 5% -12% 6% 0%;
+          background-color: black;
+          color: white;
+          padding: 15px 8px 15px 8px;
+          text-align: center;">
+            <!-- <option value="">Choose</option> -->
+            <option value="Yard located">Yard Located</option>
+            <option value="Yard PO Sent">PO Sent</option>
+            <option value="PO confirmed">PO Confirmed</option>
+            <option value="PO cancelled">PO Cancelled</option>
+            <option value="Part shipped">Part Shipped</option>
+            <option value="Part delivered">Part Delivered</option>
+            <option value="Escalation">Escalation</option>
+          </select>
+          <!-- <div id="cardCharged">
+            <label for="paymentStatusCard">Card Charged:</label>
+            <select class="form-control paymentStatus">
+              <option value="">Choose</option>
+              <option value="Card charged">Charged</option>
+              <option value="">Not charged</option>
+            </select>
+          </div> -->
+          <label for="paymentStatusRefund" style="display: none"
+            >Refund Collected:</label
+          >
+          <select
+            class="form-control paymentStatus"
+            id="paymentStatusSelect"
+            style="display: none"
+          >
+            <option value="">Choose</option>
+            <option value="Refund collected">Yes</option>
+            <option value="">No</option>
+          </select>
+          <div id="refundedAmountContainer">
+            <label for="refundedAmount">Refunded Amount:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="refundedAmount"
+              placeholder="Enter refunded amount"
+            />
+          </div>
+          <div>
+            <button
+              type="button"
+              class="btn save"
+              id="editYardInfo"
+              style="border-radius: 22px;align-items: center;margin: 6% 2% 8% 72%;width: 170%;height: 5vh;">
+              Save
+            </button>
+          </div>
+        </div>
 
+        <div id="escalation">
+          <div style="margin: 2% 0 2% 25%">
+            <label for="reason1">Reason:</label>
+            <select
+              name="esc"
+              id="esc"
+              style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4"
+            >
+              <option value="">Choose</option>
+              <option value="Damaged">Damaged</option>
+              <option value="Defective">Defective</option>
+              <option value="Incorrect">Incorrect</option>
+              <option value="Not programming">Not programming</option>
+            </select>
+          </div>
+          <div id="escRMA" style="margin: 2% 0 2% 25%">
+            <label for="reason">Escalation Process:</label>
+            <select
+              name="esc"
+              id="escProcess"
+              style="padding: 0.6%; width: 51.8%; border: 1px solid #d9d4d4"
+            >
+              <option value="">Choose</option>
+              <option value="RMA Sent">RMA Sent</option>
+              <option value="RMA signed">RMA signed</option>
+              <option value="Return tracking sent">Return Tracking Sent</option>
+              <option value="Return part In transit">
+                Return Part In Transit
+              </option>
+            </select>
+          </div>
+        </div>
+        <div id="shipping_own_cust">
+          <div class="form-group">
+            <div class="form-row">
+              <div class="col-md-6">
+                <label class="radio-inline">
+                  <input type="radio" name="returnValue" value="Our shipping" />
+                  Our Shipping
+                </label>
+                <input
+                  type="number"
+                  class="returnShipment"
+                  id="ourShippingInput"
+                  placeholder="Our Shipping Price"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="radio-inline">
+                  <input
+                    type="radio"
+                    value="Customer shipping"
+                    name="returnValue"
+                  />
+                  Customer Shipping
+                </label>
+                <input
+                  type="number"
+                  class="returnShipment"
+                  value="0"
+                  id="customerShippingInput"
+                  placeholder="Customer Shipping Price"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="inputForCust"></div>
+        <div class="form-group" id="divTrackingEdit">
+          <label>Tracking Information:</label>
+          <table class="table table-bordered" id="trackingTableEdit">
+            <thead>
+              <tr>
+                <th>Tracking No</th>
+                <th>ETA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="trackingNoEdit"
+                    placeholder="Enter Tracking No"
+                    required
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="etaEdit"
+                    placeholder="Enter ETA"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <select class="form-control" id="shipperNameEdit" required>
+                    <option value="" disabled selected>Select Shipper</option>
+                    <option value="UPS">UPS</option>
+                    <option value="World Wide Express">
+                      World Wide Express
+                    </option>
+                    <option value="FedEx">FedEx</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <input
+                    type="url"
+                    class="form-control"
+                    id="linkInput"
+                    placeholder="Enter Link"
+                    required
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-primary" id="sendEmailButton">
+            Send Email
+          </button>
+        </div>
+        <div class="comments" id="notesContainer">
+          <h2>Yard Notes</h2>
+          <div id="comment-box"></div>
+        </div>
+        <div class="container">
+          <form>
+            <textarea
+              id="noteInput"
+              placeholder="Type Your Notes here..."
+            ></textarea>
+            <div class="btn">
+              <input
+                id="submit"
+                type="submit"
+                value="Update Notes"
+                style="
+                  margin: -60% 0% 7% 540%;
+                  border-radius: 20px;
+                  background-color: grey;
+                  border: none;
+                "
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+      <input type="hidden" id="yardIndexEdit" />
+    </div>
 
     <!-- edit yard details -->
     <div class="modal fade" id="editYardDetailsModal" tabindex="-1" aria-labelledby="editYardDetailsModalLabel" aria-hidden="true" style="display: none;">
@@ -2905,5 +3084,5 @@ select:disabled {
     </script>
   </body>   
 </html>
-when editYardPopup opens, i want it to be scrollable and height to be auto because when the options like part shipped ,escalation is chosen some divs opens
-so the height should increase accordingly
+<!-- when editYardPopup opens, i want it to be scrollable and height to be auto because when the options like part shipped ,escalation is chosen some divs opens
+so the height should increase accordingly , so the backgroun -->
