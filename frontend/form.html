@@ -2771,6 +2771,7 @@ select:disabled {
         });
 
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
+          console.log("edit yard details")
   $(".mainDiv").addClass("blur");
   yardIndex = $(this).data("yard-index");
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
