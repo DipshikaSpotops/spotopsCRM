@@ -2476,7 +2476,8 @@ select:disabled {
 
         $("#editYardInfo").on("click", async function () {
           console.log("clicking n save");
-          $(".mainDiv").addClass("blur");
+          $(".mainDiv").removeClass("blur");
+          $("#editYardPopup").hide();
           yardIndex = $(this).data("yard-index");
           const status = $("#refund").val();
           const returnCharges = $(".returnShipment").val();
