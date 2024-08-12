@@ -2889,7 +2889,10 @@ $("#saveYardDetails").on("click", function () {
       return response.json();
     })
     .then((data) => {
+      alert("Yard details have been updated");
       $("#editYardDetailsModal").modal("hide");
+      $(".mainDiv").removeClass("blur");
+
       updateOrderHistory(data.orderHistory);
       showYardDetails(yardIndex);
       fetchAndUpdateYardInfo();
