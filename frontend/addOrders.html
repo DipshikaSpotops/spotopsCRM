@@ -7,14 +7,41 @@
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
   <style>
-    body {
-      background-color: #f8f9fa;
-      display: flex;
-      overflow-x: hidden;
-      flex-direction: column;
-      font-family: Arial, sans-serif;
-    }
-    
+
+body {
+   background-color: #f8f9fa;
+   display: flex;
+   overflow-x: hidden;
+   flex-direction: column;
+   font-family: Arial, sans-serif; /* Ensure consistent font family */
+   font-size: 16px; /* Match font size */
+   line-height: 1.5; /* Ensure readability */
+}
+
+.navbar, .sidebar .nav-link {
+   font-size: 16px;
+   font-weight: 400; /* Ensure weight consistency */
+}
+
+/* Additional element specific styling */
+.navbar .user-info span {
+   margin-right: 10px;
+   color: white;
+   font-weight: 400; /* Ensuring the font weight is the same */
+}
+*, *::before, *::after {
+   box-sizing: border-box;
+}
+
+
+/* Additional element specific styling */
+.navbar .user-info span {
+   margin-right: 10px;
+   color: white;
+   font-weight: 400; /* Ensuring the font weight is the same */
+}
+
+
     #newOrderForm {
       margin: -2% 0% -2% 12%;
     }
