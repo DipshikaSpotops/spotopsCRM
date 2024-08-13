@@ -2241,6 +2241,7 @@ select:disabled {
 
         $(".add-yard-btn").on("click", function () {
           showModal("#yardModal");
+          updateTotalSpending();
           const newOrderStatus = "Yard Processing";
 
           console.log("new order status", newOrderStatus);
@@ -2431,17 +2432,16 @@ select:disabled {
         shippingValue = yardShip;
         shippingMethod = `Yard shipping: ${yardShip}`;
     }
-
-    //to update totalSpending
-    function updateTotalSpending() {
-      console.log("function update spendng")
-      const shippingValue = ownShip || yardShip;
-      const totalYardSpending = partPrice + shippingValue + others;
-      $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
-  }
-
   // Event listeners for input fields
-  $("#partPrice, #ownShipping, #yardShipping, #others").on("input", updateTotalSpending);
+  $("#partPrice, #ownShipping, #yardShipping, #others").on("input", updateTotalSpending(partPrice,ownShip,yardShip,others));
+
+  // // When the add-yard-btn is clicked, the yardModal is opened
+  // $(".add-yard-btn").on("click", function () {
+  //     showModal("#yardModal");
+
+  //     // Reset the total spending label when the modal is opened
+  //     updateTotalSpending();
+  // });
 
 
     const firstName = localStorage.getItem("firstName");
@@ -3152,6 +3152,14 @@ function fetchOrderDetails(orderNo) {
       return data;
     });
 }
+
+//to update totalSpending
+function updateTotalSpending(partPrice,ownShip,yardShip,others) {
+      console.log("function update spendng")
+      const shippingValue = ownShip || yardShip;
+      const totalYardSpending = partPrice + shippingValue + others;
+      $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
+  }
 
     });
     </script>
