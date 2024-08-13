@@ -84,6 +84,7 @@ document.querySelector('.signup-btn').addEventListener('click', async (e) => {
 
         if (response.status === 200) {
             localStorage.clear();
+            localStorage.setItem("loginTimestamp", Date.now());
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('firstName', fName);
             localStorage.setItem('email', email);
