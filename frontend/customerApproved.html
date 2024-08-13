@@ -269,6 +269,7 @@
               <th>Agent Name</th>
               <th>Customer Name</th>
               <th>Part Name</th>
+              <th>Part Desc</th>
               <th>Order Status</th>
               <th>Email</th>
               <th>Actions</th>
@@ -387,6 +388,7 @@
                   <td>${item.salesAgent}</td>
                   <td>${item.customerName}</td>
                   <td>${item.pReq || item.partName}</td>
+                  <td>${item.desc}</td>
                   <td>${item.orderStatus}</td>
                   <td>${item.email}</td>
                   <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
