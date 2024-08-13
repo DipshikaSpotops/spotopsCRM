@@ -490,7 +490,7 @@
           const sState = $("#sState").val();
           const sCountry = $("#sCountry").val();
           const sZip = $("#sZip").val();
-          const shippingInfo = `${sStreet}\n${sCity}\n${sState}\n${sCountry}\n${sZip}`;
+          const shippingInfo = `${sStreet},\n${sCity},\n${sState},\n${sZip},\n${sCountry}`;
           var newOrderNo;
 
           axios

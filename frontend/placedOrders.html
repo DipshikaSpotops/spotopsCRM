@@ -536,7 +536,8 @@
           data.forEach((item) => {
             if (item.orderStatus === "Placed") {
               
-              const formattedAddress = item.bAddress.replace(/,/g, '<br>');
+              const formatteBdAddress = item.bAddress.replace(/,/g, '<br>');
+              const formatteSdAddress = item.sAddress.replace(/,/g, '<br>');
               // var billing = item.bAddress;
               // console.log("billing",billing);
               // billing.replace(/,/g, '\n');
@@ -556,7 +557,7 @@
                                     Alt Phone: ${item.altPhone}</br>
                                     Billing Address: ${formattedAddress}</br>
                                   </td>
-                                  <td> ${item.sAddress}</br>
+                                  <td> ${formatteSdAddress}</br>
                                 <td>${item.pReq || item.partName}</td>
                                 <td>Year: ${item.year}</br>
                                 Make: ${item.make}</br>
