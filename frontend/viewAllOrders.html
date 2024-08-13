@@ -472,31 +472,36 @@
       });
 
       $("#infoTable").on("click", ".cancel-btn", function () {
-        const id = $(this).data("id");
-        console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-        if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-          fetch(`https://www.spotops360.com/orders/${id}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                console.error("Failed to delete order", response);
-                throw new Error("Failed to delete order");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log("Order cancelled successfully", data); // Added log
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error("Error cancelling order:", error);
-            });
+  const id = $(this).data("id");
+  console.log(`Cancel button clicked for order ID: ${id}`); // Added log
+  
+  if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+    fetch(`https://www.spotops360.com/orders/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json", // Ensure correct content type
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Failed to delete order", response.statusText);
+          throw new Error("Failed to delete order");
         }
+        return response.json(); // Assuming your server returns JSON
+      })
+      .then((data) => {
+        console.log("Order cancelled successfully", data); // Added log
+        alert("Order cancelled successfully"); // Add alert for user feedback
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error cancelling order:", error);
+        alert(`Error cancelling order: ${error.message}`); // Add alert for user feedback
       });
+  }
+});
+
 
       $("#infoTable").on("click", ".send-invoice-btn", function () {
         const id = $(this).data("id");
