@@ -307,7 +307,7 @@ app.put("/orders/:orderNo", async (req, res) => {
       if (oldStatus !== order.orderStatus) {
           const timestamp = new Date().toLocaleString()
           order.orderHistory.push(
-              `Order status updated to ${order.orderStatus} by "${firstName}" on ${timestamp}`
+              `Order status updated to ${order.orderStatus} by ${firstName} on ${timestamp}`
           );
       }
 
