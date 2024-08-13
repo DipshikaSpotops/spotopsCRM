@@ -402,8 +402,8 @@ app.delete("/orders/:orderNo", async (req, res) => {
   console.log("Received request to delete order:", req.params);
   
   try {
-    const orderNo = req.params.orderNo;
-    console.log("Order No to delete:", orderNo);
+    const orderNo = req.params.id;
+    console.log("Order No to delete:", id);
 
     const order = await Order.findOne({ orderNo });
     console.log("Order found:", order);
@@ -413,16 +413,23 @@ app.delete("/orders/:orderNo", async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    const cancelledOrder = new CancelledOrder(order.toObject());
-    console.log("Saving cancelled order:", cancelledOrder);
+    // Log the order data to inspect it
+    console.log("Order data:", order);
 
-    await cancelledOrder.save(); // Save the cancelled order
+    // Attempt to create a CancelledOrder with the order data
+    const cancelledOrder = new CancelledOrder(order.toObject()); 
+    console.log("Cancelled Order to save:", cancelledOrder);
+
+    // Save the cancelled order
+    await cancelledOrder.save(); 
     console.log("Cancelled order saved");
 
+    // Delete the original order
     await Order.deleteOne({ orderNo });
     console.log("Order deleted");
 
     res.json({ message: "Order canceled and saved as cancelled" });
+
   } catch (err) {
     console.error("Error deleting order:", err);
     res.status(500).json({ message: "Error deleting order", error: err.message });
