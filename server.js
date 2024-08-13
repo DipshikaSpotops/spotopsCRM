@@ -403,7 +403,7 @@ app.delete("/orders/:orderNo", async (req, res) => {
   
   try {
     const orderNo = req.params.id;
-    console.log("Order No to delete:", id);
+    console.log("Order No to delete:", orderNo);
 
     const order = await Order.findOne({ orderNo });
     console.log("Order found:", order);
