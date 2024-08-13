@@ -1235,9 +1235,9 @@ select:disabled {
               <div style="margin: 0% 46% 5% -31%;width: 265px;">
                 <input type="number" class="form-control" id="others" placeholder="Other Charges" />
               </div>
-              <div class="form" >
-                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;">Total Yard Spending:</label>
-              </div>
+              <!-- <div class="form" >
+                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;">Total Yard Spending: $100.25</label>
+              </div> -->
             </div>
             
           </div>
@@ -1550,9 +1550,9 @@ select:disabled {
               <div class="form-group " style="margin: 0% -56%;width: 60%;">
                 <input type="number" class="form-control" id="editOthers" placeholder="Other Charges" />
               </div>
-              <div class="form">
-                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: 17% 148%;">Total Yard Spending:</label>
-              </div>
+              <!-- <div class="form">
+                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: 17% 148%;">Total Yard Spending: $100.25</label>
+              </div> -->
             </div>
           </div>
           <div class="modal-footer">
@@ -2241,13 +2241,6 @@ select:disabled {
 
         $(".add-yard-btn").on("click", function () {
           showModal("#yardModal");
-          // updateTotalSpending();
-          // Event listeners for input fields
-          const partPrice = parseFloat($("#partPrice").val()) || 0; 
-    const ownShip = parseFloat($("#ownShipping").val()) || 0; 
-    const yardShip = parseFloat($("#yardShipping").val()) || 0; 
-    const others = parseFloat(document.getElementById("others").value) || 0; 
-         $("#partPrice, #ownShipping, #yardShipping, #others").on("input", updateTotalSpending(partPrice,ownShip,yardShip,others));
           const newOrderStatus = "Yard Processing";
 
           console.log("new order status", newOrderStatus);
@@ -2408,96 +2401,81 @@ select:disabled {
             "d7efef519360bf1ae968db97c52855fcdfbfab171af45c4720f8b648cf2814f3069a696b70ad12bba620b5394ee11b076f4fc31bd07baee18ace4fb4c8bfed34"; // Use your provided token here
           await fetchYardInfo(token);
         }
+
+        var shippingMethod;
         $("#addYardInfo").on("click", async function () {
-    $("#refund").val("Yard located").change();
-    const yardName = $("#yardName").val();
-    const agentName = $("#agentName").val();
-    const yardRating = $("#yardRating").val();
-    const phone = $("#phone").val();
-    const altPhone = $("#altPhone").val();
-    const email = $("#email").val();
-    const address = $("#address").val();
-    const city = $("#city").val();
-    const state = $("#state").val();
-    const country = $("#country").val();
-    const zipcode = $("#zip").val();
-    const addedAddress = city + "  " + state + "  " + zipcode;
-    const partPrice = parseFloat($("#partPrice").val()) || 0; // Convert to number or set to 0
-    const ownShip = parseFloat($("#ownShipping").val()) || 0; // Convert to number or set to 0
-    const yardShip = parseFloat($("#yardShipping").val()) || 0; // Convert to number or set to 0
-    const others = parseFloat(document.getElementById("others").value) || 0; // Convert to number or set to 0
+          $("#refund").val("Yard located").change();
+          const yardName = $("#yardName").val();
+          const agentName = $("#agentName").val();
+          const yardRating = $("#yardRating").val();
+          const phone = $("#phone").val();
+          const altPhone = $("#altPhone").val();
+          const email = $("#email").val();
+          const address = $("#address").val();
+          const city = $("#city").val();
+          const state = $("#state").val();
+          const country = $("#country").val();
+          const zipcode = $("#zip").val();
+          const addedAddress = city + "  " + state + "  " + zipcode;
+          const partPrice = $("#partPrice").val();
+          const ownShip = $("#ownShipping").val();
+          const yardShip = $("#yardShipping").val();
+          const others = document.getElementById("others").value;
+          console.log("others", others);
+          if (ownShip){
+           shippingMethod =`Own shipping: ${ownShip} `;
+          }else if (yardShip){
+             shippingMethod = `Yard shipping: ${yardShip}`;
+          }
+          // const shippingDetails =
+          //   shippingMethod === "Own shipping"
+          //     ? $("#ownShippingInput").val()
+          //     : $("#yardShippingInput").val();
+           
 
-    console.log("others", others);
-    
-    // Determine the shipping method and its value
-    let shippingValue = 0;
-    if (ownShip) {
-        shippingValue = ownShip;
-        shippingMethod = `Own shipping: ${ownShip}`;
-    } else if (yardShip) {
-        shippingValue = yardShip;
-        shippingMethod = `Yard shipping: ${yardShip}`;
-    }
-  // // Event listeners for input fields
-  // $("#partPrice, #ownShipping, #yardShipping, #others").on("input", updateTotalSpending(partPrice,ownShip,yardShip,others));
+           const firstName = localStorage.getItem("firstName");    
+          const data222 = {
+            yardName: yardName,
+            agentName: agentName,
+            yardRating: yardRating,
+            phone: phone,
+            altPhone: altPhone,
+            email: email,
+            address: addedAddress,
+            country: country,
+            partPrice: partPrice,
+            status: "Yard located",
+            shippingDetails: shippingMethod,
+            // shippingDetails: shippingDetails,
+            others: others,
+          };
 
-  // // When the add-yard-btn is clicked, the yardModal is opened
-  // $(".add-yard-btn").on("click", function () {
-  //     showModal("#yardModal");
-
-  //     // Reset the total spending label when the modal is opened
-  //     updateTotalSpending();
-  // });
-
-
-    const firstName = localStorage.getItem("firstName");
-
-    const data222 = {
-        yardName: yardName,
-        agentName: agentName,
-        yardRating: yardRating,
-        phone: phone,
-        altPhone: altPhone,
-        email: email,
-        address: addedAddress,
-        country: country,
-        partPrice: partPrice,
-        status: "Yard located",
-        shippingDetails: shippingMethod,
-        others: others,
-    };
-
-    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data222),
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then((data) => {
-        $("#editYardPopup").hide();
-        addYardButton(
-            data.additionalInfo.length,
-            `Yard ${data.additionalInfo.length}`
-        );
-        updateOrderHistory(data.orderHistory);
-        fetchAndUpdateYardInfo();
-    })
-    .catch((error) => {
-        console.error("Error:", error);
-    });
-});
-
-    
-    // Determine the shipping method and its value
-    let shippingValue = 0;
-   
+          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data222),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              $("#editYardPopup").hide();
+              addYardButton(
+                data.additionalInfo.length,
+                `Yard ${data.additionalInfo.length}`
+              );
+              updateOrderHistory(data.orderHistory);
+              fetchAndUpdateYardInfo();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
 
         $("#editYardInfo").on("click", async function () {
           console.log("clicking n save");
@@ -3158,14 +3136,8 @@ function fetchOrderDetails(orderNo) {
       return data;
     });
 }
+//for descBar ends here
 
-//to update totalSpending
-function updateTotalSpending(partPrice,ownShip,yardShip,others) {
-      console.log("function update spendng")
-      const shippingValue = ownShip || yardShip;
-      const totalYardSpending = partPrice + shippingValue + others;
-      $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
-  }
 
     });
     </script>
