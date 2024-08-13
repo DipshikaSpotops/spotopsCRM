@@ -2241,7 +2241,13 @@ select:disabled {
 
         $(".add-yard-btn").on("click", function () {
           showModal("#yardModal");
-          updateTotalSpending();
+          // updateTotalSpending();
+          // Event listeners for input fields
+          const partPrice = parseFloat($("#partPrice").val()) || 0; 
+    const ownShip = parseFloat($("#ownShipping").val()) || 0; 
+    const yardShip = parseFloat($("#yardShipping").val()) || 0; 
+    const others = parseFloat(document.getElementById("others").value) || 0; 
+         $("#partPrice, #ownShipping, #yardShipping, #others").on("input", updateTotalSpending(partPrice,ownShip,yardShip,others));
           const newOrderStatus = "Yard Processing";
 
           console.log("new order status", newOrderStatus);
@@ -2432,8 +2438,8 @@ select:disabled {
         shippingValue = yardShip;
         shippingMethod = `Yard shipping: ${yardShip}`;
     }
-  // Event listeners for input fields
-  $("#partPrice, #ownShipping, #yardShipping, #others").on("input", updateTotalSpending(partPrice,ownShip,yardShip,others));
+  // // Event listeners for input fields
+  // $("#partPrice, #ownShipping, #yardShipping, #others").on("input", updateTotalSpending(partPrice,ownShip,yardShip,others));
 
   // // When the add-yard-btn is clicked, the yardModal is opened
   // $(".add-yard-btn").on("click", function () {
