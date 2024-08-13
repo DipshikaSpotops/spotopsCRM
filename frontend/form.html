@@ -461,6 +461,8 @@
       }
 
       .dropdown-menu {
+        background-color: black;
+        border: none;
         position: absolute; /* Position dropdown menus absolutely */
         top: 60px; /* Align dropdowns with the bottom of the navbar */
         left: 0;
@@ -469,6 +471,18 @@
         display: none; /* Initially hide dropdowns */
       }
 
+      .dropdown-item {
+    color: white;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: #ff914d;
+    color: black;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #ff914d;
+}
       .navbar .dropdown:hover .dropdown-menu {
         display: block; /* Show dropdowns on hover */
       }
@@ -553,10 +567,14 @@
       }
 
       .submenu .nav-link {
+        color: white;
         display: block;
         margin-left: 20px;
       }
-
+      .submenu .nav-link:hover,
+.submenu .nav-link:focus {
+    color: #ff914d;
+} 
       .profile-table {
         width: 50%;
         margin: 20px auto;
@@ -2202,7 +2220,9 @@ select:disabled {
           });
           $(".navbar .nav-link").css({
             color: "white",
+            cursor: "pointer",
           });
+          
           $(".navbar .user-info span").css({
             color: "white",
           });
@@ -3155,9 +3175,32 @@ function fetchOrderDetails(orderNo) {
     .then((response) => response.json())
     .then((data) => {
       return data;
+      
     });
 }
-//for descBar ends here
+//show deopdown on navbar
+// Show dropdown on hover
+$(".navbar .nav-item").hover(function () {
+        $(this).find(".dropdown-menu").stop(true, true).delay(100).fadeIn(200);
+    }, function () {
+        $(this).find(".dropdown-menu").stop(true, true).delay(100).fadeOut(200);
+    });
+
+    // Toggle dropdown on click
+    $(".nav-item .nav-link").on("click", function (event) {
+        event.preventDefault(); // Prevent the default behavior
+        const submenu = $(this).next(".dropdown-menu");
+        if (submenu.length) {
+            submenu.stop(true, true).slideToggle(200);
+        }
+    });
+
+    // Also toggle on chevron icon click
+    $(".chevron-icon").on("click", function (event) {
+        event.stopPropagation();
+        const submenu = $(this).closest(".nav-item").find(".dropdown-menu");
+        submenu.stop(true, true).slideToggle(200);
+    });
 
 
     });
