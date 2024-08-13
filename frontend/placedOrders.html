@@ -535,11 +535,14 @@
           const data = response.data;
           data.forEach((item) => {
             if (item.orderStatus === "Placed") {
-              var billing = item.bAddress;
-              console.log("billing",billing);
-              billing.replace(/,/g, '\n');
-              console.log("billing after regex",billing);
+              
+              const formattedAddress = item.bAddress.replace(/,/g, '<br>');
+              // var billing = item.bAddress;
+              // console.log("billing",billing);
+              // billing.replace(/,/g, '\n');
+              // console.log("billing after regex",billing);
               $("#infoTable").append(
+
                 `<tr>
                                 <td><button class="btn btn-success btn-sm approve-btn" data-id="${
                                   item.orderNo
@@ -551,7 +554,7 @@
                                     Email: ${item.email}</br>
                                     Phone: ${item.phone}</br>
                                     Alt Phone: ${item.altPhone}</br>
-                                    Billing Address: ${item.bAddress}</br>
+                                    Billing Address: ${formattedAddress}</br>
                                   </td>
                                   <td> ${item.sAddress}</br>
                                 <td>${item.pReq || item.partName}</td>
