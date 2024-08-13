@@ -398,9 +398,9 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
 });
 
 
-
 app.delete("/orders/:orderNo", async (req, res) => {
   console.log("Received request to delete order:", req.params);
+  
   try {
     const orderNo = req.params.orderNo;
     console.log("Order No to delete:", orderNo);
@@ -413,7 +413,7 @@ app.delete("/orders/:orderNo", async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    const cancelledOrder = new CancelledOrder(order.toObject()); // Create a new CancelledOrder document
+    const cancelledOrder = new CancelledOrder(order.toObject());
     console.log("Saving cancelled order:", cancelledOrder);
 
     await cancelledOrder.save(); // Save the cancelled order
@@ -428,6 +428,7 @@ app.delete("/orders/:orderNo", async (req, res) => {
     res.status(500).json({ message: "Error deleting order", error: err.message });
   }
 });
+
 
 // Route to fetch all cancelled orders
 app.get("/cancelledOrders", async (req, res) => {
