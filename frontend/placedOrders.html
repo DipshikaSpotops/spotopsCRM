@@ -535,6 +535,10 @@
           const data = response.data;
           data.forEach((item) => {
             if (item.orderStatus === "Placed") {
+              var billing = item.bAddress;
+              console.log("billing",billing);
+              billing.replace(/,/g, '\n');
+              console.log("billing after regex",billing);
               $("#infoTable").append(
                 `<tr>
                                 <td><button class="btn btn-success btn-sm approve-btn" data-id="${
