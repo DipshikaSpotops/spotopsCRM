@@ -2404,78 +2404,87 @@ select:disabled {
 
         var shippingMethod;
         $("#addYardInfo").on("click", async function () {
-          $("#refund").val("Yard located").change();
-          const yardName = $("#yardName").val();
-          const agentName = $("#agentName").val();
-          const yardRating = $("#yardRating").val();
-          const phone = $("#phone").val();
-          const altPhone = $("#altPhone").val();
-          const email = $("#email").val();
-          const address = $("#address").val();
-          const city = $("#city").val();
-          const state = $("#state").val();
-          const country = $("#country").val();
-          const zipcode = $("#zip").val();
-          const addedAddress = city + "  " + state + "  " + zipcode;
-          const partPrice = $("#partPrice").val();
-          const ownShip = $("#ownShipping").val();
-          const yardShip = $("#yardShipping").val();
-          const others = document.getElementById("others").value;
-          console.log("others", others);
-          if (ownShip){
-           shippingMethod =`Own shipping: ${ownShip} `;
-          }else if (yardShip){
-             shippingMethod = `Yard shipping: ${yardShip}`;
-          }
-          // const shippingDetails =
-          //   shippingMethod === "Own shipping"
-          //     ? $("#ownShippingInput").val()
-          //     : $("#yardShippingInput").val();
-           
+    $("#refund").val("Yard located").change();
+    const yardName = $("#yardName").val();
+    const agentName = $("#agentName").val();
+    const yardRating = $("#yardRating").val();
+    const phone = $("#phone").val();
+    const altPhone = $("#altPhone").val();
+    const email = $("#email").val();
+    const address = $("#address").val();
+    const city = $("#city").val();
+    const state = $("#state").val();
+    const country = $("#country").val();
+    const zipcode = $("#zip").val();
+    const addedAddress = city + "  " + state + "  " + zipcode;
+    const partPrice = parseFloat($("#partPrice").val()) || 0; // Convert to number or set to 0
+    const ownShip = parseFloat($("#ownShipping").val()) || 0; // Convert to number or set to 0
+    const yardShip = parseFloat($("#yardShipping").val()) || 0; // Convert to number or set to 0
+    const others = parseFloat(document.getElementById("others").value) || 0; // Convert to number or set to 0
 
-           const firstName = localStorage.getItem("firstName");    
-          const data222 = {
-            yardName: yardName,
-            agentName: agentName,
-            yardRating: yardRating,
-            phone: phone,
-            altPhone: altPhone,
-            email: email,
-            address: addedAddress,
-            country: country,
-            partPrice: partPrice,
-            status: "Yard located",
-            shippingDetails: shippingMethod,
-            // shippingDetails: shippingDetails,
-            others: others,
-          };
+    console.log("others", others);
+    
+    // Determine the shipping method and its value
+    let shippingValue = 0;
+    if (ownShip) {
+        shippingValue = ownShip;
+        shippingMethod = `Own shipping: ${ownShip}`;
+    } else if (yardShip) {
+        shippingValue = yardShip;
+        shippingMethod = `Yard shipping: ${yardShip}`;
+    }
 
-          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data222),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              $("#editYardPopup").hide();
-              addYardButton(
-                data.additionalInfo.length,
-                `Yard ${data.additionalInfo.length}`
-              );
-              updateOrderHistory(data.orderHistory);
-              fetchAndUpdateYardInfo();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
+    // Calculate the total yard spending
+    const totalYardSpending = partPrice + shippingValue + others;
+
+    // Update the label with the total yard spending
+    $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
+
+    const firstName = localStorage.getItem("firstName");
+
+    const data222 = {
+        yardName: yardName,
+        agentName: agentName,
+        yardRating: yardRating,
+        phone: phone,
+        altPhone: altPhone,
+        email: email,
+        address: addedAddress,
+        country: country,
+        partPrice: partPrice,
+        status: "Yard located",
+        shippingDetails: shippingMethod,
+        others: others,
+        totalYardSpending: totalYardSpending // Include this in the data being sent to the server
+    };
+
+    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data222),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        $("#editYardPopup").hide();
+        addYardButton(
+            data.additionalInfo.length,
+            `Yard ${data.additionalInfo.length}`
+        );
+        updateOrderHistory(data.orderHistory);
+        fetchAndUpdateYardInfo();
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+});
+
 
         $("#editYardInfo").on("click", async function () {
           console.log("clicking n save");
@@ -3138,43 +3147,40 @@ function fetchOrderDetails(orderNo) {
 }
 //for descBar ends here
 
-// for total yard spending
-//for yard total spending
-    // Fetch the data from the orders collection when the page loads
-    fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then(response => response.json())
-    .then(data => {
-        const yardInfo = data.additionalInfo[yardIndex - 1]; // assuming yardIndex is defined or fetched
+// // for total yard spending
+//     fetch(`https://www.spotops360.com/orders/${orderNo}`)
+//     .then(response => response.json())
+//     .then(data => {
+//         const yardInfo = data.additionalInfo[yardIndex - 1]; // assuming yardIndex is defined or fetched
         
-        // Extract values from the fetched data
-        const partPrice = parseFloat(yardInfo.partPrice) || 0;
-        const shippingDetails = yardInfo.shippingDetails;
-console.log("shippingDetails:", shippingDetails);
-if (shippingDetails.includes("Own shipping")) {
-    const ownShippingValue = shippingDetails.split(":")[1].trim(); 
-    console.log("own ship", ownShippingValue);
-    $("#editOwnShipping").val(ownShippingValue);
-    $("#editYardShipping").val('');  
-} else if (shippingDetails.includes("Yard shipping")) {
-    const yardShippingValue = shippingDetails.split(":")[1].trim();
-    console.log("yard ship", yardShippingValue);
-        const ownShipping = parseFloat(yardInfo.ownShipping) || 0;
-        const yardShipping = parseFloat(yardInfo.yardShipping) || 0;
-}
-        const others = parseFloat(yardInfo.others) || 0;
+//         // Extract values from the fetched data
+//         const partPrice = parseFloat(yardInfo.partPrice) || 0;
+//         const shippingDetails = yardInfo.shippingDetails;
+// console.log("shippingDetails:", shippingDetails);
+// if (shippingDetails.includes("Own shipping")) {
+//     const ownShippingValue = shippingDetails.split(":")[1].trim(); 
+//     console.log("own ship", ownShippingValue);
+//     $("#editOwnShipping").val(ownShippingValue);
+//     $("#editYardShipping").val('');  
+// } else if (shippingDetails.includes("Yard shipping")) {
+//     const yardShippingValue = shippingDetails.split(":")[1].trim();
+//     console.log("yard ship", yardShippingValue);
+//         const ownShipping = parseFloat(yardInfo.ownShipping) || 0;
+//         const yardShipping = parseFloat(yardInfo.yardShipping) || 0;
+// }
+//         const others = parseFloat(yardInfo.others) || 0;
 
-        // Calculate the total yard spending
-        const totalYardSpending = partPrice + (ownShipping || yardShipping) + others;
+//         // Calculate the total yard spending
+//         const totalYardSpending = partPrice + (ownShipping || yardShipping) + others;
 
-        // Update the total spending label with the fetched value
-        $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
-    })
-    .catch(error => {
-        console.error("Error fetching order data:", error);
-    });
+//         // Update the total spending label with the fetched value
+//         $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
+//     })
+//     .catch(error => {
+//         console.error("Error fetching order data:", error);
+//     });
 
     });
     </script>
   </body>   
 </html>
-
