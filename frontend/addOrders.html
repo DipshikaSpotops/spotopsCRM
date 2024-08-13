@@ -121,33 +121,7 @@ body {
       z-index: 2;
       border-bottom: 1px solid #e0e0e0;
     }
-    .sidebar {
-      background-color: black;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0;
-      overflow-x: hidden;
-      padding-top: 20px;
-      width: 13%;
-      height: 100vh;
-      padding: 50px 0px;
-      transition: transform 0.3s ease;
-    }
-    .sidebar .nav-link {
-      font-family:Arial, Helvetica, sans-serif;
-      color: #ffffff;
-      cursor: pointer;
-    }
-    .sidebar .nav-link:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-    .sidebar .nav-link.active,
-    .sidebar .nav-link.selected {
-      background-color: rgba(255, 255, 255, 0.2);
-      cursor: default;
-      border: none;
-    }
+    
     .main-content {
       flex-grow: 1;
       margin-left: 14%;
@@ -231,57 +205,6 @@ body {
     </div>
   </div>
 
-  <div class="sidebar" id="offcanvasSidebar">
-    <div class="offcanvas-body">
-      <nav class="nav flex-column">
-        <div class="nav-item dashboards">
-          <a class="nav-link menu" id="default-link" style="font-family: sans-serif;">
-            <i class="fas fa-home"></i> Dashboards
-            <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-          </a>
-          <div class="submenu" id="submenu-dashboards">
-            <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true" style="font-family: sans-serif;">Add New Order</a>
-            <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html" style="font-family: sans-serif;">Placed Orders</a>
-            <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html" style="font-family: sans-serif;">Customer Approved</a>
-            <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html" style="font-family: sans-serif;">View Orders</a>
-            <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html" style="font-family: sans-serif;">Cancelled Orders</a>
-            <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html" style="font-family: sans-serif;">Yard Details</a>
-          </div>
-        </div>
-        <div class="nav-item">
-          <a class="nav-link menu" id="users-link">
-            <i class="fas fa-users"></i> Users
-            <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-          </a>
-          <div class="submenu" id="submenu-users">
-            <a class="nav-link" id="create-user-link" href="createUser.html">Create User</a>
-            <a class="nav-link" id="view-users-link" href="viewallUsers.html">View Users</a>
-          </div>
-        </div>
-        <div class="nav-item teams">
-          <a class="nav-link menu" id="teams-link">
-            <i class="fas fa-users"></i> Teams
-            <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-          </a>
-          <div class="submenu" id="submenu-teams">
-            <a class="nav-link" id="view-teams-link" href="teams.html">View Teams</a>
-          </div>
-        </div>
-        <div class="nav-item">
-          <a class="nav-link menu" id="reports-link">
-            <i class="fas fa-chart-bar"></i> Reports
-            <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-          </a>
-          <div class="submenu" id="submenu-reports">
-            <a class="nav-link" id="shipping-expenses-link" href="shippingExpenses.html">Shipping Expenses</a>
-            <a class="nav-link" id="purchases-link" href="purchases.html">Purchases</a>
-            <a class="nav-link" id="refund-report-link" href="refundReport.html">Refund Report</a>
-            <a class="nav-link" id="po-report-link" href="poReport.html">PO Report</a>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </div>
 
   <div id="content-area">
     <h2 style="margin: 4% 5% -2% 26%; color: grey;">ADD NEW ORDER</h2>
