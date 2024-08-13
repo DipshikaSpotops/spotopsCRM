@@ -2436,6 +2436,7 @@ select:disabled {
 
     // Calculate the total yard spending
     const totalYardSpending = partPrice + shippingValue + others;
+    console.log("spending",totalYardSpending);
 
     // Update the label with the total yard spending
     $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
