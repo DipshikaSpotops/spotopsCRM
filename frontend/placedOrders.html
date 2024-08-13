@@ -343,7 +343,7 @@
               <th>Agent Name</th>
               <th>Customer Name</th>
               <th>Part Name</th>
-              <th>Order Status</th>
+              <th>Part Info</th>
               <th>Email</th>
               <th>Actions</th>
             </tr>
@@ -539,6 +539,13 @@
                                 <td>${item.salesAgent}</td>
                                 <td>${item.customerName}</td>
                                 <td>${item.pReq || item.partName}</td>
+                                <td>Year: ${item.year}</br>
+                                Make: ${item.make}</br>
+                                Model: ${item.model}</br>
+                                Part Description: ${item.desc}</br>
+                                VIN: ${item.vin}</br>
+                                Warranty: ${item.warranty} days</br>
+                                </td>
                                 <td>${item.orderStatus}</td>
                                 <td>${item.email}</td>
                                 <td><button class="btn btn-success btn-sm approve-btn" data-id="${
