@@ -3129,17 +3129,43 @@ $("#saveYardDetails").on("click", function () {
       console.error("Error fetching order details:", error);
     });
     // Function to fetch order details
-function fetchOrderDetails(orderNo) {
-  return fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    });
+//for yard total spending
+$(document).ready(function() {
+    // Fetch the data from the orders collection when the page loads
+    fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then(response => response.json())
+    .then(data => {
+        const yardInfo = data.additionalInfo[yardIndex - 1]; // assuming yardIndex is defined or fetched
+        
+        // Extract values from the fetched data
+        const partPrice = parseFloat(yardInfo.partPrice) || 0;
+        const shippingDetails = yardInfo.shippingDetails;
+console.log("shippingDetails:", shippingDetails);
+if (shippingDetails.includes("Own shipping")) {
+    const ownShippingValue = shippingDetails.split(":")[1].trim(); 
+    console.log("own ship", ownShippingValue);
+    $("#editOwnShipping").val(ownShippingValue);
+    $("#editYardShipping").val('');  
+} else if (shippingDetails.includes("Yard shipping")) {
+    const yardShippingValue = shippingDetails.split(":")[1].trim();
+    console.log("yard ship", yardShippingValue);
+        const ownShipping = parseFloat(yardInfo.ownShipping) || 0;
+        const yardShipping = parseFloat(yardInfo.yardShipping) || 0;
 }
-//for descBar ends here
+        const others = parseFloat(yardInfo.others) || 0;
 
+        // Calculate the total yard spending
+        const totalYardSpending = partPrice + (ownShipping || yardShipping) + others;
 
+        // Update the total spending label with the fetched value
+        $("#totalSpending").text(`Total Yard Spending: $${totalYardSpending.toFixed(2)}`);
+    })
+    .catch(error => {
+        console.error("Error fetching order data:", error);
     });
+});
+
+});
     </script>
   </body>   
 </html>
