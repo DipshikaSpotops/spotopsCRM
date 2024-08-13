@@ -290,6 +290,23 @@
 
     <script>
         $(document).ready(async function () {
+            // Get the current time and the login timestamp
+        const currentTime = Date.now();
+        const loginTimestamp = localStorage.getItem("loginTimestamp");
+        if (loginTimestamp) {
+          const timeDifference =
+            (currentTime - loginTimestamp) / (1000 * 60 * 60);
+          if (timeDifference >= 12) {
+            alert(
+              "Your session has expired. You will be redirected to the login page."
+            );
+            window.localStorage.clear(); 
+            window.location.href = "login_signup.html";
+          }
+        } else {
+          window.location.href = "login_signup.html";
+        }
+
             const token = localStorage.getItem("token");
             const team = localStorage.getItem("team");
 
