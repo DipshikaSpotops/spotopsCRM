@@ -1731,11 +1731,81 @@ select:disabled {
           $("#salesAgent").val(firstName);
         }
         
-        if (isCancelled) {
-        // Disable form fields or add a "Cancelled" label
+        const isCancelledOrder = urlParams.get('cancelled') === 'true';
+const cancelledOrderNo = urlParams.get("orderNo");
+
+if (isCancelledOrder && cancelledOrderNo) {
+  console.log("cancelled orders")
+    fetch(`https://www.spotops360.com/cancelledOrders/${cancelledOrderNo}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        console.log("Fetched cancelled order data:", data);
+
+        // Populate the form fields with the cancelled order data
+        var customerNameE = data.customerName;
+        const nameParts = customerNameE.split(" ");
+        const firstNameE = nameParts[0];
+        const lastNameE = nameParts[1];
+        var notes = data.notes;
+        var notes1 = notes.toString();
+        var resultNotes = notes1.split('</br>')[0];
+        var onlyNotes = resultNotes.trim();
+
+        $("#orderDate").val(data.orderDate);
+        $("#salesAgent").val(data.salesAgent);
+        $("#bAddress").val(data.bAddress);
+        $("#firstName").val(firstNameE);
+        $("#lastname").val(lastNameE);
+        $("#sAddress").val(data.sAddress);
+        $("#email").val(data.email);
+        $("#phone").val(data.phone);
+        $("#make").val(data.make);
+        $("#model").val(data.model);
+        $("#year").val(data.year);
+        $("#pReq").val(data.pReq);
+        $("#desc").val(data.desc);
+        $("#warranty").val(data.warranty);
+        $("#soldP").val(data.soldP);
+        $("#costP").val(data.costP);
+        $("#shippingFee").val(data.shippingFee);
+        $("#salestax").val(data.salestax);
+        $("#grossProfit").val(data.grossProfit);
+        $("#orderStatus").val(data.orderStatus);
+        $("#vin").val(data.vin);
+        $("#issueOrder").val(data.last4digits);
+        $("#notes").val(`${onlyNotes}`);
+
+        // Disable all input fields since it's a cancelled order
         $('input, select, textarea').prop('disabled', true);
         $('#status').text('Order Status: Cancelled');
-    }
+
+        // Optionally add a "Cancelled" label or status message in the UI
+        // $('#cancelledOrderLabel').text(`Order No: ${cancelledOrderNo} is Cancelled`);
+
+        // If there are any additional info (e.g., yard details, tracking info)
+        data.additionalInfo.forEach((info, index) => {
+            addYardButton(index + 1, `Yard ${index + 1}`);
+        });
+
+        if (data.trackingInfo) {
+            $("#trackingInfoContainer").html(data.trackingInfo);
+        }
+
+        updateOrderHistory(data.orderHistory);
+
+        // Prevent any further form submission attempts
+        $("#crmForm").on("submit", function (e) {
+            e.preventDefault();
+            alert('This order is cancelled. You cannot modify it.');
+        });
+    })
+    .catch((error) => {
+        console.error("Error fetching cancelled order data:", error);
+    });
+}
+
     
 
         let userRole = null;
