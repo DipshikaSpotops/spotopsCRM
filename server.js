@@ -345,7 +345,7 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
       console.log("yard details",pp,yardname,shipping,others);
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
-      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${timestamp}`);
+      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} ${shipping} Others: ${others}   by ${firstName} on ${timestamp}`);
 
       await order.save();
       
