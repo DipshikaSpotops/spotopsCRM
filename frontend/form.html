@@ -3212,6 +3212,7 @@ $("#saveYardDetails").on("click", function () {
       // support comment atsrts here
          const commentSupport = document.getElementById("comment-boxSupport");
         $("#submitComments").on("click", function (event) {
+          window.location.reload();
           event.preventDefault();
           const content1 = $("#commentInput").val();
           const yardIndex1 = $("#submit").data("yard-index") - 1;
