@@ -348,16 +348,15 @@
             });
 
             function fetchOrderDetails(orderNo, isCancelled) {
-    const url = isCancelled 
-        ? `https://www.spotops360.com/cancelledOrders/${orderNo}` 
-        : `https://www.spotops360.com/orders/${orderNo}`;
+    // const url = isCancelled 
+    //     ? `https://www.spotops360.com/cancelledOrders/${orderNo}` 
+    //     : `https://www.spotops360.com/orders/${orderNo}`;
 
-    fetch(url, {
+    fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(response => response.json())
     .then(data => {
-        // Save order details to localStorage or pass it via URL parameters
         localStorage.setItem('orderDetails', JSON.stringify(data));
         window.location.href = `form.html?orderNo=${orderNo}&cancelled=${isCancelled}`;
     })
