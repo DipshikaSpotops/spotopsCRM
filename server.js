@@ -445,12 +445,12 @@ app.get("/cancelledOrders", async (req, res) => {
       .json({ message: "Error fetching cancelled orders", error: err.message });
   }
 });
-// route to fetch a particular cancelled order
 // Endpoint to get a specific cancelled order by orderNo
 app.get('/cancelledOrders/:orderNo', async (req, res) => {
+  console.log("get a specific cancelled order");
   try {
       const orderNo = req.params.orderNo;
-
+      console.log("oNo",orderNo);
       const cancelledOrder = await CancelledOrder.findOne({ orderNo });
 
       if (!cancelledOrder) {
