@@ -2129,34 +2129,45 @@ select:disabled {
           $("#orderStatus").prop("disabled", true);
           $("#mainContent").addClass("centered-form");
 
-          axios
-            .get(`https://www.spotops360.com/orders`)
-            .then((orders) => orders)
-            .then((data) => {
-              var orderArr = data.data;
-              var lastElement = orderArr[orderArr.length - 1];
-              console.log("lastElement", lastElement);
-              if (lastElement) {
-                var existingOrderNo = lastElement.orderNo;
-              } else {
-                var existingOrderNo = "50STARS0000";
-              }
-              console.log("orderNo", existingOrderNo);
-              var prefix = existingOrderNo.slice(0, 7);
-              var numberPart = existingOrderNo.slice(7);
+          // Function to extract the highest order number from a collection
+function getHighestOrderNo(orderArr, existingOrderNo) {
+  if (orderArr.length === 0) return existingOrderNo;
 
-              var incrementedNumber = parseInt(numberPart, 10) + 1;
+  const lastElement = orderArr[orderArr.length - 1];
+  const lastOrderNo = lastElement.orderNo;
 
-              var incrementedNumberStr = incrementedNumber
-                .toString()
-                .padStart(4, "0");
+  const numberPart = parseInt(lastOrderNo.slice(7), 10);
+  return numberPart;
+}
 
-              newOrderNo = prefix + incrementedNumberStr;
-              console.log("newOrderNo", newOrderNo);
-            })
-            .catch((error) => {
-              console.error("Error fetching latest order:", error);
-            });
+axios
+  .all([
+    axios.get(`https://www.spotops360.com/orders`),
+    axios.get(`https://www.spotops360.com/cancelledOrders`),
+  ])
+  .then(
+    axios.spread((orders, cancelledOrders) => {
+      // Get the highest existing order number from all collections
+      let existingOrderNo = "50STARS0000"; // Default if no orders exist
+      let orderNoArr = [];
+
+      orderNoArr.push(getHighestOrderNo(orders.data, existingOrderNo));
+      orderNoArr.push(getHighestOrderNo(cancelledOrders.data, existingOrderNo));
+
+      // Find the maximum order number
+      const highestOrderNo = Math.max(...orderNoArr);
+
+      // Increment to get the new order number
+      const incrementedNumber = highestOrderNo + 1;
+      const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
+
+      newOrderNo = `50STARS${incrementedNumberStr}`;
+      console.log("newOrderNo", newOrderNo);
+    })
+  )
+  .catch((error) => {
+    console.error("Error fetching latest order:", error);
+  });
           $("#crmForm").on("submit", function (e) {
             e.preventDefault();
             const firstName = localStorage.getItem("firstName");
@@ -3230,3 +3241,4 @@ $(".navbar .nav-item").hover(function () {
     </script>
   </body>   
 </html>
+
