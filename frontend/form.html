@@ -1187,13 +1187,13 @@ select:disabled {
       <div class="modal-dialog">
         <div class="modal-content" style="margin: 19% -43%;width: 202%;height: 80vh;padding: 10px 28px;">
           <div class="modal-header">
-            <h5 class="modal-title" id="yardModalLabel" style="margin: 0% 41%;font-weight: bold;">Add New Yard</h5>
+            <h5 class="modal-title" id="yardModalLabel" style="margin: 0% 41%;font-weight: bold;">Add New Yard - </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="partDescFY descBar"></div>
-          <div class="modal-body">
+          <div class="modal-body" style="margin-top: -15%;">
             <div class="form-row addNewId">
               <div class="form-group col-md-4">
                 <input type="text" class="form-control" id="yardName" placeholder="Yard Name" />
@@ -1721,6 +1721,7 @@ select:disabled {
         const newEntry = urlParams.get("newEntry");
         var yardIndex;
         document.getElementById("orderHistory").textContent += orderNo;
+        document.getElementById("yardModalLabel").textContent += orderNo;
         console.log("orderNo:", orderNo); // Debugging: Check if orderNo is retrieved correctly
         console.log("process:", process); // Debugging: Check if process is retrieved correctly
         console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
