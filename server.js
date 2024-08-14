@@ -445,6 +445,24 @@ app.get("/cancelledOrders", async (req, res) => {
       .json({ message: "Error fetching cancelled orders", error: err.message });
   }
 });
+// route to fetch a particular cancelled order
+// Endpoint to get a specific cancelled order by orderNo
+app.get('/cancelledOrders/:orderNo', async (req, res) => {
+  try {
+      const orderNo = req.params.orderNo;
+
+      const cancelledOrder = await CancelledOrder.findOne({ orderNo });
+
+      if (!cancelledOrder) {
+          return res.status(404).json({ message: "Cancelled order not found" });
+      }
+
+      res.json(cancelledOrder);
+  } catch (error) {
+      console.error("Error fetching cancelled order:", error);
+      res.status(500).json({ message: "Error fetching cancelled order", error: error.message });
+  }
+});
 
 // Send Invoice Endpoint
 app.post("/orders/sendInvoice/:orderNo", async (req, res) => {

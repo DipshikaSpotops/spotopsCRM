@@ -352,7 +352,6 @@
     // const url = isCancelled 
     //     ? `https://www.spotops360.com/cancelledOrders/${orderNo}` 
     //     : `https://www.spotops360.com/orders/${orderNo}`;
-
     fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`, {
         headers: { Authorization: `Bearer ${token}` }
     })
