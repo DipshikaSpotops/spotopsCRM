@@ -1678,6 +1678,20 @@ select:disabled {
 
     <script>
       $(document).ready(async function () {
+        // for populating cancelled orders in form.html
+        const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
+
+    if (orderDetails) {
+        // Populate form fields with order details
+        $("#orderNo").val(orderDetails.orderNo);
+        $("#customerName").val(orderDetails.customerName);
+        $("#email").val(orderDetails.email);
+        // Add more fields as necessary
+        // ...
+    }
+
+    // Clear order details from localStorage after loading
+    localStorage.removeItem('orderDetails');
         // Get the current time and the login timestamp
         const currentTime = Date.now();
         const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -1701,6 +1715,7 @@ select:disabled {
         const role = localStorage.getItem("role");
         const team = localStorage.getItem("team");
         const urlParams = new URLSearchParams(window.location.search);
+        const isCancelled = urlParams.get('cancelled') === 'true';
         const orderNo = urlParams.get("orderNo");
         const process = urlParams.get("process");
         const newEntry = urlParams.get("newEntry");
@@ -1716,6 +1731,11 @@ select:disabled {
           $("#salesAgent").val(firstName);
         }
         
+        if (isCancelled) {
+        // Disable form fields or add a "Cancelled" label
+        $('input, select, textarea').prop('disabled', true);
+        $('#status').text('Order Status: Cancelled');
+    }
 
         let userRole = null;
         let userEmail = null;
