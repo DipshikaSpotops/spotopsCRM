@@ -2545,6 +2545,7 @@ axios
 
         var shippingMethod;
         $("#addYardInfo").on("click", function (event) {
+          const firstName = localStorage.getItem("firstName");   
   event.preventDefault();
 
   const requiredFields = [
@@ -2635,7 +2636,7 @@ axios
     shippingMethod = `Yard shipping: ${yardShip}`;
   }
 
-  const firstName = localStorage.getItem("firstName");    
+   
   const data222 = {
     yardName: yardName,
     agentName: agentName,
