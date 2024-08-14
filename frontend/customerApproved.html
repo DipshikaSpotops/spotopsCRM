@@ -266,7 +266,8 @@
               <th>Order Date</th>
               <th>Order No</th>
               <th>Agent Name</th>
-              <th>Customer Name</th>
+              <th>Customer Info</th>
+              <th>Shipping Info</th>
               <th>Part Name</th>
               <th>Part Info</th>
               <th>Order Status</th>
@@ -380,12 +381,30 @@
           const data = response.data;
           data.forEach((item) => {
             if (item.orderStatus === "Customer approved") {
+              var bAddress = item.bAddress;
+
+              const bParts = bAddress.split(',');
+              const firstLineB = `${bParts[0].trim()}, ${bParts[1].trim()}`;
+              const secondLineB = `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}`;
+              const formattedBAddress = `${firstLineB}<br>${secondLineB}`;
+              var sAddress = item.sAddress;
+
+              const sParts = sAddress.split(',');
+              const firstLineS = `${sParts[0].trim()}, ${sParts[1].trim()}`;
+              const secondLineS = `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}`;
+              const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
               $("#infoTable").append(
                 `<tr>
                   <td>${item.orderDate}</td>
                   <td>${item.orderNo}</td>
                   <td>${item.salesAgent}</td>
-                  <td>${item.customerName}</td>
+                  <td>Name: ${item.customerName}</br>
+                                    Email: ${item.email}</br>
+                                    Phone: ${item.phone}</br>
+                                    Alt Phone: ${item.altPhone}</br>
+                                    Billing Address:</br> ${formattedBAddress}</br>
+                                  </td>
+                  <td> ${formattedSAddress}</br>                
                   <td>${item.pReq || item.partName}</td>
                   <td>Year: ${item.year}</br>
                       Make: ${item.make}</br>
