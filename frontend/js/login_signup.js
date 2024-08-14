@@ -29,22 +29,22 @@ links.forEach(link => {
 document.querySelector('.login-btn').addEventListener('click', async (e) => {
     e.preventDefault();
     const email = document.querySelector('.login-email').value.trim();
-const password = document.querySelector('.login-password').value.trim();
-    console.log("Login data:", { email, password });
+    const password = document.querySelector('.login-password').value.trim();
+    const payload = { email, password };
+    console.log("Login payload:", payload);  // Log payload
 
     try {
-        const response = await axios.post('https://www.spotops360.com/auth/login', { email, password });
+        const response = await axios.post('https://www.spotops360.com/auth/login', payload);
+        console.log("Login response:", response.data);
         if (response.status === 200) {
-            console.log("data res",response.data);
             localStorage.clear();
             localStorage.setItem("loginTimestamp", Date.now());
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('firstName', response.data.firstName);
             localStorage.setItem('lastName', response.data.lastName);
-            localStorage.setItem('team',response.data.team);
-            localStorage.setItem('role',response.data.role)
-            localStorage.setItem('email',response.data.email);
-            
+            localStorage.setItem('team', response.data.team);
+            localStorage.setItem('role', response.data.role);
+            localStorage.setItem('email', response.data.email);
             Swal.fire({
                 icon: 'success',
                 title: 'Logged in successfully',
@@ -54,7 +54,6 @@ const password = document.querySelector('.login-password').value.trim();
                 window.location.href = 'index.html';
             });
         } else {
-            
             alert(response.data.msg || response.data.errors.map(error => error.msg).join(', '));
         }
     } catch (error) {
@@ -65,10 +64,9 @@ const password = document.querySelector('.login-password').value.trim();
             showConfirmButton: true,
             timer: 1500
         });
-        
-        // alert('Invalid Username or Password. Please try again.');
     }
 });
+
 
 
 document.querySelector('.signup-btn').addEventListener('click', async (e) => {

@@ -42,22 +42,24 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
+    console.log("Login request received:", req.body);
     try {
         const user = await User.findOne({ email });
         if (!user) {
+            console.log("No user found with email:", email); 
             return res.status(400).json({ msg: 'Invalid email or password' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
+            console.log("Password mismatch for user:", email); 
             return res.status(400).json({ msg: 'Invalid email or password' });
         }
 
         const tokenValue = generateToken();
         const token = new Token({ token: tokenValue, userId: user._id });
         await token.save();
-        console.log("Token saved to database:", token);
+        console.log("Token generated and saved:", tokenValue);
 
         res.json({
             token: tokenValue,
@@ -68,10 +70,11 @@ router.post('/login', async (req, res) => {
             email: user.email,
         });
     } catch (err) {
-        console.error('Error logging in user:', err);
+        console.error('Error logging in user:', err);  // Log any caught errors
         res.status(500).json({ msg: 'Error logging in user', error: err.message });
     }
 });
+
 
 
 
