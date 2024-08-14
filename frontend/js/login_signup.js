@@ -31,8 +31,7 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
     const email = document.querySelector('.login-email').value.trim();
     const password = document.querySelector('.login-password').value.trim();
     const payload = { email, password };
-    console.log("Login payload:", payload);  // Log payload
-
+    console.log("Login payload:", payload); 
     try {
         const response = await axios.post('https://www.spotops360.com/auth/login', payload);
         console.log("Login response:", response.data);
