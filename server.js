@@ -339,13 +339,13 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
       console.log("additional updated",order)
       var pp = order.additionalInfo[countYard -1 ].partPrice;
       var yardname = order.additionalInfo[countYard - 1].yardName;
-      var shipping = order.additionalInfo[countYard - 1].shippingMethod;
+      var shipping = order.additionalInfo[countYard - 1].shippingDetails;
       var others = order.additionalInfo[countYard - 1].others;
       
       console.log("yard details",pp,yardname,shipping,others);
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
-      order.orderHistory.push(`Yard ${countYard} Located Yard Name-${yardname} PP-${pp} ${shipping} Others-${others}   by ${firstName} on ${timestamp}`);
+      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${timestamp}`);
 
       await order.save();
       
