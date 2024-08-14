@@ -264,6 +264,7 @@
         <table class="table table-bordered">
           <thead>
             <tr style="background-color: #f2f2f2;">
+              <th>Actions</th>
               <th>Order Date</th>
               <th>Order No</th>
               <th>Agent Name</th>
@@ -273,7 +274,7 @@
               <th>Part Info</th>
               <th>Order Status</th>
               <th>Email</th>
-              <th>Actions</th>
+              
             </tr>
           </thead>
           <tbody id="infoTable">
@@ -396,6 +397,7 @@
               const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
               $("#infoTable").append(
                 `<tr>
+                  <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
                   <td>${item.orderDate}</td>
                   <td>${item.orderNo}</td>
                   <td>${item.salesAgent}</td>
@@ -416,7 +418,7 @@
                     </td>
                     <td>${item.orderStatus}</td>
                   <td>${item.email}</td>
-                  <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
+                  
                 </tr>`
               );
             }

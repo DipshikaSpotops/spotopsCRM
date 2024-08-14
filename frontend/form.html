@@ -885,7 +885,7 @@ select:disabled {
     <div style="display: flex" class="mainDiv">
 
       <div class="sidebarOrder">
-        <h2>Order History</h2>
+        <h2 id="orderHistory">Order History-</h2>
         <ul id="orderHistoryList" class="timeline"></ul>
       </div>
 
@@ -1720,7 +1720,7 @@ select:disabled {
         const process = urlParams.get("process");
         const newEntry = urlParams.get("newEntry");
         var yardIndex;
-
+        document.getElementById("orderHistory").textContent += orderNo;
         console.log("orderNo:", orderNo); // Debugging: Check if orderNo is retrieved correctly
         console.log("process:", process); // Debugging: Check if process is retrieved correctly
         console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
