@@ -303,7 +303,7 @@ app.put("/orders/:orderNo", async (req, res) => {
       const oldStatus = order.orderStatus;
       Object.assign(order, req.body);
 
-      const firstName = req.body.firstName; // Get firstName from the request body
+      const firstName = req.query.firstName; // Get firstName from the request body
       console.log("loggein user",firstName);
 
       // Add timestamp to order history only if the status has changed
