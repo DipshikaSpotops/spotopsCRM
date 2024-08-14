@@ -2570,7 +2570,7 @@ axios
         var shippingMethod;
         $("#addYardInfo").on("click", async function () {
           $(".mainDiv").removeClass("blur");
-          $("#editYardPopup").hide()
+          $("#yardModal").hide();
           $("#refund").val("Yard located").change();
           const yardName = $("#yardName").val();
           const agentName = $("#agentName").val();
@@ -2642,6 +2642,7 @@ axios
             .catch((error) => {
               console.error("Error:", error);
             });
+            window.location.reload();
         });
 
         $("#editYardInfo").on("click", async function () {
