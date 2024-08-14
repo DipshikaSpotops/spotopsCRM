@@ -2547,35 +2547,6 @@ axios
         $("#addYardInfo").on("click", function (event) {
   event.preventDefault();
 
-  const newOrderStatus = "Yard Processing";
-
-          console.log("new order status", newOrderStatus);
-
-          $("#orderStatus").val(newOrderStatus);
-
-          console.log("orderNo", orderNo);
-          const updatedData = { orderStatus: newOrderStatus };
-
-          fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedData),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              updateOrderHistory(data.orderHistory);
-              console.log("Order status updated successfully:", data);
-            })
-            .catch((error) => {
-              console.error("Error updating order status:", error);
-            });
   const requiredFields = [
     $("#yardName"),
     $("#agentName"),
@@ -2605,6 +2576,34 @@ axios
     alert("Please fill out all required fields.");
     return;
   }
+
+  // Set the new order status and update it on the server
+  const newOrderStatus = "Yard Processing";
+  console.log("new order status", newOrderStatus);
+  $("#orderStatus").val(newOrderStatus);
+
+  const updatedData = { orderStatus: newOrderStatus };
+
+  fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    updateOrderHistory(data.orderHistory);
+    console.log("Order status updated successfully:", data);
+  })
+  .catch((error) => {
+    console.error("Error updating order status:", error);
+  });
 
   // Proceed with form submission if all fields are filled
   $(".mainDiv").removeClass("blur");
@@ -2680,6 +2679,7 @@ axios
 
   window.location.reload();
 });
+
 
 
         $("#editYardInfo").on("click", async function () {
