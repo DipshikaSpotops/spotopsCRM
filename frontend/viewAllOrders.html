@@ -377,121 +377,123 @@
 
   <script>
     $(document).ready(async function () {
-      // Get the current time and the login timestamp
-      const currentTime = Date.now();
-        const loginTimestamp = localStorage.getItem("loginTimestamp");
-        if (loginTimestamp) {
-          const timeDifference =
-            (currentTime - loginTimestamp) / (1000 * 60 * 60);
-          if (timeDifference >= 12) {
-            alert(
-              "Your session has expired. You will be redirected to the login page."
-            );
-            window.localStorage.clear(); 
-            window.location.href = "login_signup.html";
-          }
-        } else {
-          window.location.href = "login_signup.html";
-        }
-      const firstName = localStorage.getItem("firstName");
-      const lastName = localStorage.getItem("lastName");
-      const email = localStorage.getItem("email");
-      const role = localStorage.getItem("role");
-      const team = localStorage.getItem("team");
+  // Get the current time and the login timestamp
+  const currentTime = Date.now();
+  const loginTimestamp = localStorage.getItem("loginTimestamp");
+  if (loginTimestamp) {
+    const timeDifference = (currentTime - loginTimestamp) / (1000 * 60 * 60);
+    if (timeDifference >= 12) {
+      alert("Your session has expired. You will be redirected to the login page.");
+      window.localStorage.clear();
+      window.location.href = "login_signup.html";
+    }
+  } else {
+    window.location.href = "login_signup.html";
+  }
 
-      if (firstName) {
-        $("#user-name").text(firstName);
-      }
-      if (!firstName) {
-        window.location.href = "login_signup.html";
-      }
+  const firstName = localStorage.getItem("firstName");
+  const lastName = localStorage.getItem("lastName");
+  const email = localStorage.getItem("email");
+  const role = localStorage.getItem("role");
+  const team = localStorage.getItem("team");
 
-      const token = localStorage.getItem("token");
+  if (firstName) {
+    $("#user-name").text(firstName);
+  }
+  if (!firstName) {
+    window.location.href = "login_signup.html";
+  }
 
-      try {
-        // Fetch orders from both the orders and cancelledOrders collections
-        const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-          axios.get("https://www.spotops360.com/orders", {
-            headers: token ? {
-              Authorization: `Bearer ${token}`
-            } : {},
-          }),
-          axios.get("https://www.spotops360.com/cancelledOrders", {
-            headers: token ? {
-              Authorization: `Bearer ${token}`
-            } : {},
-          })
-        ]);
+  const token = localStorage.getItem("token");
 
-        if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-          throw new Error("Failed to fetch orders");
-        }
+  try {
+    // Fetch orders from both the orders and cancelledOrders collections
+    const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+      axios.get("https://www.spotops360.com/orders", {
+        headers: token ? {
+          Authorization: `Bearer ${token}`
+        } : {},
+      }),
+      axios.get("https://www.spotops360.com/cancelledOrders", {
+        headers: token ? {
+          Authorization: `Bearer ${token}`
+        } : {},
+      })
+    ]);
 
-        const orders = ordersResponse.data;
-        const cancelledOrders = cancelledOrdersResponse.data;
+    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+      throw new Error("Failed to fetch orders");
+    }
 
-        // Combine both orders and cancelled orders
-        const allOrders = [...orders, ...cancelledOrders];
+    const orders = ordersResponse.data;
+    const cancelledOrders = cancelledOrdersResponse.data;
 
-        // Render the combined orders in the table
-        allOrders.forEach((item) =>{
-          const actions = `
-                <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
-                <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
-                <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a">Cancel</button>
-            `;
-          const sendInvoice = `
-                <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-            `;
+    // Combine both orders and cancelled orders
+    const allOrders = [...orders, ...cancelledOrders];
 
-          $("#infoTable").append(`
-                <tr>
-                    <td>${item.orderDate}</td>
-                    <td>${item.orderNo}</td>
-                    <td>${item.salesAgent}</td>
-                    <td>${item.customerName}</td>
-                    <td>${item.pReq || item.partName}</td>
-                    <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[0].yardName : ""}</td>
-                    <td>${item.orderStatus}</td>
-                    <td class="actions">${actions}</td>
-                    <td>${sendInvoice}</td>
-                    <td>${item.email}</td>
-                </tr>
-            `);
-        });
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
+    // Render the combined orders in the table
+    allOrders.forEach((item) => {
+      // Check if the order is from the cancelledOrders collection
+      const isCancelledOrder = cancelledOrders.some(cancelledItem => cancelledItem.orderNo === item.orderNo);
+      const orderStatus = isCancelledOrder ? "Cancelled" : item.orderStatus;
 
-      $("#searchInput").on("keyup", function () {
-        let value = $(this).val().toLowerCase();
-        $("#infoTable tr").filter(function () {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-      });
+      const actions = `
+        <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
+        <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
+        <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${orderStatus === 'Cancelled' ? 'disabled' : ''}>Cancel</button>
+      `;
+      const sendInvoice = `
+        <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+      `;
 
-      $("#infoTable").on("click", ".edit-btn", function () {
-        const id = $(this).data("id");
-        window.location.href = `form.html?orderNo=${id}`;
-      });
+      $("#infoTable").append(`
+        <tr>
+          <td>${item.orderDate}</td>
+          <td>${item.orderNo}</td>
+          <td>${item.salesAgent}</td>
+          <td>${item.customerName}</td>
+          <td>${item.pReq || item.partName}</td>
+          <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[0].yardName : ""}</td>
+          <td>${orderStatus}</td>
+          <td class="actions">${actions}</td>
+          <td>${sendInvoice}</td>
+          <td>${item.email}</td>
+        </tr>
+      `);
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
 
-      $("#infoTable").on("click", ".process-btn", function () {
-        const id = $(this).data("id");
-        window.location.href = `form.html?orderNo=${id}&process=true`;
-      });
+  $("#searchInput").on("keyup", function () {
+    let value = $(this).val().toLowerCase();
+    $("#infoTable tr").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
 
-      $("#infoTable").on("click", ".cancel-btn", function () {
-  const id = $(this).data("id");
-  console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-  
-  if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-    fetch(`https://www.spotops360.com/orders/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json", // Ensure correct content type
-      },
-    })
+  $("#infoTable").on("click", ".edit-btn", function () {
+    const id = $(this).data("id");
+    window.location.href = `form.html?orderNo=${id}`;
+  });
+
+  $("#infoTable").on("click", ".process-btn", function () {
+    const id = $(this).data("id");
+    window.location.href = `form.html?orderNo=${id}&process=true`;
+  });
+
+  $("#infoTable").on("click", ".cancel-btn", function () {
+    const id = $(this).data("id");
+    console.log(`Cancel button clicked for order ID: ${id}`); // Added log
+    
+    if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+      fetch(`https://www.spotops360.com/orders/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // Ensure correct content type
+        },
+      })
       .then((response) => {
         if (!response.ok) {
           console.error("Failed to delete order", response.statusText);
@@ -508,109 +510,94 @@
         console.error("Error cancelling order:", error);
         alert(`Error cancelling order: ${error.message}`); // Add alert for user feedback
       });
+    }
+  });
+
+  $("#infoTable").on("click", ".send-invoice-btn", function () {
+    const id = $(this).data("id");
+    fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      alert(data.message);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  });
+
+  $("#addNewEntry").on("click", function (e) {
+    e.preventDefault();
+    window.location.href = "form.html?newEntry=true";
+  });
+
+  $(".toggle-sidebar").on("click", function () {
+    $("#offcanvasSidebar").toggleClass("show");
+  });
+
+  $(".nav-link.menu").on("click", function (event) {
+    event.preventDefault();
+    const submenu = $(this).next(".submenu");
+    submenu.toggle();
+    $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+  });
+
+  $('#profileLink').click(function () {
+    $('#profileFirstName').val(firstName);
+    $('#profileLastName').val(lastName);
+    $('#profileEmail').val(email);
+    $('#profileRole').val(role);
+    $('#profileModal').modal('show');
+  });
+
+  $('.close').click(function () {
+    console.log("close button clicked");
+    location.reload();
+  });
+
+  // Apply team-based and role-based restrictions
+  if (team === "Team Charlie") {
+    $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
+    $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
+    $(".nav-item:has(#submenu-teams)").hide();
+    $(".nav-item:has(#submenu-users)").hide();
+  } else if (team === "Team Mark") {
+    $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+    $(".nav-item:has(#submenu-teams)").hide();
+    $(".nav-item:has(#submenu-users)").hide();
+    $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
+  } else if (team === "Team Sussane") {
+    $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+    $(".nav-item:has(#submenu-teams)").hide();
+    $(".nav-item:has(#submenu-users)").hide();
+    $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
+  } else if (role === "Admin") {
+    $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+    $('#submenu-reports .nav-link:contains("Refund Report")').show();
+    $('#submenu-reports .nav-link:contains("Collect Refund")').show();
+    $("#submenu-dashboards .view-individualOrders-link").hide();
   }
+
+  const currentPath = window.location.pathname;
+  $(".nav-link").each(function () {
+    if (currentPath.includes($(this).attr("href"))) {
+      $(this).addClass("active");
+    }
+  });
+
+  $('#logoutLink').click(function () {
+    window.localStorage.clear();
+    window.location.href = 'login_signup.html';
+  });
 });
 
-
-      $("#infoTable").on("click", ".send-invoice-btn", function () {
-        const id = $(this).data("id");
-        fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert(data.message);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      });
-
-      $("#addNewEntry").on("click", function (e) {
-        e.preventDefault();
-        window.location.href = "form.html?newEntry=true";
-      });
-
-      $(".toggle-sidebar").on("click", function () {
-        $("#offcanvasSidebar").toggleClass("show");
-      });
-
-      $(".nav-link.menu").on("click", function (event) {
-        event.preventDefault();
-        const submenu = $(this).next(".submenu");
-        submenu.toggle();
-        $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-      });
-
-      $('#profileLink').click(function () {
-        $('#profileFirstName').val(firstName);
-        $('#profileLastName').val(lastName);
-        $('#profileEmail').val(email);
-        $('#profileRole').val(role);
-        $('#profileModal').modal('show');
-      });
-
-      $('.close').click(function () {
-        console.log("close button clicked");
-        location.reload();
-      });
-
-      // Apply team-based and role-based restrictions
-      if (team === "Team Charlie") {
-        // Hide specific reports links for Team Charlie
-        $("#submenu-reports .nav-link")
-          .not(':contains("My Sales Report")')
-          .hide();
-        // Hide specific dashboards links for Team Charlie
-        $(
-          "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-        ).hide();
-        // Hide teams and users sections for Team Charlie
-        $(".nav-item:has(#submenu-teams)").hide();
-        $(".nav-item:has(#submenu-users)").hide();
-      } else if (team === "Team Mark") {
-        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-        $(".nav-item:has(#submenu-teams)").hide();
-        $(".nav-item:has(#submenu-users)").hide();
-        $(
-          "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
-        ).hide();
-      } else if (team === "Team Sussane") {
-        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-        $(".nav-item:has(#submenu-teams)").hide();
-        $(".nav-item:has(#submenu-users)").hide();
-        $(
-          "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
-        ).hide();
-      } else if (role === "Admin") {
-        // Hide specific reports links for Admin
-        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-        $('#submenu-reports .nav-link:contains("Refund Report")').show();
-        $('#submenu-reports .nav-link:contains("Collect Refund")').show();
-        // Hide specific dashboards links for Admin
-        $("#submenu-dashboards .view-individualOrders-link").hide();
-      }
-
-      // Highlight active link based on current URL
-      const currentPath = window.location.pathname;
-      $(".nav-link").each(function () {
-        if (currentPath.includes($(this).attr("href"))) {
-          $(this).addClass("active");
-        }
-      });
-
-      $('#logoutLink').click(function () {
-        window.localStorage.clear();
-        window.location.href = 'login_signup.html';
-      });
-    });
   </script>
 </body>
 </html>
-
 
 
 
