@@ -190,7 +190,27 @@ app.get("/teams", async (req, res) => {
       .json({ message: "Error fetching teams", error: error.message });
   }
 });
-
+const additionalInfoSchema = new mongoose.Schema({
+  yardName: String,
+  agentName: String,
+  yardRating:String,
+  phone: String,
+  altNo: String,
+  email: String,
+  address: String,
+  country:String,
+  partPrice: Number,
+  shippingDetails: String,
+  others: String,
+  status: String,
+  paymentStatus: String,
+  refundedAmount: Number,
+  escalationCause: String,
+  escalationProcess: String,
+  returnShipping: String,
+  returnShippingCharge: Number,
+  notes: [String] // Ensure notes field is an array of strings
+});
 // Cancelled Orders Schema
 const CancelledOrderSchema = new mongoose.Schema({
   orderNo: String,
@@ -228,27 +248,6 @@ const CancelledOrderSchema = new mongoose.Schema({
 });
 
 const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
-const additionalInfoSchema = new mongoose.Schema({
-  yardName: String,
-  agentName: String,
-  yardRating:String,
-  phone: String,
-  altNo: String,
-  email: String,
-  address: String,
-  country:String,
-  partPrice: Number,
-  shippingDetails: String,
-  others: String,
-  status: String,
-  paymentStatus: String,
-  refundedAmount: Number,
-  escalationCause: String,
-  escalationProcess: String,
-  returnShipping: String,
-  returnShippingCharge: Number,
-  notes: [String] // Ensure notes field is an array of strings
-});
 
 const OrderSchema = new mongoose.Schema({
   orderNo: String,
