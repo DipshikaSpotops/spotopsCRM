@@ -41,18 +41,21 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+    console.log("Raw request body:", req.body);  // Log the raw body
+    
     const { email, password } = req.body;
-    console.log("Login request received:", req.body);
+    console.log("Login request received with email:", email, "and password:", password);  // Log parsed fields
+
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            console.log("No user found with email:", email); 
+            console.log("No user found with email:", email);
             return res.status(400).json({ msg: 'Invalid email or password' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            console.log("Password mismatch for user:", email); 
+            console.log("Password mismatch for user:", email);
             return res.status(400).json({ msg: 'Invalid email or password' });
         }
 
@@ -70,10 +73,11 @@ router.post('/login', async (req, res) => {
             email: user.email,
         });
     } catch (err) {
-        console.error('Error logging in user:', err);  // Log any caught errors
+        console.error('Error logging in user:', err);
         res.status(500).json({ msg: 'Error logging in user', error: err.message });
     }
 });
+
 
 
 
