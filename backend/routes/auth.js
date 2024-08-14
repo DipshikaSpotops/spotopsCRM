@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -48,7 +49,6 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ msg: 'Invalid email or password' });
         }
 
-        // Uncomment the password checking code if needed
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ msg: 'Invalid email or password' });
@@ -59,14 +59,21 @@ router.post('/login', async (req, res) => {
         await token.save();
         console.log("Token saved to database:", token);
 
-        res.json({ token: tokenValue, firstName: user.firstName, team: user.team, lastName: user.lastName, role: user.role, email: user.email,});
+        res.json({
+            token: tokenValue,
+            firstName: user.firstName,
+            team: user.team,
+            lastName: user.lastName,
+            role: user.role,
+            email: user.email,
+        });
     } catch (err) {
-        console.error(err);
+        console.error('Error logging in user:', err);
         res.status(500).json({ msg: 'Error logging in user', error: err.message });
     }
 });
 
-module.exports = router;
+
 
 
 router.get('/me', authMiddleware, async (req, res) => {

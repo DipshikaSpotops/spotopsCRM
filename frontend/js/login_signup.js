@@ -28,8 +28,8 @@ links.forEach(link => {
 
 document.querySelector('.login-btn').addEventListener('click', async (e) => {
     e.preventDefault();
-    const email = document.querySelector('.login-email').value;
-    const password = document.querySelector('.login-password').value;
+    const email = document.querySelector('.login-email').value.trim();
+const password = document.querySelector('.login-password').value.trim();
     console.log("Login data:", { email, password });
 
     try {
@@ -44,6 +44,7 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
             localStorage.setItem('team',response.data.team);
             localStorage.setItem('role',response.data.role)
             localStorage.setItem('email',response.data.email);
+            
             Swal.fire({
                 icon: 'success',
                 title: 'Logged in successfully',
@@ -59,11 +60,12 @@ document.querySelector('.login-btn').addEventListener('click', async (e) => {
     } catch (error) {
         console.error('Login error:', error);
         Swal.fire({
-            icon: 'failure',
+            icon: 'error',
             title: 'Invalid email or password',
             showConfirmButton: true,
             timer: 1500
-        })
+        });
+        
         // alert('Invalid Username or Password. Please try again.');
     }
 });
