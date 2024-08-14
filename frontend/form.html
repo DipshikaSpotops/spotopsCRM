@@ -1964,10 +1964,11 @@ select:disabled {
               const nameParts = customerNameE.split(" ");
               const firstNameE = nameParts[0];
               const lastNameE = nameParts[1];
-              let text = data.notes;
-              let onlyNotes = text.split('<br>')[0];
-              console.log(onlyNotes); 
-
+              var notes = data.notes;
+              var notes1 = notes.toString();
+              var resultNotes = notes1.split('</br>')[0];
+              var onlyNotes = resultNotes.trim();
+              console.log(onlyNotes);
               console.log("First Name:", firstName);
               console.log("Last Name:", lastName);
               orderNo;
