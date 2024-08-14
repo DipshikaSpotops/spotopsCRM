@@ -1241,7 +1241,7 @@ select:disabled {
             </div>
             <div class="form-row addNewId">
               <div class="form-group col-md-4">
-                <label for="partPrice" style="font-size: 12px;color: #6e6b6b;">Est. Part Price</label>
+                <label for="partPrice" style="font-size: 12px;color: #6e6b6b;" id="estPP">Est. Part Price - </label>
                 <input type="number" class="form-control" id="partPrice" placeholder="Part Price" />
               </div>
               <div class="form-group col-md-4">
@@ -1725,6 +1725,7 @@ select:disabled {
         var yardIndex;
         document.getElementById("orderHistory").textContent += orderNo;
         document.getElementById("yardModalLabel").textContent += orderNo;
+        
         console.log("orderNo:", orderNo); // Debugging: Check if orderNo is retrieved correctly
         console.log("process:", process); // Debugging: Check if process is retrieved correctly
         console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
@@ -2064,9 +2065,11 @@ if (isCancelledOrder && cancelledOrderNo) {
         var vinNo = document.getElementById("vin").value;
         console.log("vin");
         if (orderNo) {
+          
           fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
+        document.getElementById("estPP").textContent += data.costP;
               console.log("Fetched order data:", data);
               var customerNameE = data.customerName;
               console.log("cusName", customerNameE);
