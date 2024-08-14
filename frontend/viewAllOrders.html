@@ -409,22 +409,32 @@
       const token = localStorage.getItem("token");
 
       try {
-        const response = await axios.get("https://www.spotops360.com/orders", {
-          headers: token ? {
-            Authorization: `Bearer ${token}`
-          } : {},
-        });
+        // Fetch orders from both the orders and cancelledOrders collections
+        const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+          axios.get("https://www.spotops360.com/orders", {
+            headers: token ? {
+              Authorization: `Bearer ${token}`
+            } : {},
+          }),
+          axios.get("https://www.spotops360.com/cancelledOrders", {
+            headers: token ? {
+              Authorization: `Bearer ${token}`
+            } : {},
+          })
+        ]);
 
-        if (response.status !== 200) {
+        if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
           throw new Error("Failed to fetch orders");
         }
 
-        const data = response.data;
+        const orders = ordersResponse.data;
+        const cancelledOrders = cancelledOrdersResponse.data;
 
-        // Filter out orders with status "Customer approved" or "Placed"
-        // const filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
+        // Combine both orders and cancelled orders
+        const allOrders = [...orders, ...cancelledOrders];
 
-        data.forEach((item) => {
+        // Render the combined orders in the table
+        allOrders.forEach((item) =>{
           const actions = `
                 <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
                 <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
@@ -600,3 +610,10 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
