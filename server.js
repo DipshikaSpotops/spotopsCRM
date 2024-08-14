@@ -201,6 +201,7 @@ const CancelledOrderSchema = new mongoose.Schema({
   sAddress: String,
   email: String,
   phone: String,
+  altPhone: String,
   make: String,
   model: String,
   year: Number,
@@ -213,14 +214,17 @@ const CancelledOrderSchema = new mongoose.Schema({
   salestax: Number,
   grossProfit: Number,
   orderStatus: String,
-  vin: Number,
-  issueOrder: String,
-  additionalInfo: Array,
+  vin: String,
+  last4digits: String,
+  additionalInfo: [additionalInfoSchema],
   trackingInfo: String,
   orderHistory: [String],
-  isCancelled: { type: Boolean, default: true },
-  last4digits:String,
-  notes: [String]
+  notes: [String],
+  isCancelled: { type: Boolean, default: false },
+  teamOrder:String,
+  actualGP:Number,
+  supportNotes:[String]
+
 });
 
 const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
