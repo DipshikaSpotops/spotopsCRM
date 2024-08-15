@@ -294,7 +294,7 @@
             <h6 style="text-align: center; margin-top: 1%;">Billing Info</h6>
             <div class="form-row firstSix">
               <div class="form-group col-md-2">
-                <input type="text" class="form-control" placeholder="Attention" required />
+                <input type="text" class="form-control" id="bAttention" placeholder="Attention" required />
               </div>
               <div class="form-group col-md-2">
                 <input type="text" class="form-control" id="bAddress" placeholder="Street Address" required />
@@ -328,7 +328,7 @@
             <h6 style="text-align: center; margin-top: 1%;">Shipping Info</h6>
             <div class="form-row firstSix">
               <div class="form-group col-md-2">
-                <input type="text" class="form-control" placeholder="Attention" required />
+                <input type="text" class="form-control"id="sAttention" placeholder="Attention" required />
               </div>
               <div class="form-group col-md-2">
                 <input type="text" class="form-control" id="sAddress" placeholder="Street Address" required />
@@ -634,6 +634,7 @@
             $("#sState").val($("#bState").val());
             $("#sCountry").val($("#bCountry").val());
             $("#sZip").val($("#bZip").val());
+            $("#sAttention").val($("#bAttention").val());
         } else {
             // Clear the shipping address fields if the checkbox is unchecked
             $("#sAddress").val("");
