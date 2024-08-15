@@ -1037,11 +1037,15 @@ app.put('/users/:id', async (req, res) => {
   }
 });
 
-// api for yard suggestions:
-app.get('/yards', (req, res) => {
-  console.log("suggestions");
+// api for giving yard suggestions
+app.get('/orders/:orderNo/additionalInfo', (req, res) => {
+  console.log("Yard suggestions endpoint hit with query:", req.query.query);
   const query = req.query.query;
   Yard.find({ name: new RegExp(query, 'i') }) 
       .then(yards => res.json(yards))
-      .catch(err => res.status(500).json({ error: err.message }));
+      .catch(err => {
+        console.error("Error fetching yards:", err);
+        res.status(500).json({ error: err.message });
+      });
 });
+
