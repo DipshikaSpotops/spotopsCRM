@@ -2412,18 +2412,18 @@ axios
     // let canAddNewYard = true;
     $("#yardInfoContainer .yard-btn").each(function () {
         let yardIndex = $(this).data("yard-index");
-
+Promises.fetchAll(yardInfo)
         // Fetch the yard status
         fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
                 const yardData = data.additionalInfo[yardIndex - 1];
-                console.log("yardData",yardData);
+                console.log("yardData suggestions",yardData);
                 if (yardData.status == "PO cancelled" || yardData.status == "Escalation") {
-                    canAddNewYard = false;
+                    // canAddNewYard = false;
                 
                     alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
-                    return false; // Prevent the new yard modal from showing
+                    // return false; // Prevent the new yard modal from showing
                 } else {
                     showModal("#yardModal"); // Proceed to add new yard
                 }
