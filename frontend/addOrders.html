@@ -310,7 +310,7 @@
             </div>
           </div>
           <!-- same as billing addres checkbox -->
-          <div class="sameAsBA">
+          <div class="sameAsBA" style="margin: -2% 3%;">
             <label for="sameasBA">Same as Billing Address</label>
             <input type="checkbox" value="Same as Billing Adress"/>
           </div>
@@ -608,6 +608,26 @@
           console.log("close button clicked");
           location.reload();
         });
+        
+
+    // Event listener for "Same as Billing Address" checkbox
+    $("input[type='checkbox'][value='Same as Billing Adress']").on("change", function () {
+        if ($(this).is(":checked")) {
+            // Copy the values from billing address fields to shipping address fields
+            $("#sAddress").val($("#bAddress").val());
+            $("#sCity").val($("#bCity").val());
+            $("#sState").val($("#bState").val());
+            $("#sCountry").val($("#bCountry").val());
+            $("#sZip").val($("#bZip").val());
+        } else {
+            // Clear the shipping address fields if the checkbox is unchecked
+            $("#sAddress").val("");
+            $("#sCity").val("");
+            $("#sState").val("");
+            $("#sCountry").val("");
+            $("#sZip").val("");
+        }
+    });
 
         $("#logoutLink").click(function () {
           window.localStorage.clear();
