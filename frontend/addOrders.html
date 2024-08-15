@@ -285,30 +285,32 @@
             </div>
           </div>
 
-          <div class="firstRow" id="billing">
-            <h6 style="text-align: center; margin-top: 1%;">Billing Info</h6>
-            <div class="form-row firstFive">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bAddress" placeholder="Street Address" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bCity" placeholder="City" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bState" placeholder="State" required />
-              </div>
-              <div class="form-group col-md-2">
-                <select class="form-control" id="bCountry" required>
-                  <option value="">Country</option>
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
-              </div>
+          <div class="form-row firstFive">
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bAddress" placeholder="Street Address" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bCity" placeholder="City" required />
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bState" placeholder="State" required />
+            </div>
+            <div class="form-group col-md-2">
+              <select class="form-control" id="bCountry" required>
+                <option value="">Country</option>
+                <option value="USA">USA</option>
+                <option value="Canada">Canada</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
+            </div>
+            <!-- New column added here -->
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="bAttention" placeholder="Attention" />
             </div>
           </div>
+          
           <!-- same as billing addres checkbox -->
           <div class="sameAsBA" style="margin: -2% 3%;">
             <label for="sameasBA">Same as Billing Address</label>
@@ -336,8 +338,13 @@
               <div class="form-group col-md-2">
                 <input type="text" class="form-control" id="sZip" placeholder="Zip Code" required />
               </div>
+              <!-- New column added -->
+              <div class="form-group col-md-2">
+                <input type="text" class="form-control" id="sAttention" placeholder="Attention" />
+              </div>
             </div>
           </div>
+          
 
           <div class="firstRow" id="partInfo">
             <h6 style="text-align: center; margin-top: 1%;">Part Information</h6>
