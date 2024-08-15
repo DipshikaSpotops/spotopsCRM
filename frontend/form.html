@@ -3420,20 +3420,26 @@ $(".navbar .nav-item").hover(function () {
     }
     // for giving yard suggestions:
     $('#yardName').on('input', function() {
-      console.log("inputting yard name");
-        const query = $(this).val();
+   console.log("inputting yard name");
+     const query = $(this).val();
 
-        if (query.length > 2) { // Start suggesting after 2 characters
-            fetch(`https://www.spotops360.com/yards?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    displaySuggestions(data);
-                })
-                .catch(error => console.error('Error fetching yard suggestions:', error));
-        } else {
-            $('#yardSuggestionsList').hide();
-        }
-    });
+     if (query.length > 2) {
+         fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?query=${query}`)
+             .then(response => {
+                 if (!response.ok) {
+                     throw new Error(`HTTP error! status: ${response.status}`);
+                 }
+                 return response.json();
+             })
+             .then(data => {
+                 displaySuggestions(data);
+             })
+             .catch(error => console.error('Error fetching yard suggestions:', error));
+     } else {
+         $('#yardSuggestionsList').hide();
+     }
+ });
+
 
     // Function to display the suggestions in a dropdown list
     function displaySuggestions(suggestions) {
