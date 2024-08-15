@@ -2409,41 +2409,27 @@ axios
         });
 
         $(".add-yard-btn").on("click", function () {
-    const yardStatusPromises = [];
-
+    // let canAddNewYard = true;
     $("#yardInfoContainer .yard-btn").each(function () {
         let yardIndex = $(this).data("yard-index");
 
-        // Push the fetch promise to the array
-        const fetchPromise = fetch(`https://www.spotops360.com/orders/${orderNo}`)
+        // Fetch the yard status
+        fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
                 const yardData = data.additionalInfo[yardIndex - 1];
-                // Return the status of the yard
-                return yardData.status;
+                console.log("yardData",yardData);
+                if (yardData.status == "PO cancelled" || yardData.status == "Escalation") {
+                    canAddNewYard = false;
+                
+                    alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
+                    return false; // Prevent the new yard modal from showing
+                } else {
+                    showModal("#yardModal"); // Proceed to add new yard
+                }
             });
-
-        yardStatusPromises.push(fetchPromise);
     });
-
-    // Wait for all fetches to complete
-    Promise.all(yardStatusPromises)
-        .then((statuses) => {
-            let canAddNewYard = statuses.every(status => 
-                status === "PO Cancelled" || status === "Escalation"
-            );
-
-            if (canAddNewYard) {
-                showModal("#yardModal"); // Proceed to add new yard
-            } else {
-                alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
-            }
-        })
-        .catch((error) => {
-            console.error('Error checking yard statuses:', error);
-        });
 });
-
 
 
         
