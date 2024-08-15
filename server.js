@@ -216,6 +216,7 @@ const additionalInfoSchema = new mongoose.Schema({
   returnShippingCharge: Number,
   notes: [String]
 });
+const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
 const CancelledOrderSchema = new mongoose.Schema({
   orderNo: String,
@@ -1034,4 +1035,13 @@ app.put('/users/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+});
+
+// api for yard suggestions:
+app.get('/yards', (req, res) => {
+  console.log("suggestions");
+  const query = req.query.query;
+  Yard.find({ name: new RegExp(query, 'i') })  // Case-insensitive search
+      .then(yards => res.json(yards))
+      .catch(err => res.status(500).json({ error: err.message }));
 });

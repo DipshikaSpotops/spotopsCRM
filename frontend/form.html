@@ -20,6 +20,21 @@
       #divTrackingEdit {
         display: none;
       }
+
+      #yardSuggestionsList {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    width: 100%;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#yardSuggestionsList .list-group-item {
+    cursor: pointer;
+}
+
       body {
         background-color: #f8f9fa;
         display: flex;
@@ -1184,11 +1199,11 @@ select:disabled {
     </div>
 
     <!-- add yard starts here -->
-    <div class="modal fade" id="yardModal" tabindex="-1" aria-labelledby="yardModalLabel" aria-hidden="true" style=" display: none;">
+    <div class="modal fade" id="yardModal" tabindex="-1" aria-labelledby="yardModalLabel" aria-hidden="true" style="display: none;">
       <div class="modal-dialog">
         <div class="modal-content" style="margin: 19% -43%;width: 202%;height: 80vh;padding: 10px 28px;">
           <div class="modal-header">
-            <h5 class="modal-title" id="yardModalLabel" style="margin: 0% 33%;font-weight: bold;  white-space: nowrap;overflow: hidden;">Add New Yard - </h5>
+            <h5 class="modal-title" id="yardModalLabel" style="margin: 0% 33%;font-weight: bold; white-space: nowrap;overflow: hidden;">Add New Yard - </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -1197,7 +1212,8 @@ select:disabled {
           <div class="modal-body" style="margin-top: -10%;">
             <div class="form-row addNewId">
               <div class="form-group col-md-4">
-                <input type="text" class="form-control" id="yardName" placeholder="Yard Name" required>
+                <input type="text" class="form-control" id="yardName" placeholder="Yard Name" required autocomplete="off">
+                <ul id="yardSuggestionsList" class="list-group" style="display: none; position: absolute; z-index: 1000;"></ul>
               </div>
               <div class="form-group col-md-4">
                 <input type="text" class="form-control" id="agentName" placeholder="Agent Name" required>
@@ -1228,7 +1244,7 @@ select:disabled {
                 <input type="text" class="form-control" id="state" placeholder="Enter State" required>
               </div>
             </div>
-            <div class="form-row  addNewId">
+            <div class="form-row addNewId">
               <div class="form-group col-md-4">
                 <select class="form-control" id="country">
                   <option selected>Select Country</option>
@@ -1246,7 +1262,7 @@ select:disabled {
                 <input type="number" class="form-control" id="partPrice" placeholder="Part Price" required>
               </div>
               <div class="form-group col-md-4">
-                <label for="ownS" ></label>
+                <label for="ownS"></label>
                 <input type="number" class="form-control" id="ownShipping" placeholder="Own Shipping" style="margin-top:3%;" />
               </div>
               <div class="form-group col-md-4">
@@ -1258,19 +1274,12 @@ select:disabled {
               <div style="margin: 0% 46% 5% -31%;width: 265px;">
                 <input type="number" class="form-control" id="others" placeholder="Other Charges" style="margin: 0% 0% 0% -83%;width: 116%;"/>
               </div>
-              <!-- <div class="form" >
-                <label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: -5% 51%;">Total Yard Spending: $100.25</label>
-              </div> -->
             </div>
-            
           </div>
-          <!-- <div > -->
-            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-            <button type="button" class="btn save" id="addYardInfo">Submit</button>
-          <!-- </div> -->
+          <button type="button" class="btn save" id="addYardInfo">Submit</button>
         </div>
       </div>
-    </div>
+    </div>    
 <!-- add yard ends here -->
 
     <div id="editYardPopup" style="display: none">
@@ -3415,6 +3424,40 @@ $(".navbar .nav-item").hover(function () {
             });
     });
     }
+    // for giving yard suggestions:
+    // Event listener for the yard name input field
+    $('#yardName').on('input', function() {
+        const query = $(this).val();
+
+        if (query.length > 2) { // Start suggesting after 2 characters
+            fetch(`https://www.spotops360.com/yards?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    displaySuggestions(data);
+                })
+                .catch(error => console.error('Error fetching yard suggestions:', error));
+        } else {
+            $('#yardSuggestionsList').hide();
+        }
+    });
+
+    // Function to display the suggestions in a dropdown list
+    function displaySuggestions(suggestions) {
+        const suggestionsList = $('#yardSuggestionsList');
+        suggestionsList.empty(); // Clear previous suggestions
+        suggestions.forEach(suggestion => {
+            suggestionsList.append(`<li class="list-group-item">${suggestion.name}</li>`);
+        });
+        suggestionsList.show();
+    }
+
+    // Event listener for clicking a suggestion
+    $(document).on('click', '#yardSuggestionsList .list-group-item', function() {
+        const selectedYard = $(this).text();
+        $('#yardName').val(selectedYard);
+        $('#yardSuggestionsList').hide();
+    });
+
     });
     </script>
   </body>   
