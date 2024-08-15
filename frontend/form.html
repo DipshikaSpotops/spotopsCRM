@@ -2008,42 +2008,34 @@ if (isCancelledOrder && cancelledOrderNo) {
 
         function formatYardData(yardData) {
           let yardInfo = `
-                    Yard Name: ${yardData.yardName}<br>
-                    Address: ${yardData.address}<br>
-                    Email: ${yardData.email}<br>
-                    Phone No: ${yardData.phone}<br>
-                    Agent Name: ${yardData.agentName}<br>
-                    Part Price: $${yardData.partPrice}<br>
-                    Shipping Method: ${yardData.shippingDetails}<br>
-                    Others: $${yardData.others}<br>
-                `;
+<table style="width: 100%;">
+  <tr>
+    <td style="width: 50%; vertical-align: top;">
+      Yard Name: ${yardData.yardName}<br>
+      Address: ${yardData.address}<br>
+      Email: ${yardData.email}<br>
+      Phone No: ${yardData.phone}<br>
+      Alt Phone No: ${yardData.altPhone}<br>
+      Agent Name: ${yardData.agentName}<br>
+      Part Price: $${yardData.partPrice}<br>
+      Shipping Method: ${yardData.shippingDetails}<br>
+      Others: $${yardData.others}<br>
+    </td>
+    <td style="width: 50%; vertical-align: top;">
+      ${yardData.status ? `Status: ${yardData.status}<br>` : ""}
+      ${yardData.paymentStatus ? `Payment Status: ${yardData.paymentStatus}<br>` : ""}
+      ${yardData.paymentDetails ? `Payment Details: ${yardData.paymentDetails}<br>` : ""}
+      ${yardData.trackingNo ? `Tracking No: ${yardData.trackingNo}<br>` : ""}
+      ${yardData.escalationCause ? `Escalation Reason: ${yardData.escalationCause}<br>` : ""}
+      ${yardData.escalationProcess ? `Escalation Process: ${yardData.escalationProcess}<br>` : ""}
+      ${yardData.returnShipping ? `Return Shipping type: ${yardData.returnShipping}<br>` : ""}
+      ${yardData.returnShippingCharge ? `Return shipping amount: $${yardData.returnShippingCharge}<br>` : ""}
+    </td>
+  </tr>
+</table>
+`;
 
-          if (yardData.status) {
-            yardInfo += `Status: ${yardData.status}<br>`;
-          }
-          if (yardData.paymentStatus) {
-            yardInfo += `Payment Status: ${yardData.paymentStatus}<br>`;
-          }
-          if (yardData.paymentDetails) {
-            yardInfo += `Payment Details: ${yardData.paymentDetails}<br>`;
-          }
-          if (yardData.trackingNo) {
-            yardInfo += `Tracking No: ${yardData.trackingNo}<br>`;
-          }
-          if (yardData.escalationCause) {
-            yardInfo += `Escalation Reason: ${yardData.escalationCause}<br>`;
-          }
-          if (yardData.escalationProcess) {
-            yardInfo += `Escalation Process: ${yardData.escalationProcess}<br>`;
-          }
-          if (yardData.returnShipping) {
-            yardInfo += `Return Shipping type: ${yardData.returnShipping}<br>`;
-          }
-          if (yardData.returnShippingCharge) {
-            yardInfo += `Return shipping amount: ${yardData.returnShippingCharge}<br>`;
-          }
-
-          return yardInfo;
+return yardInfo;
         }
 
         function updateOrderHistory(orderHistory) {
