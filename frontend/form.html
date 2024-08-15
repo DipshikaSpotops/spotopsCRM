@@ -2420,9 +2420,7 @@ axios
                 console.log("yardData suggestions",yardData);
                 if (yardData.status === "PO cancelled" || yardData.status === "Escalation") {
                     // canAddNewYard = false;
-                    showModal("#yardModal"); // Proceed to add new yard
-                   
-                    // return false; // Prevent the new yard modal from showing
+                    showModal("#yardModal"); 
                 } else {
                   alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
                 }
@@ -3421,8 +3419,8 @@ $(".navbar .nav-item").hover(function () {
     });
     }
     // for giving yard suggestions:
-    // Event listener for the yard name input field
     $('#yardName').on('input', function() {
+      console.log("inputting yard name");
         const query = $(this).val();
 
         if (query.length > 2) { // Start suggesting after 2 characters
