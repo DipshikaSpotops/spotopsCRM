@@ -312,12 +312,12 @@ app.put("/orders/:orderNo", async (req, res) => {
       console.log("loggein user",firstName);
 
       // Add timestamp to order history only if the status has changed
-      if (oldStatus !== order.orderStatus) {
-          const timestamp = new Date().toLocaleString()
-          order.orderHistory.push(
-              `Order status updated to ${order.orderStatus} by ${firstName} on ${timestamp}`
-          );
-      }
+      // if (oldStatus !== order.orderStatus) {
+      //     const timestamp = new Date().toLocaleString()
+      //     order.orderHistory.push(
+      //         `Order status updated to ${order.orderStatus} by ${firstName} on ${timestamp}`
+      //     );
+      // }
 
       const updatedOrder = await order.save();
       res.json(updatedOrder);
