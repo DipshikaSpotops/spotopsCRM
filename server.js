@@ -1041,7 +1041,7 @@ app.put('/users/:id', async (req, res) => {
 app.get('/yards', (req, res) => {
   console.log("suggestions");
   const query = req.query.query;
-  Yard.find({ name: new RegExp(query, 'i') })  // Case-insensitive search
+  Yard.find({ name: new RegExp(query, 'i') }) 
       .then(yards => res.json(yards))
       .catch(err => res.status(500).json({ error: err.message }));
 });
