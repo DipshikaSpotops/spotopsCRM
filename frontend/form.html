@@ -3459,28 +3459,3 @@ $(".navbar .nav-item").hover(function () {
     </script>
   </body>   
 </html>
-in my above html page:below is not working, even if the yard status is PO Cancelled or Escalation, i am not able to add a new yard $(".add-yard-btn").on("click", function () {
-  // Loop through all yards to check their status
-  let canAddNewYard = true;
-  $("#yardInfoContainer .yard-btn").each(function () {
-      let yardIndex = $(this).data("yard-index");
-
-      // Fetch the yard status
-      fetch(`https://www.spotops360.com/orders/${orderNo}`)
-          .then((response) => response.json())
-          .then((data) => {
-              const yardData = data.additionalInfo[yardIndex - 1];
-              if (yardData.status !== "PO Cancelled" && yardData.status !== "Escalation") {
-                  canAddNewYard = false;
-              }
-
-              // If a yard has a status that does not allow adding a new yard
-              if (!canAddNewYard) {
-                  alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
-                  return false; // Prevent the new yard modal from showing
-              } else {
-                  showModal("#yardModal"); // Proceed to add new yard
-              }
-          });
-  });
-});
