@@ -209,7 +209,7 @@ const additionalInfoSchema = new mongoose.Schema({
   trackingNo: String ,
   eta: Number,
   shipperName: String,
-  trackingLink:url,
+  trackingLink:String,
   escalationCause: String,
   escalationProcess: String,
   returnShipping: String,
