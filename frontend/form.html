@@ -2440,7 +2440,7 @@ axios
     };
 
     fetch(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
       {
         method: "PUT",
         headers: {
@@ -2739,7 +2739,7 @@ axios
           };
 
           fetch(
-            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`,
             {
               method: "PUT",
               headers: {
@@ -3085,7 +3085,7 @@ $("#saveYardDetails").on("click", function () {
   };
 
   fetch(
-    `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+    `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`,
     {
       method: "PUT",
       headers: {

@@ -387,7 +387,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
 
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
-      const firstName = req.body.firstName; // Get firstName from the request body
+      const firstName = req.query.firstName; // Get firstName from the request body
       const status = req.body.status; // Get status from the request body
       order.orderHistory.push(`Yard ${yardIndex + 1} ${status} updated by ${firstName} on ${timestamp}`);
 
