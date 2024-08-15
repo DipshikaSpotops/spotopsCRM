@@ -13,6 +13,7 @@ const OrderNumber = require("./backend/models/OrderNo");
 
 const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
+const { url } = require("inspector");
 
 const port = 3000;
 const app = express();
@@ -205,11 +206,15 @@ const additionalInfoSchema = new mongoose.Schema({
   status: String,
   paymentStatus: String,
   refundedAmount: Number,
+  trackingNo: String ,
+  eta: Number,
+  shipperName: String,
+  trackingLink:url,
   escalationCause: String,
   escalationProcess: String,
   returnShipping: String,
   returnShippingCharge: Number,
-  notes: [String] // Ensure notes field is an array of strings
+  notes: [String]
 });
 // Cancelled Orders Schema
 const CancelledOrderSchema = new mongoose.Schema({
