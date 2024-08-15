@@ -2015,7 +2015,6 @@ if (isCancelledOrder && cancelledOrderNo) {
       Address: ${yardData.address}<br>
       Email: ${yardData.email}<br>
       Phone No: ${yardData.phone}<br>
-      Alt Phone No: ${yardData.altPhone}<br>
       Agent Name: ${yardData.agentName}<br>
       Part Price: $${yardData.partPrice}<br>
       Shipping Method: ${yardData.shippingDetails}<br>
@@ -2683,6 +2682,11 @@ axios
           const status = $("#refund").val();
           const returnCharges = $(".returnShipment").val();
           console.log("returnshipp", returnCharges);
+          const trackingNo = $("#trackingNoEdit").val();
+          const eta = $("#etaEdit").val();
+          const shipperName = $("#shipperNameEdit").val();
+          const trackingLink = $("#linkInput").val();
+          console.log("trackingDetails", trackingNo,eta,shipperName,trackingLink);
 
           const returnShippingMethod = $(
             "input[name='returnValue']:checked"
@@ -2723,6 +2727,10 @@ axios
           const data1 = {
             status: status,
             // paymentStatus: paymentStatus,
+            trackingNo: trackingNo ,
+            ets: eta,
+            shipperName: shipperName,
+            trackingLink:trackingLink ,
             refundedAmount: refundedAmount ? parseFloat(refundedAmount) : null,
             escalationCause: escCause,
             escalationProcess: escProcess,
