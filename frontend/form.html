@@ -1684,7 +1684,7 @@ select:disabled {
       $(document).ready(async function () {
         // for populating cancelled orders in form.html
         const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
-
+        updateAddYardButton();
     if (orderDetails) {
         // Populate form fields with order details
         $("#orderNo").val(orderDetails.orderNo);
@@ -2400,9 +2400,31 @@ axios
         });
 
         $(".add-yard-btn").on("click", function () {
-          showModal("#yardModal");
-          
-        });
+    // Loop through all yards to check their status
+    let canAddNewYard = true;
+    $("#yardInfoContainer .yard-btn").each(function () {
+        let yardIndex = $(this).data("yard-index");
+
+        // Fetch the yard status
+        fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+                const yardData = data.additionalInfo[yardIndex - 1];
+                if (yardData.status !== "PO Cancelled" && yardData.status !== "Escalation") {
+                    canAddNewYard = false;
+                }
+
+                // If a yard has a status that does not allow adding a new yard
+                if (!canAddNewYard) {
+                    alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
+                    return false; // Prevent the new yard modal from showing
+                } else {
+                    showModal("#yardModal"); // Proceed to add new yard
+                }
+            });
+    });
+});
+
 
         
 
@@ -3365,12 +3387,34 @@ $(".navbar .nav-item").hover(function () {
 
     // Also toggle on chevron icon click
     $(".chevron-icon").on("click", function (event) {
+      event.preventDefault
         event.stopPropagation();
         const submenu = $(this).closest(".nav-item").find(".dropdown-menu");
         submenu.stop(true, true).slideToggle(200);
     });
+// function to add yards only when status is PO cancelled or Escalation
+    function updateAddYardButton() {
+    let canAddNewYard = true;
+    $("#yardInfoContainer .yard-btn").each(function () {
+    let yardIndex = $(this).data("yard-index");
 
+        fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+                const yardData = data.additionalInfo[yardIndex - 1];
+                if (yardData.status !== "PO Cancelled" && yardData.status !== "Escalation") {
+                    canAddNewYard = false;
+                }
 
+                // Disable the button if conditions are not met
+                if (!canAddNewYard) {
+                    $(".add-yard-btn").prop('disabled', true);
+                } else {
+                    $(".add-yard-btn").prop('disabled', false);
+                }
+            });
+    });
+    }
     });
     </script>
   </body>   
