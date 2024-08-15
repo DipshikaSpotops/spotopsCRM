@@ -2418,13 +2418,13 @@ axios
             .then((data) => {
                 const yardData = data.additionalInfo[yardIndex - 1];
                 console.log("yardData suggestions",yardData);
-                if (yardData.status == "PO cancelled" || yardData.status == "Escalation") {
+                if (yardData.status === "PO cancelled" || yardData.status === "Escalation") {
                     // canAddNewYard = false;
-                
-                    alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
+                    showModal("#yardModal"); // Proceed to add new yard
+                   
                     // return false; // Prevent the new yard modal from showing
                 } else {
-                    showModal("#yardModal"); // Proceed to add new yard
+                  alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
                 }
             });
     });
