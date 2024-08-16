@@ -434,45 +434,47 @@
           tableHeader.append('<th scope="col">Actions</th>');
 
           data.forEach((item) => {
-            if (item.additionalInfo.length > 0) {
-              // Only append if additionalInfo length > 0
-              let yardInfoHtml = "";
-              let totalShipping = 0;
+  if (item.additionalInfo.length > 0) {
+    let yardInfoHtml = "";
+    let totalShipping = 0;
 
-              for (let i = 0; i < maxYards; i++) {
-                if (item.additionalInfo[i]) {
-                  var shipping  = item.additionalInfo.shippingDetails;
-                  let shippingDetails = shipping.split(":")[1].trim();
-                  console.log(shippingDetails); 
+    for (let i = 0; i < maxYards; i++) {
+      if (item.additionalInfo[i]) {
+        // Check if shippingDetails exist
+        let shippingDetails = item.additionalInfo[i].shippingDetails;
+        let shippingCharge = 0;
 
-                  const shippingCharge = parseFloat(
-                    shippingDetails || 0
-                  );
-                  totalShipping += shippingCharge;
+        if (shippingDetails) {
+          const shippingArray = shippingDetails.split(":");
+          shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
+        }
 
-                  yardInfoHtml += `<td>
-                      ${item.additionalInfo[i].yardName || ""} | ${
-                    item.additionalInfo[i].shippingMethod || ""
-                  } ($${shippingDetails || "0"})<br>
-                  </td>`;
-                } else {
-                  yardInfoHtml += "<td></td>";
-                }
-              }
+        totalShipping += shippingCharge;
 
-              totalShippingSum += totalShipping;
+        yardInfoHtml += `<td>
+            ${item.additionalInfo[i].yardName || ""} | ${
+          item.additionalInfo[i].shippingMethod || ""
+        } ($${shippingCharge.toFixed(2) || "0"})<br>
+        </td>`;
+      } else {
+        yardInfoHtml += "<td></td>";
+      }
+    }
 
-              $("#yardInfoTable").append(
-                `<tr>
-                    <td>${item.orderNo}</td>
-                    <td>${item.orderDate}</td>
-                    ${yardInfoHtml}
-                    <td>${totalShipping.toFixed(2)}</td>
-                    <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
-                </tr>`
-              );
-            }
-          });
+    totalShippingSum += totalShipping;
+
+    $("#yardInfoTable").append(
+      `<tr>
+          <td>${item.orderNo}</td>
+          <td>${item.orderDate}</td>
+          ${yardInfoHtml}
+          <td>${totalShipping.toFixed(2)}</td>
+          <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
+      </tr>`
+    );
+  }
+});
+
 
           const colSpan = maxYards + 2; // Including Order No and Order Date columns
           tableFooter.find("tr").html(`
