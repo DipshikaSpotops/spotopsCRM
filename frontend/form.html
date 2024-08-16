@@ -1743,17 +1743,7 @@ select:disabled {
         console.log("team", team, token);
     
     console.log("Fetching yard information for order:", orderNo);
-    // Load the saved payment status on page load
-    const savedPaymentStatus = localStorage.getItem(`paymentStatus_${orderNo}`);
-    if (savedPaymentStatus) {
-        $('.paymentStatus').val(savedPaymentStatus);
-    }
-
-    // Save the selected value when the dropdown changes
-    $('.paymentStatus').on('change', function () {
-        const selectedStatus = $(this).val();
-        localStorage.setItem(`paymentStatus_${orderNo}`, selectedStatus);
-    });
+    
     // Fetch yard information on page load
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
@@ -2480,35 +2470,35 @@ axios
   });
 
   // On clicking the submit button inside the popup
-  $('#cardChargedSbmit').on('click', function () {
-        $('#cardCharged').hide();
-        $(".mainDiv").removeClass("blur");
+  $('#cardChargedSbmit').on('click', function() {
+    $('#cardCharged').hide();
+    $(".mainDiv").removeClass("blur");
 
-        // Retrieve the payment status
-        const paymentStatus = $(".paymentStatus").val();
+    // Retrieve the payment status
+    const paymentStatus = $(".paymentStatus").val();
+    
+    // Update the background color of the yard button
+    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+    
+    // Save the payment status to the server or local storage
+    const data = { paymentStatus: paymentStatus };
 
-        // Update the background color of the yard button
-        $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-
-        // Save the payment status to the server or local storage
-        const data = { paymentStatus: paymentStatus };
-
-        fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (!response.ok) throw new Error("Network response was not ok");
-            return response.json();
-        })
-        .then(data => {
-            updateOrderHistory(data.orderHistory);
-            showYardDetails(selectedYardIndex);
-            fetchAndUpdateYardInfo();
-        })
-        .catch(error => console.error("Error:", error));
-    });
+    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
+    })
+    .then(data => {
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(selectedYardIndex);
+        fetchAndUpdateYardInfo();
+    })
+    .catch(error => console.error("Error:", error));
+});
  
 
 //  card charged part till here
@@ -3444,3 +3434,16 @@ $(".navbar .nav-item").hover(function () {
     </script>
   </body>   
 </html>
+in my below div, if a user has chosen some value, till the time a user comes and changes the status it should be on the previous status:
+   <!-- card charged div starts here -->
+   <div id="cardCharged">
+    <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+    <label for="paymentStatusCard">Card Charged:</label>
+    <select class="form-control paymentStatus">
+      <option value="">Choose</option>
+      <option value="Card charged">Charged</option>
+      <option value="">Not charged</option>
+    </select>
+    <button id="cardChargedSbmit">Submit</button>
+  </div>
+  <!-- card charged div ends here -->
