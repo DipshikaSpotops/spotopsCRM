@@ -2434,12 +2434,29 @@ axios
         // card charged part starts here
         let selectedYardIndex;
   // On clicking the "Card Charged" button
-  $("#yardInfoContainer").on("click", ".cardcharged", function () {
-    selectedYardIndex = $(this).data("yard-index");
-    console.log("yard index", selectedYardIndex);
-    $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
-    $(".mainDiv").addClass("blur");
-  });
+ // Function to fetch the payment status for the specific yard index from the database
+ function fetchPaymentStatus(orderNo, yardIndex) {
+        return fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`)
+            .then(response => response.json())
+            .then(data => data.paymentStatus)
+            .catch(error => console.error("Error fetching payment status:", error));
+    }
+ $('#yardInfoContainer').on('click', '.cardcharged', function () {
+        selectedYardIndex = $(this).data('yard-index');
+
+        fetchPaymentStatus(orderNo, selectedYardIndex).then(paymentStatus => {
+            if (paymentStatus) {
+                $('.paymentStatus').val(paymentStatus);
+            }
+        });
+
+        $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
+        $(".mainDiv").addClass("blur");
+    });
+
+   
+
+
   $("#closeCardCharged").on("click", function () {
     $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
           $(".mainDiv").removeClass("blur");
