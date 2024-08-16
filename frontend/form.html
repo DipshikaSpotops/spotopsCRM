@@ -3519,6 +3519,26 @@ $("#okButton").click(function () {
             window.location.reload();
           });
 
+          // Function to apply background color based on payment status
+  function applyPaymentStatusStyles() {
+    $("#yardInfoContainer .yard-btn").each(function () {
+      const yardIndex = $(this).data("yard-index");
+      console.log("yardIndex",yardIndex)
+      // Fetch the payment status for each yard
+      fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.paymentStatus === "Card charged") {
+            $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+          }
+        })
+        .catch(error => console.error("Error fetching payment status:", error));
+    });
+  }
+
+  // Call the function on page load
+  applyPaymentStatusStyles();
+
     });
     </script>
   </body>   
