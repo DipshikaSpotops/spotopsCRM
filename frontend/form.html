@@ -1760,10 +1760,26 @@ select:disabled {
         document.getElementById("orderHistory").textContent += orderNo;
         document.getElementById("yardModalLabel").textContent += orderNo;
         
-        console.log("orderNo:", orderNo); // Debugging: Check if orderNo is retrieved correctly
-        console.log("process:", process); // Debugging: Check if process is retrieved correctly
-        console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
+        console.log("orderNo:", orderNo); 
+        console.log("process:", process);
+        console.log("newEntry:", newEntry);
         console.log("team", team, token);
+      // part to check the paymentStatus
+      fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then(response => response.json())
+    .then(data => {
+        data.additionalInfo.forEach((yard, index) => {
+            const yardIndex = index + 1;
+            console.log("yardIndex",yardIndex,data);
+            if (yard.paymentStatus === "Card charged") {
+                $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+            }
+
+            
+        });
+    })
+    .catch(error => console.error("Error fetching yard data:", error));
+      // part to check the apymentStatus ends
 
         if (firstName) {
           $("#user-name").text(firstName);
