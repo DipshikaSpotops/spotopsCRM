@@ -1755,12 +1755,20 @@ select:disabled {
         data.additionalInfo.forEach((yard, index) => {
             const yardIndex = index + 1;
             console.log(`Processing Yard ${yardIndex}:`, yard);
+
+            // Check if paymentStatus is "Card charged"
             if (yard.paymentStatus === "Card charged") {
                 console.log(`Yard ${yardIndex} is Card charged`);
                 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
             } else {
                 console.log(`Yard ${yardIndex} payment status is not Card charged`);
             }
+
+            // // Set the payment status in the select dropdown if this is the selected yard
+            // if (yardIndex === selectedYardIndex) {
+            //     console.log(`Setting payment status for Yard ${yardIndex}: ${yard.paymentStatus}`);
+            //     $(".paymentStatus").val(yard.paymentStatus);
+            // }
         });
     })
     .catch(error => console.error("Error fetching yard data:", error));
@@ -3434,16 +3442,3 @@ $(".navbar .nav-item").hover(function () {
     </script>
   </body>   
 </html>
-in my below div, if a user has chosen some value, till the time a user comes and changes the status it should be on the previous status:
-   <!-- card charged div starts here -->
-   <div id="cardCharged">
-    <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
-    <label for="paymentStatusCard">Card Charged:</label>
-    <select class="form-control paymentStatus">
-      <option value="">Choose</option>
-      <option value="Card charged">Charged</option>
-      <option value="">Not charged</option>
-    </select>
-    <button id="cardChargedSbmit">Submit</button>
-  </div>
-  <!-- card charged div ends here -->
