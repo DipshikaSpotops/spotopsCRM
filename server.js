@@ -327,38 +327,34 @@ app.put("/orders/:orderNo", async (req, res) => {
   }
 });
 // 
-app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
-  console.log("additionalInfo");
-  try {
-      const order = await Order.findOne({ orderNo: req.params.orderNo });
-      const firstName = req.query.firstname;
-      console.log("fName",firstName);
-      if (!order) return res.status(404).send('Order not found');
+app.post('/orders/:orderNo/additionalInfo', (req, res) => {
+  const { yardName, yardRating, email } = req.body;
+  const newYard = new Yard({
+    yardName,
+    yardRating,
+    email
+  });
 
-      // Count the number of existing yards
-      const countYard = order.additionalInfo.length + 1;
-      console.log(countYard,"countyard")
-      console.log("body",req.body);
-       
+  newYard.save()
+    .then(() => {
+      console.log('Yard saved to yards collection');
 
-      order.additionalInfo.push(req.body);
-      console.log("additional updated",order)
-      var pp = order.additionalInfo[countYard -1 ].partPrice;
-      var yardname = order.additionalInfo[countYard - 1].yardName;
-      var shipping = order.additionalInfo[countYard - 1].shippingDetails;
-      var others = order.additionalInfo[countYard - 1].others;
+      // Now proceed with adding the additionalInfo to the order
+      const orderNo = req.params.orderNo;
+      const additionalInfo = req.body;
       
-      console.log("yard details",pp,yardname,shipping,others);
-      // Add timestamp to order history
-      const timestamp = new Date().toLocaleString();
-      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${timestamp}`);
-
-      await order.save();
-      
-      res.json(order);
-  } catch (error) {
-      res.status(500).json({ message: 'Server error', error });
-  }
+      Order.findOneAndUpdate(
+        { orderNo: orderNo },
+        { $push: { additionalInfo: additionalInfo } },
+        { new: true }
+      )
+      .then(order => res.json(order))
+      .catch(err => res.status(500).json({ error: err.message }));
+    })
+    .catch(err => {
+      console.error('Error saving yard:', err);
+      res.status(500).json({ error: err.message });
+    });
 });
 // //update average GP
 // app.put("/orders/:orderNo")
@@ -806,7 +802,7 @@ app.get("/ordersteamA", async (req, res) => {
 app.get("/ordersteamB", async (req, res) => {
   console.log("Team B orders");
   try {
-    const orderB = await order.find({});
+    const orderB = await Order.find({});
     console.log("Successfully shown", orderB);
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -1041,6 +1037,7 @@ app.put('/users/:id', async (req, res) => {
 app.get('/orders/:orderNo/additionalInfo', (req, res) => {
   console.log("Yard suggestions endpoint hit with query:", req.query.query);
   const query = req.query.query;
+  console.log("query",query);
   Yard.find({ name: new RegExp(query, 'i') }) 
       .then(yards => res.json(yards))
       .catch(err => {
