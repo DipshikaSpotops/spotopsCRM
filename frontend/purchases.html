@@ -346,17 +346,24 @@
                         if (item.additionalInfo[i] && item.additionalInfo[i].paymentStatus === "Card charged") {
                             appendOrder = true; // set flag to true if any additionalInfo has status "Card charged"
                             const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
-                            const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
+                            // const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
                             totalPartPrice += partPrice;
                             totalShipping += shippingCharge;
                             otherCharges = 0;
                             overallPurchaseCost = totalPartPrice + totalShipping + otherCharges
                             console.log("overall",overallPurchaseCost);
+                             // Check if shippingDetails exist
+        let shippingDetails = item.additionalInfo[i].shippingDetails;
+        let shippingCharge = 0;
 
+        if (shippingDetails) {
+          const shippingArray = shippingDetails.split(":");
+          shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
+        }
 
                             yardInfoHtml += `<td>
                                 ${item.additionalInfo[i].yardName || ""}${item.additionalInfo[i].yardName ? ' | ' : ''}${item.additionalInfo[i].partPrice || ""}${item.additionalInfo[i].partPrice ? ' | ' : ''}<br>
-                                ${item.additionalInfo[i].shippingMethod || ""}${item.additionalInfo[i].shippingMethod ? ' | ' : ''}(${item.additionalInfo[i].shippingDetails || "0"})<br>
+                                ${item.additionalInfo[i].shippingMethod || ""}${item.additionalInfo[i].shippingMethod ? ' | ' : ''}(${shippingCharge || "0"})<br>
                                 ${item.additionalInfo[i].status}   |  ${overallPurchaseCost} <br>
                             </td>`;
                         } else {
