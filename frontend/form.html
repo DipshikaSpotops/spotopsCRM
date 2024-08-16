@@ -1722,12 +1722,9 @@ select:disabled {
         const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
         updateAddYardButton();
     if (orderDetails) {
-        // Populate form fields with order details
         $("#orderNo").val(orderDetails.orderNo);
         $("#customerName").val(orderDetails.customerName);
         $("#email").val(orderDetails.email);
-        // Add more fields as necessary
-        // ...
     }
 
     // Clear order details from localStorage after loading
@@ -2007,40 +2004,42 @@ if (isCancelledOrder && cancelledOrderNo) {
         }
 
         function showYardDetails(yardIndex) {
-          const yardDetails = $(`#yard-details-${yardIndex}`);
-          if (yardDetails.is(":visible")) {
-            yardDetails.hide();
-          } else {
-            fetch(`https://www.spotops360.com/orders/${orderNo}`)
-              .then((response) => response.json())
-              .then((data) => {
-                if (
-                  !data.additionalInfo ||
-                  !data.additionalInfo[yardIndex - 1]
-                ) {
-                  return;
-                }
-                const yardData = data.additionalInfo[yardIndex - 1];
-                let yardDetailsHtml = `
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <td colspan="2">${formatYardData(
-                                          yardData
-                                        )}</td>
-                                    </tr>
-                                    <tr style="display:flex">
-                                        <td colspan="2">
-                                            <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
-                                            <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
-                                            <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            `;
-                yardDetails.html(yardDetailsHtml).show();
-              });
-          }
+  const yardDetails = $(`#yard-details-${yardIndex}`);
+  if (yardDetails.is(":visible")) {
+    yardDetails.hide();
+  } else {
+    fetch(`https://www.spotops360.com/orders/${orderNo}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+          return;
         }
+        const yardData = data.additionalInfo[yardIndex - 1];
+        
+        // Check payment status and apply color
+        if (yardData.paymentStatus === "Card charged") {
+          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+        }
+
+        let yardDetailsHtml = `
+          <table class="table table-bordered">
+            <tr>
+              <td colspan="2">${formatYardData(yardData)}</td>
+            </tr>
+            <tr style="display:flex">
+              <td colspan="2">
+                <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
+                <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
+                <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
+              </td>
+            </tr>
+          </table>
+        `;
+        yardDetails.html(yardDetailsHtml).show();
+      });
+  }
+}
+
 
         function formatYardData(yardData) {
           let yardInfo = `
@@ -2501,49 +2500,55 @@ axios
 
   // On clicking the submit button inside the popup
   $('#cardChargedSbmit').on('click', function() {
-    $('#cardCharged').hide();
-    $(".mainDiv").removeClass("blur");
-    console.log("in card charged", selectedYardIndex, "oNo", orderNo);
+  $('#cardCharged').hide();
+  $(".mainDiv").removeClass("blur");
+  console.log("in card charged", selectedYardIndex, "oNo", orderNo);
+  
+  const paymentStatus = $(".paymentStatus")
+    .map(function () {
+      return $(this).val();
+    })
+    .get()
+    .filter(function (value) {
+      return value !== "";
+    })
+    .join();
+  
+  // Update button color based on payment status
+  if (paymentStatus === "Card charged") {
     $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-    const paymentStatus = $(".paymentStatus")
-      .map(function () {
-        return $(this).val();
-      })
-      .get()
-      .filter(function (value) {
-        return value !== "";
-      })
-      .join();
-      
-    const data1 = {
-      paymentStatus: paymentStatus
-    };
+  }
+  
+  const data1 = {
+    paymentStatus: paymentStatus
+  };
 
-    fetch(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data1),
-      }
-    )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      updateOrderHistory(data.orderHistory);
-      showYardDetails(selectedYardIndex);
-      fetchAndUpdateYardInfo();
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-  });  
+  fetch(
+    `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data1),
+    }
+  )
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    updateOrderHistory(data.orderHistory);
+    showYardDetails(selectedYardIndex);
+    fetchAndUpdateYardInfo();
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+});
+
 
 //  card charged part till here
 
