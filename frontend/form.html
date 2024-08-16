@@ -2450,6 +2450,7 @@ axios
     $('#cardCharged').hide();
     $(".mainDiv").removeClass("blur");
     console.log("in card charged", selectedYardIndex, "oNo", orderNo);
+    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
     const paymentStatus = $(".paymentStatus")
       .map(function () {
         return $(this).val();
