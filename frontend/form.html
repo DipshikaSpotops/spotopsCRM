@@ -2446,49 +2446,50 @@ axios
   });
 
   // On clicking the submit button inside the popup
-  $('#cardChargedSbmit').on('click', function() {
-    $('#cardCharged').hide();
-    $(".mainDiv").removeClass("blur");
-    console.log("in card charged", selectedYardIndex, "oNo", orderNo);
-    const paymentStatus = $(".paymentStatus")
-      .map(function () {
-        return $(this).val();
-      })
-      .get()
-      .filter(function (value) {
-        return value !== "";
-      })
-      .join();
-      
+$('#cardChargedSbmit').on('click', function () {
+    const paymentStatus = $('.paymentStatus').val();
+    
+    // Check if the selected value is "Card charged"
+    if (paymentStatus === 'Card charged') {
+        // Change the color of the button related to the selected yard index
+        $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+    }
+
+    // Hide the card charged div and remove the blur
+    $('#cardCharged').fadeOut();
+    $('.mainDiv').removeClass('blur');
+
+    // Add your existing fetch request here if you need to update the server
     const data1 = {
-      paymentStatus: paymentStatus
+        paymentStatus: paymentStatus
     };
 
     fetch(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data1),
-      }
+        `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data1),
+        }
     )
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
     })
     .then((data) => {
-      updateOrderHistory(data.orderHistory);
-      showYardDetails(selectedYardIndex);
-      fetchAndUpdateYardInfo();
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(selectedYardIndex);
+        fetchAndUpdateYardInfo();
     })
     .catch((error) => {
-      console.error("Error:", error);
+        console.error('Error:', error);
     });
-  });  
+});
+
 
 //  card charged part till here
 
@@ -3396,28 +3397,28 @@ $(".navbar .nav-item").hover(function () {
         submenu.stop(true, true).slideToggle(200);
     });
 // function to add yards only when status is PO cancelled or Escalation
-//     function updateAddYardButton() {
-//     let canAddNewYard = true;
-//     $("#yardInfoContainer .yard-btn").each(function () {
-//     let yardIndex = $(this).data("yard-index");
+    function updateAddYardButton() {
+    let canAddNewYard = true;
+    $("#yardInfoContainer .yard-btn").each(function () {
+    let yardIndex = $(this).data("yard-index");
 
-//         fetch(`https://www.spotops360.com/orders/${orderNo}`)
-//             .then((response) => response.json())
-//             .then((data) => {
-//                 const yardData = data.additionalInfo[yardIndex - 1];
-//                 if (yardData.status !== "PO Cancelled" && yardData.status !== "Escalation") {
-//                     canAddNewYard = false;
-//                 }
+        fetch(`https://www.spotops360.com/orders/${orderNo}`)
+            .then((response) => response.json())
+            .then((data) => {
+                const yardData = data.additionalInfo[yardIndex - 1];
+                if (yardData.status !== "PO Cancelled" && yardData.status !== "Escalation") {
+                    canAddNewYard = false;
+                }
 
-//                 // Disable the button if conditions are not met
-//                 if (!canAddNewYard) {
-//                     $(".add-yard-btn").prop('disabled', true);
-//                 } else {
-//                     $(".add-yard-btn").prop('disabled', false);
-//                 }
-//             });
-//     });
-//     }
+                // Disable the button if conditions are not met
+                if (!canAddNewYard) {
+                    $(".add-yard-btn").prop('disabled', true);
+                } else {
+                    $(".add-yard-btn").prop('disabled', false);
+                }
+            });
+    });
+    }
 //     // for giving yard suggestions:
 //     $('#yardName').on('input', function() {
 //    console.log("inputting yard name");
