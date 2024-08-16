@@ -442,8 +442,8 @@
               for (let i = 0; i < maxYards; i++) {
                 if (item.additionalInfo[i]) {
                   var shipping  = item.additionalInfo.shippingDetails;
-                  let shippingDetails = shipping.match(/\d+/)[0];
-                  console.log("shippingDetails",shippingDetails); 
+                  let shippingDetails = shipping.split(":")[1].trim();
+                  console.log(shippingDetails); 
 
                   const shippingCharge = parseFloat(
                     shippingDetails || 0
