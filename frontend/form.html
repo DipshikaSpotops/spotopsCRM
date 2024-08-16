@@ -3371,8 +3371,8 @@ function fetchOrderDetails(orderNo) {
       
     });
 }
-//show deopdown on navbar
-// Show dropdown on hover
+
+// Show dropdown on hover(navbar)
 $(".navbar .nav-item").hover(function () {
         $(this).find(".dropdown-menu").stop(true, true).delay(100).fadeIn(200);
     }, function () {
@@ -3396,69 +3396,72 @@ $(".navbar .nav-item").hover(function () {
         submenu.stop(true, true).slideToggle(200);
     });
 // function to add yards only when status is PO cancelled or Escalation
-    function updateAddYardButton() {
-    let canAddNewYard = true;
-    $("#yardInfoContainer .yard-btn").each(function () {
-    let yardIndex = $(this).data("yard-index");
+//     function updateAddYardButton() {
+//     let canAddNewYard = true;
+//     $("#yardInfoContainer .yard-btn").each(function () {
+//     let yardIndex = $(this).data("yard-index");
 
-        fetch(`https://www.spotops360.com/orders/${orderNo}`)
-            .then((response) => response.json())
-            .then((data) => {
-                const yardData = data.additionalInfo[yardIndex - 1];
-                if (yardData.status !== "PO Cancelled" && yardData.status !== "Escalation") {
-                    canAddNewYard = false;
-                }
+//         fetch(`https://www.spotops360.com/orders/${orderNo}`)
+//             .then((response) => response.json())
+//             .then((data) => {
+//                 const yardData = data.additionalInfo[yardIndex - 1];
+//                 if (yardData.status !== "PO Cancelled" && yardData.status !== "Escalation") {
+//                     canAddNewYard = false;
+//                 }
 
-                // Disable the button if conditions are not met
-                if (!canAddNewYard) {
-                    $(".add-yard-btn").prop('disabled', true);
-                } else {
-                    $(".add-yard-btn").prop('disabled', false);
-                }
-            });
-    });
-    }
-    // for giving yard suggestions:
-    $('#yardName').on('input', function() {
-   console.log("inputting yard name");
-     const query = $(this).val();
+//                 // Disable the button if conditions are not met
+//                 if (!canAddNewYard) {
+//                     $(".add-yard-btn").prop('disabled', true);
+//                 } else {
+//                     $(".add-yard-btn").prop('disabled', false);
+//                 }
+//             });
+//     });
+//     }
+//     // for giving yard suggestions:
+//     $('#yardName').on('input', function() {
+//    console.log("inputting yard name");
+//      const query = $(this).val();
 
-     if (query.length > 2) {
-         fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?query=${query}`)
-             .then(response => {
-                 if (!response.ok) {
-                     throw new Error(`HTTP error! status: ${response.status}`);
-                 }
-                 return response.json();
-             })
-             .then(data => {
-                 displaySuggestions(data);
-             })
-             .catch(error => console.error('Error fetching yard suggestions:', error));
-     } else {
-         $('#yardSuggestionsList').hide();
-     }
- });
+//      if (query.length > 2) {
+//          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?query=${query}`)
+//              .then(response => {
+//                  if (!response.ok) {
+//                      throw new Error(`HTTP error! status: ${response.status}`);
+//                  }
+//                  return response.json();
+//              })
+//              .then(data => {
+//                  displaySuggestions(data);
+//              })
+//              .catch(error => console.error('Error fetching yard suggestions:', error));
+//      } else {
+//          $('#yardSuggestionsList').hide();
+//      }
+//  });
 
 
-    // Function to display the suggestions in a dropdown list
-    function displaySuggestions(suggestions) {
-        const suggestionsList = $('#yardSuggestionsList');
-        suggestionsList.empty(); // Clear previous suggestions
-        suggestions.forEach(suggestion => {
-            suggestionsList.append(`<li class="list-group-item">${suggestion.name}</li>`);
-        });
-        suggestionsList.show();
-    }
+//     // Function to display the suggestions in a dropdown list
+//     function displaySuggestions(suggestions) {
+//         const suggestionsList = $('#yardSuggestionsList');
+//         const suggestion  = $('#suggestionList');
+        
+//         suggestionsList.empty(); // Clear previous suggestions
+//         suggestions.forEach(suggestion => {
+//             suggestionsList.append(`<li class="list-group-item">${suggestion.name}</li>`);
+//         });
+//         suggestionsList.show();
+//     }
 
-    // Event listener for clicking a suggestion
-    $(document).on('click', '#yardSuggestionsList .list-group-item', function() {
-        const selectedYard = $(this).text();
-        $('#yardName').val(selectedYard);
-        $('#yardSuggestionsList').hide();
-    });
+//     // Event listener for clicking a suggestion
+//     $(document).on('click', '#yardSuggestionsList .list-group-item', function() {
+//         const selectedYard = $(this).text();
+//         $('#yardName').val(selectedYard);
+//         $('#yardSuggestionsList').hide();
+//     });
 
     });
     </script>
   </body>   
 </html>
+
