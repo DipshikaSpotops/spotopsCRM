@@ -441,15 +441,19 @@
 
               for (let i = 0; i < maxYards; i++) {
                 if (item.additionalInfo[i]) {
+                  var shipping  = item.additionalInfo.shippingDetails;
+                  let shippingDetails = shipping.match(/\d+/)[0];
+                  console.log("shippingDetails",shippingDetails); 
+
                   const shippingCharge = parseFloat(
-                    item.additionalInfo[i].shippingDetails || 0
+                    shippingDetails || 0
                   );
                   totalShipping += shippingCharge;
 
                   yardInfoHtml += `<td>
                       ${item.additionalInfo[i].yardName || ""} | ${
                     item.additionalInfo[i].shippingMethod || ""
-                  } ($${item.additionalInfo[i].shippingDetails || "0"})<br>
+                  } ($${shippingDetails || "0"})<br>
                   </td>`;
                 } else {
                   yardInfoHtml += "<td></td>";
