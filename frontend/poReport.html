@@ -444,7 +444,15 @@
                         for (let i = 0; i < maxYards; i++) {
                             if (item.additionalInfo[i]) {
                                 const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
-                                const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
+                                let shippingDetails = item.additionalInfo[i].shippingDetails;
+                                let shippingCharge = 0;
+
+                                if (shippingDetails) {
+                                const shippingArray = shippingDetails.split(":");
+                                shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
+        }
+
+                                // const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
                                 totalPartPrice += partPrice;
                                 totalShipping += shippingCharge;
 
@@ -466,7 +474,7 @@
                                 <td>${item.orderDate}</td>
                                 ${yardInfoHtml}
                                 <td>${totalPartPrice.toFixed(2)}</td>
-                                <td>${totalShipping.toFixed(2)}</td>
+                                <td>${shippingCharge}</td>
                                 <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
                             </tr>`
                         );
