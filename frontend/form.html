@@ -2436,25 +2436,33 @@ axios
         });
 
         $(".add-yard-btn").on("click", function () {
-    // let canAddNewYard = true;
-    $("#yardInfoContainer .yard-btn").each(function () {
-        let yardIndex = $(this).data("yard-index");
-        // Fetch the yard status
+    // Get the last yard button
+    const lastYardBtn = $("#yardInfoContainer .yard-btn").last();
+
+    if (lastYardBtn.length > 0) {
+        let yardIndex = lastYardBtn.data("yard-index");
+
+        // Fetch the yard status for the last yard index
         fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
                 const yardData = data.additionalInfo[yardIndex - 1];
-                console.log("yardData suggestions",yardData);
+                console.log("yardData suggestions", yardData);
+
                 if (yardData.status === "PO cancelled" || yardData.status === "Escalation") {
-                    // canAddNewYard = false;
-                    showModal("#yardModal"); 
+                    showModal("#yardModal"); // Show modal if status is PO cancelled or Escalation
                 } else {
-                  $('#yardModal').modal('hide');
-                  $("#addFailed").show();
+                    $('#yardModal').modal('hide'); // Hide modal
+                    alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
                 }
-            });
-    });
+            })
+            .catch(error => console.error("Error fetching yard data:", error));
+    } else {
+        // Handle the case where there are no yard buttons, if necessary
+        alert("No yard data available.");
+    }
 });
+
 
 
         
