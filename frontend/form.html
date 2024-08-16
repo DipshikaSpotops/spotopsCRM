@@ -1764,6 +1764,7 @@ select:disabled {
         console.log("process:", process);
         console.log("newEntry:", newEntry);
         console.log("team", team, token);
+
       // part to check the paymentStatus
       fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
@@ -1773,9 +1774,9 @@ select:disabled {
             console.log("yardIndex",yardIndex,yard);
             var pStatus = yard.paymentStatus;
             console.log("pStatus",pStatus);
-            // if (pStatus) {
-                $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-            // }
+            if (pStatus) {
+                $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f !important');
+            }
 
             
         });
