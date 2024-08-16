@@ -2458,10 +2458,11 @@ axios
             })
             .catch(error => console.error("Error fetching yard data:", error));
     } else {
-        // Handle the case where there are no yard buttons, if necessary
-        alert("No yard data available.");
+        // If there are no yards, allow adding the first yard
+        showModal("#yardModal"); // Show modal to add the first yard
     }
 });
+
 
 
 
