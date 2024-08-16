@@ -1743,7 +1743,17 @@ select:disabled {
         console.log("team", team, token);
     
     console.log("Fetching yard information for order:", orderNo);
-    
+    // Load the saved payment status on page load
+    const savedPaymentStatus = localStorage.getItem(`paymentStatus_${orderNo}`);
+    if (savedPaymentStatus) {
+        $('.paymentStatus').val(savedPaymentStatus);
+    }
+
+    // Save the selected value when the dropdown changes
+    $('.paymentStatus').on('change', function () {
+        const selectedStatus = $(this).val();
+        localStorage.setItem(`paymentStatus_${orderNo}`, selectedStatus);
+    });
     // Fetch yard information on page load
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
@@ -1755,8 +1765,6 @@ select:disabled {
         data.additionalInfo.forEach((yard, index) => {
             const yardIndex = index + 1;
             console.log(`Processing Yard ${yardIndex}:`, yard);
-
-            // Check if paymentStatus is "Card charged"
             if (yard.paymentStatus === "Card charged") {
                 console.log(`Yard ${yardIndex} is Card charged`);
                 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
@@ -2472,35 +2480,35 @@ axios
   });
 
   // On clicking the submit button inside the popup
-  $('#cardChargedSbmit').on('click', function() {
-    $('#cardCharged').hide();
-    $(".mainDiv").removeClass("blur");
+  $('#cardChargedSbmit').on('click', function () {
+        $('#cardCharged').hide();
+        $(".mainDiv").removeClass("blur");
 
-    // Retrieve the payment status
-    const paymentStatus = $(".paymentStatus").val();
-    
-    // Update the background color of the yard button
-    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-    
-    // Save the payment status to the server or local storage
-    const data = { paymentStatus: paymentStatus };
+        // Retrieve the payment status
+        const paymentStatus = $(".paymentStatus").val();
 
-    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-    })
-    .then(data => {
-        updateOrderHistory(data.orderHistory);
-        showYardDetails(selectedYardIndex);
-        fetchAndUpdateYardInfo();
-    })
-    .catch(error => console.error("Error:", error));
-});
+        // Update the background color of the yard button
+        $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+
+        // Save the payment status to the server or local storage
+        const data = { paymentStatus: paymentStatus };
+
+        fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.json();
+        })
+        .then(data => {
+            updateOrderHistory(data.orderHistory);
+            showYardDetails(selectedYardIndex);
+            fetchAndUpdateYardInfo();
+        })
+        .catch(error => console.error("Error:", error));
+    });
  
 
 //  card charged part till here
