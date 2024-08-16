@@ -1741,20 +1741,27 @@ select:disabled {
         console.log("process:", process); // Debugging: Check if process is retrieved correctly
         console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
         console.log("team", team, token);
-
-         // Fetch yard information on page load
+    
+    console.log("Fetching yard information for order:", orderNo);
+    
+    // Fetch yard information on page load
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
     .then(data => {
+        // Debugging the response data
+        console.log("Fetched order data:", data);
+
+        // Loop through the additionalInfo array
         data.additionalInfo.forEach((yard, index) => {
             const yardIndex = index + 1;
-            console.log("yardIndex",yardIndex,yard);
+            console.log(`Processing Yard ${yardIndex}:`, yard);
+
+            // Check if paymentStatus is "Card charged"
             if (yard.paymentStatus === "Card charged") {
-              console.log("card charged");
+                console.log(`Yard ${yardIndex} is Card charged`);
                 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-            }
-            if (yardIndex === selectedYardIndex) {
-                $(".paymentStatus").val(yard.paymentStatus);
+            } else {
+                console.log(`Yard ${yardIndex} payment status is not Card charged`);
             }
         });
     })
