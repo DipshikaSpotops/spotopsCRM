@@ -1773,7 +1773,7 @@ select:disabled {
             console.log("yardIndex",yardIndex,yard);
             var pStatus = yard.paymentStatus;
             console.log("pStatus",pStatus);
-            if (pStatus == "Card charged") {
+            if (pStatus) {
                 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
             }
 
