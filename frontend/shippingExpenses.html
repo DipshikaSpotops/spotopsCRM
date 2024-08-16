@@ -407,11 +407,12 @@
         }
 
         $("#searchInput").on("keyup", function () {
-          let value = $(this).val().toLowerCase();
-          $("#infoTable tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-          });
-        });
+  let value = $(this).val().toLowerCase();
+  $("#yardInfoTable tr").filter(function () {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+  });
+});
+
 
         function renderTable(data) {
           const tableHeader = $("#tableHeader");
