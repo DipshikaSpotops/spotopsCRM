@@ -1689,6 +1689,23 @@ select:disabled {
       </div>
     </div>
 
+    //div to show cannot add new yard popup
+    <!-- Approve Modal popup -->
+    <div
+      class="modal fade modalPopup"
+      id="addFailed"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+      style="display: none;"
+    >
+            <p>You cannot add a new yard until the current yard status is either PO Cancelled or Escalation.</p>
+            <button type="button" class="btn btn-primary" id="okButton">
+              OK
+            </button>
+    </div>
+
     <script>
       $(document).ready(async function () {
         // for populating cancelled orders in form.html
@@ -2422,8 +2439,7 @@ axios
                     // canAddNewYard = false;
                     showModal("#yardModal"); 
                 } else {
-                  alert("You cannot add a new yard until the current yard status is either PO Cancelled or Escalation.");
-                  $('#yardModal').modal('hide');
+                  $("#addFailed").show();
                 }
             });
     });
@@ -3478,6 +3494,10 @@ $(".navbar .nav-item").hover(function () {
 //         $('#yardName').val(selectedYard);
 //         $('#yardSuggestionsList').hide();
 //     });
+
+$("#okButton").click(function () {
+            window.location.reload();
+          });
 
     });
     </script>
