@@ -1771,7 +1771,9 @@ select:disabled {
         data.additionalInfo.forEach((yard, index) => {
             const yardIndex = index + 1;
             console.log("yardIndex",yardIndex,yard);
-            if (yard.paymentStatus == "Card charged") {
+            var pStatus = yard.paymentStatus;
+            console.log("pStatus",pStatus);
+            if (pStatus == "Card charged") {
                 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
             }
 
