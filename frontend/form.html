@@ -2409,24 +2409,36 @@ axios
         });
 
         $(".add-yard-btn").on("click", function () {
-    // let canAddNewYard = true;
-    $("#yardInfoContainer .yard-btn").each(function () {
+    let canAddNewYard = false;
+
+    // Loop through each yard button to check its status
+    $("#yardInfoContainer .yard-btn").each(function (index) {
         let yardIndex = $(this).data("yard-index");
+
         // Fetch the yard status
         fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
                 const yardData = data.additionalInfo[yardIndex - 1];
-                console.log("yardData suggestions",yardData);
+                console.log("yardData suggestions", yardData);
+
                 if (yardData.status === "PO cancelled" || yardData.status === "Escalation") {
-                    // canAddNewYard = false;
-                    showModal("#yardModal"); 
-                } else {
-                  alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
+                    canAddNewYard = true;
                 }
-            });
+
+                // Only show modal after checking all yards
+                if (index === $("#yardInfoContainer .yard-btn").length - 1) {
+                    if (canAddNewYard) {
+                        showModal("#yardModal"); 
+                    } else {
+                        alert("You cannot add a new yard until the current yard status is either PO Cancelled or Escalation.");
+                    }
+                }
+            })
+            .catch(error => console.error("Error fetching yard data:", error));
     });
 });
+
 
 
         
