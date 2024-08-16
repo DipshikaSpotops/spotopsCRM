@@ -1691,6 +1691,7 @@ select:disabled {
 
     <script>
       $(document).ready(async function () {
+        
         // for populating cancelled orders in form.html
         const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
         updateAddYardButton();
@@ -1740,6 +1741,27 @@ select:disabled {
         console.log("process:", process); // Debugging: Check if process is retrieved correctly
         console.log("newEntry:", newEntry); // Debugging: Check if newEntry is retrieved correctly
         console.log("team", team, token);
+
+         // Fetch yard information on page load
+    fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then(response => response.json())
+    .then(data => {
+        // Loop through the additionalInfo to find the relevant yard and apply the saved status
+        data.additionalInfo.forEach((yard, index) => {
+            const yardIndex = index + 1;
+
+            // Check if the payment status is "Card charged"
+            if (yard.paymentStatus === "Card charged") {
+                $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+            }
+
+            // Set the payment status in the select dropdown if the div is shown again
+            if (yardIndex === selectedYardIndex) {
+                $(".paymentStatus").val(yard.paymentStatus);
+            }
+        });
+    })
+    .catch(error => console.error("Error fetching yard data:", error));
 
         if (firstName) {
           $("#user-name").text(firstName);
@@ -2449,47 +2471,33 @@ axios
   $('#cardChargedSbmit').on('click', function() {
     $('#cardCharged').hide();
     $(".mainDiv").removeClass("blur");
-    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-    console.log("in card charged", selectedYardIndex, "oNo", orderNo);
-    const paymentStatus = $(".paymentStatus")
-      .map(function () {
-        return $(this).val();
-      })
-      .get()
-      .filter(function (value) {
-        return value !== "";
-      })
-      .join();
-      
-    const data1 = {
-      paymentStatus: paymentStatus
-    };
 
-    fetch(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
-      {
+    // Retrieve the payment status
+    const paymentStatus = $(".paymentStatus").val();
+    
+    // Update the background color of the yard button
+    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+    
+    // Save the payment status to the server or local storage
+    const data = { paymentStatus: paymentStatus };
+
+    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data1),
-      }
-    )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
     })
-    .then((data) => {
-      updateOrderHistory(data.orderHistory);
-      showYardDetails(selectedYardIndex);
-      fetchAndUpdateYardInfo();
+    .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-  });  
+    .then(data => {
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(selectedYardIndex);
+        fetchAndUpdateYardInfo();
+    })
+    .catch(error => console.error("Error:", error));
+});
+ 
 
 //  card charged part till here
 
@@ -3419,47 +3427,6 @@ $(".navbar .nav-item").hover(function () {
             });
     });
     }
-//     // for giving yard suggestions:
-//     $('#yardName').on('input', function() {
-//    console.log("inputting yard name");
-//      const query = $(this).val();
-
-//      if (query.length > 2) {
-//          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?query=${query}`)
-//              .then(response => {
-//                  if (!response.ok) {
-//                      throw new Error(`HTTP error! status: ${response.status}`);
-//                  }
-//                  return response.json();
-//              })
-//              .then(data => {
-//                  displaySuggestions(data);
-//              })
-//              .catch(error => console.error('Error fetching yard suggestions:', error));
-//      } else {
-//          $('#yardSuggestionsList').hide();
-//      }
-//  });
-
-
-//     // Function to display the suggestions in a dropdown list
-//     function displaySuggestions(suggestions) {
-//         const suggestionsList = $('#yardSuggestionsList');
-//         const suggestion  = $('#suggestionList');
-        
-//         suggestionsList.empty(); // Clear previous suggestions
-//         suggestions.forEach(suggestion => {
-//             suggestionsList.append(`<li class="list-group-item">${suggestion.name}</li>`);
-//         });
-//         suggestionsList.show();
-//     }
-
-//     // Event listener for clicking a suggestion
-//     $(document).on('click', '#yardSuggestionsList .list-group-item', function() {
-//         const selectedYard = $(this).text();
-//         $('#yardName').val(selectedYard);
-//         $('#yardSuggestionsList').hide();
-//     });
 
     });
     </script>
