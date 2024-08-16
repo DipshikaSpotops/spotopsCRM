@@ -2446,50 +2446,50 @@ axios
   });
 
   // On clicking the submit button inside the popup
-$('#cardChargedSbmit').on('click', function () {
-    const paymentStatus = $('.paymentStatus').val();
-    
-    // Check if the selected value is "Card charged"
-    if (paymentStatus === 'Card charged') {
-        // Change the color of the button related to the selected yard index
-        $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-    }
-
-    // Hide the card charged div and remove the blur
-    $('#cardCharged').fadeOut();
-    $('.mainDiv').removeClass('blur');
-
-    // Add your existing fetch request here if you need to update the server
+  $('#cardChargedSbmit').on('click', function() {
+    $('#cardCharged').hide();
+    $(".mainDiv").removeClass("blur");
+    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+    console.log("in card charged", selectedYardIndex, "oNo", orderNo);
+    const paymentStatus = $(".paymentStatus")
+      .map(function () {
+        return $(this).val();
+      })
+      .get()
+      .filter(function (value) {
+        return value !== "";
+      })
+      .join();
+      
     const data1 = {
-        paymentStatus: paymentStatus
+      paymentStatus: paymentStatus
     };
 
     fetch(
-        `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
-        {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data1),
-        }
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data1),
+      }
     )
     .then((response) => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
     })
     .then((data) => {
-        updateOrderHistory(data.orderHistory);
-        showYardDetails(selectedYardIndex);
-        fetchAndUpdateYardInfo();
+      updateOrderHistory(data.orderHistory);
+      showYardDetails(selectedYardIndex);
+      fetchAndUpdateYardInfo();
     })
     .catch((error) => {
-        console.error('Error:', error);
+      console.error("Error:", error);
     });
-});
-
+  });  
 
 //  card charged part till here
 
