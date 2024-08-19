@@ -2538,7 +2538,7 @@ axios
     //for refubd status
     $('#yardInfoContainer').on('click', '.refundCollect', function () {
         selectedYardIndex = $(this).data('yard-index');
-
+        console.log("refund collected part",selectedYardIndex);
         $("#refundCollect").fadeIn(); 
         $(".mainDiv").addClass("blur");
     });
