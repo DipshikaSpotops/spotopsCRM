@@ -1642,6 +1642,7 @@ select:disabled {
               id="refundedAmount"
               placeholder="Enter refunded amount"
             />
+            <button id="refundSubmit">Submit</button>
           </div>
   </div>        
 <!-- refund div ends here -->
@@ -2598,9 +2599,61 @@ axios
     console.error("Error:", error);
   });
 });
-
-
 //  card charged part till here
+// refundCollect part 
+$('#refundSubmit').on('click', function() {
+  $('#refundCollect').hide();
+  $(".mainDiv").removeClass("blur");
+  console.log("refunf collect status", selectedYardIndex, "oNo", orderNo);
+  
+  const refundStatus = $(".paymentStatusRefund")
+    .map(function () {
+      return $(this).val();
+    })
+    .get()
+    .filter(function (value) {
+      return value !== "";
+    })
+    .join();
+  
+    const refundedAmount = $("#refundedAmount").val();
+  
+  // // Update button color based on payment status
+  // if (refundStatus === "Refund collected") {
+  //   $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+  // }
+  
+  const data1 = {
+    refundStatus: refundStatus,
+    refundedAmount:refundedAmount
+  };
+
+  fetch(
+    `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data1),
+    }
+  )
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    updateOrderHistory(data.orderHistory);
+    showYardDetails(selectedYardIndex);
+    fetchAndUpdateYardInfo();
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+});
+// refundCollect part ends here
 
         $("#yardInfoContainer").on("click", ".edit-yard", function () {
           $("#editYardPopup").show();
