@@ -418,7 +418,10 @@
                             const taxedSP = salePrice - salestax;
 
                             for (let d = 0; d < info.length; d++) {
-                                const shippingCharge = info[d].shippingDetails || 0;
+                                var shippingDetails = info[d].shippingDetails;
+                                const shippingValue = shippingDetails.split(":")[1].trim(); 
+                                console.log("own ship", shippingValue);
+                                const shippingCharge = shippingValue || 0;
                                 const partprice = info[d].partPrice || 0;
                                 const otherC = info[d].others || 0;
                                 const returnShippingCharge = info[d].returnShippingCharge || 0;
