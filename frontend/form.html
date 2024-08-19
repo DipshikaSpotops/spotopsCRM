@@ -2345,7 +2345,7 @@ axios
             var salesAgent = $("#salesAgent").val();
             const timestamp = new Date().toLocaleString();
             const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:,mnbjklkjhbv', centralTime);
+            console.log('US Central Time:,mnbjklkjhbv', centralTime);
             var orderNote = ` ${note}</br>
                               ${salesAgent},${centralTime} :`
             const newOrder = {
@@ -3069,6 +3069,33 @@ console.log('Selected payment status:', paymentStatus);
             $("#notesContainer").show();
             $("#divTrackingEdit").hide();
             $("#cardCharged").hide();
+            const deliveredDate = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+        console.log('PO Sent Date:', poSentDate);
+        const updateData = {
+            partDeliveredDate: deliveredDate
+        };
+
+        const orderNo = orderNo; 
+        console.log("orderNo",orderNo,"delivred on",partDeliveredDate);
+        fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update PO Sent Date');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('PO Sent Date updated successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
           } else if (
             refundStatus === "Bad part" ||
             refundStatus === "In return"
@@ -3078,13 +3105,44 @@ console.log('Selected payment status:', paymentStatus);
             $("#divTrackingEdit").hide();
             $("#cardCharged").hide();
           } else if (
-            refundStatus === "Card charged" ||
-            refundStatus === "Yard PO Sent"
+            refundStatus === "Card charged"
           ) {
             newOrderStatus = "Yard Processing";
             $("#escalation").hide();
             $("#divTrackingEdit").hide();
-          } else if (refundStatus === "Yard located") {
+          }else  if (refundStatus === "Yard PO Sent") {
+            newOrderStatus = "Yard Processing";
+            $("#escalation").hide();
+            $("#divTrackingEdit").hide();    
+        const poSentDate = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+        console.log('PO Sent Date:', poSentDate);
+        const updateData = {
+            poSentDate: poSentDate
+        };
+
+        const orderNo = orderNo; 
+        console.log("orderNo",orderNo)
+        fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update PO Sent Date');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('PO Sent Date updated successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+           else if (refundStatus === "Yard located") {
             $("#divTrackingEdit").hide();
           } else {
             $("#divTrackingEdit").hide();

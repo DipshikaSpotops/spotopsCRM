@@ -1049,6 +1049,21 @@ app.put('/users/:id', async (req, res) => {
   }
 });
 
+// api for updating PO sent date:
+app.put('/orders/:orderNo', (req, res) => {
+  const { orderNo } = req.params;
+  const { poSentDate } = req.body;
+  Order.findOneAndUpdate({ orderNo: orderNo }, { $set: { poSentDate: poSentDate } }, { new: true })
+      .then(updatedOrder => {
+          res.json(updatedOrder);
+      })
+      .catch(err => {
+          console.error('Error updating PO Sent Date:', err);
+          res.status(500).send('Error updating PO Sent Date');
+      });
+});
+
+
 // api for giving yard suggestions
 // app.get('/orders/:orderNo/additionalInfo', (req, res) => {
 //   console.log("Yard suggestions endpoint hit with query:", req.query.query);
