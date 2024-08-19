@@ -462,7 +462,7 @@
                         (partialSum, c) => partialSum + c,
                         0
                     );
-                    estimatedAverageGP = totalAgp / validOrdersCount;
+                    estimatedAverageGP = totalAgp / validOrdersCount || 0;
 
                     console.log("totalAGP", totalAgp);
                     console.log("highestGP", highestGP);
