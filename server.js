@@ -216,7 +216,10 @@ const additionalInfoSchema = new mongoose.Schema({
   escalationProcess: String,
   returnShipping: String,
   returnShippingCharge: Number,
-  notes: [String]
+  notes: [String],
+  poSentDate: String,
+  partDeliveredDate:String
+
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
