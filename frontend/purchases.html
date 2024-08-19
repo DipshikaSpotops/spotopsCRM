@@ -205,7 +205,6 @@
                         <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
                     </a>
                     <div class="submenu" id="submenu-reports">
-                        <a class="nav-link placed-orders-link" href="placedOrders.html">Placed Orders</a>
                         <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
                         <a class="nav-link" href="purchases.html">Purchases</a>
                         <a class="nav-link" href="poReport.html">PO Report</a>
@@ -359,6 +358,7 @@
                             otherCharges = 0;
                             overallPurchaseCost = totalPartPrice + totalShipping + otherCharges
                             console.log("overall",overallPurchaseCost);
+                            totalOverall += overallPurchaseCost;
                              // Check if shippingDetails exist
        
                             yardInfoHtml += `<td>
@@ -374,6 +374,7 @@
                     if (appendOrder) {
                         totalPartPriceSum += totalPartPrice;
                         totalShippingSum += totalShipping;
+                        totalOverallSUm += totalOverall;
 
                         $("#yardInfoTable").append(
                             `<tr>
