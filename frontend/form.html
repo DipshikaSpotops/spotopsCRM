@@ -2539,13 +2539,7 @@ axios
     $('#yardInfoContainer').on('click', '.refundCollect', function () {
         selectedYardIndex = $(this).data('yard-index');
 
-        fetchPaymentStatus(orderNo, selectedYardIndex).then(paymentStatus => {
-            if (paymentStatus) {
-                $('.paymentStatusRefund').val(paymentStatus);
-            }
-        });
-
-        $("#refundCollect").fadeIn(); // Show the #cardCharged div with a fade-in effect
+        $("#refundCollect").fadeIn(); 
         $(".mainDiv").addClass("blur");
     });
 
