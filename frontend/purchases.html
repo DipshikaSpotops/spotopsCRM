@@ -347,6 +347,7 @@
                         if (item.additionalInfo[i] && item.additionalInfo[i].paymentStatus === "Card charged") {
                             appendOrder = true; // set flag to true if any additionalInfo has status "Card charged"
                             const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
+                            let otherC = parseFloat(item.additionalInfo[i].others || 0)
                             let shippingDetails = item.additionalInfo[i].shippingDetails;
                             let shippingCharge = 0;
 
@@ -357,8 +358,8 @@
                             // const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
                             totalPartPrice += partPrice;
                             totalShipping += shippingCharge;
-                            otherCharges = 0;
-                            overallPurchaseCost = totalPartPrice + totalShipping + otherCharges
+                            otherCharges += otherC;
+                            overallPurchaseCost = totalPartPrice + totalShipping + otherCharges;
                             console.log("overall",overallPurchaseCost);
                             totalOverall += overallPurchaseCost;
                              // Check if shippingDetails exist
@@ -376,6 +377,7 @@
                     if (appendOrder) {
                         totalPartPriceSum += totalPartPrice;
                         totalShippingSum += totalShipping;
+                        totalOthers += otherCharges
                         totalOverallSum += totalOverall;
 
                         $("#yardInfoTable").append(
@@ -401,6 +403,7 @@
                 footerHtml += `
                     <td id="totalPartPrice">$${totalPartPriceSum.toFixed(2)}</td>
                     <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
+                    <td id="others">$${totalOthers.toFixed(2)}</td>
                     <td id="overallSum">$${totalOverallSum.toFixed(2)}</td>
                     <td></td>
                 </tr>`;
