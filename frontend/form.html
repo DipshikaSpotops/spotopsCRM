@@ -1331,7 +1331,7 @@ select:disabled {
               <option value="">Not charged</option>
             </select>
           </div> -->
-          <label for="paymentStatusRefund" style="display: none"
+          <!-- <label for="paymentStatusRefund" style="display: none"
             >Refund Collected:</label
           >
           <select
@@ -1351,7 +1351,7 @@ select:disabled {
               id="refundedAmount"
               placeholder="Enter refunded amount"
             />
-          </div>
+          </div> -->
           <div>
             <button
               type="button"
@@ -1622,7 +1622,32 @@ select:disabled {
   <button id="cardChargedSbmit">Submit</button>
 </div>
 <!-- card charged div ends here -->
-
+<!-- refund  div starts here -->
+<div id="refundCollect">
+  <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+<label for="paymentStatusRefund" style="display: none"
+            >Refund Collected:</label
+          >
+          <select
+            class="form-control paymentStatusRefund"
+            id="paymentStatusSelect"
+            style="display: none"
+          >
+            <option value="">Choose</option>
+            <option value="Refund collected">Yes</option>
+            <option value="">No</option>
+          </select>
+          <div id="refundedAmountContainer">
+            <label for="refundedAmount">Refunded Amount:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="refundedAmount"
+              placeholder="Enter refunded amount"
+            />
+          </div>
+  </div>        
+<!-- refund div ends here -->
 
 
     <div
@@ -2051,6 +2076,7 @@ if (isCancelledOrder && cancelledOrderNo) {
                 <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
                 <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
                 <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
+                <button type="button" class="refundCollect" data-yard-index="${yardIndex}">Refund Status</button>
               </td>
             </tr>
           </table>
@@ -2507,6 +2533,19 @@ axios
         });
 
         $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
+        $(".mainDiv").addClass("blur");
+    });
+    //for refubd status
+    $('#yardInfoContainer').on('click', '.refundCollect', function () {
+        selectedYardIndex = $(this).data('yard-index');
+
+        fetchPaymentStatus(orderNo, selectedYardIndex).then(paymentStatus => {
+            if (paymentStatus) {
+                $('.paymentStatusRefund').val(paymentStatus);
+            }
+        });
+
+        $("#refundCollect").fadeIn(); // Show the #cardCharged div with a fade-in effect
         $(".mainDiv").addClass("blur");
     });
 
