@@ -2108,6 +2108,8 @@ if (isCancelledOrder && cancelledOrderNo) {
       ${yardData.escalationProcess ? `Escalation Process: ${yardData.escalationProcess}<br>` : ""}
       ${yardData.returnShipping ? `Return Shipping type: ${yardData.returnShipping}<br>` : ""}
       ${yardData.returnShippingCharge ? `Return shipping amount: $${yardData.returnShippingCharge}<br>` : ""}
+      ${yardData.refundStatus ? `Refund Status: $${yardData.refundStatus}<br>` : ""}
+      ${yardData.refundedAmount ? `Refunded Amount: $${yardData.refundedAmount}<br>` : ""}
     </td>
   </tr>
 </table>
