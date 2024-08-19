@@ -278,7 +278,7 @@
         }
             const token = localStorage.getItem("token");
             var team;
-            console.log("token", token);
+            // console.log("token", token);
             let yardData = [];
 
             async function fetchData() {
@@ -292,7 +292,7 @@
                     }
 
                     const data = response.data;
-                    console.log("data", data);
+                    // console.log("data", data);
 
                     // Check if data is an array
                     if (!Array.isArray(data)) {
@@ -361,7 +361,7 @@
                             totalShipping += shippingCharge;
                             otherCharges += otherC;
                             overallPurchaseCost = totalPartPrice + totalShipping + otherCharges;
-                            console.log("overall",overallPurchaseCost);
+                            // console.log("overall",overallPurchaseCost);
                             totalOveralls += overallPurchaseCost;
                              // Check if shippingDetails exist
        
@@ -379,9 +379,9 @@
                         totalPartPriceSum += totalPartPrice;
                         totalShippingSum += totalShipping;
                         totalOthersSum += otherCharges
-                        console.log("totalOthers",totalOthersSum);
+                        // console.log("totalOthers",totalOthersSum);
                         totalOverallSum += overallPurchaseCost;
-                        console.log("overallSum",totalOverallSum);
+                        // console.log("overallSum",totalOverallSum);
 
                         $("#yardInfoTable").append(
                             `<tr>
