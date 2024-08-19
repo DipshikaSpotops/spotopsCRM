@@ -407,10 +407,22 @@
         }
 
         $("#searchInput").on("keyup", function () {
-  let value = $(this).val().toLowerCase();
-  $("#yardInfoTable tr").filter(function () {
-    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-  });
+    let value = $(this).val().toLowerCase();
+    let totalShippingSum = 0;
+
+    $("#yardInfoTable tr").filter(function () {
+        const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+        $(this).toggle(isMatch);
+
+        if (isMatch) {
+            // Find the total shipping column and parse its value
+            const totalShipping = parseFloat($(this).find("td").eq(-2).text()) || 0;
+            totalShippingSum += totalShipping;
+        }
+    });
+
+    // Update the footer with the new total shipping value
+    $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
 });
 
 
@@ -520,3 +532,11 @@
     </script>
   </body>
 </html>
+<!-- even for the above page, dynamically changr <td>${totalShipping.toFixed(2)}</td>
+on following
+$("#searchInput").on("keyup", function () {
+let value = $(this).val().toLowerCase();
+$("#yardInfoTable tr").filter(function () {
+$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+});
+}); -->
