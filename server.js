@@ -6,15 +6,13 @@ const path = require("path");
 const bcrypt = require("bcrypt");   
 const nodemailer = require("nodemailer");
 const fs = require("fs");
-const moment = require("moment");
+const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 require("dotenv").config();
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
 
 // for us Time:
-// Make sure to include moment.js and moment-timezone.js in your project
-
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:', centralTime);
 
