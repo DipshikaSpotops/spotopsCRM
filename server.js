@@ -205,6 +205,7 @@ const additionalInfoSchema = new mongoose.Schema({
   others: String,
   status: String,
   paymentStatus: String,
+  refundStatus:String,
   refundedAmount: Number,
   trackingNo: String ,
   eta: Number,
