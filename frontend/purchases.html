@@ -315,6 +315,7 @@
                 let maxYards = 0;
                 let totalPartPriceSum = 0;
                 let totalShippingSum = 0;
+                let totalOverallSum = 0;
 
                 data.forEach((item) => {
                     if (item.additionalInfo.length > maxYards) {
@@ -375,7 +376,7 @@
                     if (appendOrder) {
                         totalPartPriceSum += totalPartPrice;
                         totalShippingSum += totalShipping;
-                        totalOverallSUm += totalOverall;
+                        totalOverallSum += totalOverall;
 
                         $("#yardInfoTable").append(
                             `<tr>
