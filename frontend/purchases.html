@@ -232,7 +232,7 @@
                             <th scope="col">Order Date</th>
                         </tr>
                     </thead>
-                    <tbody id="yardInfoTable">
+                    <tbody id="yardInfoTable" style="text-align: center;">
                         <!-- Yard information will be appended here -->
                     </tbody>
                     <tfoot id="tableFooter">
@@ -384,7 +384,7 @@
                         // console.log("overallSum",totalOverallSum);
 
                         $("#yardInfoTable").append(
-                            `<tr style = "text-align:center;">
+                            `<tr>
                                 <td>${item.orderNo}</td>
                                 <td>${item.orderDate}</td>
                                 ${yardInfoHtml}
