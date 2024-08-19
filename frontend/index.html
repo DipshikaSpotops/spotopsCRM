@@ -203,7 +203,7 @@
                 >View Orders</a
               >
               <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
-              <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
+              <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a>
               <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
               <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
               <a
@@ -425,10 +425,10 @@
           // Hide specific reports links for Team Charlie
           $("#submenu-reports .nav-link")
             .not(':contains("My Sales Report")')
-            .hide();
+            .show();
           // Hide specific dashboards links for Team Charlie
           $(
-            "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+            "#submenu-dashboards .view-orders-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
           ).hide();
           // Hide teams and users sections for Team Charlie
           $(".nav-item:has(#submenu-teams)").hide();
