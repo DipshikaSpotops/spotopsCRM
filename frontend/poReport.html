@@ -374,12 +374,28 @@
                 $("#yard-info-content").removeClass("d-none");
             });
             $("#searchInput").on("keyup", function () {
-          let value = $(this).val().toLowerCase();
-          $("#infoTable tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-          });
-        });
+    let value = $(this).val().toLowerCase();
+    let totalPartPriceSum = 0;
+    let totalShippingSum = 0;
 
+    $("#yardInfoTable tr").filter(function () {
+        const match = $(this).text().toLowerCase().indexOf(value) > -1;
+        $(this).toggle(match);
+
+        if (match) {
+            // Assuming the part price and shipping charge are in specific columns, update the selectors accordingly.
+            const partPrice = parseFloat($(this).find("td").eq(-3).text()) || 0; // Adjust index as needed
+            const shippingCharge = parseFloat($(this).find("td").eq(-2).text()) || 0; // Adjust index as needed
+
+            totalPartPriceSum += partPrice;
+            totalShippingSum += shippingCharge;
+        }
+    });
+
+    // Update the footer with the new totals
+    $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
+    $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
+});
         
 
             
@@ -457,7 +473,7 @@
                                 totalShipping += shippingCharge;
 
                                 yardInfoHtml += `<td>
-                                    ${item.additionalInfo[i].yardName || ""} | $${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
+                                    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
                                     Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"})<br>
                                 </td>`;
                             } else {
@@ -519,3 +535,27 @@
     </script>
 </body>
 </html>
+<!-- $("#searchInput").on("keyup", function () {
+    let value = $(this).val().toLowerCase();
+    let totalPartPriceSum = 0;
+    let totalShippingSum = 0;
+
+    $("#yardInfoTable tr").filter(function () {
+        const match = $(this).text().toLowerCase().indexOf(value) > -1;
+        $(this).toggle(match);
+
+        if (match) {
+            // Assuming the part price and shipping charge are in specific columns, update the selectors accordingly.
+            const partPrice = parseFloat($(this).find("td").eq(-3).text()) || 0; // Adjust index as needed
+            const shippingCharge = parseFloat($(this).find("td").eq(-2).text()) || 0; // Adjust index as needed
+
+            totalPartPriceSum += partPrice;
+            totalShippingSum += shippingCharge;
+        }
+    });
+
+    // Update the footer with the new totals
+    $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
+    $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
+});
+ -->
