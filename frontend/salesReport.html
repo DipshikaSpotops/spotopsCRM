@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Report</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -46,19 +46,21 @@
             left: auto;
         }
         .sidebar {
-            background-color: #006666;
+            background-color: black;
             position: fixed;
             z-index: 1;
             top: 0;
             left: 0;
             overflow-x: hidden;
             padding-top: 20px;
-            width: 14%;
+            width: 13%;
             height: 100vh;
-            padding: 50px 14px;
+            padding: 50px 0px;
+            transition: transform 0.3s ease;
         }
         .sidebar .nav-link {
             color: #ffffff;
+            cursor: pointer;
         }
         .sidebar .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -113,6 +115,24 @@
             width: 10%;
             margin-bottom: 20px;
         }
+        .submenu {
+            display: block; /* Show submenus by default */
+        }
+        .nav-item > .submenu {
+            padding-left: 20px;
+        }
+        .nav-item .nav-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-item .nav-link i {
+            margin-right: 10px;
+        }
+        .chevron-icon {
+            margin-left: auto;
+            cursor: pointer;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -128,7 +148,7 @@
 <body>
     <div class="navbar">
         <div class="logo">
-            <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+            <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo">
         </div>
         <div class="user-info dropdown">
             <span>Welcome <span id="user-name"></span></span>
@@ -145,19 +165,19 @@
         <div class="offcanvas-body">
             <nav class="nav flex-column">
                 <div class="nav-item dashboards">
-                    <a class="nav-link" href="#" id="default-link">
+                    <a class="nav-link menu" href="#" id="default-link">
                         <i class="fas fa-home"></i> Dashboards
-                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
                     <div class="submenu" id="submenu-dashboards">
                         <a class="nav-link add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
-                        <a class="nav-link view-orders-link" href="individualOrders.html">View My Orders</a>
+                        <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
                     </div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" id="reports-section">
                     <a class="nav-link" href="#">
                         <i class="fas fa-chart-bar"></i> Reports
-                        <span class="chevron-icon"><i class="fas fa-chevron-right"></i></span>
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
                     <div class="submenu" id="submenu-reports">
                         <a class="nav-link" href="salesReport.html">My Sales Report</a>
@@ -304,8 +324,6 @@
             $(".close").click(function () {
                 location.reload();
             });
-
-           
 
             async function fetchSalesData(filter) {
                 try {
