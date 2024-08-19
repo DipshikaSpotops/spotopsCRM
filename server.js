@@ -6,10 +6,18 @@ const path = require("path");
 const bcrypt = require("bcrypt");   
 const nodemailer = require("nodemailer");
 const fs = require("fs");
+const moment = require('momemt');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 require("dotenv").config();
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
+
+// for us Time:
+// Make sure to include moment.js and moment-timezone.js in your project
+
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+
 
 const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
@@ -317,7 +325,7 @@ app.put("/orders/:orderNo", async (req, res) => {
       if (oldStatus !== order.orderStatus) {
           const timestamp = new Date().toLocaleString()
           order.orderHistory.push(
-              `Order status updated to ${order.orderStatus} by ${firstName} on ${timestamp}`
+              `Order status updated to ${order.orderStatus} by ${firstName} on ${centralTime}`
           );
       }
 
