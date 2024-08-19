@@ -362,7 +362,7 @@
                             otherCharges += otherC;
                             overallPurchaseCost = totalPartPrice + totalShipping + otherCharges;
                             console.log("overall",overallPurchaseCost);
-                            totalOverall += overallPurchaseCost;
+                            totalOveralls += overallPurchaseCost;
                              // Check if shippingDetails exist
        
                             yardInfoHtml += `<td>
@@ -380,7 +380,7 @@
                         totalShippingSum += totalShipping;
                         totalOthersSum += otherCharges
                         console.log("totalOthers",totalOthersSum);
-                        totalOverallSum += totalOverall;
+                        totalOverallSum += totalOveralls;
                         console.log("overallSum",totalOverallSum);
 
                         $("#yardInfoTable").append(
