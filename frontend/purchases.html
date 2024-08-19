@@ -470,11 +470,38 @@
             });
 
             $("#searchInput").on("keyup", function () {
-          let value = $(this).val().toLowerCase();
-          $("#yardInfoTable tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-          });
-        }); 
+    let value = $(this).val().toLowerCase();
+    let totalPartPriceSum = 0;
+    let totalShippingSum = 0;
+    let totalOthersSum = 0;
+    let totalOverallSum = 0;
+
+    $("#yardInfoTable tr").filter(function () {
+        const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+        $(this).toggle(isMatch);
+
+        if (isMatch) {
+            // Parse the relevant columns for each row
+            const partPrice = parseFloat($(this).find("td").eq(-5).text().replace('$', '')) || 0;
+            const shipping = parseFloat($(this).find("td").eq(-4).text().replace('$', '')) || 0;
+            const others = parseFloat($(this).find("td").eq(-3).text().replace('$', '')) || 0;
+            const overall = parseFloat($(this).find("td").eq(-2).text().replace('$', '')) || 0;
+
+            // Accumulate the totals
+            totalPartPriceSum += partPrice;
+            totalShippingSum += shipping;
+            totalOthersSum += others;
+            totalOverallSum += overall;
+        }
+    });
+
+    // Update the footer with the new totals
+    $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
+    $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
+    $("#others").text(`$${totalOthersSum.toFixed(2)}`);
+    $("#overallSum").text(`$${totalOverallSum.toFixed(2)}`);
+});
+
 
             
 
@@ -541,3 +568,14 @@
     </script>
 </body>
 </html>
+<!-- even for the above page, dynamically changr <td id="totalPartPrice">$${totalPartPriceSum.toFixed(2)}</td>
+<td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
+<td id="others">$${totalOthersSum.toFixed(2)}</td>
+<td id="overallSum">$${totalOverallSum.toFixed(2)}</td>
+on following
+$("#searchInput").on("keyup", function () {
+let value = $(this).val().toLowerCase();
+$("#yardInfoTable tr").filter(function () {
+$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+});
+}); -->
