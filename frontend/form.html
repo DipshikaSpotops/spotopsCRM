@@ -2344,8 +2344,10 @@ axios
             var note = $("#notes").val()
             var salesAgent = $("#salesAgent").val();
             const timestamp = new Date().toLocaleString();
+            const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
             var orderNote = ` ${note}</br>
-                              ${salesAgent},${timestamp} :`
+                              ${salesAgent},${centralTime} :`
             const newOrder = {
               orderNo: newOrderNo,
               orderDate: $("#orderDate").val(),
@@ -3343,7 +3345,9 @@ $("#saveYardDetails").on("click", function () {
         const content = $("#noteInput").val();
         const yardIndex = $("#submit").data("yard-index") - 1;
         const firstName = localStorage.getItem("firstName");
-        const timestamp = new Date().toLocaleString();
+        // const timestamp = new Date().toLocaleString();
+        const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
 
         if (content.length > 0) {
           axios
@@ -3352,7 +3356,7 @@ $("#saveYardDetails").on("click", function () {
               {
                 note: content,
                 author: firstName,
-                timestamp: timestamp,
+                timestamp: centralTime,
               }
             )
             .then((response) => {
@@ -3415,6 +3419,8 @@ $("#saveYardDetails").on("click", function () {
           const yardIndex1 = $("#submit").data("yard-index") - 1;
           const firstName1 = localStorage.getItem("firstName");
           const timestamp1 = new Date().toLocaleString();
+          const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
 
           if (content1.length > 0) {
             axios
@@ -3423,7 +3429,7 @@ $("#saveYardDetails").on("click", function () {
                 {
                   note: content1,
                   author: firstName1,
-                  timestamp: timestamp1,
+                  timestamp: centralTime,
                 }
               )
               .then((response) => {

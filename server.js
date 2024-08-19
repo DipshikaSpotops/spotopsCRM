@@ -12,11 +12,6 @@ require("dotenv").config();
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
 
-// for us Time:
-const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:,mnbjklkjhbv', centralTime);
-
-
 const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
 const { url } = require("inspector");
@@ -309,6 +304,8 @@ app.get("/orders/:orderNo", async (req, res) => {
 });
 
 app.put("/orders/:orderNo", async (req, res) => {
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
   try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
       if (!order) return res.status(404).send("Order not found");
@@ -336,6 +333,8 @@ app.put("/orders/:orderNo", async (req, res) => {
 // 
 app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
   console.log("additionalInfo");
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
   try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
       const firstName = req.query.firstname;
@@ -358,7 +357,7 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
       console.log("yard details",pp,yardname,shipping,others);
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
-      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${timestamp}`);
+      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${centralTime}`);
 
       await order.save();
       
@@ -371,6 +370,8 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
 // app.put("/orders/:orderNo")
 
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
   try {
     // console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
     const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -399,7 +400,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
       const status = req.body.status; // Get status from the request body
       const paymentStatus = req.body.paymentStatus;
       const refundStatus = req.body.refundStatus;
-      order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${timestamp}`);
+      order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${centralTime}`);
 
       // Mark the additionalInfo array as modified
       order.markModified("additionalInfo");
@@ -868,6 +869,8 @@ app.get("/ordersteamB", async (req, res) => {
 // });
 // Update notes in additionalInfo of a specific yardIndex
 app.post('/orders/:orderNo/notes/:yardIndex', async (req, res) => {
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
   console.log('Received request to add note');
   try {
     const { orderNo, yardIndex } = req.params;
