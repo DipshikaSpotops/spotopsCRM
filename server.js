@@ -6,7 +6,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");   
 const nodemailer = require("nodemailer");
 const fs = require("fs");
-const moment = require('momemt');
+const moment = require("moment");
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 require("dotenv").config();
 const OrderNumber = require("./backend/models/OrderNo");
