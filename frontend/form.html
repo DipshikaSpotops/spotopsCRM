@@ -2617,7 +2617,7 @@ $('#refundSubmit').on('click', function() {
     .join();
   
     const refundedAmount = $("#refundedAmount").val();
-  
+    console.log("collect",refundStatus,refundedAmount);
   // // Update button color based on payment status
   // if (refundStatus === "Refund collected") {
   //   $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
