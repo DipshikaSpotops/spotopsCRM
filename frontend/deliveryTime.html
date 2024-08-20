@@ -141,7 +141,7 @@
             // Fetch and display data
             async function fetchData() {
                 try {
-                    const response = await axios.get("https://www.spotops360.com/yardInfo", {
+                    const response = await axios.get("https://www.spotops360.com/orders", {
                         headers: { Authorization: `Bearer ${token}` },
                     });
 
@@ -168,11 +168,11 @@
             }
 
             function renderTable(data) {
+              console.log("data",data);
                 const tableHeader = $("#tableHeader");
                 $("#yardInfoTable").empty();
                 let maxYards = 0;
 
-                // Determine the maximum number of yards in any order
                 data.forEach((item) => {
                     if (item.additionalInfo.length > maxYards) {
                         maxYards = item.additionalInfo.length;
@@ -186,7 +186,9 @@
                 }
 
                 // Populate the table rows
-                console.log("data",data);
+                console.log("data",
+                  
+                );
                 data.forEach((item) => {
                     let yardInfoHtml = "";
 
