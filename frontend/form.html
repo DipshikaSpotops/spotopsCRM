@@ -2925,8 +2925,7 @@ $("#editYardInfo").on("click", async function () {
     const formatter = new Intl.DateTimeFormat('en-US', options);
     const parts = formatter.formatToParts(now);
     const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-
-    // Conditionally add poSentDate or partDeliveredDate based on the status
+    console.log("status",status);
     if (status === "Yard PO Sent") {
         data1.poSentDate = formattedDate;
         console.log("poSentDate set:", data1.poSentDate);
