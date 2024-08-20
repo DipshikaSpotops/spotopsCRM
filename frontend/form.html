@@ -2912,7 +2912,7 @@ $("#editYardInfo").on("click", async function () {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: false,
+        hour12: true,
     };
     const formatter = new Intl.DateTimeFormat('en-US', options);
     const parts = formatter.formatToParts(now);
@@ -2940,6 +2940,7 @@ $("#editYardInfo").on("click", async function () {
     })
     .then((data) => {
         $("#editYardModal").modal("hide");
+        console.log("updating dates")
         updateOrderHistory(data.orderHistory);
         showYardDetails(yardIndex);
         fetchAndUpdateYardInfo();
