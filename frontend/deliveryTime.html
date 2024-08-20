@@ -236,7 +236,7 @@
                             }
                             if (status !== "Part delivered") {
                             const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-                            console.log("Raw customerApprovedDate:", customerApprovedDate);
+                            console.log("Raw customerApprovedDate:", customerApprovedDate,dallasTime);
                             const approvedDate = new Date(customerApprovedDate);
                             console.log("Parsed customerApprovedDate:", approvedDate);
                             
