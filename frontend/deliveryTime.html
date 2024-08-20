@@ -234,13 +234,24 @@
                                     daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
                                 }
                             }
-
                             if (status !== "Part delivered") {
                             const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-                            const diffTime = Math.abs(dallasTime - new Date(customerApprovedDate));
-                            daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                            console.log("Difference between customer approved date and today in Dallas time:", daysDifference2);
+                            console.log("Raw customerApprovedDate:", customerApprovedDate);
+                            const approvedDate = new Date(customerApprovedDate);
+                            console.log("Parsed customerApprovedDate:", approvedDate);
+                            
+                            if (isNaN(approvedDate)) {
+                                console.error("Invalid customerApprovedDate:", customerApprovedDate);
+                            } else {
+                                const diffTime = Math.abs(dallasTime - approvedDate);
+
+                                // Convert the difference from milliseconds to days
+                                daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
+                                
+                                console.log("Difference between customer approved date and today in Dallas time:", daysDifference2);
                             }
+                         }
+
 
 
 
