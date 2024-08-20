@@ -1067,9 +1067,9 @@ app.put('/orders/:orderNo', (req, res) => {
 });
 // api for updating po sent date and delivery date:
 app.put('/orders/:orderNo/additionalInfo/:yardIndex', async (req, res) => {
-  console.log("updating dates")
-  const { orderNo, yardIndex } = req.params;  
-  const { poSentDate, partDeliveredDate } = req.body; 
+  const { orderNo, yardIndex } = req.params;
+  const { poSentDate, partDeliveredDate, status } = req.body;
+
   try {
       const order = await Order.findOne({ orderNo });
 
@@ -1077,19 +1077,26 @@ app.put('/orders/:orderNo/additionalInfo/:yardIndex', async (req, res) => {
           return res.status(404).send('Order not found');
       }
 
-      if (yardIndex < 0 || yardIndex >= order.yards.length) {
-          return res.status(404).send('Yard not found in the order');
-      }
-      if (poSentDate) order.yards[yardIndex].poSentDate = poSentDate;
-      if (partDeliveredDate) order.yards[yardIndex].partDeliveredDate = partDeliveredDate;
+      const yard = order.yards[yardIndex];
 
-      await order.save();  
-      res.json(order); 
+      if (!yard) {
+          return res.status(404).send('Yard not found');
+      }
+
+      // Update the relevant fields
+      if (poSentDate) yard.poSentDate = poSentDate;
+      if (partDeliveredDate) yard.partDeliveredDate = partDeliveredDate;
+
+      // Save the changes
+      await order.save();
+
+      res.json(order);
   } catch (err) {
       console.error('Error updating yard dates:', err);
       res.status(500).send('Internal server error');
   }
 });
+
 
 
 
