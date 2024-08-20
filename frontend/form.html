@@ -2926,44 +2926,67 @@ $("#editYardInfo").on("click", async function () {
     const parts = formatter.formatToParts(now);
     const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
     console.log("status",status);
-    if (status === "Yard PO Sent") {
-        data1.poSentDate = formattedDate;
-        console.log("poSentDate set:", data1.poSentDate);
-    } else if (status === "Part delivered") {
-        data1.partDeliveredDate = formattedDate;
-        console.log("partDeliveredDate set:", data1.partDeliveredDate);
+    // Assuming you have the yardIndex and orderNo available
+
+// 1. Update additionalInfo with poSentDate or partDeliveredDate
+if (status === "Yard PO Sent") {
+    data1.poSentDate = formattedDate;
+    console.log("poSentDate set:", data1.poSentDate);
+} else if (status === "Part delivered") {
+    data1.partDeliveredDate = formattedDate;
+    console.log("partDeliveredDate set:", data1.partDeliveredDate);
+}
+
+// This fetch only updates the additionalInfo part of the order
+fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data1),
+})
+.then((response) => {
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
     }
+    return response.json();
+})
+.then((data) => {
+    console.log("additionalInfo updated:", data);
+})
+.catch((error) => {
+    console.error("Error updating additionalInfo:", error);
+});
 
-    // Log the data before sending
-    console.log("Yard Index:", yardIndex);
-    console.log("Order No:", orderNo);
-    console.log("Sending data:", JSON.stringify(data1));
-
-    // Send the data to the server using fetch
-    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    },
+})
+.then(response => response.json())
+.then(orderData => {
+    const mainOrderUpdate = {
+        customerApprovedDate: orderData.customerApprovedDate,
+    };
+    return fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data1),
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then((data) => {
-        console.log("Server response:", data);
-
-        $("#editYardModal").modal("hide");
-        updateOrderHistory(data.orderHistory);
-        showYardDetails(yardIndex);
-        fetchAndUpdateYardInfo();
-    })
-    .catch((error) => {
-        console.error("Error:", error);
+        body: JSON.stringify(mainOrderUpdate),
     });
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Main order updated:", data);
+})
+.catch(error => {
+    console.error("Error updating main order:", error);
+});
+
+
+   
 });
 
 
@@ -3591,48 +3614,6 @@ $(".navbar .nav-item").hover(function () {
             });
     });
     }
-//     // for giving yard suggestions:
-//     $('#yardName').on('input', function() {
-//    console.log("inputting yard name");
-//      const query = $(this).val();
-
-//      if (query.length > 2) {
-//          fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?query=${query}`)
-//              .then(response => {
-//                  if (!response.ok) {
-//                      throw new Error(`HTTP error! status: ${response.status}`);
-//                  }
-//                  return response.json();
-//              })
-//              .then(data => {
-//                  displaySuggestions(data);
-//              })
-//              .catch(error => console.error('Error fetching yard suggestions:', error));
-//      } else {
-//          $('#yardSuggestionsList').hide();
-//      }
-//  });
-
-
-//     // Function to display the suggestions in a dropdown list
-//     function displaySuggestions(suggestions) {
-//         const suggestionsList = $('#yardSuggestionsList');
-//         const suggestion  = $('#suggestionList');
-        
-//         suggestionsList.empty(); // Clear previous suggestions
-//         suggestions.forEach(suggestion => {
-//             suggestionsList.append(`<li class="list-group-item">${suggestion.name}</li>`);
-//         });
-//         suggestionsList.show();
-//     }
-
-//     // Event listener for clicking a suggestion
-//     $(document).on('click', '#yardSuggestionsList .list-group-item', function() {
-//         const selectedYard = $(this).text();
-//         $('#yardName').val(selectedYard);
-//         $('#yardSuggestionsList').hide();
-//     });
-
 $("#okButton").click(function () {
             window.location.reload();
           });
@@ -3641,3 +3622,12 @@ $("#okButton").click(function () {
     </script>
   </body>   
 </html>
+<!-- in the above page: when following event occurs, when i am updating poSentDate or partDeliveredDate,
+if (status === "Yard PO Sent") {
+  data1.poSentDate = formattedDate;
+  console.log("poSentDate set:", data1.poSentDate);
+} else if (status === "Part delivered") {
+  data1.partDeliveredDate = formattedDate;
+  console.log("partDeliveredDate set:", data1.partDeliveredDate);
+}
+my customerApproved Date is getting removed from the databse, how is it possible -->
