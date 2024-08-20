@@ -2866,98 +2866,89 @@ $('#refundSubmit').on('click', function() {
 
 
 
-        $("#editYardInfo").on("click", async function () {
-          console.log("clicking n save");
-          $(".mainDiv").removeClass("blur");
-          $("#editYardPopup").hide();
-          yardIndex = $(this).data("yard-index");
-          const status = $("#refund").val();
-          const returnCharges = $(".returnShipment").val();
-          console.log("returnshipp", returnCharges);
-          const trackingNo = $("#trackingNoEdit").val();
-          const eta = $("#etaEdit").val();
-          const shipperName = $("#shipperNameEdit").val();
-          const trackingLink = $("#linkInput").val();
-          console.log("trackingDetails", trackingNo,eta,shipperName,trackingLink);
+$("#editYardInfo").on("click", async function () {
+    console.log("clicking on save");
+    $(".mainDiv").removeClass("blur");
+    $("#editYardPopup").hide();
+    const yardIndex = $(this).data("yard-index");
+    const status = $("#refund").val();
+    const returnCharges = $(".returnShipment").val();
+    const trackingNo = $("#trackingNoEdit").val();
+    const eta = $("#etaEdit").val();
+    const shipperName = $("#shipperNameEdit").val();
+    const trackingLink = $("#linkInput").val();
+    const returnShippingMethod = $("input[name='returnValue']:checked").val();
+    const paymentStatus = $('.paymentStatus').val();
+    const escCause = $("#esc").map(function () {
+        return $(this).val();
+    }).get().filter(function (value) {
+        return value !== "";
+    }).join();
+    const escProcess = $("#escProcess").map(function () {
+        return $(this).val();
+    }).get().filter(function (value) {
+        return value !== "";
+    }).join();
+    const refundedAmount = $("#refundedAmount").val();
 
-          const returnShippingMethod = $(
-            "input[name='returnValue']:checked"
-          ).val();
-          console.log("shippinfR", returnShippingMethod);
+    const data1 = {
+        status: status,
+        trackingNo: trackingNo,
+        ets: eta,
+        shipperName: shipperName,
+        trackingLink: trackingLink,
+        refundedAmount: refundedAmount ? parseFloat(refundedAmount) : null,
+        escalationCause: escCause,
+        escalationProcess: escProcess,
+        returnShipping: returnShippingMethod,
+        returnShippingCharge: returnCharges,
+    };
+    const now = new Date();
+    const options = {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(now);
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 
-          // const paymentStatus = $(".paymentStatus")
-          //   .map(function () {
-          //     return $(this).val();
-          //   })
-          //   .get()
-          //   .filter(function (value) {
-          //     return value !== "";
-          //   })
-          //   .join();
-            const paymentStatus  = $('.paymentStatus').val();
-console.log('Selected payment status:', paymentStatus);
+    // Conditional logic to update poSentDate or partDeliveredDate
+    if (status === "Yard PO Sent") {
+        data1.poSentDate = formattedDate;
+    } else if (status === "Part Delivered") {
+        data1.partDeliveredDate = formattedDate;
+    }
 
-          const escCause = $("#esc")
-            .map(function () {
-              return $(this).val();
-            })
-            .get()
-            .filter(function (value) {
-              return value !== "";
-            })
-            .join();
-          const escProcess = $("#escProcess")
-            .map(function () {
-              return $(this).val();
-            })
-            .get()
-            .filter(function (value) {
-              return value !== "";
-            })
-            .join();
-          console.log("escCause", escCause, "escProcess", escProcess);
-          const refundedAmount = $("#refundedAmount").val();
+    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data1),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        $("#editYardModal").modal("hide");
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(yardIndex);
+        fetchAndUpdateYardInfo();
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+});
 
-          const data1 = {
-            status: status,
-            // paymentStatus: paymentStatus,
-            trackingNo: trackingNo ,
-            ets: eta,
-            shipperName: shipperName,
-            trackingLink:trackingLink ,
-            refundedAmount: refundedAmount ? parseFloat(refundedAmount) : null,
-            escalationCause: escCause,
-            escalationProcess: escProcess,
-            returnShipping: returnShippingMethod,
-            returnShippingCharge: returnCharges,
-          };
-
-          fetch(
-            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data1),
-            }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              $("#editYardModal").modal("hide");
-              updateOrderHistory(data.orderHistory);
-              showYardDetails(yardIndex);
-              fetchAndUpdateYardInfo();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
 
         async function fetchYardInfo(token) {
           const response = await axios.get("https://www.spotops360.com/yardInfo", {
@@ -3039,24 +3030,6 @@ console.log('Selected payment status:', paymentStatus);
     const orderStatus = $("#orderStatus").val();
 
     let newOrderStatus = orderStatus;
-    const now = new Date();
-    const options = {
-        timeZone: 'America/Chicago',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-    };
-
-    // Formatting the date to Dallas time
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    const parts = formatter.formatToParts(now);
-    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-    
-    let updateData = {};
 
     if (refundStatus === "Part shipped") {
         newOrderStatus = "In Transit";
@@ -3088,16 +3061,11 @@ console.log('Selected payment status:', paymentStatus);
         $("#divTrackingEdit").hide();
         $("#cardCharged").hide();
         
-        // Save partDeliveredDate
-        updateData.partDeliveredDate = formattedDate;
         
     } else if (refundStatus === "Yard PO Sent") {
         newOrderStatus = "Yard Processing";
         $("#escalation").hide();
-        $("#divTrackingEdit").hide();    
-        
-        // Save poSentDate
-        updateData.poSentDate = formattedDate;
+        $("#divTrackingEdit").hide();
         
     } else if (refundStatus === "Yard located") {
         $("#divTrackingEdit").hide();
@@ -3105,31 +3073,6 @@ console.log('Selected payment status:', paymentStatus);
         $("#divTrackingEdit").hide();
         $("#sendEmailButton").hide();
         $("#notesContainer").hide();
-    }
-
-    // If there's data to update
-    if (Object.keys(updateData).length > 0) {
-      // const orderNo = urlParams.get("orderNo");
-      console.log("dates",updateData,orderNo,yardIndex)
-        fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updateData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to update date');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Date updated successfully:', data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
     }
 
     // Updating the order status
@@ -3156,7 +3099,6 @@ console.log('Selected payment status:', paymentStatus);
         console.error("Error updating order status:", error);
     });
 });
-
 
         $(".paymentStatus").on("change", function () {
           const paymentStatus = $(this).val();
