@@ -2956,8 +2956,6 @@ $("#editYardInfo").on("click", async function () {
     })
     .then((data) => {
         console.log("Server response:", data);
-        console.log("poSentDate after update:", data.yards[yardIndex].poSentDate);
-        console.log("partDeliveredDate after update:", data.yards[yardIndex].partDeliveredDate);
 
         $("#editYardModal").modal("hide");
         updateOrderHistory(data.orderHistory);
