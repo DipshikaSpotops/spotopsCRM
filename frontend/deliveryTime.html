@@ -213,7 +213,7 @@
                                 hour12: false,
                             };
                             const today = new Intl.DateTimeFormat('en-US', options);
-                            const parts = formatter.formatToParts(now);
+                            const parts = today.formatToParts(now);
                             const todayDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 
                             // Check if poSentDate is defined and valid
