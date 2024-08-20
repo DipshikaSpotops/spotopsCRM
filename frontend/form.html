@@ -3110,8 +3110,8 @@ console.log('Selected payment status:', paymentStatus);
 
     // If there's data to update
     if (Object.keys(updateData).length > 0) {
+      // const orderNo = urlParams.get("orderNo");
       console.log("dates",updateData,orderNo,yardIndex)
-        const orderNo = "your-order-number"; // Replace with your actual order number variable
         fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`, {
             method: "PUT",
             headers: {
