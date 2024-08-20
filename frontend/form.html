@@ -2870,6 +2870,8 @@ $("#editYardInfo").on("click", async function () {
     console.log("clicking on save");
     $(".mainDiv").removeClass("blur");
     $("#editYardPopup").hide();
+    
+    // Get the yard index and other relevant data from the form
     const yardIndex = $(this).data("yard-index");
     const status = $("#refund").val();
     const returnCharges = $(".returnShipment").val();
@@ -2879,18 +2881,22 @@ $("#editYardInfo").on("click", async function () {
     const trackingLink = $("#linkInput").val();
     const returnShippingMethod = $("input[name='returnValue']:checked").val();
     const paymentStatus = $('.paymentStatus').val();
+    
     const escCause = $("#esc").map(function () {
         return $(this).val();
     }).get().filter(function (value) {
         return value !== "";
     }).join();
+
     const escProcess = $("#escProcess").map(function () {
         return $(this).val();
     }).get().filter(function (value) {
         return value !== "";
     }).join();
+
     const refundedAmount = $("#refundedAmount").val();
 
+    // Create the data object to send to the server
     const data1 = {
         status: status,
         trackingNo: trackingNo,
@@ -2903,6 +2909,8 @@ $("#editYardInfo").on("click", async function () {
         returnShipping: returnShippingMethod,
         returnShippingCharge: returnCharges,
     };
+
+    // Get the current date and time in the 'America/Chicago' timezone
     const now = new Date();
     const options = {
         timeZone: 'America/Chicago',
@@ -2912,19 +2920,27 @@ $("#editYardInfo").on("click", async function () {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: true,
+        hour12: false,
     };
     const formatter = new Intl.DateTimeFormat('en-US', options);
     const parts = formatter.formatToParts(now);
     const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 
-    // Conditional logic to update poSentDate or partDeliveredDate
+    // Conditionally add poSentDate or partDeliveredDate based on the status
     if (status === "Yard PO Sent") {
         data1.poSentDate = formattedDate;
+        console.log("poSentDate set:", data1.poSentDate);
     } else if (status === "Part Delivered") {
         data1.partDeliveredDate = formattedDate;
+        console.log("partDeliveredDate set:", data1.partDeliveredDate);
     }
 
+    // Log the data before sending
+    console.log("Yard Index:", yardIndex);
+    console.log("Order No:", orderNo);
+    console.log("Sending data:", JSON.stringify(data1));
+
+    // Send the data to the server using fetch
     fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
         method: "PUT",
         headers: {
@@ -2939,8 +2955,11 @@ $("#editYardInfo").on("click", async function () {
         return response.json();
     })
     .then((data) => {
+        console.log("Server response:", data);
+        console.log("poSentDate after update:", data.yards[yardIndex].poSentDate);
+        console.log("partDeliveredDate after update:", data.yards[yardIndex].partDeliveredDate);
+
         $("#editYardModal").modal("hide");
-        console.log("updating dates")
         updateOrderHistory(data.orderHistory);
         showYardDetails(yardIndex);
         fetchAndUpdateYardInfo();
