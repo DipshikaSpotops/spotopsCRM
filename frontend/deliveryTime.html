@@ -191,7 +191,8 @@
 
                     for (let i = 0; i < maxYards; i++) {
                         if (item.additionalInfo[i]) {
-                            const customerApprovedDate = item.customerApprovedDate;
+                          console.log("item",item);
+                            let customerApprovedDate = item.customerApprovedDate;
                             let poSentDate = item.additionalInfo[i].poSentDate;
                             let deliveredDate = item.additionalInfo[i].partDeliveredDate;
                             let status = item.additionalInfo[i].status;
