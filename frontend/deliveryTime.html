@@ -168,104 +168,105 @@
             }
 
             function renderTable(data) {
-                const tableHeader = $("#tableHeader");
-                $("#yardInfoTable").empty();
-                let maxYards = 0;
+    const tableHeader = $("#tableHeader");
+    $("#yardInfoTable").empty();
+    let maxYards = 0;
 
-                // Determine the maximum number of yards in any order
-                data.forEach((item) => {
-                    if (item.additionalInfo.length > maxYards) {
-                        maxYards = item.additionalInfo.length;
-                    }
-                });
+    // Determine the maximum number of yards in any order
+    data.forEach((item) => {
+        if (item.additionalInfo.length > maxYards) {
+            maxYards = item.additionalInfo.length;
+        }
+    });
 
-                // Update table header based on the maximum number of yards
-                tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
-                for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col">Yard ${i}</th>`);
+    // Update table header based on the maximum number of yards
+    tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
+    for (let i = 1; i <= maxYards; i++) {
+        tableHeader.append(`<th scope="col">Yard ${i}</th>`);
+    }
+
+    // Populate the table rows
+    data.forEach((item) => {
+        let yardInfoHtml = "";
+
+        for (let i = 0; i < maxYards; i++) {
+            if (item.additionalInfo[i]) {
+                const customerApprovedDate = item.customerApprovedDate;
+                let poSentDate = item.additionalInfo[i].poSentDate;
+                let deliveredDate = item.additionalInfo[i].partDeliveredDate;
+                let status = item.additionalInfo[i].status;
+
+                // Initialize formatted dates as empty strings
+                let datePO = '';
+                let dateDelivered = '';
+                let daysDifference1 = '';
+                let daysDifference2 = '';
+
+                // Get the current date
+                const now = new Date();
+
+                // Check if poSentDate is defined and valid
+                if (poSentDate) {
+                    const poSentDateObj = new Date(poSentDate);
+                    const dayPO = poSentDateObj.getDate();
+                    const dayPOSuffix = getDaySuffix(dayPO);
+                    datePO = poSentDateObj.toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }).replace(poSentDateObj.getDate(), `${dayPO}${dayPOSuffix}`);
                 }
 
-                // Populate the table rows
-                data.forEach((item) => {
-                    let yardInfoHtml = "";
+                // Check if deliveredDate is defined and valid
+                if (deliveredDate) {
+                    const deliveredDateObj = new Date(deliveredDate);
+                    const dayDelivered = deliveredDateObj.getDate();
+                    const dayDeliveredSuffix = getDaySuffix(dayDelivered);
+                    dateDelivered = deliveredDateObj.toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }).replace(deliveredDateObj.getDate(), `${dayDelivered}${dayDeliveredSuffix}`);
 
-                    for (let i = 0; i < maxYards; i++) {
-                        if (item.additionalInfo[i]) {
-                            const customerApprovedDate = item.customerApprovedDate;
-                            let poSentDate = item.additionalInfo[i].poSentDate;
-                            let deliveredDate = item.additionalInfo[i].partDeliveredDate;
-                            let status = item.additionalInfo[i].status;
-
-                            // Initialize formatted dates as empty strings
-                            let datePO = '';
-                            let dateDelivered = '';
-                            let daysDifference1 = '';
-                            let daysDifference2 = '';
-
-                            // Get the current date
-                            const now = new Date();
-
-                            // Check if poSentDate is defined and valid
-                            if (poSentDate) {
-                                const poSentDateObj = new Date(poSentDate);
-                                const dayPO = poSentDateObj.getDate();
-                                const dayPOSuffix = getDaySuffix(dayPO);
-                                datePO = poSentDateObj.toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                }).replace(poSentDateObj.getDate(), `${dayPO}${dayPOSuffix}`);
-                            }
-
-                            // Check if deliveredDate is defined and valid
-                            if (deliveredDate) {
-                                const deliveredDateObj = new Date(deliveredDate);
-                                const dayDelivered = deliveredDateObj.getDate();
-                                const dayDeliveredSuffix = getDaySuffix(dayDelivered);
-                                dateDelivered = deliveredDateObj.toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                }).replace(deliveredDateObj.getDate(), `${dayDelivered}${dayDeliveredSuffix}`);
-
-                                // Calculate the difference in days between PO Sent and Delivered
-                                if (poSentDate) {
-                                    const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
-                                    daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-                                }
-                            }
-
-                            // Calculate the difference in days between Customer Approved and Today
-                            if (customerApprovedDate && status !== "Part delivered") {
-                                const diffTime = Math.abs(now - new Date(customerApprovedDate));
-                                daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-                            }
-
-                            yardInfoHtml += `<td>
-                                ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
-                                <br>
-                                PO Sent - ${datePO || ""}
-                                ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
-                                ${item.additionalInfo[i].trackingId ? `<br>${item.additionalInfo[i].trackingId}` : ""}
-                                ${status ? `<br>${status}` : ""}
-                                ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
-                                ${daysDifference1 ? `<br>Delivered in - ${daysDifference1} days` : ""}
-                            </td>`;
-
-                        } else {
-                            yardInfoHtml += "<td></td>";
-                        }
+                    // Calculate the difference in days between PO Sent and Delivered
+                    if (poSentDate) {
+                        const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
+                        daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
                     }
+                }
 
-                    $("#yardInfoTable").append(
-                        `<tr>
-                            <td>${item.orderNo}</td>
-                            <td>${item.orderDate}</td>
-                            ${yardInfoHtml}
-                        </tr>`
-                    );
-                });
+                // Calculate the difference in days between Customer Approved and Today
+                if (customerApprovedDate && (!status || status !== "Part delivered")) {
+                    const diffTime = Math.abs(now - new Date(customerApprovedDate));
+                    daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
+                }
+
+                yardInfoHtml += `<td>
+                    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
+                    <br>
+                    PO Sent - ${datePO || ""}
+                    ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
+                    ${item.additionalInfo[i].trackingId ? `<br>${item.additionalInfo[i].trackingId}` : ""}
+                    ${status ? `<br>${status}` : ""}
+                    ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
+                    ${daysDifference1 ? `<br>Delivered in - ${daysDifference1} days` : ""}
+                </td>`;
+
+            } else {
+                yardInfoHtml += "<td></td>";
             }
+        }
+
+        $("#yardInfoTable").append(
+            `<tr>
+                <td>${item.orderNo}</td>
+                <td>${item.orderDate}</td>
+                ${yardInfoHtml}
+            </tr>`
+        );
+    });
+}
+
 
             await fetchData();
         });
@@ -380,3 +381,6 @@
     </div>
 </body>
 </html>
+
+
+${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""} has to be visible on the frontend untill the status is Part delivered,but now its not at all visible
