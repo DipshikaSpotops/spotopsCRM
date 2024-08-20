@@ -187,6 +187,54 @@
             }
 
             await fetchData();
+
+            // Sidebar functionality
+            $(".toggle-sidebar").on("click", function () {
+                $("#offcanvasSidebar").toggleClass("show");
+            });
+
+            $(".nav-link").on("click", function () {
+                $(".nav-link").removeClass("active selected");
+                $(this).addClass("selected");
+
+                const contentMap = {
+                    "dashboards-link": "#yard-info-content",
+                    "users-link": "#users-content",
+                    "teams-link": "#teams-content",
+                    "reports-link": "#reports-content",
+                    "profile": "#profile-content",
+                };
+
+                $(".main-content > div").addClass("d-none");
+                $(contentMap[this.id]).removeClass("d-none");
+                $("#offcanvasSidebar").removeClass("show");
+            });
+
+            $(".chevron-icon, .nav-link").on("click", function (event) {
+                event.stopPropagation();
+                const submenu = $(this).closest(".nav-item").find(".submenu");
+                submenu.toggle();
+                $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+                $(this).closest(".nav-link").toggleClass("selected");
+            });
+
+            $("#profile").click(function () {
+                $("#profileFirstName").val(firstName);
+                $("#profileLastName").val(lastName);
+                $("#profileEmail").val(email);
+                $("#profileRole").val(role);
+                $("#profileModal").modal("show");
+            });
+
+            $(".close").click(function () {
+                console.log("close button clicked");
+                location.reload();
+            });
+
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
+            });
         });
     </script>
 </head>
@@ -223,8 +271,6 @@
                         <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
                         <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
                         <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
-                        <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
-                        <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
                     </div>
                 </div>
                 <div class="nav-item">
