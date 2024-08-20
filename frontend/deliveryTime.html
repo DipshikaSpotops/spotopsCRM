@@ -72,7 +72,7 @@
             transition: margin-left 0.3s ease;
         }
         .submenu {
-            display: block; 
+            display: block;
         }
         .nav-item > .submenu {
             padding-left: 20px;
@@ -213,24 +213,51 @@
         <div class="offcanvas-body">
             <nav class="nav flex-column">
                 <div class="nav-item dashboards">
-                    <a class="nav-link menu" href="#">
+                    <a class="nav-link menu" href="#" id="dashboards-link">
                         <i class="fas fa-home"></i> Dashboards
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
+                    <div class="submenu" id="submenu-dashboards">
+                        <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
+                        <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
+                        <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
+                        <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+                        <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+                        <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
+                    </div>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link menu" href="#">
+                    <a class="nav-link menu" href="#" id="users-link">
                         <i class="fas fa-users"></i> Users
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
+                    <div class="submenu" id="submenu-users">
+                        <a class="nav-link" href="createUser.html">Create User</a>
+                        <a class="nav-link" href="viewallUsers.html">View Users</a>
+                    </div>
                 </div>
                 <div class="nav-item teams">
-                    <a class="nav-link menu" href="#">
+                    <a class="nav-link menu" href="#" id="teams-link">
                         <i class="fas fa-users"></i> Teams
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
+                    <div class="submenu" id="submenu-teams">
+                        <a class="nav-link" href="teams.html">View Teams</a>
+                    </div>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link menu" href="#">
+                    <a class="nav-link menu" href="#" id="reports-link">
                         <i class="fas fa-chart-bar"></i> Reports
+                        <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
                     </a>
+                    <div class="submenu" id="submenu-reports">
+                        <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+                        <a class="nav-link" href="purchases.html">Purchases</a>
+                        <a class="nav-link" href="refundReport.html">Refund Report</a>
+                        <a class="nav-link" href="poReport.html">PO Report</a>
+                        <a class="nav-link" href="salesReport.html">My Sales Report</a>
+                    </div>
                 </div>
             </nav>
         </div>
