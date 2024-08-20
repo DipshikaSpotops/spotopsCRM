@@ -612,7 +612,7 @@
             firstName: firstName,
             customerApprovedDate: formattedDate,
           };
-
+          console.log("in placed data",updatedData);
           try {
             const response = await fetch(
               `https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`,
