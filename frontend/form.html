@@ -1624,7 +1624,7 @@ select:disabled {
 <!-- card charged div ends here -->
 <!-- refund  div starts here -->
 <div id="refundCollect">
-  <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+  <button id="closeCardCharged" style"float: right; background: none; border: none; font-size: 20px;">&times;</button>
 <label for="paymentStatusRefund">Refund Collected:</label
           >
           <select
@@ -3035,11 +3035,12 @@ console.log('Selected payment status:', paymentStatus);
         });
 
         $("#refund").on("change", function () {
-          const refundStatus = $(this).val();
-          const orderStatus = $("#orderStatus").val();
+    const refundStatus = $(this).val();
+    const orderStatus = $("#orderStatus").val();
+    const yardIndex = "your-yard-index"; // Replace with the actual yard index
 
-          let newOrderStatus = orderStatus;
-          const now = new Date();
+    let newOrderStatus = orderStatus;
+    const now = new Date();
     const options = {
         timeZone: 'America/Chicago',
         year: 'numeric',
@@ -3050,50 +3051,68 @@ console.log('Selected payment status:', paymentStatus);
         second: '2-digit',
         hour12: false,
     };
-    
-    
 
-          if (refundStatus === "Part shipped") {
-            newOrderStatus = "In Transit";
-            $("#divTrackingEdit").show();
-            $("#sendEmailButton").show();
-            $("#notesContainer").show();
-            $("#cardCharged").hide();
-            $("#escalation").hide();
-          } else if (refundStatus === "PO confirmed") {
-            $("#escalation").hide();
-            $("#divTrackingEdit").hide();
-            $("#sendEmailButton").hide();
-            $("#notesContainer").show();
-            $("#cardCharged").hide();
-          } else if (refundStatus === "Escalation") {
-            $("#escalation").show();
-            $("#divTrackingEdit").hide();
-            $("#sendEmailButton").hide();
-            $("#notesContainer").show();
-            $("#cardCharged").hide();
-          } else if (refundStatus === "PO cancelled") {
-            $("#divTrackingEdit").hide();
-            $("#sendEmailButton").hide();
-            $("#notesContainer").show();
-            $("#cardCharged").hide();
-          } else if (refundStatus === "Part delivered") {
-            newOrderStatus = "Order Fulfilled";
-            $("#notesContainer").show();
-            $("#divTrackingEdit").hide();
-            $("#cardCharged").hide();
-            const formatter = new Intl.DateTimeFormat('en-US', options);
+    // Formatting the date to Dallas time
+    const formatter = new Intl.DateTimeFormat('en-US', options);
     const parts = formatter.formatToParts(now);
-    const deliveredDate= `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
     
-    console.log('Dallas DateTime:', deliveredDate,orderNo);
-        const updateData = {
-            partDeliveredDate: deliveredDate
-        };
+    let updateData = {};
 
-        const orderNo = orderNo; 
-        console.log("orderNo",orderNo,"delivred on",updateData);
-        fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+    if (refundStatus === "Part shipped") {
+        newOrderStatus = "In Transit";
+        $("#divTrackingEdit").show();
+        $("#sendEmailButton").show();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+        $("#escalation").hide();
+    } else if (refundStatus === "PO confirmed") {
+        $("#escalation").hide();
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+    } else if (refundStatus === "Escalation") {
+        $("#escalation").show();
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+    } else if (refundStatus === "PO cancelled") {
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+    } else if (refundStatus === "Part delivered") {
+        newOrderStatus = "Order Fulfilled";
+        $("#notesContainer").show();
+        $("#divTrackingEdit").hide();
+        $("#cardCharged").hide();
+        
+        // Save partDeliveredDate
+        updateData.partDeliveredDate = formattedDate;
+        
+    } else if (refundStatus === "Yard PO Sent") {
+        newOrderStatus = "Yard Processing";
+        $("#escalation").hide();
+        $("#divTrackingEdit").hide();    
+        
+        // Save poSentDate
+        updateData.poSentDate = formattedDate;
+        
+    } else if (refundStatus === "Yard located") {
+        $("#divTrackingEdit").hide();
+    } else {
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").hide();
+    }
+
+    // If there's data to update
+    if (Object.keys(updateData).length > 0) {
+      console.log("dates",updateData,orderNo,yardIndex)
+        const orderNo = "your-order-number"; // Replace with your actual order number variable
+        fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -3102,95 +3121,43 @@ console.log('Selected payment status:', paymentStatus);
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to update PO Sent Date');
+                throw new Error('Failed to update date');
             }
             return response.json();
         })
         .then(data => {
-            console.log('PO Sent Date updated successfully:', data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-          } else if (
-            refundStatus === "Bad part" ||
-            refundStatus === "In return"
-          ) {
-            newOrderStatus = "Escalation";
-            $("#notesContainer").show();
-            $("#divTrackingEdit").hide();
-            $("#cardCharged").hide();
-          } else if (
-            refundStatus === "Card charged"
-          ) {
-            newOrderStatus = "Yard Processing";
-            $("#escalation").hide();
-            $("#divTrackingEdit").hide();
-          }else  if (refundStatus === "Yard PO Sent") {
-            newOrderStatus = "Yard Processing";
-            $("#escalation").hide();
-            $("#divTrackingEdit").hide();    
-            const formatter = new Intl.DateTimeFormat('en-US', options);
-    const parts = formatter.formatToParts(now);
-    const poSenDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-    console.log("po sent date",poSenDate,orderNo);
-        const updateData1 = {
-            poSentDate: poSenDate
-        };
-
-        const orderNo = orderNo; 
-        console.log("orderNo",orderNo,updateData1)
-        fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updateData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to update PO Sent Date');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('PO Sent Date updated successfully:', data);
+            console.log('Date updated successfully:', data);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     }
-           else if (refundStatus === "Yard located") {
-            $("#divTrackingEdit").hide();
-          } else {
-            $("#divTrackingEdit").hide();
-            $("#sendEmailButton").hide();
-            $("#notesContainer").hide();
-          }
 
-          const updatedData = { orderStatus: newOrderStatus };
+    // Updating the order status
+    const updatedData = { orderStatus: newOrderStatus };
 
-          fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedData),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              $("#orderStatus").val(newOrderStatus);
-              updateOrderHistory(data.orderHistory);
-            })
-            .catch((error) => {
-              console.error("Error updating order status:", error);
-            });
-        });
+    fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        $("#orderStatus").val(newOrderStatus);
+        updateOrderHistory(data.orderHistory);
+    })
+    .catch((error) => {
+        console.error("Error updating order status:", error);
+    });
+});
+
 
         $(".paymentStatus").on("change", function () {
           const paymentStatus = $(this).val();
@@ -3595,7 +3562,6 @@ console.log('US Central Time:,mnbjklkjhbv', centralTime);
        // for descBar start hre
   fetchOrderDetails(orderNo)
     .then((order) => {
-      // Extract necessary details
       const year = order.year;
       const make = order.make;
       const model = order.model;
