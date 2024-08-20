@@ -153,7 +153,7 @@
 
                 // Determine the maximum number of yards in any order
                 data.forEach((item) => {
-                    if (item.yards.length > maxYards) {
+                    if (Array.isArray(item.yards) && item.yards.length > maxYards) {
                         maxYards = item.yards.length;
                     }
                 });
@@ -169,7 +169,7 @@
                     let yardInfoHtml = "";
 
                     for (let i = 0; i < maxYards; i++) {
-                        if (item.yards[i]) {
+                        if (Array.isArray(item.yards) && item.yards[i]) {
                             yardInfoHtml += `<td>${item.yards[i].yardName || ""}</td>`;
                         } else {
                             yardInfoHtml += "<td></td>";
@@ -237,7 +237,7 @@
     </div>
 
     <div class="main-content">
-        <h1>Order Information</h1>
+        <h1>Delivery Time Report</h1>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
