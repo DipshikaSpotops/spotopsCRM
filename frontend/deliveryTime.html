@@ -239,6 +239,7 @@
                                 console.log("status is not part delivered till now");
                                 const diffTime = Math.abs(now - new Date(customerApprovedDate));
                                 daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
+                                console.log("difference blw cust approved and today",daysDifference2);
                             }
 
                             yardInfoHtml += `<td>
