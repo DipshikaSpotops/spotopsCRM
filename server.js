@@ -265,6 +265,7 @@ const OrderSchema = new mongoose.Schema({
   orderDate: String,
   salesAgent: String,
   customerName: String,
+  customerApprovedDate: String,
   bAddress: String,
   sAddress: String,
   email: String,
@@ -309,11 +310,13 @@ app.get("/orders/:orderNo", async (req, res) => {
 app.put("/orders/:orderNo", async (req, res) => {
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:,mnbjklkjhbv', centralTime);
+const { customerApprovedDate } = req.body;
   try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
       if (!order) return res.status(404).send("Order not found");
 
       const oldStatus = order.orderStatus;
+      order.customerApprovedDate = customerApprovedDate;
       Object.assign(order, req.body);
 
       const firstName = req.query.firstName; // Get firstName from the request body
@@ -1077,7 +1080,7 @@ app.put('/orders/:orderNo/additionalInfo/:yardIndex', async (req, res) => {
           return res.status(404).send('Order not found');
       }
 
-      const yard = order.yards[yardIndex];
+      const yard = order.additionalInfo[yardIndex];
 
       if (!yard) {
           return res.status(404).send('Yard not found');
