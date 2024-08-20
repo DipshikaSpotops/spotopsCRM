@@ -311,6 +311,7 @@ app.put("/orders/:orderNo", async (req, res) => {
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:,mnbjklkjhbv', centralTime);
 const { customerApprovedDate } = req.body;
+console.log("customerApproved data",customerApprovedDate);
   try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
       if (!order) return res.status(404).send("Order not found");
