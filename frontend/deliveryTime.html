@@ -191,31 +191,19 @@
 
                     for (let i = 0; i < maxYards; i++) {
                         if (item.additionalInfo[i]) {
-                          var customerApprovedDate = item.customerApprovedDate;
+                            const customerApprovedDate = item.customerApprovedDate;
                             let poSentDate = item.additionalInfo[i].poSentDate;
                             let deliveredDate = item.additionalInfo[i].partDeliveredDate;
+                            let status = item.additionalInfo[i].status;
 
                             // Initialize formatted dates as empty strings
                             let datePO = '';
                             let dateDelivered = '';
                             let daysDifference1 = '';
-                            let difference2 = '';
-                            // for current date 
-                            // Get the current date and time in the 'America/Chicago' timezone
+                            let daysDifference2 = '';
+
+                            // Get the current date
                             const now = new Date();
-                            const options = {
-                                timeZone: 'America/Chicago',
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                second: '2-digit',
-                                hour12: false,
-                            };
-                            const today = new Intl.DateTimeFormat('en-US', options);
-                            const parts = today.formatToParts(now);
-                            const todayDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 
                             // Check if poSentDate is defined and valid
                             if (poSentDate) {
@@ -228,30 +216,7 @@
                                     year: 'numeric'
                                 }).replace(poSentDateObj.getDate(), `${dayPO}${dayPOSuffix}`);
                             }
-                          // for todays's date
-                          if (todayDate) {
-                                const todayDateObj = new Date(todayDate);
-                                const dayToday = todayDateObj.getDate();
-                                const todaySuffix = getDaySuffix(dayToday);
-                                dateToday = todayDateObj.toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                }).replace(todayDateObj.getDate(), `${dayToday}${todaySuffix}`);
-                                console.log("today's date:",dateToday);
-                            }
-                            // for customerApproved's date
-                          if (customerApprovedDate) {
-                                const cusDateObj = new Date(todayDate);
-                                const dayC = cusDateObj.getDate();
-                                const cusSuffix = getDaySuffix(dayCus);
-                                cusDate = cusDateObj.toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                }).replace(cusDateObj.getDate(), `${dayCus}${cusSuffix}`);
-                                console.log("cus approved date:",cusDate);
-                            }
+
                             // Check if deliveredDate is defined and valid
                             if (deliveredDate) {
                                 const deliveredDateObj = new Date(deliveredDate);
@@ -263,30 +228,29 @@
                                     year: 'numeric'
                                 }).replace(deliveredDateObj.getDate(), `${dayDelivered}${dayDeliveredSuffix}`);
 
-                                // Calculate the difference in days
+                                // Calculate the difference in days between PO Sent and Delivered
                                 if (poSentDate) {
                                     const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
                                     daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-                                    console.log("difference b/w delivered and customer approve dates:",daysDifference1)
-                                }
-                                if (customerApprovedDate) {
-                                    const diffTime = Math.abs(todayDateObj - new Date(customerApprovedDate));
-                                    daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-                                    console.log("difference b/w] customer approved and todaY dates:",daysDifference2)
                                 }
                             }
 
-                        yardInfoHtml += `<td>
-                        ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
-                        <br>
-                        PO Sent - ${datePO || ""}
-                        <br>
-                        ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
-                        ${item.additionalInfo[i].trackingId ? `<br>${item.additionalInfo[i].trackingId}` : ""}
-                        ${item.additionalInfo[i].status ? `<br>${item.additionalInfo[i].status}` : ""}
-                        ${daysDifference1 ? `<br>${daysDifference1} days since Customer Approved` : ""}
-                        ${daysDifference1 ? `<br>Delivered in - ${daysDifference1} days` : ""}
-                      </td>`;
+                            // Calculate the difference in days between Customer Approved and Today
+                            if (customerApprovedDate && status !== "Part delivered") {
+                                const diffTime = Math.abs(now - new Date(customerApprovedDate));
+                                daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
+                            }
+
+                            yardInfoHtml += `<td>
+                                ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
+                                <br>
+                                PO Sent - ${datePO || ""}
+                                ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
+                                ${item.additionalInfo[i].trackingId ? `<br>${item.additionalInfo[i].trackingId}` : ""}
+                                ${status ? `<br>${status}` : ""}
+                                ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
+                                ${daysDifference1 ? `<br>Delivered in - ${daysDifference1} days` : ""}
+                            </td>`;
 
                         } else {
                             yardInfoHtml += "<td></td>";
