@@ -235,8 +235,8 @@
                                 }
                             }
 
-                            // Calculate the difference in days between Customer Approved and Today
-                            if (customerApprovedDate && (!status || status !== "Part delivered")) {
+                            if (status  !== "Part delivered") {
+                                console.log("status is not part delivered till now");
                                 const diffTime = Math.abs(now - new Date(customerApprovedDate));
                                 daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
                             }
