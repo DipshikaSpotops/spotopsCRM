@@ -253,8 +253,8 @@
         for (let i = 1; i <= maxYards; i++) {
             tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
         }
-        tableHeader.append('<th scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon">&#9650;</span></th>');
-        tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping <span class="sort-icon">&#9650;</span></th>');
+        tableHeader.append('<th scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#9650;</span></th>');
+        tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping <span class="sort-icon onlyNumber">&#9650;</span></th>');
         tableHeader.append('<th scope="col">Actions</th>');
 
         data.forEach((item) => {
