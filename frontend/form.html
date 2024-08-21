@@ -3412,8 +3412,6 @@ $("#saveYardDetails").on("click", function () {
         const yardIndex = $("#submit").data("yard-index") - 1;
         const firstName = localStorage.getItem("firstName");
         // const timestamp = new Date().toLocaleString();
-        const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:,mnbjklkjhbv', centralTime);
 
         if (content.length > 0) {
           axios
