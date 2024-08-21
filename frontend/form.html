@@ -2345,8 +2345,8 @@ axios
             var note = $("#notes").val()
             var salesAgent = $("#salesAgent").val();
             const timestamp = new Date().toLocaleString();
-            const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-            console.log('US Central Time:,mnbjklkjhbv', centralTime);
+            // const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+            // console.log('US Central Time:,mnbjklkjhbv', centralTime);
             var orderNote = ` ${note}</br>
                               ${salesAgent},${centralTime} :`
             const newOrder = {
@@ -3420,7 +3420,6 @@ $("#saveYardDetails").on("click", function () {
               {
                 note: content,
                 author: firstName,
-                timestamp: centralTime,
               }
             )
             .then((response) => {
