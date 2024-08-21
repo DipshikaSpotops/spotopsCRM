@@ -267,7 +267,7 @@
     };
 
     function extractNumericValue(text) {
-        // Extract the numeric value from a string, considering formats like "Y1 | ($10.00)" and "10.00"
+        // Extract the numeric value from a string, considering both "Y1 | ($10.00)" and "10.00" formats
         const match = text.match(/[\d,.]+/);
         return match ? parseFloat(match[0].replace(/[^0-9.-]+/g, "")) : 0;
     }
@@ -277,8 +277,8 @@
         const rows = tbody.find("tr").toArray();
 
         rows.sort(function (a, b) {
-            let cellA = $(a).find("td").eq(column).text().trim();
-            let cellB = $(b).find("td").eq(column).text().trim();
+            const cellA = $(a).find("td").eq(column).text().trim();
+            const cellB = $(b).find("td").eq(column).text().trim();
 
             if (isNumeric) {
                 const numA = extractNumericValue(cellA);
@@ -297,20 +297,25 @@
         });
     }
 
-    // Click event for sorting numeric columns
-    $(document).on("click", ".onlyNumber", function () {
-        const column = $(this).closest("th").index();
-        const sortBy = $(this).closest("th").data("sort");
+    // Click event for sorting
+    $("#tableHeader th").on("click", function () {
+        const column = $(this).index();
+        const sortBy = $(this).data("sort");
+
+        // Determine if the column should be treated as numeric
+        const isNumeric = ["yard", "totalShipping"].some(type => sortBy.includes(type));
 
         // Toggle the sort order
         currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
         currentSort.column = sortBy;
 
-        sortTable(column, currentSort.order, true);
+        sortTable(column, currentSort.order, isNumeric);
 
         // Update sort icon
-        $(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
-        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+        $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
+        $(this)
+            .find("span.sort-icon")
+            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     });
 
     async function fetchData() {
@@ -493,6 +498,7 @@
         window.location.href = 'login_signup.html';
     });
 });
+
 
     </script>
   </body>
