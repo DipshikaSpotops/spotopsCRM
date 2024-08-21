@@ -21,10 +21,12 @@ const app = express();
 
 app.use(cors({
   origin: 'https://spotops360.com', // Replace with your frontend's domain
-  methods: 'GET,POST,PUT,DELETE,OPTIONS,PATCH',
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
   credentials: true
 }));
 app.use(bodyParser.json());
+
+// Corrected connection string with the '@' character properly URL-encoded
 const mongoURI =
   "mongodb+srv://Dipshika:dnjDdHAD0Hhxj5Zp@cluster0.gojob9v.mongodb.net/ordersDB?retryWrites=true&w=majority";
 
@@ -307,34 +309,43 @@ app.get("/orders/:orderNo", async (req, res) => {
 
 app.put("/orders/:orderNo", async (req, res) => {
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:,mnbjklkjhbv', centralTime);
-const { customerApprovedDate } = req.body;
-console.log("customerApproved data",customerApprovedDate);
+  console.log('US Central Time:', centralTime);
+
   try {
-      const order = await Order.findOne({ orderNo: req.params.orderNo });
-      if (!order) return res.status(404).send("Order not found");
+    const order = await Order.findOne({ orderNo: req.params.orderNo });
+    if (!order) return res.status(404).send("Order not found");
 
-      const oldStatus = order.orderStatus;
-      order.customerApprovedDate = customerApprovedDate;
-      Object.assign(order, req.body);
+    const oldStatus = order.orderStatus;
+    
+    // Preserve existing customerApprovedDate if not provided
+    if (req.body.customerApprovedDate) {
+      order.customerApprovedDate = req.body.customerApprovedDate;
+    }
 
-      const firstName = req.query.firstName; // Get firstName from the request body
-      console.log("loggein user",firstName);
-
-      // Add timestamp to order history only if the status has changed
-      if (oldStatus !== order.orderStatus) {
-          const timestamp = new Date().toLocaleString()
-          order.orderHistory.push(
-              `Order status updated to ${order.orderStatus} by ${firstName} on ${centralTime}`
-          );
+    // Update only the fields provided in the request
+    for (let key in req.body) {
+      if (key !== 'customerApprovedDate') {
+        order[key] = req.body[key];
       }
+    }
 
-      const updatedOrder = await order.save();
-      res.json(updatedOrder);
+    const firstName = req.query.firstName;
+    console.log("Logged in user:", firstName);
+
+    // Add timestamp to order history only if the status has changed
+    if (oldStatus !== order.orderStatus) {
+      order.orderHistory.push(
+        `Order status updated to ${order.orderStatus} by ${firstName} on ${centralTime}`
+      );
+    }
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
   } catch (err) {
-      res.status(400).send(err.message);
+    res.status(400).send(err.message);
   }
 });
+
 // 
 app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
   console.log("additionalInfo");
@@ -1099,26 +1110,7 @@ app.put('/orders/:orderNo/additionalInfo/:yardIndex', async (req, res) => {
   }
 });
 
-// patch request
-app.patch('/orders/:orderNo', (req, res) => {
-  const { orderNo } = req.params;
-  const { firstName } = req.query;
-  const updatedFields = req.body;
 
-  // Find the order by orderNo and firstName
-  let order = Order.find(o => o.orderNo === orderNo && o.firstName === firstName);
-
-  if (order) {
-    // Only update fields provided in the request body
-    Object.keys(updatedFields).forEach(key => {
-      order[key] = updatedFields[key];
-    });
-
-    res.status(200).json(order);
-  } else {
-    res.status(404).json({ message: "Order not found" });
-  }
-});
 
 
 

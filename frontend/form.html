@@ -2728,139 +2728,141 @@ $('#refundSubmit').on('click', function() {
 
         var shippingMethod;
         $("#addYardInfo").on("click", function (event) {
-        const firstName = localStorage.getItem("firstName");   
-        event.preventDefault();
+          const firstName = localStorage.getItem("firstName");   
+  event.preventDefault();
 
-        const requiredFields = [
-          $("#yardName"),
-          $("#agentName"),
-          $("#yardRating"),
-          $("#phone"),
-          $("#email"),
-          $("#address"),
-          $("#city"),
-          $("#state"),
-          $("#zip"),
-          $("#partPrice")
-        ];
+  const requiredFields = [
+    $("#yardName"),
+    $("#agentName"),
+    $("#yardRating"),
+    $("#phone"),
+    $("#email"),
+    $("#address"),
+    $("#city"),
+    $("#state"),
+    $("#zip"),
+    $("#partPrice")
+  ];
 
-        // Check if all required fields are filled
-        let allFieldsFilled = true;
-        requiredFields.forEach(function (field) {
-          if (field.val().trim() === "") {
-            allFieldsFilled = false;
-            field.css("border-color", "red"); // Highlight missing fields
-          } else {
-            field.css("border-color", ""); // Reset border color if field is filled
-          }
-        });
+  // Check if all required fields are filled
+  let allFieldsFilled = true;
+  requiredFields.forEach(function (field) {
+    if (field.val().trim() === "") {
+      allFieldsFilled = false;
+      field.css("border-color", "red"); // Highlight missing fields
+    } else {
+      field.css("border-color", ""); // Reset border color if field is filled
+    }
+  });
 
-        // If not all fields are filled, show an alert and do not proceed
-        if (!allFieldsFilled) {
-          alert("Please fill out all required fields.");
-          return;
-        }
-        // Prepare only the fields that need to be updated
-        const updatedData = {
-          orderStatus: "Yard Processing", 
-          poSentDate: "newPoSentDate",
-          partDeliveredDate: "newPartDeliveredDate" 
-        };
-        fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedData),
-        })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          updateOrderHistory(data.orderHistory);
-          console.log("Order status updated successfully:", data);
-        })
-        .catch((error) => {
-          console.error("Error updating order status:", error);
-        });
+  // If not all fields are filled, show an alert and do not proceed
+  if (!allFieldsFilled) {
+    alert("Please fill out all required fields.");
+    return;
+  }
 
-        // Proceed with form submission if all fields are filled
-        $(".mainDiv").removeClass("blur");
-        $("#yardModal").hide();
-        $("#refund").val("Yard located").change();
+  // Set the new order status and update it on the server
+  const newOrderStatus = "Yard Processing";
+  console.log("new order status", newOrderStatus);
+  $("#orderStatus").val(newOrderStatus);
 
-        // Your existing code to submit the form data
-        const yardName = $("#yardName").val();
-        const agentName = $("#agentName").val();
-        const yardRating = $("#yardRating").val();
-        const phone = $("#phone").val();
-        const altPhone = $("#altPhone").val();
-        const email = $("#email").val();
-        const address = $("#address").val();
-        const city = $("#city").val();
-        const state = $("#state").val();
-        const country = $("#country").val();
-        const zipcode = $("#zip").val();
-        const addedAddress = city + "  " + state + "  " + zipcode;
-        const partPrice = $("#partPrice").val();
-        const ownShip = $("#ownShipping").val();
-        const yardShip = $("#yardShipping").val();
-        const others = document.getElementById("others").value;
+  const updatedData = { orderStatus: newOrderStatus };
 
-        let shippingMethod = "";
-        if (ownShip) {
-          shippingMethod = `Own shipping: ${ownShip} `;
-        } else if (yardShip) {
-          shippingMethod = `Yard shipping: ${yardShip}`;
-        }
+  fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    updateOrderHistory(data.orderHistory);
+    console.log("Order status updated successfully:", data);
+  })
+  .catch((error) => {
+    console.error("Error updating order status:", error);
+  });
 
-        const data222 = {
-          yardName: yardName,
-          agentName: agentName,
-          yardRating: yardRating,
-          phone: phone,
-          altPhone: altPhone,
-          email: email,
-          address: addedAddress,
-          country: country,
-          partPrice: partPrice,
-          status: "Yard located",
-          shippingDetails: shippingMethod,
-          others: others,
-        };
+  // Proceed with form submission if all fields are filled
+  $(".mainDiv").removeClass("blur");
+  $("#yardModal").hide();
+  $("#refund").val("Yard located").change();
 
-        fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data222),
-        })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          $("#editYardPopup").hide();
-          addYardButton(
-            data.additionalInfo.length,
-            `Yard ${data.additionalInfo.length}`
-          );
-          updateOrderHistory(data.orderHistory);
-          fetchAndUpdateYardInfo();
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+  // Your existing code to submit the form data
+  const yardName = $("#yardName").val();
+  const agentName = $("#agentName").val();
+  const yardRating = $("#yardRating").val();
+  const phone = $("#phone").val();
+  const altPhone = $("#altPhone").val();
+  const email = $("#email").val();
+  const address = $("#address").val();
+  const city = $("#city").val();
+  const state = $("#state").val();
+  const country = $("#country").val();
+  const zipcode = $("#zip").val();
+  const addedAddress = city + "  " + state + "  " + zipcode;
+  const partPrice = $("#partPrice").val();
+  const ownShip = $("#ownShipping").val();
+  const yardShip = $("#yardShipping").val();
+  const others = document.getElementById("others").value;
 
-        window.location.reload();
-      });
+  let shippingMethod = "";
+  if (ownShip) {
+    shippingMethod = `Own shipping: ${ownShip} `;
+  } else if (yardShip) {
+    shippingMethod = `Yard shipping: ${yardShip}`;
+  }
 
+   
+  const data222 = {
+    yardName: yardName,
+    agentName: agentName,
+    yardRating: yardRating,
+    phone: phone,
+    altPhone: altPhone,
+    email: email,
+    address: addedAddress,
+    country: country,
+    partPrice: partPrice,
+    status: "Yard located",
+    shippingDetails: shippingMethod,
+    others: others,
+  };
+
+  fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data222),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    $("#editYardPopup").hide();
+    addYardButton(
+      data.additionalInfo.length,
+      `Yard ${data.additionalInfo.length}`
+    );
+    updateOrderHistory(data.orderHistory);
+    fetchAndUpdateYardInfo();
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
+  window.location.reload();
+});
 
 
 
