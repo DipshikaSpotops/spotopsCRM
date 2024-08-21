@@ -381,11 +381,11 @@
 
                         totalShipping += shippingCharge;
 
-                        yardInfoHtml += `<td>
+                        yardInfoHtml += `<td data-sort-value="${shippingCharge}">
                             ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge.toFixed(2) || "0"})<br>
                         </td>`;
                     } else {
-                        yardInfoHtml += "<td></td>";
+                        yardInfoHtml += "<td data-sort-value='0'></td>";
                     }
                 }
 
@@ -396,7 +396,7 @@
                         <td>${item.orderNo}</td>
                         <td>${item.orderDate}</td>
                         ${yardInfoHtml}
-                        <td>${totalShipping.toFixed(2)}</td>
+                        <td data-sort-value="${totalShipping}">${totalShipping.toFixed(2)}</td>
                         <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
                     </tr>`
                 );
