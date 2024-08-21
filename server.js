@@ -890,7 +890,7 @@ console.log('US Central Time:,mnbjklkjhbv', centralTime);
   console.log('Received request to add note');
   try {
     const { orderNo, yardIndex } = req.params;
-    const { note, author, timestamp } = req.body;
+    const { note, author } = req.body;
     const yardIndexInt = parseInt(yardIndex, 10); // Convert to integer
 
     console.log(`Received request to add note to order ${orderNo}, yardIndex ${yardIndexInt}: ${note}`);
@@ -917,7 +917,7 @@ console.log('US Central Time:,mnbjklkjhbv', centralTime);
       author: author,
       timestamp: timestamp
     };
-    var nNote = `${author},${timestamp} : ${note}`
+    var nNote = `${author},${centralTime} : ${note}`
     console.log("mNote",nNote);
     // Add the new note to the notes array
     order.additionalInfo[yardIndexInt].notes.push(nNote);
