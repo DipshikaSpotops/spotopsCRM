@@ -160,6 +160,10 @@
         .date-filter label {
             margin-right: 10px;
         }
+        .sort-icon {
+        margin-left: 5px;
+        cursor: pointer;
+      }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -265,8 +269,8 @@
                 <table class="table table-bordered mt-4">
                     <thead>
                         <tr id="tableHeader" style="background-color: #f2f2f2;">
-                            <th scope="col">Order No</th>
-                            <th scope="col">Order Date</th>
+                            <th scope="col">Order No <span class="sort-icon">&#9650;</span></th>
+                            <th scope="col">Order Date <span class="sort-icon">&#9650;</span></th>
                         </tr>
                     </thead>
                     <tbody id="yardInfoTable">
@@ -462,6 +466,13 @@
                     $(this).addClass("active");
                 }
             });
+
+            // Update sort icon
+          $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
+          $(this)
+            .find("span.sort-icon")
+            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+        });
 
             // Fetch and display data
             async function fetchData() {
