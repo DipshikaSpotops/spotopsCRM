@@ -2344,11 +2344,23 @@ axios
             var customerName = cusFName + " " + cusLName;
             var note = $("#notes").val()
             var salesAgent = $("#salesAgent").val();
-            const timestamp = new Date().toLocaleString();
-            // const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-            // console.log('US Central Time:,mnbjklkjhbv', centralTime);
+            const now = new Date();
+    const options = {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(now);
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+            console.log('US Central Time:,mnbjklkjhbv', formattedDate);
             var orderNote = ` ${note}</br>
-                              ${salesAgent},${centralTime} :`
+                              ${salesAgent},${formattedDate} :`
             const newOrder = {
               orderNo: newOrderNo,
               orderDate: $("#orderDate").val(),
@@ -2374,7 +2386,7 @@ axios
               last4digits: $("#issueOrder").val(),
               notes: orderNote,
               orderHistory: [
-                `Order placed by ${firstName} on ${new Date().toLocaleString()}`,
+                `Order placed by ${firstName} on ${formattedDate}`,
               ],
             };
 
@@ -3409,9 +3421,23 @@ $("#saveYardDetails").on("click", function () {
       $("#submit").on("click", function (event) {
         event.preventDefault();
         const content = $("#noteInput").val();
-        const yardIndex = $("#submit").data("yard-index");
+        const yardIndex = $("#submit").data("yard-index") - 1;
         const firstName = localStorage.getItem("firstName");
         // const timestamp = new Date().toLocaleString();
+        const now = new Date();
+    const options = {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(now);
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 
         if (content.length > 0) {
           axios
@@ -3420,6 +3446,7 @@ $("#saveYardDetails").on("click", function () {
               {
                 note: content,
                 author: firstName,
+                timestamp: formattedDate,
               }
             )
             .then((response) => {
@@ -3482,8 +3509,20 @@ $("#saveYardDetails").on("click", function () {
           const yardIndex1 = $("#submit").data("yard-index") - 1;
           const firstName1 = localStorage.getItem("firstName");
           const timestamp1 = new Date().toLocaleString();
-          const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-          console.log('US Central Time:,mnbjklkjhbv', centralTime);
+          const now = new Date();
+    const options = {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(now);
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 
           if (content1.length > 0) {
             axios
@@ -3492,7 +3531,7 @@ $("#saveYardDetails").on("click", function () {
                 {
                   note: content1,
                   author: firstName1,
-                  timestamp: centralTime,
+                  timestamp: formattedDate,
                 }
               )
               .then((response) => {
