@@ -139,180 +139,190 @@
         }
 
         $(document).ready(function () {
-            let currentSort = {
-                column: "",
-                order: "asc" // ascending by default
-            };
+    let currentSort = {
+        column: "",
+        order: "asc" // ascending by default
+    };
 
-            function sortTable(column, order) {
-                const tbody = $("#yardInfoTable");
-                const rows = tbody.find("tr").toArray();
+    function sortTable(column, order, isYardColumn) {
+        const tbody = $("#yardInfoTable");
+        const rows = tbody.find("tr").toArray();
 
-                rows.sort(function (a, b) {
-                    const cellA = $(a).find("td").eq(column).text().trim();
-                    const cellB = $(b).find("td").eq(column).text().trim();
+        rows.sort(function (a, b) {
+            let cellA = $(a).find("td").eq(column).text().trim();
+            let cellB = $(b).find("td").eq(column).text().trim();
 
-                    if (!isNaN(cellA) && !isNaN(cellB)) {
-                        return order === "asc" ? cellA - cellB : cellB - cellA;
-                    } else {
-                        return order === "asc"
-                            ? cellA.localeCompare(cellB)
-                            : cellB.localeCompare(cellA);
-                    }
-                });
-
-                // Append sorted rows back to the table body
-                $.each(rows, function (index, row) {
-                    tbody.append(row);
-                });
+            if (isYardColumn) {
+                // Extract yardName for sorting
+                cellA = cellA.split("|")[0].trim(); // Extracts yardName part before the first "|"
+                cellB = cellB.split("|")[0].trim(); // Extracts yardName part before the first "|"
             }
 
-            // Click event for sorting
-            $("#tableHeader th").on("click", function () {
-                const column = $(this).index();
-                const sortBy = $(this).data("sort");
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return order === "asc" ? cellA - cellB : cellB - cellA;
+            } else {
+                return order === "asc"
+                    ? cellA.localeCompare(cellB)
+                    : cellB.localeCompare(cellA);
+            }
+        });
 
-                // Toggle the sort order
-                currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-                currentSort.column = sortBy;
+        // Append sorted rows back to the table body
+        $.each(rows, function (index, row) {
+            tbody.append(row);
+        });
+    }
 
-                sortTable(column, currentSort.order);
+    // Click event for sorting
+    $("#tableHeader th").on("click", function () {
+        const column = $(this).index();
+        const sortBy = $(this).data("sort");
 
-                // Update sort icon
-                $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
-                $(this)
-                    .find("span.sort-icon")
-                    .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+        // Determine if the column is a Yard column
+        const isYardColumn = sortBy.startsWith("yard");
+
+        // Toggle the sort order
+        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+        currentSort.column = sortBy;
+
+        sortTable(column, currentSort.order, isYardColumn);
+
+        // Update sort icon
+        $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
+        $(this)
+            .find("span.sort-icon")
+            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    });
+
+    async function fetchData() {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get("https://www.spotops360.com/yardInfo", {
+                headers: { Authorization: `Bearer ${token}` },
             });
 
-            async function fetchData() {
-                try {
-                    const token = localStorage.getItem("token");
-                    const response = await axios.get("https://www.spotops360.com/yardInfo", {
-                        headers: { Authorization: `Bearer ${token}` },
-                    });
-
-                    if (response.status !== 200) {
-                        throw new Error("Failed to fetch yard information");
-                    }
-
-                    const data = response.data;
-
-                    renderTable(data);
-                } catch (error) {
-                    console.error(
-                        "Error fetching yard information:",
-                        error
-                    );
-                    alert(
-                        "Error fetching yard information: " +
-                            error.message
-                    );
-                }
+            if (response.status !== 200) {
+                throw new Error("Failed to fetch yard information");
             }
 
-            function renderTable(data) {
-                const tableHeader = $("#tableHeader");
-                const tableFooter = $("#tableFooter");
-                $("#yardInfoTable").empty();
-                let maxYards = 0;
-                let totalPartPriceSum = 0;
-                let totalShippingSum = 0;
+            const data = response.data;
 
-                data.forEach((item) => {
-                    if (item.additionalInfo.length > maxYards) {
-                        maxYards = item.additionalInfo.length;
-                    }
-                });
+            renderTable(data);
+        } catch (error) {
+            console.error(
+                "Error fetching yard information:",
+                error
+            );
+            alert(
+                "Error fetching yard information: " +
+                    error.message
+            );
+        }
+    }
 
-                tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
-                for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
-                }
-                tableHeader.append('<th scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon">&#9650;</span></th>');
-                tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping <span class="sort-icon">&#9650;</span></th>');
-                tableHeader.append('<th scope="col">Actions</th>');
+    function renderTable(data) {
+        const tableHeader = $("#tableHeader");
+        const tableFooter = $("#tableFooter");
+        $("#yardInfoTable").empty();
+        let maxYards = 0;
+        let totalPartPriceSum = 0;
+        let totalShippingSum = 0;
 
-                data.forEach((item) => {
-                    if (item.additionalInfo.length > 0) { // Only append if additionalInfo length > 0
-                        let yardInfoHtml = "";
-                        let totalPartPrice = 0;
-                        let totalShipping = 0;
+        data.forEach((item) => {
+            if (item.additionalInfo.length > maxYards) {
+                maxYards = item.additionalInfo.length;
+            }
+        });
 
-                        for (let i = 0; i < maxYards; i++) {
-                            if (item.additionalInfo[i]) {
-                                const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
-                                let shippingDetails = item.additionalInfo[i].shippingDetails;
-                                let shippingCharge = 0;
+        tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
+        for (let i = 1; i <= maxYards; i++) {
+            tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+        }
+        tableHeader.append('<th scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon">&#9650;</span></th>');
+        tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping <span class="sort-icon">&#9650;</span></th>');
+        tableHeader.append('<th scope="col">Actions</th>');
 
-                                if (shippingDetails) {
-                                    const shippingArray = shippingDetails.split(":");
-                                    shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
-                                }
+        data.forEach((item) => {
+            if (item.additionalInfo.length > 0) { // Only append if additionalInfo length > 0
+                let yardInfoHtml = "";
+                let totalPartPrice = 0;
+                let totalShipping = 0;
 
-                                totalPartPrice += partPrice;
-                                totalShipping += shippingCharge;
+                for (let i = 0; i < maxYards; i++) {
+                    if (item.additionalInfo[i]) {
+                        const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
+                        let shippingDetails = item.additionalInfo[i].shippingDetails;
+                        let shippingCharge = 0;
 
-                                yardInfoHtml += `<td>
-                                    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
-                                    Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"})<br>
-                                </td>`;
-                            } else {
-                                yardInfoHtml += "<td></td>";
-                            }
+                        if (shippingDetails) {
+                            const shippingArray = shippingDetails.split(":");
+                            shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
                         }
 
-                        totalPartPriceSum += totalPartPrice;
-                        totalShippingSum += totalShipping;
+                        totalPartPrice += partPrice;
+                        totalShipping += shippingCharge;
 
-                        $("#yardInfoTable").append(
-                            `<tr>
-                                <td>${item.orderNo}</td>
-                                <td>${item.orderDate}</td>
-                                ${yardInfoHtml}
-                                <td>${totalPartPrice.toFixed(2)}</td>
-                                <td>${totalShipping.toFixed(2)}</td>
-                                <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
-                            </tr>`
-                        );
+                        yardInfoHtml += `<td>
+                            ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
+                            Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"})<br>
+                        </td>`;
+                    } else {
+                        yardInfoHtml += "<td></td>";
                     }
-                });
-
-                // Create the footer row with totals
-                let footerHtml = '<tr>';
-                for (let i = 0; i <= maxYards + 1; i++) {
-                    footerHtml += '<td></td>';
                 }
-                footerHtml += `
-                    <td id="totalPartPrice">$${totalPartPriceSum.toFixed(2)}</td>
-                    <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
-                    <td></td>
-                </tr>`;
-                tableFooter.html(footerHtml);
+
+                totalPartPriceSum += totalPartPrice;
+                totalShippingSum += totalShipping;
+
+                $("#yardInfoTable").append(
+                    `<tr>
+                        <td>${item.orderNo}</td>
+                        <td>${item.orderDate}</td>
+                        ${yardInfoHtml}
+                        <td>${totalPartPrice.toFixed(2)}</td>
+                        <td>${totalShipping.toFixed(2)}</td>
+                        <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
+                    </tr>`
+                );
             }
-
-            $("#filterBtn").click(function () {
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (startDate && endDate) {
-                    const filteredData = yardData.filter(item => {
-                        const orderDate = new Date(item.orderDate);
-                        return orderDate >= new Date(startDate) && orderDate <= new Date(endDate);
-                    });
-                    renderTable(filteredData);
-                } else {
-                    alert("Please select both start and end date.");
-                }
-            });
-
-             fetchData();
-
-            $('#logoutLink').on('click', function() {
-                window.localStorage.clear();
-                window.location.href = 'login_signup.html';
-            });
         });
+
+        // Create the footer row with totals
+        let footerHtml = '<tr>';
+        for (let i = 0; i <= maxYards + 1; i++) {
+            footerHtml += '<td></td>';
+        }
+        footerHtml += `
+            <td id="totalPartPrice">$${totalPartPriceSum.toFixed(2)}</td>
+            <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
+            <td></td>
+        </tr>`;
+        tableFooter.html(footerHtml);
+    }
+
+    $("#filterBtn").click(function () {
+        const startDate = $("#startDate").val();
+        const endDate = $("#endDate").val();
+
+        if (startDate && endDate) {
+            const filteredData = yardData.filter(item => {
+                const orderDate = new Date(item.orderDate);
+                return orderDate >= new Date(startDate) && orderDate <= new Date(endDate);
+            });
+            renderTable(filteredData);
+        } else {
+            alert("Please select both start and end date.");
+        }
+    });
+
+    fetchData();
+
+    $('#logoutLink').on('click', function() {
+        window.localStorage.clear();
+        window.location.href = 'login_signup.html';
+    });
+});
+
     </script>
 </head>
 <body>
@@ -402,7 +412,7 @@
                 <input type="date" id="endDate">
                 <button class="btn btn-primary" id="filterBtn">Filter</button>
             </div> -->
-            <div class="table-responsive mx-auto" style="max-width: 90%">
+            <div class="table-responsive mx-auto" style="max-width: 90%;text-align: center;">
                 <table class="table table-bordered mt-4">
                     <thead>
                         <tr id="tableHeader"  style="background-color: #f2f2f2;text-align: center;">
@@ -436,8 +446,16 @@
                 <label for="profileEmail">Email Id:</label>
                 <input type="text" id="profileEmail" readonly />
                 <button class="btn btn-primary" id="backToOrders">Back</button>
-            </div>
+            </div>`
         </div>
     </div>
 </body>
 </html>
+in the following column:
+tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+the data which is getting appended is below
+yardInfoHtml += `<td>
+    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
+    Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"})<br>
+</td>`;
+consider ${item.additionalInfo[i].yardName || ""} and sort with from A to Z
