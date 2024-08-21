@@ -260,29 +260,38 @@
     </div>
 
     <script>
-    $(document).ready(function () {
+   $(document).ready(function () {
     let currentSort = {
         column: "",
         order: "asc" // ascending by default
     };
+
+    function extractNumericValue(text) {
+        // Extracts the numeric value from a string, ignoring any non-numeric characters
+        const match = text.match(/[-+]?[0-9]*\.?[0-9]+/);
+        return match ? parseFloat(match[0]) : 0;
+    }
 
     function sortTable(column, order, isNumeric) {
         const tbody = $("#yardInfoTable");
         const rows = tbody.find("tr").toArray();
 
         rows.sort(function (a, b) {
-            const cellA = $(a).find("td").eq(column).data('sort-value');
-            const cellB = $(b).find("td").eq(column).data('sort-value');
+            const cellA = $(a).find("td").eq(column).text().trim();
+            const cellB = $(b).find("td").eq(column).text().trim();
 
             if (isNumeric) {
-                return order === "asc" ? cellA - cellB : cellB - cellA;
+                const numA = extractNumericValue(cellA);
+                const numB = extractNumericValue(cellB);
+                return order === "asc" ? numA - numB : numB - numA;
             } else {
                 return order === "asc"
-                    ? String(cellA).localeCompare(String(cellB))
-                    : String(cellB).localeCompare(String(cellA));
+                    ? cellA.localeCompare(cellB)
+                    : cellB.localeCompare(cellA);
             }
         });
 
+        // Append sorted rows back to the table body
         $.each(rows, function (index, row) {
             tbody.append(row);
         });
@@ -293,7 +302,8 @@
         const column = $(this).index();
         const sortBy = $(this).data("sort");
 
-        const isNumeric = ["yard", "totalShipping"].some(type => sortBy.includes(type)) || column > 1;
+        // Determine if the column should be treated as numeric
+        const isNumeric = ["yard", "totalShipping"].some(type => sortBy.includes(type));
 
         // Toggle the sort order
         currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
@@ -305,7 +315,7 @@
         $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
         $(this)
             .find("span.sort-icon")
-            .html(currentSort.order === "asc" ? "&#9660;" : "&#9650;"); // Toggle current column icon
+            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     });
 
     async function fetchData() {
@@ -389,8 +399,8 @@
 
                 $("#yardInfoTable").append(
                     `<tr>
-                        <td data-sort-value="${item.orderNo}">${item.orderNo}</td>
-                        <td data-sort-value="${new Date(item.orderDate).getTime()}">${item.orderDate}</td>
+                        <td>${item.orderNo}</td>
+                        <td>${item.orderDate}</td>
                         ${yardInfoHtml}
                         <td data-sort-value="${totalShipping}">${totalShipping.toFixed(2)}</td>
                         <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
@@ -433,7 +443,7 @@
 
             if (isMatch) {
                 // Find the total shipping column and parse its value
-                const totalShipping = parseFloat($(this).find("td").eq(-2).data('sort-value')) || 0;
+                const totalShipping = parseFloat($(this).find("td").eq(-2).text()) || 0;
                 totalShippingSum += totalShipping;
             }
         });
@@ -487,9 +497,8 @@
         window.localStorage.clear();
         window.location.href = 'login_signup.html';
     });
-
-
 });
+
 
     </script>
   </body>
