@@ -536,27 +536,4 @@
     </script>
 </body>
 </html>
-<!-- $("#searchInput").on("keyup", function () {
-    let value = $(this).val().toLowerCase();
-    let totalPartPriceSum = 0;
-    let totalShippingSum = 0;
-
-    $("#yardInfoTable tr").filter(function () {
-        const match = $(this).text().toLowerCase().indexOf(value) > -1;
-        $(this).toggle(match);
-
-        if (match) {
-            // Assuming the part price and shipping charge are in specific columns, update the selectors accordingly.
-            const partPrice = parseFloat($(this).find("td").eq(-3).text()) || 0; // Adjust index as needed
-            const shippingCharge = parseFloat($(this).find("td").eq(-2).text()) || 0; // Adjust index as needed
-
-            totalPartPriceSum += partPrice;
-            totalShippingSum += shippingCharge;
-        }
-    });
-
-    // Update the footer with the new totals
-    $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
-    $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
-});
- -->
+<!-- in the above html page, can you give filter to each colum to sort from asc to desc and the desc to ascending -->
