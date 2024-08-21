@@ -163,16 +163,10 @@
         .sortable {
             cursor: pointer;
         }
-        /* .sortable:after {
-            content: ' ▲▼';
-            font-size: 0.8em;
-        } */
-        /* .sortable.asc:after {
-            content: ' ▲';
+        .sort-icon {
+            margin-left: 5px;
+            cursor: pointer;
         }
-        .sortable.desc:after {
-            content: ' ▼';
-        } */
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -182,7 +176,7 @@
         if (!firstName) {
           window.location.href = "login_signup.html";
         }
-      </script>
+    </script>
 </head>
 <body>
     <div class="navbar">
@@ -213,15 +207,12 @@
                     </a>
                     <div class="submenu" id="submenu-dashboards">
                         <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
-            <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
-            <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
-            <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
-            <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
-            <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
-            <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
-            <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
-            <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
-            <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
+                        <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+                        <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
+                        <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
+                        <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+                        <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+                        <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
                     </div>
                 </div>
                 <div class="nav-item">
@@ -254,7 +245,6 @@
                         <a class="nav-link" href="refundReport.html">Refund Report</a>
                         <a class="nav-link" href="poReport.html">PO Report</a>
                         <a class="nav-link" href="salesReport.html">My Sales Report</a>
-                        <!-- <a class="nav-link" href="moreThan2CardC.html">Collect Refund</a> -->
                         <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
                     </div>
                 </div>
@@ -268,19 +258,12 @@
             <div style="align-items: center; justify-content: center">
               <input type="text" class="form-control" id="searchInput" placeholder="Search..." />
             </div>
-            <!-- <div class="date-filter">
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate">
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate">
-                <button class="btn btn-primary" id="filterBtn">Filter</button>
-            </div> -->
             <div class="table-responsive mx-auto" style="max-width: 90%">
                 <table class="table table-bordered mt-4">
                     <thead>
                         <tr id="tableHeader" style="background-color: #f2f2f2;">
-                            <th scope="col" class="sortable">Order No <span class="sort-icon">&#9650;</span></th>
-                            <th scope="col" class="sortable">Order Date <span class="sort-icon">&#9650;</span></th>
+                            <th scope="col" class="sortable" data-sort="orderNo">Order No <span class="sort-icon">&#9650;</span></th>
+                            <th scope="col" class="sortable" data-sort="orderDate">Order Date <span class="sort-icon">&#9650;</span></th>
                             <!-- Add more sortable columns as needed -->
                         </tr>
                     </thead>
@@ -312,59 +295,177 @@
 
     <script>
         $(document).ready(async function () {
-            // Get the current time and the login timestamp
-            const currentTime = Date.now();
-            const loginTimestamp = localStorage.getItem("loginTimestamp");
-            if (loginTimestamp) {
-                const timeDifference = (currentTime - loginTimestamp) / (1000 * 60 * 60);
-                if (timeDifference >= 12) {
-                    alert("Your session has expired. You will be redirected to the login page.");
-                    window.localStorage.clear(); 
-                    window.location.href = "login_signup.html";
+            let currentSort = {
+                column: "",
+                order: "asc" // ascending by default
+            };
+
+            function sortTable(column, order) {
+                const tbody = $("#yardInfoTable");
+                const rows = tbody.find("tr").toArray();
+
+                rows.sort(function (a, b) {
+                    const cellA = $(a).find("td").eq(column).text().trim();
+                    const cellB = $(b).find("td").eq(column).text().trim();
+
+                    if (!isNaN(cellA) && !isNaN(cellB)) {
+                        return order === "asc" ? cellA - cellB : cellB - cellA;
+                    } else {
+                        return order === "asc"
+                            ? cellA.localeCompare(cellB)
+                            : cellB.localeCompare(cellA);
+                    }
+                });
+
+                // Append sorted rows back to the table body
+                $.each(rows, function (index, row) {
+                    tbody.append(row);
+                });
+            }
+
+            // Click event for sorting
+            $("#tableHeader th").on("click", function () {
+                const column = $(this).index();
+                const sortBy = $(this).data("sort");
+
+                // Toggle the sort order
+                currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+                currentSort.column = sortBy;
+
+                sortTable(column, currentSort.order);
+
+                // Update sort icon
+                $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
+                $(this)
+                    .find("span.sort-icon")
+                    .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+            });
+
+            // Fetch and display data
+            async function fetchData() {
+                try {
+                    const token = localStorage.getItem("token");
+                    const response = await axios.get("https://www.spotops360.com/yardInfo", {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    if (response.status !== 200) {
+                        throw new Error("Failed to fetch yard information");
+                    }
+
+                    const data = response.data;
+
+                    // Check if data is an array
+                    if (!Array.isArray(data)) {
+                        throw new Error("Data is not an array");
+                    }
+
+                    renderTable(data);
+                } catch (error) {
+                    console.error("Error fetching yard information:", error);
+                    alert("Error fetching yard information: " + error.message);
                 }
-            } else {
-                window.location.href = "login_signup.html";
-            }
-            
-            const firstName = localStorage.getItem("firstName");
-            const lastName = localStorage.getItem("lastName");
-            const email = localStorage.getItem("email");
-            const role = localStorage.getItem("role");
-            const team = localStorage.getItem("team");
-
-            if (firstName) {
-                $("#user-name").text(firstName);
-            }
-            if (!firstName) {
-                window.location.href = "login_signup.html";
             }
 
-            const token = localStorage.getItem("token");
+            function renderTable(data) {
+                const tableHeader = $("#tableHeader");
+                const tableFooter = $("#tableFooter");
+                $("#yardInfoTable").empty();
+                let maxYards = 0;
 
-            // Apply team-based and role-based restrictions
-            if (team === "Team Charlie") {
-                $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
-                $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
-                $(".nav-item:has(#submenu-teams)").hide();
-                $(".nav-item:has(#submenu-users)").hide();
-            } else if (team === "Team Mark") {
-                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-                $(".nav-item:has(#submenu-teams)").hide();
-                $(".nav-item:has(#submenu-users)").hide();
-                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
-            } else if (team === "Team Sussane") {
-                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-                $(".nav-item:has(#submenu-teams)").hide();
-                $(".nav-item:has(#submenu-users)").hide();
-                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
-            } else if (role === "Admin") {
-                $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-                $('#submenu-reports .nav-link:contains("Refund Report")').show();
-                $('#submenu-reports .nav-link:contains("Collect Refund")').show();
-                $("#submenu-dashboards .view-individualOrders-link").hide();
+                data.forEach((item) => {
+                    if (item.additionalInfo.length > maxYards) {
+                        maxYards = item.additionalInfo.length;
+                    }
+                });
+
+                tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
+                for (let i = 1; i <= maxYards; i++) {
+                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+                }
+                tableHeader.append('<th scope="col" class="sortable">Total Part Price <span class="sort-icon">&#9650;</span></th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Shipping($) <span class="sort-icon">&#9650;</span></th>');
+                tableHeader.append('<th scope="col" class="sortable">Actions <span class="sort-icon">&#9650;</span></th>');
+
+                data.forEach((item) => {
+                    let appendOrder = false; // flag to check if the order should be appended
+                    let yardInfoHtml = "";
+                    let totalPartPrice = 0;
+                    let totalShipping = 0;
+
+                    for (let i = 0; i < maxYards; i++) {
+                        if (item.additionalInfo[i] && item.additionalInfo[i].paymentStatus === "Refund collected") {
+                            appendOrder = true; 
+                            const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
+                            const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
+                            totalPartPrice += partPrice;
+                            totalShipping += shippingCharge;
+
+                            yardInfoHtml += `<td>
+                                ${item.additionalInfo[i].yardName || ""}${item.additionalInfo[i].yardName ? ' | ' : ''}${item.additionalInfo[i].partPrice || ""}${item.additionalInfo[i].partPrice ? ' | ' : ''}<br>
+                                ${item.additionalInfo[i].shippingMethod || ""}${item.additionalInfo[i].shippingMethod ? ' | ' : ''}(${item.additionalInfo[i].shippingDetails || "0"})<br>
+                                ${item.additionalInfo[i].status}<br>
+                            </td>`;
+                        } else {
+                            yardInfoHtml += "<td></td>";
+                        }
+                    }
+
+                    if (appendOrder) {
+                        $("#yardInfoTable").append(
+                            `<tr>
+                                <td>${item.orderNo}</td>
+                                <td>${item.orderDate}</td>
+                                ${yardInfoHtml}
+                                <td>${totalPartPrice.toFixed(2)}</td>
+                                <td>${totalShipping.toFixed(2)}</td>
+                                <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
+                            </tr>`
+                        );
+                    }
+                });
+
+                // Create the footer row with totals
+                let footerHtml = '<tr>';
+                for (let i = 0; i <= maxYards + 1; i++) {
+                    footerHtml += '<td></td>';
+                }
+                footerHtml += `
+                    <td id="totalPartPrice">$${totalPartPrice.toFixed(2)}</td>
+                    <td id="totalShipping">$${totalShipping.toFixed(2)}</td>
+                    <td></td>
+                </tr>`;
+                tableFooter.html(footerHtml);
             }
 
-            // Toggle sidebar visibility on smaller screens
+            $('#yardInfoTable').on('click', '.process-btn', function () {
+                const id = $(this).data('id');
+                window.location.href = `form.html?orderNo=${id}&process=true`;
+            });
+
+            await fetchData();
+
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
+            });
+
+            // Highlight active link based on current URL
+            const currentPath = window.location.pathname;
+            $(".nav-link").each(function () {
+                if (currentPath.includes($(this).attr("href"))) {
+                    $(this).addClass("active");
+                }
+            });
+
+            $("#searchInput").on("keyup", function () {
+                let value = $(this).val().toLowerCase();
+                $("#yardInfoTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            // Sidebar toggle and menu functionality
             $(".toggle-sidebar").on("click", function () {
                 $("#offcanvasSidebar").toggleClass("show");
             });
@@ -408,194 +509,7 @@
             $(".close").click(function () {
                 location.reload();
             });
-
-            $("#searchInput").on("keyup", function () {
-                let value = $(this).val().toLowerCase();
-                $("#yardInfoTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                });
-            });
-
-            // Highlight active link based on current URL
-            const currentPath = window.location.pathname;
-            $(".nav-link").each(function () {
-                if (currentPath.includes($(this).attr("href"))) {
-                    $(this).addClass("active");
-                }
-            });
-
-            // Fetch and display data
-            async function fetchData() {
-                try {
-                    const response = await axios.get("https://www.spotops360.com/yardInfo", {
-                        headers: { Authorization: `Bearer ${token}` },
-                    });
-
-                    if (response.status !== 200) {
-                        throw new Error("Failed to fetch shipping expenses information");
-                    }
-
-                    const data = response.data;
-
-                    // Check if data is an array
-                    if (!Array.isArray(data)) {
-                        throw new Error("Data is not an array");
-                    }
-
-                    yardData = data;
-                    renderTable(data);
-                } catch (error) {
-                    console.error("Error fetching shipping expenses information:", error);
-                    alert("Error fetching shipping expenses information: " + error.message);
-                }
-            }
-
-            function renderTable(data) {
-                const tableHeader = $("#tableHeader");
-                const tableFooter = $("#tableFooter");
-                $("#yardInfoTable").empty();
-                let maxYards = 0;
-                let totalPartPriceSum = 0;
-                let totalShippingSum = 0;
-
-                data.forEach((item) => {
-                    if (item.additionalInfo.length > maxYards) {
-                        maxYards = item.additionalInfo.length;
-                    }
-                });
-
-                tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
-                for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
-                }
-                tableHeader.append('<th scope="col" class="sortable">Total Part Price <span class="sort-icon">&#9650;</span></th>');
-                tableHeader.append('<th scope="col" class="sortable">Total Shipping($) <span class="sort-icon">&#9650;</span></th>');
-                tableHeader.append('<th scope="col" class="sortable">Actions <span class="sort-icon">&#9650;</span></th>');
-
-                data.forEach((item) => {
-                    let appendOrder = false; // flag to check if the order should be appended
-                    let yardInfoHtml = "";
-                    let totalPartPrice = 0;
-                    let totalShipping = 0;
-
-                    for (let i = 0; i < maxYards; i++) {
-                        if (item.additionalInfo[i] && item.additionalInfo[i].paymentStatus === "Refund collected") {
-                            appendOrder = true; 
-                            const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
-                            const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
-                            totalPartPrice += partPrice;
-                            totalShipping += shippingCharge;
-
-                            yardInfoHtml += `<td>
-                                ${item.additionalInfo[i].yardName || ""}${item.additionalInfo[i].yardName ? ' | ' : ''}${item.additionalInfo[i].partPrice || ""}${item.additionalInfo[i].partPrice ? ' | ' : ''}<br>
-                                ${item.additionalInfo[i].shippingMethod || ""}${item.additionalInfo[i].shippingMethod ? ' | ' : ''}(${item.additionalInfo[i].shippingDetails || "0"})<br>
-                                ${item.additionalInfo[i].status}<br>
-                            </td>`;
-                        } else {
-                            yardInfoHtml += "<td></td>";
-                        }
-                    }
-
-                    if (appendOrder) {
-                        totalPartPriceSum += totalPartPrice;
-                        totalShippingSum += totalShipping;
-
-                        $("#yardInfoTable").append(
-                            `<tr>
-                                <td>${item.orderNo}</td>
-                                <td>${item.orderDate}</td>
-                                ${yardInfoHtml}
-                                <td>${totalPartPrice.toFixed(2)}</td>
-                                <td>${totalShipping.toFixed(2)}</td>
-                                <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
-                            </tr>`
-                        );
-                    }
-                });
-
-                // Create the footer row with totals
-                let footerHtml = '<tr>';
-                for (let i = 0; i <= maxYards + 1; i++) {
-                    footerHtml += '<td></td>';
-                }
-                footerHtml += `
-                    <td id="totalPartPrice">$${totalPartPriceSum.toFixed(2)}</td>
-                    <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
-                    <td></td>
-                </tr>`;
-                tableFooter.html(footerHtml);
-            }
-
-            $('#yardInfoTable').on('click', '.process-btn', function () {
-                const id = $(this).data('id');
-                window.location.href = `form.html?orderNo=${id}&process=true`;
-            });
-
-            $("#filterBtn").click(function () {
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (startDate && endDate) {
-                    const filteredData = yardData.filter(item => {
-                        const orderDate = new Date(item.orderDate);
-                        return orderDate >= new Date(startDate) && orderDate <= new Date(endDate);
-                    });
-                    renderTable(filteredData);
-                } else {
-                    alert("Please select both start and end date.");
-                }
-            });
-
-            await fetchData();
-
-            $('#logoutLink').on('click', function() {
-                window.localStorage.clear();
-                window.location.href = 'login_signup.html';
-            });
-
-            // Sorting functionality
-            let sortOrder = 'asc';
-            let currentColumn = null;
-
-            $('.sortable').on('click', function() {
-                const column = $(this).index();
-                const isNumeric = $(this).hasClass('numeric');
-                
-                if (currentColumn === column) {
-                    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-                } else {
-                    sortOrder = 'asc';
-                    currentColumn = column;
-                }
-                
-                sortTable(column, sortOrder, isNumeric);
-                $('.sortable').removeClass('asc desc');
-                $(this).addClass(sortOrder);
-            });
-
-            function sortTable(column, order, isNumeric) {
-                const rows = $('#yardInfoTable tr').get();
-
-                rows.sort(function(a, b) {
-                    const A = $(a).children('td').eq(column).text().toUpperCase();
-                    const B = $(b).children('td').eq(column).text().toUpperCase();
-
-                    if (isNumeric) {
-                        return order === 'asc' ? parseFloat(A) - parseFloat(B) : parseFloat(B) - parseFloat(A);
-                    } else {
-                        if (A < B) return order === 'asc' ? -1 : 1;
-                        if (A > B) return order === 'asc' ? 1 : -1;
-                        return 0;
-                    }
-                });
-
-                $.each(rows, function(index, row) {
-                    $('#yardInfoTable').append(row);
-                });
-            }
         });
     </script>
 </body>
 </html>
-
-<!-- in the above html page, can you give filter to each colum to sort from asc to desc and the desc to ascending use  <span class="sort-icon">&#9650;</span> -->
