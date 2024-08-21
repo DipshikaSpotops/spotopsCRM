@@ -3409,7 +3409,7 @@ $("#saveYardDetails").on("click", function () {
       $("#submit").on("click", function (event) {
         event.preventDefault();
         const content = $("#noteInput").val();
-        const yardIndex = $("#submit").data("yard-index") - 1;
+        const yardIndex = $("#submit").data("yard-index");
         const firstName = localStorage.getItem("firstName");
         // const timestamp = new Date().toLocaleString();
 
