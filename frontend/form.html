@@ -1507,7 +1507,7 @@ select:disabled {
                 type="submit"
                 value="Update Notes"
                 style="
-                  margin: -60% 0% 7% 540%;
+                  margin: -60% 0% 7% 522%;
                   border-radius: 20px;
                   background-color: grey;
                   border: none;
@@ -3453,6 +3453,7 @@ $("#saveYardDetails").on("click", function () {
             .then((response) => {
               alert("Notes updated successfully.");
               $("#noteInput").val("");
+              console.log("yindex",yardIndex);
               fetchAndDisplayNotes(yardIndex-1);
             })
             .catch((error) => {
