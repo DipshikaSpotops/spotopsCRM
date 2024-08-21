@@ -451,11 +451,3 @@
     </div>
 </body>
 </html>
-in the following column:
-tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
-the data which is getting appended is below
-yardInfoHtml += `<td>
-    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
-    Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"})<br>
-</td>`;
-consider ${item.additionalInfo[i].yardName || ""} and sort with from A to Z
