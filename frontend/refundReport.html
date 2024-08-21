@@ -279,8 +279,8 @@
                 <table class="table table-bordered mt-4">
                     <thead>
                         <tr id="tableHeader" style="background-color: #f2f2f2;">
-                            <th scope="col" class="sortable">Order No</th>
-                            <th scope="col" class="sortable">Order Date</th>
+                            <th scope="col" class="sortable">Order No <span class="sort-icon">&#9650;</span></th>
+                            <th scope="col" class="sortable">Order Date <span class="sort-icon">&#9650;</span></th>
                             <!-- Add more sortable columns as needed -->
                         </tr>
                     </thead>
@@ -411,7 +411,7 @@
 
             $("#searchInput").on("keyup", function () {
                 let value = $(this).val().toLowerCase();
-                $("#infoTable tr").filter(function () {
+                $("#yardInfoTable tr").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
             });
@@ -466,11 +466,11 @@
 
                 tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
                 for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i}</th>`);
+                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
                 }
-                tableHeader.append('<th scope="col" class="sortable">Total Part Price</th>');
-                tableHeader.append('<th scope="col" class="sortable">Total Shipping($)</th>');
-                tableHeader.append('<th scope="col" class="sortable">Actions</th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Part Price <span class="sort-icon">&#9650;</span></th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Shipping($) <span class="sort-icon">&#9650;</span></th>');
+                tableHeader.append('<th scope="col" class="sortable">Actions <span class="sort-icon">&#9650;</span></th>');
 
                 data.forEach((item) => {
                     let appendOrder = false; // flag to check if the order should be appended
@@ -597,4 +597,5 @@
     </script>
 </body>
 </html>
-in the above html page, can you give filter to each colum to sort from asc to desc and the desc to ascending use  <span class="sort-icon">&#9650;</span>
+
+<!-- in the above html page, can you give filter to each colum to sort from asc to desc and the desc to ascending use  <span class="sort-icon">&#9650;</span> -->
