@@ -224,8 +224,8 @@
           <table class="table table-bordered mt-4">
             <thead>
               <tr id="tableHeader">
-                <th scope="col" data-sort="orderNo">Order No <span class="sort-icon">&#9650;</span></th>
-                <th scope="col" data-sort="orderDate">Order Date <span class="sort-icon">&#9650;</span></th>
+                <th scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
                 <!-- Yard columns will be added dynamically -->
               </tr>
             </thead>
@@ -277,8 +277,8 @@
         const rows = tbody.find("tr").toArray();
 
         rows.sort(function (a, b) {
-            const cellA = $(a).find("td").eq(column).text().trim();
-            const cellB = $(b).find("td").eq(column).text().trim();
+            let cellA = $(a).find("td").eq(column).text().trim();
+            let cellB = $(b).find("td").eq(column).text().trim();
 
             if (isNumeric) {
                 const numA = extractNumericValue(cellA);
@@ -297,25 +297,36 @@
         });
     }
 
-    // Click event for sorting
-    $("#tableHeader th").on("click", function () {
-        const column = $(this).index();
-        const sortBy = $(this).data("sort");
-
-        // Determine if the column should be treated as numeric
-        const isNumeric = ["yard", "totalShipping"].some(type => sortBy.includes(type));
+    // Click event for sorting Yard columns (alphabetical sorting)
+    $(document).on("click", ".fYardName", function () {
+        const column = $(this).closest("th").index();
+        const sortBy = $(this).closest("th").data("sort");
 
         // Toggle the sort order
         currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
         currentSort.column = sortBy;
 
-        sortTable(column, currentSort.order, isNumeric);
+        sortTable(column, currentSort.order, false);
 
         // Update sort icon
-        $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
-        $(this)
-            .find("span.sort-icon")
-            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+        $(".fYardName").html("&#9650;"); // Reset all icons to ascending
+        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    });
+
+    // Click event for sorting numeric columns
+    $(document).on("click", ".onlyNumber", function () {
+        const column = $(this).closest("th").index();
+        const sortBy = $(this).closest("th").data("sort");
+
+        // Toggle the sort order
+        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+        currentSort.column = sortBy;
+
+        sortTable(column, currentSort.order, true);
+
+        // Update sort icon
+        $(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
+        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     });
 
     async function fetchData() {
@@ -364,9 +375,9 @@
 
         tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
         for (let i = 1; i <= maxYards; i++) {
-            tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+            tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
         }
-        tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon">&#9650;</span></th>');
+        tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#9650;</span></th>');
         tableHeader.append('<th scope="col">Actions</th>');
 
         data.forEach((item) => {
@@ -498,7 +509,6 @@
         window.location.href = 'login_signup.html';
     });
 });
-
 
     </script>
   </body>
