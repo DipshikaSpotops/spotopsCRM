@@ -144,7 +144,7 @@
         order: "asc" // ascending by default
     };
 
-    function sortTable(column, order, isYardColumn) {
+    function sortTable(column, order, isNumericColumn) {
         const tbody = $("#yardInfoTable");
         const rows = tbody.find("tr").toArray();
 
@@ -152,15 +152,13 @@
             let cellA = $(a).find("td").eq(column).text().trim();
             let cellB = $(b).find("td").eq(column).text().trim();
 
-            if (isYardColumn) {
-                // Extract yardName for sorting
-                cellA = cellA.split("|")[0].trim(); // Extracts yardName part before the first "|"
-                cellB = cellB.split("|")[0].trim(); // Extracts yardName part before the first "|"
-            }
-
-            if (!isNaN(cellA) && !isNaN(cellB)) {
-                return order === "asc" ? parseFloat(cellA) - parseFloat(cellB) : parseFloat(cellB) - parseFloat(cellA);
+            if (isNumericColumn) {
+                // Convert to numbers for numeric comparison
+                cellA = parseFloat(cellA.replace(/[^0-9.-]+/g, "")) || 0;
+                cellB = parseFloat(cellB.replace(/[^0-9.-]+/g, "")) || 0;
+                return order === "asc" ? cellA - cellB : cellB - cellA;
             } else {
+                // String comparison for other columns
                 return order === "asc"
                     ? cellA.localeCompare(cellB)
                     : cellB.localeCompare(cellA);
@@ -172,6 +170,25 @@
             tbody.append(row);
         });
     }
+
+    // Click event for sorting columns with numerical values
+    $(document).on("click", ".onlyNumber", function () {
+        const column = $(this).closest("th").index();
+        const sortBy = $(this).closest("th").data("sort");
+
+        // Check if the column should be sorted numerically
+        const isNumericColumn = true;
+
+        // Toggle the sort order
+        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+        currentSort.column = sortBy;
+
+        sortTable(column, currentSort.order, isNumericColumn);
+
+        // Update sort icon
+        $(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
+        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    });
 
     // Click event for sorting Yard columns
     $(document).on("click", ".fYardName", function () {
@@ -429,7 +446,7 @@
                 <label for="profileEmail">Email Id:</label>
                 <input type="text" id="profileEmail" readonly />
                 <button class="btn btn-primary" id="backToOrders">Back</button>
-            </div>`
+            </div>
         </div>
     </div>
 </body>
