@@ -159,7 +159,7 @@
             }
 
             if (!isNaN(cellA) && !isNaN(cellB)) {
-                return order === "asc" ? cellA - cellB : cellB - cellA;
+                return order === "asc" ? parseFloat(cellA) - parseFloat(cellB) : parseFloat(cellB) - parseFloat(cellA);
             } else {
                 return order === "asc"
                     ? cellA.localeCompare(cellB)
@@ -173,10 +173,10 @@
         });
     }
 
-    // Click event for sorting
-    $("#tableHeader th").on("click", function () {
-        const column = $(this).index();
-        const sortBy = $(this).data("sort");
+    // Click event for sorting Yard columns
+    $(document).on("click", ".fYardName", function () {
+        const column = $(this).closest("th").index();
+        const sortBy = $(this).closest("th").data("sort");
 
         // Determine if the column is a Yard column
         const isYardColumn = sortBy.startsWith("yard");
@@ -188,10 +188,8 @@
         sortTable(column, currentSort.order, isYardColumn);
 
         // Update sort icon
-        $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
-        $(this)
-            .find("span.sort-icon")
-            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+        $(".fYardName").html("&#9650;"); // Reset all icons to ascending
+        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     });
 
     async function fetchData() {
@@ -236,7 +234,7 @@
 
         tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
         for (let i = 1; i <= maxYards; i++) {
-            tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+            tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
         }
         tableHeader.append('<th scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon">&#9650;</span></th>');
         tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping <span class="sort-icon">&#9650;</span></th>');
@@ -299,21 +297,6 @@
         </tr>`;
         tableFooter.html(footerHtml);
     }
-
-    $("#filterBtn").click(function () {
-        const startDate = $("#startDate").val();
-        const endDate = $("#endDate").val();
-
-        if (startDate && endDate) {
-            const filteredData = yardData.filter(item => {
-                const orderDate = new Date(item.orderDate);
-                return orderDate >= new Date(startDate) && orderDate <= new Date(endDate);
-            });
-            renderTable(filteredData);
-        } else {
-            alert("Please select both start and end date.");
-        }
-    });
 
     fetchData();
 
@@ -451,3 +434,11 @@
     </div>
 </body>
 </html>
+in the following column:
+tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+the data which is getting appended is below
+yardInfoHtml += `<td>
+    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
+    Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"})<br>
+</td>`;
+consider ${item.additionalInfo[i].yardName || ""} and sort with from A to Z
