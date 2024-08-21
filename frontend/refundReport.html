@@ -26,15 +26,15 @@
             cursor: pointer;
         }
         #searchInput {
-        width: 40%;
-        border-radius: 30px;
-        border: 1px solid grey;
-        margin: 1% 28%;
-        background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
-        background-size: 20px 20px;
-        padding-left: 35px;
-        height: 40px;
-      }
+            width: 40%;
+            border-radius: 30px;
+            border: 1px solid grey;
+            margin: 1% 28%;
+            background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
+            background-size: 20px 20px;
+            padding-left: 35px;
+            height: 40px;
+        }
         .navbar {
             color: white;
             background-color: black;
@@ -160,6 +160,19 @@
         .date-filter label {
             margin-right: 10px;
         }
+        .sortable {
+            cursor: pointer;
+        }
+        .sortable:after {
+            content: ' ▲▼';
+            font-size: 0.8em;
+        }
+        .sortable.asc:after {
+            content: ' ▲';
+        }
+        .sortable.desc:after {
+            content: ' ▼';
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -266,8 +279,9 @@
                 <table class="table table-bordered mt-4">
                     <thead>
                         <tr id="tableHeader" style="background-color: #f2f2f2;">
-                            <th scope="col">Order No</th>
-                            <th scope="col">Order Date</th>
+                            <th scope="col" class="sortable">Order No</th>
+                            <th scope="col" class="sortable">Order Date</th>
+                            <!-- Add more sortable columns as needed -->
                         </tr>
                     </thead>
                     <tbody id="yardInfoTable">
@@ -296,61 +310,22 @@
         </div>
     </div>
 
-    <!-- Profile Modal -->
-    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="profileForm">
-                        <div class="form-group">
-                            <label for="profileFirstName">First Name</label>
-                            <input type="text" class="form-control" id="profileFirstName" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileLastName">Last Name</label>
-                            <input type="text" class="form-control" id="profileLastName" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileEmail">Email</label>
-                            <input type="email" class="form-control" id="profileEmail" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileRole">Role</label>
-                            <input type="text" class="form-control" id="profileRole" readonly>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         $(document).ready(async function () {
             // Get the current time and the login timestamp
-        const currentTime = Date.now();
-        const loginTimestamp = localStorage.getItem("loginTimestamp");
-        if (loginTimestamp) {
-          const timeDifference =
-            (currentTime - loginTimestamp) / (1000 * 60 * 60);
-          if (timeDifference >= 12) {
-            alert(
-              "Your session has expired. You will be redirected to the login page."
-            );
-            window.localStorage.clear(); 
-            window.location.href = "login_signup.html";
-          }
-        } else {
-          window.location.href = "login_signup.html";
-        }
+            const currentTime = Date.now();
+            const loginTimestamp = localStorage.getItem("loginTimestamp");
+            if (loginTimestamp) {
+                const timeDifference = (currentTime - loginTimestamp) / (1000 * 60 * 60);
+                if (timeDifference >= 12) {
+                    alert("Your session has expired. You will be redirected to the login page.");
+                    window.localStorage.clear(); 
+                    window.location.href = "login_signup.html";
+                }
+            } else {
+                window.location.href = "login_signup.html";
+            }
+            
             const firstName = localStorage.getItem("firstName");
             const lastName = localStorage.getItem("lastName");
             const email = localStorage.getItem("email");
@@ -361,44 +336,31 @@
                 $("#user-name").text(firstName);
             }
             if (!firstName) {
-          window.location.href = "login_signup.html";
-        }
+                window.location.href = "login_signup.html";
+            }
 
             const token = localStorage.getItem("token");
 
             // Apply team-based and role-based restrictions
             if (team === "Team Charlie") {
-                // Hide specific reports links for Team Charlie
-                $("#submenu-reports .nav-link")
-                    .not(':contains("My Sales Report")')
-                    .hide();
-                // Hide specific dashboards links for Team Charlie
-                $(
-                    "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-                ).hide();
-                // Hide teams and users sections for Team Charlie
+                $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
+                $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
                 $(".nav-item:has(#submenu-teams)").hide();
                 $(".nav-item:has(#submenu-users)").hide();
             } else if (team === "Team Mark") {
                 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
                 $(".nav-item:has(#submenu-teams)").hide();
                 $(".nav-item:has(#submenu-users)").hide();
-                $(
-                    "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
-                ).hide();
+                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
             } else if (team === "Team Sussane") {
                 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
                 $(".nav-item:has(#submenu-teams)").hide();
                 $(".nav-item:has(#submenu-users)").hide();
-                $(
-                    "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
-                ).hide();
+                $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
             } else if (role === "Admin") {
-                // Hide specific reports links for Admin
                 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
                 $('#submenu-reports .nav-link:contains("Refund Report")').show();
                 $('#submenu-reports .nav-link:contains("Collect Refund")').show();
-                // Hide specific dashboards links for Admin
                 $("#submenu-dashboards .view-individualOrders-link").hide();
             }
 
@@ -444,18 +406,16 @@
             });
 
             $(".close").click(function () {
-                console.log("close button clicked");
                 location.reload();
             });
 
             $("#searchInput").on("keyup", function () {
-          let value = $(this).val().toLowerCase();
-          $("#infoTable tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-          });
-        });
+                let value = $(this).val().toLowerCase();
+                $("#infoTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
 
-            
             // Highlight active link based on current URL
             const currentPath = window.location.pathname;
             $(".nav-link").each(function () {
@@ -506,11 +466,11 @@
 
                 tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
                 for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col">Yard ${i}</th>`);
+                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i}</th>`);
                 }
-                tableHeader.append('<th scope="col">Total Part Price</th>');
-                tableHeader.append('<th scope="col">Total Shipping($)</th>');
-                tableHeader.append('<th scope="col">Actions</th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Part Price</th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Shipping($)</th>');
+                tableHeader.append('<th scope="col" class="sortable">Actions</th>');
 
                 data.forEach((item) => {
                     let appendOrder = false; // flag to check if the order should be appended
@@ -592,8 +552,48 @@
                 window.localStorage.clear();
                 window.location.href = 'login_signup.html';
             });
+
+            // Sorting functionality
+            let sortOrder = 'asc';
+            let currentColumn = null;
+
+            $('.sortable').on('click', function() {
+                const column = $(this).index();
+                const isNumeric = $(this).hasClass('numeric');
+                
+                if (currentColumn === column) {
+                    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortOrder = 'asc';
+                    currentColumn = column;
+                }
+                
+                sortTable(column, sortOrder, isNumeric);
+                $('.sortable').removeClass('asc desc');
+                $(this).addClass(sortOrder);
+            });
+
+            function sortTable(column, order, isNumeric) {
+                const rows = $('#yardInfoTable tr').get();
+
+                rows.sort(function(a, b) {
+                    const A = $(a).children('td').eq(column).text().toUpperCase();
+                    const B = $(b).children('td').eq(column).text().toUpperCase();
+
+                    if (isNumeric) {
+                        return order === 'asc' ? parseFloat(A) - parseFloat(B) : parseFloat(B) - parseFloat(A);
+                    } else {
+                        if (A < B) return order === 'asc' ? -1 : 1;
+                        if (A > B) return order === 'asc' ? 1 : -1;
+                        return 0;
+                    }
+                });
+
+                $.each(rows, function(index, row) {
+                    $('#yardInfoTable').append(row);
+                });
+            }
         });
     </script>
 </body>
 </html>
-<!-- in the above html page, can you give filter to each colum to sort from asc to desc and the desc to ascending -->
