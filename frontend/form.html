@@ -2728,141 +2728,154 @@ $('#refundSubmit').on('click', function() {
 
         var shippingMethod;
         $("#addYardInfo").on("click", function (event) {
-          const firstName = localStorage.getItem("firstName");   
-  event.preventDefault();
+        const firstName = localStorage.getItem("firstName");   
+        event.preventDefault();
 
-  const requiredFields = [
-    $("#yardName"),
-    $("#agentName"),
-    $("#yardRating"),
-    $("#phone"),
-    $("#email"),
-    $("#address"),
-    $("#city"),
-    $("#state"),
-    $("#zip"),
-    $("#partPrice")
-  ];
+        const requiredFields = [
+          $("#yardName"),
+          $("#agentName"),
+          $("#yardRating"),
+          $("#phone"),
+          $("#email"),
+          $("#address"),
+          $("#city"),
+          $("#state"),
+          $("#zip"),
+          $("#partPrice")
+        ];
 
-  // Check if all required fields are filled
-  let allFieldsFilled = true;
-  requiredFields.forEach(function (field) {
-    if (field.val().trim() === "") {
-      allFieldsFilled = false;
-      field.css("border-color", "red"); // Highlight missing fields
-    } else {
-      field.css("border-color", ""); // Reset border color if field is filled
-    }
-  });
+        // Check if all required fields are filled
+        let allFieldsFilled = true;
+        requiredFields.forEach(function (field) {
+          if (field.val().trim() === "") {
+            allFieldsFilled = false;
+            field.css("border-color", "red"); // Highlight missing fields
+          } else {
+            field.css("border-color", ""); // Reset border color if field is filled
+          }
+        });
 
-  // If not all fields are filled, show an alert and do not proceed
-  if (!allFieldsFilled) {
-    alert("Please fill out all required fields.");
-    return;
-  }
+        // If not all fields are filled, show an alert and do not proceed
+        if (!allFieldsFilled) {
+          alert("Please fill out all required fields.");
+          return;
+        }
 
-  // Set the new order status and update it on the server
-  const newOrderStatus = "Yard Processing";
-  console.log("new order status", newOrderStatus);
-  $("#orderStatus").val(newOrderStatus);
+        // Fetch existing order data before updating
+        fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((orderData) => {
+            // Update the order status and preserve existing data
+            const newOrderStatus = "Yard Processing";
+            console.log("new order status", newOrderStatus);
+            $("#orderStatus").val(newOrderStatus);
 
-  const updatedData = { orderStatus: newOrderStatus };
+            const updatedData = {
+              ...orderData, // Spread existing order data
+              orderStatus: newOrderStatus, // Update only the orderStatus field
+            };
 
-  fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedData),
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    updateOrderHistory(data.orderHistory);
-    console.log("Order status updated successfully:", data);
-  })
-  .catch((error) => {
-    console.error("Error updating order status:", error);
-  });
+            return fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedData),
+            });
+          })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            updateOrderHistory(data.orderHistory);
+            console.log("Order status updated successfully:", data);
+          })
+          .catch((error) => {
+            console.error("Error updating order status:", error);
+          });
 
-  // Proceed with form submission if all fields are filled
-  $(".mainDiv").removeClass("blur");
-  $("#yardModal").hide();
-  $("#refund").val("Yard located").change();
+        // Proceed with form submission if all fields are filled
+        $(".mainDiv").removeClass("blur");
+        $("#yardModal").hide();
+        $("#refund").val("Yard located").change();
 
-  // Your existing code to submit the form data
-  const yardName = $("#yardName").val();
-  const agentName = $("#agentName").val();
-  const yardRating = $("#yardRating").val();
-  const phone = $("#phone").val();
-  const altPhone = $("#altPhone").val();
-  const email = $("#email").val();
-  const address = $("#address").val();
-  const city = $("#city").val();
-  const state = $("#state").val();
-  const country = $("#country").val();
-  const zipcode = $("#zip").val();
-  const addedAddress = city + "  " + state + "  " + zipcode;
-  const partPrice = $("#partPrice").val();
-  const ownShip = $("#ownShipping").val();
-  const yardShip = $("#yardShipping").val();
-  const others = document.getElementById("others").value;
+        // Your existing code to submit the form data
+        const yardName = $("#yardName").val();
+        const agentName = $("#agentName").val();
+        const yardRating = $("#yardRating").val();
+        const phone = $("#phone").val();
+        const altPhone = $("#altPhone").val();
+        const email = $("#email").val();
+        const address = $("#address").val();
+        const city = $("#city").val();
+        const state = $("#state").val();
+        const country = $("#country").val();
+        const zipcode = $("#zip").val();
+        const addedAddress = city + "  " + state + "  " + zipcode;
+        const partPrice = $("#partPrice").val();
+        const ownShip = $("#ownShipping").val();
+        const yardShip = $("#yardShipping").val();
+        const others = document.getElementById("others").value;
 
-  let shippingMethod = "";
-  if (ownShip) {
-    shippingMethod = `Own shipping: ${ownShip} `;
-  } else if (yardShip) {
-    shippingMethod = `Yard shipping: ${yardShip}`;
-  }
+        let shippingMethod = "";
+        if (ownShip) {
+          shippingMethod = `Own shipping: ${ownShip} `;
+        } else if (yardShip) {
+          shippingMethod = `Yard shipping: ${yardShip}`;
+        }
 
-   
-  const data222 = {
-    yardName: yardName,
-    agentName: agentName,
-    yardRating: yardRating,
-    phone: phone,
-    altPhone: altPhone,
-    email: email,
-    address: addedAddress,
-    country: country,
-    partPrice: partPrice,
-    status: "Yard located",
-    shippingDetails: shippingMethod,
-    others: others,
-  };
+        const data222 = {
+          yardName: yardName,
+          agentName: agentName,
+          yardRating: yardRating,
+          phone: phone,
+          altPhone: altPhone,
+          email: email,
+          address: addedAddress,
+          country: country,
+          partPrice: partPrice,
+          status: "Yard located",
+          shippingDetails: shippingMethod,
+          others: others,
+        };
 
-  fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data222),
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    $("#editYardPopup").hide();
-    addYardButton(
-      data.additionalInfo.length,
-      `Yard ${data.additionalInfo.length}`
-    );
-    updateOrderHistory(data.orderHistory);
-    fetchAndUpdateYardInfo();
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+        fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data222),
+        })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          $("#editYardPopup").hide();
+          addYardButton(
+            data.additionalInfo.length,
+            `Yard ${data.additionalInfo.length}`
+          );
+          updateOrderHistory(data.orderHistory);
+          fetchAndUpdateYardInfo();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
 
-  window.location.reload();
-});
+        window.location.reload();
+      });
+
 
 
 
@@ -2953,11 +2966,14 @@ fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?
 })
 .then((data) => {
     console.log("additionalInfo updated:", data);
+    // Additional success handling
 })
 .catch((error) => {
     console.error("Error updating additionalInfo:", error);
 });
 
+// 2. If needed, separately update the main orders object
+// Fetch the current order data, including customerApprovedDate
 fetch(`https://www.spotops360.com/orders/${orderNo}`, {
     method: "GET",
     headers: {
@@ -2966,9 +2982,13 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`, {
 })
 .then(response => response.json())
 .then(orderData => {
+    // Prepare data to update in the main order object
     const mainOrderUpdate = {
-        customerApprovedDate: orderData.customerApprovedDate,
+        customerApprovedDate: orderData.customerApprovedDate, // Ensure it's not lost
+        // Add other fields if needed
     };
+
+    // Only update the main order object if necessary
     return fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
         method: "PUT",
         headers: {
@@ -2986,7 +3006,36 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`, {
 });
 
 
-   
+    // Log the data before sending
+    console.log("Yard Index:", yardIndex);
+    console.log("Order No:", orderNo);
+    console.log("Sending data:", JSON.stringify(data1));
+
+    // Send the data to the server using fetch
+    fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data1),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        console.log("Server response:", data);
+
+        $("#editYardModal").modal("hide");
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(yardIndex);
+        fetchAndUpdateYardInfo();
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
 });
 
 
@@ -3622,12 +3671,3 @@ $("#okButton").click(function () {
     </script>
   </body>   
 </html>
-<!-- in the above page: when following event occurs, when i am updating poSentDate or partDeliveredDate,
-if (status === "Yard PO Sent") {
-  data1.poSentDate = formattedDate;
-  console.log("poSentDate set:", data1.poSentDate);
-} else if (status === "Part delivered") {
-  data1.partDeliveredDate = formattedDate;
-  console.log("partDeliveredDate set:", data1.partDeliveredDate);
-}
-my customerApproved Date is getting removed from the databse, how is it possible -->
