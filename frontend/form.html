@@ -2760,14 +2760,12 @@ $('#refundSubmit').on('click', function() {
           alert("Please fill out all required fields.");
           return;
         }
-
         // Prepare only the fields that need to be updated
         const updatedData = {
-          orderStatus: "Yard Processing", // Only update the orderStatus
-          poSentDate: "newPoSentDate", // Add other fields as necessary
-          partDeliveredDate: "newPartDeliveredDate" // Example field
+          orderStatus: "Yard Processing", 
+          poSentDate: "newPoSentDate",
+          partDeliveredDate: "newPartDeliveredDate" 
         };
-
         fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
           method: "PATCH",
           headers: {

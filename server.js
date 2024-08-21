@@ -21,7 +21,7 @@ const app = express();
 
 app.use(cors({
   origin: 'https://spotops360.com', // Replace with your frontend's domain
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  methods: 'GET,POST,PUT,DELETE,OPTIONS,PATCH',
   credentials: true
 }));
 app.use(bodyParser.json());
@@ -1101,7 +1101,26 @@ app.put('/orders/:orderNo/additionalInfo/:yardIndex', async (req, res) => {
   }
 });
 
+// patch request
+app.patch('/orders/:orderNo', (req, res) => {
+  const { orderNo } = req.params;
+  const { firstName } = req.query;
+  const updatedFields = req.body;
 
+  // Find the order by orderNo and firstName
+  let order = orders.find(o => o.orderNo === orderNo && o.firstName === firstName);
+
+  if (order) {
+    // Only update fields provided in the request body
+    Object.keys(updatedFields).forEach(key => {
+      order[key] = updatedFields[key];
+    });
+
+    res.status(200).json(order);
+  } else {
+    res.status(404).json({ message: "Order not found" });
+  }
+});
 
 
 
