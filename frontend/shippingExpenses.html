@@ -260,235 +260,239 @@
     </div>
 
     <script>
-      $(document).ready(function () {
-        let currentSort = {
-          column: "",
-          order: "asc" // ascending by default
-        };
+    $(document).ready(function () {
+    let currentSort = {
+        column: "",
+        order: "asc" // ascending by default
+    };
 
-        function sortTable(column, order) {
-          const tbody = $("#yardInfoTable");
-          const rows = tbody.find("tr").toArray();
+    function sortTable(column, order, isNumeric) {
+        const tbody = $("#yardInfoTable");
+        const rows = tbody.find("tr").toArray();
 
-          rows.sort(function (a, b) {
+        rows.sort(function (a, b) {
             const cellA = $(a).find("td").eq(column).text().trim();
             const cellB = $(b).find("td").eq(column).text().trim();
 
-            if (!isNaN(cellA) && !isNaN(cellB)) {
-              return order === "asc" ? cellA - cellB : cellB - cellA;
+            if (isNumeric) {
+                const numA = parseFloat(cellA.replace(/[^0-9.-]+/g, "")) || 0;
+                const numB = parseFloat(cellB.replace(/[^0-9.-]+/g, "")) || 0;
+                return order === "asc" ? numA - numB : numB - numA;
             } else {
-              return order === "asc"
-                ? cellA.localeCompare(cellB)
-                : cellB.localeCompare(cellA);
+                return order === "asc"
+                    ? cellA.localeCompare(cellB)
+                    : cellB.localeCompare(cellA);
             }
-          });
-
-          // Append sorted rows back to the table body
-          $.each(rows, function (index, row) {
-            tbody.append(row);
-          });
-        }
-
-        // Click event for sorting
-        $("#tableHeader th").on("click", function () {
-          const column = $(this).index();
-          const sortBy = $(this).data("sort");
-
-          // Toggle the sort order
-          currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-          currentSort.column = sortBy;
-
-          sortTable(column, currentSort.order);
-
-          // Update sort icon
-          $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
-          $(this)
-            .find("span.sort-icon")
-            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
         });
 
-        async function fetchData() {
-          try {
+        // Append sorted rows back to the table body
+        $.each(rows, function (index, row) {
+            tbody.append(row);
+        });
+    }
+
+    // Click event for sorting
+    $("#tableHeader th").on("click", function () {
+        const column = $(this).index();
+        const sortBy = $(this).data("sort");
+
+        // Determine if the column should be treated as numeric
+        const isNumeric = ["yard", "totalShipping"].some(type => sortBy.includes(type));
+
+        // Toggle the sort order
+        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+        currentSort.column = sortBy;
+
+        sortTable(column, currentSort.order, isNumeric);
+
+        // Update sort icon
+        $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
+        $(this)
+            .find("span.sort-icon")
+            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    });
+
+    async function fetchData() {
+        try {
             const token = localStorage.getItem("token");
             const response = await axios.get("https://www.spotops360.com/yardInfo", {
-              headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (response.status !== 200) {
-              throw new Error("Failed to fetch shipping expenses information");
+                throw new Error("Failed to fetch shipping expenses information");
             }
 
             const data = response.data;
 
             // Check if data is an array
             if (!Array.isArray(data)) {
-              throw new Error("Data is not an array");
+                throw new Error("Data is not an array");
             }
 
             renderTable(data);
-          } catch (error) {
+        } catch (error) {
             console.error(
-              "Error fetching shipping expenses information:",
-              error
+                "Error fetching shipping expenses information:",
+                error
             );
             alert(
-              "Error fetching shipping expenses information: " +
+                "Error fetching shipping expenses information: " +
                 error.message
             );
-          }
         }
+    }
 
-        function renderTable(data) {
-          const tableHeader = $("#tableHeader");
-          const tableFooter = $("#tableFooter");
-          $("#yardInfoTable").empty();
-          let maxYards = 0;
-          let totalShippingSum = 0;
+    function renderTable(data) {
+        const tableHeader = $("#tableHeader");
+        const tableFooter = $("#tableFooter");
+        $("#yardInfoTable").empty();
+        let maxYards = 0;
+        let totalShippingSum = 0;
 
-          data.forEach((item) => {
+        data.forEach((item) => {
             if (item.additionalInfo.length > maxYards) {
-              maxYards = item.additionalInfo.length;
+                maxYards = item.additionalInfo.length;
             }
-          });
+        });
 
-          tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
-          for (let i = 1; i <= maxYards; i++) {
+        tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
+        for (let i = 1; i <= maxYards; i++) {
             tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
-          }
-          tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon">&#9650;</span></th>');
-          tableHeader.append('<th scope="col">Actions</th>');
-
-          data.forEach((item) => {
-            if (item.additionalInfo.length > 0) {
-              let yardInfoHtml = "";
-              let totalShipping = 0;
-
-              for (let i = 0; i < maxYards; i++) {
-                if (item.additionalInfo[i]) {
-                  // Check if shippingDetails exist
-                  let shippingDetails = item.additionalInfo[i].shippingDetails;
-                  let shippingCharge = 0;
-
-                  if (shippingDetails) {
-                    const shippingArray = shippingDetails.split(":");
-                    shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
-                  }
-
-                  totalShipping += shippingCharge;
-
-                  yardInfoHtml += `<td>
-                      ${item.additionalInfo[i].yardName || ""} | ${
-                    item.additionalInfo[i].shippingMethod || ""
-                  } ($${shippingCharge.toFixed(2) || "0"})<br>
-                  </td>`;
-                } else {
-                  yardInfoHtml += "<td></td>";
-                }
-              }
-
-              totalShippingSum += totalShipping;
-
-              $("#yardInfoTable").append(
-                `<tr>
-                    <td>${item.orderNo}</td>
-                    <td>${item.orderDate}</td>
-                    ${yardInfoHtml}
-                    <td>${totalShipping.toFixed(2)}</td>
-                    <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
-                </tr>`
-              );
-            }
-          });
-
-          const colSpan = maxYards + 2; // Including Order No and Order Date columns
-          tableFooter.find("tr").html(`
-              <td colspan="${colSpan}"></td>
-              <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
-              <td></td>
-          `);
         }
+        tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon">&#9650;</span></th>');
+        tableHeader.append('<th scope="col">Actions</th>');
 
-        // Fetch and display data
-        fetchData();
+        data.forEach((item) => {
+            if (item.additionalInfo.length > 0) {
+                let yardInfoHtml = "";
+                let totalShipping = 0;
 
-        $("#yardInfoTable").on("click", ".process-btn", function () {
-          const id = $(this).data("id");
-          window.location.href = `form.html?orderNo=${id}&process=true`;
+                for (let i = 0; i < maxYards; i++) {
+                    if (item.additionalInfo[i]) {
+                        // Check if shippingDetails exist
+                        let shippingDetails = item.additionalInfo[i].shippingDetails;
+                        let shippingCharge = 0;
+
+                        if (shippingDetails) {
+                            const shippingArray = shippingDetails.split(":");
+                            shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
+                        }
+
+                        totalShipping += shippingCharge;
+
+                        yardInfoHtml += `<td>
+                            ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge.toFixed(2) || "0"})<br>
+                        </td>`;
+                    } else {
+                        yardInfoHtml += "<td></td>";
+                    }
+                }
+
+                totalShippingSum += totalShipping;
+
+                $("#yardInfoTable").append(
+                    `<tr>
+                        <td>${item.orderNo}</td>
+                        <td>${item.orderDate}</td>
+                        ${yardInfoHtml}
+                        <td>${totalShipping.toFixed(2)}</td>
+                        <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
+                    </tr>`
+                );
+            }
         });
 
-        // Highlight active link based on current URL
-        const currentPath = window.location.pathname;
-        $(".nav-link").each(function () {
-          if (currentPath.includes($(this).attr("href"))) {
+        const colSpan = maxYards + 2; // Including Order No and Order Date columns
+        tableFooter.find("tr").html(`
+            <td colspan="${colSpan}"></td>
+            <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
+            <td></td>
+        `);
+    }
+
+    // Fetch and display data
+    fetchData();
+
+    $("#yardInfoTable").on("click", ".process-btn", function () {
+        const id = $(this).data("id");
+        window.location.href = `form.html?orderNo=${id}&process=true`;
+    });
+
+    // Highlight active link based on current URL
+    const currentPath = window.location.pathname;
+    $(".nav-link").each(function () {
+        if (currentPath.includes($(this).attr("href"))) {
             $(this).addClass("active");
-          }
-        });
+        }
+    });
 
-        $("#searchInput").on("keyup", function () {
-          let value = $(this).val().toLowerCase();
-          let totalShippingSum = 0;
+    $("#searchInput").on("keyup", function () {
+        let value = $(this).val().toLowerCase();
+        let totalShippingSum = 0;
 
-          $("#yardInfoTable tr").filter(function () {
+        $("#yardInfoTable tr").filter(function () {
             const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
             $(this).toggle(isMatch);
 
             if (isMatch) {
-              // Find the total shipping column and parse its value
-              const totalShipping = parseFloat($(this).find("td").eq(-2).text()) || 0;
-              totalShippingSum += totalShipping;
+                // Find the total shipping column and parse its value
+                const totalShipping = parseFloat($(this).find("td").eq(-2).text()) || 0;
+                totalShippingSum += totalShipping;
             }
-          });
-
-          // Update the footer with the new total shipping value
-          $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
         });
 
-        $(".toggle-sidebar").on("click", function () {
-          $("#offcanvasSidebar").toggleClass("show");
-        });
+        // Update the footer with the new total shipping value
+        $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
+    });
 
-        $(".nav-link").on("click", function () {
-          $(".nav-link").removeClass("active selected");
-          $(this).addClass("selected");
+    $(".toggle-sidebar").on("click", function () {
+        $("#offcanvasSidebar").toggleClass("show");
+    });
 
-          const contentMap = {
+    $(".nav-link").on("click", function () {
+        $(".nav-link").removeClass("active selected");
+        $(this).addClass("selected");
+
+        const contentMap = {
             "dashboards-link": "#yard-info-content",
             "users-link": "#users-content",
             "teams-link": "#teams-content",
             "reports-link": "#reports-content",
             "profile": "#profile-content",
-          };
+        };
 
-          $(".main-content > div").addClass("d-none");
-          $(contentMap[this.id]).removeClass("d-none");
-          $("#offcanvasSidebar").removeClass("show");
-        });
+        $(".main-content > div").addClass("d-none");
+        $(contentMap[this.id]).removeClass("d-none");
+        $("#offcanvasSidebar").removeClass("show");
+    });
 
-        $(".chevron-icon, .nav-link").on("click", function (event) {
-          event.stopPropagation();
-          const submenu = $(this).closest(".nav-item").find(".submenu");
-          submenu.toggle();
-          $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-          $(this).closest(".nav-link").toggleClass("selected");
-        });
+    $(".chevron-icon, .nav-link").on("click", function (event) {
+        event.stopPropagation();
+        const submenu = $(this).closest(".nav-item").find(".submenu");
+        submenu.toggle();
+        $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+        $(this).closest(".nav-link").toggleClass("selected");
+    });
 
-        $("#profile").click(function () {
-          $("#profileFirstName").val(localStorage.getItem("firstName"));
-          $("#profileLastName").val(localStorage.getItem("lastName"));
-          $("#profileEmail").val(localStorage.getItem("email"));
-          $("#profileRole").val(localStorage.getItem("role"));
-          $("#profileModal").modal("show");
-        });
+    $("#profile").click(function () {
+        $("#profileFirstName").val(localStorage.getItem("firstName"));
+        $("#profileLastName").val(localStorage.getItem("lastName"));
+        $("#profileEmail").val(localStorage.getItem("email"));
+        $("#profileRole").val(localStorage.getItem("role"));
+        $("#profileModal").modal("show");
+    });
 
-        $(".close").click(function () {
-          location.reload();
-        });
+    $(".close").click(function () {
+        location.reload();
+    });
 
-        $('#logoutLink').on('click', function() {
-          window.localStorage.clear();
-          window.location.href = 'login_signup.html';
-        });
-      });
+    $('#logoutLink').on('click', function() {
+        window.localStorage.clear();
+        window.location.href = 'login_signup.html';
+    });
+});
+
     </script>
   </body>
 </html>
