@@ -3454,7 +3454,7 @@ $("#saveYardDetails").on("click", function () {
               alert("Notes updated successfully.");
               $("#noteInput").val("");
               console.log("yindex",yardIndex);
-              fetchAndDisplayNotes(yardIndex-1);
+              fetchAndDisplayNotes(yardIndex);
             })
             .catch((error) => {
               console.error("Error:", error);
