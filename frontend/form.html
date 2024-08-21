@@ -2727,11 +2727,12 @@ $('#refundSubmit').on('click', function() {
           fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
-              console.log(
-                "Fetched notes:",
-                data.additionalInfo[yardIndex - 1].notes
-              );
-              displayComments(data.additionalInfo[yardIndex - 1].notes);
+              console.log("notes",data);
+              // console.log(
+              //   "Fetched notes:",
+              //   data.additionalInfo[yardIndex - 1].notes
+              // );
+              // displayComments(data.additionalInfo[yardIndex - 1].notes);
             })
             .catch((error) => {
               console.error("Error fetching notes:", error);
