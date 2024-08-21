@@ -466,13 +466,7 @@
                     $(this).addClass("active");
                 }
             });
-
-            // Update sort icon
-          $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
-          $(this)
-            .find("span.sort-icon")
-            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-        });
+            
 
             // Fetch and display data
             async function fetchData() {
