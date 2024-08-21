@@ -3453,7 +3453,7 @@ $("#saveYardDetails").on("click", function () {
             .then((response) => {
               alert("Notes updated successfully.");
               $("#noteInput").val("");
-              fetchAndDisplayNotes(yardIndex);
+              fetchAndDisplayNotes(yardIndex-1);
             })
             .catch((error) => {
               console.error("Error:", error);
