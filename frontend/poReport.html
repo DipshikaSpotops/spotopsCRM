@@ -239,7 +239,7 @@
                 <table class="table table-bordered mt-4">
                     <thead>
                         <tr id="tableHeader"  style="background-color: #f2f2f2;text-align: center;">
-                            < scope="col" class="sortable">Order No <span class="sort-icon">&#9650;</span></th>
+                            <th scope="col" class="sortable">Order No <span class="sort-icon">&#9650;</span></th>
                             <th scope="col" class="sortable">Order Date <span class="sort-icon">&#9650;</span></th>
                             <!-- Additional columns will be dynamically added here -->
                         </tr>
@@ -452,10 +452,10 @@
 
                 tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
                 for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">▲▼</span></th>`);
+                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
                 }
-                tableHeader.append('<th scope="col" class="sortable">Total Part Price <span class="sort-icon">▲▼</span></th>');
-                tableHeader.append('<th scope="col" class="sortable">Total Shipping <span class="sort-icon">▲▼</span></th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Part Price <span class="sort-icon">&#9650;</span></th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Shipping <span class="sort-icon">&#9650;</span></th>');
                 tableHeader.append('<th scope="col">Actions</th>');
 
                 data.forEach((item) => {
