@@ -200,7 +200,7 @@
                 // Update table header based on the maximum number of yards
                 tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
                 for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col" Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+                    tableHeader.append(`<th scope="col" >Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
                 }
 
                 // Populate the table rows
