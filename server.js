@@ -25,8 +25,6 @@ app.use(cors({
   credentials: true
 }));
 app.use(bodyParser.json());
-
-// Corrected connection string with the '@' character properly URL-encoded
 const mongoURI =
   "mongodb+srv://Dipshika:dnjDdHAD0Hhxj5Zp@cluster0.gojob9v.mongodb.net/ordersDB?retryWrites=true&w=majority";
 
@@ -1108,7 +1106,7 @@ app.patch('/orders/:orderNo', (req, res) => {
   const updatedFields = req.body;
 
   // Find the order by orderNo and firstName
-  let order = orders.find(o => o.orderNo === orderNo && o.firstName === firstName);
+  let order = Order.find(o => o.orderNo === orderNo && o.firstName === firstName);
 
   if (order) {
     // Only update fields provided in the request body
