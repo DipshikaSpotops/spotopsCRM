@@ -1624,7 +1624,7 @@ select:disabled {
 <!-- card charged div ends here -->
 <!-- refund  div starts here -->
 <div id="refundCollect">
-  <button id="closeCardCharged" style"float: right; background: none; border: none; font-size: 20px;">&times;</button>
+  <button id="closeRefundCollected" style"float: right; background: none; border: none; font-size: 20px;">&times;</button>
 <label for="paymentStatusRefund">Refund Collected:</label
           >
           <select
@@ -2550,6 +2550,11 @@ axios
 
   $("#closeCardCharged").on("click", function () {
     $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
+          $(".mainDiv").removeClass("blur");
+  });
+  
+  $("#closeRefundCollected").on("click", function () {
+    $("#refundCollect").fadeOut(); // Hide the popup when the close button is clicked
           $(".mainDiv").removeClass("blur");
   });
 
