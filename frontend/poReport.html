@@ -124,6 +124,14 @@
                 display: block;
             }
         }
+        th.sortable {
+            cursor: pointer;
+        }
+        th.sortable .sort-icon {
+            margin-left: 5px;
+            font-size: 12px;
+            display: inline-block;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -231,8 +239,9 @@
                 <table class="table table-bordered mt-4">
                     <thead>
                         <tr id="tableHeader"  style="background-color: #f2f2f2;text-align: center;">
-                            <th scope="col">Order No</th>
-                            <th scope="col">Order Date</th>
+                            <th scope="col" class="sortable">Order No <span class="sort-icon">▲▼</span></th>
+                            <th scope="col" class="sortable">Order Date <span class="sort-icon">▲▼</span></th>
+                            <!-- Additional columns will be dynamically added here -->
                         </tr>
                     </thead>
                     <tbody id="yardInfoTable">
@@ -267,21 +276,22 @@
     <script>
         $(document).ready(async function () {
             // Get the current time and the login timestamp
-        const currentTime = Date.now();
-        const loginTimestamp = localStorage.getItem("loginTimestamp");
-        if (loginTimestamp) {
-          const timeDifference =
-            (currentTime - loginTimestamp) / (1000 * 60 * 60);
-          if (timeDifference >= 12) {
-            alert(
-              "Your session has expired. You will be redirected to the login page."
-            );
-            window.localStorage.clear(); 
-            window.location.href = "login_signup.html";
-          }
-        } else {
-          window.location.href = "login_signup.html";
-        }
+            const currentTime = Date.now();
+            const loginTimestamp = localStorage.getItem("loginTimestamp");
+            if (loginTimestamp) {
+                const timeDifference =
+                    (currentTime - loginTimestamp) / (1000 * 60 * 60);
+                if (timeDifference >= 12) {
+                    alert(
+                        "Your session has expired. You will be redirected to the login page."
+                    );
+                    window.localStorage.clear(); 
+                    window.location.href = "login_signup.html";
+                }
+            } else {
+                window.location.href = "login_signup.html";
+            }
+
             const firstName = localStorage.getItem("firstName");
             const lastName = localStorage.getItem("lastName");
             const email = localStorage.getItem("email");
@@ -292,8 +302,8 @@
                 $("#user-name").text(firstName);
             }
             if (!firstName) {
-          window.location.href = "login_signup.html";
-        }
+                window.location.href = "login_signup.html";
+            }
 
             const token = localStorage.getItem("token");
 
@@ -360,8 +370,6 @@
                 $(this).closest(".nav-link").toggleClass("selected");
             });
 
-            
-
             $("#profile").click(function () {
                 $("#profileName").val(firstName);
                 $("#profileRole").val(role);
@@ -374,32 +382,30 @@
                 $("#profile-content").addClass("d-none");
                 $("#yard-info-content").removeClass("d-none");
             });
+
             $("#searchInput").on("keyup", function () {
-    let value = $(this).val().toLowerCase();
-    let totalPartPriceSum = 0;
-    let totalShippingSum = 0;
+                let value = $(this).val().toLowerCase();
+                let totalPartPriceSum = 0;
+                let totalShippingSum = 0;
 
-    $("#yardInfoTable tr").filter(function () {
-        const match = $(this).text().toLowerCase().indexOf(value) > -1;
-        $(this).toggle(match);
+                $("#yardInfoTable tr").filter(function () {
+                    const match = $(this).text().toLowerCase().indexOf(value) > -1;
+                    $(this).toggle(match);
 
-        if (match) {
-            // Assuming the part price and shipping charge are in specific columns, update the selectors accordingly.
-            const partPrice = parseFloat($(this).find("td").eq(-3).text()) || 0; // Adjust index as needed
-            const shippingCharge = parseFloat($(this).find("td").eq(-2).text()) || 0; // Adjust index as needed
+                    if (match) {
+                        // Assuming the part price and shipping charge are in specific columns, update the selectors accordingly.
+                        const partPrice = parseFloat($(this).find("td").eq(-3).text()) || 0; // Adjust index as needed
+                        const shippingCharge = parseFloat($(this).find("td").eq(-2).text()) || 0; // Adjust index as needed
 
-            totalPartPriceSum += partPrice;
-            totalShippingSum += shippingCharge;
-        }
-    });
+                        totalPartPriceSum += partPrice;
+                        totalShippingSum += shippingCharge;
+                    }
+                });
 
-    // Update the footer with the new totals
-    $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
-    $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
-});
-        
-
-            
+                // Update the footer with the new totals
+                $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
+                $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
+            });
 
             // Highlight active link based on current URL
             const currentPath = window.location.pathname;
@@ -446,10 +452,10 @@
 
                 tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
                 for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th scope="col">Yard ${i}</th>`);
+                    tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">▲▼</span></th>`);
                 }
-                tableHeader.append('<th scope="col">Total Part Price</th>');
-                tableHeader.append('<th scope="col">Total Shipping</th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Part Price <span class="sort-icon">▲▼</span></th>');
+                tableHeader.append('<th scope="col" class="sortable">Total Shipping <span class="sort-icon">▲▼</span></th>');
                 tableHeader.append('<th scope="col">Actions</th>');
 
                 data.forEach((item) => {
@@ -465,9 +471,9 @@
                                 let shippingCharge = 0;
 
                                 if (shippingDetails) {
-                                const shippingArray = shippingDetails.split(":");
-                                shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
-        }
+                                    const shippingArray = shippingDetails.split(":");
+                                    shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
+                                }
 
                                 // const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
                                 totalPartPrice += partPrice;
@@ -509,6 +515,29 @@
                     <td></td>
                 </tr>`;
                 tableFooter.html(footerHtml);
+
+                // Add sorting functionality to table headers
+                $(".sortable").on("click", function () {
+                    const index = $(this).index();
+                    const isAscending = $(this).data("isAscending") || false;
+
+                    const rows = $("#yardInfoTable tr").toArray();
+                    rows.sort((a, b) => {
+                        const aValue = $(a).find("td").eq(index).text().trim();
+                        const bValue = $(b).find("td").eq(index).text().trim();
+
+                        return isAscending
+                            ? aValue.localeCompare(bValue, undefined, { numeric: true })
+                            : bValue.localeCompare(aValue, undefined, { numeric: true });
+                    });
+
+                    $(this).data("isAscending", !isAscending);
+                    $("#yardInfoTable").html(rows);
+
+                    // Update the sort icon
+                    $(".sort-icon").text("▲▼"); // Reset all icons
+                    $(this).find(".sort-icon").text(isAscending ? "▲" : "▼"); // Update clicked icon
+                });
             }
 
             $("#filterBtn").click(function () {
@@ -536,4 +565,3 @@
     </script>
 </body>
 </html>
-<!-- in the above html page, can you give filter to each colum to sort from asc to desc and the desc to ascending -->
