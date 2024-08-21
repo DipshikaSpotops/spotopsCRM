@@ -2727,7 +2727,7 @@ $('#refundSubmit').on('click', function() {
           fetch(`https://www.spotops360.com/orders/${orderNo}`)
             .then((response) => response.json())
             .then((data) => {
-              console.log("notes",data);
+              console.log("notes",data,yardIndex);
               // console.log(
               //   "Fetched notes:",
               //   data.additionalInfo[yardIndex - 1].notes
