@@ -161,7 +161,7 @@
         valB = parseInt(valB.replace(/\D/g, ""), 10);
       }
 
-      if (sortOrder[type] === "asc") {
+      if (currentSort[type] === "asc") {
         return valA > valB ? 1 : -1;
       } else {
         return valA < valB ? 1 : -1;
