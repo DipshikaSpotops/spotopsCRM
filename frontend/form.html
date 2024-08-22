@@ -1612,17 +1612,17 @@ select:disabled {
     <!-- edit yard details ends here -->
 
     <!-- card charged div starts here -->
-<div id="cardCharged">
-  <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
-  <label for="paymentStatusCard">Card Charged:</label>
-  <select class="form-control paymentStatus">
-    <option value="">Choose</option>
-    <option value="Card charged">Charged</option>
-    <option value="">Not charged</option>
-  </select>
-  <button id="cardChargedSbmit">Submit</button>
-</div>
-<!-- card charged div ends here -->
+    <div id="cardCharged">
+      <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+      <label for="paymentStatusCard">Card Charged:</label>
+      <select class="form-control paymentStatus">
+        <option value="">Choose</option>
+        <option value="Card charged">Charged</option>
+        <option value="">Not charged</option>
+      </select>
+      <button id="cardChargedSbmit">Submit</button>
+    </div>
+    <!-- card charged div ends here -->
 <!-- refund  div starts here -->
 <div id="refundCollect">
   <button id="closeRefundCollected" style"float: right; background: none; border: none; font-size: 20px;">&times;</button>
@@ -2572,54 +2572,43 @@ axios
   });
 
   // On clicking the submit button inside the popup
-  $('#cardChargedSbmit').on('click', function() {
-  $('#cardCharged').hide();
-  $(".mainDiv").removeClass("blur");
-  console.log("in card charged", selectedYardIndex, "oNo", orderNo);
-  
-  const paymentStatus = $(".paymentStatus")
-    .map(function () {
-      return $(this).val();
-    })
-    .get()
-    .filter(function (value) {
-      return value !== "";
-    })
-    .join();
-  
-  // Update button color based on payment status
-  if (paymentStatus === "Card charged") {
-    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-  }
-  
-  const data1 = {
-    paymentStatus: paymentStatus
-  };
+  // Saving the selected payment status
+$('#cardChargedSbmit').on('click', function() {
+    $('#cardCharged').hide();
+    $(".mainDiv").removeClass("blur");
+    
+    const paymentStatus = $(".paymentStatus").val();
+    
+    if (paymentStatus === "Card charged") {
+        $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+    }
+    
+    const data1 = { paymentStatus };
 
-  fetch(
-    `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data1),
-    }
-  )
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    updateOrderHistory(data.orderHistory);
-    showYardDetails(selectedYardIndex);
-    fetchAndUpdateYardInfo();
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+    fetch(
+        `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data1),
+        }
+    )
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(selectedYardIndex);
+        fetchAndUpdateYardInfo();
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
 });
 //  card charged part till here
 // refundCollect part 
@@ -3254,7 +3243,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`, {
           }
         });
 
-        $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
+        $("#yardInfoContainer").on("click", ".edit-yard-details", function () {  
           console.log("edit yard details")
   $(".mainDiv").addClass("blur");
   yardIndex = $(this).data("yard-index");
@@ -3265,6 +3254,8 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`, {
         return;
       }
       const yardData = data.additionalInfo[yardIndex - 1];
+      // Set payment status
+      $("#paymentStatusSelect").val(yardData.paymentStatus);
       $("#editYardName").val(yardData.yardName);
       $("#editAddress").val(yardData.address);
       $("#editYardRating").val(yardData.yardRating);
@@ -3702,3 +3693,6 @@ $("#okButton").click(function () {
     </script>
   </body>   
 </html>
+
+
+
