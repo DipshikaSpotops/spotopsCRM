@@ -267,7 +267,7 @@
     };
 
     function extractNumericValue(text) {
-        // Extract the numeric value from a string, considering both "Y1 | ($10.00)" and "10.00" formats
+        // Extract the numeric value from a string, considering common formats like "Y1 | ($10.00)" and "10.00"
         const match = text.match(/[\d,.]+/);
         return match ? parseFloat(match[0].replace(/[^0-9.-]+/g, "")) : 0;
     }
@@ -281,10 +281,12 @@
             let cellB = $(b).find("td").eq(column).text().trim();
 
             if (isNumeric) {
+                // Convert values to numbers for accurate comparison
                 const numA = extractNumericValue(cellA);
                 const numB = extractNumericValue(cellB);
                 return order === "asc" ? numA - numB : numB - numA;
             } else {
+                // Sort alphabetically if not numeric
                 return order === "asc"
                     ? cellA.localeCompare(cellB)
                     : cellB.localeCompare(cellA);
