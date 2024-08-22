@@ -394,8 +394,8 @@
   const rows = table.find("tr").toArray();
 
   rows.sort((a, b) => {
-    let valA = $(a).find("td").eq(column).text().trim();
-    let valB = $(b).find("td").eq(column).text().trim();
+    let valA = $(a).find("td").eq(column).text().trim().toLowerCase();
+    let valB = $(b).find("td").eq(column).text().trim().toLowerCase();
 
     if (type === "date") {
       valA = new Date(valA);
@@ -403,10 +403,6 @@
     } else if (type === "number") {
       valA = parseInt(valA.replace(/\D/g, ""), 10);
       valB = parseInt(valB.replace(/\D/g, ""), 10);
-    } else {
-      // Case-insensitive comparison for strings
-      valA = valA.toLowerCase();
-      valB = valB.toLowerCase();
     }
 
     if (sortOrder[type] === "asc") {
@@ -427,15 +423,15 @@
   updateSortIcons(column, sortOrder[type]);
 }
 
-  
-    function updateSortIcons(columnIndex, order) {
-      $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-      $("th").each(function (index) {
-        if (index === columnIndex) {
-          $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-        }
-      });
+function updateSortIcons(columnIndex, order) {
+  $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+  $("th").each(function (index) {
+    if (index === columnIndex) {
+      $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
     }
+  });
+}
+
   
     // Event listeners for sorting
     $("th").each(function (index) {
