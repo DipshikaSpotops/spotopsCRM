@@ -141,35 +141,64 @@
         $(document).ready(function () {
     let currentSort = {
         column: "",
-        order: "asc" // ascending by default
+        order: "asc",
+        orderDate: "asc",
     };
 
-    function sortTable(column, order, isNumericColumn) {
-        const tbody = $("#yardInfoTable");
-        const rows = tbody.find("tr").toArray();
+    function sortTable(column, type) {
+    const table = $("#infoTable");
+    const rows = table.find("tr").toArray();
 
-        rows.sort(function (a, b) {
-            let cellA = $(a).find("td").eq(column).text().trim();
-            let cellB = $(b).find("td").eq(column).text().trim();
+    rows.sort((a, b) => {
+      let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
+      let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
 
-            if (isNumericColumn) {
-                // Convert to numbers for numeric comparison
-                cellA = parseFloat(cellA.replace(/[^0-9.-]+/g, "")) || 0;
-                cellB = parseFloat(cellB.replace(/[^0-9.-]+/g, "")) || 0;
-                return order === "asc" ? cellA - cellB : cellB - cellA;
-            } else {
-                // String comparison for other columns
-                return order === "asc"
-                    ? cellA.localeCompare(cellB)
-                    : cellB.localeCompare(cellA);
-            }
-        });
+      if (type === "date") {
+        valA = new Date(valA);
+        valB = new Date(valB);
+      } else if (type === "number") {
+        valA = parseInt(valA.replace(/\D/g, ""), 10);
+        valB = parseInt(valB.replace(/\D/g, ""), 10);
+      }
 
-        // Append sorted rows back to the table body
-        $.each(rows, function (index, row) {
-            tbody.append(row);
-        });
-    }
+      if (sortOrder[type] === "asc") {
+        return valA > valB ? 1 : -1;
+      } else {
+        return valA < valB ? 1 : -1;
+      }
+    });
+
+    $.each(rows, function (index, row) {
+      table.append(row);
+    });
+
+    // Toggle sort order
+    sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+
+    // Update the sort icon
+    updateSortIcons(column, sortOrder[type]);
+  }
+
+  function updateSortIcons(columnIndex, order) {
+    $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+    $("th").each(function (index) {
+      if (index === columnIndex) {
+        $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+      }
+    });
+  }
+   
+    // Event listeners for sorting
+  $("th").each(function (index) {
+    const th = $(this);
+    let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+
+    if (type === "orderdate") {
+      th.on("click", function () {
+        sortTable(index, "date");
+      });
+    } 
+  });
 
     // Click event for sorting columns with numerical values
     $(document).on("click", ".onlyNumber", function () {
