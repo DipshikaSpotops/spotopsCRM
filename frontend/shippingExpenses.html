@@ -224,8 +224,8 @@
           <table class="table table-bordered mt-4">
             <thead>
               <tr id="tableHeader">
-                <th scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumberOrder">&#9650;</span></th>
-                <th scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumberOrder">&#9650;</span></th>
+                <th scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
                 <!-- Yard columns will be added dynamically -->
               </tr>
             </thead>
@@ -262,74 +262,80 @@
     <script>
    $(document).ready(function () {
     let currentSort = {
-        column: "",
-        order: "asc" // ascending by default
-    };
+    column: "",
+    order: "asc" // ascending by default
+};
 
-    function extractNumericValue(text) {
-        // Extract the numeric value from a string, considering common formats like "Y1 | ($10.00)" and "10.00"
-        const match = text.match(/[\d,.]+/);
-        return match ? parseFloat(match[0].replace(/[^0-9.-]+/g, "")) : 0;
-    }
+function sortTable(column, order, isDateColumn, isYardColumn) {
+    const tbody = $("#yardInfoTable");
+    const rows = tbody.find("tr").toArray();
 
-    function sortTable(column, order, isNumeric) {
-        const tbody = $("#yardInfoTable");
-        const rows = tbody.find("tr").toArray();
+    rows.sort(function (a, b) {
+        let cellA = $(a).find("td").eq(column).text().trim();
+        let cellB = $(b).find("td").eq(column).text().trim();
 
-        rows.sort(function (a, b) {
-            let cellA = $(a).find("td").eq(column).text().trim();
-            let cellB = $(b).find("td").eq(column).text().trim();
-
-            if (isNumeric) {
-                // Convert values to numbers for accurate comparison
-                const numA = extractNumericValue(cellA);
-                const numB = extractNumericValue(cellB);
-                return order === "asc" ? numA - numB : numB - numA;
-            } else {
-                // Sort alphabetically if not numeric
-                return order === "asc"
-                    ? cellA.localeCompare(cellB)
-                    : cellB.localeCompare(cellA);
-            }
-        });
-
-        // Append sorted rows back to the table body
-        $.each(rows, function (index, row) {
-            tbody.append(row);
-        });
-    }
-
-    // Click event for sorting Yard columns (alphabetical sorting)
-    $(document).on("click", ".fYardName", function () {
-        const column = $(this).closest("th").index();
-        const sortBy = $(this).closest("th").data("sort");
-
-        // Toggle the sort order
-        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-        currentSort.column = sortBy;
-
-        sortTable(column, currentSort.order, false);
-
-        // Update sort icon
-        $(".fYardName").html("&#9650;"); // Reset all icons to ascending
-        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+        if (isDateColumn) {
+            // Convert date strings into Date objects for sorting
+            cellA = new Date(cellA);
+            cellB = new Date(cellB);
+            return order === "asc" ? cellA - cellB : cellB - cellA;
+        } else if (isYardColumn) {
+            // Sort Yard columns alphabetically
+            return order === "asc" 
+                ? cellA.localeCompare(cellB) 
+                : cellB.localeCompare(cellA);
+        } else {
+            // General string comparison for other columns
+            return order === "asc"
+                ? cellA.localeCompare(cellB)
+                : cellB.localeCompare(cellA);
+        }
     });
 
-    // Click event for sorting numeric columns
-    $(document).on("click", ".onlyNumber,.onlyNumberOrder", function () {
-        const column = $(this).closest("th").index();
-        const sortBy = $(this).closest("th").data("sort");
-
-        // Toggle the sort order
-        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-        currentSort.column = sortBy;
-
-        sortTable(column, currentSort.order, true);
-
-        // Update sort icon
-        $(".onlyNumber,.onlyNumberOrder").html("&#9650;"); // Reset all icons to ascending
-        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    // Append sorted rows back to the table body
+    $.each(rows, function (index, row) {
+        tbody.append(row);
     });
+}
+
+// Click event for sorting the Order Date column
+$(document).on("click", ".onlyNumber", function () {
+    const column = $(this).closest("th").index();
+    const sortBy = $(this).closest("th").data("sort");
+
+    // Determine if the column is a date column
+    const isDateColumn = sortBy === "orderDate";
+    const isYardColumn = sortBy.startsWith("yard");
+
+    // Toggle the sort order
+    currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+    currentSort.column = sortBy;
+
+    sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+
+    // Update sort icon
+    $(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
+    $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+});
+
+// Click event for sorting Yard columns
+$(document).on("click", ".fYardName", function () {
+    const column = $(this).closest("th").index();
+    const sortBy = $(this).closest("th").data("sort");
+
+    // Determine if the column is a Yard column
+    const isYardColumn = sortBy.startsWith("yard");
+
+    // Toggle the sort order
+    currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+    currentSort.column = sortBy;
+
+    sortTable(column, currentSort.order, false, isYardColumn);
+
+    // Update sort icon
+    $(".fYardName").html("&#9650;"); // Reset all icons to ascending
+    $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+});
 
     async function fetchData() {
         try {
