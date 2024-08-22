@@ -173,10 +173,10 @@
     });
 
     // Toggle sort order
-    sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+    currentSort[type] = currentSort[type] === "asc" ? "desc" : "asc";
 
     // Update the sort icon
-    updateSortIcons(column, sortOrder[type]);
+    updateSortIcons(column, currentSort[type]);
   }
 
   function updateSortIcons(columnIndex, order) {
