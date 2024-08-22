@@ -178,6 +178,10 @@
     .filter-bar button {
       margin-left: 10px;
     }
+    .sort-icon {
+      margin-left: 5px;
+      cursor: pointer;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -187,6 +191,72 @@
     if (!firstName) {
       window.location.href = "login_signup.html";
     }
+
+    $(document).ready(async function () {
+      const currentSort = {
+        column: '',
+        order: 'asc'
+      };
+
+      function sortTable(columnIndex, isNumeric = false, isDate = false) {
+        const tbody = $("#infoTable");
+        const rows = tbody.find("tr").toArray();
+
+        rows.sort(function (a, b) {
+          let cellA = $(a).find("td").eq(columnIndex).text().trim();
+          let cellB = $(b).find("td").eq(columnIndex).text().trim();
+
+          if (isNumeric) {
+            cellA = parseFloat(cellA.replace(/[^0-9.-]+/g, ""));
+            cellB = parseFloat(cellB.replace(/[^0-9.-]+/g, ""));
+          } else if (isDate) {
+            cellA = new Date(cellA);
+            cellB = new Date(cellB);
+          }
+
+          return currentSort.order === 'asc' ? (cellA > cellB ? 1 : -1) : (cellA < cellB ? 1 : -1);
+        });
+
+        $.each(rows, function (index, row) {
+          tbody.append(row);
+        });
+      }
+
+      function toggleSortOrder(sortBy) {
+        currentSort.order = currentSort.column === sortBy && currentSort.order === 'asc' ? 'desc' : 'asc';
+        currentSort.column = sortBy;
+      }
+
+      $(".sort-icon").on("click", function () {
+        const column = $(this).closest("th").index();
+        const sortBy = $(this).closest("th").data("sort");
+
+        toggleSortOrder(sortBy);
+
+        const isNumeric = sortBy === "orderNo";
+        const isDate = sortBy === "orderDate";
+
+        sortTable(column, isNumeric, isDate);
+
+        $(".sort-icon").html("&#9650;");
+        $(this).html(currentSort.order === 'asc' ? "&#9650;" : "&#9660;");
+      });
+
+      // Fetch and render data as before...
+      // Highlight active link based on current URL
+      const currentPath = window.location.pathname;
+      $(".nav-link").each(function () {
+        if (currentPath.includes($(this).attr("href"))) {
+          $(this).addClass("active");
+        }
+      });
+
+      // Logout functionality
+      $('#logoutLink').click(function () {
+        window.localStorage.clear();
+        window.location.href = 'login_signup.html';
+      });
+    });
   </script>
 </head>
 <body>
@@ -222,9 +292,6 @@
             <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
             <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
             <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
-            <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
-            <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
-            <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
             <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
             <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
           </div>
@@ -259,7 +326,6 @@
             <a class="nav-link" href="refundReport.html">Refund Report</a>
             <a class="nav-link" href="poReport.html">PO Report</a>
             <a class="nav-link" href="salesReport.html">My Sales Report</a>
-            <!-- <a class="nav-link" href="moreThan2CardC.html">Collect Refund</a> -->
             <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
           </div>
         </div>
@@ -292,20 +358,20 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>Order Date</th>
-            <th>Order No</th>
-            <th>Agent Name</th>
-            <th>Customer Name</th>
-            <th>Part Name</th>
-            <th>Yard</th>
-            <th>Order Status</th>
-            <th>Actions</th>
-            <th>Send Invoice</th>
-            <th>Email</th>
+            <th data-sort="orderDate">Order Date<span class="sort-icon">&#9650;</span></th>
+            <th data-sort="orderNo">Order No.<span class="sort-icon">&#9650;</span></th>
+            <th data-sort="agentName">Agent Name<span class="sort-icon">&#9650;</span></th>
+            <th data-sort="customerName">Customer Name<span class="sort-icon">&#9650;</span></th>
+            <th data-sort="partName">Part Name<span class="sort-icon">&#9650;</span></th>
+            <th data-sort="yard">Yard<span class="sort-icon">&#9650;</span></th>
+            <th data-sort="orderStatus">Order Status<span class="sort-icon">&#9650;</span></th>
+            <th data-sort="actions">Actions</th>
+            <th data-sort="sendInvoice">Send Invoice</th>
+            <th data-sort="email">Email<span class="sort-icon">&#9650;</span></th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Order data will be populated here -->
+        <tbody id="infoTable">
+          <!-- Information from the form will be appended here -->
         </tbody>
       </table>
     </div>
@@ -375,226 +441,5 @@
       </div>
     </div>
   </div>
-
-  <script>
-    $(document).ready(async function () {
-      // Get the current time and the login timestamp
-      const currentTime = Date.now();
-        const loginTimestamp = localStorage.getItem("loginTimestamp");
-        if (loginTimestamp) {
-          const timeDifference =
-            (currentTime - loginTimestamp) / (1000 * 60 * 60);
-          if (timeDifference >= 12) {
-            alert(
-              "Your session has expired. You will be redirected to the login page."
-            );
-            window.localStorage.clear(); 
-            window.location.href = "login_signup.html";
-          }
-        } else {
-          window.location.href = "login_signup.html";
-        }
-      const firstName = localStorage.getItem("firstName");
-      const lastName = localStorage.getItem("lastName");
-      const email = localStorage.getItem("email");
-      const role = localStorage.getItem("role");
-      const team = localStorage.getItem("team");
-
-      if (firstName) {
-        $("#user-name").text(firstName);
-      }
-      if (!firstName) {
-        window.location.href = "login_signup.html";
-      }
-
-      const token = localStorage.getItem("token");
-
-      try {
-        const response = await axios.get("https://www.spotops360.com/orders", {
-          headers: token ? {
-            Authorization: `Bearer ${token}`
-          } : {},
-        });
-
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch orders");
-        }
-
-        const data = response.data;
-
-        // Filter out orders with status "Customer approved" or "Placed"
-        const filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
-
-        filteredData.forEach((item) => {
-          const actions = `
-                <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
-                <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
-                <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a">Cancel</button>
-            `;
-          const sendInvoice = `
-                <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-            `;
-            var yardlength = item.additionalInfo.length;
-          $("#infoTable").append(`
-                <tr>
-                    <td>${item.orderDate}</td>
-                    <td>${item.orderNo}</td>
-                    <td>${item.salesAgent}</td>
-                    <td>${item.customerName}</td>
-                    <td>${item.pReq || item.partName}</td>
-                    <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength-1].yardName : ""}</td>
-                    <td>${item.orderStatus}</td>
-                    <td class="actions">${actions}</td>
-                    <td>${sendInvoice}</td>
-                    <td>${item.email}</td>
-                </tr>
-            `);
-        });
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-
-      $("#searchInput").on("keyup", function () {
-        let value = $(this).val().toLowerCase();
-        $("#infoTable tr").filter(function () {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-      });
-
-      $("#infoTable").on("click", ".edit-btn", function () {
-        const id = $(this).data("id");
-        window.location.href = `form.html?orderNo=${id}`;
-      });
-
-      $("#infoTable").on("click", ".process-btn", function () {
-        const id = $(this).data("id");
-        window.location.href = `form.html?orderNo=${id}&process=true`;
-      });
-
-      $("#infoTable").on("click", ".cancel-btn", function () {
-        const id = $(this).data("id");
-        console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-        if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-          fetch(`https://www.spotops360.com/orders/${id}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                console.error("Failed to delete order", response);
-                throw new Error("Failed to delete order");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log("Order cancelled successfully", data); // Added log
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error("Error cancelling order:", error);
-            });
-        }
-      });
-
-      $("#infoTable").on("click", ".send-invoice-btn", function () {
-        const id = $(this).data("id");
-        fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert(data.message);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      });
-
-      $("#addNewEntry").on("click", function (e) {
-        e.preventDefault();
-        window.location.href = "form.html?newEntry=true";
-      });
-
-      $(".toggle-sidebar").on("click", function () {
-        $("#offcanvasSidebar").toggleClass("show");
-      });
-
-      $(".nav-link.menu").on("click", function (event) {
-        event.preventDefault();
-        const submenu = $(this).next(".submenu");
-        submenu.toggle();
-        $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-      });
-
-      $('#profileLink').click(function () {
-        $('#profileFirstName').val(firstName);
-        $('#profileLastName').val(lastName);
-        $('#profileEmail').val(email);
-        $('#profileRole').val(role);
-        $('#profileModal').modal('show');
-      });
-
-      $('.close').click(function () {
-        console.log("close button clicked");
-        location.reload();
-      });
-
-      // Apply team-based and role-based restrictions
-      if (team === "Team Charlie") {
-        // Hide specific reports links for Team Charlie
-        $("#submenu-reports .nav-link")
-          .not(':contains("My Sales Report")')
-          .hide();
-        // Hide specific dashboards links for Team Charlie
-        $(
-          "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-        ).hide();
-        // Hide teams and users sections for Team Charlie
-        $(".nav-item:has(#submenu-teams)").hide();
-        $(".nav-item:has(#submenu-users)").hide();
-      } else if (team === "Team Mark") {
-        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-        $(".nav-item:has(#submenu-teams)").hide();
-        $(".nav-item:has(#submenu-users)").hide();
-        $(
-          "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
-        ).hide();
-      } else if (team === "Team Sussane") {
-        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-        $(".nav-item:has(#submenu-teams)").hide();
-        $(".nav-item:has(#submenu-users)").hide();
-        $(
-          "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
-        ).hide();
-      } else if (role === "Admin") {
-        // Hide specific reports links for Admin
-        $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-        $('#submenu-reports .nav-link:contains("Refund Report")').show();
-        $('#submenu-reports .nav-link:contains("Collect Refund")').show();
-        // Hide specific dashboards links for Admin
-        $("#submenu-dashboards .view-individualOrders-link").hide();
-      }
-
-      // Highlight active link based on current URL
-      const currentPath = window.location.pathname;
-      $(".nav-link").each(function () {
-        if (currentPath.includes($(this).attr("href"))) {
-          $(this).addClass("active");
-        }
-      });
-
-      $('#logoutLink').click(function () {
-        window.localStorage.clear();
-        window.location.href = 'login_signup.html';
-      });
-    });
-  </script>
 </body>
 </html>
-<!-- in the above page,i have column namedOrder Date  with the date format 2024-08-21, add a filter in the column Order Date to either sort in ascending or descending order in one click
-second column is Prder No -->
