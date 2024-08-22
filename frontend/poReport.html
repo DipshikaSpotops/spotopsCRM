@@ -139,7 +139,7 @@
         }
 
         $(document).ready(function () {
-            let currentSort = {
+    let currentSort = {
         column: "",
         order: "asc" // ascending by default
     };
@@ -190,7 +190,27 @@
         $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     });
 
-    
+
+
+    // Click event for sorting Yard columns
+    $(document).on("click", ".fYardName", function () {
+        const column = $(this).closest("th").index();
+        const sortBy = $(this).closest("th").data("sort");
+
+        // Determine if the column is a Yard column
+        const isYardColumn = sortBy.startsWith("yard");
+
+        // Toggle the sort order
+        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+        currentSort.column = sortBy;
+
+        sortTable(column, currentSort.order, isYardColumn);
+
+        // Update sort icon
+        $(".fYardName").html("&#9650;"); // Reset all icons to ascending
+        $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    });
+
     async function fetchData() {
         try {
             const token = localStorage.getItem("token");
