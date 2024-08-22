@@ -403,14 +403,14 @@ $(document).on("click", ".fYardName", function () {
                         if (shippingDetails) {
                             const shippingArray = shippingDetails.split(":");
                             shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
-                            const shippingType = shippingDetails.split(":")[0].trim(); 
+                            shippingType = shippingDetails.split(":")[0].trim(); 
                             console.log("===",shippingType,shippingCharge);
                         }
 
                         totalShipping += shippingCharge;
 
                         yardInfoHtml += `<td data-sort-value="${shippingCharge}">
-                            ${item.additionalInfo[i].yardName || ""} | ${shippingType || ""} ($${shippingCharge.toFixed(2) || "0"})<br>
+                            ${item.additionalInfo[i].yardName || ""} | ${shippingType} ($${shippingCharge.toFixed(2) || "0"})<br>
                         </td>`;
                     } else {
                         yardInfoHtml += "<td data-sort-value='0'></td>";
