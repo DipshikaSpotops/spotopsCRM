@@ -390,48 +390,52 @@
     };
   
     function sortTable(column, type) {
-  const table = $("#infoTable");
-  const rows = table.find("tr").toArray();
+    const table = $("#infoTable");
+    const rows = table.find("tr").toArray();
 
-  rows.sort((a, b) => {
-    let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase
-    let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase
+    rows.sort((a, b) => {
+        let valA = $(a).find("td").eq(column).text().trim().toLowerCase();
+        let valB = $(b).find("td").eq(column).text().trim().toLowerCase();
 
-    if (type === "date") {
-      valA = new Date(valA);
-      valB = new Date(valB);
-    } else if (type === "number") {
-      valA = parseInt(valA.replace(/\D/g, ""), 10);
-      valB = parseInt(valB.replace(/\D/g, ""), 10);
-    }
+        if (type === "date") {
+            valA = new Date(valA);
+            valB = new Date(valB);
+        } else if (type === "number") {
+            valA = parseInt(valA.replace(/\D/g, ""), 10);
+            valB = parseInt(valB.replace(/\D/g, ""), 10);
+        } else {
+            // Remove leading and trailing spaces for exact string comparison
+            valA = valA.trim();
+            valB = valB.trim();
+        }
 
-    if (sortOrder[type] === "asc") {
-      return valA > valB ? 1 : -1;
-    } else {
-      return valA < valB ? 1 : -1;
-    }
-  });
+        if (sortOrder[type] === "asc") {
+            return valA > valB ? 1 : (valA < valB ? -1 : 0); // Handle equal values
+        } else {
+            return valA < valB ? 1 : (valA > valB ? -1 : 0); // Handle equal values
+        }
+    });
 
-  $.each(rows, function (index, row) {
-    table.append(row);
-  });
+    $.each(rows, function(index, row) {
+        table.append(row);
+    });
 
-  // Toggle sort order
-  sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+    // Toggle sort order
+    sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
 
-  // Update the sort icon
-  updateSortIcons(column, sortOrder[type]);
+    // Update the sort icon
+    updateSortIcons(column, sortOrder[type]);
 }
-
 
 function updateSortIcons(columnIndex, order) {
-  $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-  $("th").each(function (index) {
-    if (index === columnIndex) {
-      $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-    }
-  });
+    $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+    $("th").each(function(index) {
+        if (index === columnIndex) {
+            $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+        }
+    });
 }
+
 
   
     // Event listeners for sorting
