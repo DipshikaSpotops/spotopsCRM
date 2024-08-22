@@ -1757,6 +1757,10 @@ select:disabled {
     <script>
       $(document).ready(async function () {
         // for populating cancelled orders in form.html
+         const savedPaymentStatus = localStorage.getItem('paymentStatus');
+          if (savedPaymentStatus) {
+              $('#paymentStatusSelect').val(savedPaymentStatus);
+          }
         const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
         updateAddYardButton();
     if (orderDetails) {
@@ -2592,6 +2596,7 @@ $('#cardChargedSbmit').on('click', function() {
     $(".mainDiv").removeClass("blur");
     
     const paymentStatus = $(".paymentStatus").val();
+    localStorage.setItem('paymentStatus', paymentStatus);
     
     if (paymentStatus === "Card charged") {
         $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
@@ -3709,17 +3714,3 @@ $("#okButton").click(function () {
   </body>   
 </html>
 
-
-  <!-- card charged div starts here -->
-  <!-- <div id="cardCharged">
-    <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
-    <label for="paymentStatusCard">Card Charged:</label>
-    <select class="form-control paymentStatus">
-      <option value="">Choose</option>
-      <option value="Card charged">Charged</option>
-      <option value="">Not charged</option>
-    </select>
-    <button id="cardChargedSbmit">Submit</button>
-  </div> -->
-  <!-- card charged div ends here
-   save the selcted option in the div even when the page reloads,might use localStorage -->
