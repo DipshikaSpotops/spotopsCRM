@@ -398,6 +398,7 @@ $(document).on("click", ".fYardName", function () {
                         // Check if shippingDetails exist
                         let shippingDetails = item.additionalInfo[i].shippingDetails;
                         let shippingCharge = 0;
+                        let shippingType = "";
 
                         if (shippingDetails) {
                             const shippingArray = shippingDetails.split(":");
