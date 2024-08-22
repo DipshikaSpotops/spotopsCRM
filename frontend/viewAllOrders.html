@@ -390,38 +390,43 @@
     };
   
     function sortTable(column, type) {
-      const table = $("#infoTable");
-      const rows = table.find("tr").toArray();
-  
-      rows.sort((a, b) => {
-        let valA = $(a).find("td").eq(column).text().trim();
-        let valB = $(b).find("td").eq(column).text().trim();
-  
-        if (type === "date") {
-          valA = new Date(valA);
-          valB = new Date(valB);
-        } else if (type === "number") {
-          valA = parseInt(valA.replace(/\D/g, ""), 10);
-          valB = parseInt(valB.replace(/\D/g, ""), 10);
-        }
-  
-        if (sortOrder[type] === "asc") {
-          return valA > valB ? 1 : -1;
-        } else {
-          return valA < valB ? 1 : -1;
-        }
-      });
-  
-      $.each(rows, function (index, row) {
-        table.append(row);
-      });
-  
-      // Toggle sort order
-      sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-  
-      // Update the sort icon
-      updateSortIcons(column, sortOrder[type]);
+  const table = $("#infoTable");
+  const rows = table.find("tr").toArray();
+
+  rows.sort((a, b) => {
+    let valA = $(a).find("td").eq(column).text().trim();
+    let valB = $(b).find("td").eq(column).text().trim();
+
+    if (type === "date") {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else if (type === "number") {
+      valA = parseInt(valA.replace(/\D/g, ""), 10);
+      valB = parseInt(valB.replace(/\D/g, ""), 10);
+    } else {
+      // Case-insensitive comparison for strings
+      valA = valA.toLowerCase();
+      valB = valB.toLowerCase();
     }
+
+    if (sortOrder[type] === "asc") {
+      return valA > valB ? 1 : -1;
+    } else {
+      return valA < valB ? 1 : -1;
+    }
+  });
+
+  $.each(rows, function (index, row) {
+    table.append(row);
+  });
+
+  // Toggle sort order
+  sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+
+  // Update the sort icon
+  updateSortIcons(column, sortOrder[type]);
+}
+
   
     function updateSortIcons(columnIndex, order) {
       $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
@@ -700,15 +705,6 @@
 </html>
 
 
-
-<!-- in the above page,i have column named Order Date  with the date format 2024-08-21, add a filter in the column Order Date to either sort in ascending or descending order in one click
-second column is Order No. with the data format 50STARS0001 , add a filter in the column Order No. to either sort in ascending or descending order in one click
-third column is Agent Name with the data format Admin,  add a filter in the column Agent Name to either sort from A to Z or Z to A in one click
-fourt column is Customer Name with the data format Manas Rawat, add a filter in the column Customer Name to either sort from A to Z or Z to A  in one click
-fifth column is Part Name with data format ABS Module, ABS Pump , add a filter in the column Part Name to either sort from A to Z or Z to A in one click
-sixth column is Yard with data format Australia,ASU,  add a filter in the column Yard to either sort from A to Z or Z to A in one click
-seventh column is Order Status with the data format In Transit, Yard Processing, add a filter in the column Order Status to either sort from A to Z or Z to A in one click
-tent column is Email with data format dipsikha.spotopsdigital@gmail.com, add a filter in the column Email to either sort from A to Z or Z to A in one click
-
-use the following icon:
-<span class="sort-icon onlyNumber">&#9650;</span> -->
+ 
+now in 5Th column named Part Name, i have data like ABS Module twice, ABS Pump twice, Transmission, so sorting should have been from A to Z ABS Module,ABS Module, ABS Pump, ABS Pump,Transmission and from Z to A Transmission, ABS Pump, ABS Pump, ABS Module,ABS Module, but right now its not happening in thi way
+and in7th column Order Status, i have data like In Transit,Yard Processing, Customer Approved, Yard Processing, Yard Processing , so sorting from A to Z should be Customer Approved, In Transit, Yard Processing, Yard Processing, Yard Processing and from Z to A Yard Processing, Yard Processing, v, In Transit, Customer Approved, so right now its not the case for this column Order Status
