@@ -494,10 +494,9 @@ $(document).on("click", ".fYardName", function () {
 
           tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
           for (let i = 1; i <= maxYards; i++) {
-            tableHeader.append(
-              `<th scope="col">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
-            );
-          }
+    tableHeader.append(`<th scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
+}
+
           tableHeader.append(
             '<th scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
@@ -762,4 +761,9 @@ $(document).on("click", ".fYardName", function () {
     </script>
   </body>
 </html>
-
+<!-- in the above html page:
+i am getting an error:purchases.html:412 Uncaught TypeError: Cannot read properties of undefined (reading 'startsWith')
+at HTMLSpanElement.<anonymous> (purchases.html:412:33)
+at HTMLDocument.dispatch (jquery-3.5.1.min.js:2:43090)
+at v.handle (jquery-3.5.1.min.js:2:41074)
+but in the following html, it is working finr...what changes are to bemade?dont change anything else: -->
