@@ -128,10 +128,6 @@
         .sortable {
             cursor: pointer;
         }
-        /* .sortable:after {
-            content: ' ▲▼';
-            font-size: 0.8em;
-        } */
         .sortable.asc:after {
             content: ' ▲';
         }
@@ -214,16 +210,13 @@
                             let deliveredDate = item.additionalInfo[i].partDeliveredDate;
                             let status = item.additionalInfo[i].status;
 
-                            // Initialize formatted dates as empty strings
                             let datePO = '';
                             let dateDelivered = '';
                             let daysDifference1 = '';
                             let daysDifference2 = '';
 
-                            // Get the current date
                             const now = new Date();
 
-                            // Check if poSentDate is defined and valid
                             if (poSentDate) {
                                 const poSentDateObj = new Date(poSentDate);
                                 const dayPO = poSentDateObj.getDate();
@@ -235,7 +228,6 @@
                                 }).replace(poSentDateObj.getDate(), `${dayPO}${dayPOSuffix}`);
                             }
 
-                            // Check if deliveredDate is defined and valid
                             if (deliveredDate) {
                                 const deliveredDateObj = new Date(deliveredDate);
                                 const dayDelivered = deliveredDateObj.getDate();
@@ -246,12 +238,12 @@
                                     year: 'numeric'
                                 }).replace(deliveredDateObj.getDate(), `${dayDelivered}${dayDeliveredSuffix}`);
 
-                                // Calculate the difference in days between PO Sent and Delivered
                                 if (poSentDate) {
                                     const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
-                                    daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
+                                    daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                                 }
                             }
+
                             if (status !== "Part delivered") {
                                 const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
                                 const approvedDate = new Date(customerApprovedDate);
@@ -260,9 +252,7 @@
                                     console.error("Invalid customerApprovedDate:", customerApprovedDate);
                                 } else {
                                     const diffTime = Math.abs(dallasTime - approvedDate);
-
-                                    // Convert the difference from milliseconds to days
-                                    daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
+                                    daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                                 }
                             }
 
@@ -273,10 +263,9 @@
                                 ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
                                 ${item.additionalInfo[i].trackingNo ? `<br>${item.additionalInfo[i].trackingNo}` : ""}
                                 ${status ? `<br>${status}` : ""}
+                                ${(status === "Part delivered" || status === "Escalation") && daysDifference1 ? `<br>Delivered in : ${daysDifference1} days` : ""}
                                 ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
-                                ${daysDifference1 ? `<br>Delivered in : ${daysDifference1} days` : ""}
                             </td>`;
-
                         } else {
                             yardInfoHtml += "<td></td>";
                         }
@@ -320,7 +309,6 @@
                 const column = $(this).index();
                 const sortBy = $(this).data("sort");
 
-                // Toggle the sort order
                 currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
                 currentSort.column = sortBy;
 
@@ -362,6 +350,7 @@
                 $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
                 $(this).closest(".nav-link").toggleClass("selected");
             });
+
             $("#profile").click(function () {
                 $("#profileFirstName").val(firstName);
                 $("#profileLastName").val(localStorage.getItem("lastName"));
@@ -455,7 +444,6 @@
                         <a class="nav-link" href="purchases.html">Purchases</a>
                         <a class="nav-link" href="refundReport.html">Refund Report</a>
                         <a class="nav-link" href="poReport.html">PO Report</a>
-                        <!-- <a class="nav-link" href="salesReport.html">My Sales Report</a> -->
                         <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
                     </div>
                 </div>
@@ -474,41 +462,11 @@
                     <tr id="tableHeader">
                         <th scope="col" class="sortable">Order No <span class="sort-icon">&#9650;</span></th>
                         <th scope="col" class="sortable">Order Date <span class="sort-icon">&#9650;</span></th>
-                        <!-- Yard columns will be added dynamically -->
                     </tr>
                 </thead>
                 <tbody id="yardInfoTable">
-                    <!-- Yard information will be appended here -->
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="class">
-        <h1>Refunds</h1>
-        <table>
-            <tr>
-                <th>Order No</th>
-                <th>Order Date</th>
-                <th>Order Value</th>
-                <th>Total Part price</th>
-                <th>Total Shipping</th>
-                <th>Actions</th>
-            </tr>
-        </table>
-    </div>
-
-    <div id="profile-content" class="d-none">
-        <h1>User Profile</h1>
-        <div class="profile-table">
-            <label for="profileFirstName">First Name:</label>
-            <input type="text" id="profileFirstName" readonly />
-            <label for="profileLastName">Last Name:</label>
-            <input type="text" id="profileLastName" readonly />
-            <label for="profileRole">Team:</label>
-            <input type="text" id="profileRole" readonly />
-            <label for="profileEmail">Email Id:</label>
-            <input type="text" id="profileEmail" readonly />
-            <button class="btn btn-primary" id="backToOrders">Back</button>
         </div>
     </div>
 </body>
