@@ -591,12 +591,12 @@
             footerHtml += "<td></td>";
           }
           footerHtml += `
-                    <td id="totalPartPrice">$${totalPartPriceSum.toFixed(
+                    <td id="totalPartPrice" style="text-align:center;">$${totalPartPriceSum.toFixed(
                       2
                     )}</td>
-                    <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
-                    <td id="others">$${totalOthersSum.toFixed(2)}</td>
-                    <td id="overallSum">$${totalOverallSum.toFixed(2)}</td>
+                    <td id="totalShipping" style="text-align:center;">$${totalShippingSum.toFixed(2)}</td>
+                    <td id="others" style="text-align:center;">$${totalOthersSum.toFixed(2)}</td>
+                    <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(2)}</td>
                     <td></td>
                 </tr>`;
           tableFooter.html(footerHtml);
