@@ -394,8 +394,8 @@
   const rows = table.find("tr").toArray();
 
   rows.sort((a, b) => {
-    let valA = $(a).find("td").eq(column).text().trim().toLowerCase();
-    let valB = $(b).find("td").eq(column).text().trim().toLowerCase();
+    let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase
+    let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase
 
     if (type === "date") {
       valA = new Date(valA);
@@ -422,6 +422,7 @@
   // Update the sort icon
   updateSortIcons(column, sortOrder[type]);
 }
+
 
 function updateSortIcons(columnIndex, order) {
   $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
