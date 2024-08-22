@@ -3267,6 +3267,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`, {
         return;
       }
       const yardData = data.additionalInfo[yardIndex - 1];
+      console.log("yardData",yardData);
       $("#editYardName").val(yardData.yardName);
       $("#editAddress").val(yardData.address);
       $("#editYardRating").val(yardData.yardRating);
@@ -3355,8 +3356,8 @@ $("#saveYardDetails").on("click", function () {
     others: $("#editOthers").val(),
     shippingDetails: shippingDetails,
     status: $("#refund").val(),
-    paymentStatus: $("#paymentStatusSelect").val(),
-    refundedAmount: $("#refundedAmount").val(),
+    paymentStatus: $("#editPaymentStatus").val(),
+    refundedAmount: $("#editrefundAmount").val(),
     escalationCause: $("#esc").val(),
     escalationProcess: $("#escProcess").val(),
   };
