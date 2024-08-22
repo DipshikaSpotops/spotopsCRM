@@ -533,10 +533,12 @@ $(document).on("click", ".fYardName", function () {
                 let otherC = parseFloat(item.additionalInfo[i].others || 0);
                 let shippingDetails = item.additionalInfo[i].shippingDetails;
                 let shippingCharge = 0;
+                let shippingType = "";
 
                 if (shippingDetails) {
                   const shippingArray = shippingDetails.split(":");
                   shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
+                  shippingType = shippingDetails.split(":")[0].trim();
                 }
                 totalPartPrice += partPrice;
                 totalShipping += shippingCharge;
@@ -553,7 +555,7 @@ $(document).on("click", ".fYardName", function () {
                 }<br>
                                 ${item.additionalInfo[i].shippingMethod || ""}${
                   item.additionalInfo[i].shippingMethod ? " | " : ""
-                }(${shippingCharge || "0"})<br>
+                }${shippingType} | (${shippingCharge || "0"}) | Others: ${otherC}<br>
                                 ${
                                   item.additionalInfo[i].status
                                 }   |  ${overallPurchaseCost} <br>
