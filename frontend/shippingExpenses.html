@@ -315,19 +315,16 @@
         $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     });
 
-     // Click event for sorting columns with numerical values
-     $(document).on("click", ".onlyNumber", function () {
+    // Click event for sorting numeric columns
+    $(document).on("click", ".onlyNumber", function () {
         const column = $(this).closest("th").index();
         const sortBy = $(this).closest("th").data("sort");
-
-        // Check if the column should be sorted numerically
-        const isNumericColumn = true;
 
         // Toggle the sort order
         currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
         currentSort.column = sortBy;
 
-        sortTable(column, currentSort.order, isNumericColumn);
+        sortTable(column, currentSort.order, true);
 
         // Update sort icon
         $(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
@@ -517,6 +514,6 @@
     </script>
   </body>
 </html>
-i dont know why it is not getting sorted in asc or desc order for the following:
-<th scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+<!-- i dont know why it is not getting sorted in asc or desc order for the following:
+ <th scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th> -->
