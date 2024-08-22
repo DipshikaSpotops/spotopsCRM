@@ -224,8 +224,8 @@
           <table class="table table-bordered mt-4">
             <thead>
               <tr id="tableHeader">
-                <th scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
-                <th scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumberOrder">&#9650;</span></th>
+                <th scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumberOrder">&#9650;</span></th>
                 <!-- Yard columns will be added dynamically -->
               </tr>
             </thead>
@@ -316,7 +316,7 @@
     });
 
     // Click event for sorting numeric columns
-    $(document).on("click", ".onlyNumber", function () {
+    $(document).on("click", ".onlyNumber,.onlyNumberOrder", function () {
         const column = $(this).closest("th").index();
         const sortBy = $(this).closest("th").data("sort");
 
@@ -327,7 +327,7 @@
         sortTable(column, currentSort.order, true);
 
         // Update sort icon
-        $(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
+        $(".onlyNumber,.onlyNumberOrder").html("&#9650;"); // Reset all icons to ascending
         $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     });
 
