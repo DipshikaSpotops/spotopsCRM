@@ -333,9 +333,9 @@
         $(this).toggle(isMatch);
 
         if (isMatch) {
-            const partPrice = parseFloat($(this).find("td").eq(-5).text().replace("$", "")) || 0;
-            const shipping = parseFloat($(this).find("td").eq(-4).text().replace("$", "")) || 0;
-            const others = parseFloat($(this).find("td").eq(-3).text().replace("$", "")) || 0;
+            const partPrice = parseFloat($(this).find("td").eq(-4).text().replace("$", "")) || 0;
+            const shipping = parseFloat($(this).find("td").eq(-3).text().replace("$", "")) || 0;
+            const others = parseFloat($(this).find("td").eq(-2).text().replace("$", "")) || 0;
 
             totalPartPriceSum += partPrice;
             totalShippingSum += shipping;
