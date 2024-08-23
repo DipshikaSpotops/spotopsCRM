@@ -348,7 +348,6 @@
               <th style="cursor: pointer;" scope="col">Sale Price <span class="sort-icon onlyNumber">&#9650;</span></th>
               <th style="cursor: pointer;" scope="col">est. GP <span class="sort-icon onlyNumber">&#9650;</span></th>
               <th style="cursor: pointer;" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
-              <th style="cursor: pointer;" scope="col">Email <span class="sort-icon onlyNumber">&#9650;</span></th>
             </tr>
           </thead>
           <tbody id="infoTable">
@@ -645,11 +644,21 @@
               if (item.additionalInfo && item.additionalInfo.length > 0) {
                 item.additionalInfo.forEach((info, index) => {
                   yardColumns += `
-                    <td>Yard ${index + 1} - ${info.yardName}</td>
-                    <td>${info.partPrice}</td>
-                    <td>${info.shippingDetails}</td>
-                    <td>${info.escalationDate || ""} - ${info.rmaDOE || ""}</td>
-                    <td>${info.paymentStatus || ""} - ${info.refundedAmount || ""} - ${info.status || ""} - ${info.trackingNo || ""} - ${info.returnTracking || ""} - ${info.comments || ""}</td>
+                    <td> ${info.yardName || ""} | ${info.address || "" } | ${info.yardRating || ""}<br>
+                          ${info.email || "" } | ${info.phone || "" }  | ${info.stockNo || "" }  | Warranty: ${info.warranty || "" }<br>
+                   </td>
+                   <td>  Part price:  ${info.partPrice || "" } <br>
+                         ${info.shippingDetails || "" } <br>
+                         Others: $${info.others} <br>
+                   </td>
+                   <td>Customer Tracking: $${info.trackingNo} <br>  
+                         
+                   </td>
+                    <td>Escalation Date: $${info.escalationDate} <br>  
+                        Escalation Cause: ${info.escalationCause || "" } <br>
+                         Escalation Process: ${info.escalationProcess || "" } <br>
+                         
+                   </td>
                   `;
                 });
               }
@@ -667,7 +676,6 @@
                   <td>${item.soldP}</td>
                   <td>${item.grossProfit}</td>
                   <td>${item.orderStatus}</td>
-                  <td>${item.email}</td>
                   ${yardColumns}
                 </tr>`
               );
@@ -735,40 +743,7 @@
             }
           });
       
-          $("#infoTable").on("click", ".cancel-btn", function () {
-            const orderNo = $(this).data("id");
-            const cancelButton = $(this); // Store reference to the clicked button
-      
-            if (confirm(`Are you sure you want to cancel order ${orderNo}?`)) {
-              const cancelData = { orderStatus: "Cancelled" }; // Data to update the order status
-      
-              fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(cancelData),
-              })
-                .then((response) => {
-                  if (!response.ok) {
-                    throw new Error("Failed to cancel the order");
-                  }
-                  return response.json();
-                })
-                .then((data) => {
-                  alert("Order cancelled successfully");
-                  // Update the status in the table and disable the button
-                  cancelButton.closest("tr").find("td:eq(6)").text("Cancelled");
-                  cancelButton.prop("disabled", true);
-                  window.location.reload();
-                })
-                .catch((error) => {
-                  console.error("Error:", error);
-                  alert(`Error cancelling order: ${error.message}`);
-                });
-            }
-          });
+        
       
           $("#logoutLink").on("click", function () {
             window.localStorage.clear();
@@ -779,7 +754,4 @@
       
   </body>
 </html>
-<!-- just add the logic to add hearder names, dont change anything else,,rest should stay intact -->
-<!-- in my database inside orders collection ihave an array called additionalInfo, if additionalInfo's length greater than 0 then i want to add columns like in the following html called Yard columns but if the length od additionalInfo is 2 for example,then for each
-index i want to add 4 columns, 1st colimn should have yardName,yardRating,address,agentName,phone,email,partPrice,stockNo,warranty, 2nd column to have partPrice, shippingDetails,others , third column to have Escalation Date and RMA DOE and 4th column to have paymentStatus,refundedAmount,status,trackingNo,returnTracking and Comments 
-and like it should go if the length of additionalInfokeeps increasing...edit the above html page and take the below html page as the -->
+
