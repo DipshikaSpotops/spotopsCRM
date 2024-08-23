@@ -520,6 +520,7 @@ $(document).on("click", ".fYardName", function () {
             let otherCharges = 0;
             let overallPurchaseCost = 0;
             let totalOveralls = 0;
+            let overAllwithrefund = 0;
 
             for (let i = 0; i < maxYards; i++) {
               if (
@@ -534,7 +535,7 @@ $(document).on("click", ".fYardName", function () {
                 let shippingDetails = item.additionalInfo[i].shippingDetails;
                 let shippingCharge = 0;
                 let shippingType = "";
-                let overAllwithrefund = 0;
+                
                 let refunds = parseFloat(item.additionalInfo[i].refundedAmount || 0);
                 console.log("refunds",refunds);
                 if (shippingDetails) {
@@ -585,7 +586,7 @@ $(document).on("click", ".fYardName", function () {
                                 <td>${totalPartPrice.toFixed(2)}</td>
                                 <td>${totalShipping.toFixed(2)}</td>
                                 <td>${otherCharges.toFixed(2)}</td>
-                                <td>${overAllwithrefund.toFixed(2)}</td>
+                                <td>${overallPurchaseCost.toFixed(2)}</td>
                                 <td><button class="btn btn-success btn-sm process-btn" data-id="${
                                   item.orderNo
                                 }">View</button></td>
