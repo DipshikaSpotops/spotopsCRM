@@ -1783,11 +1783,12 @@ select:disabled {
         } else {
           window.location.href = "login_signup.html";
         }
-        // const savedPaymentStatus = localStorage.getItem('paymentStatus');
-        //  console.log("paymentStatus",paymentStatus);
-        //   if (savedPaymentStatus) {
-        //       $('#paymentStatusSelect').val(savedPaymentStatus);
-        //   }
+        // when i am trying to do the following: i am getting an error because
+        const savedPaymentStatus = localStorage.getItem('paymentStatus');
+         console.log("paymentStatus",savedPaymentStatus);
+          if (savedPaymentStatus) {
+              $('#paymentStatusSelect').val(savedPaymentStatus);
+          }
         const firstName = localStorage.getItem("firstName");
         const lastName = localStorage.getItem("lastName");
         const token = localStorage.getItem("token");
