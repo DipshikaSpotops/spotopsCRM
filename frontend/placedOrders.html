@@ -628,11 +628,10 @@
               $("#infoTable").append(
 
                 `<tr>
-                                <td><button class="btn btn-success btn-sm approve-btn" data-id="${
-                                  item.orderNo
-                                }">Approve</button>
-                                <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${orderStatus === 'Cancelled' ? 'disabled' : ''}>Cancel</button>
-                                </td>
+                                <td>
+  <button class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">Approve</button>
+  <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
+</td>
                                 <td>${item.orderDate}</td>
                                 <td>${item.orderNo}</td>
                                 <td>${item.salesAgent}</td>
@@ -717,37 +716,40 @@
             console.error("Error updating order status:", error);
           }
         });
-        $(".cancel-btn").on("click", function () {
-          console.log("inside cancel")
-    const id = $(this).data("id");
-    console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-    
-    if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-      fetch(`https://www.spotops360.com/orders/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // Ensure correct content type
-        },
-      })
-      .then((response) => {
-        if (!response.ok) {
-          console.error("Failed to delete order", response.statusText);
-          throw new Error("Failed to delete order");
-        }
-        return response.json(); // Assuming your server returns JSON
-      })
-      .then((data) => {
-        console.log("Order cancelled successfully", data); // Added log
-        alert("Order cancelled successfully"); // Add alert for user feedback
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error("Error cancelling order:", error);
-        alert(`Error cancelling order: ${error.message}`); // Add alert for user feedback
-      });
+        $("#infoTable").on("click", ".cancel-btn", function () {
+    const orderNo = $(this).data("id");
+    const cancelButton = $(this); // Store reference to the clicked button
+
+    if (confirm(`Are you sure you want to cancel order ${orderNo}?`)) {
+        const cancelData = { orderStatus: "Cancelled" }; // Data to update the order status
+
+        fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(cancelData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to cancel the order');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Order cancelled successfully');
+            // Update the status in the table and disable the button
+            cancelButton.closest('tr').find('td:eq(6)').text("Cancelled");
+            cancelButton.prop('disabled', true);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(`Error cancelling order: ${error.message}`);
+        });
     }
-  });
+});
+
         $("#logoutLink").on("click", function () {
           window.localStorage.clear();
           window.location.href = "login_signup.html";
