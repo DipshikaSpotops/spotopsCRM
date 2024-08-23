@@ -465,6 +465,9 @@
         const email = localStorage.getItem("email");
         const role = localStorage.getItem("role");
         const team = localStorage.getItem("team");
+        var newOrderNo;
+      
+
 
         if (firstName) {
           $("#user-name").text(firstName);
@@ -490,80 +493,109 @@
 
         $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
 
-        $("#newOrderForm").on("submit", function (e) {
-          e.preventDefault();
-          const firstName = localStorage.getItem("firstName");
-          const cusFName = $("#firstName").val();
-          const cusLName = $("#lastName").val();
-          const customerName = cusFName + " " + cusLName;
-          const timestamp = new Date().toLocaleString();
-          const note = $("#notes").val();
-          const orderNote = `${note}<br>${firstName},${timestamp} : `;
+        
+          // Function to extract the highest order number from a collection
+function getHighestOrderNo(orderArr, existingOrderNo) {
+  if (orderArr.length === 0) return existingOrderNo;
 
-          const bStreet = $("#bAddress").val();
-          const bCity = $("#bCity").val();
-          const bState = $("#bState").val();
-          const bCountry = $("#bCountry").val();
-          const bZip = $("#bZip").val();
-          const billingInfo = `${bStreet},\n${bCity},\n${bState},\n${bZip},\n${bCountry}`;
+  const lastElement = orderArr[orderArr.length - 1];
+  const lastOrderNo = lastElement.orderNo;
 
-          const sStreet = $("#sAddress").val();
-          const sCity = $("#sCity").val();
-          const sState = $("#sState").val();
-          const sCountry = $("#sCountry").val();
-          const sZip = $("#sZip").val();
-          const shippingInfo = `${sStreet},\n${sCity},\n${sState},\n${sZip},\n${sCountry}`;
-          var newOrderNo;
+  const numberPart = parseInt(lastOrderNo.slice(7), 10);
+  return numberPart;
+}
 
-          axios
-            .get("https://www.spotops360.com/orders")
-            .then((orders) => orders.data)
-            .then((orderArr) => {
-              const lastElement = orderArr[orderArr.length - 1];
-              const existingOrderNo = lastElement ? lastElement.orderNo : "50STARS0000";
-              const prefix = existingOrderNo.slice(0, 7);
-              const numberPart = existingOrderNo.slice(7);
-              const incrementedNumber = parseInt(numberPart, 10) + 1;
-              const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
-              newOrderNo = prefix + incrementedNumberStr;
+axios
+  .all([
+    axios.get(`https://www.spotops360.com/orders`),
+    axios.get(`https://www.spotops360.com/cancelledOrders`),
+  ])
+  .then(
+    axios.spread((orders, cancelledOrders) => {
+      // Get the highest existing order number from all collections
+      let existingOrderNo = "50STARS0000"; // Default if no orders exist
+      let orderNoArr = [];
 
-              const newOrder = {
-                orderNo: newOrderNo,
-                orderDate: $("#orderDate").val(),
-                salesAgent: $("#salesAgent").val(),
-                customerName: customerName,
-                bAddress: billingInfo,
-                sAddress: shippingInfo,
-                email: $("#email").val(),
-                phone: $("#phone").val(),
-                altPhone: $("#altPhone").val(),
-                make: $("#make").val(),
-                model: $("#model").val(),
-                year: $("#year").val(),
-                pReq: $("#pReq").val(),
-                desc: $("#desc").val(),
-                warranty: $("#warranty").val(),
-                soldP: $("#soldP").val(),
-                costP: $("#costP").val(),
-                shippingFee: $("#shippingFee").val(),
-                salestax: $("#salestax").val(),
-                grossProfit: $("#grossProfit").val(),
-                orderStatus: "Placed",
-                vin: $("#vin").val(),
-                last4digits: $("#issueOrder").val(),
-                notes: orderNote,
-                orderHistory: [`Order placed by ${firstName} on ${new Date().toLocaleString()}`],
-              };
+      orderNoArr.push(getHighestOrderNo(orders.data, existingOrderNo));
+      orderNoArr.push(getHighestOrderNo(cancelledOrders.data, existingOrderNo));
 
-              return axios.post("https://www.spotops360.com/orders", newOrder).then(() => {
-                alert(`Order No. ${newOrderNo} has been placed successfully.`);
-                window.location.reload();
-              });
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
+      // Find the maximum order number
+      const highestOrderNo = Math.max(...orderNoArr);
+
+      // Increment to get the new order number
+      const incrementedNumber = highestOrderNo + 1;
+      const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
+
+      newOrderNo = `50STARS${incrementedNumberStr}`;
+      console.log("newOrderNo", newOrderNo);
+    })
+  )
+  .catch((error) => {
+    console.error("Error fetching latest order:", error);
+  });
+        
+  $("#newOrderForm").on("submit", function (e) {
+  e.preventDefault();
+  const firstName = localStorage.getItem("firstName");
+  const cusFName = $("#firstName").val();
+  const cusLName = $("#lastName").val();
+  const customerName = cusFName + " " + cusLName;
+  const timestamp = new Date().toLocaleString();
+  const note = $("#notes").val();
+  const orderNote = `${note}<br>${firstName},${timestamp} : `;
+
+  const bStreet = $("#bAddress").val();
+  const bCity = $("#bCity").val();
+  const bState = $("#bState").val();
+  const bCountry = $("#bCountry").val();
+  const bZip = $("#bZip").val();
+  const billingInfo = `${bStreet},\n${bCity},\n${bState},\n${bZip},\n${bCountry}`;
+
+  const sStreet = $("#sAddress").val();
+  const sCity = $("#sCity").val();
+  const sState = $("#sState").val();
+  const sCountry = $("#sCountry").val();
+  const sZip = $("#sZip").val();
+  const shippingInfo = `${sStreet},\n${sCity},\n${sState},\n${sZip},\n${sCountry}`;
+
+  const newOrder = {
+    orderNo: newOrderNo,
+    orderDate: $("#orderDate").val(),
+    salesAgent: $("#salesAgent").val(),
+    customerName: customerName,
+    bAddress: billingInfo,
+    sAddress: shippingInfo,
+    email: $("#email").val(),
+    phone: $("#phone").val(),
+    altPhone: $("#altPhone").val(),
+    make: $("#make").val(),
+    model: $("#model").val(),
+    year: $("#year").val(),
+    pReq: $("#pReq").val(),
+    desc: $("#desc").val(),
+    warranty: $("#warranty").val(),
+    soldP: $("#soldP").val(),
+    costP: $("#costP").val(),
+    shippingFee: $("#shippingFee").val(),
+    salestax: $("#salestax").val(),
+    grossProfit: $("#grossProfit").val(),
+    orderStatus: "Placed",
+    vin: $("#vin").val(),
+    last4digits: $("#issueOrder").val(),
+    notes: orderNote,
+    orderHistory: [`Order placed by ${firstName} on ${new Date().toLocaleString()}`],
+  };
+
+  axios.post("https://www.spotops360.com/orders", newOrder)
+    .then(() => {
+      alert(`Order No. ${newOrderNo} has been placed successfully.`);
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+
 
         // Sidebar and navigation functionality
         if (team === "Team Charlie") {
