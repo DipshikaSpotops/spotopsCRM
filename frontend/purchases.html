@@ -534,7 +534,8 @@ $(document).on("click", ".fYardName", function () {
                 let shippingDetails = item.additionalInfo[i].shippingDetails;
                 let shippingCharge = 0;
                 let shippingType = "";
-
+                let refunds = parseFloat(item.additionalInfo[i].refundedAmount || 0);
+                console.log("refunds",refunds);
                 if (shippingDetails) {
                   const shippingArray = shippingDetails.split(":");
                   shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
@@ -544,7 +545,7 @@ $(document).on("click", ".fYardName", function () {
                 totalShipping += shippingCharge;
                 otherCharges += otherC;
                 overallPurchaseCost =
-                  totalPartPrice + totalShipping + otherCharges;
+                  totalPartPrice + totalShipping + otherCharges - refunds;
                 totalOveralls += overallPurchaseCost;
 
                 yardInfoHtml += `<td>
@@ -558,7 +559,7 @@ $(document).on("click", ".fYardName", function () {
                 }${shippingType} | (${shippingCharge || "0"}) | Others: ${otherC}<br>
                                 ${
                                   item.additionalInfo[i].status
-                                }   |  ${overallPurchaseCost} <br>
+                                }   | Yard Spend: ${item.additionalInfo[i].partPrice + shippingCharge + otherC } |  Refunds: ${refunds} <br>
                             </td>`;
               } else {
                 yardInfoHtml += "<td></td>";
