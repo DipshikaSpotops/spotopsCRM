@@ -166,20 +166,19 @@
         height: 100vh;
         margin: 0;
       }
-      .modalPopup{
+      .modalPopup {
         display: block;
-    background-color: white;
-    height: 92px;
-    width: 16%;
-    text-align: center;
-    border: 1px solid grey;
-    border-radius: 10px;
-    margin: 18% 47%;
+        background-color: white;
+        height: 92px;
+        width: 16%;
+        text-align: center;
+        border: 1px solid grey;
+        border-radius: 10px;
+        margin: 18% 47%;
       }
-    .sort-icon{
-      cursor: pointer;
-    }   
-
+      .sort-icon {
+        cursor: pointer;
+      }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -263,9 +262,6 @@
                 >View Orders</a
               >
               <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
-              <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
-              <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
-              <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
               <a
                 class="nav-link cancelled-orders-link"
                 id="cancelled-orders-link"
@@ -318,7 +314,6 @@
               <a class="nav-link" href="refundReport.html">Refund Report</a>
               <a class="nav-link" href="poReport.html">PO Report</a>
               <a class="nav-link" href="salesReport.html">My Sales Report</a>
-              <!-- <a class="nav-link" href="moreThan2CardC.html">Collect Refund</a> -->
               <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
             </div>
           </div>
@@ -387,87 +382,88 @@
       aria-hidden="true"
       style="display: none;"
     >
-            <p>The order has been approved</p>
-            <button type="button" class="btn btn-primary" id="okButton">
-              OK
-            </button>
+      <p>The order has been approved</p>
+      <button type="button" class="btn btn-primary" id="okButton">
+        OK
+      </button>
     </div>
 
     <script>
       $(document).ready(async function () {
         let sortOrder = {
-      orderDate: "asc",
-      orderNo: "asc",
-      agentName: "asc",
-      customerName: "asc",
-      partName: "asc",
-      yard: "asc",
-      orderStatus: "asc",
-      email: "asc",
-    };
-  
-    function sortTable(column, type) {
-      const table = $("#infoTable");
-      const rows = table.find("tr").toArray();
-  
-      rows.sort((a, b) => {
-        let valA = $(a).find("td").eq(column).text().trim();
-        let valB = $(b).find("td").eq(column).text().trim();
-  
-        if (type === "date") {
-          valA = new Date(valA);
-          valB = new Date(valB);
-        } else if (type === "number") {
-          valA = parseInt(valA.replace(/\D/g, ""), 10);
-          valB = parseInt(valB.replace(/\D/g, ""), 10);
+          orderDate: "asc",
+          orderNo: "asc",
+          agentName: "asc",
+          customerName: "asc",
+          partName: "asc",
+          yard: "asc",
+          orderStatus: "asc",
+          email: "asc",
+        };
+
+        function sortTable(column, type) {
+          const table = $("#infoTable");
+          const rows = table.find("tr").toArray();
+
+          rows.sort((a, b) => {
+            let valA = $(a).find("td").eq(column).text().trim();
+            let valB = $(b).find("td").eq(column).text().trim();
+
+            if (type === "date") {
+              valA = new Date(valA);
+              valB = new Date(valB);
+            } else if (type === "number") {
+              valA = parseInt(valA.replace(/\D/g, ""), 10);
+              valB = parseInt(valB.replace(/\D/g, ""), 10);
+            }
+
+            if (sortOrder[type] === "asc") {
+              return valA > valB ? 1 : -1;
+            } else {
+              return valA < valB ? 1 : -1;
+            }
+          });
+
+          $.each(rows, function (index, row) {
+            table.append(row);
+          });
+
+          // Toggle sort order
+          sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+
+          // Update the sort icon
+          updateSortIcons(column, sortOrder[type]);
         }
-  
-        if (sortOrder[type] === "asc") {
-          return valA > valB ? 1 : -1;
-        } else {
-          return valA < valB ? 1 : -1;
+
+        function updateSortIcons(columnIndex, order) {
+          $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+          $("th").each(function (index) {
+            if (index === columnIndex) {
+              $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+            }
+          });
         }
-      });
-  
-      $.each(rows, function (index, row) {
-        table.append(row);
-      });
-  
-      // Toggle sort order
-      sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-  
-      // Update the sort icon
-      updateSortIcons(column, sortOrder[type]);
-    }
-  
-    function updateSortIcons(columnIndex, order) {
-      $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-      $("th").each(function (index) {
-        if (index === columnIndex) {
-          $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-        }
-      });
-    }
-  
-    // Event listeners for sorting
-    $("th").each(function (index) {
-      const th = $(this);
-      let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-  
-      if (type === "orderdate") {
-        th.on("click", function () {
-          sortTable(index, "date");
+
+        // Event listeners for sorting
+        $("th").each(function (index) {
+          const th = $(this);
+          let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+
+          if (type === "orderdate") {
+            th.on("click", function () {
+              sortTable(index, "date");
+            });
+          } else if (type === "orderno") {
+            th.on("click", function () {
+              sortTable(index, "number");
+            });
+          } else {
+            th.on("click", function () {
+              sortTable(index, type);
+            });
+          }
         });
-      } else if (type === "orderno") {
-        th.on("click", function () {
-          sortTable(index, "number");
-        });
-      } else {
-        th.on("click", function () {
-          sortTable(index, type);
-        });
-      }
-    });
+
         // Get the current time and the login timestamp
         const currentTime = Date.now();
         const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -478,12 +474,13 @@
             alert(
               "Your session has expired. You will be redirected to the login page."
             );
-            window.localStorage.clear(); 
+            window.localStorage.clear();
             window.location.href = "login_signup.html";
           }
         } else {
           window.location.href = "login_signup.html";
         }
+
         const firstName = localStorage.getItem("firstName");
         const lastName = localStorage.getItem("lastName");
         const email = localStorage.getItem("email");
@@ -591,6 +588,7 @@
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
           });
         });
+
         // Highlight active link based on current URL
         const currentPath = window.location.pathname;
         $(".nav-link").each(function () {
@@ -612,48 +610,44 @@
           }
 
           const data = response.data;
+
           data.forEach((item) => {
-              var bAddress = item.bAddress;
+            const bAddress = item.bAddress.split(",");
+            const formattedBAddress = `${bAddress[0].trim()}, ${bAddress[1].trim()}<br>${bAddress[2].trim()}, ${bAddress[3].trim()}, ${bAddress[4].trim()}`;
 
-              const bParts = bAddress.split(',');
-              const firstLineB = `${bParts[0].trim()}, ${bParts[1].trim()}`;
-              const secondLineB = `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}`;
-              const formattedBAddress = `${firstLineB}<br>${secondLineB}`;
-              var sAddress = item.sAddress;
+            const sAddress = item.sAddress.split(",");
+            const formattedSAddress = `${sAddress[0].trim()}, ${sAddress[1].trim()}<br>${sAddress[2].trim()}, ${sAddress[3].trim()}, ${sAddress[4].trim()}`;
 
-              const sParts = sAddress.split(',');
-              const firstLineS = `${sParts[0].trim()}, ${sParts[1].trim()}`;
-              const secondLineS = `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}`;
-              const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
+            let yardColumns = "";
+            if (item.additionalInfo && item.additionalInfo.length > 0) {
+              item.additionalInfo.forEach((info, index) => {
+                yardColumns += `
+                  <td>Yard ${index + 1} - ${info.yardName}</td>
+                  <td>${info.partPrice}</td>
+                  <td>${info.shippingDetails}</td>
+                  <td>${info.escalationDate || ""} - ${info.rmaDOE || ""}</td>
+                  <td>${info.paymentStatus || ""} - ${info.refundedAmount || ""} - ${info.status || ""} - ${info.trackingNo || ""} - ${info.returnTracking || ""} - ${info.comments || ""}</td>
+                `;
+              });
+            }
 
-              $("#infoTable").append(
-                `<tr>
+            $("#infoTable").append(
+              `<tr>
                 <td>${item.orderDate}</td>
                 <td>${item.orderNo}</td>
                 <td>${item.salesAgent}</td>
-                <td>${item.customerApprovedDate}</td>
-                <td>Name: ${item.customerName}</br>
-                Email: ${item.email}</br>
-                Phone: ${item.phone}</br>
-                Alt Phone: ${item.altPhone}</br>
-                Billing Address:</br> ${formattedBAddress}</br>
-                </td>
-                <td> ${formattedSAddress}</br>
+                <td>${item.customerApprovedDate || ""}</td>
+                <td>Name: ${item.customerName}<br>Email: ${item.email}<br>Phone: ${item.phone}<br>Alt Phone: ${item.altPhone}<br>Billing Address:<br>${formattedBAddress}</td>
+                <td>${formattedSAddress}</td>
                 <td>${item.pReq || item.partName}</td>
-                <td>Year: ${item.year}</br>
-                Make: ${item.make}</br>
-                Model: ${item.model}</br>
-                Part Description: ${item.desc}</br>
-                VIN: ${item.vin}</br>
-                Warranty: ${item.warranty} days</br>
-                </td>
+                <td>Year: ${item.year}<br>Make: ${item.make}<br>Model: ${item.model}<br>Part Description: ${item.desc}<br>VIN: ${item.vin}<br>Warranty: ${item.warranty} days</td>
                 <td>${item.soldP}</td>
                 <td>${item.grossProfit}</td>
                 <td>${item.orderStatus}</td>
                 <td>${item.email}</td>
-                </tr>`
-              );
-            
+                ${yardColumns}
+              </tr>`
+            );
           });
         } catch (error) {
           console.error("Error fetching orders:", error);
@@ -666,28 +660,31 @@
           $("#okButton").click(function () {
             window.location.reload();
           });
+
           const orderNo = $(this).data("id");
+
           // Get the current date and time in the 'America/Chicago' timezone
-    const now = new Date();
-    const options = {
-        timeZone: 'America/Chicago',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-    };
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    const parts = formatter.formatToParts(now);
-    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+          const now = new Date();
+          const options = {
+            timeZone: "America/Chicago",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          };
+          const formatter = new Intl.DateTimeFormat("en-US", options);
+          const parts = formatter.formatToParts(now);
+          const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+
           const updatedData = {
             orderStatus: "Customer approved",
             firstName: firstName,
             customerApprovedDate: formattedDate,
           };
-          console.log("in placed data",updatedData);
+
           try {
             const response = await fetch(
               `https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`,
@@ -714,40 +711,41 @@
             console.error("Error updating order status:", error);
           }
         });
+
         $("#infoTable").on("click", ".cancel-btn", function () {
-    const orderNo = $(this).data("id");
-    const cancelButton = $(this); // Store reference to the clicked button
+          const orderNo = $(this).data("id");
+          const cancelButton = $(this); // Store reference to the clicked button
 
-    if (confirm(`Are you sure you want to cancel order ${orderNo}?`)) {
-        const cancelData = { orderStatus: "Cancelled" }; // Data to update the order status
+          if (confirm(`Are you sure you want to cancel order ${orderNo}?`)) {
+            const cancelData = { orderStatus: "Cancelled" }; // Data to update the order status
 
-        fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-            method: "DELETE",
-            headers: {
+            fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+              method: "DELETE",
+              headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(cancelData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to cancel the order');
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert('Order cancelled successfully');
-            // Update the status in the table and disable the button
-            cancelButton.closest('tr').find('td:eq(6)').text("Cancelled");
-            cancelButton.prop('disabled', true);
-            window.location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert(`Error cancelling order: ${error.message}`);
+              },
+              body: JSON.stringify(cancelData),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Failed to cancel the order");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                alert("Order cancelled successfully");
+                // Update the status in the table and disable the button
+                cancelButton.closest("tr").find("td:eq(6)").text("Cancelled");
+                cancelButton.prop("disabled", true);
+                window.location.reload();
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert(`Error cancelling order: ${error.message}`);
+              });
+          }
         });
-    }
-});
 
         $("#logoutLink").on("click", function () {
           window.localStorage.clear();
@@ -757,3 +755,7 @@
     </script>
   </body>
 </html>
+
+<!-- in my database inside orders collection ihave an array called additionalInfo, if additionalInfo's length greater than 0 then i want to add columns like in the following html called Yard columns but if the length od additionalInfo is 2 for example,then for each
+index i want to add 4 columns, 1st colimn should have yardName,yardRating,address,agentName,phone,email,partPrice,stockNo,warranty, 2nd column to have partPrice, shippingDetails,others , third column to have Escalation Date and RMA DOE and 4th column to have paymentStatus,refundedAmount,status,trackingNo,returnTracking and Comments 
+and like it should go if the length of additionalInfokeeps increasing...edit the above html page and take the below html page as the -->
