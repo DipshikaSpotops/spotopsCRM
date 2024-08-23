@@ -1787,7 +1787,7 @@ select:disabled {
         const savedPaymentStatus = localStorage.getItem('paymentStatus');
          console.log("paymentStatus",savedPaymentStatus);
           if (savedPaymentStatus) {
-              $('#paymentStatusSelect').val(savedPaymentStatus);
+              $('.paymentStatus').val(savedPaymentStatus);
           }
         const firstName = localStorage.getItem("firstName");
         const lastName = localStorage.getItem("lastName");
