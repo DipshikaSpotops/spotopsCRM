@@ -505,7 +505,7 @@ $(document).on("click", ".fYardName", function () {
             '<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append(
-            '<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Refunds($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+            '<th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunds($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append(
             '<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
@@ -607,8 +607,9 @@ $(document).on("click", ".fYardName", function () {
                     )}</td>
                     <td id="totalShipping" style="text-align:center;">$${totalShippingSum.toFixed(2)}</td>
                     <td id="others" style="text-align:center;">$${totalOthersSum.toFixed(2)}</td>
+                    <td id="refunds" style="text-align:center;">$${totalOverallRefund.toFixed(2)}</td>
                     <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(2)}</td>
-                    <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(2)}</td>
+                    
                     <td></td>
                 </tr>`;
           tableFooter.html(footerHtml);
@@ -677,6 +678,7 @@ $(document).on("click", ".fYardName", function () {
           let totalShippingSum = 0;
           let totalOthersSum = 0;
           let totalOverallSum = 0;
+          let totalRefundsSum = 0;
 
           $("#yardInfoTable tr").filter(function () {
             const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
@@ -700,6 +702,7 @@ $(document).on("click", ".fYardName", function () {
               totalShippingSum += shipping;
               totalOthersSum += others;
               totalOverallSum += overall;
+              totalRefundsSum += refunds;
             }
           });
 
@@ -707,6 +710,7 @@ $(document).on("click", ".fYardName", function () {
           $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
           $("#others").text(`$${totalOthersSum.toFixed(2)}`);
           $("#overallSum").text(`$${totalOverallSum.toFixed(2)}`);
+          $("#overallSum").text(`$${totalRefundsSum.toFixed(2)}`);
         });
 
         $(".toggle-sidebar").on("click", function () {
