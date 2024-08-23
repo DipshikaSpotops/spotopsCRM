@@ -580,7 +580,7 @@ $(document).on("click", ".fYardName", function () {
               totalShippingSum += totalShipping;
               totalOthersSum += otherCharges;
               totalOverallSum += overAllwithRefund;
-              totalRefunds += tRefunds;
+              totalRefundsSum += tRefunds;
               console.log("overall after refund",totalOverallSum);
               $("#yardInfoTable").append(
                 `<tr>
@@ -610,7 +610,7 @@ $(document).on("click", ".fYardName", function () {
                     )}</td>
                     <td id="totalShipping" style="text-align:center;">$${totalShippingSum.toFixed(2)}</td>
                     <td id="others" style="text-align:center;">$${totalOthersSum.toFixed(2)}</td>
-                    <td id="refunds" style="text-align:center;">$${totalRefunds.toFixed(2)}</td>
+                    <td id="refunds" style="text-align:center;">$${totalRefundsSum.toFixed(2)}</td>
                     <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(2)}</td>
                     
                     <td></td>
