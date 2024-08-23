@@ -1756,11 +1756,7 @@ select:disabled {
 
     <script>
       $(document).ready(async function () {
-         const savedPaymentStatus = localStorage.getItem('paymentStatus');
-         console.log("paymentStatus",paymentStatus);
-          if (savedPaymentStatus) {
-              $('#paymentStatusSelect').val(savedPaymentStatus);
-          }
+        
         const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
         updateAddYardButton();
     if (orderDetails) {
@@ -1787,6 +1783,11 @@ select:disabled {
         } else {
           window.location.href = "login_signup.html";
         }
+        const savedPaymentStatus = localStorage.getItem('paymentStatus');
+         console.log("paymentStatus",paymentStatus);
+          if (savedPaymentStatus) {
+              $('#paymentStatusSelect').val(savedPaymentStatus);
+          }
         const firstName = localStorage.getItem("firstName");
         const lastName = localStorage.getItem("lastName");
         const token = localStorage.getItem("token");
