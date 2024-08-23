@@ -301,7 +301,7 @@ $(document).on("click", ".fYardName", function () {
 
                 totalPartPriceSum += totalPartPrice;
                 totalShippingSum += totalShipping;
-                totalOthersSum += totalShipping;
+                totalOthersSum += totalOthers;
 
                 $("#yardInfoTable").append(
                     `<tr>
@@ -310,7 +310,7 @@ $(document).on("click", ".fYardName", function () {
                         ${yardInfoHtml}
                         <td>${totalPartPrice.toFixed(2)}</td>
                         <td>${totalShipping.toFixed(2)}</td>
-                        <td>${otherC.toFixed(2)}</td>
+                        <td>${totalOthers.toFixed(2)}</td>
                         <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
                     </tr>`
                 );
