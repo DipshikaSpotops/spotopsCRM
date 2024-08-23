@@ -336,10 +336,13 @@ $(document).on("click", ".fYardName", function () {
     $(".fYardName").html("&#9650;"); // Reset all icons to ascending
     $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
 });
-// Click event for sorting any sortable column
-$(document).on("click", "th[data-sort]", function () {
-        const column = $(this).index();
-        const sortBy = $(this).data("sort");
+
+    // Click event for sorting any sortable column
+    $(document).on("click", "th[data-sort], th[data-sort] .sort-icon", function (event) {
+        const $target = $(event.target);
+        const $th = $target.closest("th");
+        const column = $th.index();
+        const sortBy = $th.data("sort");
 
         // Determine if the column is a date column or a yard column
         const isDateColumn = sortBy === "orderDate";
@@ -353,9 +356,9 @@ $(document).on("click", "th[data-sort]", function () {
 
         // Update sort icon
         $("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
-        $(this).find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-    }); 
-
+        $th.find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    });
+    
     async function fetchData() {
         try {
             const token = localStorage.getItem("token");
@@ -542,3 +545,12 @@ $(document).on("click", "th[data-sort]", function () {
     </script>
   </body>
 </html>
+<!-- in my above page, on click of all the following th, sorting should work, right now, its working only when i click on the respective span:
+for (let i = 1; i <= maxYards; i++) {
+  tableHeader.append(`<th style="cursor:pointer;" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
+}
+tableHeader.append('<th style="cursor:pointer;" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#9650;</span></th>');
+<th style="cursor: pointer;" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
+ <th style="cursor: pointer;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+
+ now i walso wamt the sorting to wprk if i click on any of  <span class="sort-icon onlyNumber"></span> or <span class="sort-icon fYardName">&#9650;</span> and also the whole th -->
