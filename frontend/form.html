@@ -1756,8 +1756,8 @@ select:disabled {
 
     <script>
       $(document).ready(async function () {
-        // for populating cancelled orders in form.html
          const savedPaymentStatus = localStorage.getItem('paymentStatus');
+         console.log("paymentStatus",paymentStatus);
           if (savedPaymentStatus) {
               $('#paymentStatusSelect').val(savedPaymentStatus);
           }
@@ -2597,6 +2597,7 @@ $('#cardChargedSbmit').on('click', function() {
     
     const paymentStatus = $(".paymentStatus").val();
     localStorage.setItem('paymentStatus', paymentStatus);
+console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
     
     if (paymentStatus === "Card charged") {
         $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
@@ -3714,3 +3715,8 @@ $("#okButton").click(function () {
   </body>   
 </html>
 
+
+          
+
+
+   
