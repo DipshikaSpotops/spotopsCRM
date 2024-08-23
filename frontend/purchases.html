@@ -482,6 +482,7 @@ $(document).on("click", ".fYardName", function () {
           let totalShippingSum = 0;
           let totalOverallSum = 0;
           let totalOthersSum = 0;
+          let totalOverallRefund = 0;
 
           data.forEach((item) => {
             if (item.additionalInfo.length > maxYards) {
@@ -502,6 +503,9 @@ $(document).on("click", ".fYardName", function () {
           );
           tableHeader.append(
             '<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+          );
+          tableHeader.append(
+            '<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Refunds($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append(
             '<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
@@ -573,7 +577,7 @@ $(document).on("click", ".fYardName", function () {
               totalPartPriceSum += totalPartPrice;
               totalShippingSum += totalShipping;
               totalOthersSum += otherCharges;
-              totalOverallSum += overAllwithRefund;
+              totalOverallRefund += overAllwithRefund;
               console.log("overall after refund",totalOverallSum);
               $("#yardInfoTable").append(
                 `<tr>
@@ -583,6 +587,7 @@ $(document).on("click", ".fYardName", function () {
                                 <td>${totalPartPrice.toFixed(2)}</td>
                                 <td>${totalShipping.toFixed(2)}</td>
                                 <td>${otherCharges.toFixed(2)}</td>
+                                <td>${refunds.toFixed(2)}</td>
                                 <td>${totalOveralls.toFixed(2)}</td>
                                 <td><button class="btn btn-success btn-sm process-btn" data-id="${
                                   item.orderNo
@@ -602,6 +607,7 @@ $(document).on("click", ".fYardName", function () {
                     )}</td>
                     <td id="totalShipping" style="text-align:center;">$${totalShippingSum.toFixed(2)}</td>
                     <td id="others" style="text-align:center;">$${totalOthersSum.toFixed(2)}</td>
+                    <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(2)}</td>
                     <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(2)}</td>
                     <td></td>
                 </tr>`;
