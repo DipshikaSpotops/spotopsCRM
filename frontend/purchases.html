@@ -306,8 +306,8 @@
           <table class="table table-bordered mt-4">
             <thead>
               <tr id="tableHeader" style="background-color: #f2f2f2">
-                <th style="text-align: center;" scope="col" data-sort="orderNo"> Order No <span class="sort-icon onlyNumber">&#x25B2;</span></th>
-                <th style="text-align: center;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#x25B2;</span></th>
+                <th style="text-align: center;cursor: pointer;" scope="col" data-sort="orderNo"> Order No <span class="sort-icon onlyNumber">&#x25B2;</span></th>
+                <th style="text-align: center;cursor: pointer;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#x25B2;</span></th>
               </tr>
             </thead>
             <tbody id="yardInfoTable" style="text-align: center">
@@ -490,20 +490,20 @@ $(document).on("click", ".fYardName", function () {
 
           tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
           for (let i = 1; i <= maxYards; i++) {
-    tableHeader.append(`<th style="text-align:center" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
+    tableHeader.append(`<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
 }
 
           tableHeader.append(
-            '<th style="text-align:center"style="text-align:center" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+            '<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append(
-            '<th style="text-align:center" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+            '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append(
-            '<th style="text-align:center" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+            '<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append(
-            '<th style="text-align:center" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+            '<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append('<th scope="col">Actions</th>');
           
@@ -553,7 +553,7 @@ $(document).on("click", ".fYardName", function () {
                 yardInfoHtml += `<td>
                                 ${item.additionalInfo[i].yardName || ""}${
                   item.additionalInfo[i].yardName ? " | " : ""
-                }${item.additionalInfo[i].partPrice || ""}${
+                }Part Price: ${item.additionalInfo[i].partPrice || ""}${
                   item.additionalInfo[i].partPrice ? " | " : ""
                 }<br>
                                 ${item.additionalInfo[i].shippingMethod || ""}${
