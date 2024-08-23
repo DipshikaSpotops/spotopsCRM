@@ -248,6 +248,7 @@ $(document).on("click", ".fYardName", function () {
         let maxYards = 0;
         let totalPartPriceSum = 0;
         let totalShippingSum = 0;
+        let totalOthersSum = 0;
 
         data.forEach((item) => {
             if (item.additionalInfo.length > maxYards) {
@@ -261,6 +262,7 @@ $(document).on("click", ".fYardName", function () {
         }
         tableHeader.append('<th scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#9650;</span></th>');
         tableHeader.append('<th scope="col" data-sort="totalShipping">Total Shipping <span class="sort-icon onlyNumber">&#9650;</span></th>');
+        tableHeader.append('<th scope="col" data-sort="totalOthers">Total Others <span class="sort-icon onlyNumber">&#9650;</span></th>');
         tableHeader.append('<th scope="col">Actions</th>');
 
         data.forEach((item) => {
@@ -272,20 +274,24 @@ $(document).on("click", ".fYardName", function () {
                 for (let i = 0; i < maxYards; i++) {
                     if (item.additionalInfo[i]) {
                         const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
+                        const otherC = parseFloat(item.additionalInfo[i].others || 0);
                         let shippingDetails = item.additionalInfo[i].shippingDetails;
                         let shippingCharge = 0;
+                        let shippingType = "";
 
                         if (shippingDetails) {
                             const shippingArray = shippingDetails.split(":");
                             shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
+                            shippingType = shippingDetails.split(":")[0].trim();
                         }
 
                         totalPartPrice += partPrice;
                         totalShipping += shippingCharge;
+                        totalOthers += otherC;
 
                         yardInfoHtml += `<td>
                             ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].email || "0"} | ${item.additionalInfo[i].phone || ""}<br>
-                            Part price: $${item.additionalInfo[i].partPrice || "0"} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"})<br>
+                            Part price: ${shippingType || ""} |  ${item.additionalInfo[i].shippingMethod || ""} ($${shippingCharge || "0"}) | Others: $${otherC}<br>
                         </td>`;
                     } else {
                         yardInfoHtml += "<td></td>";
@@ -294,6 +300,7 @@ $(document).on("click", ".fYardName", function () {
 
                 totalPartPriceSum += totalPartPrice;
                 totalShippingSum += totalShipping;
+                totalOthersSum += totalShipping;
 
                 $("#yardInfoTable").append(
                     `<tr>
@@ -302,6 +309,7 @@ $(document).on("click", ".fYardName", function () {
                         ${yardInfoHtml}
                         <td>${totalPartPrice.toFixed(2)}</td>
                         <td>${totalShipping.toFixed(2)}</td>
+                        <td>${otherC.toFixed(2)}</td>
                         <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
                     </tr>`
                 );
@@ -316,6 +324,7 @@ $(document).on("click", ".fYardName", function () {
         footerHtml += `
             <td id="totalPartPrice">$${totalPartPriceSum.toFixed(2)}</td>
             <td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
+            <td id="totalShipping">$${totalOthersSum.toFixed(2)}</td>
             <td></td>
         </tr>`;
         tableFooter.html(footerHtml);
