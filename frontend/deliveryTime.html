@@ -143,299 +143,251 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        $(document).ready(async function () {
-            const firstName = localStorage.getItem("firstName");
-            if (!firstName) {
-                window.location.href = "login_signup.html";
+$(document).ready(async function () {
+    const firstName = localStorage.getItem("firstName");
+    if (!firstName) {
+        window.location.href = "login_signup.html";
+    }
+    $("#user-name").text(firstName);
+
+    const token = localStorage.getItem("token");
+
+    let currentSort = {
+        column: "",
+        order: "asc" // ascending by default
+    };
+
+    async function fetchData() {
+        try {
+            const response = await axios.get("https://www.spotops360.com/yardInfo", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (response.status !== 200) {
+                throw new Error("Failed to fetch yard information");
             }
-            $("#user-name").text(firstName);
 
-            const token = localStorage.getItem("token");
+            const data = response.data;
+            renderTable(data);
+        } catch (error) {
+            console.error("Error fetching yard information:", error);
+            alert("Error fetching yard information: " + error.message);
+        }
+    }
 
-            let currentSort = {
-                column: "",
-                order: "asc" // ascending by default
-            };
-            $(document).on("click", ".fYardName", function () {
-          const column = $(this).closest("th").index();
-          const sortBy = $(this).closest("th").data("sort");
+    function getDaySuffix(day) {
+        if (day > 3 && day < 21) return 'th';
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
 
-          const isYardColumn = sortBy.startsWith("yard");
+    function renderTable(data) {
+        const tableHeader = $("#tableHeader");
+        $("#yardInfoTable").empty();
+        let maxYards = 0;
 
-          currentSort.order =
-            currentSort.column === sortBy && currentSort.order === "asc"
-              ? "desc"
-              : "asc";
-          currentSort.column = sortBy;
-
-          sortTable(column, currentSort.order, false, isYardColumn);
-
-          $(".fYardName").html("&#9650;");
-          $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;");
+        data.forEach((item) => {
+            if (item.additionalInfo.length > maxYards) {
+                maxYards = item.additionalInfo.length;
+            }
         });
 
-                    // Click event for sorting any sortable column
-        $(document).on(
-          "click",
-          "th[data-sort], th[data-sort] .sort-icon",
-          function (event) {
-            const $target = $(event.target);
-            const $th = $target.closest("th");
-            const column = $th.index();
-            const sortBy = $th.data("sort");
+        // Update table header based on the maximum number of yards
+        tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
+        for (let i = 1; i <= maxYards; i++) {
+            tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+        }
 
-            // Determine if the column is a date column or a yard column
-            const isDateColumn = sortBy === "orderDate";
-            const isYardColumn = sortBy.startsWith("yard");
+        // Populate the table rows
+        data.forEach((item) => {
+            let yardInfoHtml = "";
 
-            // Toggle the sort order
-            currentSort.order =
-              currentSort.column === sortBy && currentSort.order === "asc"
-                ? "desc"
-                : "asc";
-            currentSort.column = sortBy;
+            for (let i = 0; i < maxYards; i++) {
+                if (item.additionalInfo[i]) {
+                    let customerApprovedDate = item.customerApprovedDate;
+                    let poSentDate = item.additionalInfo[i].poSentDate;
+                    let deliveredDate = item.additionalInfo[i].partDeliveredDate;
+                    let status = item.additionalInfo[i].status;
 
-            sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+                    // Initialize formatted dates as empty strings
+                    let datePO = '';
+                    let dateDelivered = '';
+                    let daysDifference1 = '';
+                    let daysDifference2 = '';
 
-            // Update sort icon
-            $("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
-            $th
-              .find(".sort-icon")
-              .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-          }
-        );
+                    // Get the current date
+                    const now = new Date();
 
-            // Fetch and display data
-            async function fetchData() {
-                try {
-                    const response = await axios.get("https://www.spotops360.com/yardInfo", {
-                        headers: { Authorization: `Bearer ${token}` },
-                    });
-
-                    if (response.status !== 200) {
-                        throw new Error("Failed to fetch yard information");
+                    // Check if poSentDate is defined and valid
+                    if (poSentDate) {
+                        const poSentDateObj = new Date(poSentDate);
+                        const dayPO = poSentDateObj.getDate();
+                        const dayPOSuffix = getDaySuffix(dayPO);
+                        datePO = poSentDateObj.toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        }).replace(poSentDateObj.getDate(), `${dayPO}${dayPOSuffix}`);
                     }
 
-                    const data = response.data;
-                    renderTable(data);
-                } catch (error) {
-                    console.error("Error fetching yard information:", error);
-                    alert("Error fetching yard information: " + error.message);
-                }
-            }
+                    // Check if deliveredDate is defined and valid
+                    if (deliveredDate) {
+                        const deliveredDateObj = new Date(deliveredDate);
+                        const dayDelivered = deliveredDateObj.getDate();
+                        const dayDeliveredSuffix = getDaySuffix(dayDelivered);
+                        dateDelivered = deliveredDateObj.toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        }).replace(deliveredDateObj.getDate(), `${dayDelivered}${dayDeliveredSuffix}`);
 
-            function getDaySuffix(day) {
-                if (day > 3 && day < 21) return 'th';
-                switch (day % 10) {
-                    case 1: return 'st';
-                    case 2: return 'nd';
-                    case 3: return 'rd';
-                    default: return 'th';
-                }
-            }
-
-            function renderTable(data) {
-                const tableHeader = $("#tableHeader");
-                $("#yardInfoTable").empty();
-                let maxYards = 0;
-
-                data.forEach((item) => {
-                    if (item.additionalInfo.length > maxYards) {
-                        maxYards = item.additionalInfo.length;
+                        // Calculate the difference in days between PO Sent and Delivered
+                        if (poSentDate) {
+                            const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
+                            daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
+                        }
                     }
-                });
+                    if (status !== "Part delivered") {
+                        const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+                        const approvedDate = new Date(customerApprovedDate);
 
-                // Update table header based on the maximum number of yards
-                tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
-                for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th style="cursor:pointer;" scope="col" >Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
-                }
-
-                // Populate the table rows
-                data.forEach((item) => {
-                    let yardInfoHtml = "";
-
-                    for (let i = 0; i < maxYards; i++) {
-                        if (item.additionalInfo[i]) {
-                            let customerApprovedDate = item.customerApprovedDate;
-                            let poSentDate = item.additionalInfo[i].poSentDate;
-                            let deliveredDate = item.additionalInfo[i].partDeliveredDate;
-                            let status = item.additionalInfo[i].status;
-
-                            // Initialize formatted dates as empty strings
-                            let datePO = '';
-                            let dateDelivered = '';
-                            let daysDifference1 = '';
-                            let daysDifference2 = '';
-
-                            // Get the current date
-                            const now = new Date();
-
-                            // Check if poSentDate is defined and valid
-                            if (poSentDate) {
-                                const poSentDateObj = new Date(poSentDate);
-                                const dayPO = poSentDateObj.getDate();
-                                const dayPOSuffix = getDaySuffix(dayPO);
-                                datePO = poSentDateObj.toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                }).replace(poSentDateObj.getDate(), `${dayPO}${dayPOSuffix}`);
-                            }
-
-                            // Check if deliveredDate is defined and valid
-                            if (deliveredDate) {
-                                const deliveredDateObj = new Date(deliveredDate);
-                                const dayDelivered = deliveredDateObj.getDate();
-                                const dayDeliveredSuffix = getDaySuffix(dayDelivered);
-                                dateDelivered = deliveredDateObj.toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                }).replace(deliveredDateObj.getDate(), `${dayDelivered}${dayDeliveredSuffix}`);
-
-                                // Calculate the difference in days between PO Sent and Delivered
-                                if (poSentDate) {
-                                    const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
-                                    daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-                                }
-                            }
-                            if (status !== "Part delivered") {
-                                const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-                                const approvedDate = new Date(customerApprovedDate);
-
-                                if (isNaN(approvedDate)) {
-                                    console.error("Invalid customerApprovedDate:", customerApprovedDate);
-                                } else {
-                                    const diffTime = Math.abs(dallasTime - approvedDate);
-
-                                    // Convert the difference from milliseconds to days
-                                    daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-                                }
-                            }
-
-                            yardInfoHtml += `<td>
-                            ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
-                            <br>
-                            PO Sent - ${datePO || ""}
-                            ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
-                            ${item.additionalInfo[i].trackingNo ? `<br>${item.additionalInfo[i].trackingNo}` : ""}
-                            ${status ? `<br>${status}` : ""}
-                            ${(status === "Part delivered" || status === "Escalation") && daysDifference1 ? `<br>Delivered in ${daysDifference1} days` : ""}
-                            ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
-                            </td>`;
-
-
+                        if (isNaN(approvedDate)) {
+                            console.error("Invalid customerApprovedDate:", customerApprovedDate);
                         } else {
-                            yardInfoHtml += "<td></td>";
+                            const diffTime = Math.abs(dallasTime - approvedDate);
+
+                            // Convert the difference from milliseconds to days
+                            daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
                         }
                     }
 
-                    $("#yardInfoTable").append(
-                        `<tr>
-                            <td>${item.orderNo}</td>
-                            <td>${item.orderDate}</td>
-                            ${yardInfoHtml}
-                        </tr>`
-                    );
-                });
-            }
+                    yardInfoHtml += `<td>
+                    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
+                    <br>
+                    PO Sent - ${datePO || ""}
+                    ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
+                    ${item.additionalInfo[i].trackingNo ? `<br>${item.additionalInfo[i].trackingNo}` : ""}
+                    ${status ? `<br>${status}` : ""}
+                    ${(status === "Part delivered" || status === "Escalation") && daysDifference1 ? `<br>Delivered in ${daysDifference1} days` : ""}
+                    ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
+                    </td>`;
 
-            function sortTable(column, order) {
-                const tbody = $("#yardInfoTable");
-                const rows = tbody.find("tr").toArray();
 
-                rows.sort(function (a, b) {
-                    const cellA = $(a).find("td").eq(column).text().trim();
-                    const cellB = $(b).find("td").eq(column).text().trim();
-
-                    if (!isNaN(cellA) && !isNaN(cellB)) {
-                        return order === "asc" ? cellA - cellB : cellB - cellA;
-                    } else {
-                        return order === "asc"
-                            ? cellA.localeCompare(cellB)
-                            : cellB.localeCompare(cellA);
-                    }
-                });
-
-                // Append sorted rows back to the table body
-                $.each(rows, function (index, row) {
-                    tbody.append(row);
-                });
-            }
-
-            // Click event for sorting
-            $("#tableHeader").on("click", "th.sortable", function () {
-                const column = $(this).index();
-                const sortBy = $(this).data("sort");
-
-                // Toggle the sort order
-                currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-                currentSort.column = sortBy;
-
-                sortTable(column, currentSort.order);
-
-                // Update sort icon
-                $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
-                $(this)
-                    .find("span.sort-icon")
-                    .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-            });
-
-            await fetchData();
-
-            // Sidebar toggle and menu functionality
-            $(".toggle-sidebar").on("click", function () {
-                $("#offcanvasSidebar").toggleClass("show");
-            });
-
-            $(".nav-link").on("click", function () {
-                $(".nav-link").removeClass("active selected");
-                $(this).addClass("selected");
-
-                const contentMap = {
-                    "default-link": "#default-content",
-                    "add-order-link": "#add-order-content",
-                    "view-order-link": "#view-order-content",
-                };
-
-                $(".main-content > div").addClass("d-none");
-                $(contentMap[this.id]).removeClass("d-none");
-                $("#offcanvasSidebar").removeClass("show");
-            });
-
-            $(".chevron-icon, .nav-link").on("click", function (event) {
-                event.stopPropagation();
-                const submenu = $(this).closest(".nav-item").find(".submenu");
-                submenu.toggle();
-                $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-                $(this).closest(".nav-link").toggleClass("selected");
-            });
-            $("#profile").click(function () {
-                $("#profileFirstName").val(firstName);
-                $("#profileLastName").val(localStorage.getItem("lastName"));
-                $("#profileEmail").val(localStorage.getItem("email"));
-                $("#profileRole").val(localStorage.getItem("role"));
-                $("#profileModal").modal("show");
-            });
-
-            $(".close").click(function () {
-                location.reload();
-            });
-
-            $("#logoutLink").click(function () {
-                window.localStorage.clear();
-                window.location.href = "login_signup.html";
-            });
-
-            // Highlight active link based on current URL
-            const currentPath = window.location.pathname;
-            $(".nav-link").each(function () {
-                if (currentPath.includes($(this).attr("href"))) {
-                    $(this).addClass("active");
+                } else {
+                    yardInfoHtml += "<td></td>";
                 }
-            });
+            }
+
+            $("#yardInfoTable").append(
+                `<tr>
+                    <td>${item.orderNo}</td>
+                    <td>${item.orderDate}</td>
+                    ${yardInfoHtml}
+                </tr>`
+            );
         });
+    }
+
+    function sortTable(column, order) {
+        const tbody = $("#yardInfoTable");
+        const rows = tbody.find("tr").toArray();
+
+        rows.sort(function (a, b) {
+            const cellA = $(a).find("td").eq(column).text().trim();
+            const cellB = $(b).find("td").eq(column).text().trim();
+
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return order === "asc" ? cellA - cellB : cellB - cellA;
+            } else {
+                return order === "asc"
+                    ? cellA.localeCompare(cellB)
+                    : cellB.localeCompare(cellA);
+            }
+        });
+
+        // Append sorted rows back to the table body
+        $.each(rows, function (index, row) {
+            tbody.append(row);
+        });
+    }
+
+    // Click event for sorting
+    $("#tableHeader").on("click", "th.sortable", function () {
+        const column = $(this).index();
+        const sortBy = $(this).data("sort");
+
+        // Toggle the sort order
+        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+        currentSort.column = sortBy;
+
+        sortTable(column, currentSort.order);
+
+        // Update sort icon
+        $("#tableHeader th span.sort-icon").html("&#9650;"); // Reset all icons to ascending
+        $(this)
+            .find("span.sort-icon")
+            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    });
+
+    await fetchData();
+
+    // Sidebar toggle and menu functionality
+    $(".toggle-sidebar").on("click", function () {
+        $("#offcanvasSidebar").toggleClass("show");
+    });
+
+    $(".nav-link").on("click", function () {
+        $(".nav-link").removeClass("active selected");
+        $(this).addClass("selected");
+
+        const contentMap = {
+            "default-link": "#default-content",
+            "add-order-link": "#add-order-content",
+            "view-order-link": "#view-order-content",
+        };
+
+        $(".main-content > div").addClass("d-none");
+        $(contentMap[this.id]).removeClass("d-none");
+        $("#offcanvasSidebar").removeClass("show");
+    });
+
+    $(".chevron-icon, .nav-link").on("click", function (event) {
+        event.stopPropagation();
+        const submenu = $(this).closest(".nav-item").find(".submenu");
+        submenu.toggle();
+        $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+        $(this).closest(".nav-link").toggleClass("selected");
+    });
+    $("#profile").click(function () {
+        $("#profileFirstName").val(firstName);
+        $("#profileLastName").val(localStorage.getItem("lastName"));
+        $("#profileEmail").val(localStorage.getItem("email"));
+        $("#profileRole").val(localStorage.getItem("role"));
+        $("#profileModal").modal("show");
+    });
+
+    $(".close").click(function () {
+        location.reload();
+    });
+
+    $("#logoutLink").click(function () {
+        window.localStorage.clear();
+        window.location.href = "login_signup.html";
+    });
+
+    // Highlight active link based on current URL
+    const currentPath = window.location.pathname;
+    $(".nav-link").each(function () {
+        if (currentPath.includes($(this).attr("href"))) {
+            $(this).addClass("active");
+        }
+    });
+});
+
     </script>
 </head>
 <body>
