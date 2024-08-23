@@ -336,7 +336,26 @@ $(document).on("click", ".fYardName", function () {
     $(".fYardName").html("&#9650;"); // Reset all icons to ascending
     $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
 });
+// Click event for sorting any sortable column
+$(document).on("click", "th[data-sort]", function () {
+        const column = $(this).index();
+        const sortBy = $(this).data("sort");
 
+        // Determine if the column is a date column or a yard column
+        const isDateColumn = sortBy === "orderDate";
+        const isYardColumn = sortBy.startsWith("yard");
+
+        // Toggle the sort order
+        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+        currentSort.column = sortBy;
+
+        sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+
+        // Update sort icon
+        $("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
+        $(this).find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+    }); 
+    
     async function fetchData() {
         try {
             const token = localStorage.getItem("token");
@@ -523,10 +542,10 @@ $(document).on("click", ".fYardName", function () {
     </script>
   </body>
 </html>
-<!-- in my above page, on click of all the following th, sorting should work, right now, its working only when i click on the respective span, give the full code without changing any other functionality please:
+in my above page, on click of all the following th, sorting should work, right now, its working only when i click on the respective span:
 for (let i = 1; i <= maxYards; i++) {
   tableHeader.append(`<th style="cursor:pointer;" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
 }
 tableHeader.append('<th style="cursor:pointer;" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#9650;</span></th>');
 <th style="cursor: pointer;" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
- <th style="cursor: pointer;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th> -->
+ <th style="cursor: pointer;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
