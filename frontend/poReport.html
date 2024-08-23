@@ -225,7 +225,7 @@
               : "asc";
           currentSort.column = sortBy;
 
-          sortTable(column, currentSort.order, false, isYardColumn);
+          sortTable(column, currentSort.order, false, isYardColumn);4
 
           $(".fYardName").html("&#9650;");
           $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;");
@@ -512,12 +512,12 @@
                 href="viewAllOrders.html"
                 >View All Orders</a
               >
-              <a
+              <!-- <a
                 class="nav-link view-individualOrders-link"
                 id="view-individualOrders-link"
                 href="individualOrders.html"
                 >View My Orders</a
-              >
+              > -->
               <a
                 class="nav-link cancelled-orders-link"
                 id="cancelled-orders-link"
