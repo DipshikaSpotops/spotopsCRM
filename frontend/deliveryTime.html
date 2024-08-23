@@ -156,6 +156,24 @@
                 column: "",
                 order: "asc" // ascending by default
             };
+            $(document).on("click", ".fYardName", function () {
+          const column = $(this).closest("th").index();
+          const sortBy = $(this).closest("th").data("sort");
+
+          const isYardColumn = sortBy.startsWith("yard");
+
+          currentSort.order =
+            currentSort.column === sortBy && currentSort.order === "asc"
+              ? "desc"
+              : "asc";
+          currentSort.column = sortBy;
+
+          sortTable(column, currentSort.order, false, isYardColumn);
+
+          $(".fYardName").html("&#9650;");
+          $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;");
+        });
+
                     // Click event for sorting any sortable column
         $(document).on(
           "click",
@@ -230,7 +248,7 @@
                 // Update table header based on the maximum number of yards
                 tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
                 for (let i = 1; i <= maxYards; i++) {
-                    tableHeader.append(`<th style="cursor:pointer;" scope="col" >Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+                    tableHeader.append(`<th style="cursor:pointer;" scope="col" >Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
                 }
 
                 // Populate the table rows
