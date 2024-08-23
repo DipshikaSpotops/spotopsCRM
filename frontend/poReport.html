@@ -322,6 +322,39 @@
             }
 
             fetchData();
+            
+            $("#searchInput").on("keyup", function () {
+          let value = $(this).val().toLowerCase();
+          let totalPartPriceSum = 0;
+          let totalShippingSum = 0;
+          let totalOthersSum = 0;
+          let totalOverallSum = 0;
+
+          $("#yardInfoTable tr").filter(function () {
+            const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+            $(this).toggle(isMatch);
+
+            if (isMatch) {
+              const partPrice =
+                parseFloat($(this).find("td").eq(-5).text().replace("$", "")) ||
+                0;
+              const shipping =
+                parseFloat($(this).find("td").eq(-4).text().replace("$", "")) ||
+                0;
+              const others =
+                parseFloat($(this).find("td").eq(-3).text().replace("$", "")) ||
+                0;
+
+              totalPartPriceSum += partPrice;
+              totalShippingSum += shipping;
+              totalOthersSum += others;
+            }
+          });
+
+          $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
+          $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
+          $("#others").text(`$${totalOthersSum.toFixed(2)}`);
+        });
 
             $('#logoutLink').on('click', function() {
                 window.localStorage.clear();
