@@ -629,9 +629,9 @@
 
                 `<tr>
                                 <td>
-  <button class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">Approve</button>
-  <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-</td>
+                                <button style="    background-color: #cae8c9;border: none;color: #61a55e;" class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">Approve</button>
+                                <button style="background-color: #fcdfda; border: none;color: #72504a;" class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
+                                </td>
                                 <td>${item.orderDate}</td>
                                 <td>${item.orderNo}</td>
                                 <td>${item.salesAgent}</td>
@@ -724,7 +724,7 @@
         const cancelData = { orderStatus: "Cancelled" }; // Data to update the order status
 
         fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-            method: "PUT",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -742,6 +742,7 @@
             // Update the status in the table and disable the button
             cancelButton.closest('tr').find('td:eq(6)').text("Cancelled");
             cancelButton.prop('disabled', true);
+            window.location.reload();
         })
         .catch(error => {
             console.error('Error:', error);
