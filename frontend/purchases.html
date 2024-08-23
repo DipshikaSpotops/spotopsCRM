@@ -545,8 +545,9 @@ $(document).on("click", ".fYardName", function () {
                 totalShipping += shippingCharge;
                 otherCharges += otherC;
                 overallPurchaseCost =
-                  totalPartPrice + totalShipping + otherCharges - refunds;
+                  (totalPartPrice + totalShipping + otherCharges) - refunds;
                 totalOveralls += overallPurchaseCost;
+                console.log("yotalOveralls",overallPurchaseCost);
 
                 yardInfoHtml += `<td>
                                 ${item.additionalInfo[i].yardName || ""}${
