@@ -547,7 +547,7 @@ $(document).on("click", ".fYardName", function () {
                 totalShipping += shippingCharge;
                 otherCharges += otherC;
                 overallPurchaseCost =
-                  (totalPartPrice + totalShipping + otherCharges);
+                  (partPrice + shippingCharge + otherC);
                   overAllwithRefund = overallPurchaseCost - refunds ;
                   console.log(overallPurchaseCost,"overall with refunds",overAllwithRefund);
                 totalOveralls += overallPurchaseCost;
