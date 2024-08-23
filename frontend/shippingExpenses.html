@@ -355,7 +355,7 @@ $(document).on("click", "th[data-sort]", function () {
         $("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
         $(this).find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
     }); 
-    
+
     async function fetchData() {
         try {
             const token = localStorage.getItem("token");
@@ -542,10 +542,3 @@ $(document).on("click", "th[data-sort]", function () {
     </script>
   </body>
 </html>
-in my above page, on click of all the following th, sorting should work, right now, its working only when i click on the respective span:
-for (let i = 1; i <= maxYards; i++) {
-  tableHeader.append(`<th style="cursor:pointer;" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
-}
-tableHeader.append('<th style="cursor:pointer;" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#9650;</span></th>');
-<th style="cursor: pointer;" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
- <th style="cursor: pointer;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
