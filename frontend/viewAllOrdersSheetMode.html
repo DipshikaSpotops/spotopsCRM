@@ -624,8 +624,8 @@
               additionalHeaders += `
                 <th style="cursor: pointer;" scope="col">Yard ${i + 1} - Info <span class="sort-icon onlyNumber">&#9650;</span></th>
                 <th style="cursor: pointer;" scope="col">Yard ${i + 1} - Price <span class="sort-icon onlyNumber">&#9650;</span></th>
-                <th style="cursor: pointer;" scope="col">Yard ${i + 1} - Shipping <span class="sort-icon onlyNumber">&#9650;</span></th>
-                <th style="cursor: pointer;" scope="col">Yard ${i + 1} - Payment <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th style="cursor: pointer;" scope="col">Yard ${i + 1} - Shipping Details <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th style="cursor: pointer;" scope="col">Yard ${i + 1} - Escalation<span class="sort-icon onlyNumber">&#9650;</span></th>
               `;
             }
       
@@ -651,10 +651,10 @@
                          ${info.shippingDetails || "" } <br>
                          Others: $${info.others} <br>
                    </td>
-                   <td>Customer Tracking: $${info.trackingNo} <br>  
+                   <td>Customer Tracking: ${info.trackingNo || ""} <br>  
                          
                    </td>
-                    <td>Escalation Date: $${info.escalationDate} <br>  
+                    <td>Escalation Date: $${info.escalationDate || ""} <br>  
                         Escalation Cause: ${info.escalationCause || "" } <br>
                          Escalation Process: ${info.escalationProcess || "" } <br>
                          
