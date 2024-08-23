@@ -481,6 +481,7 @@ $(document).on("click", ".fYardName", function () {
           let totalPartPriceSum = 0;
           let totalShippingSum = 0;
           let totalOverallSum = 0;
+          let totalRefundsSum  = 0;
           let totalOthersSum = 0;
           let totalOverallRefund = 0;
 
@@ -697,8 +698,11 @@ $(document).on("click", ".fYardName", function () {
               const others =
                 parseFloat($(this).find("td").eq(-3).text().replace("$", "")) ||
                 0;
-              const overall =
+                const refunds =
                 parseFloat($(this).find("td").eq(-2).text().replace("$", "")) ||
+                0;
+              const overall =
+                parseFloat($(this).find("td").eq(-1).text().replace("$", "")) ||
                 0;
 
               totalPartPriceSum += partPrice;
