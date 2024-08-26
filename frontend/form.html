@@ -2538,39 +2538,37 @@ yardIndex = $(this).data("yard-index");
 showYardDetails(yardIndex);
 });
 
+
 $(".add-yard-btn").on("click", function () {
-// Get the last yard button
-const lastYardBtn = $("#yardInfoContainer .yard-btn").last();
+  // Fetch the order data first to get the order status and additionalInfo
+  fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const orderStatus = data.orderStatus;
+      const lastYardBtn = $("#yardInfoContainer .yard-btn").last();
 
-if (lastYardBtn.length > 0) {
-let yardIndex = lastYardBtn.data("yard-index");
+      if (orderStatus === "Placed") {
+        $('#yardModal').modal('hide'); // Hide modal
+        alert("You cannot add a new yard until the customer approves the order.");
+      } else if (lastYardBtn.length > 0) {
+        let yardIndex = lastYardBtn.data("yard-index");
+        const yardData = data.additionalInfo[yardIndex - 1];
+        console.log("yardData suggestions", yardData, orderStatus);
 
-// Fetch the yard status for the last yard index
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
-var orderStatus = data.orderStatus;
-const yardData = data.additionalInfo[yardIndex - 1];
-console.log("yardData suggestions", yardData,orderStatus);
-
-if (yardData.status === "PO cancelled" || yardData.status === "Escalation" ) {
-showModal("#yardModal"); // Show modal if status is PO cancelled or Escalation
-} 
-else if (orderStatus === "Placed"){
-$('#yardModal').modal('hide'); // Hide modal
-alert("You cannot add a new yard until the customer approves the order.");
-}
-else {
-$('#yardModal').modal('hide'); // Hide modal
-alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
-}
-})
-.catch(error => console.error("Error fetching yard data:", error));
-} else {
-// If there are no yards, allow adding the first yard
-showModal("#yardModal"); // Show modal to add the first yard
-}
+        if (yardData.status === "PO cancelled" || yardData.status === "Escalation") {
+          showModal("#yardModal"); // Show modal if status is PO cancelled or Escalation
+        } else {
+          $('#yardModal').modal('hide'); // Hide modal
+          alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
+        }
+      } else {
+        // If there are no yards, allow adding the first yard
+        showModal("#yardModal"); // Show modal to add the first yard
+      }
+    })
+    .catch(error => console.error("Error fetching yard data:", error));
 });
+
 
 
 
