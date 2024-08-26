@@ -513,6 +513,7 @@ axios
   .then(
     axios.spread((orders, cancelledOrders) => {
       // Extract the highest order number from both collections
+      console.log("orders",orders);
       const highestOrderInOrders = orders.orderNo;
       const highestOrderInCancelledOrders = cancelledOrders.orderNo;
       console.log("orderNos",highestOrderInOrders,highestOrderInCancelledOrders)
