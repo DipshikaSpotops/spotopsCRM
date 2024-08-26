@@ -1823,21 +1823,30 @@ console.log("team", team, token);
 
 // part to check the paymentStatus
 setTimeout(function() {
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then(response => response.json())
-.then(data => {
-data.additionalInfo.forEach((yard, index) => {
-const yardIndex = index + 1;
-console.log("yardIndex", yardIndex, yard);
-var pStatus = yard.paymentStatus;
-console.log("pStatus", pStatus);
-if (pStatus === "Card charged") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-}
-});
-})
-.catch(error => console.error("Error fetching yard data:", error));
+  fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then(response => response.json())
+    .then(data => {
+      data.additionalInfo.forEach((yard, index) => {
+        const yardIndex = index + 1;
+        console.log("yardIndex", yardIndex, yard);
+        
+        var pStatus = yard.paymentStatus;
+        console.log("pStatus", pStatus);
+        
+        // Check if the payment status is "Card charged"
+        if (pStatus === "Card charged") {
+          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+        }
+
+        // Check if the status is "Escalation"
+        if (yard.status === "Escalation") {
+          $("#escTickBox").prop("checked", true);
+        }
+      });
+    })
+    .catch(error => console.error("Error fetching yard data:", error));
 }, 500);
+
 
 // part to check the apymentStatus ends
 
@@ -2137,7 +2146,7 @@ ${yardData.status ? `Status: ${yardData.status}<br>` : ""}
 ${yardData.paymentStatus ? `Payment Status: ${yardData.paymentStatus}<br>` : ""}
 ${yardData.paymentDetails ? `Payment Details: ${yardData.paymentDetails}<br>` : ""}
 ${yardData.trackingNo ? `Tracking No: ${yardData.trackingNo}<br>` : ""}
-${yardData.escalationDate ? `Escalatio: ${yardData.escalationDate}<br>` : ""}
+${yardData.escalationDate ? `Escalation Date: ${yardData.escalationDate}<br>` : ""}
 ${yardData.escalationCause ? `Escalation Reason: ${yardData.escalationCause}<br>` : ""}
 ${yardData.escalationProcess ? `Escalation Process: ${yardData.escalationProcess}<br>` : ""}
 ${yardData.returnShipping ? `Return Shipping type: ${yardData.returnShipping}<br>` : ""}
