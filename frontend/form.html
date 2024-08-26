@@ -2799,11 +2799,13 @@ const escProcess = $("#escProcess").val();
 const refundedAmount = $("#refundedAmount").val();
 var escDate;
 var forEscDate;
+var escTicked;
 console.log("status",status);
 
   // Check if the escalation checkbox is ticked
-const escTicked = $("#escTickBox").is(":checked") ? "Yes" : "No";
+// const escTicked = $("#escTickBox").is(":checked") ? "Yes" : "No";
 if (status == "Escalation"){
+escTicked = "Yes";  
 const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
@@ -2843,7 +2845,7 @@ const daySuffix = (day) => {
 console.log("formatDate",`${day}${daySuffix(day)} ${month}, ${year}`);
 }
 
-console.log("esc date",escDate);
+console.log("esc Ticked",escTicked);
   // Merge existing data with new data
   const updatedData = {
     ...currentYardData, // Merge existing data
