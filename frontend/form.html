@@ -2138,6 +2138,7 @@ if (isCancelledOrder && cancelledOrderNo) {
       ${yardData.paymentStatus ? `Payment Status: ${yardData.paymentStatus}<br>` : ""}
       ${yardData.paymentDetails ? `Payment Details: ${yardData.paymentDetails}<br>` : ""}
       ${yardData.trackingNo ? `Tracking No: ${yardData.trackingNo}<br>` : ""}
+      ${yardData.escalationDate ? `Escalation Date: ${yardData.escalationDate}<br>` : ""}
       ${yardData.escalationCause ? `Escalation Reason: ${yardData.escalationCause}<br>` : ""}
       ${yardData.escalationProcess ? `Escalation Process: ${yardData.escalationProcess}<br>` : ""}
       ${yardData.returnShipping ? `Return Shipping type: ${yardData.returnShipping}<br>` : ""}
@@ -3283,32 +3284,32 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`, {
 
         $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
           console.log("edit yard details")
-  $(".mainDiv").addClass("blur");
-  yardIndex = $(this).data("yard-index");
-  fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then((response) => response.json())
-    .then((data) => {
-      if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-        return;
-      }
-      const yardData = data.additionalInfo[yardIndex - 1];
-      console.log("yardData",yardData);
-      $("#editYardName").val(yardData.yardName);
-      $("#editAddress").val(yardData.address);
-      $("#editYardRating").val(yardData.yardRating);
-      const addressParts = yardData.address.split(" ");
-      $("#editCity").val(addressParts[0]);
-      $("#editState").val(addressParts[1]);
-      $("#editZip").val(addressParts[2]);
-      $("#editPhone").val(yardData.phone);
-      $("#editAltPhone").val(yardData.altPhone);
-      $("#editEmail").val(yardData.email);
-      $("#editAgentName").val(yardData.agentName);
-      $("#editCountry").val(yardData.country);
-      $("#editPartPrice").val(yardData.partPrice);
-      $("#editOthers").val(yardData.others);
-      $("#editPaymentStatus").val(yardData.paymentStatus);
-      $("#editrefundAmount").val(yardData.refundedAmount);
+        $(".mainDiv").addClass("blur");
+        yardIndex = $(this).data("yard-index");
+        fetch(`https://www.spotops360.com/orders/${orderNo}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+              return;
+            }
+            const yardData = data.additionalInfo[yardIndex - 1];
+            console.log("yardData",yardData);
+            $("#editYardName").val(yardData.yardName);
+            $("#editAddress").val(yardData.address);
+            $("#editYardRating").val(yardData.yardRating);
+            const addressParts = yardData.address.split(" ");
+            $("#editCity").val(addressParts[0]);
+            $("#editState").val(addressParts[1]);
+            $("#editZip").val(addressParts[2]);
+            $("#editPhone").val(yardData.phone);
+            $("#editAltPhone").val(yardData.altPhone);l
+            $("#editEmail").val(yardData.email);
+            $("#editAgentName").val(yardData.agentName);
+            $("#editCountry").val(yardData.country);
+            $("#editPartPrice").val(yardData.partPrice);
+            $("#editOthers").val(yardData.others);
+            $("#editPaymentStatus").val(yardData.paymentStatus);
+            $("#editrefundAmount").val(yardData.refundedAmount);
 
       const shippingDetails = yardData.shippingDetails;
 console.log("shippingDetails:", shippingDetails);
