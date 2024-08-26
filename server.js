@@ -218,6 +218,7 @@ const additionalInfoSchema = new mongoose.Schema({
   returnShippingCharge: Number,
   notes: [String],
   poSentDate: String,
+  escdate: String,
   partDeliveredDate:String,
   stockNo: String,
   warranty: Number
