@@ -519,11 +519,11 @@ axios
       orderNoArr.push(getHighestOrderNo(orders.data, existingOrderNo));
       orderNoArr.push(getHighestOrderNo(cancelledOrders.data, existingOrderNo));
 
-      // Find the maximum order number
+      // Find the maximum order number, handle potential empty array case
       const highestOrderNo = Math.max(...orderNoArr);
 
-      // Increment to get the new order number
-      const incrementedNumber = highestOrderNo + 1;
+      // Ensure highestOrderNo is valid before incrementing
+      const incrementedNumber = !isNaN(highestOrderNo) ? highestOrderNo + 1 : 1;
       const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
 
       newOrderNo = `50STARS${incrementedNumberStr}`;
@@ -533,6 +533,7 @@ axios
   .catch((error) => {
     console.error("Error fetching latest order:", error);
   });
+
         
   $("#newOrderForm").on("submit", function (e) {
   e.preventDefault();
