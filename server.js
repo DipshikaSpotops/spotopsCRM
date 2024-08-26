@@ -219,6 +219,7 @@ const additionalInfoSchema = new mongoose.Schema({
   notes: [String],
   poSentDate: String,
   escalationDate: String,
+  escTicked:String,
   partDeliveredDate:String,
   stockNo: String,
   warranty: Number
