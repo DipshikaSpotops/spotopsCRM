@@ -2793,77 +2793,68 @@ $("#editYardInfo").on("click", async function () {
     return;
   }
 
-const status = $("#refund").val();
-const returnCharges = $(".returnShipment").val();
-const trackingNo = $("#trackingNoEdit").val();
-const eta = $("#etaEdit").val();
-const shipperName = $("#shipperNameEdit").val();
-const trackingLink = $("#linkInput").val();
-const returnShippingMethod = $("input[name='returnValue']:checked").val();
-const paymentStatus = $('.paymentStatus').val();
-const escCause = $("#esc").val();
-const escProcess = $("#escProcess").val();
-const refundedAmount = $("#refundedAmount").val();
-var escDate;
-var forEscDate;
-var escTicked;
-console.log("status",status,shipperName,trackingLink);
+  const status = $("#refund").val();
+  const returnCharges = $(".returnShipment").val();
+  const trackingNo = $("#trackingNoEdit").val();
+  const eta = $("#etaEdit").val();
+  const shipperName = $("#shipperNameEdit").val();
+  const trackingLink = $("#linkInput").val();
+  const returnShippingMethod = $("input[name='returnValue']:checked").val();
+  const paymentStatus = $('.paymentStatus').val();
+  const escCause = $("#esc").val();
+  const escProcess = $("#escProcess").val();
+  const refundedAmount = $("#refundedAmount").val();
+  var escDate;
+  var forEscDate;
+  var escTicked;
+  console.log("status", status, shipperName, trackingLink);
 
-  // Check if the escalation checkbox is ticked
-// const escTicked = $("#escTickBox").is(":checked") ? "Yes" : "No";
-if (status == "Escalation"){
-escTicked = "Yes";  
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
- escDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
- const date = new Date(escDate);
+  if (status === "Escalation") {
+    escTicked = "Yes";
+    const now = new Date();
+    const options = {
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(now);
+    escDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+    const date = new Date(escDate);
 
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-// Extract the day, month, and year
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-
-// Get the correct suffix for the day
-const daySuffix = (day) => {
-  if (day > 3 && day < 21) return "th"; // All days between 4th and 20th get 'th'
-  switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const daySuffix = (day) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    };
+    forEscDate = `${day}${daySuffix(day)} ${month}, ${year}`;
   }
-};
- forEscDate = `${day}${daySuffix(day)} ${month}, ${year}`
-// Format the date
-console.log("formatDate",`${day}${daySuffix(day)} ${month}, ${year}`);
-}
 
-console.log("esc Ticked",escTicked);
-  // Merge existing data with new data
+  console.log("esc Ticked", escTicked);
+
   const updatedData = {
-    ...currentYardData, // Merge existing data
+    ...currentYardData,
     status: status,
-    trackingNo: trackingNo || currentYardData.trackingNo, 
+    trackingNo: trackingNo || currentYardData.trackingNo,
     ets: eta,
     shipperName: shipperName,
     trackingLink: trackingLink,
     refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
     escalationCause: escCause,
-    escalationDate:forEscDate || "",
+    escalationDate: forEscDate || "",
     escalationProcess: escProcess,
     escTicked: escTicked,
     returnShipping: returnShippingMethod,
@@ -2895,11 +2886,16 @@ console.log("esc Ticked",escTicked);
     updateOrderHistory(data.orderHistory);
     showYardDetails(yardIndex);
     fetchAndUpdateYardInfo();
+
+    // Now call the refund change handler to update the order status
+    const refundStatus = $("#refund").val();
+    updateOrderStatus(refundStatus);
   })
   .catch((error) => {
     console.error("Error:", error);
   });
 });
+
 
 
 
@@ -3150,80 +3146,157 @@ $("#shipping_own_cust").show();
 }
 });
 
+// $("#refund").on("change", function () {
+// const refundStatus = $(this).val();
+// const orderStatus = $("#orderStatus").val();
+
+// let newOrderStatus = orderStatus;
+
+// if (refundStatus === "Part shipped") {
+// newOrderStatus = "In Transit";
+// $("#divTrackingEdit").show();
+// $("#sendEmailButton").show();
+// $("#notesContainer").show();
+// $("#cardCharged").hide();
+// $("#escalation").hide();
+// } else if (refundStatus === "PO confirmed") {
+// $("#escalation").hide();
+// $("#divTrackingEdit").hide();
+// $("#sendEmailButton").hide();
+// $("#notesContainer").show();
+// $("#cardCharged").hide();
+// } else if (refundStatus === "Escalation") {
+// $("#escalation").show();
+// $("#divTrackingEdit").hide();
+// $("#sendEmailButton").hide();
+// $("#notesContainer").show();
+// $("#cardCharged").hide();
+// } else if (refundStatus === "PO cancelled") {
+// $("#divTrackingEdit").hide();
+// $("#sendEmailButton").hide();
+// $("#notesContainer").show();
+// $("#cardCharged").hide();
+// } else if (refundStatus === "Part delivered") {
+// newOrderStatus = "Order Fulfilled";
+// $("#notesContainer").show();
+// $("#divTrackingEdit").hide();
+// $("#cardCharged").hide();
+
+
+// } else if (refundStatus === "Yard PO Sent") {
+// newOrderStatus = "Yard Processing";
+// $("#escalation").hide();
+// $("#divTrackingEdit").hide();
+
+// } else if (refundStatus === "Yard located") {
+// $("#divTrackingEdit").hide();
+// } else {
+// $("#divTrackingEdit").hide();
+// $("#sendEmailButton").hide();
+// $("#notesContainer").hide();
+// }
+
+// // Updating the order status
+// const updatedData = { orderStatus: newOrderStatus };
+
+// fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+// method: "PUT",
+// headers: {
+// "Content-Type": "application/json",
+// },
+// body: JSON.stringify(updatedData),
+// })
+// .then((response) => {
+// if (!response.ok) {
+// throw new Error("Network response was not ok");
+// }
+// return response.json();
+// })
+// .then((data) => {
+// $("#orderStatus").val(newOrderStatus);
+// updateOrderHistory(data.orderHistory);
+// })
+// .catch((error) => {
+// console.error("Error updating order status:", error);
+// });
+// });
+function updateOrderStatus(refundStatus) {
+  const orderStatus = $("#orderStatus").val();
+  let newOrderStatus = orderStatus;
+
+  if (refundStatus === "Part shipped") {
+    newOrderStatus = "In Transit";
+    $("#divTrackingEdit").show();
+    $("#sendEmailButton").show();
+    $("#notesContainer").show();
+    $("#cardCharged").hide();
+    $("#escalation").hide();
+  } else if (refundStatus === "PO confirmed") {
+    $("#escalation").hide();
+    $("#divTrackingEdit").hide();
+    $("#sendEmailButton").hide();
+    $("#notesContainer").show();
+    $("#cardCharged").hide();
+  } else if (refundStatus === "Escalation") {
+    $("#escalation").show();
+    $("#divTrackingEdit").hide();
+    $("#sendEmailButton").hide();
+    $("#notesContainer").show();
+    $("#cardCharged").hide();
+  } else if (refundStatus === "PO cancelled") {
+    $("#divTrackingEdit").hide();
+    $("#sendEmailButton").hide();
+    $("#notesContainer").show();
+    $("#cardCharged").hide();
+  } else if (refundStatus === "Part delivered") {
+    newOrderStatus = "Order Fulfilled";
+    $("#notesContainer").show();
+    $("#divTrackingEdit").hide();
+    $("#cardCharged").hide();
+  } else if (refundStatus === "Yard PO Sent") {
+    newOrderStatus = "Yard Processing";
+    $("#escalation").hide();
+    $("#divTrackingEdit").hide();
+  } else if (refundStatus === "Yard located") {
+    $("#divTrackingEdit").hide();
+  } else {
+    $("#divTrackingEdit").hide();
+    $("#sendEmailButton").hide();
+    $("#notesContainer").hide();
+  }
+
+  // Update the order status on the server
+  const updatedData = { orderStatus: newOrderStatus };
+  
+  fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    $("#orderStatus").val(newOrderStatus);
+    updateOrderHistory(data.orderHistory);
+  })
+  .catch((error) => {
+    console.error("Error updating order status:", error);
+  });
+}
+
+// Trigger the updateOrderStatus function on refund status change
 $("#refund").on("change", function () {
-const refundStatus = $(this).val();
-const orderStatus = $("#orderStatus").val();
-
-let newOrderStatus = orderStatus;
-
-if (refundStatus === "Part shipped") {
-newOrderStatus = "In Transit";
-$("#divTrackingEdit").show();
-$("#sendEmailButton").show();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-$("#escalation").hide();
-} else if (refundStatus === "PO confirmed") {
-$("#escalation").hide();
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-} else if (refundStatus === "Escalation") {
-$("#escalation").show();
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-} else if (refundStatus === "PO cancelled") {
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-} else if (refundStatus === "Part delivered") {
-newOrderStatus = "Order Fulfilled";
-$("#notesContainer").show();
-$("#divTrackingEdit").hide();
-$("#cardCharged").hide();
-
-
-} else if (refundStatus === "Yard PO Sent") {
-newOrderStatus = "Yard Processing";
-$("#escalation").hide();
-$("#divTrackingEdit").hide();
-
-} else if (refundStatus === "Yard located") {
-$("#divTrackingEdit").hide();
-} else {
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").hide();
-}
-
-// Updating the order status
-const updatedData = { orderStatus: newOrderStatus };
-
-fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(updatedData),
-})
-.then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
-})
-.then((data) => {
-$("#orderStatus").val(newOrderStatus);
-updateOrderHistory(data.orderHistory);
-})
-.catch((error) => {
-console.error("Error updating order status:", error);
+  const refundStatus = $(this).val();
+  updateOrderStatus(refundStatus);
 });
-});
+
+
 
 $(".paymentStatus").on("change", function () {
 const paymentStatus = $(this).val();
@@ -3360,7 +3433,6 @@ $('#editYardDetailsModal').hide();
 $(".mainDiv").removeClass("blur");
 yardIndex = $(this).data("yard-index");
 
-// Determine the type of shipping and update the shipping details accordingly
 let shippingDetails = "";
 
 if ($("#editOwnShipping").val()) {
@@ -3735,6 +3807,11 @@ window.location.reload();
 </script>
 </body>   
 </html>
+
+
+
+
+
 
 
 
