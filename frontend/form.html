@@ -2556,7 +2556,7 @@ console.log("yardData suggestions", yardData,orderStatus);
 if (yardData.status === "PO cancelled" || yardData.status === "Escalation" ) {
 showModal("#yardModal"); // Show modal if status is PO cancelled or Escalation
 } 
-else if (orderStatus = "Placed"){
+else if (orderStatus === "Placed"){
 $('#yardModal').modal('hide'); // Hide modal
 alert("You cannot add a new yard until the customer approves the order.");
 }
