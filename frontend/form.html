@@ -2807,7 +2807,7 @@ const refundedAmount = $("#refundedAmount").val();
 var escDate;
 var forEscDate;
 var escTicked;
-console.log("status",status);
+console.log("status",status,shipperName,trackingLink);
 
   // Check if the escalation checkbox is ticked
 // const escTicked = $("#escTickBox").is(":checked") ? "Yes" : "No";
@@ -2857,7 +2857,7 @@ console.log("esc Ticked",escTicked);
   const updatedData = {
     ...currentYardData, // Merge existing data
     status: status,
-    trackingNo: trackingNo || currentYardData.trackingNo, // Retain existing trackingNo if not updated
+    trackingNo: trackingNo || currentYardData.trackingNo, 
     ets: eta,
     shipperName: shipperName,
     trackingLink: trackingLink,
