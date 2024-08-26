@@ -1281,11 +1281,24 @@ select:disabled {
                 <input type="number" class="form-control" id="yardShipping" placeholder="Yard Shipping" style="margin-top:3%;"/>
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row addNewId">
+              <div class="form-group col-md-4">
+                  <input type="number" class="form-control" id="others" placeholder="Other Charges" style="margin: 0% 0% 0% -83%;width: 116%;"/>
+                </div>
+              <div class="form-group col-md-4">
+                <label for="ownS"></label>
+                <input type="text" class="form-control" id="stockNo" placeholder="Stock No." style="margin-top:3%;" />
+              </div>
+              <div class="form-group col-md-4">
+                <label for="yardS"></label>
+                <input type="number" class="form-control" id="warr" placeholder="Warranty" style="margin-top:3%;"/>
+              </div>
+            </div>
+            <!-- <div class="form-row">
               <div style="margin: 0% 46% 5% -31%;width: 265px;">
                 <input type="number" class="form-control" id="others" placeholder="Other Charges" style="margin: 0% 0% 0% -83%;width: 116%;"/>
               </div>
-            </div>
+            </div> -->
           </div>
           <button type="button" class="btn save" id="addYardInfo">Submit</button>
         </div>
@@ -2841,6 +2854,9 @@ $('#refundSubmit').on('click', function() {
   const ownShip = $("#ownShipping").val();
   const yardShip = $("#yardShipping").val();
   const others = document.getElementById("others").value;
+  const stockNo = $("#stockNo").val();
+  const warrYard = $("#warr").val();
+
 
   let shippingMethod = "";
   if (ownShip) {
