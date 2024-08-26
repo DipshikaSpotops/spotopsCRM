@@ -2774,7 +2774,6 @@ $("#editYardInfo").on("click", async function () {
   $(".mainDiv").removeClass("blur");
   $("#editYardPopup").hide();
 
-  // Get the yard index and other relevant data from the form
   const yardIndex = $(this).data("yard-index");
 
   // Fetch the current yard data from the server
@@ -2807,7 +2806,6 @@ $("#editYardInfo").on("click", async function () {
   var escDate;
   var forEscDate;
   var escTicked;
-  console.log("status", status, shipperName, trackingLink);
 
   if (status === "Escalation") {
     escTicked = "Yes";
@@ -2842,8 +2840,6 @@ $("#editYardInfo").on("click", async function () {
     };
     forEscDate = `${day}${daySuffix(day)} ${month}, ${year}`;
   }
-
-  console.log("esc Ticked", escTicked);
 
   const updatedData = {
     ...currentYardData,
@@ -2887,15 +2883,13 @@ $("#editYardInfo").on("click", async function () {
     showYardDetails(yardIndex);
     fetchAndUpdateYardInfo();
 
-    // Now call the refund change handler to update the order status
-    const refundStatus = $("#refund").val();
-    updateOrderStatus(refundStatus);
+    // Trigger the refund change manually after saving yard data
+    $("#refund").trigger("change");
   })
   .catch((error) => {
     console.error("Error:", error);
   });
 });
-
 
 
 
@@ -3146,157 +3140,80 @@ $("#shipping_own_cust").show();
 }
 });
 
-// $("#refund").on("change", function () {
-// const refundStatus = $(this).val();
-// const orderStatus = $("#orderStatus").val();
+$("#refund").on("change", function () {
+const refundStatus = $(this).val();
+const orderStatus = $("#orderStatus").val();
 
-// let newOrderStatus = orderStatus;
+let newOrderStatus = orderStatus;
 
-// if (refundStatus === "Part shipped") {
-// newOrderStatus = "In Transit";
-// $("#divTrackingEdit").show();
-// $("#sendEmailButton").show();
-// $("#notesContainer").show();
-// $("#cardCharged").hide();
-// $("#escalation").hide();
-// } else if (refundStatus === "PO confirmed") {
-// $("#escalation").hide();
-// $("#divTrackingEdit").hide();
-// $("#sendEmailButton").hide();
-// $("#notesContainer").show();
-// $("#cardCharged").hide();
-// } else if (refundStatus === "Escalation") {
-// $("#escalation").show();
-// $("#divTrackingEdit").hide();
-// $("#sendEmailButton").hide();
-// $("#notesContainer").show();
-// $("#cardCharged").hide();
-// } else if (refundStatus === "PO cancelled") {
-// $("#divTrackingEdit").hide();
-// $("#sendEmailButton").hide();
-// $("#notesContainer").show();
-// $("#cardCharged").hide();
-// } else if (refundStatus === "Part delivered") {
-// newOrderStatus = "Order Fulfilled";
-// $("#notesContainer").show();
-// $("#divTrackingEdit").hide();
-// $("#cardCharged").hide();
+if (refundStatus === "Part shipped") {
+newOrderStatus = "In Transit";
+$("#divTrackingEdit").show();
+$("#sendEmailButton").show();
+$("#notesContainer").show();
+$("#cardCharged").hide();
+$("#escalation").hide();
+} else if (refundStatus === "PO confirmed") {
+$("#escalation").hide();
+$("#divTrackingEdit").hide();
+$("#sendEmailButton").hide();
+$("#notesContainer").show();
+$("#cardCharged").hide();
+} else if (refundStatus === "Escalation") {
+$("#escalation").show();
+$("#divTrackingEdit").hide();
+$("#sendEmailButton").hide();
+$("#notesContainer").show();
+$("#cardCharged").hide();
+} else if (refundStatus === "PO cancelled") {
+$("#divTrackingEdit").hide();
+$("#sendEmailButton").hide();
+$("#notesContainer").show();
+$("#cardCharged").hide();
+} else if (refundStatus === "Part delivered") {
+newOrderStatus = "Order Fulfilled";
+$("#notesContainer").show();
+$("#divTrackingEdit").hide();
+$("#cardCharged").hide();
 
 
-// } else if (refundStatus === "Yard PO Sent") {
-// newOrderStatus = "Yard Processing";
-// $("#escalation").hide();
-// $("#divTrackingEdit").hide();
+} else if (refundStatus === "Yard PO Sent") {
+newOrderStatus = "Yard Processing";
+$("#escalation").hide();
+$("#divTrackingEdit").hide();
 
-// } else if (refundStatus === "Yard located") {
-// $("#divTrackingEdit").hide();
-// } else {
-// $("#divTrackingEdit").hide();
-// $("#sendEmailButton").hide();
-// $("#notesContainer").hide();
-// }
-
-// // Updating the order status
-// const updatedData = { orderStatus: newOrderStatus };
-
-// fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-// method: "PUT",
-// headers: {
-// "Content-Type": "application/json",
-// },
-// body: JSON.stringify(updatedData),
-// })
-// .then((response) => {
-// if (!response.ok) {
-// throw new Error("Network response was not ok");
-// }
-// return response.json();
-// })
-// .then((data) => {
-// $("#orderStatus").val(newOrderStatus);
-// updateOrderHistory(data.orderHistory);
-// })
-// .catch((error) => {
-// console.error("Error updating order status:", error);
-// });
-// });
-function updateOrderStatus(refundStatus) {
-  const orderStatus = $("#orderStatus").val();
-  let newOrderStatus = orderStatus;
-
-  if (refundStatus === "Part shipped") {
-    newOrderStatus = "In Transit";
-    $("#divTrackingEdit").show();
-    $("#sendEmailButton").show();
-    $("#notesContainer").show();
-    $("#cardCharged").hide();
-    $("#escalation").hide();
-  } else if (refundStatus === "PO confirmed") {
-    $("#escalation").hide();
-    $("#divTrackingEdit").hide();
-    $("#sendEmailButton").hide();
-    $("#notesContainer").show();
-    $("#cardCharged").hide();
-  } else if (refundStatus === "Escalation") {
-    $("#escalation").show();
-    $("#divTrackingEdit").hide();
-    $("#sendEmailButton").hide();
-    $("#notesContainer").show();
-    $("#cardCharged").hide();
-  } else if (refundStatus === "PO cancelled") {
-    $("#divTrackingEdit").hide();
-    $("#sendEmailButton").hide();
-    $("#notesContainer").show();
-    $("#cardCharged").hide();
-  } else if (refundStatus === "Part delivered") {
-    newOrderStatus = "Order Fulfilled";
-    $("#notesContainer").show();
-    $("#divTrackingEdit").hide();
-    $("#cardCharged").hide();
-  } else if (refundStatus === "Yard PO Sent") {
-    newOrderStatus = "Yard Processing";
-    $("#escalation").hide();
-    $("#divTrackingEdit").hide();
-  } else if (refundStatus === "Yard located") {
-    $("#divTrackingEdit").hide();
-  } else {
-    $("#divTrackingEdit").hide();
-    $("#sendEmailButton").hide();
-    $("#notesContainer").hide();
-  }
-
-  // Update the order status on the server
-  const updatedData = { orderStatus: newOrderStatus };
-  
-  fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedData),
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    $("#orderStatus").val(newOrderStatus);
-    updateOrderHistory(data.orderHistory);
-  })
-  .catch((error) => {
-    console.error("Error updating order status:", error);
-  });
+} else if (refundStatus === "Yard located") {
+$("#divTrackingEdit").hide();
+} else {
+$("#divTrackingEdit").hide();
+$("#sendEmailButton").hide();
+$("#notesContainer").hide();
 }
 
-// Trigger the updateOrderStatus function on refund status change
-$("#refund").on("change", function () {
-  const refundStatus = $(this).val();
-  updateOrderStatus(refundStatus);
+// Updating the order status
+const updatedData = { orderStatus: newOrderStatus };
+
+fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedData),
+})
+.then((response) => {
+if (!response.ok) {
+throw new Error("Network response was not ok");
+}
+return response.json();
+})
+.then((data) => {
+$("#orderStatus").val(newOrderStatus);
+updateOrderHistory(data.orderHistory);
+})
+.catch((error) => {
+console.error("Error updating order status:", error);
 });
-
-
+});
 
 $(".paymentStatus").on("change", function () {
 const paymentStatus = $(this).val();
