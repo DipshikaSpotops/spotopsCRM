@@ -2551,12 +2551,12 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((data) => {
 var orderStatus = data.orderStatus;
 const yardData = data.additionalInfo[yardIndex - 1];
-console.log("yardData suggestions", yardData);
+console.log("yardData suggestions", yardData,orderStatus);
 
 if (yardData.status === "PO cancelled" || yardData.status === "Escalation" ) {
 showModal("#yardModal"); // Show modal if status is PO cancelled or Escalation
 } 
-else if (status = "Placed"){
+else if (orderStatus = "Placed"){
 $('#yardModal').modal('hide'); // Hide modal
 alert("You cannot add a new yard until the customer approves the order.");
 }
