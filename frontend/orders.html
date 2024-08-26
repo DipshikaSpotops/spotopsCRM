@@ -331,6 +331,7 @@
                 <th style="cursor:pointer;" scope="col">Part Name <span class="sort-icon onlyNumber">&#9650;</span></th>
                 <th style="cursor:pointer;" scope="col">Yard <span class="sort-icon onlyNumber">&#9650;</span></th>
                 <th style="cursor:pointer;" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon onlyNumber">&#9650;</span></th>
                 <th style="cursor:pointer;" scope="col">Actions</th>
                 <th style="cursor:pointer;" scope="col">Send Invoice</th>
                 <th style="cursor:pointer;" scope="col">Email <span class="sort-icon onlyNumber">&#9650;</span></th>
@@ -522,6 +523,7 @@
                       <td>${item.pReq || item.partName}</td>
                       <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength-1].yardName : ""}</td>
                       <td>${item.orderStatus}</td>
+                      <td>${item.additionalInfo[0].escTicked}</td>
                       <td class="actions">${actions}</td>
                       <td>${sendInvoice}</td>
                       <td>${item.email}</td>
