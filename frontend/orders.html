@@ -524,7 +524,7 @@
                       <td>${item.pReq || item.partName}</td>
                       <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength-1].yardName : ""}</td>
                       <td>${item.orderStatus}</td>
-                      <td>${item.additionalInfo[0].escTicked}</td>
+                      <td>${item.additionalInfo[0].escTicked || ""}</td>
                       <td class="actions">${actions}</td>
                       <td>${sendInvoice}</td>
                       <td>${item.email}</td>
