@@ -2789,6 +2789,7 @@ const escCause = $("#esc").val();
 const escProcess = $("#escProcess").val();
 const refundedAmount = $("#refundedAmount").val();
 var escDate;
+var forEscDate;
 console.log("status",status);
 
   // Check if the escalation checkbox is ticked
@@ -2828,7 +2829,7 @@ const daySuffix = (day) => {
     default: return "th";
   }
 };
-
+ forEscDate = `${day}${daySuffix(day)} ${month}, ${year}`
 // Format the date
 console.log("formatDate",`${day}${daySuffix(day)} ${month}, ${year}`);
 }
@@ -2844,7 +2845,7 @@ console.log("esc date",escDate);
     trackingLink: trackingLink,
     refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
     escalationCause: escCause,
-    escalationDate:escDate || "",
+    escalationDate:forEscDate || "",
     escalationProcess: escProcess,
     escTicked: escTicked,
     returnShipping: returnShippingMethod,
