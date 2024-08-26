@@ -375,227 +375,168 @@ even after sorting,the sorted data is not getting sorted like how i want in the 
       </div>
     </div>
   </div>
-
   <script>
     $(document).ready(async function () {
       let sortOrder = {
-  orderDate: "asc",
-  orderNo: "asc",
-  agentName: "asc",
-  customerName: "asc",
-  partName: "asc",
-  yard: "asc",
-  orderStatus: "asc",
-  email: "asc",
-};
-
-function sortTable(column, type) {
-  const table = $("#infoTable");
-  const rows = table.find("tr").toArray();
-
-  rows.sort((a, b) => {
-    let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
-    let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
-
-    if (type === "date") {
-      valA = new Date(valA);
-      valB = new Date(valB);
-    } else if (type === "number") {
-      valA = parseInt(valA.replace(/\D/g, ""), 10);
-      valB = parseInt(valB.replace(/\D/g, ""), 10);
-    }
-
-    if (sortOrder[type] === "asc") {
-      return valA > valB ? 1 : -1;
-    } else {
-      return valA < valB ? 1 : -1;
-    }
-  });
-
-  $.each(rows, function (index, row) {
-    table.append(row);
-  });
-
-  // Toggle sort order
-  sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-  // Update the sort icon
-  updateSortIcons(column, sortOrder[type]);
-}
-
-function updateSortIcons(columnIndex, order) {
-  $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-  $("th").each(function (index) {
-    if (index === columnIndex) {
-      $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-    }
-  });
-}
-
-// Event listeners for sorting
-$("th").each(function (index) {
-  const th = $(this);
-  let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-
-  if (type === "orderdate") {
-    th.on("click", function () {
-      sortTable(index, "date");
-    });
-  } else if (type === "orderno") {
-    th.on("click", function () {
-      sortTable(index, "number");
-    });
-  } else {
-    th.on("click", function () {
-      sortTable(index, type);
-    });
-  }
-});
+        orderDate: "asc",
+        orderNo: "asc",
+        agentName: "asc",
+        customerName: "asc",
+        partName: "asc",
+        yard: "asc",
+        orderStatus: "asc",
+        email: "asc",
+      };
+    
+      function sortTable(column, type) {
+        const table = $("#infoTable");
+        const rows = table.find("tr").toArray();
+    
+        rows.sort((a, b) => {
+          let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
+          let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
+    
+          if (type === "date") {
+            valA = new Date(valA);
+            valB = new Date(valB);
+          } else if (type === "number") {
+            valA = parseInt(valA.replace(/\D/g, ""), 10);
+            valB = parseInt(valB.replace(/\D/g, ""), 10);
+          }
+    
+          if (sortOrder[type] === "asc") {
+            return valA > valB ? 1 : -1;
+          } else {
+            return valA < valB ? 1 : -1;
+          }
+        });
+    
+        $.each(rows, function (index, row) {
+          table.append(row);
+        });
+    
+        // Toggle sort order
+        sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+    
+        // Update the sort icon
+        updateSortIcons(column, sortOrder[type]);
+      }
+    
+      function updateSortIcons(columnIndex, order) {
+        $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+        $("th").each(function (index) {
+          if (index === columnIndex) {
+            $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+          }
+        });
+      }
+    
+      // Event listeners for sorting
+      $("th").each(function (index) {
+        const th = $(this);
+        let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+    
+        if (type === "orderdate") {
+          th.on("click", function () {
+            sortTable(index, "date");
+          });
+        } else if (type === "orderno") {
+          th.on("click", function () {
+            sortTable(index, "number");
+          });
+        } else {
+          th.on("click", function () {
+            sortTable(index, type);
+          });
+        }
+      });
+    
       // Get the current time and the login timestamp
       const currentTime = Date.now();
-        const loginTimestamp = localStorage.getItem("loginTimestamp");
-        if (loginTimestamp) {
-          const timeDifference =
-            (currentTime - loginTimestamp) / (1000 * 60 * 60);
-          if (timeDifference >= 12) {
-            alert(
-              "Your session has expired. You will be redirected to the login page."
-            );
-            window.localStorage.clear(); 
-            window.location.href = "login_signup.html";
-          }
-        } else {
+      const loginTimestamp = localStorage.getItem("loginTimestamp");
+      if (loginTimestamp) {
+        const timeDifference =
+          (currentTime - loginTimestamp) / (1000 * 60 * 60);
+        if (timeDifference >= 12) {
+          alert(
+            "Your session has expired. You will be redirected to the login page."
+          );
+          window.localStorage.clear(); 
           window.location.href = "login_signup.html";
         }
+      } else {
+        window.location.href = "login_signup.html";
+      }
       const firstName = localStorage.getItem("firstName");
       const lastName = localStorage.getItem("lastName");
       const email = localStorage.getItem("email");
       const role = localStorage.getItem("role");
       const team = localStorage.getItem("team");
-
+    
       if (firstName) {
         $("#user-name").text(firstName);
       }
       if (!firstName) {
         window.location.href = "login_signup.html";
       }
-
+    
       const token = localStorage.getItem("token");
-
+    
       try {
         const response = await axios.get("https://www.spotops360.com/orders", {
           headers: token ? {
             Authorization: `Bearer ${token}`
           } : {},
         });
-
+    
         if (response.status !== 200) {
           throw new Error("Failed to fetch orders");
         }
-
+    
         const data = response.data;
-
-data.forEach((item) => {
-  item.additionalInfo.forEach((yard) => {
-    if (yard.escTicked === "Yes") {
-      var yardlength = item.additionalInfo.length;
-
-      $("#infoTable").append(`
-        <tr>
-          <td>${item.orderDate}</td>
-          <td>${item.orderNo}</td>
-          <td>${item.salesAgent}</td>
-          <td>${item.customerName}</td>
-          <td>${item.pReq || item.partName}</td>
-          <td>${yard.yardName}</td>
-          <td>${item.orderStatus}</td>
-          <td class="actions">${actions}</td>
-          <td>${sendInvoice}</td>
-          <td>${item.email}</td>
-        </tr>
-      `);
-    }
-  });
-});
-
-
+    
+        data.forEach((item) => {
+          item.additionalInfo.forEach((yard) => {
+            if (yard.escTicked === "Yes") {
+              var yardlength = item.additionalInfo.length;
+    
+              $("#infoTable").append(`
+                <tr>
+                  <td>${item.orderDate}</td>
+                  <td>${item.orderNo}</td>
+                  <td>${item.salesAgent}</td>
+                  <td>${item.customerName}</td>
+                  <td>${item.pReq || item.partName}</td>
+                  <td>${yard.yardName}</td>
+                  <td>${item.orderStatus}</td>
+                  <td>${item.email}</td>
+                </tr>
+              `);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    
       $("#searchInput").on("keyup", function () {
         let value = $(this).val().toLowerCase();
         $("#infoTable tr").filter(function () {
           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
       });
-
-      $("#infoTable").on("click", ".edit-btn", function () {
-        const id = $(this).data("id");
-        window.location.href = `form.html?orderNo=${id}`;
-      });
-
-      $("#infoTable").on("click", ".process-btn", function () {
-        const id = $(this).data("id");
-        window.location.href = `form.html?orderNo=${id}&process=true`;
-      });
-
-      $("#infoTable").on("click", ".cancel-btn", function () {
-        const id = $(this).data("id");
-        console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-        if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-          fetch(`https://www.spotops360.com/orders/${id}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                console.error("Failed to delete order", response);
-                throw new Error("Failed to delete order");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log("Order cancelled successfully", data); // Added log
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error("Error cancelling order:", error);
-            });
-        }
-      });
-
-      $("#infoTable").on("click", ".send-invoice-btn", function () {
-        const id = $(this).data("id");
-        fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert(data.message);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      });
-
-      $("#addNewEntry").on("click", function (e) {
-        e.preventDefault();
-        window.location.href = "form.html?newEntry=true";
-      });
-
+    
       $(".toggle-sidebar").on("click", function () {
         $("#offcanvasSidebar").toggleClass("show");
       });
-
+    
       $(".nav-link.menu").on("click", function (event) {
         event.preventDefault();
         const submenu = $(this).next(".submenu");
         submenu.toggle();
         $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
       });
-
+    
       $('#profileLink').click(function () {
         $('#profileFirstName').val(firstName);
         $('#profileLastName').val(lastName);
@@ -603,12 +544,12 @@ data.forEach((item) => {
         $('#profileRole').val(role);
         $('#profileModal').modal('show');
       });
-
+    
       $('.close').click(function () {
         console.log("close button clicked");
         location.reload();
       });
-
+    
       // Apply team-based and role-based restrictions
       if (team === "Team Charlie") {
         // Hide specific reports links for Team Charlie
@@ -644,7 +585,7 @@ data.forEach((item) => {
         // Hide specific dashboards links for Admin
         $("#submenu-dashboards .view-individualOrders-link").hide();
       }
-
+    
       // Highlight active link based on current URL
       const currentPath = window.location.pathname;
       $(".nav-link").each(function () {
@@ -652,14 +593,15 @@ data.forEach((item) => {
           $(this).addClass("active");
         }
       });
-
+    
       $('#logoutLink').click(function () {
         window.localStorage.clear();
         window.location.href = 'login_signup.html';
       });
     });
-  </script>
-</body>
+    </script>
+    
+ </body>
 </html>
 
   
