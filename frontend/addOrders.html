@@ -1,714 +1,751 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Order Entry</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
-    <style>
-      body {
-        display: flex;
-        overflow-x: hidden;
-        flex-direction: column;
-      }
-      #logoImg {
-        height: auto;
-        width: 150px;
-        margin: -16px 6px;
-      }
-      .navbar .user-info span {
-        margin-right: 10px;
-        color: white;
-      }
-      .navbar .user-icon {
-        color: white;
-        cursor: pointer;
-      }
-      .navbar {
-        color: white;
-        background-color: black;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        position: fixed;
-        top: 0;
-        z-index: 2;
-        border-bottom: 1px solid #e0e0e0;
-      }
-      .sidebar {
-        background-color: black;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        overflow-x: hidden;
-        padding-top: 20px;
-        width: 13%;
-        height: 100vh;
-        padding: 50px 0px;
-        transition: transform 0.3s ease;
-      }
-      .sidebar .nav-link {
-        color: #ffffff;
-        cursor: pointer;
-      }
-      .sidebar .nav-link:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-      .sidebar .nav-link.active,
-      .sidebar .nav-link.selected {
-        background-color: rgba(255, 255, 255, 0.2);
-        cursor: default;
-        border: none;
-      }
-      .main-content {
-        width: 100%;
-        flex-grow: 1;
-        padding: 20px;
-        margin-left: 3%;
-        margin-top: 76px;
-        transition: margin-left 0.3s ease;
-      }
-      .submenu {
-        display: block; /* Show all submenus by default */
-      }
-      .nav-item > .submenu {
-        padding-left: 20px;
-      }
-      .nav-item .nav-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .nav-item .nav-link i {
-        margin-right: 10px;
-      }
-      .chevron-icon {
-        margin-left: auto;
-        cursor: pointer;
-      }
-      .submenu .nav-link {
-        display: block;
-        margin-left: 20px;
-      }
-      .toggle-sidebar {
-        display: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-      }
-      @media (max-width: 768px) {
-        .sidebar {
-          transform: translateX(-100%);
-          width: 70%;
-        }
-        .sidebar.show {
-          transform: translateX(0);
-        }
-        .main-content {
-          margin-left: 0;
-        }
-        .toggle-sidebar {
-          display: block;
-        }
-      }
-      /* Specific styles for the New Order Entry page */
-      #addoBtn {
-        margin: 4% 36%;
-        background-color: black;
-        color: white;
-      }
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>New Order Entry</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+<style>
+body {
+display: flex;
+overflow-x: hidden;
+flex-direction: column;
+}
+#logoImg {
+height: auto;
+width: 150px;
+margin: -16px 6px;
+}
+.navbar .user-info span {
+margin-right: 10px;
+color: white;
+}
+.navbar .user-icon {
+color: white;
+cursor: pointer;
+}
+.navbar {
+color: white;
+background-color: black;
+padding: 10px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+position: fixed;
+top: 0;
+z-index: 2;
+border-bottom: 1px solid #e0e0e0;
+}
+.sidebar {
+background-color: black;
+position: fixed;
+z-index: 1;
+top: 0;
+left: 0;
+overflow-x: hidden;
+padding-top: 20px;
+width: 13%;
+height: 100vh;
+padding: 50px 0px;
+transition: transform 0.3s ease;
+}
+.sidebar .nav-link {
+color: #ffffff;
+cursor: pointer;
+}
+.sidebar .nav-link:hover {
+background-color: rgba(255, 255, 255, 0.2);
+}
+.sidebar .nav-link.active,
+.sidebar .nav-link.selected {
+background-color: rgba(255, 255, 255, 0.2);
+cursor: default;
+border: none;
+}
+.main-content {
+width: 100%;
+flex-grow: 1;
+padding: 20px;
+margin-left: 3%;
+margin-top: 76px;
+transition: margin-left 0.3s ease;
+}
+.submenu {
+display: block; /* Show all submenus by default */
+}
+.nav-item > .submenu {
+padding-left: 20px;
+}
+.nav-item .nav-link {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.nav-item .nav-link i {
+margin-right: 10px;
+}
+.chevron-icon {
+margin-left: auto;
+cursor: pointer;
+}
+.submenu .nav-link {
+display: block;
+margin-left: 20px;
+}
+.toggle-sidebar {
+display: none;
+color: white;
+font-size: 24px;
+cursor: pointer;
+}
+@media (max-width: 768px) {
+.sidebar {
+transform: translateX(-100%);
+width: 70%;
+}
+.sidebar.show {
+transform: translateX(0);
+}
+.main-content {
+margin-left: 0;
+}
+.toggle-sidebar {
+display: block;
+}
+}
+/* Specific styles for the New Order Entry page */
+#addoBtn {
+margin: 4% 36%;
+background-color: black;
+color: white;
+}
 
-      #newOrderForm {
-        margin: -2% 0% -2% 12%;
-      }
-      .firstRow {
-        border: 1px solid #c0c0c0;
-        border-radius: 10px;
-        margin: -3% 18% 4% 2%;
-        padding: 1%;
-      }
-      .firstFive {
-        margin: 0% 0% 0% -1%;
-        width: 122%;
-        height: 8vh;
-      }
-      .firstSix{
-        margin: 0% 0% 0% -1%;
-        width: 102%;
-        height: 8vh;
-      }
-      .priceRow {
-        padding: 14px;
-        border: 1px solid #c0c0c0;
-        border-radius: 10px;
-        width: 115%;
-        margin: -4% -19%;
-        height: 20vh;
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      .form-control[readonly] {
-        background-color: #e9ecef;
-      }
-      #salesAgent {
-        margin: 4% 350%;
-        border-radius: 10px;
-        height: 5vh;
-        text-align: center;
-        color: black;
-        background-color: grey;
-        border: none;
-      }
-      #orderDate {
-        margin: 4% 458%;
-        width: 133%;
-        border-radius: 10px;
-        color: grey;
-        height: 5vh;
-        text-align: center;
-        background-color: black;
-      }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-      const firstName = localStorage.getItem("firstName");
-      if (!firstName) {
-        window.location.href = "login_signup.html";
-      }
-    </script>
-  </head>
-  <body>
-    <div class="navbar">
-      <div class="logo">
-        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+#newOrderForm {
+margin: -2% 0% -2% 12%;
+}
+.firstRow {
+border: 1px solid #c0c0c0;
+border-radius: 10px;
+margin: -3% 18% 4% 2%;
+padding: 1%;
+}
+.firstFive {
+margin: 0% 0% 0% -1%;
+width: 122%;
+height: 8vh;
+}
+.firstSix{
+margin: 0% 0% 0% -1%;
+width: 102%;
+height: 8vh;
+}
+.priceRow {
+padding: 14px;
+border: 1px solid #c0c0c0;
+border-radius: 10px;
+width: 115%;
+margin: -4% -19%;
+height: 20vh;
+}
+.form-group {
+margin-bottom: 15px;
+}
+.form-control[readonly] {
+background-color: #e9ecef;
+}
+#salesAgent {
+margin: 4% 350%;
+border-radius: 10px;
+height: 5vh;
+text-align: center;
+color: black;
+background-color: grey;
+border: none;
+}
+#orderDate {
+margin: 4% 458%;
+width: 133%;
+border-radius: 10px;
+color: grey;
+height: 5vh;
+text-align: center;
+background-color: black;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+const firstName = localStorage.getItem("firstName");
+if (!firstName) {
+window.location.href = "login_signup.html";
+}
+</script>
+</head>
+<body>
+<div class="navbar">
+<div class="logo">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</div>
+<div class="toggle-sidebar">
+<i class="fas fa-bars"></i>
+</div>
+<div class="user-info dropdown">
+<span>Welcome <span id="user-name">User</span></span>
+<i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+<a class="dropdown-item" href="#" id="profile"><i class="fas fa-user"></i> My Profile</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+</div>
+</div>
+</div>
+
+<div class="sidebar" id="offcanvasSidebar">
+<div class="offcanvas-body">
+<nav class="nav flex-column">
+<div class="nav-item dashboards">
+<a class="nav-link menu" href="#" id="default-link">
+<i class="fas fa-home"></i> Dashboards
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+</a>
+<div class="submenu" id="submenu-dashboards">
+<a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
+<a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+<a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
+<a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
+<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+<a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
+<a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+<a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
+<a class="nav-link" href="escalatedOrders.html">Escalation</a>
+</div>
+</div>
+<div class="nav-item">
+<a class="nav-link menu" href="#">
+<i class="fas fa-users"></i> Users
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+</a>
+<div class="submenu" id="submenu-users">
+<a class="nav-link" href="createUser.html">Create User</a>
+<a class="nav-link" href="viewallUsers.html">View Users</a>
+</div>
+</div>
+<div class="nav-item teams">
+<a class="nav-link menu" href="#">
+<i class="fas fa-users"></i> Teams
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+</a>
+<div class="submenu" id="submenu-teams">
+<a class="nav-link" href="teams.html">View Teams</a>
+</div>
+</div>
+<div class="nav-item">
+<a class="nav-link menu" href="#">
+<i class="fas fa-chart-bar"></i> Reports
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+</a>
+<div class="submenu" id="submenu-reports">
+<a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+<a class="nav-link" href="purchases.html">Purchases</a>
+<a class="nav-link" href="refundReport.html">Refund Report</a>
+<a class="nav-link" href="poReport.html">PO Report</a>
+<a class="nav-link" href="salesReport.html">My Sales Report</a>
+<a class="nav-link" href="deliveryTime.html">Delivery Report</a>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+<div class="main-content">
+<h2 style="margin: 0% 0% -3% 18%;color: grey;">ADD NEW ORDER</h2>
+<div id="firstRow" style="display: flex; margin: 0% 28%;">
+<div>
+<input type="text" id="salesAgent" required />
+</div>
+<div>
+<input type="date" id="orderDate" required />
+</div>
+</div>
+
+<form id="newOrderForm">
+<div class="main-content">
+<div class="firstRow" id="customer">
+<h6 style="text-align: center; margin-top: 1%;">Customer Info</h6>
+<div class="form-row firstFive">
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="firstName" placeholder="First Name" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="lastName" placeholder="Last Name" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="email" class="form-control" id="email" placeholder="Email Address" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="phone" placeholder="Phone No." required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" placeholder="Alt Phone No" id="altPhone" />
+</div>
+</div>
+</div>
+
+<div class="firstRow" id="billing">
+<h6 style="text-align: center; margin-top: 1%;">Billing Info</h6>
+<div class="form-row firstSix">
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="bAttention" placeholder="Attention" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="bAddress" placeholder="Street Address" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="bCity" placeholder="City" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="bState" placeholder="State" required />
+</div>
+<div class="form-group col-md-2">
+  <select class="form-control" id="bCountry" required>
+    <option value="">Country</option>
+    <option value="USA">USA</option>
+    <option value="Canada">Canada</option>
+  </select>
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
+</div>
+
+</div>
+
+</div>
+<!-- same as billing addres checkbox -->
+<div class="sameAsBA" style="margin: -2% 3%;">
+<label for="sameasBA">Same as Billing Address</label>
+<input type="checkbox" value="Same as Billing Adress"/>
+</div>
+<div class="firstRow" id="shipping">
+<h6 style="text-align: center; margin-top: 1%;">Shipping Info</h6>
+<div class="form-row firstSix">
+<div class="form-group col-md-2">
+  <input type="text" class="form-control"id="sAttention" placeholder="Attention" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="sAddress" placeholder="Street Address" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="sCity" placeholder="City" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="sState" placeholder="State" required />
+</div>
+<div class="form-group col-md-2">
+  <select class="form-control" id="sCountry" required>
+    <option value="">Country</option>
+    <option value="USA">USA</option>
+    <option value="Canada">Canada</option>
+  </select>
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="sZip" placeholder="Zip Code" required />
+</div>
+
+</div>
+
+</div>
+
+<div class="firstRow" id="partInfo">
+<h6 style="text-align: center; margin-top: 1%;">Part Information</h6>
+<div class="form-row firstFive">
+<div class="form-group col-md-2">
+  <select class="form-control" id="pReq" required>
+    <option value="ABS Pump">ABS Pump</option>
+    <option value="ABS Module">ABS Module</option>
+    <option value="Transmission">Transmission</option>
+  </select>
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="year" placeholder="Year" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="make" placeholder="Make" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="model" placeholder="Model" required />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="warranty" placeholder="Warranty" required />
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="desc" placeholder="Description" />
+</div>
+<div class="form-group col-md-2">
+  <input type="text" class="form-control" id="vin" required placeholder="VIN No." />
+</div>
+</div>
+</div>
+
+<div class="container mt-4">
+<div class="priceRow">
+<h6 class="text-center;" style="margin-top: 1%; text-align: center;">Price and GP Information</h6>
+<div class="form-row">
+  <div class="form-group col-md-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
       </div>
-      <div class="toggle-sidebar">
-        <i class="fas fa-bars"></i>
-      </div>
-      <div class="user-info dropdown">
-        <span>Welcome <span id="user-name">User</span></span>
-        <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-          <a class="dropdown-item" href="#" id="profile"><i class="fas fa-user"></i> My Profile</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </div>
-      </div>
+      <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
     </div>
-
-    <div class="sidebar" id="offcanvasSidebar">
-      <div class="offcanvas-body">
-        <nav class="nav flex-column">
-          <div class="nav-item dashboards">
-            <a class="nav-link menu" href="#" id="default-link">
-              <i class="fas fa-home"></i> Dashboards
-              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-            </a>
-            <div class="submenu" id="submenu-dashboards">
-              <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
-              <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
-              <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
-              <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
-              <a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
-              <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
-              <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
-              <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Details</a>
-              <a class="nav-link" href="escalatedOrders.html">Escalation</a>
-            </div>
-          </div>
-          <div class="nav-item">
-            <a class="nav-link menu" href="#">
-              <i class="fas fa-users"></i> Users
-              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-            </a>
-            <div class="submenu" id="submenu-users">
-              <a class="nav-link" href="createUser.html">Create User</a>
-              <a class="nav-link" href="viewallUsers.html">View Users</a>
-            </div>
-          </div>
-          <div class="nav-item teams">
-            <a class="nav-link menu" href="#">
-              <i class="fas fa-users"></i> Teams
-              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-            </a>
-            <div class="submenu" id="submenu-teams">
-              <a class="nav-link" href="teams.html">View Teams</a>
-            </div>
-          </div>
-          <div class="nav-item">
-            <a class="nav-link menu" href="#">
-              <i class="fas fa-chart-bar"></i> Reports
-              <span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
-            </a>
-            <div class="submenu" id="submenu-reports">
-              <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
-              <a class="nav-link" href="purchases.html">Purchases</a>
-              <a class="nav-link" href="refundReport.html">Refund Report</a>
-              <a class="nav-link" href="poReport.html">PO Report</a>
-              <a class="nav-link" href="salesReport.html">My Sales Report</a>
-              <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
-            </div>
-          </div>
-        </nav>
+  </div>
+  <div class="form-group col-md-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
       </div>
+      <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
     </div>
-
-    <div class="main-content">
-      <h2 style="margin: 0% 0% -3% 18%;color: grey;">ADD NEW ORDER</h2>
-      <div id="firstRow" style="display: flex; margin: 0% 28%;">
-        <div>
-          <input type="text" id="salesAgent" required />
-        </div>
-        <div>
-          <input type="date" id="orderDate" required />
-        </div>
+  </div>
+  <div class="form-group col-md-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
       </div>
-
-      <form id="newOrderForm">
-        <div class="main-content">
-          <div class="firstRow" id="customer">
-            <h6 style="text-align: center; margin-top: 1%;">Customer Info</h6>
-            <div class="form-row firstFive">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="firstName" placeholder="First Name" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="lastName" placeholder="Last Name" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="email" class="form-control" id="email" placeholder="Email Address" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="phone" placeholder="Phone No." required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" placeholder="Alt Phone No" id="altPhone" />
-              </div>
-            </div>
-          </div>
-
-          <div class="firstRow" id="billing">
-            <h6 style="text-align: center; margin-top: 1%;">Billing Info</h6>
-            <div class="form-row firstSix">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bAttention" placeholder="Attention" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bAddress" placeholder="Street Address" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bCity" placeholder="City" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bState" placeholder="State" required />
-              </div>
-              <div class="form-group col-md-2">
-                <select class="form-control" id="bCountry" required>
-                  <option value="">Country</option>
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
-              </div>
-              
-            </div>
-            
-          </div>
-          <!-- same as billing addres checkbox -->
-          <div class="sameAsBA" style="margin: -2% 3%;">
-            <label for="sameasBA">Same as Billing Address</label>
-            <input type="checkbox" value="Same as Billing Adress"/>
-          </div>
-          <div class="firstRow" id="shipping">
-            <h6 style="text-align: center; margin-top: 1%;">Shipping Info</h6>
-            <div class="form-row firstSix">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control"id="sAttention" placeholder="Attention" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sAddress" placeholder="Street Address" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sCity" placeholder="City" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sState" placeholder="State" required />
-              </div>
-              <div class="form-group col-md-2">
-                <select class="form-control" id="sCountry" required>
-                  <option value="">Country</option>
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="sZip" placeholder="Zip Code" required />
-              </div>
-              
-            </div>
-            
-          </div>
-
-          <div class="firstRow" id="partInfo">
-            <h6 style="text-align: center; margin-top: 1%;">Part Information</h6>
-            <div class="form-row firstFive">
-              <div class="form-group col-md-2">
-                <select class="form-control" id="pReq" required>
-                  <option value="ABS Pump">ABS Pump</option>
-                  <option value="ABS Module">ABS Module</option>
-                  <option value="Transmission">Transmission</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="year" placeholder="Year" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="make" placeholder="Make" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="model" placeholder="Model" required />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="warranty" placeholder="Warranty" required />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="desc" placeholder="Description" />
-              </div>
-              <div class="form-group col-md-2">
-                <input type="text" class="form-control" id="vin" required placeholder="VIN No." />
-              </div>
-            </div>
-          </div>
-
-          <div class="container mt-4">
-            <div class="priceRow">
-              <h6 class="text-center;" style="margin-top: 1%; text-align: center;">Price and GP Information</h6>
-              <div class="form-row">
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">$</span>
-                    </div>
-                    <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">$</span>
-                    </div>
-                    <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">$</span>
-                    </div>
-                    <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes"></input>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-2">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">%</span>
-                    </div>
-                    <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
-                </div>
-                <div class="form-group col-md-2">
-                  <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn" id="addoBtn">Add New Order</button>
-        </div>
-      </form>
+      <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
     </div>
+  </div>
+  <div class="form-group col-md-6">
+    <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes"></input>
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group col-md-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">%</span>
+      </div>
+      <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
+    </div>
+  </div>
+  <div class="form-group col-md-2">
+    <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
+  </div>
+  <div class="form-group col-md-2">
+    <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
+  </div>
+</div>
+</div>
+</div>
+<button type="submit" class="btn" id="addoBtn">Add New Order</button>
+</div>
+</form>
+</div>
 
-    <script>
-      $(document).ready(function () {
-        // Get the current time and the login timestamp
-        const currentTime = Date.now();
-        const loginTimestamp = localStorage.getItem("loginTimestamp");
-        if (loginTimestamp) {
-          const timeDifference = (currentTime - loginTimestamp) / (1000 * 60 * 60);
-          if (timeDifference >= 12) {
-            alert("Your session has expired. You will be redirected to the login page.");
-            window.localStorage.clear();
-            window.location.href = "login_signup.html";
-          }
-        } else {
-          window.location.href = "login_signup.html";
-        }
-        const firstName = localStorage.getItem("firstName");
-        const lastName = localStorage.getItem("lastName");
-        const email = localStorage.getItem("email");
-        const role = localStorage.getItem("role");
-        const team = localStorage.getItem("team");
-        var newOrderNo;
-      
+<script>
+$(document).ready(function () {
+// Get the current time and the login timestamp
+const currentTime = Date.now();
+const loginTimestamp = localStorage.getItem("loginTimestamp");
+if (loginTimestamp) {
+const timeDifference = (currentTime - loginTimestamp) / (1000 * 60 * 60);
+if (timeDifference >= 12) {
+alert("Your session has expired. You will be redirected to the login page.");
+window.localStorage.clear();
+window.location.href = "login_signup.html";
+}
+} else {
+window.location.href = "login_signup.html";
+}
+const firstName = localStorage.getItem("firstName");
+const lastName = localStorage.getItem("lastName");
+const email = localStorage.getItem("email");
+const role = localStorage.getItem("role");
+const team = localStorage.getItem("team");
+var newOrderNo;
 
 
-        if (firstName) {
-          $("#user-name").text(firstName);
-          $("#salesAgent").val(firstName);
-        }
 
-        const today = new Date().toISOString().split("T")[0];
-        $("#orderDate").val(today);
+if (firstName) {
+$("#user-name").text(firstName);
+$("#salesAgent").val(firstName);
+}
 
-        const token = localStorage.getItem("token");
+const today = new Date().toISOString().split("T")[0];
+$("#orderDate").val(today);
 
-        function calculateProfit() {
-          const quotedPrice = parseFloat($("#soldP").val()) || 0;
-          const yardPrice = parseFloat($("#costP").val()) || 0;
-          const shipping = parseFloat($("#shippingFee").val()) || 0;
+const token = localStorage.getItem("token");
 
-          const salesTax = 0.035 * quotedPrice;
-          const grossProfit = quotedPrice - yardPrice - shipping - salesTax;
+function calculateProfit() {
+const quotedPrice = parseFloat($("#soldP").val()) || 0;
+const yardPrice = parseFloat($("#costP").val()) || 0;
+const shipping = parseFloat($("#shippingFee").val()) || 0;
 
-          $("#salestax").val(salesTax.toFixed(2));
-          $("#grossProfit").val(grossProfit.toFixed(2));
-        }
+const salesTax = 0.035 * quotedPrice;
+const grossProfit = quotedPrice - yardPrice - shipping - salesTax;
 
-        $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
+$("#salestax").val(salesTax.toFixed(2));
+$("#grossProfit").val(grossProfit.toFixed(2));
+}
 
-        
-          // Function to extract the highest order number from a collection
+$("#soldP, #costP, #shippingFee").on("input", calculateProfit);
+
+
+// Function to extract the highest order number from a collection
 function getHighestOrderNo(orderArr, existingOrderNo) {
-  if (orderArr.length === 0) return existingOrderNo;
+if (orderArr.length === 0) return existingOrderNo;
 
-  const lastElement = orderArr[orderArr.length - 1];
-  const lastOrderNo = lastElement.orderNo;
+const lastElement = orderArr[orderArr.length - 1];
+const lastOrderNo = lastElement.orderNo;
 
-  const numberPart = parseInt(lastOrderNo.slice(7), 10);
-  return numberPart;
+const numberPart = parseInt(lastOrderNo.slice(7), 10);
+return numberPart;
 }
 
 axios
-  .all([
-    axios.get(`https://www.spotops360.com/orders`),
-    axios.get(`https://www.spotops360.com/cancelledOrders`),
-  ])
-  .then(
-    axios.spread((orders, cancelledOrders) => {
-      // Initialize the existing order number to a default value
-      let existingOrderNo = "50STARS0000"; // Default if no orders exist
+.all([
+axios.get(`https://www.spotops360.com/orders`),
+axios.get(`https://www.spotops360.com/cancelledOrders`),
+])
+.then(
+axios.spread((orders, cancelledOrders) => {
+// Initialize the existing order number to a default value
+let existingOrderNo = "50STARS0000"; // Default if no orders exist
 
-      // Function to extract the highest order number from a collection
-      function getHighestOrderNo(orderArr, existingOrderNo) {
-        if (orderArr.length === 0) return parseInt(existingOrderNo.slice(7), 10);
+// Function to extract the highest order number from a collection
+function getHighestOrderNo(orderArr, existingOrderNo) {
+if (orderArr.length === 0) return parseInt(existingOrderNo.slice(7), 10);
 
-        const lastElement = orderArr[orderArr.length - 1];
-        const lastOrderNo = lastElement.orderNo;
+const lastElement = orderArr[orderArr.length - 1];
+const lastOrderNo = lastElement.orderNo;
 
-        const numberPart = parseInt(lastOrderNo.slice(7), 10);
-        return numberPart;
-      }
+const numberPart = parseInt(lastOrderNo.slice(7), 10);
+return numberPart;
+}
 
-      // Initialize an array to hold the highest order numbers from both collections
-      let orderNoArr = [];
+// Initialize an array to hold the highest order numbers from both collections
+let orderNoArr = [];
 
-      // Push the highest order number from both collections, or the default if empty
-      orderNoArr.push(getHighestOrderNo(orders.data, existingOrderNo));
-      orderNoArr.push(getHighestOrderNo(cancelledOrders.data, existingOrderNo));
+// Push the highest order number from both collections, or the default if empty
+orderNoArr.push(getHighestOrderNo(orders.data, existingOrderNo));
+orderNoArr.push(getHighestOrderNo(cancelledOrders.data, existingOrderNo));
 
-      // Find the maximum order number from both collections
-      const highestOrderNo = Math.max(...orderNoArr);
+// Find the maximum order number from both collections
+const highestOrderNo = Math.max(...orderNoArr);
 
-      // Increment the highest order number by 1 to get the new order number
-      const incrementedNumber = highestOrderNo + 1;
-      const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
+// Increment the highest order number by 1 to get the new order number
+const incrementedNumber = highestOrderNo + 1;
+const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
 
-      // Construct the new order number
-      newOrderNo = `50STARS${incrementedNumberStr}`;
-      console.log("newOrderNo", newOrderNo);
-    })
-  )
-  .catch((error) => {
-    console.error("Error fetching latest order:", error);
-  });
-        
-  $("#newOrderForm").on("submit", function (e) {
-  e.preventDefault();
-  const firstName = localStorage.getItem("firstName");
-  const cusFName = $("#firstName").val();
-  const cusLName = $("#lastName").val();
-  const customerName = cusFName + " " + cusLName;
-  const timestamp = new Date().toLocaleString();
-  const note = $("#notes").val();
-  const orderNote = `${note}<br>${firstName},${timestamp} : `;
+// Construct the new order number
+newOrderNo = `50STARS${incrementedNumberStr}`;
+console.log("newOrderNo", newOrderNo);
+})
+)
+.catch((error) => {
+console.error("Error fetching latest order:", error);
+});
 
-  const bStreet = $("#bAddress").val();
-  const bCity = $("#bCity").val();
-  const bState = $("#bState").val();
-  const bCountry = $("#bCountry").val();
-  const bZip = $("#bZip").val();
-  const billingInfo = `${bStreet},\n${bCity},\n${bState},\n${bZip},\n${bCountry}`;
+$("#newOrderForm").on("submit", function (e) {
+e.preventDefault();
+const firstName = localStorage.getItem("firstName");
+const cusFName = $("#firstName").val();
+const cusLName = $("#lastName").val();
+const customerName = cusFName + " " + cusLName;
+const timestamp = new Date().toLocaleString();
+const note = $("#notes").val();
+const orderNote = `${note}<br>${firstName},${timestamp} : `;
 
-  const sStreet = $("#sAddress").val();
-  const sCity = $("#sCity").val();
-  const sState = $("#sState").val();
-  const sCountry = $("#sCountry").val();
-  const sZip = $("#sZip").val();
-  const shippingInfo = `${sStreet},\n${sCity},\n${sState},\n${sZip},\n${sCountry}`;
+const bStreet = $("#bAddress").val();
+const bCity = $("#bCity").val();
+const bState = $("#bState").val();
+const bCountry = $("#bCountry").val();
+const bZip = $("#bZip").val();
+const billingInfo = `${bStreet},\n${bCity},\n${bState},\n${bZip},\n${bCountry}`;
 
-  const newOrder = {
-    orderNo: newOrderNo,
-    orderDate: $("#orderDate").val(),
-    salesAgent: $("#salesAgent").val(),
-    customerName: customerName,
-    bAddress: billingInfo,
-    sAddress: shippingInfo,
-    email: $("#email").val(),
-    phone: $("#phone").val(),
-    altPhone: $("#altPhone").val(),
-    make: $("#make").val(),
-    model: $("#model").val(),
-    year: $("#year").val(),
-    pReq: $("#pReq").val(),
-    desc: $("#desc").val(),
-    warranty: $("#warranty").val(),
-    soldP: $("#soldP").val(),
-    costP: $("#costP").val(),
-    shippingFee: $("#shippingFee").val(),
-    salestax: $("#salestax").val(),
-    grossProfit: $("#grossProfit").val(),
-    orderStatus: "Placed",
-    vin: $("#vin").val(),
-    last4digits: $("#issueOrder").val(),
-    notes: orderNote,
-    orderHistory: [`Order placed by ${firstName} on ${new Date().toLocaleString()}`],
-  };
+const sStreet = $("#sAddress").val();
+const sCity = $("#sCity").val();
+const sState = $("#sState").val();
+const sCountry = $("#sCountry").val();
+const sZip = $("#sZip").val();
+const shippingInfo = `${sStreet},\n${sCity},\n${sState},\n${sZip},\n${sCountry}`;
+const now = new Date();
+const options = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter = new Intl.DateTimeFormat('en-US', options);
+const parts = formatter.formatToParts(now);
+escDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+const date = new Date(escDate);
 
-  axios.post("https://www.spotops360.com/orders", newOrder)
-    .then(() => {
-      alert(`Order No. ${newOrderNo} has been placed successfully.`);
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+// Array of month names
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Extract the day, month, and year
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+
+// Get the correct suffix for the day
+const daySuffix = (day) => {
+if (day > 3 && day < 21) return "th"; // All days between 4th and 20th get 'th'
+switch (day % 10) {
+case 1: return "st";
+case 2: return "nd";
+case 3: return "rd";
+default: return "th";
+}
+};
+forEscDate = `${day}${daySuffix(day)} ${month}, ${year}`
+// Format the date
+console.log("formatDate",`${day}${daySuffix(day)} ${month}, ${year}`);
+
+const newOrder = {
+orderNo: newOrderNo,
+orderDate: $("#orderDate").val(),
+salesAgent: $("#salesAgent").val(),
+customerName: customerName,
+bAddress: billingInfo,
+sAddress: shippingInfo,
+email: $("#email").val(),
+phone: $("#phone").val(),
+altPhone: $("#altPhone").val(),
+make: $("#make").val(),
+model: $("#model").val(),
+year: $("#year").val(),
+pReq: $("#pReq").val(),
+desc: $("#desc").val(),
+warranty: $("#warranty").val(),
+soldP: $("#soldP").val(),
+costP: $("#costP").val(),
+shippingFee: $("#shippingFee").val(),
+salestax: $("#salestax").val(),
+grossProfit: $("#grossProfit").val(),
+orderStatus: "Placed",
+vin: $("#vin").val(),
+last4digits: $("#issueOrder").val(),
+notes: orderNote,
+orderHistory: [`Order placed by ${firstName} on ${new Date().toLocaleString()}`],
+};
+
+axios.post("https://www.spotops360.com/orders", newOrder)
+.then(() => {
+alert(`Order No. ${newOrderNo} has been placed successfully.`);
+window.location.reload();
+})
+.catch((error) => {
+console.error("Error:", error);
+});
 });
 
 
-        // Sidebar and navigation functionality
-        if (team === "Team Charlie") {
-          $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
-          $(
-            "#submenu-dashboards .view-orders-link,.customer-approved-link, .view-all-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-          ).hide();
-          $(".nav-item:has(#submenu-teams)").hide();
-          $(".nav-item:has(#submenu-users)").hide();
-        } else if (team === "Team Mark") {
-          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-          $(".nav-item:has(#submenu-teams)").hide();
-          $(".nav-item:has(#submenu-users)").hide();
-          $(
-            "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
-          ).hide();
-        } else if (team === "Team Sussane") {
-          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-          $(".nav-item:has(#submenu-teams)").hide();
-          $(".nav-item:has(#submenu-users)").hide();
-          $(
-            "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
-          ).hide();
-        } else if (role === "Admin") {
-          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-          $('#submenu-reports .nav-link:contains("Refund Report")').show();
-          $('#submenu-reports .nav-link:contains("Collect Refund")').show();
-          $("#submenu-dashboards .view-individualOrders-link").hide();
-        }
+// Sidebar and navigation functionality
+if (team === "Team Charlie") {
+$("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
+$(
+"#submenu-dashboards .view-orders-link,.customer-approved-link, .view-all-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+).hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+} else if (team === "Team Mark") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+).hide();
+} else if (team === "Team Sussane") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+).hide();
+} else if (role === "Admin") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$('#submenu-reports .nav-link:contains("Refund Report")').show();
+$('#submenu-reports .nav-link:contains("Collect Refund")').show();
+$("#submenu-dashboards .view-individualOrders-link").hide();
+}
 
-        $(".toggle-sidebar").on("click", function () {
-          $("#offcanvasSidebar").toggleClass("show");
-        });
+$(".toggle-sidebar").on("click", function () {
+$("#offcanvasSidebar").toggleClass("show");
+});
 
-        $(".chevron-icon").on("click", function (event) {
-          event.stopPropagation();
-          const submenu = $(this).closest(".nav-item").find(".submenu");
-          submenu.toggle();
-          $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-          $(this).closest(".nav-link").toggleClass("selected");
-        });
+$(".chevron-icon").on("click", function (event) {
+event.stopPropagation();
+const submenu = $(this).closest(".nav-item").find(".submenu");
+submenu.toggle();
+$(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+$(this).closest(".nav-link").toggleClass("selected");
+});
 
-        $(".nav-link.menu").on("click", function (event) {
-          event.stopPropagation();
-          const submenu = $(this).next(".submenu");
-          submenu.toggle();
-          $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-          $(this).toggleClass("selected");
-        });
+$(".nav-link.menu").on("click", function (event) {
+event.stopPropagation();
+const submenu = $(this).next(".submenu");
+submenu.toggle();
+$(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+$(this).toggleClass("selected");
+});
 
-        $("#profile").click(function () {
-          $("#profileFirstName").val(firstName);
-          $("#profileLastName").val(lastName);
-          $("#profileEmail").val(email);
-          $("#profileRole").val(role);
-          $("#profileModal").modal("show");
-        });
+$("#profile").click(function () {
+$("#profileFirstName").val(firstName);
+$("#profileLastName").val(lastName);
+$("#profileEmail").val(email);
+$("#profileRole").val(role);
+$("#profileModal").modal("show");
+});
 
-        $(".close").click(function () {
-          console.log("close button clicked");
-          location.reload();
-        });
-        
+$(".close").click(function () {
+console.log("close button clicked");
+location.reload();
+});
 
-    // Event listener for "Same as Billing Address" checkbox
-    $("input[type='checkbox'][value='Same as Billing Adress']").on("change", function () {
-        if ($(this).is(":checked")) {
-            // Copy the values from billing address fields to shipping address fields
-            $("#sAddress").val($("#bAddress").val());
-            $("#sCity").val($("#bCity").val());
-            $("#sState").val($("#bState").val());
-            $("#sCountry").val($("#bCountry").val());
-            $("#sZip").val($("#bZip").val());
-            $("#sAttention").val($("#bAttention").val());
-        } else {
-            // Clear the shipping address fields if the checkbox is unchecked
-            $("#sAddress").val("");
-            $("#sCity").val("");
-            $("#sState").val("");
-            $("#sCountry").val("");
-            $("#sZip").val("");
-            $("#sAttention").val("");
-        }
-    });
 
-        $("#logoutLink").click(function () {
-          window.localStorage.clear();
-          window.location.href = "login_signup.html";
-        });
+// Event listener for "Same as Billing Address" checkbox
+$("input[type='checkbox'][value='Same as Billing Adress']").on("change", function () {
+if ($(this).is(":checked")) {
+// Copy the values from billing address fields to shipping address fields
+$("#sAddress").val($("#bAddress").val());
+$("#sCity").val($("#bCity").val());
+$("#sState").val($("#bState").val());
+$("#sCountry").val($("#bCountry").val());
+$("#sZip").val($("#bZip").val());
+$("#sAttention").val($("#bAttention").val());
+} else {
+// Clear the shipping address fields if the checkbox is unchecked
+$("#sAddress").val("");
+$("#sCity").val("");
+$("#sState").val("");
+$("#sCountry").val("");
+$("#sZip").val("");
+$("#sAttention").val("");
+}
+});
 
-        const currentPath = window.location.pathname;
-        $(".nav-link").each(function () {
-          if (currentPath.includes($(this).attr("href"))) {
-            $(this).addClass("active");
-          }
-        });
-      });
-    </script>
-  </body>
+$("#logoutLink").click(function () {
+window.localStorage.clear();
+window.location.href = "login_signup.html";
+});
+
+const currentPath = window.location.pathname;
+$(".nav-link").each(function () {
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
+});
+});
+</script>
+</body>
 </html>
