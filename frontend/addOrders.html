@@ -512,20 +512,35 @@ axios
   ])
   .then(
     axios.spread((orders, cancelledOrders) => {
-      // Get the highest existing order number from all collections
+      // Initialize the existing order number to a default value
       let existingOrderNo = "50STARS0000"; // Default if no orders exist
+
+      // Function to extract the highest order number from a collection
+      function getHighestOrderNo(orderArr, existingOrderNo) {
+        if (orderArr.length === 0) return parseInt(existingOrderNo.slice(7), 10);
+
+        const lastElement = orderArr[orderArr.length - 1];
+        const lastOrderNo = lastElement.orderNo;
+
+        const numberPart = parseInt(lastOrderNo.slice(7), 10);
+        return numberPart;
+      }
+
+      // Initialize an array to hold the highest order numbers from both collections
       let orderNoArr = [];
 
+      // Push the highest order number from both collections, or the default if empty
       orderNoArr.push(getHighestOrderNo(orders.data, existingOrderNo));
       orderNoArr.push(getHighestOrderNo(cancelledOrders.data, existingOrderNo));
 
-      // Find the maximum order number
+      // Find the maximum order number from both collections
       const highestOrderNo = Math.max(...orderNoArr);
 
-      // Increment to get the new order number
+      // Increment the highest order number by 1 to get the new order number
       const incrementedNumber = highestOrderNo + 1;
       const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
 
+      // Construct the new order number
       newOrderNo = `50STARS${incrementedNumberStr}`;
       console.log("newOrderNo", newOrderNo);
     })
