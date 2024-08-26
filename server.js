@@ -218,7 +218,9 @@ const additionalInfoSchema = new mongoose.Schema({
   returnShippingCharge: Number,
   notes: [String],
   poSentDate: String,
-  partDeliveredDate:String
+  partDeliveredDate:String,
+  stockNo: String,
+  warranty: Number
 
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
