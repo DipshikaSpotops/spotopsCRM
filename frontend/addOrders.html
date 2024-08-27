@@ -521,7 +521,7 @@ axios
       console.log("orders",orders.data,orderleng,canOrderarrlength);
       const highestOrderInOrders = orderarr[orderleng].orderNo ;
       console.log("orderNos",highestOrderInOrders)
-      if (canOrdersArr[canOrderarrlength].orderNo ! == ""){
+      if (canOrdersArr[canOrderarrlength].orderNo !== ""){
       const highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
       
       console.log("cancelledorderNos",highestOrderInCancelledOrders)
