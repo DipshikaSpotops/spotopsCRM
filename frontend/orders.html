@@ -327,15 +327,15 @@
               <tr>
                 <th style="cursor:pointer;" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
                 <th style="cursor:pointer;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-                <th style="cursor:pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
-                <th style="cursor:pointer;" scope="col">Customer Name <span class="sort-icon ">&#9650;</span></th>
-                <th style="cursor:pointer;" scope="col">Part Name <span class="sort-icon ">&#9650;</span></th>
-                <th style="cursor:pointer;" scope="col">Yard <span class="sort-icon ">&#9650;</span></th>
-                <th style="cursor:pointer;" scope="col">Order Status <span class="sort-icon ">&#9650;</span></th>
-                <th style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon onlyNumber">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Agent Name <span class="sort-icon aToZ">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Customer Name <span class="sort-icon aToZ">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Part Name <span class="sort-icon aToZ">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Yard <span class="sort-icon aToZ">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Order Status <span class="sort-icon aToZ">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon aToZ">&#9650;</span></th>
                 <th style="cursor:pointer;" scope="col">Actions</th>
                 <th style="cursor:pointer;" scope="col">Send Invoice</th>
-                <th style="cursor:pointer;" scope="col">Email <span class="sort-icon ">&#9650;</span></th>
+                <th style="cursor:pointer;" scope="col">Email <span class="sort-icon aToZ">&#9650;</span></th>
               </tr>
             </thead>
             <tbody id="infoTable">
@@ -397,27 +397,23 @@
         email: "asc"
     };
 
-  function sortTable(column, type) {
+    function sortTable(columnIndex, columnType) {
         const table = $("#infoTable");
         const rows = table.find("tr").toArray();
 
         rows.sort((a, b) => {
-            let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
-            let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
+            let valA = $(a).find("td").eq(columnIndex).text().trim().toLowerCase();
+            let valB = $(b).find("td").eq(columnIndex).text().trim().toLowerCase();
 
-            if (type === "date") {
+            if (columnType === "date") {
                 valA = new Date(valA);
                 valB = new Date(valB);
-            } else if (type === "number") {
+            } else if (columnType === "number") {
                 valA = parseInt(valA.replace(/\D/g, ""), 10);
                 valB = parseInt(valB.replace(/\D/g, ""), 10);
-            } else {
-                // Default to string comparison
-                valA = valA;
-                valB = valB;
             }
 
-            if (sortOrder[type] === "asc") {
+            if (sortOrder[columnType] === "asc") {
                 return valA > valB ? 1 : -1;
             } else {
                 return valA < valB ? 1 : -1;
@@ -428,14 +424,14 @@
             table.append(row);
         });
 
-        // Toggle sort order
-        sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+        // Toggle sort order for the next click
+        sortOrder[columnType] = sortOrder[columnType] === "asc" ? "desc" : "asc";
 
         // Update the sort icon
-        updateSortIcons(column, sortOrder[type]);
+        updateSortIcons(columnIndex, sortOrder[columnType]);
     }
 
-  function updateSortIcons(columnIndex, order) {
+    function updateSortIcons(columnIndex, order) {
         $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
         $("th").each(function (index) {
             if (index === columnIndex) {
@@ -444,30 +440,23 @@
         });
     }
 
- // Event listeners for sorting
- $("th").each(function (index) {
+     // Event listeners for sorting
+     $("th").each(function (index) {
         const th = $(this);
-        let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+        let type = "";
 
-        // Custom logic to map column headers to sorting types
-        if (type === "orderdate") {
-            th.on("click", function () {
-                sortTable(index, "date");
-            });
-        } else if (type === "orderno") {
-            th.on("click", function () {
-                sortTable(index, "number");
-            });
-        } else if (["agentname", "customername", "partname", "yard", "email", "orderstatus", "escalationstatus"].includes(type)) {
-            th.on("click", function () {
-                sortTable(index, type);
-            });
-        } else {
-            th.on("click", function () {
-                sortTable(index, "string");
-            });
+        if (th.find(".sort-icon").hasClass("onlyNumber")) {
+            type = "number";
+        } else if (th.find(".sort-icon").hasClass("aToZ")) {
+            type = "text";
         }
+
+        // Map the type to the correct sort function
+        th.on("click", function () {
+            sortTable(index, type);
+        });
     });
+});
         // Get the current time and the login timestamp
         const currentTime = Date.now();
           const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -695,7 +684,7 @@ another column named Email, and example data for that column are dipsikha.spotop
 
 so i want to sort from A to Z or Z to A but it seems like it is getting sorted according to Order No column  -->
 
-<!-- $(document).ready(async function () {
+<!--$(document).ready(async function () {
     let sortOrder = {
         orderDate: "asc",
         orderNo: "asc",
@@ -708,27 +697,23 @@ so i want to sort from A to Z or Z to A but it seems like it is getting sorted a
         email: "asc"
     };
 
-    function sortTable(column, type) {
+    function sortTable(columnIndex, columnType) {
         const table = $("#infoTable");
         const rows = table.find("tr").toArray();
 
         rows.sort((a, b) => {
-            let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
-            let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
+            let valA = $(a).find("td").eq(columnIndex).text().trim().toLowerCase();
+            let valB = $(b).find("td").eq(columnIndex).text().trim().toLowerCase();
 
-            if (type === "date") {
+            if (columnType === "date") {
                 valA = new Date(valA);
                 valB = new Date(valB);
-            } else if (type === "number") {
+            } else if (columnType === "number") {
                 valA = parseInt(valA.replace(/\D/g, ""), 10);
                 valB = parseInt(valB.replace(/\D/g, ""), 10);
-            } else {
-                // Default to string comparison
-                valA = valA;
-                valB = valB;
             }
 
-            if (sortOrder[type] === "asc") {
+            if (sortOrder[columnType] === "asc") {
                 return valA > valB ? 1 : -1;
             } else {
                 return valA < valB ? 1 : -1;
@@ -739,11 +724,11 @@ so i want to sort from A to Z or Z to A but it seems like it is getting sorted a
             table.append(row);
         });
 
-        // Toggle sort order
-        sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+        // Toggle sort order for the next click
+        sortOrder[columnType] = sortOrder[columnType] === "asc" ? "desc" : "asc";
 
         // Update the sort icon
-        updateSortIcons(column, sortOrder[type]);
+        updateSortIcons(columnIndex, sortOrder[columnType]);
     }
 
     function updateSortIcons(columnIndex, order) {
@@ -758,29 +743,21 @@ so i want to sort from A to Z or Z to A but it seems like it is getting sorted a
     // Event listeners for sorting
     $("th").each(function (index) {
         const th = $(this);
-        let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+        let type = "";
 
-        // Custom logic to map column headers to sorting types
-        if (type === "orderdate") {
-            th.on("click", function () {
-                sortTable(index, "date");
-            });
-        } else if (type === "orderno") {
-            th.on("click", function () {
-                sortTable(index, "number");
-            });
-        } else if (["agentname", "customername", "partname", "yard", "email", "orderstatus", "escalationstatus"].includes(type)) {
-            th.on("click", function () {
-                sortTable(index, type);
-            });
-        } else {
-            th.on("click", function () {
-                sortTable(index, "string");
-            });
+        if (th.find(".sort-icon").hasClass("onlyNumber")) {
+            type = "number";
+        } else if (th.find(".sort-icon").hasClass("aToZ")) {
+            type = "text";
         }
-    });
 
-    // The rest of your code remains unchanged
+        // Map the type to the correct sort function
+        th.on("click", function () {
+            sortTable(index, type);
+        });
+    });
+});
+
 });
  -->
   
