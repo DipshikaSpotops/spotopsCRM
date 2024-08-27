@@ -386,27 +386,32 @@
       };
 
       function sortTableText(columnIndex) {
-        const table = $("#infoTable");
-        const rows = table.find("tr").toArray();
+    const table = $("#infoTable");
+    const rows = table.find("tr").toArray();
 
-        rows.sort((a, b) => {
-          let valA = $(a).find("td").eq(columnIndex).text().trim().toLowerCase();
-          let valB = $(b).find("td").eq(columnIndex).text().trim().toLowerCase();
+    rows.sort((a, b) => {
+        let valA = $(a).find("td").eq(columnIndex).text().trim().toLowerCase();
+        let valB = $(b).find("td").eq(columnIndex).text().trim().toLowerCase();
 
-          if (sortOrder[columnIndex] === "asc") {
+        if (sortOrder[columnIndex] === "asc") {
             return valA.localeCompare(valB);
-          } else {
+        } else {
             return valB.localeCompare(valA);
-          }
-        });
+        }
+    });
 
-        $.each(rows, function (index, row) {
-          table.append(row);
-        });
+    // Append the sorted rows back into the table
+    $.each(rows, function (index, row) {
+        table.append(row);
+    });
 
-        sortOrder[columnIndex] = sortOrder[columnIndex] === "asc" ? "desc" : "asc";
-        updateSortIcons(columnIndex, sortOrder[columnIndex]);
-      }
+    // Toggle the sort order for the next click
+    sortOrder[columnIndex] = sortOrder[columnIndex] === "asc" ? "desc" : "asc";
+
+    // Update the sort icon
+    updateSortIcons(columnIndex, sortOrder[columnIndex]);
+}
+
 
       function sortTableNumber(columnIndex) {
         const table = $("#infoTable");
