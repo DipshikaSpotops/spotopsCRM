@@ -532,6 +532,12 @@ if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[c
     console.log("No valid orderNo found in cancelled orders.");
 }
 
+// Extract the numeric part of the order numbers
+const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace(/\D/g, ''), 10); 
+const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders
+    ? parseInt(highestOrderInCancelledOrders.replace(/\D/g, ''), 10)
+    : 0; 
+
 // Let's assume orderNoArr contains the numeric parts of the order numbers extracted from both orders and cancelledOrders.
 const orderNoArr = [highestOrderInOrdersInt, highestOrderInCancelledOrdersInt]; // This array should have numeric values
 
@@ -551,10 +557,6 @@ const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrder
 newOrderNo = `50STARS${incrementedNumberStr}`;
 
 console.log("newOrderNo", newOrderNo);
-
-
-
-
     })
   )
   .catch((error) => {
