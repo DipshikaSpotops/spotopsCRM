@@ -517,15 +517,18 @@ axios
       var orderleng = orderarr.length - 1;
       console.log("orders",orders.data);
       var canOrdersArr = cancelledOrders.data;
-      var canOrderarrlength = canOrdersArr.length - 1 ;
-      console.log("orders",orders.data,orderleng,canOrderarrlength);
+      console.log("orders",orders.data,orderleng);
       const highestOrderInOrders = orderarr[orderleng].orderNo ;
       console.log("orderNos",highestOrderInOrders)
-      if (canOrdersArr[canOrderarrlength].orderNo !== "" || canOrdersArr[canOrderarrlength].orderNo !== undefined){
-      const highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
-      
-      console.log("cancelledorderNos",highestOrderInCancelledOrders)
-      }
+      const canOrderarrlength = canOrdersArr.length - 1;
+
+if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
+    const highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
+    console.log("cancelledorderNos", highestOrderInCancelledOrders);
+} else {
+    console.log("No valid orderNo found in cancelled orders.");
+}
+
       // Compare to find the overall highest order number
       const highestOrderNo = Math.max(highestOrderInOrders, highestOrderInCancelledOrders);
 
