@@ -518,9 +518,9 @@ axios
       console.log("orders",orders.data);
       var canOrdersArr = cancelledOrders.data;
       console.log("orders",orders.data,orderleng);
-      const highestOrderInOrders = orderarr[orderleng].orderNo ;
-      console.log("orderNos",highestOrderInOrders)
-      const canOrderarrlength = canOrdersArr.length - 1;
+      const highestOrderInOrders = orderarr[orderleng].orderNo;
+console.log("orderNos", highestOrderInOrders);
+const canOrderarrlength = canOrdersArr.length - 1;
 let highestOrderInCancelledOrders = "";
 
 // Check if the cancelled orders array has any elements and if the orderNo exists
@@ -531,13 +531,23 @@ if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[c
     console.log("No valid orderNo found in cancelled orders.");
 }
 
-const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace(/\D/g, ''), 10);  // Replace non-digits and parse
+// Extract the numeric part of the order numbers
+const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace(/\D/g, ''), 10); 
 const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders
     ? parseInt(highestOrderInCancelledOrders.replace(/\D/g, ''), 10)
     : 0; 
+
+// Determine the highest order number
 const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
 
+// Increment the highest order number and format it back to the padded format
+const nextOrderNo = (highestOrderNo + 1).toString().padStart(4, '0'); // Pads to ensure at least 4 digits
+
+// Construct the full new order number
+const newOrderNo = `50STARS${nextOrderNo}`;
+
 console.log("Overall highest order number:", highestOrderNo);
+console.log("Next order number:", newOrderNo);
 
       // Increment to get the new order number
       const incrementedNumber = highestOrderNo + 1;
