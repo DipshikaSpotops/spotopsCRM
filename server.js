@@ -314,6 +314,15 @@ app.get("/orders/:orderNo", async (req, res) => {
 app.put("/orders/:orderNo", async (req, res) => {
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
   console.log('US Central Time:', centralTime);
+    const date = new Date(centralTime);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day} ${month}, ${year}`;
+    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 
   try {
     const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -325,7 +334,6 @@ app.put("/orders/:orderNo", async (req, res) => {
     if (req.body.customerApprovedDate) {
       order.customerApprovedDate = req.body.customerApprovedDate;
     }
-
     // Update only the fields provided in the request
     for (let key in req.body) {
       if (key !== 'customerApprovedDate') {
@@ -339,7 +347,7 @@ app.put("/orders/:orderNo", async (req, res) => {
     // Add timestamp to order history only if the status has changed
     if (oldStatus !== order.orderStatus) {
       order.orderHistory.push(
-        `Order status updated to ${order.orderStatus} by ${firstName} on ${centralTime}`
+        `Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`
       );
     }
 
@@ -355,6 +363,15 @@ app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
   console.log("additionalInfo");
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:,mnbjklkjhbv', centralTime);
+const date = new Date(centralTime);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day} ${month}, ${year}`;
+    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
   try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
       const firstName = req.query.firstname;
@@ -377,7 +394,7 @@ console.log('US Central Time:,mnbjklkjhbv', centralTime);
       console.log("yard details",pp,yardname,shipping,others);
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
-      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${centralTime}`);
+      order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${formattedDateTime}`);
 
       await order.save();
       
@@ -392,6 +409,15 @@ console.log('US Central Time:,mnbjklkjhbv', centralTime);
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:,mnbjklkjhbv', centralTime);
+const date = new Date(centralTime);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day} ${month}, ${year}`;
+    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
   try {
     // console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
     const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -420,7 +446,7 @@ console.log('US Central Time:,mnbjklkjhbv', centralTime);
       const status = req.body.status; // Get status from the request body
       const paymentStatus = req.body.paymentStatus;
       const refundStatus = req.body.refundStatus;
-      order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${centralTime}`);
+      order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
 
       // Mark the additionalInfo array as modified
       order.markModified("additionalInfo");
