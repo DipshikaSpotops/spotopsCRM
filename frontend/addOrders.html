@@ -521,17 +521,25 @@ axios
       const highestOrderInOrders = orderarr[orderleng].orderNo ;
       console.log("orderNos",highestOrderInOrders)
       const canOrderarrlength = canOrdersArr.length - 1;
-      var highestOrderInCancelledOrders = "";
+     // Assume canOrdersArr is an array of cancelled orders
+const canOrderarrlength = canOrdersArr.length - 1;
+let highestOrderInCancelledOrders = "";
+
+// Check if the cancelled orders array has any elements and if the orderNo exists
 if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
-     highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
+    highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
     console.log("cancelledorderNos", highestOrderInCancelledOrders);
 } else {
     console.log("No valid orderNo found in cancelled orders.");
 }
 
-      // Compare to find the overall highest order number
-      console.log(highestOrderInCancelledOrders);
-      const highestOrderNo = Math.max(highestOrderInOrders, highestOrderInCancelledOrders);
+const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace(/\D/g, ''), 10);  // Replace non-digits and parse
+const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders
+    ? parseInt(highestOrderInCancelledOrders.replace(/\D/g, ''), 10)
+    : 0; 
+const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
+
+console.log("Overall highest order number:", highestOrderNo);
 
       // Increment to get the new order number
       const incrementedNumber = highestOrderNo + 1;
