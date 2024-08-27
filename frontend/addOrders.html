@@ -520,6 +520,7 @@ axios
       console.log("orders",orders.data,orderleng);
       const highestOrderInOrders = orderarr[orderleng].orderNo;
 console.log("orderNos", highestOrderInOrders);
+
 const canOrderarrlength = canOrdersArr.length - 1;
 let highestOrderInCancelledOrders = "";
 
@@ -541,13 +542,14 @@ const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders
 const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
 
 // Increment the highest order number and format it back to the padded format
-const nextOrderNo = (highestOrderNo + 1).toString().padStart(4, '0'); // Pads to ensure at least 4 digits
+const nextOrderNo = (highestOrderNo + 1).toString().padStart(highestOrderInOrders.replace(/\D/g, '').length, '0');
 
 // Construct the full new order number
 const newOrderNo = `50STARS${nextOrderNo}`;
 
 console.log("Overall highest order number:", highestOrderNo);
 console.log("Next order number:", newOrderNo);
+
 
       // Increment to get the new order number
       const incrementedNumber = highestOrderNo + 1;
