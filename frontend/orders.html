@@ -440,8 +440,8 @@
         });
     }
 
-     // Event listeners for sorting
-     $("th").each(function (index) {
+ // Event listeners for sorting
+ $("th").each(function (index) {
         const th = $(this);
         let type = "";
 
@@ -456,7 +456,7 @@
             sortTable(index, type);
         });
     });
-});
+
         // Get the current time and the login timestamp
         const currentTime = Date.now();
           const loginTimestamp = localStorage.getItem("loginTimestamp");
