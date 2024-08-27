@@ -2905,9 +2905,9 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 // console.log("notes",data,yardIndex);
 console.log(
 "Fetched notes:",
-data.additionalInfo[yardIndex - 1].notes
+data.additionalInfo[yardIndex].notes
 );
-displayComments(data.additionalInfo[yardIndex - 1].notes);
+displayComments(data.additionalInfo[yardIndex].notes);
 })
 .catch((error) => {
 console.error("Error fetching notes:", error);
