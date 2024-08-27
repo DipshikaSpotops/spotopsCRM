@@ -531,32 +531,21 @@ if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[c
 } else {
     console.log("No valid orderNo found in cancelled orders.");
 }
-
-// Extract the numeric part of the order numbers
-const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace(/\D/g, ''), 10); 
-const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders
-    ? parseInt(highestOrderInCancelledOrders.replace(/\D/g, ''), 10)
-    : 0; 
-
-// Let's assume orderNoArr contains the numeric parts of the order numbers extracted from both orders and cancelledOrders.
-const orderNoArr = [highestOrderInOrdersInt, highestOrderInCancelledOrdersInt]; // This array should have numeric values
-
-// Find the highest order number
-const highestOrderNo = Math.max(...orderNoArr);
-
-// Increment to get the new order number
+// Extract the numeric part from the order numbers by removing the prefix
+const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
+const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
+    ? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
+    : 0;
+const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
 const incrementedNumber = highestOrderNo + 1;
-
-// Determine the length of the original order number's numeric part (to preserve leading zeros)
-const originalOrderNumberLength = highestOrderInOrders.replace(/\D/g, '').length;
-
-// Format the incremented number with leading zeros
+const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
 const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
 
 // Construct the new order number
 newOrderNo = `50STARS${incrementedNumberStr}`;
 
 console.log("newOrderNo", newOrderNo);
+
     })
   )
   .catch((error) => {
