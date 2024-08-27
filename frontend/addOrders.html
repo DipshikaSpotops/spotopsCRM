@@ -540,11 +540,11 @@ const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders
 
 // Determine the highest order number
 const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
-console.log("highestOrder",highestOrderNo);
+
 // Increment the highest order number
 const incrementedOrderNo = highestOrderNo + 1;
-console.log(incrementedOrderNo);
-// Determine the length of the numeric part in the original order number
+
+// Get the original numeric part length to preserve leading zeros
 const orderNumberLength = highestOrderInOrders.replace(/\D/g, '').length;
 
 // Format the next order number with leading zeros
@@ -555,6 +555,8 @@ const newOrderNo = `50STARS${nextOrderNo}`;
 
 console.log("Overall highest order number:", highestOrderNo);
 console.log("Next order number:", newOrderNo);
+
+
 
     })
   )
