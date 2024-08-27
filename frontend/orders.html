@@ -132,13 +132,6 @@
       border-radius: 8px;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
-    .profile-table input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
     table.table {
       margin-top: 0;
       border-collapse: collapse;
@@ -183,6 +176,14 @@
     }
   </style>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const firstName = localStorage.getItem("firstName");
+    if (!firstName) {
+      window.location.href = "login_signup.html";
+    }
+  </script>
 </head>
 <body>
   <div class="navbar">
@@ -261,6 +262,24 @@
 
   <div class="main-content">
     <div id="default-content"></div>
+    <div id="add-order-content" class="d-none">
+      <h1>Add New Order</h1>
+      <form>
+        <div class="form-group">
+          <label for="orderNo">Order No</label>
+          <input type="number" class="form-control" id="orderNo" required />
+        </div>
+        <div class="form-group">
+          <label for="customerName">Customer Name</label>
+          <input type="text" class="form-control" id="customerName" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
     <div id="view-order-content" class="d-none">
       <h1>View Order</h1>
       <table class="table table-bordered">
@@ -287,8 +306,8 @@
     <div class="container-fluid mt-2" style="margin: -1%;">
       <!-- Search Bar -->
       <div class="table-responsive" style="margin-top: -40px;">
-        <h1 style="text-align: center; margin-right: 90px; margin-top: 20px;">View Orders</h1>
-        <div style="align-items: center; justify-content: center;">
+        <h1 style="text-align: center; margin-right: 90px;margin-top: 20px;">View Orders</h1>
+        <div style="align-items: center;justify-content: center;">
           <input type="text" class="form-control" id="searchInput" placeholder="Search..." />
         </div>
         <table class="table table-bordered mt-4">
@@ -420,12 +439,43 @@
           type = "text";
         }
 
+        // Map the type to the correct sort function
         th.on("click", function () {
           sortTable(index, type);
         });
       });
 
-      // Fetch data and populate the table
+      // Get the current time and the login timestamp
+      const currentTime = Date.now();
+      const loginTimestamp = localStorage.getItem("loginTimestamp");
+      if (loginTimestamp) {
+        const timeDifference =
+          (currentTime - loginTimestamp) / (1000 * 60 * 60);
+        if (timeDifference >= 12) {
+          alert(
+            "Your session has expired. You will be redirected to the login page."
+          );
+          window.localStorage.clear(); 
+          window.location.href = "login_signup.html";
+        }
+      } else {
+        window.location.href = "login_signup.html";
+      }
+      const firstName = localStorage.getItem("firstName");
+      const lastName = localStorage.getItem("lastName");
+      const email = localStorage.getItem("email");
+      const role = localStorage.getItem("role");
+      const team = localStorage.getItem("team");
+
+      if (firstName) {
+        $("#user-name").text(firstName);
+      }
+      if (!firstName) {
+        window.location.href = "login_signup.html";
+      }
+
+      const token = localStorage.getItem("token");
+
       try {
         const response = await axios.get("https://www.spotops360.com/orders", {
           headers: token ? {
@@ -439,40 +489,39 @@
 
         const data = response.data;
 
-        // Filter out orders with specific statuses
+        // Filter out orders with status "Customer approved" or "Placed"
         const filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
 
         filteredData.forEach((item) => {
           const actions = `
-            <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
-            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
-            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>
-          `;
+                <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
+                <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
+                <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a">Cancel</button>
+            `;
           const sendInvoice = `
-            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}">Send Invoice</button>
-          `;
-          const yardLength = item.additionalInfo.length;
+                <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+            `;
+            var yardlength = item.additionalInfo.length;
           $("#infoTable").append(`
-            <tr>
-              <td>${item.orderDate}</td>
-              <td>${item.orderNo}</td>
-              <td>${item.salesAgent}</td>
-              <td>${item.customerName}</td>
-              <td>${item.pReq || item.partName}</td>
-              <td>${item.additionalInfo && yardLength > 0 ? item.additionalInfo[yardLength-1].yardName : ""}</td>
-              <td>${item.orderStatus}</td>
-              <td>${item.additionalInfo[0].escTicked || ""}</td>
-              <td class="actions">${actions}</td>
-              <td>${sendInvoice}</td>
-              <td>${item.email}</td>
-            </tr>
-          `);
+                <tr>
+                    <td>${item.orderDate}</td>
+                    <td>${item.orderNo}</td>
+                    <td>${item.salesAgent}</td>
+                    <td>${item.customerName}</td>
+                    <td>${item.pReq || item.partName}</td>
+                    <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength-1].yardName : ""}</td>
+                    <td>${item.orderStatus}</td>
+                    <td>${item.additionalInfo[0].escTicked || ""}</td>
+                    <td class="actions">${actions}</td>
+                    <td>${sendInvoice}</td>
+                    <td>${item.email}</td>
+                </tr>
+            `);
         });
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
 
-      // Search functionality
       $("#searchInput").on("keyup", function () {
         let value = $(this).val().toLowerCase();
         $("#infoTable tr").filter(function () {
@@ -480,7 +529,6 @@
         });
       });
 
-      // Event listeners for table actions
       $("#infoTable").on("click", ".edit-btn", function () {
         const id = $(this).data("id");
         window.location.href = `form.html?orderNo=${id}`;
@@ -493,6 +541,7 @@
 
       $("#infoTable").on("click", ".cancel-btn", function () {
         const id = $(this).data("id");
+        console.log(`Cancel button clicked for order ID: ${id}`); // Added log
         if (confirm(`Are you sure you want to cancel order ${id}?`)) {
           fetch(`https://www.spotops360.com/orders/${id}`, {
             method: "DELETE",
@@ -502,11 +551,13 @@
           })
             .then((response) => {
               if (!response.ok) {
+                console.error("Failed to delete order", response);
                 throw new Error("Failed to delete order");
               }
               return response.json();
             })
             .then((data) => {
+              console.log("Order cancelled successfully", data); // Added log
               window.location.reload();
             })
             .catch((error) => {
@@ -557,29 +608,43 @@
       });
 
       $('.close').click(function () {
+        console.log("close button clicked");
         location.reload();
       });
 
       // Apply team-based and role-based restrictions
       if (team === "Team Charlie") {
-        $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
-        $("#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link").hide();
+        // Hide specific reports links for Team Charlie
+        $("#submenu-reports .nav-link")
+          .not(':contains("My Sales Report")')
+          .hide();
+        // Hide specific dashboards links for Team Charlie
+        $(
+          "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+        ).hide();
+        // Hide teams and users sections for Team Charlie
         $(".nav-item:has(#submenu-teams)").hide();
         $(".nav-item:has(#submenu-users)").hide();
       } else if (team === "Team Mark") {
         $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
         $(".nav-item:has(#submenu-teams)").hide();
         $(".nav-item:has(#submenu-users)").hide();
-        $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link").hide();
+        $(
+          "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+        ).hide();
       } else if (team === "Team Sussane") {
         $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
         $(".nav-item:has(#submenu-teams)").hide();
         $(".nav-item:has(#submenu-users)").hide();
-        $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link").hide();
+        $(
+          "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+        ).hide();
       } else if (role === "Admin") {
+        // Hide specific reports links for Admin
         $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
         $('#submenu-reports .nav-link:contains("Refund Report")').show();
         $('#submenu-reports .nav-link:contains("Collect Refund")').show();
+        // Hide specific dashboards links for Admin
         $("#submenu-dashboards .view-individualOrders-link").hide();
       }
 
@@ -599,90 +664,3 @@
   </script>
 </body>
 </html>
-
-<!-- in the above page,i have a column Agent Name and example data for that column are John, John, Tony, Michael, Mark,Dipshika
-another column named Customer Name and example data for that column are Kenny Zepess,Nathan, David L, RTR Automotive, Jesse, Shawn, Dipshika Pradhan
-another column named Part Name and example data for that column are ABS Pump, ABS Module,Transmission
-another column named Yard  and example data for that column are Hillsboro Auto Wrecking,Lambert Auto Salvag,East Coast Auto Source,All West Coast Auto Wrecking,Junction Auto Parts,My Auto Store,Y1test
-another column named Email, and example data for that column are dipsikha.spotopsdigital@gmail.com,sm.spencer1980@yahoo.com,jmortonhilsen@gmail.com,rtr.niceville@gmail.com,mcnabbdavid1@gmail.com,bestwelder2013@gmail.com,zepessk@yahoo.com
-
-so i want to sort from A to Z or Z to A but it seems like it is getting sorted according to Order No column  -->
-
-<!--$(document).ready(async function () {
-    let sortOrder = {
-        orderDate: "asc",
-        orderNo: "asc",
-        agentName: "asc",
-        customerName: "asc",
-        partName: "asc",
-        yard: "asc",
-        orderStatus: "asc",
-        escalationStatus: "asc",
-        email: "asc"
-    };
-
-    function sortTable(columnIndex, columnType) {
-        const table = $("#infoTable");
-        const rows = table.find("tr").toArray();
-
-        rows.sort((a, b) => {
-            let valA = $(a).find("td").eq(columnIndex).text().trim().toLowerCase();
-            let valB = $(b).find("td").eq(columnIndex).text().trim().toLowerCase();
-
-            if (columnType === "date") {
-                valA = new Date(valA);
-                valB = new Date(valB);
-            } else if (columnType === "number") {
-                valA = parseInt(valA.replace(/\D/g, ""), 10);
-                valB = parseInt(valB.replace(/\D/g, ""), 10);
-            }
-
-            if (sortOrder[columnType] === "asc") {
-                return valA > valB ? 1 : -1;
-            } else {
-                return valA < valB ? 1 : -1;
-            }
-        });
-
-        $.each(rows, function (index, row) {
-            table.append(row);
-        });
-
-        // Toggle sort order for the next click
-        sortOrder[columnType] = sortOrder[columnType] === "asc" ? "desc" : "asc";
-
-        // Update the sort icon
-        updateSortIcons(columnIndex, sortOrder[columnType]);
-    }
-
-    function updateSortIcons(columnIndex, order) {
-        $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-        $("th").each(function (index) {
-            if (index === columnIndex) {
-                $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-            }
-        });
-    }
-
-    // Event listeners for sorting
-    $("th").each(function (index) {
-        const th = $(this);
-        let type = "";
-
-        if (th.find(".sort-icon").hasClass("onlyNumber")) {
-            type = "number";
-        } else if (th.find(".sort-icon").hasClass("aToZ")) {
-            type = "text";
-        }
-
-        // Map the type to the correct sort function
-        th.on("click", function () {
-            sortTable(index, type);
-        });
-    });
-});
-
-});
- -->
-  
-    
