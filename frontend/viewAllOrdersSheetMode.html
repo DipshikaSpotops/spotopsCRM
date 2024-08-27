@@ -86,14 +86,51 @@
         cursor: default;
         border: none;
       }
-      .main-content {
-        flex-grow: 1;
-        padding: 20px;
-        margin-left: 14%;
-        margin-top: 30px;
-        overflow-x: auto;
-        transition: margin-left 0.3s ease;
-      }
+      body, html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Prevent body from scrolling */
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px); /* Adjust based on the height of your navbar */
+  overflow: hidden;
+  padding: 10px;
+}
+
+.fixed-header {
+  flex-shrink: 0; /* Prevents the header from shrinking */
+  margin: 0 auto;
+}
+
+
+
+.table-container {
+  flex-grow: 1;
+  overflow: auto;
+  position: relative;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container::-webkit-scrollbar {
+  height: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
       .submenu {
         display: block; /* Show all submenus by default */
       }
@@ -330,66 +367,38 @@
     </div>
 
     <div class="main-content">
-      
-        <h1 class="fixed-header" style="margin: 1% 31%;" >View All Orders- Sheet Mode</h1>
-        <div
-          style="align-items: center; justify-content: center;"
-        >
-          <input
-            type="text"
-            class="form-control"
-            id="searchInput"
-            placeholder="Search..."
-          />
-        </div>
-        <div style="overflow-x: auto; padding-top: 10px">
-          <table class="table table-bordered mt-4">
-            <thead>
-              <tr>
-                <th style="cursor: pointer" scope="col">
-                  Order Date <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Order No. <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Agent Name <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  CA Date <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Customer Info
-                  <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Shipping Info
-                  <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Part Name <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Part Info <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Sale Price <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Est. GP <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-                <th style="cursor: pointer" scope="col">
-                  Order Status <span class="sort-icon onlyNumber">&#9650;</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody id="infoTable">
-              <!-- Information from the form will be appended here -->
-            </tbody>
-          </table>
-        </div>
-      
-
+      <h1 class="fixed-header">View All Orders - Sheet Mode</h1>
+      <div>
+        <input
+          type="text"
+          class="form-control"
+          id="searchInput"
+          placeholder="Search..."
+        />
+      </div>
+      <div class="table-container">
+        <table class="table table-bordered mt-4">
+          <thead>
+            <tr>
+              <th style="cursor: pointer" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">CA Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Customer Info <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Shipping Info <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Part Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Part Info <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Sale Price <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Est. GP <span class="sort-icon onlyNumber">&#9650;</span></th>
+              <th style="cursor: pointer" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
+            </tr>
+          </thead>
+          <tbody id="infoTable">
+            <!-- Information from the form will be appended here -->
+          </tbody>
+        </table>
+      </div>
+    
       <!-- Profile Section -->
       <div id="profile-content" class="d-none">
         <h1>User Profile</h1>
@@ -404,6 +413,7 @@
         </div>
       </div>
     </div>
+    
 
     <!-- Approve Modal popup -->
     <div
