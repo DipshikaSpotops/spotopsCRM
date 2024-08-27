@@ -3476,7 +3476,7 @@ timestamp: formattedDate,
 alert("Notes updated successfully.");
 $("#noteInput").val("");
 console.log("yindex",yardIndex);
-fetchAndDisplayNotes(yardIndex);
+fetchAndDisplayNotes(yardIndex + 1);
 })
 .catch((error) => {
 console.error("Error:", error);
