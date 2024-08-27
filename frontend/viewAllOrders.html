@@ -679,7 +679,7 @@
           const orders = ordersResponse.data;
           const cancelledOrders = cancelledOrdersResponse.data;
           const isDisabled =
-            orderStatus === "Placed" || orderStatus === "Customer approved";
+            
 
           // Combine both orders and cancelled orders
           const allOrders = [...orders, ...cancelledOrders];
@@ -690,9 +690,8 @@
             const isCancelledOrder = cancelledOrders.some(
               (cancelledItem) => cancelledItem.orderNo === item.orderNo
             );
-            const orderStatus = isCancelledOrder
-              ? "Cancelled"
-              : item.orderStatus;
+            const orderStatus = isCancelledOrder ? "Cancelled": item.orderStatus;
+            const isDisabled = orderStatus === "Placed" || orderStatus === "Customer approved"; 
 
             const actions = `
     <button class="btn btn-primary btn-sm edit-btn" data-id="${
