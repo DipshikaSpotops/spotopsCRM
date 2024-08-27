@@ -541,8 +541,14 @@ const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders
 // Determine the highest order number
 const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
 
-// Increment the highest order number and format it back to the padded format
-const nextOrderNo = (highestOrderNo + 1).toString().padStart(highestOrderInOrders.replace(/\D/g, '').length, '0');
+// Increment the highest order number
+const incrementedOrderNo = highestOrderNo + 1;
+
+// Determine the length of the numeric part in the original order number
+const orderNumberLength = highestOrderInOrders.replace(/\D/g, '').length;
+
+// Format the next order number with leading zeros
+const nextOrderNo = incrementedOrderNo.toString().padStart(orderNumberLength, '0');
 
 // Construct the full new order number
 const newOrderNo = `50STARS${nextOrderNo}`;
@@ -550,13 +556,6 @@ const newOrderNo = `50STARS${nextOrderNo}`;
 console.log("Overall highest order number:", highestOrderNo);
 console.log("Next order number:", newOrderNo);
 
-
-      // Increment to get the new order number
-      const incrementedNumber = highestOrderNo + 1;
-      const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
-
-      newOrderNo = `50STARS${incrementedNumberStr}`;
-      console.log("newOrderNo", newOrderNo);
     })
   )
   .catch((error) => {
@@ -602,6 +601,8 @@ const formatter = new Intl.DateTimeFormat('en-US', options);
 const parts = formatter.formatToParts(now);
 const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 const date = new Date(formattedDate);
+
+// Array of month names
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const day = date.getDate();
 const month = months[date.getMonth()];
