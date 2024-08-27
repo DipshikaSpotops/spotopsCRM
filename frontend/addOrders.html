@@ -609,7 +609,7 @@ const daySuffix = (day) => {
         default: return "th";
     }
 };
-console.log(`${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`);
+var orderDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
   const newOrder = {
     orderNo: newOrderNo,
     orderDate: $("#orderDate").val(),
@@ -635,7 +635,7 @@ console.log(`${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`);
     vin: $("#vin").val(),
     last4digits: $("#issueOrder").val(),
     notes: orderNote,
-    orderHistory: [`Order placed by ${firstName} on ${new Date().toLocaleString()}`],
+    orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
   };
 
   axios.post("https://www.spotops360.com/orders", newOrder)
