@@ -525,6 +525,7 @@ Close
 
 <script>
 $(document).ready(async function () {
+  var allOrders;
 // Sorting Order Object
 let sortOrder = {
 orderDate: "asc",
@@ -681,7 +682,7 @@ const orders = ordersResponse.data;
 const cancelledOrders = cancelledOrdersResponse.data;
 
 // Combine both orders and cancelled orders
-const allOrders = [...orders, ...cancelledOrders];
+ allOrders = [...orders, ...cancelledOrders];
 var customerNameArr = [];
 // Render the combined orders in the table
 allOrders.forEach((item) => {
