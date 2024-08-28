@@ -729,7 +729,7 @@ const daySuffix = (day) => {
     }
 };
 
-var customerApprovedDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute} || ""`;
+var customerApprovedDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}` || "";
 
   let yardColumns = "";
   if (item.additionalInfo && item.additionalInfo.length > 0) {
