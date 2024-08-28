@@ -3969,16 +3969,17 @@ window.location.reload();
 document.getElementById("escProcess").addEventListener("change", function() {
     var selectedValue = this.value;
     var escalationReturnDiv = document.querySelector(".escalationReturn");
-    var escalationReturnDiv = document.querySelector(".escalationReplacement");
+    var escalationReplacementDiv = document.querySelector(".escalationReplacement");
     console.log("escalationreturn",escalationReturnDiv);
     if (selectedValue === "Return") {
         escalationReturnDiv.style.display = "flex";
     }
     else if (selectedValue === "Replacement") {
-      escalationReplacement.style.display = "flex";
+      escalationReplacementDiv.style.display = "flex";
     }
     else {
         escalationReturnDiv.style.display = "none";
+        escalationReplacementDiv.style.display = "none";
     }
 });
 
