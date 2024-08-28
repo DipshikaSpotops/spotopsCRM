@@ -418,7 +418,7 @@ Agent Name <span class="sort-icon onlyNumber">&#9650;</span>
 </th>
 <th style="cursor: pointer" scope="col">
 Customer Name
-<span class="sort-icon onlyNumber">&#9650;</span>
+<span class="sort-icon" id="custSort">&#9650;</span>
 </th>
 <th style="cursor: pointer" scope="col">
 Part Name <span class="sort-icon onlyNumber">&#9650;</span>
@@ -682,9 +682,10 @@ const cancelledOrders = cancelledOrdersResponse.data;
 
 // Combine both orders and cancelled orders
 const allOrders = [...orders, ...cancelledOrders];
-
+var customerNameArr = [];
 // Render the combined orders in the table
 allOrders.forEach((item) => {
+customerNameArr.push(item.customerName);  
 // Check if the order is from the cancelledOrders collection
 const isCancelledOrder = cancelledOrders.some(
 (cancelledItem) => cancelledItem.orderNo === item.orderNo
@@ -898,6 +899,59 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+let customerNameSortOrder = "asc"; // Initial sort order
+
+  $("#custSort").click(function () {
+    if (customerNameSortOrder === "asc") {
+      customerNameArr.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+      customerNameSortOrder = "desc";
+      $(this).find(".sort-icon").html("&#9660;"); // Update the sort icon
+    } else {
+      customerNameArr.sort((a, b) => b.toLowerCase().localeCompare(a.toLowerCase()));
+      customerNameSortOrder = "asc";
+      $(this).find(".sort-icon").html("&#9650;"); // Update the sort icon
+    }
+
+    // Clear existing table rows
+    $("#infoTable").empty();
+
+    // Render sorted customer names with other data in the table
+    customerNameArr.forEach((customerName) => {
+      const orderData = allOrders.find(order => order.customerName === customerName);
+      if (orderData) {
+        const isCancelledOrder = cancelledOrders.some(
+          (cancelledItem) => cancelledItem.orderNo === orderData.orderNo
+        );
+        const orderStatus = isCancelledOrder ? "Cancelled" : orderData.orderStatus;
+        const isDisabled = orderStatus === "Placed" || orderStatus === "Customer approved";
+        const actions = `
+          <button class="btn btn-primary btn-sm edit-btn" data-id="${orderData.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
+          <button class="btn btn-success btn-sm process-btn" data-id="${orderData.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${isDisabled ? "disabled" : ""}>View</button>
+          <button class="btn btn-danger btn-sm cancel-btn" data-id="${orderData.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${orderStatus === "Cancelled" ? "disabled" : ""}>Cancel</button>
+        `;
+        const sendInvoice = `
+          <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${orderData.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+        `;
+        var yardlength = orderData.additionalInfo.length;
+
+        $("#infoTable").append(`
+          <tr>
+            <td>${orderData.orderDate}</td>
+            <td>${orderData.orderNo}</td>
+            <td>${orderData.salesAgent}</td>
+            <td>${orderData.customerName}</td>
+            <td>${orderData.pReq || orderData.partName}</td>
+            <td>${orderData.additionalInfo && orderData.additionalInfo.length > 0 ? orderData.additionalInfo[yardlength - 1].yardName : ""}</td>
+            <td>${orderStatus}</td>
+            <td>${orderData.additionalInfo && orderData.additionalInfo[0] && orderData.additionalInfo[0].escTicked ? orderData.additionalInfo[0].escTicked : ""}</td>
+            <td class="actions">${actions}</td>
+            <td>${sendInvoice}</td>
+            <td>${orderData.email}</td>
+          </tr>
+        `);
+      }
+    });
+  });
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
@@ -907,15 +961,4 @@ window.location.href = "login_signup.html";
 </script>
 </body>
 </html>
-<!-- in the above html i have
-<td>${orderStatus}</td>
-which getting appended in a table, if
-<td>${orderStatus}</td>
-is Placed or Customer approved then i want to disable the following button:
-<button
-class="btn btn-success btn-sm process-btn"
-data-id="${item.orderNo}"
-style="background-color: #cae8c9; border: none; color: #61a55e"
->
-View
-</button> -->
+
