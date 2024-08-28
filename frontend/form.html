@@ -3973,9 +3973,11 @@ document.getElementById("escProcess").addEventListener("change", function() {
     console.log("escalationreturn",escalationReturnDiv);
     if (selectedValue === "Return") {
         escalationReturnDiv.style.display = "flex";
+        escalationReplacementDiv.style.display = "none";
     }
     else if (selectedValue === "Replacement") {
       escalationReplacementDiv.style.display = "flex";
+      escalationReturnDiv.style.display = "none";
     }
     else {
         escalationReturnDiv.style.display = "none";
