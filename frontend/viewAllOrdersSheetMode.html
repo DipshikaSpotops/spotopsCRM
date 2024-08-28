@@ -708,6 +708,28 @@ data.forEach((item) => {
 
   const sAddress = item.sAddress.split(",");
   const formattedSAddress = `${sAddress[0].trim()}, ${sAddress[1].trim()}<br>${sAddress[2].trim()}, ${sAddress[3].trim()}, ${sAddress[4].trim()}`;
+  var formattedDate =  item.customerApprovedDate;
+  const date = new Date(formattedDate);
+
+// Array of month names
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hour = date.getHours();
+const minute = date.getMinutes().toString().padStart(2, '0');
+
+const daySuffix = (day) => {
+    if (day > 3 && day < 21) return "th"; // All days between 4th and 20th get 'th'
+    switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+    }
+};
+
+var customerApprovedDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 
   let yardColumns = "";
   if (item.additionalInfo && item.additionalInfo.length > 0) {
@@ -744,7 +766,7 @@ data.forEach((item) => {
         <td>${item.orderDate}</td>
         <td>${item.orderNo}</td>
         <td>${item.salesAgent}</td>
-        <td>${item.customerApprovedDate || ""}</td>
+        <td>${customerApprovedDate || ""}</td>
         <td>Name: ${item.customerName}<br>Email: ${
       item.email
     }<br>Phone: ${item.phone}<br>Alt Phone: ${
