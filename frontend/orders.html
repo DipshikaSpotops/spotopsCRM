@@ -458,61 +458,6 @@
       });
     }
   });
-
-  // Attach click event to all th elements with id starting with 'aToZ-'
-  $("th[id^='aToZ-']").on("click", function () {
-        const index = $(this).index(); // Get the column index
-        sortTable(index); // Call the sortTable function
-        toggleSortIcon($(this)); // Update the sort icon
-    });
-});
-
-// Function to toggle the sort icon direction
-function toggleSortIcon(th) {
-    const icon = th.find(".sort-icon");
-    const currentDir = icon.html() === "&#9650;" ? "asc" : "desc";
-    icon.html(currentDir === "asc" ? "&#9660;" : "&#9650;");
-}
-
-// The sortTable function as you provided
-function sortTable(n) {
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("infoTable"); // Updated to match the ID of your table's tbody
-    switching = true;
-    dir = "asc";
-
-    while (switching) {
-        switching = false;
-        rows = table.rows;
-
-        for (i = 0; i < (rows.length - 1); i++) {
-            shouldSwitch = false;
-            x = rows[i].getElementsByTagName("TD")[n];
-            y = rows[i + 1].getElementsByTagName("TD")[n];
-
-            if (dir == "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir == "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-        if (shouldSwitch) {
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            switchcount++;
-        } else {
-            if (switchcount == 0 && dir == "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
-    }
         // Get the current time and the login timestamp
         const currentTime = Date.now();
           const loginTimestamp = localStorage.getItem("loginTimestamp");
