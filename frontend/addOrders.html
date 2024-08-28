@@ -673,7 +673,7 @@ console.log("newOrderNo", newOrderNo);
   const customerName = cusFName + " " + cusLName;
   const timestamp = new Date().toLocaleString();
   const note = $("#notes").val();
-  const orderNote = `${note}<br>${firstName},${timestamp} : `;
+  
 
   const bStreet = $("#bAddress").val();
   const bCity = $("#bCity").val();
@@ -721,7 +721,9 @@ const daySuffix = (day) => {
         default: return "th";
     }
 };
+
 var orderDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+const orderNote = `${note}<br>${firstName},${orderDate}`;
   const newOrder = {
     orderNo: newOrderNo,
     orderDate: $("#orderDate").val(),
