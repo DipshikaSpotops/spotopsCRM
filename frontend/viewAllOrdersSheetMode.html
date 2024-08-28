@@ -708,7 +708,9 @@ data.forEach((item) => {
 
   const sAddress = item.sAddress.split(",");
   const formattedSAddress = `${sAddress[0].trim()}, ${sAddress[1].trim()}<br>${sAddress[2].trim()}, ${sAddress[3].trim()}, ${sAddress[4].trim()}`;
-  var formattedDate =  item.customerApprovedDate  || "";
+  var formattedDate =  item.customerApprovedDate ;
+  var customerApprovedDate;
+  if (formattedDate){
   const date = new Date(formattedDate);
 
 // Array of month names
@@ -729,8 +731,10 @@ const daySuffix = (day) => {
     }
 };
 
-var customerApprovedDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}` || "";
-
+ customerApprovedDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}` || "";
+  }else{
+    customerApprovedDate = "";
+  }
   let yardColumns = "";
   if (item.additionalInfo && item.additionalInfo.length > 0) {
     item.additionalInfo.forEach((info, index) => {
