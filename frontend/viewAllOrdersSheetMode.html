@@ -217,6 +217,19 @@ margin: 18% 47%;
 .sort-icon {
 cursor: pointer;
 }
+th {
+      position: sticky;
+      top: 0; /* Position the header at the top */
+      background-color: #fff; /* Ensure the background is white */
+      z-index: 2; /* Ensure the headers are above the table data */
+      box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* Add a shadow for better visibility */
+    }
+
+    th span.sort-icon {
+      display: inline-block;
+      margin-left: 5px;
+      cursor: pointer;
+    }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -821,3 +834,15 @@ window.location.href = "login_signup.html";
 </body>
 </html>
 
+i want the following column headers to be fixed when we scroll to see the data:
+<th style="cursor: pointer" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">CA Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Customer Info <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Shipping Info <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Part Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Part Info <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Sale Price <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Est. GP <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
