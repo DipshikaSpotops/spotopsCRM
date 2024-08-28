@@ -728,6 +728,34 @@ background-color: #e9ecef; /* Ensure disabled inputs are visually distinguishabl
 opacity: 1; /* Fix opacity to make it look consistent */
 cursor: not-allowed; /* Show a not-allowed cursor */
 }
+.escalationReturn {
+    display: none;
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly */
+    gap: 20px; /* Add some spacing between the columns */
+    margin: 2% 0;
+}
+
+.escalationReturn .form-group {
+    flex: 1; /* Each item will take up equal width */
+    min-width: 200px; /* Ensure a minimum width for smaller screens */
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 10px;
+    flex-direction: column; /* Ensure checkboxes are in a column within the form group */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"], .form-group select {
+    width: 100%; /* Make input fields and select dropdowns take full width */
+}
+
 
 </style>
 
