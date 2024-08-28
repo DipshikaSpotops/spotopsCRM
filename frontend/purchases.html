@@ -1,4 +1,7 @@
-that of purchases.html page, make the first html table look like the below html file which is purchases .html and Welcome is empty is above page,copy from below html,even the yard columns of the above html have different widt,it should have same width like the below html page
+that of purchases.html page, make the first html table look like the below html
+file which is purchases .html and Welcome is empty is above page,copy from below
+html,even the yard columns of the above html have different widt,it should have
+same width like the below html page
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -86,9 +89,10 @@ that of purchases.html page, make the first html table look like the below html 
       .main-content {
         flex-grow: 1;
         padding: 20px;
-        margin-left: 14%;
-        margin-top: 30px;
+        margin-left: 8%;
+        margin-top: -1%;
         transition: margin-left 0.3s ease;
+        width: 97%;
       }
       .submenu {
         display: block; /* Show all submenus by default */
@@ -243,7 +247,9 @@ that of purchases.html page, make the first html table look like the below html 
                 href="yardInfo.html"
                 >Yard Details</a
               >
-              <a class="nav-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a>
+              <a class="nav-link" href="viewAllOrdersSheetMode.html"
+                >View All Orders- Sheet Mode</a
+              >
               <a class="nav-link" href="escalatedOrders.html">Escalation</a>
             </div>
           </div>
@@ -309,8 +315,20 @@ that of purchases.html page, make the first html table look like the below html 
           <table class="table table-bordered mt-4">
             <thead>
               <tr id="tableHeader" style="background-color: #f2f2f2">
-                <th style="text-align: center;cursor: pointer;" scope="col" data-sort="orderNo"> Order No <span class="sort-icon onlyNumber">&#x25B2;</span></th>
-                <th style="text-align: center;cursor: pointer;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#x25B2;</span></th>
+                <th
+                  style="text-align: center; cursor: pointer"
+                  scope="col"
+                  data-sort="orderNo"
+                >
+                  Order No <span class="sort-icon onlyNumber">&#x25B2;</span>
+                </th>
+                <th
+                  style="text-align: center; cursor: pointer"
+                  scope="col"
+                  data-sort="orderDate"
+                >
+                  Order Date <span class="sort-icon onlyNumber">&#x25B2;</span>
+                </th>
               </tr>
             </thead>
             <tbody id="yardInfoTable" style="text-align: center">
@@ -341,109 +359,122 @@ that of purchases.html page, make the first html table look like the below html 
 
     <script>
       $(document).ready(async function () {
-    let currentSort = {
-        column: "",
-        order: "asc", // ascending by default
-    };
+        let currentSort = {
+          column: "",
+          order: "asc", // ascending by default
+        };
 
-    function sortTable(column, order, isDateColumn, isYardColumn) {
-        const tbody = $("#yardInfoTable");
-        const rows = tbody.find("tr").toArray();
+        function sortTable(column, order, isDateColumn, isYardColumn) {
+          const tbody = $("#yardInfoTable");
+          const rows = tbody.find("tr").toArray();
 
-        rows.sort(function (a, b) {
+          rows.sort(function (a, b) {
             let cellA = $(a).find("td").eq(column).text().trim();
             let cellB = $(b).find("td").eq(column).text().trim();
 
             if (isDateColumn) {
-                // Convert date strings into Date objects for sorting
-                cellA = new Date(cellA);
-                cellB = new Date(cellB);
-                return order === "asc" ? cellA - cellB : cellB - cellA;
+              // Convert date strings into Date objects for sorting
+              cellA = new Date(cellA);
+              cellB = new Date(cellB);
+              return order === "asc" ? cellA - cellB : cellB - cellA;
             } else if (isYardColumn) {
-                // Sort Yard columns alphabetically
-                return order === "asc"
-                    ? cellA.localeCompare(cellB)
-                    : cellB.localeCompare(cellA);
+              // Sort Yard columns alphabetically
+              return order === "asc"
+                ? cellA.localeCompare(cellB)
+                : cellB.localeCompare(cellA);
             } else {
-                // General string comparison for other columns
-                return order === "asc"
-                    ? cellA.localeCompare(cellB)
-                    : cellB.localeCompare(cellA);
+              // General string comparison for other columns
+              return order === "asc"
+                ? cellA.localeCompare(cellB)
+                : cellB.localeCompare(cellA);
             }
-        });
+          });
 
-        // Append sorted rows back to the table body
-        $.each(rows, function (index, row) {
+          // Append sorted rows back to the table body
+          $.each(rows, function (index, row) {
             tbody.append(row);
+          });
+        }
+
+        // Click event for sorting columns with numerical values and dates
+        $(document).on("click", ".onlyNumber", function () {
+          const column = $(this).closest("th").index();
+          const sortBy = $(this).closest("th").data("sort");
+
+          // Ensure sortBy is defined before using it
+          if (!sortBy) return;
+
+          // Determine if the column is a date column or Yard column
+          const isDateColumn = sortBy === "orderDate";
+          const isYardColumn = sortBy.startsWith("yard");
+
+          // Toggle the sort order
+          currentSort.order =
+            currentSort.column === sortBy && currentSort.order === "asc"
+              ? "desc"
+              : "asc";
+          currentSort.column = sortBy;
+
+          sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+
+          // Update sort icon
+          $(".sort-icon").html("&#9650;"); // Reset all icons to ascending
+          $(this)
+            .find(".sort-icon")
+            .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
         });
-    }
+        // Click event for sorting Yard columns
+        $(document).on("click", ".fYardName", function () {
+          const column = $(this).closest("th").index();
+          const sortBy = $(this).closest("th").data("sort");
 
-    // Click event for sorting columns with numerical values and dates
-    $(document).on("click", ".onlyNumber", function () {
-        const column = $(this).closest("th").index();
-        const sortBy = $(this).closest("th").data("sort");
+          // Determine if the column is a Yard column
+          const isYardColumn = sortBy.startsWith("yard");
 
-        // Ensure sortBy is defined before using it
-        if (!sortBy) return;
+          // Toggle the sort order
+          currentSort.order =
+            currentSort.column === sortBy && currentSort.order === "asc"
+              ? "desc"
+              : "asc";
+          currentSort.column = sortBy;
 
-        // Determine if the column is a date column or Yard column
-        const isDateColumn = sortBy === "orderDate";
-        const isYardColumn = sortBy.startsWith("yard");
+          sortTable(column, currentSort.order, false, isYardColumn);
 
-        // Toggle the sort order
-        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc"
-            ? "desc"
-            : "asc";
-        currentSort.column = sortBy;
+          // Update sort icon
+          $(".fYardName").html("&#9650;"); // Reset all icons to ascending
+          $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+        });
 
-        sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+        // Click event for sorting any sortable column
+        $(document).on(
+          "click",
+          "th[data-sort], th[data-sort] .sort-icon",
+          function (event) {
+            const $target = $(event.target);
+            const $th = $target.closest("th");
+            const column = $th.index();
+            const sortBy = $th.data("sort");
 
-        // Update sort icon
-        $(".sort-icon").html("&#9650;"); // Reset all icons to ascending
-        $(this).find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-    });
-    // Click event for sorting Yard columns
-$(document).on("click", ".fYardName", function () {
-    const column = $(this).closest("th").index();
-    const sortBy = $(this).closest("th").data("sort");
+            // Determine if the column is a date column or a yard column
+            const isDateColumn = sortBy === "orderDate";
+            const isYardColumn = sortBy.startsWith("yard");
 
-    // Determine if the column is a Yard column
-    const isYardColumn = sortBy.startsWith("yard");
+            // Toggle the sort order
+            currentSort.order =
+              currentSort.column === sortBy && currentSort.order === "asc"
+                ? "desc"
+                : "asc";
+            currentSort.column = sortBy;
 
-    // Toggle the sort order
-    currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-    currentSort.column = sortBy;
+            sortTable(column, currentSort.order, isDateColumn, isYardColumn);
 
-    sortTable(column, currentSort.order, false, isYardColumn);
-
-    // Update sort icon
-    $(".fYardName").html("&#9650;"); // Reset all icons to ascending
-    $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-});
-
-    // Click event for sorting any sortable column
-    $(document).on("click", "th[data-sort], th[data-sort] .sort-icon", function (event) {
-        const $target = $(event.target);
-        const $th = $target.closest("th");
-        const column = $th.index();
-        const sortBy = $th.data("sort");
-
-        // Determine if the column is a date column or a yard column
-        const isDateColumn = sortBy === "orderDate";
-        const isYardColumn = sortBy.startsWith("yard");
-
-        // Toggle the sort order
-        currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-        currentSort.column = sortBy;
-
-        sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-
-        // Update sort icon
-        $("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
-        $th.find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-    });
-
-
+            // Update sort icon
+            $("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
+            $th
+              .find(".sort-icon")
+              .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+          }
+        );
 
         const currentTime = Date.now();
         const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -505,7 +536,7 @@ $(document).on("click", ".fYardName", function () {
           let totalPartPriceSum = 0;
           let totalShippingSum = 0;
           let totalOverallSum = 0;
-          let totalRefundsSum  = 0;
+          let totalRefundsSum = 0;
           let totalOthersSum = 0;
           let totalOverallRefund = 0;
 
@@ -517,8 +548,10 @@ $(document).on("click", ".fYardName", function () {
 
           tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
           for (let i = 1; i <= maxYards; i++) {
-    tableHeader.append(`<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
-}
+            tableHeader.append(
+              `<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
+            );
+          }
 
           tableHeader.append(
             '<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
@@ -536,7 +569,6 @@ $(document).on("click", ".fYardName", function () {
             '<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
           );
           tableHeader.append('<th scope="col">Actions</th>');
-          
 
           data.forEach((item) => {
             let appendOrder = false;
@@ -562,9 +594,11 @@ $(document).on("click", ".fYardName", function () {
                 let shippingDetails = item.additionalInfo[i].shippingDetails;
                 let shippingCharge = 0;
                 let shippingType = "";
-                
-                let refunds = parseFloat(item.additionalInfo[i].refundedAmount || 0);
-                console.log("refunds",refunds);
+
+                let refunds = parseFloat(
+                  item.additionalInfo[i].refundedAmount || 0
+                );
+                console.log("refunds", refunds);
                 if (shippingDetails) {
                   const shippingArray = shippingDetails.split(":");
                   shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
@@ -574,13 +608,16 @@ $(document).on("click", ".fYardName", function () {
                 totalShipping += shippingCharge;
                 otherCharges += otherC;
                 tRefunds += refunds;
-                overallPurchaseCost =
-                  (partPrice + shippingCharge + otherC);
-                  overAllwithRefund = overallPurchaseCost - refunds ;
-                  console.log(overallPurchaseCost,"overall with refunds",overAllwithRefund);
+                overallPurchaseCost = partPrice + shippingCharge + otherC;
+                overAllwithRefund = overallPurchaseCost - refunds;
+                console.log(
+                  overallPurchaseCost,
+                  "overall with refunds",
+                  overAllwithRefund
+                );
                 totalOveralls += overAllwithRefund;
 
-                console.log("yotalOveralls",totalOveralls);
+                console.log("yotalOveralls", totalOveralls);
 
                 yardInfoHtml += `<td>
                                 ${item.additionalInfo[i].yardName || ""}${
@@ -590,10 +627,14 @@ $(document).on("click", ".fYardName", function () {
                 }<br>
                                 ${item.additionalInfo[i].shippingMethod || ""}${
                   item.additionalInfo[i].shippingMethod ? " | " : ""
-                }${shippingType} | (${shippingCharge || "0"}) | Others: ${otherC}<br>
+                }${shippingType} | (${
+                  shippingCharge || "0"
+                }) | Others: ${otherC}<br>
                                 ${
                                   item.additionalInfo[i].status
-                                }   | Yard Spend: ${item.additionalInfo[i].partPrice + shippingCharge + otherC } |  Refunds: ${refunds} <br>
+                                }   | Yard Spend: ${
+                  item.additionalInfo[i].partPrice + shippingCharge + otherC
+                } |  Refunds: ${refunds} <br>
                             </td>`;
               } else {
                 yardInfoHtml += "<td></td>";
@@ -606,7 +647,7 @@ $(document).on("click", ".fYardName", function () {
               totalOthersSum += otherCharges;
               totalOverallSum += overAllwithRefund;
               totalRefundsSum += tRefunds;
-              console.log("overall after refund",totalOverallSum);
+              console.log("overall after refund", totalOverallSum);
               $("#yardInfoTable").append(
                 `<tr>
                                 <td>${item.orderNo}</td>
@@ -633,10 +674,18 @@ $(document).on("click", ".fYardName", function () {
                     <td id="totalPartPrice" style="text-align:center;">$${totalPartPriceSum.toFixed(
                       2
                     )}</td>
-                    <td id="totalShipping" style="text-align:center;">$${totalShippingSum.toFixed(2)}</td>
-                    <td id="others" style="text-align:center;">$${totalOthersSum.toFixed(2)}</td>
-                    <td id="refunds" style="text-align:center;">$${totalRefundsSum.toFixed(2)}</td>
-                    <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(2)}</td>
+                    <td id="totalShipping" style="text-align:center;">$${totalShippingSum.toFixed(
+                      2
+                    )}</td>
+                    <td id="others" style="text-align:center;">$${totalOthersSum.toFixed(
+                      2
+                    )}</td>
+                    <td id="refunds" style="text-align:center;">$${totalRefundsSum.toFixed(
+                      2
+                    )}</td>
+                    <td id="overallSum" style="text-align:center;">$${totalOverallSum.toFixed(
+                      2
+                    )}</td>
                     
                     <td></td>
                 </tr>`;
@@ -722,7 +771,7 @@ $(document).on("click", ".fYardName", function () {
               const others =
                 parseFloat($(this).find("td").eq(-3).text().replace("$", "")) ||
                 0;
-                const refunds =
+              const refunds =
                 parseFloat($(this).find("td").eq(-2).text().replace("$", "")) ||
                 0;
               const overall =
