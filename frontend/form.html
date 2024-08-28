@@ -1461,12 +1461,10 @@ id="escProcess"
 style="padding: 0.6%; width: 51.8%; border: 1px solid #d9d4d4"
 >
 <option value="">Choose</option>
-<option value="RMA Sent">RMA Sent</option>
-<option value="RMA signed">RMA signed</option>
-<option value="Return tracking sent">Return Tracking Sent</option>
-<option value="Return part In transit">
-Return Part In Transit
-</option>
+<option value="RMA Sent">Under Progress</option>
+<option value="Replacement">Replacement</option>
+<!-- <option value="Return tracking sent">Return Tracking Sent</option> -->
+<option value="Return">Return</option>
 </select>
 </div>
 </div>
@@ -1505,6 +1503,40 @@ placeholder="Customer Shipping Price"
 </div>
 </div>
 </div>
+<!--escalation return div -->
+<div class="escalationReturn" style="display: none;">
+  <div class="form-group">
+      <label for="rma-status">RMA Status</label>
+      <div class="checkbox-group">
+          <div>
+              <input type="checkbox" id="rma-sent" name="rma-sent">
+              <label for="rma-sent">RMA Sent</label>
+          </div>
+          <div>
+              <input type="checkbox" id="junked" name="junked">
+              <label for="junked">Junked</label>
+          </div>
+      </div>
+  </div>
+
+  <div class="form-group">
+      <label for="shipping-type">Shipping Type</label>
+      <select id="customer" name="customer" class="form-control">
+        <option value="Customer shipping">Customer</option>
+        <option value="Yard shipping">Yard Shipping</option>
+        <option value="Own shipping">Own Shipping</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+      <label for="tracking-info">Tracking Info</label>
+      <input type="text" id="tracking-info" name="tracking-info" class="form-control" placeholder="Enter Tracking Info">
+      <label for="shipping-charges">Shipping Charges</label>
+      <input type="text" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
+  </div>
+</div>
+<!-- return div -->
+
 <div class="inputForCust"></div>
 <div class="form-group" id="divTrackingEdit">
 <label>Tracking Information:</label>
@@ -3885,6 +3917,18 @@ $(".add-yard-btn").prop('disabled', false);
 $("#okButton").click(function () {
 window.location.reload();
 });
+// script for escalationReturn
+document.getElementById("escProcess").addEventListener("change", function() {
+    var selectedValue = this.value;
+    var escalationReturnDiv = document.querySelector(".escalationReturn");
+    console.log("escalationreturn",escalationReturnDiv);
+    if (selectedValue === "Return") {
+        escalationReturnDiv.style.display = "block";
+    } else {
+        escalationReturnDiv.style.display = "none";
+    }
+});
+
 
 });
 </script>
