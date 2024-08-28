@@ -526,6 +526,8 @@ Close
 <script>
 $(document).ready(async function () {
   var allOrders;
+  var cancelledOrders;
+  var orders;
 // Sorting Order Object
 let sortOrder = {
 orderDate: "asc",
@@ -678,8 +680,8 @@ cancelledOrdersResponse.status !== 200
 throw new Error("Failed to fetch orders");
 }
 
-const orders = ordersResponse.data;
-const cancelledOrders = cancelledOrdersResponse.data;
+ orders = ordersResponse.data;
+ cancelledOrders = cancelledOrdersResponse.data;
 
 // Combine both orders and cancelled orders
  allOrders = [...orders, ...cancelledOrders];
