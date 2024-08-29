@@ -1537,54 +1537,49 @@ placeholder="Customer Shipping Price"
 </div>
 <!--escalation return div -->
 <div class="escalationReturn" style="display: none;">
-  <div >
-      <label for="rma-status">RMA Status:</label>
-      <div class="checkbox-group">
-          <div>
-              <input type="checkbox" id="rma-sent" name="rma-sent">
-              <label for="rma-sent">RMA Sent</label>
-          </div>
-          <div>
-              <input type="checkbox" id="junked" name="junked">
-              <label for="junked">Junked</label>
-          </div>
+  <div>
+    <label for="rma-status">RMA Status:</label>
+    <div class="checkbox-group">
+      <div>
+        <input type="checkbox" id="rma-sent" name="rma-sent">
+        <label for="rma-sent">RMA Sent</label>
       </div>
+      <div>
+        <input type="checkbox" id="junked" name="junked">
+        <label for="junked">Junked</label>
+      </div>
+    </div>
   </div>
 
   <div>
-      <label for="shipping-type">Shipping Type:</label>
-      <select id="customer" name="customer" class="form-control">
-        <option value="Customer shipping">Customer</option>
-        <option value="Yard shipping">Yard Shipping</option>
-        <option value="Own shipping">Own Shipping</option>
+    <label for="shipping-type">Shipping Type:</label>
+    <select id="customer" name="customer" class="form-control">
+      <option value="Customer shipping">Customer</option>
+      <option value="Yard shipping">Yard Shipping</option>
+      <option value="Own shipping">Own Shipping</option>
     </select>
   </div>
 
-  <div>
-      <label for="tracking-info">Tracking Info:</label>
-      <input type="text" id="tracking-info" name="tracking-info" class="form-control" placeholder="Enter Tracking Info">
-      <label for="shipping-charges">Shipping Charges</label>
-      <input type="text" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
+  <div id="shipping-charges-container" style="display: none;">
+    <label for="shipping-charges">Shipping Charges</label>
+    <input type="text" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
   </div>
 </div>
-<!-- return div ends here-->
- <!-- escalation replacement div -->
- <div class="escalationReplacement" style="display: none;">
 
+<!-- escalation replacement div -->
+<div class="escalationReplacement" style="display: none;">
   <div>
-      <label for="shipping-type">Shipping Type</label>
-      <select id="customer" name="customer" class="form-control">
-        <option value="Customer shipping">Customer</option>
-        <option value="Yard shipping">Yard Shipping</option>
-        <option value="Own shipping">Own Shipping</option>
+    <label for="shipping-type">Shipping Type:</label>
+    <select id="replacement-customer" name="customer" class="form-control">
+      <option value="Customer shipping">Customer</option>
+      <option value="Yard shipping">Yard Shipping</option>
+      <option value="Own shipping">Own Shipping</option>
     </select>
   </div>
 
-  <div>
-      <label for="tracking-info">Tracking Info</label>
-      <input type="text" id="tracking-info" name="tracking-info" class="form-control" placeholder="Enter Tracking Info">
-      <label for="shipping-charges">Shipping Charges</label>
-      <input type="text" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
+  <div id="replacement-shipping-charges-container" style="display: none;">
+    <label for="shipping-charges">Shipping Charges</label>
+    <input type="text" id="replacement-shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
   </div>
 </div>
   <!-- escalation replacement div ends here -->
@@ -3988,6 +3983,33 @@ document.getElementById("escProcess").addEventListener("change", function() {
         escalationReplacementDiv.style.display = "none";
     }
 });
+//for showing shipping charges
+document.addEventListener("DOMContentLoaded", function() {
+  // For the escalationReturn div
+  const customerSelect = document.getElementById('customer');
+  const shippingChargesContainer = document.getElementById('shipping-charges-container');
+
+  customerSelect.addEventListener('change', function() {
+    if (customerSelect.value === 'Own shipping') {
+      shippingChargesContainer.style.display = 'block';
+    } else {
+      shippingChargesContainer.style.display = 'none';
+    }
+  });
+
+  // For the escalationReplacement div
+  const replacementCustomerSelect = document.getElementById('replacement-customer');
+  const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
+
+  replacementCustomerSelect.addEventListener('change', function() {
+    if (replacementCustomerSelect.value === 'Own shipping') {
+      replacementShippingChargesContainer.style.display = 'block';
+    } else {
+      replacementShippingChargesContainer.style.display = 'none';
+    }
+  });
+});
+
 
 
 
