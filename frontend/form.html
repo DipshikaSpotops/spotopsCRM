@@ -3984,22 +3984,21 @@ document.getElementById("escProcess").addEventListener("change", function() {
     }
 });
 //for showing shipping charges
-document.addEventListener("DOMContentLoaded", function() {
-  // For the escalationReturn div
-  const customerSelect = document.getElementById('customer');
-  const shippingChargesContainer = document.getElementById('shipping-charges-container');
-  console.log("escReturn",customerSelect,shippingChargesContainer);
-  customerSelect.addEventListener('change', function() {
-    if (customerSelect.value === 'Own shipping') {
+//for showing shipping charges
+document.getElementById("customer").addEventListener("change", function() {
+    var selectedValue = this.value;
+      // For the escalationReturn div
+    const shippingChargesContainer = document.getElementById('shipping-charges-container');
+    if (selectedValue === 'Own shipping') {
       shippingChargesContainer.style.display = 'block';
     } else {
       shippingChargesContainer.style.display = 'none';
     }
   });
 
-  // For the escalationReplacement div
-  const replacementCustomerSelect = document.getElementById('replacement-customer');
-  const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
+document.getElementById("replacement-customer").addEventListener("change", function() {
+    var selectedValue = this.value;
+    const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
   console.log("escReplace",replacementCustomerSelect,replacementShippingChargesContainer);
   replacementCustomerSelect.addEventListener('change', function() {
     if (replacementCustomerSelect.value === 'Own shipping') {
@@ -4009,8 +4008,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
-
-
 
 
 });
