@@ -1536,20 +1536,21 @@ placeholder="Customer Shipping Price"
 </div>
 </div>
 <!--escalation return div -->
+
 <div class="escalationReturn" style="display: none;">
-  <div>
+  <div id="rma-status-group">
     <label for="rma-status">RMA Status:</label>
     <div class="checkbox-group">
       <div>
-        <input type="checkbox" id="rma-sent" name="rma-sent">
+        <input value="RMA Sent" type="checkbox" id="rma-sent" name="rma-status">
         <label for="rma-sent">RMA Sent</label>
       </div>
       <div>
-        <input type="checkbox" id="junked" name="junked">
+        <input value="Junked" type="checkbox" id="junked" name="rma-status">
         <label for="junked">Junked</label>
       </div>
     </div>
-  </div>
+  </div>   
 
   <div>
     <label for="shipping-type">Shipping Type:</label>
@@ -3012,6 +3013,11 @@ $("#editYardInfo").on("click", async function () {
   const escReturnShippingType = $("#customer").val();
   const escReturnShipCharge = $("#shipping-charges").val();
   const refundedAmount = $("#refundedAmount").val();
+  const checkboxes = document.querySelectorAll('#rma-status-group input[type="checkbox"]');
+  // for RMA status
+  const selectedCheckbox = event.target;
+  const rmaStatus = selectedCheckbox.checked ? selectedCheckbox.value : null;
+  console.log("Selected RMA Status:", selectedValue);
   var escDate;
   var forEscDate;
   var escTicked;
@@ -3068,6 +3074,7 @@ $("#editYardInfo").on("click", async function () {
     escReturnShippingCharge: escReturnShipCharge,
     escReplaceShipType: escReplacementShippingType,
     escReplaceShippingCharge: escReplacementShipCharge,
+    rmaStatus: rmaStatus,
   };
 
   console.log("Yard Index:", yardIndex);
@@ -4018,6 +4025,22 @@ document.getElementById("replacement-customer").addEventListener("change", funct
       replacementShippingChargesContainer.style.display = 'none';
     }
   
+});
+
+document.getElementById("rma-status-group").addEventListener("change", function(event) {
+    const checkboxes = document.querySelectorAll('#rma-status-group input[type="checkbox"]');
+    const selectedCheckbox = event.target;
+
+    // Uncheck all checkboxes except the one that was just clicked
+    checkboxes.forEach(checkbox => {
+        if (checkbox !== selectedCheckbox) {
+            checkbox.checked = false;
+        }
+    });
+
+    // Get the value of the selected checkbox
+    const selectedValue = selectedCheckbox.checked ? selectedCheckbox.value : null;
+    console.log("Selected RMA Status:", selectedValue);
 });
 
 
