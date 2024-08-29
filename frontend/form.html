@@ -3988,7 +3988,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // For the escalationReturn div
   const customerSelect = document.getElementById('customer');
   const shippingChargesContainer = document.getElementById('shipping-charges-container');
-
+  console.log("escReturn",customerSelect,shippingChargesContainer);
   customerSelect.addEventListener('change', function() {
     if (customerSelect.value === 'Own shipping') {
       shippingChargesContainer.style.display = 'block';
@@ -4000,7 +4000,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // For the escalationReplacement div
   const replacementCustomerSelect = document.getElementById('replacement-customer');
   const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
-
+  console.log("escReplace",replacementCustomerSelect,replacementShippingChargesContainer);
   replacementCustomerSelect.addEventListener('change', function() {
     if (replacementCustomerSelect.value === 'Own shipping') {
       replacementShippingChargesContainer.style.display = 'block';
