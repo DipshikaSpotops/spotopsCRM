@@ -728,12 +728,14 @@ background-color: #e9ecef; /* Ensure disabled inputs are visually distinguishabl
 opacity: 1; /* Fix opacity to make it look consistent */
 cursor: not-allowed; /* Show a not-allowed cursor */
 }
-.escalationReturn {
+.escalationReturn,.escalationReplacement {
     display: none;
     display: flex;
-    justify-content: space-between; /* Distribute space evenly */
-    gap: 20px; /* Add some spacing between the columns */
-    margin: 2% 0;
+    justify-content: space-between;
+    gap: 80px;
+    margin: 2% 0%;
+    border: 1px solid #c0c0c0;
+    padding: 33px;
 }
 
 .escalationReturn .form-group {
@@ -1486,10 +1488,9 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4"
 <select
 name="esc"
 id="escProcess"
-style="padding: 0.6%;
-width: 51.8%;
+style="width: 51.8%;
 border: 1px solid #d9d4d4;
-height: 3vh;
+height: 4vh;
 ">
 <option value="">Choose</option>
 <option value="RMA Sent">Under Progress</option>
@@ -1570,7 +1571,7 @@ placeholder="Customer Shipping Price"
  <!-- escalation replacement div -->
  <div class="escalationReplacement" style="display: none;">
 
-  <div class="form-group">
+  <div>
       <label for="shipping-type">Shipping Type</label>
       <select id="customer" name="customer" class="form-control">
         <option value="Customer shipping">Customer</option>
@@ -1579,7 +1580,7 @@ placeholder="Customer Shipping Price"
     </select>
   </div>
 
-  <div class="form-group">
+  <div>
       <label for="tracking-info">Tracking Info</label>
       <input type="text" id="tracking-info" name="tracking-info" class="form-control" placeholder="Enter Tracking Info">
       <label for="shipping-charges">Shipping Charges</label>
