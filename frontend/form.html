@@ -2358,6 +2358,7 @@ ${yardData.escReplaceShipType ? `Shipping Type: ${yardData.escReplaceShipType}<b
 ${yardData.escReplaceShippingCharge ? `Shipping Charge: ${yardData.escReplaceShippingCharge}<br>` : ""}
 ${yardData.returnShipping ? `Return Shipping type: ${yardData.returnShipping}<br>` : ""}
 ${yardData.returnShippingCharge ? `Return shipping amount: $${yardData.returnShippingCharge}<br>` : ""}
+${yardData.returnShippingCharge ? `Return shipping amount: $${yardData.returnShippingCharge}<br>` : ""}
 ${yardData.refundStatus ? `Refund Status: ${yardData.refundStatus}<br>` : ""}
 ${yardData.refundedAmount ? `Refunded Amount: $${yardData.refundedAmount}<br>` : ""}
 </td>
@@ -3013,11 +3014,10 @@ $("#editYardInfo").on("click", async function () {
   const escReturnShippingType = $("#customer").val();
   const escReturnShipCharge = $("#shipping-charges").val();
   const refundedAmount = $("#refundedAmount").val();
-  const checkboxes = document.querySelectorAll('#rma-status-group input[type="checkbox"]');
-  // for RMA status
-  const selectedCheckbox = event.target;
-  const rmaStatus = selectedCheckbox.checked ? selectedCheckbox.value : null;
-  console.log("Selected RMA Status:", selectedValue);
+  const rmaStatusValue = $('input[name="rma-status"]:checked').val();
+  console.log("Selected RMA Status:", rmaStatusValue);
+
+  
   var escDate;
   var forEscDate;
   var escTicked;
@@ -3074,7 +3074,7 @@ $("#editYardInfo").on("click", async function () {
     escReturnShippingCharge: escReturnShipCharge,
     escReplaceShipType: escReplacementShippingType,
     escReplaceShippingCharge: escReplacementShipCharge,
-    rmaStatus: rmaStatus,
+    rmaStatus: rmaStatusValue,
   };
 
   console.log("Yard Index:", yardIndex);
