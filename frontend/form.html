@@ -1555,14 +1555,14 @@ placeholder="Customer Shipping Price"
     <label for="shipping-type">Shipping Type:</label>
     <select id="customer" name="customer" class="form-control">
       <option value="Customer shipping">Customer</option>
-      <option value="Yard shipping">Yard Shipping</option>
-      <option value="Own shipping">Own Shipping</option>
+      <option value="Return- Yard shipping">Yard Shipping</option>
+      <option value="Return- Own shipping">Own Shipping</option>
     </select>
   </div>
 
   <div id="shipping-charges-container" style="display: none;">
     <label for="shipping-charges">Shipping Charges</label>
-    <input type="text" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
+    <input type="number" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
   </div>
 </div>
 
@@ -1572,14 +1572,14 @@ placeholder="Customer Shipping Price"
     <label for="shipping-type">Shipping Type:</label>
     <select id="replacement-customer" name="customer" class="form-control">
       <option value="Customer shipping">Customer</option>
-      <option value="Yard shipping">Yard Shipping</option>
-      <option value="Own shipping">Own Shipping</option>
+      <option value="Replacement- Yard shipping">Yard Shipping</option>
+      <option value="Replacement- Own shipping">Own Shipping</option>
     </select>
   </div>
 
   <div id="replacement-shipping-charges-container" style="display: none;">
     <label for="shipping-charges">Shipping Charges</label>
-    <input type="text" id="replacement-shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
+    <input type="number" id="replacement-shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
   </div>
 </div>
   <!-- escalation replacement div ends here -->
@@ -2351,6 +2351,10 @@ ${yardData.trackingNo ? `Tracking No: ${yardData.trackingNo}<br>` : ""}
 ${yardData.escalationDate ? `Escalation Date: ${yardData.escalationDate}<br>` : ""}
 ${yardData.escalationCause ? `Escalation Reason: ${yardData.escalationCause}<br>` : ""}
 ${yardData.escalationProcess ? `Escalation Process: ${yardData.escalationProcess}<br>` : ""}
+${yardData.escReturnShipType ? `Escalation Return ST: ${yardData.escReturnShipType}<br>` : ""}
+${yardData.escReturnShippingCharge ? `Escalation Return SC: ${yardData.escReturnShippingCharge}<br>` : ""}
+${yardData.escReplaceShipType ? `Escalation Replacement ST: ${yardData.escReplaceShipType}<br>` : ""}
+${yardData.escReplaceShippingCharge ? `Escalation Replacement SC: ${yardData.escReplaceShippingCharge}<br>` : ""}
 ${yardData.returnShipping ? `Return Shipping type: ${yardData.returnShipping}<br>` : ""}
 ${yardData.returnShippingCharge ? `Return shipping amount: $${yardData.returnShippingCharge}<br>` : ""}
 ${yardData.refundStatus ? `Refund Status: ${yardData.refundStatus}<br>` : ""}
@@ -3003,6 +3007,10 @@ $("#editYardInfo").on("click", async function () {
   const paymentStatus = $('.paymentStatus').val();
   const escCause = $("#esc").val();
   const escProcess = $("#escProcess").val();
+  const escReplacementShippingType = $("#replacement-customer").val();
+  const escReplacementShipCharge = $("#replacement-shipping-charges").val();
+  const escReturnShippingType = $("#customer").val();
+  const escReturnShipCharge = $("#shipping-charges").val();
   const refundedAmount = $("#refundedAmount").val();
   var escDate;
   var forEscDate;
@@ -3056,6 +3064,10 @@ $("#editYardInfo").on("click", async function () {
     escTicked: escTicked,
     returnShipping: returnShippingMethod,
     returnShippingCharge: returnCharges,
+    escReturnShipType: escReturnShippingType,
+    escReturnShippingCharge: escReturnShipCharge,
+    escReplaceShipType: escReplacementShippingType,
+    escReplaceShippingCharge: escReplacementShippingTypeShipCharge,
   };
 
   console.log("Yard Index:", yardIndex);
@@ -3989,7 +4001,7 @@ document.getElementById("customer").addEventListener("change", function() {
     var selectedValue = this.value;
       // For the escalationReturn div
     const shippingChargesContainer = document.getElementById('shipping-charges-container');
-    if (selectedValue === 'Own shipping') {
+    if (selectedValue === 'Return- Own shipping') {
       shippingChargesContainer.style.display = 'block';
     } else {
       shippingChargesContainer.style.display = 'none';
@@ -4000,7 +4012,7 @@ document.getElementById("replacement-customer").addEventListener("change", funct
     var selectedValue = this.value;
     const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
   console.log("escReplace",replacementShippingChargesContainer);
-    if (selectedValue === 'Own shipping') {
+    if (selectedValue === 'Replacement- Own shipping') {
       replacementShippingChargesContainer.style.display = 'block';
     } else {
       replacementShippingChargesContainer.style.display = 'none';
