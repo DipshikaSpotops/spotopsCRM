@@ -4000,7 +4000,7 @@ document.getElementById("replacement-customer").addEventListener("change", funct
     var selectedValue = this.value;
     const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
   console.log("escReplace",replacementShippingChargesContainer);
-    if (replacementCustomerSelect.value === 'Own shipping') {
+    if (replacementShippingChargesContainer.value === 'Own shipping') {
       replacementShippingChargesContainer.style.display = 'block';
     } else {
       replacementShippingChargesContainer.style.display = 'none';
