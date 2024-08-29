@@ -4000,13 +4000,12 @@ document.getElementById("replacement-customer").addEventListener("change", funct
     var selectedValue = this.value;
     const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
   console.log("escReplace",replacementShippingChargesContainer);
-  replacementCustomerSelect.addEventListener('change', function() {
     if (replacementCustomerSelect.value === 'Own shipping') {
       replacementShippingChargesContainer.style.display = 'block';
     } else {
       replacementShippingChargesContainer.style.display = 'none';
     }
-  });
+  
 });
 
 
