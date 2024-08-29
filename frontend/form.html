@@ -1412,14 +1412,20 @@ aria-label="Close"
 <div class="form-group" id="editPopInfo">
 <label for="refund"  style="font-size: 25px;
 margin: 4%;">Status:</label>
-<select id="refund" style="    width: 66%;
+<select id="refund" style="
+width: 66%;
 border-radius: 25px;
 margin: 5% -12% 6% 0%;
 background-color: black;
 color: white;
-padding: 15px 8px 15px 8px;
-text-align: center;">
-<!-- <option value="">Choose</option> -->
+padding: 15px 8px;
+appearance: none;
+-webkit-appearance: none;
+-moz-appearance: none;
+background-image: url('data:image/svg+xml;base64,YOUR_SVG_DATA'); /* optional custom arrow icon */
+background-repeat: no-repeat;
+background-position: right 10px center;
+">
 <option value="Yard located">Yard Located</option>
 <option value="Yard PO Sent">PO Sent</option>
 <option value="PO confirmed">PO Confirmed</option>
@@ -1428,6 +1434,7 @@ text-align: center;">
 <option value="Part delivered">Part Delivered</option>
 <option value="Escalation">Escalation</option>
 </select>
+
 <!-- <div id="cardCharged">
 <label for="paymentStatusCard">Card Charged:</label>
 <select class="form-control paymentStatus">
