@@ -219,6 +219,7 @@ const additionalInfoSchema = new mongoose.Schema({
   escReturnShippingCharge: String,
   escReturnShipType: String,
   returnShipping: String,
+  rmaStatus:String,
   returnShippingCharge: Number,
   notes: [String],
   poSentDate: String,
