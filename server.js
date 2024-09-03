@@ -201,6 +201,7 @@ const additionalInfoSchema = new mongoose.Schema({
   email: String,
   city: String,
   state: String,
+  street: String,
   zipcode: Number,
   address: String,
   country:String,
