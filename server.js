@@ -227,7 +227,7 @@ const additionalInfoSchema = new mongoose.Schema({
   escTicked:String,
   partDeliveredDate:String,
   stockNo: String,
-  warranty: Number
+  warrYard: Number
 
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
