@@ -445,38 +445,35 @@ userTableBody.append(userRow);
 });
 
 $(".edit-user-btn").on("click", function () {
-  const userId = $(this).data("id");
-  console.log("userId:", userId);
+const userId = $(this).data("id");
+console.log("userId:", userId);
 
-  axios.get(`https://www.spotops360.com/users/${userId}`, {
-    headers: {
-      Accept: "application/json"
-    }
-  })
-  .then(response => {
-    const user = response.data;
-    console.log("res:", user);
-    // Populate the form fields with user data
-    $("#editFirstName").val(user.firstName);
-    $("#editLastName").val(user.lastName);
-    $("#editEmail").val(user.email);
-    $("#editTeam").val(user.team);
-    $("#editRole").val(user.role);
-    $("#editPassword").val(""); // Leave password field blank to avoid forcing a change
-    $("#editUserForm").data("userId", userId); // Store user ID for later use
-    $("#editUserModal").modal("show");
-  })
-  .catch(error => {
-    console.error("Error fetching user data:", error);
-    if (error.response && error.response.data && error.response.data.message) {
-      alert("Error: " + error.response.data.message);
-    } else {
-      alert("Error fetching user data. Please try again.");
-    }
-  });
+$.ajax({
+type: "GET",
+url: `https://www.spotops360.com/users/${userId}`,
+dataType: "json", 
+success: function (user) {
+console.log("res:", user);
+// Populate the form fields with user data
+$("#editFirstName").val(user.firstName);
+$("#editLastName").val(user.lastName);
+$("#editEmail").val(user.email);
+$("#editTeam").val(user.team);
+$("#editRole").val(user.role);
+$("#editPassword").val(""); // Leave password field blank to avoid forcing a change
+$("#editUserForm").data("userId", userId); // Store user ID for later use
+$("#editUserModal").modal("show");
+},
+error: function (xhr, status, error) {
+console.error("Error fetching user data:", error);
+if (xhr.responseJSON && xhr.responseJSON.message) {
+alert("Error: " + xhr.responseJSON.message);
+} else {
+alert("Error fetching user data. Please try again.");
+}
+}
 });
-
-
+});
 
 
 
