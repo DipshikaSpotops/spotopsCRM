@@ -1086,22 +1086,17 @@ app.delete('/users/:id', async (req, res) => {
 // to get the users by id
 app.get('/users/:id', async (req, res) => {
   console.log("Received request to get user by ID:", req.params.id);
-  
-  try {
-    const user = await User.findById(req.params.id);
-    
-    if (!user) {
-      console.log("User not found for ID:", req.params.id);
-      return res.status(404).json({ message: 'User not found' });
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error });
     }
-    
-    console.log("User found:", user);
-    res.json(user);
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ message: 'Server error', error });
-  }
-});
+  });
+  
 
 //edit user details
 
