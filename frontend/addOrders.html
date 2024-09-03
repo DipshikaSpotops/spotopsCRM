@@ -368,7 +368,7 @@
               <div class="form-group col-md-2">
                 <select class="form-control" id="bCountry" required>
                   <option value="">Country</option>
-                  <option value="USA">USA</option>
+                  <option value="US">US</option>
                   <option value="Canada">Canada</option>
                 </select>
               </div>
@@ -457,7 +457,7 @@
               <div class="form-group col-md-2">
                 <select class="form-control" id="sCountry" required>
                   <option value="">Country</option>
-                  <option value="USA">USA</option>
+                  <option value="US">US</option>
                   <option value="Canada">Canada</option>
                 </select>
               </div>
@@ -562,6 +562,7 @@
         // to prefill the stae and the city 
         $("#bZip").on("keyup", function() {
     const zipCode = $(this).val();
+    if (zipCode.length === 5) {
     if (zipCode) {
       axios.get(`https://api.zippopotam.us/us/${zipCode}`)
         .then(response => {
@@ -578,10 +579,11 @@
           console.error("Error fetching location data:", error);
           alert("Invalid ZIP code. Please check and try again.");
         });
-    }
+    }}
   });
   $("#sZip").on("keyup", function() {
     const zipCode = $(this).val();
+    if (zipCode.length === 5) {
     if (zipCode) {
       axios.get(`https://api.zippopotam.us/us/${zipCode}`)
         .then(response => {
@@ -598,7 +600,7 @@
           console.error("Error fetching location data:", error);
           alert("Invalid ZIP code. Please check and try again.");
         });
-    }
+    }}
   });
         // Get the current time and the login timestamp
         const currentTime = Date.now();
