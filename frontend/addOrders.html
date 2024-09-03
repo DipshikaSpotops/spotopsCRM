@@ -559,6 +559,25 @@
 
     <script>
       $(document).ready(function () {
+        // to prefill the stae and the city 
+        $("#bZip").on("blur", function() {
+    const zipCode = $(this).val();
+    if (zipCode) {
+      axios.get(`https://api.zippopotam.us/us/${zipCode}`)
+        .then(response => {
+          const data = response.data;
+          const city = data.places[0]['place name'];
+          const stateAbbr = data.places[0]['state abbreviation'];
+          
+          $("#bCity").val(city);
+          $("#bState").val(stateAbbr);
+        })
+        .catch(error => {
+          console.error("Error fetching location data:", error);
+          alert("Invalid ZIP code. Please check and try again.");
+        });
+    }
+  });
         // Get the current time and the login timestamp
         const currentTime = Date.now();
         const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -862,6 +881,9 @@ const orderNote = `${note}<br>${firstName},${orderDate}`;
     </script>
   </body>
 </html>
-in the above html, if i input <div class="form-group col-md-2">
+<!-- in the above html, if i input <div class="form-group col-md-2">
   <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
 </div>, the state and city should be prefilled
+if there is any api to do that, please use that
+i want to prefill the city and state with following divs -->
+
