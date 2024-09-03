@@ -560,7 +560,7 @@
     <script>
       $(document).ready(function () {
         // to prefill the stae and the city 
-        $("#bZip").on("blur", function() {
+        $("#bZip").on("keyup", function() {
     const zipCode = $(this).val();
     if (zipCode) {
       axios.get(`https://api.zippopotam.us/us/${zipCode}`)
@@ -568,9 +568,31 @@
           const data = response.data;
           const city = data.places[0]['place name'];
           const stateAbbr = data.places[0]['state abbreviation'];
+          const country = data['country abbreviation'];
           
           $("#bCity").val(city);
           $("#bState").val(stateAbbr);
+          $("#bCountry").val(country); 
+        })
+        .catch(error => {
+          console.error("Error fetching location data:", error);
+          alert("Invalid ZIP code. Please check and try again.");
+        });
+    }
+  });
+  $("#sZip").on("keyup", function() {
+    const zipCode = $(this).val();
+    if (zipCode) {
+      axios.get(`https://api.zippopotam.us/us/${zipCode}`)
+        .then(response => {
+          const sdata = response.data;
+          const scity = sdata.places[0]['place name'];
+          const sstateAbbr = sdata.places[0]['state abbreviation'];
+          const scountry = data['country abbreviation'];
+          
+          $("#sCity").val(scity);
+          $("#sState").val(stateAbbr);
+          $("#sCountry").val(scountry); 
         })
         .catch(error => {
           console.error("Error fetching location data:", error);
