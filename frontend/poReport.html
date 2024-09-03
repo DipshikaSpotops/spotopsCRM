@@ -358,7 +358,7 @@
             totalPartPriceSum += totalPartPrice;
             totalShippingSum += totalShipping;
             totalOthersSum += totalOthers;
-
+           
             $("#yardInfoTable").append(
               `<tr>
                             <td>${item.orderNo}</td>
@@ -420,6 +420,10 @@
           $("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
           $("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
           $("#totalOthers").text(`$${totalOthersSum.toFixed(2)}`);
+        });
+        $("#yardInfoTable").on("click", ".process-btn", function () {
+          const id = $(this).data("id");
+          window.location.href = `form.html?orderNo=${id}&process=true`;
         });
         const currentPath = window.location.pathname;
         $(".nav-link").each(function () {
