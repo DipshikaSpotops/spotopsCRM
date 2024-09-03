@@ -444,30 +444,31 @@
               userTableBody.append(userRow);
             });
 
-            // Add event listener for the edit button to open the modal
             $(".edit-user-btn").on("click", function () {
-              const userId = $(this).data("id");
+  const userId = $(this).data("id");
 
-              // Fetch user data from the server
-              $.ajax({
-                type: "GET",
-                url: `https://www.spotops360.com/users/${userId}`,
-                success: function (user) {
-                  // Populate the form fields with user data
-                  $("#editFirstName").val(user.firstName);
-                  $("#editLastName").val(user.lastName);
-                  $("#editEmail").val(user.email);
-                  $("#editTeam").val(user.team);
-                  $("#editRole").val(user.role);
-                  $("#editPassword").val(user.password);
-                  $("#editUserForm").data("userId", userId); // Store user ID for later use
-                  $("#editUserModal").modal("show");
-                },
-                error: function (error) {
-                  alert("Error fetching user data: " + error.responseJSON.message);
-                },
-              });
-            });
+  // Fetch user data from the server
+  $.ajax({
+    type: "GET",
+    url: `https://www.spotops360.com/users/${userId}`,
+    success: function (user) {
+      console.log("user",user); // Check the retrieved user data
+      // Populate the form fields with user data
+      $("#editFirstName").val(user.firstName);
+      $("#editLastName").val(user.lastName);
+      $("#editEmail").val(user.email);
+      $("#editTeam").val(user.team);
+      $("#editRole").val(user.role);
+      $("#editPassword").val(""); // Optional: leave blank to avoid forcing password change
+      $("#editUserForm").data("userId", userId); // Store user ID for later use
+      $("#editUserModal").modal("show");
+    },
+    error: function (error) {
+      alert("Error fetching user data: " + error.responseJSON.message);
+    },
+  });
+});
+
 
             // Add event listener for the delete button
             $(".delete-user-btn").on("click", function () {
@@ -546,3 +547,46 @@
     </script>
   </body>
 </html>
+the input fields of following div is still empty:
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <div class="form-group">
+            <label for="editFirstName">First Name</label>
+            <input type="text" class="form-control" id="editFirstName" required>
+          </div>
+          <div class="form-group">
+            <label for="editLastName">Last Name</label>
+            <input type="text" class="form-control" id="editLastName" required>
+          </div>
+          <div class="form-group">
+            <label for="editEmail">Email</label>
+            <input type="email" class="form-control" id="editEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="editTeam">Team</label>
+            <input type="text" class="form-control" id="editTeam" required>
+          </div>
+          <div class="form-group">
+            <label for="editRole">Role</label>
+            <input type="text" class="form-control" id="editRole" required>
+          </div>
+          <div class="form-group">
+            <label for="editPassword">Password</label>
+            <input type="password" class="form-control" id="editPassword">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
