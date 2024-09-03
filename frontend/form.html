@@ -1683,7 +1683,7 @@ border: none;
 <h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 39%;
 font-weight: bold;
 overflow: hidden;
-white-space: nowrap;">Edit Yard Details</h5>
+white-space: nowrap;">Edit Yard Details- </h5>
 <button type="button" id="EYdetails" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
@@ -2039,6 +2039,8 @@ const newEntry = urlParams.get("newEntry");
 var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
 document.getElementById("yardModalLabel").textContent += orderNo;
+document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
+
 
 console.log("orderNo:", orderNo); 
 console.log("process:", process);
