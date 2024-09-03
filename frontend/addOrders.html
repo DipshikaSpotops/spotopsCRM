@@ -664,6 +664,7 @@ const daySuffix = (day) => {
 };
 
 var orderDate= `${day}${daySuffix(day)} ${month}, ${year}`;
+console.log("orderDate",orderDate);
 
         const today = new Date().toISOString().split("T")[0];
         $("#orderDate").val(orderDate);
