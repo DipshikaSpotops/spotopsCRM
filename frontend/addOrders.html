@@ -267,7 +267,7 @@
           <input type="text" id="salesAgent" required />
         </div>
         <div>
-          <input type="date" id="orderDate" required />
+          <input type="text" id="orderDate" required />
         </div>
       </div>
 
@@ -663,11 +663,11 @@ const daySuffix = (day) => {
     }
 };
 
-var orderDate= `${day}${daySuffix(day)} ${month}, ${year}`;
-console.log("orderDate",orderDate);
+var orderDateAdd= `${day}${daySuffix(day)} ${month}, ${year}`;
+console.log("orderDate",orderDateAdd);
 
         const today = new Date().toISOString().split("T")[0];
-        $("#orderDate").val(orderDate);
+        $("#orderDate").val(orderDateAdd);
 
         const token = localStorage.getItem("token");
 
