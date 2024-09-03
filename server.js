@@ -1083,6 +1083,22 @@ app.delete('/users/:id', async (req, res) => {
   }
 });
 
+// to get the users by id
+// Route to get a user by ID
+app.get('/users/:id', async (req, res) => {
+  console.log("get the user by id");
+  try {
+    const user = await User.findById(req.params.id);
+    console.log("user",user);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
 //edit user details
 
 app.put('/users/:id', async (req, res) => {
