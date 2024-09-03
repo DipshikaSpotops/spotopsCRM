@@ -1680,7 +1680,7 @@ border: none;
 <!-- <div class="modal-content" > -->
 
 <div class="modal-header">
-<h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 33%;
+<h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 37%;
 font-weight: bold;
 overflow: hidden;
 white-space: nowrap;">Edit Yard Details- </h5>
@@ -1716,18 +1716,10 @@ white-space: nowrap;">Edit Yard Details- </h5>
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="editAddress" placeholder="Street Address" />
 </div>
-
 <div class="form-group col-md-4">
-  <select class="form-control" id="editCountry">
-  <option selected>Select Country</option>
-  <option value="US">US</option>
-  <option value="Canada">Canada</option>
-  </select>
-  </div>
-  <div class="form-group col-md-4">
-    <input type="text" class="form-control" id="editStockNo" placeholder="Entee Stock No." />
-    </div>
-<!-- <div class="form-group col-md-4">
+<input type="text" class="form-control" id="editCity" placeholder="Enter City" />
+</div>
+<div class="form-group col-md-4">
   <select class="form-control" id="editState" required>
     <option value="">Select State</option>
     <option value="AL">Alabama</option>
@@ -1781,12 +1773,12 @@ white-space: nowrap;">Edit Yard Details- </h5>
     <option value="WI">Wisconsin</option>
     <option value="WY">Wyoming</option>
   </select>
-</div> -->
+</div>
 <!-- <div class="form-group col-md-4">
 <input type="text" class="form-control" id="editState" placeholder="Enter State" />
 </div> -->
 </div>
-<!-- <div class="form-row addNewId">
+<div class="form-row addNewId">
 <div class="form-group col-md-4">
 <select class="form-control" id="editCountry">
 <option selected>Select Country</option>
@@ -1797,7 +1789,7 @@ white-space: nowrap;">Edit Yard Details- </h5>
 <div class="form-group col-md-4">
 <input type="number" class="form-control" id="editZip" placeholder="Enter Zipcode" />
 </div>
-</div> -->
+</div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
 <input type="number" class="form-control" id="editPartPrice" placeholder="Part Price" />
@@ -3278,12 +3270,13 @@ yardRating: yardRating,
 phone: phone,
 altPhone: altPhone,
 email: email,
+city:city,
+state:state,
+zipcode:zipcode,
 address: addedAddress,
 country: country,
 partPrice: partPrice,
 status: "Yard located",
-stockNo:stockNo,
-warrYard:warrYard,
 shippingDetails: shippingMethod,
 others: others,
 };
@@ -3547,7 +3540,6 @@ $("#editAddress").val(yardData.address);
 $("#editYardRating").val(yardData.yardRating);
 const addressParts = yardData.address.split(" ");
 $("#editCity").val(addressParts[0]);
-$("#editStockNo").val(yardData.stockNo);
 $("#editState").val(addressParts[1]);
 $("#editZip").val(addressParts[2]);
 $("#editPhone").val(yardData.phone);
