@@ -284,130 +284,132 @@
 
     <script>
         $(document).ready(async function () {
-    const currentTime = Date.now();
-    const loginTimestamp = localStorage.getItem("loginTimestamp");
-    if (loginTimestamp) {
-        const timeDifference = (currentTime - loginTimestamp) / (1000 * 60 * 60);
-        if (timeDifference >= 12) {
-            alert("Your session has expired. You will be redirected to the login page.");
-            window.localStorage.clear();
+            // Get the current time and the login timestamp
+        const currentTime = Date.now();
+        const loginTimestamp = localStorage.getItem("loginTimestamp");
+        if (loginTimestamp) {
+          const timeDifference =
+            (currentTime - loginTimestamp) / (1000 * 60 * 60);
+          if (timeDifference >= 12) {
+            alert(
+              "Your session has expired. You will be redirected to the login page."
+            );
+            window.localStorage.clear(); 
             window.location.href = "login_signup.html";
+          }
+        } else {
+          window.location.href = "login_signup.html";
         }
-    } else {
-        window.location.href = "login_signup.html";
-    }
+            const firstName = localStorage.getItem("firstName");
+            const lastName = localStorage.getItem("lastName");
+            const email = localStorage.getItem("email");
+            const role = localStorage.getItem("role");
+            const token = localStorage.getItem("token");
 
-    const firstName = localStorage.getItem("firstName");
-    const lastName = localStorage.getItem("lastName");
-    const email = localStorage.getItem("email");
-    const role = localStorage.getItem("role");
-    const token = localStorage.getItem("token");
-
-    if (!firstName) {
-        window.location.href = "login_signup.html";
-    }
-
-    // Check if a new month has started
-    const lastMonth = localStorage.getItem("lastMonth");
-    const currentMonth = new Date().getMonth();
-
-    if (lastMonth !== currentMonth.toString()) {
-        // Clear previous month's data
-        localStorage.setItem("lastMonth", currentMonth.toString());
-
-        // Clear graph and statistics
-        if (window.salesChart instanceof Chart) {
-            window.salesChart.destroy();
+            if (firstName) {
+                $("#user-name").text(firstName);
+            }
+            if (!firstName) {
+          window.location.href = "login_signup.html";
         }
-        updateStats({ totalOrders: 0, estimatedGP: 0, highestGP: 0, estimatedAverageGP: 0, totalAgp: 0 });
-        $('#recentOrdersTable').empty();
-        $('#brandSummaryTable').empty();
-    }
 
-    $("#profileLink").click(function () {
-        $("#profileFirstName").val(firstName);
-        $("#profileLastName").val(lastName);
-        $("#profileEmail").val(email);
-        $("#profileRole").val(role);
-        $("#profileModal").modal("show");
-    });
-
-    $(".close").click(function () {
-        location.reload();
-    });
-
-    async function fetchSalesData(filter) {
-        try {
-            const response = await axios.get(`https://www.spotops360.com/orders`, {
-                headers: { Authorization: `Bearer ${token}` },
+            $("#profileLink").click(function () {
+                $("#profileFirstName").val(firstName);
+                $("#profileLastName").val(lastName);
+                $("#profileEmail").val(email);
+                $("#profileRole").val(role);
+                $("#profileModal").modal("show");
             });
 
-            if (response.status !== 200) {
-                throw new Error("Failed to fetch orders");
+            $(".close").click(function () {
+                location.reload();
+            });
+
+            async function fetchSalesData(filter) {
+    try {
+        const response = await axios.get(`https://www.spotops360.com/orders`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.status !== 200) {
+            throw new Error("Failed to fetch orders");
+        }
+
+        const currentMonth = new Date().getMonth(); // Get the current month
+        const data = response.data.filter(
+            (order) => order.salesAgent === firstName
+        );
+
+        const salesData = [];
+        const labels =
+            filter === "daily"
+                ? getDaysInMonth(new Date().getMonth(), new Date().getFullYear())
+                : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        let totalOrders = 0;
+        let estimatedGP = 0;
+        let estimatedGPArr = [];
+        let highestGP = 0;
+        let averageGP = 0;
+        let actualAGPArr = [];
+        let totalAgp = 0;
+        let validOrdersCount = 0;
+
+        const orderCounts = {};
+
+        labels.forEach((label) => {
+            orderCounts[label] = { count: 0, grossProfit: 0 };
+        });
+
+        for (const order of data) {
+            const orderDate = new Date(order.orderDate);
+            const orderMonth = orderDate.getMonth();
+
+            // Skip orders from previous months when the filter is "daily"
+            if (filter === "daily" && orderMonth !== currentMonth) {
+                continue;
             }
 
-            const data = response.data.filter(
-                (order) => order.salesAgent === firstName
-            );
-            const salesData = [];
-            const labels =
+            const salePrice = order.soldP;
+            const salestax = order.salestax || 0;
+            const estGP = order.grossProfit;
+            estimatedGPArr.push(estGP);
+            estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
+
+            const label =
                 filter === "daily"
-                    ? getDaysInMonth(new Date().getMonth(), new Date().getFullYear())
-                    : [
-                        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                    ];
-
-            let totalOrders = 0;
-            let estimatedGP = 0;
-            let estimatedGPArr = [];
-            let highestGP = 0;
-            let averageGP = 0;
-            let actualAGPArr = [];
-            let totalAGP = 0;
-            let validOrdersCount = 0;
-
-            const orderCounts = {};
-
-            labels.forEach((label) => {
-                orderCounts[label] = { count: 0, grossProfit: 0 };
-            });
-
-            for (const order of data) {
-                const salePrice = order.soldP;
-                const salestax = order.salestax || 0;
-                const estGP = order.grossProfit;
-                estimatedGPArr.push(estGP);
-                estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
-
-                const orderDate = new Date(order.orderDate);
-                const label = filter === "daily"
                     ? orderDate.getDate().toString()
                     : orderDate.toLocaleDateString("en-US", { month: "short" });
 
-                totalOrders += 1;
-                let overallSpendingArr = [];
+            totalOrders += 1;
 
-                if (order.additionalInfo && order.additionalInfo.length > 0) {
-                    validOrdersCount++;
-                    orderCounts[label].count += 1;
-                    orderCounts[label].grossProfit += order.grossProfit;
-                    const info = order.additionalInfo;
-                    const taxedSP = salePrice - salestax;
+            let overallSpendingArr = [];
 
-                    for (let d = 0; d < info.length; d++) {
-                        const shippingDetails = info[d].shippingDetails;
-                        const shippingCharge = shippingDetails.split(":")[1].trim() || 0;
-                        const partprice = info[d].partPrice || 0;
-                        const otherC = info[d].others || 0;
-                        const returnShippingCharge = info[d].returnShippingCharge || 0;
-                        const totalP = Number(shippingCharge) + Number(partprice) + Number(otherC) + returnShippingCharge;
-                        const totalR = info[d].refundedAmount || 0;
+            if (order.additionalInfo && order.additionalInfo.length > 0) {
+                let validOrder = false;
+                validOrdersCount++;
+                orderCounts[label].count += 1;
+                orderCounts[label].grossProfit += order.grossProfit;
+                const info = order.additionalInfo;
+                const taxedSP = salePrice - salestax;
 
-                        if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
-                            overallSpendingArr.push(totalP - totalR);
-                        }
+                for (let d = 0; d < info.length; d++) {
+                    const shippingDetails = info[d].shippingDetails;
+                    const shippingValue = shippingDetails.split(":")[1].trim(); 
+                    const shippingCharge = shippingValue || 0;
+                    const partprice = info[d].partPrice || 0;
+                    const otherC = info[d].others || 0;
+                    const returnShippingCharge = info[d].returnShippingCharge || 0;
+                    const totalP = Number(shippingCharge) + Number(partprice) + Number(otherC) + returnShippingCharge;
+                    const totalR = info[d].refundedAmount || 0;
+
+                    if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
+                        validOrder = true;
+                        overallSpendingArr.push(totalP - totalR);
                     }
+                }
 
+                if (validOrder) {
                     const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
                     const actualGP = taxedSP - overallSpending;
 
@@ -422,169 +424,193 @@
                     actualAGPArr.push(actualGP);
                     highestGP = Math.max(...actualAGPArr);
                 }
-
-                salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
             }
 
-            totalAGP = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
-            averageGP = totalAGP / validOrdersCount || 0;
-
-            updateStats({ totalOrders, estimatedGP, highestGP, averageGP, totalAGP });
-            updateSalesChart(salesData, labels, filter);
-            updateRecentOrders(data);
-            updateBrandSummary(data);
-        } catch (error) {
-            console.error("Error fetching sales data:", error);
+            salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
         }
-    }
 
-    function getDaysInMonth(month, year) {
-        const date = new Date(year, month, 1);
-        const days = [];
-        while (date.getMonth() === month) {
-            days.push(date.getDate().toString());
-            date.setDate(date.getDate() + 1);
-        }
-        return days;
-    }
+        totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
+        averageGP = totalAgp / validOrdersCount || 0;
 
-    function updateStats(stats) {
-        $("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
-        $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
-        $("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
-        $("#estimatedAverageGP").text(`Average GP: $${stats.averageGP.toFixed(2)}`);
-        $("#AverageGP").text(`Actual GP: $${stats.totalAGP.toFixed(2)}`);
-    }
-
-    function updateSalesChart(salesData, labels, filter) {
-        const ctx = document.getElementById("salesChart").getContext("2d");
-        if (window.salesChart instanceof Chart) {
-            window.salesChart.destroy();
-        }
-        window.salesChart = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Number of Orders",
-                        data: salesData,
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: filter === "daily" ? "Days of the Month" : "Months",
-                        },
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Number of Orders",
-                        },
-                        ticks: {
-                            stepSize: 1,
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            },
+        updateStats({
+            totalOrders,
+            estimatedGP,
+            highestGP,
+            estimatedAverageGP: averageGP,
+            totalAgp,
         });
+        updateSalesChart(salesData, labels, filter);
+        updateRecentOrders(data);
+        updateBrandSummary(data);
+    } catch (error) {
+        console.error("Error fetching sales data:", error);
     }
+}
 
-    function updateRecentOrders(orders) {
-        const recentOrdersTable = $("#recentOrdersTable");
-        recentOrdersTable.empty();
-        orders.forEach((order) => {
-            recentOrdersTable.append(`
-                <tr>
-                    <td>${order.orderNo}</td>
-                    <td>${order.customerName}</td>
-                    <td>${order.orderDate}</td>
-                    <td>$${order.grossProfit.toFixed(2)}</td>
-                </tr>
-            `);
-        });
-    }
 
-    function updateBrandSummary(data) {
-        const brandSummary = data.reduce((acc, order) => {
-            if (!acc[order.make]) {
-                acc[order.make] = { count: 0, grossProfit: 0 };
+            function getDaysInMonth(month, year) {
+                const date = new Date(year, month, 1);
+                const days = [];
+                while (date.getMonth() === month) {
+                    days.push(date.getDate().toString());
+                    date.setDate(date.getDate() + 1);
+                }
+                return days;
             }
-            acc[order.make].count += 1;
-            acc[order.make].grossProfit += order.grossProfit;
-            return acc;
-        }, {});
 
-        const brandSummaryTable = $("#brandSummaryTable");
-        brandSummaryTable.empty();
-        for (const brand in brandSummary) {
-            brandSummaryTable.append(`
-                <tr>
-                    <td>${brand}</td>
-                    <td>${brandSummary[brand].count}</td>
-                    <td>$${brandSummary[brand].grossProfit.toFixed(2)}</td>
-                `);
-        }
-    }
+            function updateStats(stats) {
+                $("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
+                $("#estimatedGP").text(
+                    `Estimated GP: $${stats.estimatedGP.toFixed(2)}`
+                );
+                $("#estimatedHighestGP").text(
+                    `Highest GP: $${stats.highestGP.toFixed(2)}`
+                );
+                $("#estimatedAverageGP").text(
+                    `Average GP: $${stats.estimatedAverageGP.toFixed(2)}`
+                );
+                $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
+            }
 
-    $("#salesFilter").on("change", function () {
-        const filter = $(this).val();
-        fetchSalesData(filter);
-    });
+            function updateSalesChart(salesData, labels, filter) {
+                console.log("updating sales data");
+                const ctx = document.getElementById("salesChart").getContext("2d");
+                if (window.salesChart instanceof Chart) {
+                    window.salesChart.destroy();
+                }
+                window.salesChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Number of Orders",
+                                data: salesData,
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                borderColor: "rgba(75, 192, 192, 1)",
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: filter === "daily" ? "Days of the Month" : "Months",
+                                },
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: "Number of Orders",
+                                },
+                                ticks: {
+                                    stepSize: 1,
+                                    beginAtZero: true,
+                                },
+                            },
+                        },
+                    },
+                });
+            }
 
-    fetchSalesData("daily");
+            function updateRecentOrders(orders) {
+                const recentOrdersTable = $("#recentOrdersTable");
+                recentOrdersTable.empty();
+                orders.forEach((order) => {
+                    recentOrdersTable.append(`
+                        <tr>
+                            <td>${order.orderNo}</td>
+                            <td>${order.customerName}</td>
+                            <td>${order.orderDate}</td>
+                            <td>$${order.grossProfit.toFixed(2)}</td>
+                        </tr>
+                    `);
+                });
+            }
 
-    $(".toggle-btn").on("click", function () {
-        $("#offcanvasSidebar").removeClass("hide");
-    });
+            function updateBrandSummary(data) {
+                const brandSummary = data.reduce((acc, order) => {
+                    if (!acc[order.make]) {
+                        acc[order.make] = { count: 0, grossProfit: 0 };
+                    }
+                    acc[order.make].count += 1;
+                    acc[order.make].grossProfit += order.grossProfit;
+                    return acc;
+                }, {});
 
-    $(".close-btn").on("click", function () {
-        $("#offcanvasSidebar").addClass("hide");
-    });
+                const brandSummaryTable = $("#brandSummaryTable");
+                brandSummaryTable.empty();
+                for (const brand in brandSummary) {
+                    brandSummaryTable.append(`
+                        <tr>
+                            <td>${brand}</td>
+                            <td>${brandSummary[brand].count}</td>
+                            <td>$${brandSummary[brand].grossProfit.toFixed(2)}</td>
+                    `);
+                }
+            }
 
-    $(document).click(function (event) {
-        if (!$(event.target).closest("#offcanvasSidebar, .toggle-btn").length) {
-            $("#offcanvasSidebar").addClass("hide");
-        }
-    });
+            $("#salesFilter").on("change", function () {
+                const filter = $(this).val();
+                fetchSalesData(filter);
+            });
 
-    $(".nav-link").on("click", function () {
-        const submenu = $(this).next(".submenu");
-        if (submenu.length) {
-            submenu.slideToggle();
-            $(this).find(".chevron-icon i").toggleClass("fa-chevron-right fa-chevron-down");
-        } else {
-            $(".nav-link").removeClass("active");
+            // Initial fetch
+            fetchSalesData("daily");
+
+            $(".toggle-btn").on("click", function () {
+                $("#offcanvasSidebar").removeClass("hide");
+            });
+
+            $(".close-btn").on("click", function () {
+                $("#offcanvasSidebar").addClass("hide");
+            });
+
+            $(document).click(function (event) {
+                if (!$(event.target).closest("#offcanvasSidebar, .toggle-btn").length) {
+                    $("#offcanvasSidebar").addClass("hide");
+                }
+            });
+
+            $(".nav-link").on("click", function () {
+                const submenu = $(this).next(".submenu");
+                if (submenu.length) {
+                    submenu.slideToggle();
+                    $(this).find(".chevron-icon i").toggleClass("fa-chevron-right fa-chevron-down");
+                } else {
+                    $(".nav-link").removeClass("active");
+                    $(this).addClass("active");
+                }
+            });
+
+            // Highlight active link based on current URL
+        const currentPath = window.location.pathname;
+        $(".nav-link").each(function () {
+          if (currentPath.includes($(this).attr("href"))) {
             $(this).addClass("active");
-        }
-    });
+          }
+        });
 
-    // Highlight active link based on current URL
-    const currentPath = window.location.pathname;
-    $(".nav-link").each(function () {
-        if (currentPath.includes($(this).attr("href"))) {
-            $(this).addClass("active");
-        }
-    });
-
-    $('#logoutLink').on('click', function() {
-        window.localStorage.clear();
-        window.location.href = 'login_signup.html';
-    });
-});
-
+            $('#logoutLink').on('click', function() {
+                window.localStorage.clear();
+                window.location.href = 'login_signup.html';
+            });
+        });
     </script>
 </body>
 </html>
-<!-- in the above html,in daily graph , if the new month for example september starts, then the previous graph data should be removed and start from the new month  and even the data in the below div should be updated when the new month starts -->
+in the above html,in daily graph , if the new month for example september starts, then the previous graph data should be removed and start from the new month  and even the data in the below div should be updated when the new month starts
+so now see the orderDate, it starts from Sept, so ignore all august orders for daily graph,yearly graph is totally fine and also according to order date, the following should be updated 
+<div class="stats-container">
+    <div class="stats-box" id="totalOrders">Total Orders: 0</div>
+    <div class="stats-box" id="estimatedGP">Estimated GP: $0</div>
+    <div class="stats-box" id="estimatedHighestGP">Highest GP: $0</div>
+    <div class="stats-box" id="estimatedAverageGP">Average GP: $0</div>
+    <div class="stats-box" id="AverageGP">Actual GP: $0</div>
+</div>
+please dont change any other thing
