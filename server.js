@@ -1101,7 +1101,6 @@ app.get('/users/:id', async (req, res) => {
   
 
 //edit user details
-
 app.put('/users/:id', async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
