@@ -275,8 +275,8 @@ placeholder="Search..."
 <table class="table table-bordered mt-4">
 <thead>
 <tr  style="background-color: #f2f2f2;text-align: center;" id="tableHeader">
-<th scope="col">Order No</th>
-<th scope="col">Customer Name</th>
+<th scope="col">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th scope="col">Customer Name <span class="sort-icon onlyNumber">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="yardInfoTable">
@@ -377,6 +377,104 @@ Close
 
 <script>
 $(document).ready(async function () {
+  let currentSort = {
+column: "",
+order: "asc" // ascending by default
+};
+
+function sortTable(column, order, isDateColumn, isYardColumn) {
+const tbody = $("#yardInfoTable");
+const rows = tbody.find("tr").toArray();
+
+rows.sort(function (a, b) {
+let cellA = $(a).find("td").eq(column).text().trim();
+let cellB = $(b).find("td").eq(column).text().trim();
+
+if (isDateColumn) {
+// Convert date strings into Date objects for sorting
+cellA = new Date(cellA);
+cellB = new Date(cellB);
+return order === "asc" ? cellA - cellB : cellB - cellA;
+} else if (isYardColumn) {
+// Sort Yard columns alphabetically
+return order === "asc" 
+? cellA.localeCompare(cellB) 
+: cellB.localeCompare(cellA);
+} else {
+// General string comparison for other columns
+return order === "asc"
+? cellA.localeCompare(cellB)
+: cellB.localeCompare(cellA);
+}
+});
+
+// Append sorted rows back to the table body
+$.each(rows, function (index, row) {
+tbody.append(row);
+});
+}
+
+// Click event for sorting the Order Date column
+$(document).on("click", ".onlyNumber", function () {
+const column = $(this).closest("th").index();
+const sortBy = $(this).closest("th").data("sort");
+
+// Determine if the column is a date column
+const isDateColumn = sortBy === "orderDate";
+const isYardColumn = sortBy.startsWith("yard");
+
+// Toggle the sort order
+currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+
+// Update sort icon
+$(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
+$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+});
+
+// Click event for sorting Yard columns
+$(document).on("click", ".fYardName", function () {
+const column = $(this).closest("th").index();
+const sortBy = $(this).closest("th").data("sort");
+
+// Determine if the column is a Yard column
+const isYardColumn = sortBy.startsWith("yard");
+
+// Toggle the sort order
+currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, false, isYardColumn);
+
+// Update sort icon
+$(".fYardName").html("&#9650;"); // Reset all icons to ascending
+$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+});
+
+// Click event for sorting any sortable column
+$(document).on("click", "th[data-sort], th[data-sort] .sort-icon", function (event) {
+const $target = $(event.target);
+const $th = $target.closest("th");
+const column = $th.index();
+const sortBy = $th.data("sort");
+
+// Determine if the column is a date column or a yard column
+const isDateColumn = sortBy === "orderDate";
+const isYardColumn = sortBy.startsWith("yard");
+
+// Toggle the sort order
+currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+
+// Update sort icon
+$("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$th.find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+});
+
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -527,7 +625,7 @@ maxYards = item.additionalInfo.length;
 // Update the table header to include the correct number of Yard columns
 const tableHeader = $("#tableHeader");
 for (let i = 1; i <= maxYards; i++) {
-tableHeader.append(`<th scope="col">Yard ${i}</th>`);
+tableHeader.append(`<th scope="col">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
 }
 
 // Append the yard information to the table body
