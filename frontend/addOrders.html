@@ -569,7 +569,7 @@
           const city = data.places[0]['place name'];
           const stateAbbr = data.places[0]['state abbreviation'];
           const country = data['country abbreviation'];
-          
+          console.log("country",country);
           $("#bCity").val(city);
           $("#bState").val(stateAbbr);
           $("#bCountry").val(country); 
@@ -588,8 +588,8 @@
           const sdata = response.data;
           const scity = sdata.places[0]['place name'];
           const sstateAbbr = sdata.places[0]['state abbreviation'];
-          const scountry = data['country abbreviation'];
-          
+          const scountry = sdata['country abbreviation'];
+          console.log(scountry);
           $("#sCity").val(scity);
           $("#sState").val(stateAbbr);
           $("#sCountry").val(scountry); 
