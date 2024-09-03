@@ -386,78 +386,78 @@
     <script>
       $(document).ready(async function () {
         let sortOrder = {
-    orderDate: "asc",
-    orderNo: "asc",
-    agentName: "asc",
-    customerName: "asc",
-    partName: "asc",
-    yard: "asc",
-    orderStatus: "asc",
-    email: "asc",
-  };
-
-  function sortTable(column, type) {
-    const table = $("#infoTable");
-    const rows = table.find("tr").toArray();
-
-    rows.sort((a, b) => {
-      let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
-      let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
-
-      if (type === "date") {
-        valA = new Date(valA);
-        valB = new Date(valB);
-      } else if (type === "number") {
-        valA = parseInt(valA.replace(/\D/g, ""), 10);
-        valB = parseInt(valB.replace(/\D/g, ""), 10);
-      }
-
-      if (sortOrder[type] === "asc") {
-        return valA > valB ? 1 : -1;
-      } else {
-        return valA < valB ? 1 : -1;
-      }
-    });
-
-    $.each(rows, function (index, row) {
-      table.append(row);
-    });
-
-    // Toggle sort order
-    sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-    // Update the sort icon
-    updateSortIcons(column, sortOrder[type]);
-  }
-
-  function updateSortIcons(columnIndex, order) {
-    $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-    $("th").each(function (index) {
-      if (index === columnIndex) {
-        $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-      }
-    });
-  }
-
-  // Event listeners for sorting
-  $("th").each(function (index) {
-    const th = $(this);
-    let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-
-    if (type === "orderdate") {
-      th.on("click", function () {
-        sortTable(index, "date");
+      orderDate: "asc",
+      orderNo: "asc",
+      agentName: "asc",
+      customerName: "asc",
+      partName: "asc",
+      yard: "asc",
+      orderStatus: "asc",
+      email: "asc",
+    };
+  
+    function sortTable(column, type) {
+      const table = $("#infoTable");
+      const rows = table.find("tr").toArray();
+  
+      rows.sort((a, b) => {
+        let valA = $(a).find("td").eq(column).text().trim();
+        let valB = $(b).find("td").eq(column).text().trim();
+  
+        if (type === "date") {
+          valA = new Date(valA);
+          valB = new Date(valB);
+        } else if (type === "number") {
+          valA = parseInt(valA.replace(/\D/g, ""), 10);
+          valB = parseInt(valB.replace(/\D/g, ""), 10);
+        }
+  
+        if (sortOrder[type] === "asc") {
+          return valA > valB ? 1 : -1;
+        } else {
+          return valA < valB ? 1 : -1;
+        }
       });
-    } else if (type === "orderno") {
-      th.on("click", function () {
-        sortTable(index, "number");
+  
+      $.each(rows, function (index, row) {
+        table.append(row);
       });
-    } else {
-      th.on("click", function () {
-        sortTable(index, type);
+  
+      // Toggle sort order
+      sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+  
+      // Update the sort icon
+      updateSortIcons(column, sortOrder[type]);
+    }
+  
+    function updateSortIcons(columnIndex, order) {
+      $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+      $("th").each(function (index) {
+        if (index === columnIndex) {
+          $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+        }
       });
     }
-  });
+  
+    // Event listeners for sorting
+    $("th").each(function (index) {
+      const th = $(this);
+      let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+  
+      if (type === "orderdate") {
+        th.on("click", function () {
+          sortTable(index, "date");
+        });
+      } else if (type === "orderno") {
+        th.on("click", function () {
+          sortTable(index, "number");
+        });
+      } else {
+        th.on("click", function () {
+          sortTable(index, type);
+        });
+      }
+    });
         // Get the current time and the login timestamp
         const currentTime = Date.now();
           const loginTimestamp = localStorage.getItem("loginTimestamp");
