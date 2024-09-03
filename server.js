@@ -1085,17 +1085,28 @@ app.delete('/users/:id', async (req, res) => {
 
 // to get the users by id
 app.get('/users/:id', async (req, res) => {
-  console.log("Received request to get user by ID:", req.params.id);
-    try {
-      const user = await User.findById(req.params.id);
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.json(user);
-    } catch (error) {
-      res.status(500).json({ message: 'Server error', error });
+  const { id } = req.params;
+  console.log("Received request to get user by ID:", id);
+
+  // Validate the ID format
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid User ID format' });
+  }
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
+
+    res.json(user);
+  } catch (error) {
+    console.error("Server error while fetching user by ID:", error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
   
 
 //edit user details
