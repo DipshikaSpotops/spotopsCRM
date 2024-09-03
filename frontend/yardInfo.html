@@ -275,8 +275,8 @@ placeholder="Search..."
 <table class="table table-bordered mt-4">
 <thead>
 <tr  style="background-color: #f2f2f2;text-align: center;" id="tableHeader">
-<th scope="col">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th scope="col">Customer Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer;" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer;" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="yardInfoTable">
@@ -625,7 +625,7 @@ maxYards = item.additionalInfo.length;
 // Update the table header to include the correct number of Yard columns
 const tableHeader = $("#tableHeader");
 for (let i = 1; i <= maxYards; i++) {
-tableHeader.append(`<th scope="col">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
+tableHeader.append(`<th style="cursor:pointer;" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
 }
 
 // Append the yard information to the table body
