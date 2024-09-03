@@ -446,6 +446,7 @@
 
             $(".edit-user-btn").on("click", function () {
   const userId = $(this).data("id");
+  console.log("userId",userId);
 
   // Fetch user data from the server
   $.ajax({
