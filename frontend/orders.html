@@ -478,10 +478,10 @@
             throw new Error("Failed to fetch orders");
           }
 
-          
+          var data = response.data;
 
           // Filter out orders with status "Customer approved" or "Placed"
-
+          
           var filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
           filteredData = sortOrdersByOrderNoDesc(filteredData);
           filteredData.forEach((item) => {
