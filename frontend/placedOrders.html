@@ -611,7 +611,7 @@ if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 
-const data = response.data;
+var data = response.data;
 data = sortOrdersByOrderNoDesc(data);
 data.forEach((item) => {
 if (item.orderStatus === "Placed") {
