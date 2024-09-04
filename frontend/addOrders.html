@@ -1002,7 +1002,7 @@ window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
 
-const currentPath = window.location.pathname;
+const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
