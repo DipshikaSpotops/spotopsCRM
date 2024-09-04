@@ -982,6 +982,7 @@ window.location.href = "login_signup.html";
 });
 
 const currentPath = window.location.pathname;
+console.log("currentPath",currentPath);
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
