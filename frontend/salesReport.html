@@ -368,15 +368,15 @@ function parseOrderDate(dateString) {
         }
 
         const currentDate = new Date();
-        const currentMonth = currentDate.getMonth(); // Get the current month (0-indexed, i.e., Jan = 0, Sept = 8)
+        const currentMonth = currentDate.getMonth(); // Get the current month
         const currentYear = currentDate.getFullYear();
 
         const data = response.data.filter((order) => order.salesAgent === firstName);
 
         const salesData = [];
-        const labels = filter === "daily" ? getDaysInMonth(currentMonth, currentYear) : [
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        ];
+        const labels = filter === "daily" 
+            ? getDaysInMonth(currentMonth, currentYear) 
+            : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         let totalOrders = 0;
         let estimatedGP = 0;
@@ -404,7 +404,7 @@ function parseOrderDate(dateString) {
             const orderMonth = parsedOrderDate.getMonth();
             const orderYear = parsedOrderDate.getFullYear();
 
-            // Only consider orders from the current month and year when the filter is "daily"
+            // Consider only orders from the current month/year for daily filter
             if (filter === "daily" && (orderMonth !== currentMonth || orderYear !== currentYear)) {
                 return;
             }
@@ -417,7 +417,9 @@ function parseOrderDate(dateString) {
             estimatedGPArr.push(estGP);
             estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
 
-            const label = filter === "daily" ? parsedOrderDate.getDate().toString() : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
+            const label = filter === "daily" 
+                ? parsedOrderDate.getDate().toString() 
+                : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
 
             let overallSpendingArr = [];
 
@@ -449,7 +451,7 @@ function parseOrderDate(dateString) {
                     const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
                     const actualGP = taxedSP - overallSpending;
 
-                     axios.put(
+                    await axios.put(
                         `https://www.spotops360.com/orders/updateActualGP/${order.orderNo}`,
                         { actualGP },
                         {
@@ -468,7 +470,7 @@ function parseOrderDate(dateString) {
         totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
         averageGP = totalAgp / validOrdersCount || 0;
 
-        // Update stats for both daily and monthly
+        // Update stats for both daily and monthly views
         updateStats({
             totalOrders,
             estimatedGP,
@@ -476,11 +478,7 @@ function parseOrderDate(dateString) {
             estimatedAverageGP: averageGP,
             totalAgp,
         });
-        
-        // Update the chart (daily or monthly)
         updateSalesChart(salesData, labels, filter);
-        
-        // Update recent orders and brand summary
         updateRecentOrders(data);
         updateBrandSummary(data);
     } catch (error) {
