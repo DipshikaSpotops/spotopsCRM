@@ -752,17 +752,21 @@ info.stockNo || ""
       ${info.shippingDetails || ""} <br>
       Others: $${info.others} <br>
 </td>
-<td>Customer Tracking: ${info.trackingNo || ""} <br> 
-    Shipper Name: ${info.shipperName || ""} <br> 
-    Tracking Link: ${info.trackingLink || ""} <br>     
-</td>
-<td>Escalation Date: ${info.escalationDate || ""} <br>  
-    Escalation Cause: ${info.escalationCause || ""} <br>
-      Escalation Process: ${
-        info.escalationProcess || ""
-      } <br>
-      
-</td>
+let trackingInfo = "";
+        if (info.trackingNo || info.shipperName || info.trackingLink) {
+            trackingInfo = <td> ${info.trackingNo ? `Customer Tracking: ${info.trackingNo}<br>` : ""}
+                ${info.shipperName ? `Shipper Name: ${info.shipperName}<br>` : ""}
+                ${info.trackingLink ? `Tracking Link: ${info.trackingLink}<br>` : ""}
+            </td>;
+        }
+let escalationInfo = "";
+        if (info.escalationDate || info.escalationCause || info.escalationProcess) {
+            escalationInfo = <td>
+                ${info.escalationDate ? `Escalation Date: ${info.escalationDate}<br>` : ""}
+                ${info.escalationCause ? `Escalation Cause: ${info.escalationCause}<br>` : ""}
+                ${info.escalationProcess ? `Escalation Process: ${info.escalationProcess}<br>` : ""}
+            </td>;
+        }
 `;
 });
 }
@@ -870,3 +874,15 @@ window.location.href = "login_signup.html";
 </script>
 </body>
 </html>
+in the above html i want the  following to be appended in the table only if the value exists:
+<td>Customer Tracking: ${info.trackingNo || ""} <br> 
+  Shipper Name: ${info.shipperName || ""} <br> 
+  Tracking Link: ${info.trackingLink || ""} <br>     
+</td>
+<td>Escalation Date: ${info.escalationDate || ""} <br>  
+  Escalation Cause: ${info.escalationCause || ""} <br>
+    Escalation Process: ${
+      info.escalationProcess || ""
+    } <br>
+    
+</td>
