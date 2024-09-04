@@ -258,20 +258,20 @@ window.location.href = "login_signup.html";
 <div class="modal-body">
 <form id="profileForm">
 <div class="form-group">
-    <label for="profileFirstName">First Name</label>
-    <input type="text" class="form-control" id="profileFirstName" readonly />
+<label for="profileFirstName">First Name</label>
+<input type="text" class="form-control" id="profileFirstName" readonly />
 </div>
 <div class="form-group">
-    <label for="profileLastName">Last Name</label>
-    <input type="text" class="form-control" id="profileLastName" readonly />
+<label for="profileLastName">Last Name</label>
+<input type="text" class="form-control" id="profileLastName" readonly />
 </div>
 <div class="form-group">
-    <label for="profileEmail">Email</label>
-    <input type="email" class="form-control" id="profileEmail" readonly />
+<label for="profileEmail">Email</label>
+<input type="email" class="form-control" id="profileEmail" readonly />
 </div>
 <div class="form-group">
-    <label for="profileRole">Role</label>
-    <input type="text" class="form-control" id="profileRole" readonly />
+<label for="profileRole">Role</label>
+<input type="text" class="form-control" id="profileRole" readonly />
 </div>
 </form>
 </div>
@@ -362,94 +362,94 @@ let currentMonthStats = {};
 
 // Fetch data for daily graph (only for the current month)
 async function fetchSalesDataForCurrentMonth() {
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
-        const currentYear = currentDate.getFullYear();
+const currentDate = new Date();
+const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
+const currentYear = currentDate.getFullYear();
 
-        try {
-            const response = await axios.get(`https://www.spotops360.com/orders`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+try {
+const response = await axios.get(`https://www.spotops360.com/orders`, {
+headers: { Authorization: `Bearer ${token}` },
+});
 
-            if (response.status !== 200) {
-                throw new Error("Failed to fetch orders");
-            }
+if (response.status !== 200) {
+throw new Error("Failed to fetch orders");
+}
 
-            dailyData = response.data.filter((order) => {
-                const parsedOrderDate = parseOrderDate(order.orderDate);
-                if (!parsedOrderDate) return false;
+dailyData = response.data.filter((order) => {
+const parsedOrderDate = parseOrderDate(order.orderDate);
+if (!parsedOrderDate) return false;
 
-                const orderMonth = parsedOrderDate.getMonth();
-                const orderYear = parsedOrderDate.getFullYear();
+const orderMonth = parsedOrderDate.getMonth();
+const orderYear = parsedOrderDate.getFullYear();
 
-                return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
-            });
+return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
+});
 
-            calculateStats(dailyData); // Calculate stats for current month
-        } catch (error) {
-            console.error("Error fetching sales data:", error);
-        }
-    }
+calculateStats(dailyData); // Calculate stats for current month
+} catch (error) {
+console.error("Error fetching sales data:", error);
+}
+}
 
-    // Calculate stats based on daily data (for the current month)
-    function calculateStats(data) {
-        let totalOrders = 0;
-        let estimatedGP = 0;
-        let highestGP = 0;
-        let actualAGPArr = [];
-        let totalAgp = 0;
-        let validOrdersCount = 0;
+// Calculate stats based on daily data (for the current month)
+function calculateStats(data) {
+let totalOrders = 0;
+let estimatedGP = 0;
+let highestGP = 0;
+let actualAGPArr = [];
+let totalAgp = 0;
+let validOrdersCount = 0;
 
-        data.forEach((order) => {
-            totalOrders += 1;
-            const salePrice = order.soldP;
-            const salestax = order.salestax || 0;
-            const estGP = order.grossProfit;
+data.forEach((order) => {
+totalOrders += 1;
+const salePrice = order.soldP;
+const salestax = order.salestax || 0;
+const estGP = order.grossProfit;
 
-            estimatedGP += estGP;
+estimatedGP += estGP;
 
-            let totalSpending = 0;
-            let validOrder = false;
+let totalSpending = 0;
+let validOrder = false;
 
-            if (order.additionalInfo && order.additionalInfo.length > 0) {
-                validOrdersCount++;
-                order.additionalInfo.forEach((info) => {
-                    const shippingDetails = info.shippingDetails.split(":")[1].trim();
-                    const shippingCharge = parseFloat(shippingDetails) || 0;
-                    const partPrice = parseFloat(info.partPrice) || 0;
-                    const otherCost = parseFloat(info.others) || 0;
-                    const returnShippingCharge = parseFloat(info.returnShippingCharge) || 0;
-                    const refundedAmount = parseFloat(info.refundedAmount) || 0;
+if (order.additionalInfo && order.additionalInfo.length > 0) {
+validOrdersCount++;
+order.additionalInfo.forEach((info) => {
+const shippingDetails = info.shippingDetails.split(":")[1].trim();
+const shippingCharge = parseFloat(shippingDetails) || 0;
+const partPrice = parseFloat(info.partPrice) || 0;
+const otherCost = parseFloat(info.others) || 0;
+const returnShippingCharge = parseFloat(info.returnShippingCharge) || 0;
+const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
-                    totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
+totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
 
-                    if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
-                        validOrder = true;
-                    }
-                });
+if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
+    validOrder = true;
+}
+});
 
-                if (validOrder) {
-                    const actualGPForOrder = salePrice - salestax - totalSpending;
-                    actualAGPArr.push(actualGPForOrder);
-                    highestGP = Math.max(highestGP, actualGPForOrder);
-                }
-            }
-        });
+if (validOrder) {
+const actualGPForOrder = salePrice - salestax - totalSpending;
+actualAGPArr.push(actualGPForOrder);
+highestGP = Math.max(highestGP, actualGPForOrder);
+}
+}
+});
 
-        totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
-        const averageGP = validOrdersCount > 0 ? totalAgp / validOrdersCount : 0;
+totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
+const averageGP = validOrdersCount > 0 ? totalAgp / validOrdersCount : 0;
 
-        currentMonthStats = {
-            totalOrders,
-            estimatedGP,
-            highestGP,
-            estimatedAverageGP: averageGP,
-            totalAgp,
-        };
+currentMonthStats = {
+totalOrders,
+estimatedGP,
+highestGP,
+estimatedAverageGP: averageGP,
+totalAgp,
+};
 
-        // Update the stats-container with the current month's stats
-        updateStats(currentMonthStats);
-    }
+// Update the stats-container with the current month's stats
+updateStats(currentMonthStats);
+}
 
 
 
@@ -466,132 +466,134 @@ date.setDate(date.getDate() + 1);
 return days;
 }
 
- 
+
 // Update the stats-container with the provided stats
 function updateStats(stats) {
-        $("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
-        $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
-        $("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
-        $("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
-        $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
-    }
+$("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
+$("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
+$("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
+$("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
+$("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
+}
 
-    // Fetch data based on the selected filter (daily or monthly) for the chart
-    async function fetchSalesData(filter) {
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth(); // Get the current month
-        const currentYear = currentDate.getFullYear();
+// Fetch data based on the selected filter (daily or monthly) for the chart
+async function fetchSalesData(filter) {
+const currentDate = new Date();
+const currentMonth = currentDate.getMonth(); // Get the current month
+const currentYear = currentDate.getFullYear();
 
-        try {
-            const response = await axios.get(`https://www.spotops360.com/orders`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+try {
+const response = await axios.get(`https://www.spotops360.com/orders`, {
+headers: { Authorization: `Bearer ${token}` },
+});
 
-            if (response.status !== 200) {
-                throw new Error("Failed to fetch orders");
-            }
+if (response.status !== 200) {
+throw new Error("Failed to fetch orders");
+}
 
-            const data = response.data.filter((order) => order.salesAgent === firstName);
+const data = response.data.filter((order) => order.salesAgent === firstName);
 
-            const salesData = [];
-            const labels = filter === "daily" 
-                ? getDaysInMonth(currentMonth, currentYear) 
-                : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const salesData = [];
+const labels = filter === "daily" 
+? getDaysInMonth(currentMonth, currentYear) 
+: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-            labels.forEach((label) => {
-                salesData.push(0);
-            });
+labels.forEach((label) => {
+salesData.push(0);
+});
 
-            data.forEach((order) => {
-                const parsedOrderDate = parseOrderDate(order.orderDate);
-                if (!parsedOrderDate) return;
+data.forEach((order) => {
+const parsedOrderDate = parseOrderDate(order.orderDate);
+if (!parsedOrderDate) return;
 
-                // For daily, only include orders from the current month
-                if (filter === "daily") {
-                    const orderMonth = parsedOrderDate.getMonth();
-                    const orderYear = parsedOrderDate.getFullYear();
-                    if (orderMonth !== currentMonth || orderYear !== currentYear) return;
-                }
+// For daily, only include orders from the current month
+if (filter === "daily") {
+const orderMonth = parsedOrderDate.getMonth();
+const orderYear = parsedOrderDate.getFullYear();
+if (orderMonth !== currentMonth || orderYear !== currentYear) return;
+}
 
-                const label = filter === "daily" 
-                    ? parsedOrderDate.getDate().toString() 
-                    : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
+const label = filter === "daily" 
+? parsedOrderDate.getDate().toString() 
+: parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
 
-                const labelIndex = labels.indexOf(label);
-                if (labelIndex !== -1) {
-                    salesData[labelIndex] += 1;
-                }
-            });
+const labelIndex = labels.indexOf(label);
+if (labelIndex !== -1) {
+salesData[labelIndex] += 1;
+}
+});
 
-            updateSalesChart(salesData, labels, filter); // Update chart based on the selected filter
-        } catch (error) {
-            console.error("Error fetching sales data:", error);
-        }
-    }
+updateSalesChart(salesData, labels, filter); // Update chart based on the selected filter
+} catch (error) {
+console.error("Error fetching sales data:", error);
+}
+}
 
 
 
 // Chart update function
 function updateSalesChart(salesData, labels, filter) {
-        const ctx = document.getElementById("salesChart").getContext("2d");
-        if (window.salesChart instanceof Chart) {
-            window.salesChart.destroy();
-        }
-        window.salesChart = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Number of Orders",
-                        data: salesData,
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: filter === "daily" ? "Days of the Month" : "Months",
-                        },
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Number of Orders",
-                        },
-                        ticks: {
-                            stepSize: 1,
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            },
-        });
-    }
+const ctx = document.getElementById("salesChart").getContext("2d");
+if (window.salesChart instanceof Chart) {
+window.salesChart.destroy();
+}
+window.salesChart = new Chart(ctx, {
+type: "bar",
+data: {
+labels: labels,
+datasets: [
+{
+    label: "Number of Orders",
+    data: salesData,
+    backgroundColor: "rgba(75, 192, 192, 0.2)",
+    borderColor: "rgba(75, 192, 192, 1)",
+    borderWidth: 1,
+},
+],
+},
+options: {
+responsive: true,
+scales: {
+x: {
+    display: true,
+    title: {
+        display: true,
+        text: filter === "daily" ? "Days of the Month" : "Months",
+    },
+},
+y: {
+    display: true,
+    title: {
+        display: true,
+        text: "Number of Orders",
+    },
+    ticks: {
+        stepSize: 1,
+        beginAtZero: true,
+    },
+},
+},
+},
+});
+}
 
-    // Initial fetch for daily data (for the stats)
-    await fetchSalesDataForCurrentMonth();
+// Initial fetch for daily data (for the stats)
+await fetchSalesDataForCurrentMonth();
 
 
 
 function updateRecentOrders(orders) {
 const recentOrdersTable = $("#recentOrdersTable");
-recentOrdersTable.empty();
+recentOrdersTable.empty();  // Clear previous entries
+
+// Populate with the filtered data
 orders.forEach((order) => {
 recentOrdersTable.append(`
 <tr>
-    <td>${order.orderNo}</td>
-    <td>${order.customerName}</td>
-    <td>${order.orderDate}</td>
-    <td>$${order.grossProfit.toFixed(2)}</td>
+<td>${order.orderNo}</td>
+<td>${order.customerName}</td>
+<td>${order.orderDate}</td>
+<td>$${order.grossProfit.toFixed(2)}</td>
 </tr>
 `);
 });
@@ -608,22 +610,25 @@ return acc;
 }, {});
 
 const brandSummaryTable = $("#brandSummaryTable");
-brandSummaryTable.empty();
+brandSummaryTable.empty();  // Clear previous entries
+
 for (const brand in brandSummary) {
 brandSummaryTable.append(`
 <tr>
-    <td>${brand}</td>
-    <td>${brandSummary[brand].count}</td>
-    <td>$${brandSummary[brand].grossProfit.toFixed(2)}</td>
+<td>${brand}</td>
+<td>${brandSummary[brand].count}</td>
+<td>$${brandSummary[brand].grossProfit.toFixed(2)}</td>
+</tr>
 `);
 }
 }
+
 
 $("#salesFilter").on("change", function () {
 const filter = $(this).val();
 fetchSalesData(filter);
 });
- // Initial fetch for the chart (daily view)
+// Initial fetch for the chart (daily view)
 fetchSalesData("daily");
 
 $(".toggle-btn").on("click", function () {
@@ -668,3 +673,4 @@ window.location.href = 'login_signup.html';
 </script>
 </body>
 </html>
+<!-- now i am not able to see Recent Orders and also not able to see Brand Orders Smmary tablee,the data is empty -->
