@@ -473,6 +473,7 @@ salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
 totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
 averageGP = totalAgp / validOrdersCount || 0;
 // Update stats for both daily and monthly views
+console.log("stats",totalOrders,estimatedGP,highestGP,averageGP,totalAgp)
 updateStats({
 totalOrders,
 estimatedGP,
