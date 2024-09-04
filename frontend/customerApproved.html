@@ -476,28 +476,28 @@ const secondLineS = `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim(
 const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
 $("#infoTable").append(
 `<tr>
-<td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>Name: ${item.customerName}</br>
-                Email: ${item.email}</br>
-                Phone: ${item.phone}</br>
-                Alt Phone: ${item.altPhone}</br>
-                Billing Address:</br> ${formattedBAddress}</br>
-              </td>
-<td> ${formattedSAddress}</br>                
-<td>${item.pReq || item.partName}</td>
-<td>Year: ${item.year}</br>
-  Make: ${item.make}</br>
-  Model: ${item.model}</br>
-  Part Description: ${item.desc}</br>
-  VIN: ${item.vin}</br>
-  Warranty: ${item.warranty} days</br>
-</td>
-<td>${item.orderStatus}</td>
-<td>${item.email}</td>
-
+  <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
+  <td>${item.orderDate}</td>
+  <td>${item.orderNo}</td>
+  <td>${item.salesAgent}</td>
+  <td>Name: ${item.customerName}</br>
+                    Email: ${item.email}</br>
+                    Phone: ${item.phone}</br>
+                    Alt Phone: ${item.altPhone}</br>
+                    Billing Address:</br> ${formattedBAddress}</br>
+                  </td>
+  <td> ${formattedSAddress}</br>                
+  <td>${item.pReq || item.partName}</td>
+  <td>Year: ${item.year}</br>
+      Make: ${item.make}</br>
+      Model: ${item.model}</br>
+      Part Description: ${item.desc}</br>
+      VIN: ${item.vin}</br>
+      Warranty: ${item.warranty} days</br>
+    </td>
+    <td>${item.orderStatus}</td>
+  <td>${item.email}</td>
+  
 </tr>`
 );
 }
