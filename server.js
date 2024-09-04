@@ -297,6 +297,7 @@ const OrderSchema = new mongoose.Schema({
   grossProfit: Number,
   orderStatus: String,
   vin: String,
+  partNo: String,
   last4digits: String,
   additionalInfo: [additionalInfoSchema],
   trackingInfo: String,
