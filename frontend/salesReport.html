@@ -394,7 +394,6 @@ function parseOrderDate(dateString) {
         });
 
         data.forEach((order) => {
-            
             const parsedOrderDate = parseOrderDate(order.orderDate);
 
             if (!parsedOrderDate) {
@@ -469,6 +468,7 @@ function parseOrderDate(dateString) {
         totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
         averageGP = totalAgp / validOrdersCount || 0;
 
+        // Update stats for both daily and monthly
         updateStats({
             totalOrders,
             estimatedGP,
@@ -476,13 +476,18 @@ function parseOrderDate(dateString) {
             estimatedAverageGP: averageGP,
             totalAgp,
         });
+        
+        // Update the chart (daily or monthly)
         updateSalesChart(salesData, labels, filter);
+        
+        // Update recent orders and brand summary
         updateRecentOrders(data);
         updateBrandSummary(data);
     } catch (error) {
         console.error("Error fetching sales data:", error);
     }
 }
+
 
 
 
