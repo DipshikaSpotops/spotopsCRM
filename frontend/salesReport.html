@@ -335,16 +335,16 @@
             throw new Error("Failed to fetch orders");
         }
 
-        const currentMonth = new Date().getMonth(); // Get the current month
-        const data = response.data.filter(
-            (order) => order.salesAgent === firstName
-        );
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth(); // Get the current month (0-indexed, i.e., Jan = 0, Sept = 8)
+        const currentYear = currentDate.getFullYear();
+
+        const data = response.data.filter((order) => order.salesAgent === firstName);
 
         const salesData = [];
-        const labels =
-            filter === "daily"
-                ? getDaysInMonth(new Date().getMonth(), new Date().getFullYear())
-                : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const labels = filter === "daily" ? getDaysInMonth(currentMonth, currentYear) : [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
 
         let totalOrders = 0;
         let estimatedGP = 0;
@@ -361,14 +361,21 @@
             orderCounts[label] = { count: 0, grossProfit: 0 };
         });
 
-        for (const order of data) {
+        data.forEach((order) => {
             const orderDate = new Date(order.orderDate);
             const orderMonth = orderDate.getMonth();
+            const orderYear = orderDate.getFullYear();
 
-            // Skip orders from previous months when the filter is "daily"
-            if (filter === "daily" && orderMonth !== currentMonth) {
-                continue;
+            // DEBUG: Log all orders to verify their dates
+            console.log(`Order Date: ${order.orderDate}, Parsed Month: ${orderMonth}, Year: ${orderYear}`);
+
+            // Only consider orders from the current month and year when the filter is "daily"
+            if (filter === "daily" && (orderMonth !== currentMonth || orderYear !== currentYear)) {
+                console.log(`Skipping order from ${orderMonth + 1}/${orderYear}`);
+                return;
             }
+
+            totalOrders += 1;
 
             const salePrice = order.soldP;
             const salestax = order.salestax || 0;
@@ -376,12 +383,7 @@
             estimatedGPArr.push(estGP);
             estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
 
-            const label =
-                filter === "daily"
-                    ? orderDate.getDate().toString()
-                    : orderDate.toLocaleDateString("en-US", { month: "short" });
-
-            totalOrders += 1;
+            const label = filter === "daily" ? orderDate.getDate().toString() : orderDate.toLocaleDateString("en-US", { month: "short" });
 
             let overallSpendingArr = [];
 
@@ -395,7 +397,7 @@
 
                 for (let d = 0; d < info.length; d++) {
                     const shippingDetails = info[d].shippingDetails;
-                    const shippingValue = shippingDetails.split(":")[1].trim(); 
+                    const shippingValue = shippingDetails.split(":")[1].trim();
                     const shippingCharge = shippingValue || 0;
                     const partprice = info[d].partPrice || 0;
                     const otherC = info[d].others || 0;
@@ -413,7 +415,7 @@
                     const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
                     const actualGP = taxedSP - overallSpending;
 
-                    await axios.put(
+                     axios.put(
                         `https://www.spotops360.com/orders/updateActualGP/${order.orderNo}`,
                         { actualGP },
                         {
@@ -427,7 +429,7 @@
             }
 
             salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
-        }
+        });
 
         totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
         averageGP = totalAgp / validOrdersCount || 0;
@@ -446,6 +448,7 @@
         console.error("Error fetching sales data:", error);
     }
 }
+
 
 
             function getDaysInMonth(month, year) {
@@ -604,13 +607,4 @@
     </script>
 </body>
 </html>
-<!-- in the above html,in daily graph , if the new month for example september starts, then the previous graph data should be removed and start from the new month  and even the data in the below div should be updated when the new month starts
-so now see the orderDate, it starts from Sept, so ignore all august orders for daily graph,yearly graph is totally fine and also according to order date, the following should be updated 
-<div class="stats-container">
-    <div class="stats-box" id="totalOrders">Total Orders: 0</div>
-    <div class="stats-box" id="estimatedGP">Estimated GP: $0</div>
-    <div class="stats-box" id="estimatedHighestGP">Highest GP: $0</div>
-    <div class="stats-box" id="estimatedAverageGP">Average GP: $0</div>
-    <div class="stats-box" id="AverageGP">Actual GP: $0</div>
-</div>
-please dont change any other thing -->
+<!-- now the total no of oredres related to the particular account which i am reviewing are 5 for month of Sept, but its showing 2 -->
