@@ -666,10 +666,11 @@ if (response.status !== 200) {
   throw new Error("Failed to fetch orders");
 }
 
-const data = response.data;
+var data = response.data;
 
 // Determine the maximum number of additionalInfo items to create headers dynamically
 let maxAdditionalInfoLength = 0;
+data = sortOrdersByOrderNoDesc(data);
 data.forEach((item) => {
   if (
     item.additionalInfo &&
@@ -853,7 +854,14 @@ try {
   console.error("Error updating order status:", error);
 }
 });
-
+function sortOrdersByOrderNoDesc(orders) {
+console.log("sort in ascending order initially")  
+return orders.sort((a, b) => {
+const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+return orderNoB - orderNoA;
+});
+}
 $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
