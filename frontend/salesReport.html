@@ -284,17 +284,18 @@
 
     <script>
 function parseOrderDate(dateString) {
-    // Regex to handle "3rd Sept, 2024 16:11" format
-    const regex = /(\d{1,2})(?:st|nd|rd|th)? (\w{3}), (\d{4}) (\d{2}):(\d{2})/;
+    // Regex to handle "3rd Sep, 2024 16:11" or "4th Sep, 2024 8:42" format
+    const regex = /(\d{1,2})(?:st|nd|rd|th)? (\w{3}), (\d{4}) (\d{1,2}):(\d{2})/;
     const match = dateString.match(regex);
 
     if (match) {
         const day = match[1];
         const month = match[2];
         const year = match[3];
-        const hour = match[4];
+        const hour = match[4].padStart(2, "0");  // Pad single-digit hour with leading zero
         const minute = match[5];
 
+        // Convert month name to number (Jan = 1, Feb = 2, etc.)
         const monthNumber = new Date(`${month} 1, ${year}`).getMonth() + 1; // JS months are 0-indexed
         const formattedDate = `${year}-${String(monthNumber).padStart(2, "0")}-${String(day).padStart(2, "0")}T${hour}:${minute}:00`;
 
@@ -303,7 +304,7 @@ function parseOrderDate(dateString) {
 
     // Fallback to ISO date format "YYYY-MM-DD" or other parsable formats
     const isoFormatDate = new Date(dateString);
-    if (!isNaN(isoFormatDate)) {
+    if (!isNaN(isoFormatDate.getTime())) {
         return isoFormatDate;
     }
 
@@ -311,6 +312,7 @@ function parseOrderDate(dateString) {
     console.error("Unrecognized date format:", dateString);
     return null; // Return null if the format is unrecognized
 }
+
 
 
         $(document).ready(async function () {
