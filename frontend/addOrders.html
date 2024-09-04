@@ -490,6 +490,7 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="warranty" placeholder="Warranty" required />
 </div>
 </div>
+
 <div class="form-row">
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="desc" placeholder="Description" />
@@ -503,38 +504,33 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 
-<div class="firstRow">
-<div class="priceRow">
+<div class="firstRow" id="priceRow">
+<!-- <div class="priceRow"> -->
 <h6 class="text-center;" style="margin-top: 1%; text-align: center;">Price and GP Information</h6>
-<div class="form-row">
+<div class="form-row firstFive">
 <div class="form-group col-md-2">
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text">$</span>
-</div>
-<input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
-</div>
+<input type="text" class="form-control" id="year" placeholder="Year" required />
 </div>
 <div class="form-group col-md-2">
-<div class="input-group">
+    <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
+    </div>
+<div class="form-group col-md-2">
 <div class="input-group-prepend">
 <span class="input-group-text">$</span>
 </div>
 <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
 </div>
-</div>
+
 <div class="form-group col-md-2">
-<div class="input-group">
 <div class="input-group-prepend">
 <span class="input-group-text">$</span>
 </div>
 <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
 </div>
-</div>
 <div class="form-group col-md-6">
 <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes"></input>
 </div>
-</div>
+
 <div class="form-row">
 <div class="form-group col-md-2">
 <div class="input-group">
