@@ -283,6 +283,27 @@
     </div>
 
     <script>
+         // Function to parse both "3rd Sept, 2024 16:11" and "2024-09-03" formats
+         function parseOrderDate(dateString) {
+            const regex = /(\d{1,2})(?:st|nd|rd|th)? (\w{3}), (\d{4}) (\d{2}):(\d{2})/;
+            const match = dateString.match(regex);
+
+            if (match) {
+                const day = match[1];
+                const month = match[2];
+                const year = match[3];
+                const hour = match[4];
+                const minute = match[5];
+
+                const monthNumber = new Date(`${month} 1, ${year}`).getMonth() + 1; // JS months are 0-indexed
+                const formattedDate = `${year}-${String(monthNumber).padStart(2, "0")}-${String(day).padStart(2, "0")}T${hour}:${minute}:00`;
+
+                return new Date(formattedDate); // Return a JS Date object
+            }
+
+            // If the date is in 'YYYY-MM-DD' format, return it as a Date object
+            return new Date(dateString);
+        }
         $(document).ready(async function () {
             // Get the current time and the login timestamp
         const currentTime = Date.now();
@@ -326,128 +347,119 @@
             });
 
             async function fetchSalesData(filter) {
-    try {
-        const response = await axios.get(`https://www.spotops360.com/orders`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+                try {
+                    const response = await axios.get(`https://www.spotops360.com/orders`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
 
-        if (response.status !== 200) {
-            throw new Error("Failed to fetch orders");
-        }
+                    const currentDate = new Date();
+                    const currentMonth = currentDate.getMonth();
+                    const currentYear = currentDate.getFullYear();
 
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth(); // Get the current month (0-indexed, i.e., Jan = 0, Sept = 8)
-        const currentYear = currentDate.getFullYear();
+                    const data = response.data.filter((order) => order.salesAgent === firstName);
 
-        const data = response.data.filter((order) => order.salesAgent === firstName);
+                    const salesData = [];
+                    const labels = filter === "daily" ? getDaysInMonth(currentMonth, currentYear) : [
+                        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                    ];
 
-        const salesData = [];
-        const labels = filter === "daily" ? getDaysInMonth(currentMonth, currentYear) : [
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        ];
+                    let totalOrders = 0;
+                    let estimatedGP = 0;
+                    let estimatedGPArr = [];
+                    let highestGP = 0;
+                    let averageGP = 0;
+                    let actualAGPArr = [];
+                    let totalAgp = 0;
+                    let validOrdersCount = 0;
 
-        let totalOrders = 0;
-        let estimatedGP = 0;
-        let estimatedGPArr = [];
-        let highestGP = 0;
-        let averageGP = 0;
-        let actualAGPArr = [];
-        let totalAgp = 0;
-        let validOrdersCount = 0;
+                    const orderCounts = {};
 
-        const orderCounts = {};
+                    labels.forEach((label) => {
+                        orderCounts[label] = { count: 0, grossProfit: 0 };
+                    });
 
-        labels.forEach((label) => {
-            orderCounts[label] = { count: 0, grossProfit: 0 };
-        });
+                    data.forEach((order) => {
+                        const orderDate = parseOrderDate(order.orderDate);
+                        const orderMonth = orderDate.getMonth();
+                        const orderYear = orderDate.getFullYear();
 
-        data.forEach((order) => {
-            const orderDate = new Date(order.orderDate);
-            const orderMonth = orderDate.getMonth();
-            const orderYear = orderDate.getFullYear();
-
-            // DEBUG: Log all orders to verify their dates
-            console.log(`Order Date: ${order.orderDate}, Parsed Month: ${orderMonth}, Year: ${orderYear}`);
-
-            // Only consider orders from the current month and year when the filter is "daily"
-            if (filter === "daily" && (orderMonth !== currentMonth || orderYear !== currentYear)) {
-                console.log(`Skipping order from ${orderMonth + 1}/${orderYear}`);
-                return;
-            }
-
-            totalOrders += 1;
-
-            const salePrice = order.soldP;
-            const salestax = order.salestax || 0;
-            const estGP = order.grossProfit;
-            estimatedGPArr.push(estGP);
-            estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
-
-            const label = filter === "daily" ? orderDate.getDate().toString() : orderDate.toLocaleDateString("en-US", { month: "short" });
-
-            let overallSpendingArr = [];
-
-            if (order.additionalInfo && order.additionalInfo.length > 0) {
-                let validOrder = false;
-                validOrdersCount++;
-                orderCounts[label].count += 1;
-                orderCounts[label].grossProfit += order.grossProfit;
-                const info = order.additionalInfo;
-                const taxedSP = salePrice - salestax;
-
-                for (let d = 0; d < info.length; d++) {
-                    const shippingDetails = info[d].shippingDetails;
-                    const shippingValue = shippingDetails.split(":")[1].trim();
-                    const shippingCharge = shippingValue || 0;
-                    const partprice = info[d].partPrice || 0;
-                    const otherC = info[d].others || 0;
-                    const returnShippingCharge = info[d].returnShippingCharge || 0;
-                    const totalP = Number(shippingCharge) + Number(partprice) + Number(otherC) + returnShippingCharge;
-                    const totalR = info[d].refundedAmount || 0;
-
-                    if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
-                        validOrder = true;
-                        overallSpendingArr.push(totalP - totalR);
-                    }
-                }
-
-                if (validOrder) {
-                    const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
-                    const actualGP = taxedSP - overallSpending;
-
-                     axios.put(
-                        `https://www.spotops360.com/orders/updateActualGP/${order.orderNo}`,
-                        { actualGP },
-                        {
-                            headers: { Authorization: `Bearer ${token}` },
+                        if (filter === "daily" && (orderMonth !== currentMonth || orderYear !== currentYear)) {
+                            return;
                         }
-                    );
 
-                    actualAGPArr.push(actualGP);
-                    highestGP = Math.max(...actualAGPArr);
+                        totalOrders += 1;
+
+                        const salePrice = order.soldP;
+                        const salestax = order.salestax || 0;
+                        const estGP = order.grossProfit;
+                        estimatedGPArr.push(estGP);
+                        estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
+
+                        const label = filter === "daily" ? orderDate.getDate().toString() : orderDate.toLocaleDateString("en-US", { month: "short" });
+
+                        let overallSpendingArr = [];
+
+                        if (order.additionalInfo && order.additionalInfo.length > 0) {
+                            let validOrder = false;
+                            validOrdersCount++;
+                            orderCounts[label].count += 1;
+                            orderCounts[label].grossProfit += order.grossProfit;
+                            const info = order.additionalInfo;
+                            const taxedSP = salePrice - salestax;
+
+                            for (let d = 0; d < info.length; d++) {
+                                const shippingDetails = info[d].shippingDetails;
+                                const shippingValue = shippingDetails.split(":")[1].trim();
+                                const shippingCharge = shippingValue || 0;
+                                const partprice = info[d].partPrice || 0;
+                                const otherC = info[d].others || 0;
+                                const returnShippingCharge = info[d].returnShippingCharge || 0;
+                                const totalP = Number(shippingCharge) + Number(partprice) + Number(otherC) + returnShippingCharge;
+                                const totalR = info[d].refundedAmount || 0;
+
+                                if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
+                                    validOrder = true;
+                                    overallSpendingArr.push(totalP - totalR);
+                                }
+                            }
+
+                            if (validOrder) {
+                                const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
+                                const actualGP = taxedSP - overallSpending;
+
+                                 axios.put(
+                                    `https://www.spotops360.com/orders/updateActualGP/${order.orderNo}`,
+                                    { actualGP },
+                                    {
+                                        headers: { Authorization: `Bearer ${token}` },
+                                    }
+                                );
+
+                                actualAGPArr.push(actualGP);
+                                highestGP = Math.max(...actualAGPArr);
+                            }
+                        }
+
+                        salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
+                    });
+
+                    totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
+                    averageGP = totalAgp / validOrdersCount || 0;
+
+                    updateStats({
+                        totalOrders,
+                        estimatedGP,
+                        highestGP,
+                        estimatedAverageGP: averageGP,
+                        totalAgp,
+                    });
+                    updateSalesChart(salesData, labels, filter);
+                    updateRecentOrders(data);
+                    updateBrandSummary(data);
+                } catch (error) {
+                    console.error("Error fetching sales data:", error);
                 }
             }
-
-            salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
-        });
-
-        totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
-        averageGP = totalAgp / validOrdersCount || 0;
-
-        updateStats({
-            totalOrders,
-            estimatedGP,
-            highestGP,
-            estimatedAverageGP: averageGP,
-            totalAgp,
-        });
-        updateSalesChart(salesData, labels, filter);
-        updateRecentOrders(data);
-        updateBrandSummary(data);
-    } catch (error) {
-        console.error("Error fetching sales data:", error);
-    }
-}
 
 
 
@@ -476,7 +488,6 @@
             }
 
             function updateSalesChart(salesData, labels, filter) {
-                console.log("updating sales data");
                 const ctx = document.getElementById("salesChart").getContext("2d");
                 if (window.salesChart instanceof Chart) {
                     window.salesChart.destroy();
@@ -601,10 +612,10 @@
 
             $('#logoutLink').on('click', function() {
                 window.localStorage.clear();
+                window.location.href= 'form.html?newEntry=true';
                 window.location.href = 'login_signup.html';
             });
         });
     </script>
 </body>
 </html>
-<!-- now the total no of oredres related to the particular account which i am reviewing are 5 for month of Sept, but its showing 2 -->
