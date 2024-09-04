@@ -699,151 +699,173 @@ const numberPart = parseInt(lastOrderNo.slice(7), 10);
 return numberPart;
 }
 
-axios
-.all([
-axios.get(`https://www.spotops360.com/orders`),
-axios.get(`https://www.spotops360.com/cancelledOrders`),
-])
-.then(
-axios.spread((orders, cancelledOrders) => {
-// Extract the highest order number from both collections
-var orderarr = (orders.data);
-var orderleng = orderarr.length - 1;
-console.log("orders",orders.data);
-var canOrdersArr = cancelledOrders.data;
-console.log("orders",orders.data,orderleng);
-const highestOrderInOrders = orderarr[orderleng].orderNo;
-console.log("orderNos", highestOrderInOrders);
+// axios
+// .all([
+// axios.get(`https://www.spotops360.com/orders`),
+// axios.get(`https://www.spotops360.com/cancelledOrders`),
+// ])
+// .then(
+// axios.spread((orders, cancelledOrders) => {
+// // Extract the highest order number from both collections
+// var orderarr = (orders.data);
+// var orderleng = orderarr.length - 1;
+// console.log("orders",orders.data);
+// var canOrdersArr = cancelledOrders.data;
+// console.log("orders",orders.data,orderleng);
+// const highestOrderInOrders = orderarr[orderleng].orderNo;
+// console.log("orderNos", highestOrderInOrders);
 
-const canOrderarrlength = canOrdersArr.length - 1;
-let highestOrderInCancelledOrders = "";
+// const canOrderarrlength = canOrdersArr.length - 1;
+// let highestOrderInCancelledOrders = "";
 
-// Check if the cancelled orders array has any elements and if the orderNo exists
-if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
-highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
-console.log("cancelledorderNos", highestOrderInCancelledOrders);
-} else {
-console.log("No valid orderNo found in cancelled orders.");
-}
-// Extract the numeric part from the order numbers by removing the prefix
-const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
-const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
-? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
-: 0;
-const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
-const incrementedNumber = highestOrderNo + 1;
-const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
-const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
+// // Check if the cancelled orders array has any elements and if the orderNo exists
+// if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
+// highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
+// console.log("cancelledorderNos", highestOrderInCancelledOrders);
+// } else {
+// console.log("No valid orderNo found in cancelled orders.");
+// }
+// // Extract the numeric part from the order numbers by removing the prefix
+// const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
+// const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
+// ? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
+// : 0;
+// const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
+// const incrementedNumber = highestOrderNo + 1;
+// const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
+// const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
 
-// Construct the new order number
-newOrderNo = `50STARS${incrementedNumberStr}`;
+// // Construct the new order number
+// newOrderNo = `50STARS${incrementedNumberStr}`;
 
-console.log("newOrderNo", newOrderNo);
+// console.log("newOrderNo", newOrderNo);
 
-})
-)
-.catch((error) => {
-console.error("Error fetching latest order:", error);
-});
+// })
+// )
+// .catch((error) => {
+// console.error("Error fetching latest order:", error);
+// });
 
 
 $("#newOrderForm").on("submit", function (e) {
-e.preventDefault();
-const firstName = localStorage.getItem("firstName");
-const cusFName = $("#firstName").val();
-const cusLName = $("#lastName").val();
-const customerName = cusFName + " " + cusLName;
-const timestamp = new Date().toLocaleString();
-const note = $("#notes").val();
+    e.preventDefault();
 
-const bStreet = $("#bAddress").val();
-const bCity = $("#bCity").val();
-const bState = $("#bState").val();
-const bCountry = $("#bCountry").val();
-const bZip = $("#bZip").val();
-const billingInfo = `${bStreet},\n${bCity},\n${bState},\n${bZip},\n${bCountry}`;
+    // Fetch the latest order numbers right before submitting the form
+    axios
+        .all([
+            axios.get(`https://www.spotops360.com/orders`),
+            axios.get(`https://www.spotops360.com/cancelledOrders`)
+        ])
+        .then(
+            axios.spread((orders, cancelledOrders) => {
+                // Extract the highest order number from both collections
+                var orderarr = orders.data;
+                var orderleng = orderarr.length - 1;
+                const highestOrderInOrders = orderarr[orderleng].orderNo;
 
-const sStreet = $("#sAddress").val();
-const sCity = $("#sCity").val();
-const sState = $("#sState").val();
-const sCountry = $("#sCountry").val();
-const sZip = $("#sZip").val();
-const shippingInfo = `${sStreet},\n${sCity},\n${sState},\n${sZip},\n${sCountry}`;
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-const date = new Date(formattedDate);
+                var canOrdersArr = cancelledOrders.data;
+                const canOrderarrlength = canOrdersArr.length - 1;
+                let highestOrderInCancelledOrders = "";
 
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const hour = date.getHours();
-const minute = date.getMinutes().toString().padStart(2, '0');
+                // Check if the cancelled orders array has any elements and if the orderNo exists
+                if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
+                    highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
+                }
 
-const daySuffix = (day) => {
-if (day > 3 && day < 21) return "th"; // All days between 4th and 20th get 'th'
-switch (day % 10) {
-case 1: return "st";
-case 2: return "nd";
-case 3: return "rd";
-default: return "th";
+                // Extract the numeric part from the order numbers by removing the prefix
+                const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
+                const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
+                    ? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
+                    : 0;
+                const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
+                const incrementedNumber = highestOrderNo + 1;
+                const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
+                const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
+
+                // Construct the new order number
+                newOrderNo = `50STARS${incrementedNumberStr}`;
+
+                console.log("newOrderNo", newOrderNo);
+
+                // Now submit the new order with the updated order number
+                submitNewOrder(newOrderNo);
+            })
+        )
+        .catch((error) => {
+            console.error("Error fetching latest order:", error);
+        });
+});
+
+// Function to handle actual order submission after new order number is generated
+function submitNewOrder(newOrderNo) {
+    const firstName = localStorage.getItem("firstName");
+    const cusFName = $("#firstName").val();
+    const cusLName = $("#lastName").val();
+    const customerName = cusFName + " " + cusLName;
+    const note = $("#notes").val();
+    const orderDate = getFormattedOrderDate(); // Helper function for date formatting
+
+    const newOrder = {
+        orderNo: newOrderNo,
+        orderDate: orderDate,
+        salesAgent: $("#salesAgent").val(),
+        customerName: customerName,
+        bAddress: `${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()}`,
+        sAddress: `${$("#sAddress").val()},\n${$("#sCity").val()},\n${$("#sState").val()},\n${$("#sZip").val()},\n${$("#sCountry").val()}`,
+        email: $("#email").val(),
+        phone: $("#phone").val(),
+        altPhone: $("#altPhone").val(),
+        make: $("#make").val(),
+        model: $("#model").val(),
+        year: $("#year").val(),
+        pReq: $("#pReq").val(),
+        desc: $("#desc").val(),
+        warranty: $("#warranty").val(),
+        soldP: $("#soldP").val(),
+        costP: $("#costP").val(),
+        shippingFee: $("#shippingFee").val(),
+        salestax: $("#salestax").val(),
+        grossProfit: $("#grossProfit").val(),
+        orderStatus: "Placed",
+        vin: $("#vin").val(),
+        partNo: $("#partNo").val(),
+        last4digits: $("#issueOrder").val(),
+        notes: `${note}<br>${firstName},${orderDate}`,
+        orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
+    };
+
+    axios.post("https://www.spotops360.com/orders", newOrder)
+        .then(() => {
+            alert(`Order No. ${newOrderNo} has been placed successfully.`);
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
 }
-};
 
-var orderDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
-console.log("orderDate with hr min",orderDate);
-const orderNote = `${note}<br>${firstName},${orderDate}`;
-const newOrder = {
-orderNo: newOrderNo,
-orderDate: orderDate,
-salesAgent: $("#salesAgent").val(),
-customerName: customerName,
-bAddress: billingInfo,
-sAddress: shippingInfo,
-email: $("#email").val(),
-phone: $("#phone").val(),
-altPhone: $("#altPhone").val(),
-make: $("#make").val(),
-model: $("#model").val(),
-year: $("#year").val(),
-pReq: $("#pReq").val(),
-desc: $("#desc").val(),
-warranty: $("#warranty").val(),
-soldP: $("#soldP").val(),
-costP: $("#costP").val(),
-shippingFee: $("#shippingFee").val(),
-salestax: $("#salestax").val(),
-grossProfit: $("#grossProfit").val(),
-orderStatus: "Placed",
-vin: $("#vin").val(),
-partNo:$("#partNo").val(),
-last4digits: $("#issueOrder").val(),
-notes: orderNote,
-orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
-};
+// Helper function to format order date
+function getFormattedOrderDate() {
+    const now = new Date();
+    const day = now.getDate();
+    const month = now.toLocaleString('default', { month: 'short' });
+    const year = now.getFullYear();
+    const hour = now.getHours();
+    const minute = now.getMinutes().toString().padStart(2, '0');
 
-axios.post("https://www.spotops360.com/orders", newOrder)
-.then(() => {
-alert(`Order No. ${newOrderNo} has been placed successfully.`);
-window.location.reload();
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-});
+    const daySuffix = (day) => {
+        if (day > 3 && day < 21) return "th"; // All days between 4th and 20th get 'th'
+        switch (day % 10) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+        }
+    };
+
+    return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+}
+
 
 
 // Sidebar and navigation functionality
