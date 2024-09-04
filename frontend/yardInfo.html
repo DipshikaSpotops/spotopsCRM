@@ -377,7 +377,7 @@ Close
 
 <script>
 $(document).ready(async function () {
-  let currentSort = {
+let currentSort = {
 column: "",
 order: "asc" // ascending by default
 };
@@ -612,10 +612,11 @@ if (response.status !== 200) {
 throw new Error("Failed to fetch yard information");
 }
 
-const data = response.data;
+var data = response.data;
 
 // Determine the maximum number of yards
 let maxYards = 0;
+data = sortOrdersByOrderNoDesc(data);
 data.forEach((item) => {
 if (item.additionalInfo.length > maxYards) {
 maxYards = item.additionalInfo.length;
@@ -689,6 +690,14 @@ console.error("Error fetching yard information:", error);
 alert("Error fetching yard information: " + error.message);
 }
 });
+function sortOrdersByOrderNoDesc(orders) {
+console.log("sort in ascending order initially")  
+return orders.sort((a, b) => {
+const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+return orderNoB - orderNoA;
+});
+}
 </script>
 </body>
 </html>
