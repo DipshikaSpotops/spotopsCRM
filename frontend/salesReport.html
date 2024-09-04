@@ -601,10 +601,10 @@ brandSummaryTable.append(`
 }
 }
 
-// $("#salesFilter").on("change", function () {
-// const filter = $(this).val();
-// fetchSalesData(filter);
-// });
+$("#salesFilter").on("change", function () {
+const filter = $(this).val();
+fetchSalesData(filter);
+});
 
 // Initial fetch
 fetchSalesData("daily");
