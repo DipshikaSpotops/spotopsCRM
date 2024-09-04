@@ -675,7 +675,7 @@ const quotedPrice = parseFloat($("#soldP").val()) || 0;
 const yardPrice = parseFloat($("#costP").val()) || 0;
 const shipping = parseFloat($("#shippingFee").val()) || 0;
 
-const salesTax = 0.05 * quotedPrice;
+const salesTax = 0.035 * quotedPrice;
 const grossProfit = quotedPrice - yardPrice - shipping - salesTax;
 
 $("#salestax").val(salesTax.toFixed(2));
