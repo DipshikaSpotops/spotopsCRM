@@ -270,7 +270,6 @@ window.location.href = "login_signup.html";
 <input type="text" id="orderDate" required readonly/>
 </div>
 </div>
-
 <form id="newOrderForm">
 <div class="main-content">
 <div class="firstRow" id="customer">
@@ -558,6 +557,29 @@ window.location.href = "login_signup.html";
 </div>
 
 <script>
+// Function to parse both "3rd Sept, 2024 16:11" and "2024-09-03" formats
+function parseOrderDate(dateString) {
+      const regex = /(\d{1,2})(?:st|nd|rd|th)? (\w{3}), (\d{4}) (\d{2}):(\d{2})/;
+      const match = dateString.match(regex);
+
+      if (match) {
+        const day = match[1];
+        const month = match[2];
+        const year = match[3];
+        const hour = match[4];
+        const minute = match[5];
+
+        // Convert the month abbreviation to a number (e.g., "Sept" becomes 09)
+        const monthNumber = new Date(`${month} 1, ${year}`).getMonth() + 1; // JS months are 0-indexed
+        const formattedDate = `${year}-${String(monthNumber).padStart(2, "0")}-${String(day).padStart(2, "0")}T${hour}:${minute}:00`;
+
+        return new Date(formattedDate); // Return a JS Date object
+      }
+
+      // If the date is in 'YYYY-MM-DD' format, return it as a Date object
+      return new Date(dateString);
+    }
+
 $(document).ready(function () {
 // to prefill the stae and the city 
 $("#bZip").on("keyup", function() {
@@ -872,6 +894,52 @@ $('#submenu-reports .nav-link:contains("Refund Report")').show();
 $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
+function fetchSalesData() {
+        const token = localStorage.getItem("token");
+        const currentMonth = new Date().getMonth(); // Get current month
+        const currentYear = new Date().getFullYear(); // Get current year
+
+        axios
+          .get(`https://www.spotops360.com/orders`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            const data = response.data.filter((order) => order.salesAgent === firstName);
+            let validOrders = [];
+
+            // Filter orders by the current month
+            data.forEach((order) => {
+              const orderDate = parseOrderDate(order.orderDate);
+              const orderMonth = orderDate.getMonth();
+              const orderYear = orderDate.getFullYear();
+
+              // Only consider orders from the current month and year
+              if (orderMonth === currentMonth && orderYear === currentYear) {
+                validOrders.push(order);
+              }
+            });
+
+            // Process the filtered orders
+            updateOrdersUI(validOrders);
+          })
+          .catch((error) => {
+            console.error("Error fetching orders:", error);
+          });
+      }
+
+      // Function to update the UI with valid orders
+      function updateOrdersUI(validOrders) {
+        const totalOrders = validOrders.length;
+        console.log(`Total Orders for this month: ${totalOrders}`);
+
+        // Update stats box
+        $("#totalOrders").text(`Total Orders: ${totalOrders}`);
+
+        // Add more UI updates like charts, tables, etc.
+      }
+
+      // Fetch sales data on page load
+      fetchSalesData();
 
 $(".toggle-sidebar").on("click", function () {
 $("#offcanvasSidebar").toggleClass("show");
@@ -943,5 +1011,4 @@ $(this).addClass("active");
 </script>
 </body>
 </html>
-
 
