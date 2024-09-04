@@ -451,7 +451,7 @@ function parseOrderDate(dateString) {
                     const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
                     const actualGP = taxedSP - overallSpending;
 
-                    await axios.put(
+                     axios.put(
                         `https://www.spotops360.com/orders/updateActualGP/${order.orderNo}`,
                         { actualGP },
                         {
