@@ -585,7 +585,7 @@ await fetchSalesDataForCurrentMonth();
 function updateRecentOrders(orders) {
 const recentOrdersTable = $("#recentOrdersTable");
 recentOrdersTable.empty();  // Clear previous entries
-
+console.log("orders",orders);
 // Populate with the filtered data
 orders.forEach((order) => {
 recentOrdersTable.append(`
