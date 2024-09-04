@@ -356,119 +356,132 @@ function parseOrderDate(dateString) {
             });
 
             async function fetchSalesData(filter) {
-                try {
-                    const response = await axios.get(`https://www.spotops360.com/orders`, {
-                        headers: { Authorization: `Bearer ${token}` },
-                    });
+    try {
+        const response = await axios.get(`https://www.spotops360.com/orders`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
 
-                    const currentDate = new Date();
-                    const currentMonth = currentDate.getMonth();
-                    const currentYear = currentDate.getFullYear();
+        if (response.status !== 200) {
+            throw new Error("Failed to fetch orders");
+        }
 
-                    const data = response.data.filter((order) => order.salesAgent === firstName);
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth(); // Get the current month (0-indexed, i.e., Jan = 0, Sept = 8)
+        const currentYear = currentDate.getFullYear();
 
-                    const salesData = [];
-                    const labels = filter === "daily" ? getDaysInMonth(currentMonth, currentYear) : [
-                        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                    ];
+        const data = response.data.filter((order) => order.salesAgent === firstName);
 
-                    let totalOrders = 0;
-                    let estimatedGP = 0;
-                    let estimatedGPArr = [];
-                    let highestGP = 0;
-                    let averageGP = 0;
-                    let actualAGPArr = [];
-                    let totalAgp = 0;
-                    let validOrdersCount = 0;
+        const salesData = [];
+        const labels = filter === "daily" ? getDaysInMonth(currentMonth, currentYear) : [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
 
-                    const orderCounts = {};
+        let totalOrders = 0;
+        let estimatedGP = 0;
+        let estimatedGPArr = [];
+        let highestGP = 0;
+        let averageGP = 0;
+        let actualAGPArr = [];
+        let totalAgp = 0;
+        let validOrdersCount = 0;
 
-                    labels.forEach((label) => {
-                        orderCounts[label] = { count: 0, grossProfit: 0 };
-                    });
+        const orderCounts = {};
 
-                    data.forEach((order) => {
-                        const orderDate = parseOrderDate(order.orderDate);
-                        const orderMonth = orderDate.getMonth();
-                        const orderYear = orderDate.getFullYear();
+        labels.forEach((label) => {
+            orderCounts[label] = { count: 0, grossProfit: 0 };
+        });
 
-                        if (filter === "daily" && (orderMonth !== currentMonth || orderYear !== currentYear)) {
-                            return;
+        data.forEach((order) => {
+            
+            const parsedOrderDate = parseOrderDate(order.orderDate);
+
+            if (!parsedOrderDate) {
+                console.error(`Skipping unrecognized date format: ${order.orderDate}`);
+                return;
+            }
+
+            const orderMonth = parsedOrderDate.getMonth();
+            const orderYear = parsedOrderDate.getFullYear();
+
+            // Only consider orders from the current month and year when the filter is "daily"
+            if (filter === "daily" && (orderMonth !== currentMonth || orderYear !== currentYear)) {
+                return;
+            }
+
+            totalOrders += 1;
+
+            const salePrice = order.soldP;
+            const salestax = order.salestax || 0;
+            const estGP = order.grossProfit;
+            estimatedGPArr.push(estGP);
+            estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
+
+            const label = filter === "daily" ? parsedOrderDate.getDate().toString() : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
+
+            let overallSpendingArr = [];
+
+            if (order.additionalInfo && order.additionalInfo.length > 0) {
+                let validOrder = false;
+                validOrdersCount++;
+                orderCounts[label].count += 1;
+                orderCounts[label].grossProfit += order.grossProfit;
+                const info = order.additionalInfo;
+                const taxedSP = salePrice - salestax;
+
+                for (let d = 0; d < info.length; d++) {
+                    const shippingDetails = info[d].shippingDetails;
+                    const shippingValue = shippingDetails.split(":")[1].trim();
+                    const shippingCharge = shippingValue || 0;
+                    const partprice = info[d].partPrice || 0;
+                    const otherC = info[d].others || 0;
+                    const returnShippingCharge = info[d].returnShippingCharge || 0;
+                    const totalP = Number(shippingCharge) + Number(partprice) + Number(otherC) + returnShippingCharge;
+                    const totalR = info[d].refundedAmount || 0;
+
+                    if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
+                        validOrder = true;
+                        overallSpendingArr.push(totalP - totalR);
+                    }
+                }
+
+                if (validOrder) {
+                    const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
+                    const actualGP = taxedSP - overallSpending;
+
+                     axios.put(
+                        `https://www.spotops360.com/orders/updateActualGP/${order.orderNo}`,
+                        { actualGP },
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
                         }
+                    );
 
-                        totalOrders += 1;
-
-                        const salePrice = order.soldP;
-                        const salestax = order.salestax || 0;
-                        const estGP = order.grossProfit;
-                        estimatedGPArr.push(estGP);
-                        estimatedGP = estimatedGPArr.reduce((partialSum, e) => partialSum + e, 0);
-
-                        const label = filter === "daily" ? orderDate.getDate().toString() : orderDate.toLocaleDateString("en-US", { month: "short" });
-
-                        let overallSpendingArr = [];
-
-                        if (order.additionalInfo && order.additionalInfo.length > 0) {
-                            let validOrder = false;
-                            validOrdersCount++;
-                            orderCounts[label].count += 1;
-                            orderCounts[label].grossProfit += order.grossProfit;
-                            const info = order.additionalInfo;
-                            const taxedSP = salePrice - salestax;
-
-                            for (let d = 0; d < info.length; d++) {
-                                const shippingDetails = info[d].shippingDetails;
-                                const shippingValue = shippingDetails.split(":")[1].trim();
-                                const shippingCharge = shippingValue || 0;
-                                const partprice = info[d].partPrice || 0;
-                                const otherC = info[d].others || 0;
-                                const returnShippingCharge = info[d].returnShippingCharge || 0;
-                                const totalP = Number(shippingCharge) + Number(partprice) + Number(otherC) + returnShippingCharge;
-                                const totalR = info[d].refundedAmount || 0;
-
-                                if (info[d].paymentStatus === "Card charged" || info[d].paymentStatus === "Refund collected") {
-                                    validOrder = true;
-                                    overallSpendingArr.push(totalP - totalR);
-                                }
-                            }
-
-                            if (validOrder) {
-                                const overallSpending = overallSpendingArr.reduce((partialSum, o) => partialSum + o, 0);
-                                const actualGP = taxedSP - overallSpending;
-
-                                 axios.put(
-                                    `https://www.spotops360.com/orders/updateActualGP/${order.orderNo}`,
-                                    { actualGP },
-                                    {
-                                        headers: { Authorization: `Bearer ${token}` },
-                                    }
-                                );
-
-                                actualAGPArr.push(actualGP);
-                                highestGP = Math.max(...actualAGPArr);
-                            }
-                        }
-
-                        salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
-                    });
-
-                    totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
-                    averageGP = totalAgp / validOrdersCount || 0;
-
-                    updateStats({
-                        totalOrders,
-                        estimatedGP,
-                        highestGP,
-                        estimatedAverageGP: averageGP,
-                        totalAgp,
-                    });
-                    updateSalesChart(salesData, labels, filter);
-                    updateRecentOrders(data);
-                    updateBrandSummary(data);
-                } catch (error) {
-                    console.error("Error fetching sales data:", error);
+                    actualAGPArr.push(actualGP);
+                    highestGP = Math.max(...actualAGPArr);
                 }
             }
+
+            salesData[labels.indexOf(label)] = (salesData[labels.indexOf(label)] || 0) + 1;
+        });
+
+        totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
+        averageGP = totalAgp / validOrdersCount || 0;
+
+        updateStats({
+            totalOrders,
+            estimatedGP,
+            highestGP,
+            estimatedAverageGP: averageGP,
+            totalAgp,
+        });
+        updateSalesChart(salesData, labels, filter);
+        updateRecentOrders(data);
+        updateBrandSummary(data);
+    } catch (error) {
+        console.error("Error fetching sales data:", error);
+    }
+}
+
 
 
 
