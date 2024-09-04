@@ -651,13 +651,14 @@ cancelledOrdersResponse.status !== 200
 throw new Error("Failed to fetch orders");
 }
 
-const orders = ordersResponse.data;
-const cancelledOrders = cancelledOrdersResponse.data;
+var orders = ordersResponse.data;
+var cancelledOrders = cancelledOrdersResponse.data;
 
 // Combine both orders and cancelled orders
-const allOrders = [...orders, ...cancelledOrders];
+var allOrders = [...orders, ...cancelledOrders];
 
 // Render the combined orders in the table
+allOrders = sortOrdersByOrderNoDesc(allOrders);
 allOrders.forEach((item) => {
 // Check if the order is from the cancelledOrders collection
 const isCancelledOrder = cancelledOrders.some(
@@ -872,6 +873,14 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+function sortOrdersByOrderNoDesc(orders) {
+console.log("sort in ascending order initially")  
+return orders.sort((a, b) => {
+const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+return orderNoB - orderNoA;
+});
+}
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
