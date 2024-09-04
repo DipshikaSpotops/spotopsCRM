@@ -478,11 +478,12 @@
             throw new Error("Failed to fetch orders");
           }
 
-          const data = response.data;
+          
 
           // Filter out orders with status "Customer approved" or "Placed"
-          const filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
 
+          var filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
+          filteredData = sortOrdersByOrderNoDesc(filteredData);
           filteredData.forEach((item) => {
             const actions = `
                   <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
@@ -646,7 +647,14 @@
             $(this).addClass("active");
           }
         });
-
+        function sortOrdersByOrderNoDesc(orders) {
+console.log("sort in ascending order initially")  
+return orders.sort((a, b) => {
+const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+return orderNoB - orderNoA;
+});
+}
         $('#logoutLink').click(function () {
           window.localStorage.clear();
           window.location.href = 'login_signup.html';
