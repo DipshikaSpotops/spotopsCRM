@@ -271,6 +271,7 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 <form id="newOrderForm">
+<div class="main-content">
 <div class="firstRow" id="customer">
 <h6 style="text-align: center; margin-top: 1%;">Customer Info</h6>
 <div class="form-row firstFive">
@@ -490,7 +491,6 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="warranty" placeholder="Warranty" required />
 </div>
 </div>
-
 <div class="form-row">
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="desc" placeholder="Description" />
@@ -504,33 +504,38 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 
-<div class="firstRow" id="priceRow">
-<!-- <div class="priceRow"> -->
+<div class="container mt-4">
+<div class="priceRow">
 <h6 class="text-center;" style="margin-top: 1%; text-align: center;">Price and GP Information</h6>
-<div class="form-row firstFive">
+<div class="form-row">
 <div class="form-group col-md-2">
-<input type="text" class="form-control" id="year" placeholder="Year" required />
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">$</span>
+</div>
+<input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
+</div>
 </div>
 <div class="form-group col-md-2">
-    <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
-    </div>
-<div class="form-group col-md-2">
+<div class="input-group">
 <div class="input-group-prepend">
 <span class="input-group-text">$</span>
 </div>
 <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
 </div>
-
+</div>
 <div class="form-group col-md-2">
+<div class="input-group">
 <div class="input-group-prepend">
 <span class="input-group-text">$</span>
 </div>
 <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
 </div>
+</div>
 <div class="form-group col-md-6">
 <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes"></input>
 </div>
-
+</div>
 <div class="form-row">
 <div class="form-group col-md-2">
 <div class="input-group">
@@ -550,7 +555,7 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 <button type="submit" class="btn" id="addoBtn">Add New Order</button>
-
+</div>
 </form>
 </div>
 
@@ -977,7 +982,7 @@ window.location.href = "login_signup.html";
 });
 
 const currentPath = window.location.pathname;
-console.log("currentPath",currentPath);
+console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
