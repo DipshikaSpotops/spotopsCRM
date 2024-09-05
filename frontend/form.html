@@ -1617,16 +1617,19 @@ required
 </td>
 </tr>
 <tr>
-<td colspan="2">
-<select class="form-control" id="shipperNameEdit" required>
-<option value="" disabled selected>Select Shipper</option>
-<option value="UPS">UPS</option>
-<option value="World Wide Express">
-World Wide Express
-</option>
-<option value="FedEx">FedEx</option>
-</select>
-</td>
+  <td colspan="2">
+    <select class="form-control" id="shipperNameEdit" required>
+      <option value="" disabled selected>Select Shipper</option>
+      <option value="UPS">UPS</option>
+      <option value="World Wide Express">World Wide Express</option>
+      <option value="FedEx">FedEx</option>
+      <option value="Others">Others</option> <!-- Others option -->
+    </select>
+  
+    <!-- This input will only be shown if 'Others' is selected -->
+    <input type="text" class="form-control mt-2" id="otherShipperInput" placeholder="Please specify other shipper" style="display:none;">
+  </td>
+  
 </tr>
 <tr>
 <td colspan="2">
@@ -3028,7 +3031,10 @@ $("#editYardInfo").on("click", async function () {
   const returnCharges = $(".returnShipment").val();
   const trackingNo = $("#trackingNoEdit").val();
   const eta = $("#etaEdit").val();
-  const shipperName = $("#shipperNameEdit").val();
+  var shipperName = $("#shipperNameEdit").val();
+  if (shipperName === "Others") {
+    shipperName = $("#otherShipperInput").val();
+  }
   const trackingLink = $("#linkInput").val();
   const returnShippingMethod = $("input[name='returnValue']:checked").val();
   const paymentStatus = $('.paymentStatus').val();
@@ -3493,11 +3499,24 @@ $("#payment").val("Refund collected");
 $("#payment").val("");
 }
 });
-
+$("#shipperNameEdit").on("change", function () {
+  const selectedValue = $(this).val();
+  
+  if (selectedValue === "Others") {
+    // Show the input field for "Others"
+    $("#otherShipperInput").show();
+  } else {
+    // Hide the input field for "Others" when another option is selected
+    $("#otherShipperInput").hide();
+  }
+});
 $("#sendEmailButton").on("click", function () {
 const trackingNo = $("#trackingNoEdit").val();
 const eta = $("#etaEdit").val();
-const shipperName = $("#shipperNameEdit").val();
+var shipperName = $("#shipperNameEdit").val();
+if (shipperName === "Others") {
+    shipperName = $("#otherShipperInput").val();
+  }
 const link = $("#linkInput").val();
 if (trackingNo && eta && shipperName && link) {
 const data = {
