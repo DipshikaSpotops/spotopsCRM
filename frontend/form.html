@@ -3183,17 +3183,20 @@ $("#zip"),
 $("#partPrice")
 ];
 console.log("re fields",requiredFields);
+console.log("Selected state:", $("#state").val());
 // Check if all required fields are filled
 let allFieldsFilled = true;
 requiredFields.forEach(function (field) {
-console.log("field",field);  
-if (field.val().trim() === "") {
-allFieldsFilled = false;
-field.css("border-color", "red"); // Highlight missing fields
-} else {
-field.css("border-color", ""); // Reset border color if field is filled
-}
+  console.log("Field element:", field);
+  console.log("Field value:", field.val()); // Log the value of each field
+  if (field.val().trim() === "") {
+    allFieldsFilled = false;
+    field.css("border-color", "red");
+  } else {
+    field.css("border-color", "");
+  }
 });
+
 console.log("reuired",allFieldsFilled);
 // If not all fields are filled, show an alert and do not proceed
 if (!allFieldsFilled) {
@@ -4080,13 +4083,4 @@ document.getElementById("rma-status-group").addEventListener("change", function(
 </script>
 </body>   
 </html>
-
-
-
-
-
-
-
-
-
 
