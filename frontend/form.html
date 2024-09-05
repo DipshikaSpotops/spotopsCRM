@@ -3186,6 +3186,7 @@ console.log("re fields",requiredFields);
 // Check if all required fields are filled
 let allFieldsFilled = true;
 requiredFields.forEach(function (field) {
+console.log("field",field);  
 if (field.val().trim() === "") {
 allFieldsFilled = false;
 field.css("border-color", "red"); // Highlight missing fields
