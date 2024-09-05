@@ -815,13 +815,13 @@ console.log("trackingInfo", trackingNo, eta, shipperName, link);
 const transporter = nodemailer.createTransport({
 service: "gmail",
 auth: {
-user: "dipshikapradhan2201@gmail.com",
-pass: "mtjd pttn ldtg jidk",
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
 },
 });
 
 const mailOptions = {
-from: "dipshikapradhan2201@gmail.com",
+from: "service@50starsautoparts.com",
 to: `${order.email}`,
 subject: `Tracking Details / Order No. ${req.params.orderNo}`,
 html: `<p>Hi ${order.customerName},</p>
