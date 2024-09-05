@@ -381,7 +381,7 @@ if (!parsedOrderDate) return false;
 
 const orderMonth = parsedOrderDate.getMonth();
 const orderYear = parsedOrderDate.getFullYear();
-
+console.log("salesAgent",orders.salesAgent);
 return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
 });
 
@@ -414,7 +414,7 @@ let validOrder = false;
 if (order.additionalInfo && order.additionalInfo.length > 0) {
 validOrdersCount++;
 order.additionalInfo.forEach((info) => {
-const shippingDetails = info.shippingDetails.split(":")[1].trim();
+const shippingDetails = info.shippingDetails ? info.shippingDetails.split(":")[1].trim() : "0";
 const shippingCharge = parseFloat(shippingDetails) || 0;
 const partPrice = parseFloat(info.partPrice) || 0;
 const otherCost = parseFloat(info.others) || 0;
@@ -675,4 +675,3 @@ window.location.href = 'login_signup.html';
 </script>
 </body>
 </html>
-<!-- now i am not able to see Recent Orders and also not able to see Brand Orders Smmary tablee,the data is empty -->
