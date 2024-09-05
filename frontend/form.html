@@ -1271,7 +1271,7 @@ value="Update Comments"
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
-<input type="text" class="form-control" id="phone" placeholder="Phone Number" required>
+<input type="text" class="form-control" id="phoneYard" placeholder="Phone Number" required>
 </div>
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="altPhone" placeholder="Alt. Phone Number" />
@@ -3175,7 +3175,7 @@ const requiredFields = [
 $("#yardName"),
 $("#agentName"),
 $("#yardRating"),
-$("#phone"),
+$("#phoneYard"),
 $("#address"),
 $("#city"),
 $("#state"),
@@ -3183,7 +3183,7 @@ $("#zip"),
 $("#partPrice")
 ];
 console.log("re fields",requiredFields);
-console.log("Selected state:", $("#state").val());
+console.log("Selected state:", $("#state").val(),$("#phoneYard").val());
 // Check if all required fields are filled
 let allFieldsFilled = true;
 requiredFields.forEach(function (field) {
