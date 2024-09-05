@@ -1385,11 +1385,11 @@ value="Update Comments"
 <input type="number" class="form-control" id="warr" placeholder="Warranty" style="margin-top:-2%;"/>
 </div>
 </div>
-<!-- <div class="form-row">
-<div style="margin: 0% 46% 5% -31%;width: 265px;">
-<input type="number" class="form-control" id="others" placeholder="Other Charges" style="margin: 0% 0% 0% -83%;width: 116%;"/>
-</div>
-</div> -->
+<div class="form-row addNewId">
+  <div class="form-group col-md-4">
+  <input type="number" class="form-control" id="faxNo" placeholder="Enter Fax No." >
+  </div>
+  </div>
 </div>
 <button type="button" class="btn save" id="addYardInfo">Submit</button>
 </div>
@@ -3262,6 +3262,7 @@ const yardShip = $("#yardShipping").val();
 const others = document.getElementById("others").value;
 const stockNo = $("#stockNo").val();
 const warrYard = $("#warr").val();
+const faxNo = $('#faxNo').val();
 
 
 let shippingMethod = "";
@@ -3289,6 +3290,7 @@ partPrice: partPrice,
 status: "Yard located",
 shippingDetails: shippingMethod,
 others: others,
+faxNo: faxNo,
 };
 
 fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
