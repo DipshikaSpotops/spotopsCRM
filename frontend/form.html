@@ -1256,7 +1256,7 @@ value="Update Comments"
 </button>
 </div>
 <div class="partDescFY descBar"></div>
-<div class="modal-body" style="margin-top: -10%;">
+<div class="modal-body">
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="yardName" placeholder="Yard Name" required autocomplete="off">
@@ -1816,6 +1816,11 @@ white-space: nowrap;">Edit Yard Details- </h5>
 <input type="number" class="form-control" id="editrefundAmount" placeholder="Refund Amount" />
 </div>
 </div>
+<div class="form-row addNewId">
+  <div class="form-group col-md-4">
+  <input type="number" class="form-control" id="editFax" placeholder="Enter Fax No" />
+  </div>
+  </div>
 
 <!-- <div class="form-row">
 <div class="form-group " style="margin: 0% -56%;width: 60%;">
@@ -3576,6 +3581,7 @@ $("#editPartPrice").val(yardData.partPrice);
 $("#editOthers").val(yardData.others);
 $("#editPaymentStatus").val(yardData.paymentStatus);
 $("#editrefundAmount").val(yardData.refundedAmount);
+$("#editFax").val(yard.faxNo);
 
 const shippingDetails = yardData.shippingDetails;
 console.log("shippingDetails:", shippingDetails);
@@ -3648,6 +3654,7 @@ state:$("#editState").val(),
 street:$("#editAddress").val(),
 partPrice: $("#editPartPrice").val(),
 others: $("#editOthers").val(),
+faxNo: $("#editFax").val(),
 shippingDetails: shippingDetails,
 status: $("#refund").val(),
 paymentStatus: $("#editPaymentStatus").val(),
