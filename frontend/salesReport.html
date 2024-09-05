@@ -582,24 +582,26 @@ y: {
 // Initial fetch for daily data (for the stats)
 await fetchSalesDataForCurrentMonth();
 
-
-
 function updateRecentOrders(orders) {
-const recentOrdersTable = $("#recentOrdersTable");
-recentOrdersTable.empty();  // Clear previous entries
-console.log("orders",orders);
-// Populate with the filtered data
-orders.forEach((order) => {
-recentOrdersTable.append(`
-<tr>
-<td>${order.orderNo}</td>
-<td>${order.customerName}</td>
-<td>${order.orderDate}</td>
-<td>$${order.grossProfit.toFixed(2)}</td>
-</tr>
-`);
-});
+  const recentOrdersTable = $("#recentOrdersTable");
+  recentOrdersTable.empty();  // Clear previous entries
+  
+  // Get the latest 10 orders (assuming orders are sorted by date)
+  const latestOrders = orders.slice(0, 10); // Adjusts for most recent 10 orders
+  
+  // Populate with the latest 10 orders
+  latestOrders.forEach((order) => {
+    recentOrdersTable.append(`
+      <tr>
+        <td>${order.orderNo}</td>
+        <td>${order.customerName}</td>
+        <td>${order.orderDate}</td>
+        <td>$${order.grossProfit.toFixed(2)}</td>
+      </tr>
+    `);
+  });
 }
+
 
 function updateBrandSummary(data) {
 const brandSummary = data.reduce((acc, order) => {
