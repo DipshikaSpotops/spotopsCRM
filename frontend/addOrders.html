@@ -499,60 +499,60 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="vin" required placeholder="VIN No." />
 </div>
 <div class="form-group col-md-2">
-    <input type="text" class="form-control" id="partNo"  placeholder="Part No." />
-    </div>
+<input type="text" class="form-control" id="partNo"  placeholder="Part No." />
+</div>
 </div>
 </div>
 <!-- price and gp info -->
 <div class="firstRow" id="priceRow">
-    <h6 style="text-align: center; margin-top: 1%;">Price and GP Information</h6>
-    <div class="form-row firstFive">
-    <div class="form-group col-md-2">
-        <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-            </div>
-            <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
-            </div>
-    </div>
-    <div class="form-group col-md-2">
-        <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-            </div>
-            <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
-            </div>
-    </div>
-    <div class="form-group col-md-2">
-        <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-            </div>
-            <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
-            </div>
-    </div>  
-    <div class="form-group col-md-6">
-        <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
-    </div>
-    </div>
-    <div class="form-row">
-    <div class="form-group col-md-2">
-        <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text">%</span>
-            </div>
-            <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
-            </div>
-    </div>   
-    <div class="form-group col-md-2">
-        <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
-        </div>
-        <div class="form-group col-md-2">
-        <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
-        </div>
-    </div>
-    </div>
-    <!-- price and gp info till here -->
+<h6 style="text-align: center; margin-top: 1%;">Price and GP Information</h6>
+<div class="form-row firstFive">
+<div class="form-group col-md-2">
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">$</span>
+</div>
+<input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
+</div>
+</div>
+<div class="form-group col-md-2">
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">$</span>
+</div>
+<input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
+</div>
+</div>
+<div class="form-group col-md-2">
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">$</span>
+</div>
+<input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
+</div>
+</div>  
+<div class="form-group col-md-6">
+<input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-2">
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">%</span>
+</div>
+<input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
+</div>
+</div>   
+<div class="form-group col-md-2">
+<input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
+</div>
+<div class="form-group col-md-2">
+<input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
+</div>
+</div>
+</div>
+<!-- price and gp info till here -->
 
 <button type="submit" class="btn" id="addoBtn">Add New Order</button>
 </div>
@@ -747,105 +747,105 @@ return numberPart;
 
 
 $("#newOrderForm").on("submit", function (e) {
-    e.preventDefault();
+e.preventDefault();
 
-    // Fetch the latest order numbers right before submitting the form
-    axios
-        .all([
-            axios.get(`https://www.spotops360.com/orders`),
-            axios.get(`https://www.spotops360.com/cancelledOrders`)
-        ])
-        .then(
-            axios.spread((orders, cancelledOrders) => {
-                // Extract the highest order number from both collections
-                var orderarr = orders.data;
-                var orderleng = orderarr.length - 1;
-                const highestOrderInOrders = orderarr[orderleng].orderNo;
+// Fetch the latest order numbers right before submitting the form
+axios
+.all([
+axios.get(`https://www.spotops360.com/orders`),
+axios.get(`https://www.spotops360.com/cancelledOrders`)
+])
+.then(
+axios.spread((orders, cancelledOrders) => {
+// Extract the highest order number from both collections
+var orderarr = orders.data;
+var orderleng = orderarr.length - 1;
+const highestOrderInOrders = orderarr[orderleng].orderNo;
 
-                var canOrdersArr = cancelledOrders.data;
-                const canOrderarrlength = canOrdersArr.length - 1;
-                let highestOrderInCancelledOrders = "";
+var canOrdersArr = cancelledOrders.data;
+const canOrderarrlength = canOrdersArr.length - 1;
+let highestOrderInCancelledOrders = "";
 
-                // Check if the cancelled orders array has any elements and if the orderNo exists
-                if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
-                    highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
-                }
+// Check if the cancelled orders array has any elements and if the orderNo exists
+if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
+highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
+}
 
-                // Extract the numeric part from the order numbers by removing the prefix
-                const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
-                const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
-                    ? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
-                    : 0;
-                const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
-                const incrementedNumber = highestOrderNo + 1;
-                const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
-                const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
+// Extract the numeric part from the order numbers by removing the prefix
+const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
+const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
+? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
+: 0;
+const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
+const incrementedNumber = highestOrderNo + 1;
+const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
+const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
 
-                // Construct the new order number
-                newOrderNo = `50STARS${incrementedNumberStr}`;
+// Construct the new order number
+newOrderNo = `50STARS${incrementedNumberStr}`;
 
-                console.log("newOrderNo", newOrderNo);
+console.log("newOrderNo", newOrderNo);
 
-                // Now submit the new order with the updated order number
-                submitNewOrder(newOrderNo);
-            })
-        )
-        .catch((error) => {
-            console.error("Error fetching latest order:", error);
-        });
+// Now submit the new order with the updated order number
+submitNewOrder(newOrderNo);
+})
+)
+.catch((error) => {
+console.error("Error fetching latest order:", error);
+});
 });
 
 // Function to handle actual order submission after new order number is generated
 function submitNewOrder(newOrderNo) {
-    const firstName = localStorage.getItem("firstName");
-    const cusFName = $("#firstName").val();
-    const cusLName = $("#lastName").val();
-    const customerName = cusFName + " " + cusLName;
-    const note = $("#notes").val();
-    const orderDate = getFormattedOrderDate(); 
-        const newOrder = {
-        orderNo: newOrderNo,
-        orderDate: orderDate,
-        salesAgent: $("#salesAgent").val(),
-        customerName: customerName,
-        bAddress: `${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()}`,
-        sAddress: `${$("#sAddress").val()},\n${$("#sCity").val()},\n${$("#sState").val()},\n${$("#sZip").val()},\n${$("#sCountry").val()}`,
-        email: $("#email").val(),
-        phone: $("#phone").val(),
-        altPhone: $("#altPhone").val(),
-        make: $("#make").val(),
-        model: $("#model").val(),
-        year: $("#year").val(),
-        pReq: $("#pReq").val(),
-        desc: $("#desc").val(),
-        warranty: $("#warranty").val(),
-        soldP: $("#soldP").val(),
-        costP: $("#costP").val(),
-        shippingFee: $("#shippingFee").val(),
-        salestax: $("#salestax").val(),
-        grossProfit: $("#grossProfit").val(),
-        orderStatus: "Placed",
-        vin: $("#vin").val(),
-        partNo: $("#partNo").val(),
-        last4digits: $("#issueOrder").val(),
-        notes: `${note}<br>${firstName},${orderDate}`,
-        orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
-    };
+const firstName = localStorage.getItem("firstName");
+const cusFName = $("#firstName").val();
+const cusLName = $("#lastName").val();
+const customerName = cusFName + " " + cusLName;
+const note = $("#notes").val();
+const orderDate = getFormattedOrderDate(); 
+const newOrder = {
+orderNo: newOrderNo,
+orderDate: orderDate,
+salesAgent: $("#salesAgent").val(),
+customerName: customerName,
+bAddress: `${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()}`,
+sAddress: `${$("#sAddress").val()},\n${$("#sCity").val()},\n${$("#sState").val()},\n${$("#sZip").val()},\n${$("#sCountry").val()}`,
+email: $("#email").val(),
+phone: $("#phone").val(),
+altPhone: $("#altPhone").val(),
+make: $("#make").val(),
+model: $("#model").val(),
+year: $("#year").val(),
+pReq: $("#pReq").val(),
+desc: $("#desc").val(),
+warranty: $("#warranty").val(),
+soldP: $("#soldP").val(),
+costP: $("#costP").val(),
+shippingFee: $("#shippingFee").val(),
+salestax: $("#salestax").val(),
+grossProfit: $("#grossProfit").val(),
+orderStatus: "Placed",
+vin: $("#vin").val(),
+partNo: $("#partNo").val(),
+last4digits: $("#issueOrder").val(),
+notes: `${note}<br>${firstName},${orderDate}`,
+orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
+};
 
-    axios.post("https://www.spotops360.com/orders", newOrder)
-        .then(() => {
-            alert(`Order No. ${newOrderNo} has been placed successfully.`);
-            window.location.reload();
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+axios.post("https://www.spotops360.com/orders", newOrder)
+.then(() => {
+alert(`Order No. ${newOrderNo} has been placed successfully.`);
+window.location.reload();
+})
+.catch((error) => {
+console.error("Error:", error);
+});
 }
 
 // Helper function to format order date
 function getFormattedOrderDate() {
-    const now = new Date();
-    const options = {
+const now = new Date();
+const options = {
 timeZone: 'America/Chicago',
 year: 'numeric',
 month: '2-digit',
@@ -880,7 +880,7 @@ default: return "th";
 };
 
 
-    return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 }
 
 
@@ -914,51 +914,51 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 function fetchSalesData() {
-        const token = localStorage.getItem("token");
-        const currentMonth = new Date().getMonth(); // Get current month
-        const currentYear = new Date().getFullYear(); // Get current year
+const token = localStorage.getItem("token");
+const currentMonth = new Date().getMonth(); // Get current month
+const currentYear = new Date().getFullYear(); // Get current year
 
-        axios
-          .get(`https://www.spotops360.com/orders`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((response) => {
-            const data = response.data.filter((order) => order.salesAgent === firstName);
-            let validOrders = [];
+axios
+.get(`https://www.spotops360.com/orders`, {
+headers: { Authorization: `Bearer ${token}` },
+})
+.then((response) => {
+const data = response.data.filter((order) => order.salesAgent === firstName);
+let validOrders = [];
 
-            // Filter orders by the current month
-            data.forEach((order) => {
-              const orderDate = parseOrderDate(order.orderDate);
-              const orderMonth = orderDate.getMonth();
-              const orderYear = orderDate.getFullYear();
+// Filter orders by the current month
+data.forEach((order) => {
+const orderDate = parseOrderDate(order.orderDate);
+const orderMonth = orderDate.getMonth();
+const orderYear = orderDate.getFullYear();
 
-              // Only consider orders from the current month and year
-              if (orderMonth === currentMonth && orderYear === currentYear) {
-                validOrders.push(order);
-              }
-            });
+// Only consider orders from the current month and year
+if (orderMonth === currentMonth && orderYear === currentYear) {
+validOrders.push(order);
+}
+});
 
-            // Process the filtered orders
-            updateOrdersUI(validOrders);
-          })
-          .catch((error) => {
-            console.error("Error fetching orders:", error);
-          });
-      }
+// Process the filtered orders
+updateOrdersUI(validOrders);
+})
+.catch((error) => {
+console.error("Error fetching orders:", error);
+});
+}
 
-      // Function to update the UI with valid orders
-      function updateOrdersUI(validOrders) {
-        const totalOrders = validOrders.length;
-        console.log(`Total Orders for this month: ${totalOrders}`);
+// Function to update the UI with valid orders
+function updateOrdersUI(validOrders) {
+const totalOrders = validOrders.length;
+console.log(`Total Orders for this month: ${totalOrders}`);
 
-        // Update stats box
-        $("#totalOrders").text(`Total Orders: ${totalOrders}`);
+// Update stats box
+$("#totalOrders").text(`Total Orders: ${totalOrders}`);
 
-        // Add more UI updates like charts, tables, etc.
-      }
+// Add more UI updates like charts, tables, etc.
+}
 
-      // Fetch sales data on page load
-      fetchSalesData();
+// Fetch sales data on page load
+fetchSalesData();
 
 $(".toggle-sidebar").on("click", function () {
 $("#offcanvasSidebar").toggleClass("show");
