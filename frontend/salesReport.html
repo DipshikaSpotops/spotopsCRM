@@ -590,8 +590,8 @@ function updateRecentOrders(orders) {
   orders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate));
 
   // Get the last 10 orders after sorting
-  const latestOrders = orders.slice(-10); // Get the last 10 orders
-
+  var latestOrders = orders.slice(-10); // Get the last 10 orders
+  latestOrders = sortOrdersByOrderNoDesc(latestOrders);
   // Populate the table with the latest 10 orders
   latestOrders.forEach((order) => {
     recentOrdersTable.append(`
@@ -671,6 +671,14 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+function sortOrdersByOrderNoDesc(orders) {
+console.log("sort in ascending order initially")  
+return orders.sort((a, b) => {
+const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+return orderNoB - orderNoA;
+});
+}
 
 $('#logoutLink').on('click', function() {
 window.localStorage.clear();
