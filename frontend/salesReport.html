@@ -381,7 +381,7 @@ if (!parsedOrderDate) return false;
 
 const orderMonth = parsedOrderDate.getMonth();
 const orderYear = parsedOrderDate.getFullYear();
-console.log("salesAgent",orders.salesAgent);
+console.log("salesAgent",order.salesAgent);
 return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
 });
 
