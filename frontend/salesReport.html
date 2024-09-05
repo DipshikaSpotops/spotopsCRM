@@ -585,13 +585,13 @@ await fetchSalesDataForCurrentMonth();
 function updateRecentOrders(orders) {
   const recentOrdersTable = $("#recentOrdersTable");
   recentOrdersTable.empty();  // Clear previous entries
-  
+
   // Sort orders by date in ascending order (oldest to newest)
   orders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate));
-  
-  // Get the latest 10 orders
-  const latestOrders = orders.slice(0, 10); // Get the first 10 after sorting in ascending order
-  
+
+  // Get the last 10 orders after sorting
+  const latestOrders = orders.slice(-10); // Get the last 10 orders
+
   // Populate the table with the latest 10 orders
   latestOrders.forEach((order) => {
     recentOrdersTable.append(`
