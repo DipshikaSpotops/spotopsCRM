@@ -191,11 +191,24 @@ margin-bottom: 10px;
 border: 1px solid #ccc;
 border-radius: 4px;
 }
-table.table td,
-table.table th {
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+table.table td, table.table th {
+  border: 1px solid #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 50px; /* Add a consistent height for all rows */
+}
+table.table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+td {
+  height: 50px; /* Keep the height consistent across all rows */
+  vertical-align: middle; /* Ensure content is vertically aligned in the middle */
+}
+
+th {
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
 }
 
 .modal-dialog {
@@ -874,3 +887,5 @@ window.location.href = "login_signup.html";
 </script>
 </body>
 </html>
+right  now the boxes which have information, only those boxes have borders, but any row wj=hich has even little bit of information
+should have borders in all columns if if the column value is empty
