@@ -193,28 +193,39 @@ border-radius: 4px;
 }
 /* Ensure every cell (even empty) has borders */
 table.table td, table.table th {
-  border: 1px solid #e0e0e0; /* Add borders on all sides */
+  border: 1px solid #e0e0e0; 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 50px; /* Add a consistent height for all rows */
-  vertical-align: middle; /* Vertically center content */
+  height: 50px; 
+  vertical-align: middle; 
 }
 
-/* Ensure the entire row has borders, even for empty cells */
+table, th, td {
+  border: 1px solid black; 
+  border-collapse: collapse;
+  text-align: left; 
+}
+
+td {
+  padding: 8px; 
+}
+
+th {
+  padding: 12px 8px; 
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+}
+
+
 table.table tbody tr {
   border-bottom: 1px solid #e0e0e0;
 }
 
-/* Add specific styles for empty cells, just to ensure the height is consistent */
 table.table td:empty {
-  height: 50px; /* Keep the height consistent for empty cells */
+  height: 50px; 
 }
 
-th {
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0; /* Ensure headers also have borders on all sides */
-}
 
 .modal-dialog {
 display: flex;
