@@ -241,6 +241,95 @@ window.location.href = "login_signup.html";
 
 <script>
 $(document).ready(async function () {
+// Helper function to convert '10th Sep, 2024 10:01' format to JavaScript Date
+function parseCustomDate(dateString) {
+const months = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+Nov: "11", Dec: "12"
+};
+
+const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+
+if (parts) {
+const day = parts[1];
+const month = months[parts[2]];
+const year = parts[3];
+const hour = parts[4];
+const minute = parts[5];
+
+return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+}
+return null;
+}
+
+// Helper function to parse currency (e.g., $1200.62) into a float number
+function parseCurrency(value) {
+return parseFloat(value.replace(/[^0-9.-]+/g, ""));
+}
+
+// Function to sort the table
+function sortTable(column, type) {
+const table = $("#infoTable");
+const rows = table.find("tr").toArray();
+
+rows.sort((a, b) => {
+let valA = $(a).find("td").eq(column).text().trim();
+let valB = $(b).find("td").eq(column).text().trim();
+
+if (type === "date") {
+valA = parseCustomDate(valA);
+valB = parseCustomDate(valB);
+} else if (type === "currency") {
+valA = parseCurrency(valA);
+valB = parseCurrency(valB);
+}
+
+if (sortOrder[type] === "asc") {
+return valA > valB ? 1 : -1;
+} else {
+return valA < valB ? 1 : -1;
+}
+});
+
+$.each(rows, function (index, row) {
+table.append(row);
+});
+
+sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+updateSortIcons(column, sortOrder[type]);
+}
+
+// Function to update the sort icons
+function updateSortIcons(columnIndex, order) {
+$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$("th").each(function (index) {
+if (index === columnIndex) {
+$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+}
+});
+}
+
+// Assign event listeners for sorting
+$("th").each(function (index) {
+const th = $(this);
+let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+
+if (type === "orderdate") {
+th.on("click", function () {
+sortTable(index, "date");
+});
+} else if (type === "saleprice" || type === "salestax" || type === "estpartprice" || type === "estshippingprice" || type === "estgp" || type === "actualgp") {
+th.on("click", function () {
+sortTable(index, "currency");
+});
+} else {
+th.on("click", function () {
+sortTable(index, type);
+});
+}
+});
+
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
