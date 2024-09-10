@@ -612,6 +612,7 @@ throw new Error("Failed to fetch orders");
 }
 
 var data = response.data;
+console.log("dataL",data.length);
 data = sortOrdersByOrderNoDesc(data);
 data.forEach((item) => {
 if (item.orderStatus === "Placed") {
