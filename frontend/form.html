@@ -2959,20 +2959,26 @@ console.error("Error:", error);
 // refundCollect part ends here
 
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
+  // Show the edit popup and add blur effect
   $("#editYardPopup").show();
   $(".mainDiv").addClass("blur");
+
   yardIndex = $(this).data("yard-index");
   $("#editYardInfo").data("yard-index", yardIndex);
   $("#yardIndexEdit").val(yardIndex);
   $("#submit").data("yard-index", yardIndex);
 
+  // Fetch order data from API
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then((response) => response.json())
     .then((data) => {
       if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
         return;
       }
+
       const yardData = data.additionalInfo[yardIndex - 1];
+
+      // Prefill input fields
       $("#refund").val(yardData.status);
       $("#cardCharged").val(yardData.paymentStatus);
       $("#paymentStatusSelect").val(yardData.paymentStatus);
@@ -2980,34 +2986,65 @@ $("#yardInfoContainer").on("click", ".edit-yard", function () {
       $("#esc").val(yardData.escalationCause);
       $("#escProcess").val(yardData.escalationProcess);
 
-      // Check the checkbox and set escTicked key if status is "Escalation"
+      // Handle the escalation checkbox
       if (yardData.status === "Escalation") {
         $("#escTickBox").prop("checked", true);
-      } else {
-        $("#escTickBox").prop("checked", false);
-      }
-
-      // Show or hide the escalation section
-      if (yardData.status === "Escalation") {
         $("#escalation").show();
       } else {
+        $("#escTickBox").prop("checked", false);
         $("#escalation").hide();
       }
 
+      // Hide or show card charged based on status
       if (yardData.status === "PO cancelled") {
         $("#cardCharged").hide();
       } else {
-        $("#cardCharged").hide();
+        $("#cardCharged").show();
       }
 
+      // If refundStatus is 'Part shipped', show tracking section and prefill values
+      if (yardData.status === "Part shipped") {
+        console.log("shipped",yardData.status);
+        $("#divTrackingEdit").show();
+
+        // Prefill tracking information fields from yardData
+        $("#trackingNoEdit").val(yardData.trackingNo || "");
+        $("#etaEdit").val(yardData.eta || "");
+        $("#shipperNameEdit").val(yardData.shipperName || "");
+
+        // Show or hide the 'Other Shipper' input based on selected shipper
+        if (yardData.shipperName === "Others") {
+          $("#otherShipperInput").show().val(yardData.otherShipper || "");
+        } else {
+          $("#otherShipperInput").hide();
+        }
+
+        $("#linkInput").val(yardData.trackingLink || "");
+      } else {
+        // Hide tracking section if not 'Part shipped'
+        $("#divTrackingEdit").hide();
+      }
+
+      // Show the modal
       $("#editYardModal").modal("show");
 
+      // Fetch and display additional notes if required
       fetchAndDisplayNotes(yardIndex);
     })
     .catch((error) => {
       console.error("Error fetching yard data:", error);
     });
 });
+
+// Handle shipper selection to show or hide 'Other' input
+$("#shipperNameEdit").on("change", function () {
+  if ($(this).val() === "Others") {
+    $("#otherShipperInput").show();
+  } else {
+    $("#otherShipperInput").hide();
+  }
+});
+
 
 $("#editYardInfo").on("click", async function () {
   console.log("clicking on save");
