@@ -437,7 +437,7 @@ rows.sort((a, b) => {
 let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
 
-if (type === "orderDate") {
+if (type === "orderdate") {
     valA = parseCustomDate(valA); // Use the helper function to parse the date
     valB = parseCustomDate(valB);
 } else if (type === "number") {
