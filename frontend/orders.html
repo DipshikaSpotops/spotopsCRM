@@ -641,13 +641,16 @@ $(
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 } else if (team === "Team Mark") {
+  // <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>  
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
+$('#edit-btn').hide();
 $(
 "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
 ).hide();
 } else if (team === "Team Sussane") {
+  $('#edit-btn').hide();  
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
