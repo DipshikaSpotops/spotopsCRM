@@ -3457,7 +3457,7 @@ const orderStatus = $("#orderStatus").val();
 let newOrderStatus = orderStatus;
 
 // Capture the selected shipping method before hiding any elements
-const selectedShipping = $("input[name='returnValue']:checked").val();
+var selectedShipping = $("input[name='returnValue']:checked").val() || "";
 console.log("selectedShipping",selectedShipping);
 let shippingPrice = 0;
 
@@ -3465,6 +3465,8 @@ if (selectedShipping === "Our shipping") {
 shippingPrice = $("#ourShippingInput").val();
 } else if (selectedShipping === "Customer shipping") {
 shippingPrice = $("#customerShippingInput").val();
+}else{
+
 }
 
 if (refundStatus === "Part shipped") {
