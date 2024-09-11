@@ -709,14 +709,12 @@ $('#myModal').hide();
 $('.modal-backdrop').remove();
 // Optionally: remove 'modal-open' class from body to stop body scrolling
 $('body').removeClass('modal-open');
-
-// Stop body from being unclickable due to backdrop
-$('body').css('overflow', 'auto');
-// Remove the corresponding row from the table
 console.log("orderNo",currentOrderNo);
 const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
 console.log("orderRow",orderRow);
 orderRow.remove();
+// Stop body from being unclickable due to backdrop
+$('body').css('overflow', 'auto');
 });
 
 const orderNo = $(this).data("id");
