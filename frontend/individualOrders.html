@@ -254,7 +254,29 @@ grossProfit: "asc",
 actualGP: "asc",
 orderStatus: "asc",
 };
+function parseCustomDate(dateString) {
+const months = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+Nov: "11", Dec: "12"
+};
 
+// Extract parts from the string (day, month, year, time)
+const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+
+if (parts) {
+const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
+const month = months[parts[2]];
+const year = parts[3];
+const hour = parts[4];
+const minute = parts[5];
+
+// Return a valid date string for comparison
+return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+}
+
+return null;
+}
 // Function to sort the table
 function sortTable(column, type) {
 const table = $("#infoTable");
@@ -265,8 +287,8 @@ let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
 
 if (type === "date") {
-valA = new Date(valA);
-valB = new Date(valB);
+    valA = parseCustomDate(valA); // Use the helper function to parse the date
+    valB = parseCustomDate(valB);
 } else if (type === "number") {
 valA = parseFloat(valA.replace(/\D/g, ""));
 valB = parseFloat(valB.replace(/\D/g, ""));
