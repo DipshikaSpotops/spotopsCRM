@@ -831,7 +831,7 @@ html: `<p>Hi ${order.customerName},</p>
 <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website; you may check again if you do not find the ETA.</p>
 <p>Please call us if you have any questions.</p>
 <p>${shipperName} - ${trackingNo}</p>
-<p>ETD - ${eta} days</p>
+<p>ETA - ${eta} days</p>
 <p>Link - <a href="${link}">${link}</a></p>
 <p><img src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png" alt="logo" style="max-width: 100%; height: auto;"></p>
 <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
