@@ -714,7 +714,8 @@ $('body').removeClass('modal-open');
 $('body').css('overflow', 'auto');
 // Remove the corresponding row from the table
 const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
-    orderRow.remove();
+console.log("orderRow",orderRow);
+orderRow.remove();
 });
 
 const orderNo = $(this).data("id");
