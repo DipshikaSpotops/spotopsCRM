@@ -3073,6 +3073,7 @@ $("#editYardInfo").on("click", async function () {
   const returnCharges = $(".returnShipment").val();
   const trackingNo = $("#trackingNoEdit").val();
   const eta = $("#etaEdit").val();
+  console.log("eta",eta);
   var shipperName = $("#shipperNameEdit").val();
   if (shipperName === "Others") {
     shipperName = $("#otherShipperInput").val();
