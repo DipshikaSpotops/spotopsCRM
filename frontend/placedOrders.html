@@ -690,6 +690,11 @@ console.error("Error fetching orders:", error);
 }
 
 $("#infoTable").on("click", ".approve-btn", async function () {
+    const orderNoRow = $(this).data("id");
+    
+    // Save the order number to be used when removing the row
+    currentOrderNo = orderNoRow;    
+
 $("#myModal").modal("show");
 
 // On click of the OK button, reload the window
@@ -699,16 +704,17 @@ $("#myModal").modal("show");
 // });
 $("#okButton").click(function () {
 // Hide the modal using Bootstrap's modal hide method
-$('#myModal').modal('hide');
-
+$('#myModal').hide();
 // Manually remove the modal backdrop after the modal is hidden
 $('.modal-backdrop').remove();
-
 // Optionally: remove 'modal-open' class from body to stop body scrolling
 $('body').removeClass('modal-open');
 
 // Stop body from being unclickable due to backdrop
 $('body').css('overflow', 'auto');
+// Remove the corresponding row from the table
+const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
+    orderRow.remove();
 });
 
 const orderNo = $(this).data("id");
