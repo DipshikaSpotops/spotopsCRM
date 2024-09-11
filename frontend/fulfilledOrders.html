@@ -309,11 +309,11 @@ window.location.href = "login_signup.html";
 <th style="cursor:pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th id="aToZ-3" style="cursor:pointer;" scope="col">Customer Name <span class="sort-icon">&#9650;</span></th>
 <th id="aToZ-4" style="cursor:pointer;" scope="col">Part Name <span class="sort-icon">&#9650;</span></th>
-<th id="aToZ-5" style="cursor:pointer;" scope="col">Yard <span class="sort-icon">&#9650;</span></th>
+<!-- <th id="aToZ-5" style="cursor:pointer;" scope="col">Yard <span class="sort-icon">&#9650;</span></th> -->
 <th id="aToZ-6" style="cursor:pointer;" scope="col">Order Status <span class="sort-icon">&#9650;</span></th>
-<th id="aToZ-7" style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon">&#9650;</span></th>
-<th style="cursor:pointer;" scope="col">Actions</th>
-<th style="cursor:pointer;" scope="col">Send Invoice</th>
+<!-- <th id="aToZ-7" style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon">&#9650;</span></th> -->
+<!-- <th style="cursor:pointer;" scope="col">Actions</th> -->
+<!-- <th style="cursor:pointer;" scope="col">Send Invoice</th> -->
 <th id="aToZ-10" style="cursor:pointer;" scope="col">Email <span class="sort-icon">&#9650;</span></th>
 </tr>
 </thead>
@@ -505,7 +505,7 @@ var data = response.data;
 
 // Filter out orders with status "Customer approved" or "Placed"
 
-var filteredData = data.filter(item => item.orderStatus !== "Order Fulfilled");
+var filteredData = data.filter(item => item.orderStatus == "Order Fulfilled");
 filteredData = sortOrdersByOrderNoDesc(filteredData);
 filteredData.forEach((item) => {
 const actions = `
@@ -524,11 +524,7 @@ $("#infoTable").append(`
 <td>${item.salesAgent}</td>
 <td>${item.customerName}</td>
 <td>${item.pReq || item.partName}</td>
-<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength-1].yardName : ""}</td>
 <td>${item.orderStatus}</td>
-<<td>${item.additionalInfo && item.additionalInfo.length > 0 && item.additionalInfo[0].escTicked ? item.additionalInfo[0].escTicked : ""}</td>
-<td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
 <td>${item.email}</td>
 </tr>
 `);
