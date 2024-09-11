@@ -3465,8 +3465,9 @@ if (selectedShipping === "Our shipping") {
 shippingPrice = $("#ourShippingInput").val();
 } else if (selectedShipping === "Customer shipping") {
 shippingPrice = $("#customerShippingInput").val();
-}else{
-
+}else if(selectedShipping === "") {
+  selectedShipping = "";
+  shippingPrice = "";
 }
 
 if (refundStatus === "Part shipped") {
@@ -3516,6 +3517,7 @@ orderStatus: newOrderStatus,
 shippingMethod: selectedShipping,
 shippingPrice: shippingPrice
 };
+console.log("updatedData",updatedData);
 
 fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
 method: "PUT",
