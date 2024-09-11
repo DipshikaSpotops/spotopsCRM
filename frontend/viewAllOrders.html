@@ -504,6 +504,7 @@ Close
 <script>
 $(document).ready(async function () {
 // Sorting Order Object
+var team;
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
@@ -637,7 +638,7 @@ const firstName = localStorage.getItem("firstName");
 const lastName = localStorage.getItem("lastName");
 const email = localStorage.getItem("email");
 const role = localStorage.getItem("role");
-const team = localStorage.getItem("team");
+ team = localStorage.getItem("team");
 
 if (firstName) {
 $("#user-name").text(firstName);
@@ -691,10 +692,13 @@ const orderStatus = isCancelledOrder
 ? "Cancelled"
 : item.orderStatus;
 const isDisabled = orderStatus === "Placed" || orderStatus === "Customer approved";
+
+const editButton = (team === "Team Mark" || team === "Team Sussane")
+        ? "" // Hide the edit button
+        : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
 const actions = `
-<button class="btn btn-primary btn-sm edit-btn" data-id="${
-item.orderNo
-}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
+${editButton}
 <button class="btn btn-success btn-sm process-btn" data-id="${
 item.orderNo
 }" style="background-color: #cae8c9; border: none; color: #61a55e;" ${
