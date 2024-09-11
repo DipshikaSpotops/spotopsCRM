@@ -3079,30 +3079,38 @@ const status = $("#refund").val();
 const returnCharges = $(".returnShipment").val();
 const trackingNo = $("#trackingNoEdit").val();
 const eta = $("#etaEdit").val();
-console.log("eta",eta);
-var shipperName = $("#shipperNameEdit").val();
+console.log("eta", eta);
+let shipperName = $("#shipperNameEdit").val();
 if (shipperName === "Others") {
 shipperName = $("#otherShipperInput").val();
 }
 const trackingLink = $("#linkInput").val();
 const returnShippingMethod = $("input[name='returnValue']:checked").val();
 const paymentStatus = $('.paymentStatus').val();
-const escCause = $("#esc").val();
-const escProcess = $("#escProcess").val();
-const escReplacementShippingType = $("#replacement-customer").val();
-const escReplacementShipCharge = $("#replacement-shipping-charges").val();
-const escReturnShippingType = $("#customer").val();
-const escReturnShipCharge = $("#shipping-charges").val();
-const refundedAmount = $("#refundedAmount").val();
-const rmaStatusValue = $('input[name="rma-status"]:checked').val();
+let escCause = '';
+let escProcess = '';
+let escReplacementShippingType = '';
+let escReplacementShipCharge = '';
+let escReturnShippingType = '';
+let escReturnShipCharge = '';
+let refundedAmount = $("#refundedAmount").val();
+let rmaStatusValue = $('input[name="rma-status"]:checked').val();
 console.log("Selected RMA Status:", rmaStatusValue);
 
-
-var escDate;
-var forEscDate;
-var escTicked;
+// Variables to hold escalation-related data
+let escDate;
+let forEscDate;
+let escTicked;
 
 if (status === "Escalation") {
+// Update the escalation-related fields only if status is "Escalation"
+escCause = $("#esc").val();
+escProcess = $("#escProcess").val();
+escReplacementShippingType = $("#replacement-customer").val();
+escReplacementShipCharge = $("#replacement-shipping-charges").val();
+escReturnShippingType = $("#customer").val();
+escReturnShipCharge = $("#shipping-charges").val();
+
 escTicked = "Yes";
 const now = new Date();
 const options = {
@@ -3136,6 +3144,7 @@ default: return "th";
 forEscDate = `${day}${daySuffix(day)} ${month}, ${year}`;
 }
 
+// Construct the updated data object
 const updatedData = {
 ...currentYardData,
 status: status,
@@ -3144,18 +3153,21 @@ eta: eta,
 shipperName: shipperName,
 trackingLink: trackingLink,
 refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
-escalationCause: escCause,
-escalationDate: forEscDate || "",
-escalationProcess: escProcess,
-escTicked: escTicked,
 returnShipping: returnShippingMethod,
 returnShippingCharge: returnCharges,
-escReturnShipType: escReturnShippingType,
-escReturnShippingCharge: escReturnShipCharge,
-escReplaceShipType: escReplacementShippingType,
-escReplaceShippingCharge: escReplacementShipCharge,
-rmaStatus: rmaStatusValue,
 };
+
+// Add escalation fields only if status is "Escalation"
+if (status === "Escalation") {
+updatedData.escalationCause = escCause;
+updatedData.escalationDate = forEscDate || "";
+updatedData.escalationProcess = escProcess;
+updatedData.escTicked = escTicked;
+updatedData.escReturnShipType = escReturnShippingType;
+updatedData.escReturnShippingCharge = escReturnShipCharge;
+updatedData.escReplaceShipType = escReplacementShippingType;
+updatedData.escReplaceShippingCharge = escReplacementShipCharge;
+}
 
 console.log("Yard Index:", yardIndex);
 console.log("Order No:", orderNo);
@@ -3189,9 +3201,9 @@ $("#refund").trigger("change");
 .catch((error) => {
 console.error("Error:", error);
 });
+
 window.location.reload();
 });
-
 
 
 
@@ -3466,8 +3478,8 @@ shippingPrice = $("#ourShippingInput").val();
 } else if (selectedShipping === "Customer shipping") {
 shippingPrice = $("#customerShippingInput").val();
 }else if(selectedShipping === "") {
-  selectedShipping = "";
-  shippingPrice = "";
+selectedShipping = "";
+shippingPrice = "";
 }
 
 if (refundStatus === "Part shipped") {
