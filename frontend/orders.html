@@ -303,17 +303,17 @@ window.location.href = "login_signup.html";
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
-  <th style="cursor:pointer;" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
-  <th style="cursor:pointer;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-  <th style="cursor:pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
-  <th id="aToZ-3" style="cursor:pointer;" scope="col">Customer Name <span class="sort-icon">&#9650;</span></th>
-  <th id="aToZ-4" style="cursor:pointer;" scope="col">Part Name <span class="sort-icon">&#9650;</span></th>
-  <th id="aToZ-5" style="cursor:pointer;" scope="col">Yard <span class="sort-icon">&#9650;</span></th>
-  <th id="aToZ-6" style="cursor:pointer;" scope="col">Order Status <span class="sort-icon">&#9650;</span></th>
-  <th id="aToZ-7" style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon">&#9650;</span></th>
-  <th style="cursor:pointer;" scope="col">Actions</th>
-  <th style="cursor:pointer;" scope="col">Send Invoice</th>
-  <th id="aToZ-10" style="cursor:pointer;" scope="col">Email <span class="sort-icon">&#9650;</span></th>
+<th style="cursor:pointer;" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor:pointer;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor:pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th id="aToZ-3" style="cursor:pointer;" scope="col">Customer Name <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-4" style="cursor:pointer;" scope="col">Part Name <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-5" style="cursor:pointer;" scope="col">Yard <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-6" style="cursor:pointer;" scope="col">Order Status <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-7" style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon">&#9650;</span></th>
+<th style="cursor:pointer;" scope="col">Actions</th>
+<th style="cursor:pointer;" scope="col">Send Invoice</th>
+<th id="aToZ-10" style="cursor:pointer;" scope="col">Email <span class="sort-icon">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="infoTable">
@@ -337,20 +337,20 @@ window.location.href = "login_signup.html";
 <div class="modal-body">
 <form id="profileForm">
 <div class="form-group">
-  <label for="profileFirstName">First Name</label>
-  <input type="text" class="form-control" id="profileFirstName" readonly>
+<label for="profileFirstName">First Name</label>
+<input type="text" class="form-control" id="profileFirstName" readonly>
 </div>
 <div class="form-group">
-  <label for="profileLastName">Last Name</label>
-  <input type="text" class="form-control" id="profileLastName" readonly>
+<label for="profileLastName">Last Name</label>
+<input type="text" class="form-control" id="profileLastName" readonly>
 </div>
 <div class="form-group">
-  <label for="profileEmail">Email</label>
-  <input type="email" class="form-control" id="profileEmail" readonly>
+<label for="profileEmail">Email</label>
+<input type="email" class="form-control" id="profileEmail" readonly>
 </div>
 <div class="form-group">
-  <label for="profileRole">Role</label>
-  <input type="text" class="form-control" id="profileRole" readonly>
+<label for="profileRole">Role</label>
+<input type="text" class="form-control" id="profileRole" readonly>
 </div>
 </form>
 </div>
@@ -373,7 +373,29 @@ yard: "asc",
 orderStatus: "asc",
 email: "asc",
 };
+function parseCustomDate(dateString) {
+const months = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+Nov: "11", Dec: "12"
+};
 
+// Extract parts from the string (day, month, year, time)
+const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+
+if (parts) {
+const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
+const month = months[parts[2]];
+const year = parts[3];
+const hour = parts[4];
+const minute = parts[5];
+
+// Return a valid date string for comparison
+return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+}
+
+return null;
+}
 function sortTable(column, type) {
 const table = $("#infoTable");
 const rows = table.find("tr").toArray();
@@ -383,9 +405,9 @@ let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
 
 if (type === "date") {
-valA = new Date(valA);
-valB = new Date(valB);
-} else if (type === "number") {
+valA = parseCustomDate(valA); // Use the helper function to parse the date
+valB = parseCustomDate(valB);
+}else if (type === "number") {
 valA = parseInt(valA.replace(/\D/g, ""), 10);
 valB = parseInt(valB.replace(/\D/g, ""), 10);
 }
@@ -444,7 +466,7 @@ const timeDifference =
 (currentTime - loginTimestamp) / (1000 * 60 * 60);
 if (timeDifference >= 12) {
 alert(
-  "Your session has expired. You will be redirected to the login page."
+"Your session has expired. You will be redirected to the login page."
 );
 window.localStorage.clear(); 
 window.location.href = "login_signup.html";
@@ -486,28 +508,28 @@ var filteredData = data.filter(item => item.orderStatus !== "Customer approved" 
 filteredData = sortOrdersByOrderNoDesc(filteredData);
 filteredData.forEach((item) => {
 const actions = `
-    <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
-    <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
-    <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a">Cancel</button>
+<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
+<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a">Cancel</button>
 `;
 const sendInvoice = `
-    <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
 `;
 var yardlength = item.additionalInfo.length;
 $("#infoTable").append(`
-    <tr>
-        <td>${item.orderDate}</td>
-        <td>${item.orderNo}</td>
-        <td>${item.salesAgent}</td>
-        <td>${item.customerName}</td>
-        <td>${item.pReq || item.partName}</td>
-        <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength-1].yardName : ""}</td>
-        <td>${item.orderStatus}</td>
-        <td>${item.additionalInfo[0].escTicked || ""}</td>
-        <td class="actions">${actions}</td>
-        <td>${sendInvoice}</td>
-        <td>${item.email}</td>
-    </tr>
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
+<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength-1].yardName : ""}</td>
+<td>${item.orderStatus}</td>
+<td>${item.additionalInfo[0].escTicked || ""}</td>
+<td class="actions">${actions}</td>
+<td>${sendInvoice}</td>
+<td>${item.email}</td>
+</tr>
 `);
 });
 } catch (error) {
@@ -538,22 +560,22 @@ if (confirm(`Are you sure you want to cancel order ${id}?`)) {
 fetch(`https://www.spotops360.com/orders/${id}`, {
 method: "DELETE",
 headers: {
-  Authorization: `Bearer ${token}`
+Authorization: `Bearer ${token}`
 },
 })
 .then((response) => {
-  if (!response.ok) {
-    console.error("Failed to delete order", response);
-    throw new Error("Failed to delete order");
-  }
-  return response.json();
+if (!response.ok) {
+console.error("Failed to delete order", response);
+throw new Error("Failed to delete order");
+}
+return response.json();
 })
 .then((data) => {
-  console.log("Order cancelled successfully", data); // Added log
-  window.location.reload();
+console.log("Order cancelled successfully", data); // Added log
+window.location.reload();
 })
 .catch((error) => {
-  console.error("Error cancelling order:", error);
+console.error("Error cancelling order:", error);
 });
 }
 });
@@ -663,4 +685,3 @@ window.location.href = 'login_signup.html';
 </script>
 </body>
 </html>
-
