@@ -363,6 +363,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <script>
+var team;
 $(document).ready(async function () {
 let sortOrder = {
 orderDate: "asc",
@@ -479,7 +480,7 @@ const firstName = localStorage.getItem("firstName");
 const lastName = localStorage.getItem("lastName");
 const email = localStorage.getItem("email");
 const role = localStorage.getItem("role");
-const team = localStorage.getItem("team");
+ team = localStorage.getItem("team");
 
 if (firstName) {
 $("#user-name").text(firstName);
@@ -508,8 +509,13 @@ var data = response.data;
 var filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
 filteredData = sortOrdersByOrderNoDesc(filteredData);
 filteredData.forEach((item) => {
+ // Check if the team is "Team Mark" or "Team Sussane" to hide the "Edit" button
+ const editButton = (team === "Team Mark" || team === "Team Sussane")
+        ? "" // Hide the edit button
+        : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
 const actions = `
-<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
+${editButton}
 <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>
 <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a">Cancel</button>
 `;
@@ -641,16 +647,13 @@ $(
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 } else if (team === "Team Mark") {
-  // <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>  
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
-$('#edit-btn').hide();
 $(
 "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
 ).hide();
 } else if (team === "Team Sussane") {
-  $('#edit-btn').hide();  
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
@@ -689,3 +692,5 @@ window.location.href = 'login_signup.html';
 </script>
 </body>
 </html>
+in the above html the following button should be hidden if (team === "Team Mark") or if (team === "Team Sussane")
+<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>
