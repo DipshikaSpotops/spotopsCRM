@@ -458,7 +458,7 @@ window.location.href = "login_signup.html";
 
 $("#searchInput").on("keyup", function () {
 let value = $(this).val().toLowerCase();
-$("#infoTable tr").filter(function () {
+$("#cancelledOrdersTable tr").filter(function () {
 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
 });
 });
