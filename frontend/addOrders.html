@@ -306,7 +306,7 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="bCity" placeholder="City" required />
 </div>
 <div class="form-group col-md-4">
-    <select class="form-control" id="state" required>
+    <select class="form-control" id="bState" required>
       <option value="">Select State/Province</option>
       <!-- United States States -->
       <option value="AL">Alabama</option>
@@ -412,15 +412,17 @@ window.location.href = "login_signup.html";
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="sAttention" placeholder="Attention" required />
 </div>
-
 <!-- Street Address column -->
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="sAddress" placeholder="Street Address" required />
 </div>
+<div class="form-group col-md-2">
+    <input type="text" class="form-control" id="sCity" placeholder="City" required />
+    </div>
 
 <!-- City column -->
 <div class="form-group col-md-4">
-    <select class="form-control" id="state" required>
+    <select class="form-control" id="sState" required>
       <option value="">Select State/Province</option>
       <!-- United States States -->
       <option value="AL">Alabama</option>
@@ -619,7 +621,7 @@ const data = response.data;
 const city = data.places[0]['place name'];
 const stateAbbr = data.places[0]['state abbreviation'];
 const country = data['country abbreviation'];
-console.log("country",country);
+console.log("country",country,stateAbbr);
 $("#bCity").val(city);
 $("#bState").val(stateAbbr);
 $("#bCountry").val(country); 
