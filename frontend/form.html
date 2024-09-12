@@ -1301,10 +1301,13 @@ value="Update Comments"
 <input type="text" class="form-control" id="altPhone" placeholder="Alt. Phone Number" />
 </div>
 <div class="form-group col-md-4">
-<input type="email" class="form-control" id="email" placeholder="Email Id">
+<input type="number" class="form-control" id="ext" placeholder="Extension">
 </div>
 </div>
 <div class="form-row addNewId">
+  <div class="form-group col-md-4">
+    <input type="email" class="form-control" id="email" placeholder="Email Id">
+    </div>
   <div class="form-group col-md-4">
   <input type="number" class="form-control" id="faxNo" placeholder="Enter Fax No." >
   </div>
@@ -3405,6 +3408,7 @@ const others = document.getElementById("others").value;
 const stockNo = $("#stockNo").val();
 const warrYard = $("#warr").val();
 const faxNo = $('#faxNo').val();
+const ext = $('#ext').val();
 
 
 let shippingMethod = "";
@@ -3421,6 +3425,7 @@ agentName: agentName,
 yardRating: yardRating,
 phone: phone,
 altPhone: altPhone,
+ext: ext,
 email: email,
 street:address,
 city:city,
