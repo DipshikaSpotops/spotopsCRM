@@ -2033,7 +2033,7 @@ OK
 $(document).ready(async function () {
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
-  console.log("si[]")
+  console.log("sippp")
 const zipCode = $(this).val();
 if (zipCode.length === 5) {
 if (zipCode) {
@@ -2383,8 +2383,6 @@ $("#yardInfoContainer").append(buttonHtml);
 }
 
 function showYardDetails(yardIndex) {
-const currentPath = window.location.pathname;
-console.log("currentPath")  
 const yardDetails = $(`#yard-details-${yardIndex}`);
 if (yardDetails.is(":visible")) {
 yardDetails.hide();
