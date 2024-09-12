@@ -2406,7 +2406,7 @@ function showYardDetails(yardIndex, orderNo) {
         return response.json().then(data => ({ data, isCancelledOrder: false }));
       })
       .then(({ data, isCancelledOrder }) => {
-        console.log("Fetched Data:", data);  // Log the fetched data for both cases
+        console.log("Fetched Data:", data,isCancelledOrder);  // Log the fetched data for both cases
 
         // Check if the data is valid and contains `additionalInfo` (for orders)
         if (!data || (!data.additionalInfo && !isCancelledOrder)) {
