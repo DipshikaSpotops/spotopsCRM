@@ -2384,7 +2384,7 @@ $("#yardInfoContainer").append(buttonHtml);
 
 function showYardDetails(yardIndex, orderNo) {
   const yardDetails = $(`#yard-details-${yardIndex}`);
-  
+  console.log("index",yardIndex,orderNo);
   if (yardDetails.is(":visible")) {
     yardDetails.hide();
   } else {
