@@ -2395,8 +2395,9 @@ function showYardDetails(yardIndex, orderNo) {
         if (!response.ok) {
           console.log("Order not found in orders, checking cancelledOrders...");
           // If the order is not found in `orders`, fetch from `cancelledOrders`
-          return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+           fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
             .then((cancelledResponse) => {
+              console.log(cancelledResponse);
               if (!cancelledResponse.ok) {
                 throw new Error("Order not found in both collections.");
               }
