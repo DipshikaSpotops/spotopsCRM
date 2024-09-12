@@ -2395,7 +2395,10 @@ console.log("Query parameters:", queryParams);
 const yardDetails = $(`#yard-details-${yardIndex}`);
 if (yardDetails.is(":visible")) {
 yardDetails.hide();
-} else {
+}else if(queryParams.includes(cancelled=true)){
+console.log("cancelled order");
+}
+ else {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
