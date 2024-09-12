@@ -2397,6 +2397,45 @@ if (yardDetails.is(":visible")) {
 yardDetails.hide();
 }else if(queryParams.includes(cancelled=true)){
 console.log("cancelled order");
+fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Cancelled order not found");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Validate data and display yard details
+          if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+            console.error("Invalid or missing data in cancelled order");
+            disableButtons(yardIndex);
+            return;
+          }
+
+          const yardData = data.additionalInfo[yardIndex - 1];
+
+          // Generate yard details HTML for cancelled orders
+          let yardDetailsHtml = `
+            <table class="table table-bordered">
+              <tr>
+                <td colspan="2">${formatYardData(yardData)}</td>
+              </tr>
+              <tr style="display:flex">
+                <td colspan="2">
+                  <button type="button" class="edit-yard" data-yard-index="${yardIndex}" disabled>Edit Status</button>
+                  <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}" disabled>Edit Details</button>
+                  <button type="button" class="cardcharged" data-yard-index="${yardIndex}" disabled>Card Charged</button>
+                  <button type="button" class="refundCollect" data-yard-index="${yardIndex}" disabled>Refund Status</button>
+                </td>
+              </tr>
+            </table>
+          `;
+
+          yardDetails.html(yardDetailsHtml).show();
+        })
+        .catch((error) => {
+          console.error("Error fetching cancelled order:", error);
+        });
 }
  else {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
