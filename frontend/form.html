@@ -2394,7 +2394,7 @@ function showYardDetails(yardIndex, orderNo) {
         if (!response.ok) {
           console.log("cancelled");
           // If not found in orders, try fetching from cancelledOrders
-          return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+           fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
             .then((cancelledResponse) => {
               console.log("cancelled res",cancelledResponse);
               if (!cancelledResponse.ok) {
