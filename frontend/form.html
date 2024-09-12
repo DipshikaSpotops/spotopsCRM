@@ -2387,16 +2387,23 @@ function showYardDetails(yardIndex, orderNo) {
   if (yardDetails.is(":visible")) {
     yardDetails.hide();
   } else {
+    // Fetch from the orders collection first
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
       .then((response) => {
         if (!response.ok) {
-          // If not found in orders, check in cancelledOrders
-          return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+          // If not found in orders, try fetching from cancelledOrders
+          return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+            .then((cancelledResponse) => {
+              if (!cancelledResponse.ok) {
+                throw new Error("Order not found in both collections.");
+              }
+              return cancelledResponse.json().then(data => ({ data, isCancelledOrder: true }));
+            });
         }
-        return response.json();
+        return response.json().then(data => ({ data, isCancelledOrder: false }));
       })
-      .then((data) => {
-        // If the order is found in cancelledOrders, disable the buttons
+      .then(({ data, isCancelledOrder }) => {
+        // If the order is found but there's no additionalInfo or invalid yardIndex
         if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
           disableButtons(yardIndex);
           return;
@@ -2425,10 +2432,11 @@ function showYardDetails(yardIndex, orderNo) {
             </tr>
           </table>
         `;
+
         yardDetails.html(yardDetailsHtml).show();
 
-        // If the order is found in cancelledOrders, disable the buttons
-        if (data.isCancelledOrder) {
+        // Disable buttons if the order is from cancelledOrders
+        if (isCancelledOrder) {
           disableButtons(yardIndex);
         }
       })
@@ -2438,7 +2446,7 @@ function showYardDetails(yardIndex, orderNo) {
   }
 }
 
-// Disable the buttons if the order is in cancelledOrders
+// Function to disable buttons for cancelled orders
 function disableButtons(yardIndex) {
   $(`.edit-yard[data-yard-index="${yardIndex}"]`).attr("disabled", true);
   $(`.edit-yard-details[data-yard-index="${yardIndex}"]`).attr("disabled", true);
