@@ -2389,7 +2389,7 @@ function showYardDetails(yardIndex, orderNo) {
   if (yardDetails.is(":visible")) {
     yardDetails.hide();
   } else {
-    // Try to fetch from the orders collection first
+    // Fetch from the orders collection first
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
       .then((response) => {
         if (!response.ok) {
@@ -2403,18 +2403,31 @@ function showYardDetails(yardIndex, orderNo) {
               return cancelledResponse.json().then(data => ({ data, isCancelledOrder: true }));
             });
         }
-        // If found in `orders`, return that data
         return response.json().then(data => ({ data, isCancelledOrder: false }));
       })
       .then(({ data, isCancelledOrder }) => {
-        // Check if the data is valid
-        if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+        console.log("Fetched Data:", data);  // Log the fetched data for both cases
+
+        // Check if the data is valid and contains `additionalInfo` (for orders)
+        if (!data || (!data.additionalInfo && !isCancelledOrder)) {
           console.error("Invalid or missing data");
           disableButtons(yardIndex);
           return;
         }
 
-        const yardData = data.additionalInfo[yardIndex - 1];
+        // For `orders`, use `additionalInfo`; for `cancelledOrders`, handle it differently
+        let yardData;
+        if (isCancelledOrder) {
+          console.log("Handling cancelled order data");
+          yardData = data; // Assume cancelledOrders data has no additionalInfo field
+        } else {
+          yardData = data.additionalInfo[yardIndex - 1];
+          if (!yardData) {
+            console.error("No yard data found at the specified index");
+            disableButtons(yardIndex);
+            return;
+          }
+        }
 
         // Check payment status and apply color
         if (yardData.paymentStatus === "Card charged") {
@@ -2439,7 +2452,7 @@ function showYardDetails(yardIndex, orderNo) {
         `;
         yardDetails.html(yardDetailsHtml).show();
 
-        // If the order is found in cancelledOrders, disable the buttons
+        // Disable buttons if the order is from cancelledOrders
         if (isCancelledOrder) {
           disableButtons(yardIndex);
         }
