@@ -2385,16 +2385,16 @@ $("#yardInfoContainer").append(buttonHtml);
 function showYardDetails(yardIndex, orderNo) {
   const yardDetails = $(`#yard-details-${yardIndex}`);
   console.log("Index:", yardIndex, "OrderNo:", orderNo);
-  
+
   if (yardDetails.is(":visible")) {
     yardDetails.hide();
   } else {
-    // First, try to fetch from the orders collection
+    // Try to fetch from the orders collection first
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
       .then((response) => {
         if (!response.ok) {
           console.log("Order not found in orders, checking cancelledOrders...");
-          // If not found in orders, fetch from cancelledOrders
+          // If the order is not found in `orders`, fetch from `cancelledOrders`
           return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
             .then((cancelledResponse) => {
               if (!cancelledResponse.ok) {
@@ -2403,6 +2403,7 @@ function showYardDetails(yardIndex, orderNo) {
               return cancelledResponse.json().then(data => ({ data, isCancelledOrder: true }));
             });
         }
+        // If found in `orders`, return that data
         return response.json().then(data => ({ data, isCancelledOrder: false }));
       })
       .then(({ data, isCancelledOrder }) => {
@@ -2438,7 +2439,7 @@ function showYardDetails(yardIndex, orderNo) {
         `;
         yardDetails.html(yardDetailsHtml).show();
 
-        // Disable buttons if the order is from cancelledOrders
+        // If the order is found in cancelledOrders, disable the buttons
         if (isCancelledOrder) {
           disableButtons(yardIndex);
         }
@@ -2456,6 +2457,7 @@ function disableButtons(yardIndex) {
   $(`.cardcharged[data-yard-index="${yardIndex}"]`).attr("disabled", true);
   $(`.refundCollect[data-yard-index="${yardIndex}"]`).attr("disabled", true);
 }
+
 
 
 function formatYardData(yardData) {
