@@ -2383,8 +2383,15 @@ $("#yardInfoContainer").append(buttonHtml);
 }
 
 function showYardDetails(yardIndex) {
-const currentPath = window.location.pathname;
-console.log("currentPath",currentPath);  
+  const currentPath = window.location.href;
+console.log("Full Path with query parameters:", currentPath);
+
+const currentPathWithoutQuery = window.location.pathname; 
+console.log("Path without query parameters:", currentPathWithoutQuery);
+
+const queryParams = window.location.search;
+console.log("Query parameters:", queryParams);
+
 const yardDetails = $(`#yard-details-${yardIndex}`);
 if (yardDetails.is(":visible")) {
 yardDetails.hide();
