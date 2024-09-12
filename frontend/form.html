@@ -2384,16 +2384,52 @@ $("#yardInfoContainer").append(buttonHtml);
 
 function showYardDetails(yardIndex, orderNo) {
   const yardDetails = $(`#yard-details-${yardIndex}`);
-
   if (yardDetails.is(":visible")) {
     yardDetails.hide();
   } else {
-    // First, try to fetch the order from the orders collection
-    fetchOrderDetails(orderNo, yardIndex)
-      .then((orderExists) => {
-        if (!orderExists) {
-          // If the order is not found in orders, check in cancelledOrders
-          return fetchCancelledOrderDetails(orderNo, yardIndex);
+    fetch(`https://www.spotops360.com/orders/${orderNo}`)
+      .then((response) => {
+        if (!response.ok) {
+          // If not found in orders, check in cancelledOrders
+          return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // If the order is found in cancelledOrders, disable the buttons
+        if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+          disableButtons(yardIndex);
+          return;
+        }
+
+        const yardData = data.additionalInfo[yardIndex - 1];
+
+        // Check payment status and apply color
+        if (yardData.paymentStatus === "Card charged") {
+          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+        }
+
+        // Generate yard details HTML
+        let yardDetailsHtml = `
+          <table class="table table-bordered">
+            <tr>
+              <td colspan="2">${formatYardData(yardData)}</td>
+            </tr>
+            <tr style="display:flex">
+              <td colspan="2">
+                <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
+                <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
+                <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
+                <button type="button" class="refundCollect" data-yard-index="${yardIndex}">Refund Status</button>
+              </td>
+            </tr>
+          </table>
+        `;
+        yardDetails.html(yardDetailsHtml).show();
+
+        // If the order is found in cancelledOrders, disable the buttons
+        if (data.isCancelledOrder) {
+          disableButtons(yardIndex);
         }
       })
       .catch((error) => {
@@ -2402,85 +2438,13 @@ function showYardDetails(yardIndex, orderNo) {
   }
 }
 
-// Function to fetch details from the orders collection
-function fetchOrderDetails(orderNo, yardIndex) {
-  return fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return null;
-    })
-    .then((data) => {
-      if (data && data.additionalInfo && data.additionalInfo[yardIndex - 1]) {
-        displayYardDetails(data, yardIndex);
-        return true; // Order found in orders collection
-      }
-      return false; // Order not found
-    });
-}
-
-// Function to fetch details from the cancelledOrders collection
-function fetchCancelledOrderDetails(orderNo, yardIndex) {
-  return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return null;
-    })
-    .then((data) => {
-      if (data && data.additionalInfo && data.additionalInfo[yardIndex - 1]) {
-        displayYardDetails(data, yardIndex, true); // Pass true to disable buttons for cancelled orders
-        return true; // Order found in cancelledOrders collection
-      }
-      return false; // Order not found in cancelledOrders collection
-    });
-}
-
-// Function to display the yard details and optionally disable buttons if the order is from cancelledOrders
-function displayYardDetails(data, yardIndex, isCancelledOrder = false) {
-  const yardData = data.additionalInfo[yardIndex - 1];
-
-  // Check payment status and apply color
-  if (yardData.paymentStatus === "Card charged") {
-    $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-  }
-
-  // Generate yard details HTML
-  let yardDetailsHtml = `
-    <table class="table table-bordered">
-      <tr>
-        <td colspan="2">${formatYardData(yardData)}</td>
-      </tr>
-      <tr style="display:flex">
-        <td colspan="2">
-          <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
-          <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
-          <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
-          <button type="button" class="refundCollect" data-yard-index="${yardIndex}">Refund Status</button>
-        </td>
-      </tr>
-    </table>
-  `;
-
-  const yardDetails = $(`#yard-details-${yardIndex}`);
-  yardDetails.html(yardDetailsHtml).show();
-
-  // If this is a cancelled order, disable all buttons
-  if (isCancelledOrder) {
-    disableButtons(yardIndex);
-  }
-}
-
-// Function to disable the buttons for cancelled orders
+// Disable the buttons if the order is in cancelledOrders
 function disableButtons(yardIndex) {
   $(`.edit-yard[data-yard-index="${yardIndex}"]`).attr("disabled", true);
   $(`.edit-yard-details[data-yard-index="${yardIndex}"]`).attr("disabled", true);
   $(`.cardcharged[data-yard-index="${yardIndex}"]`).attr("disabled", true);
   $(`.refundCollect[data-yard-index="${yardIndex}"]`).attr("disabled", true);
 }
-
 
 
 function formatYardData(yardData) {
