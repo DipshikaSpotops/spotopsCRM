@@ -616,39 +616,39 @@ $(this).addClass("active");
 
 // Apply team-based and role-based restrictions
 if (team === "Team Charlie") {
-// Hide specific reports links for Team Charlie
-$("#submenu-reports .nav-link")
-  .not(':contains("My Sales Report")')
-  .hide();
-// Hide specific dashboards links for Team Charlie
-$(
-  "#submenu-dashboards .escalation,.view-ordersSheet-link,.view-orders-link,.view-all-orders-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-).hide();
-// Hide teams and users sections for Team Charlie
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-} else if (team === "Team Mark") {
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-$(
-  "#submenu-dashboards .add-orders-link, .view-individualOrders-link, .teamB-orders-link"
-).hide();
-} else if (team === "Team Sussane") {
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-$(
-  "#submenu-dashboards .add-orders-link, .view-individualOrders-link, .teamA-orders-link"
-).hide();
-} else if (role === "Admin") {
-// Hide specific reports links for Admin
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$('#submenu-reports .nav-link:contains("Refund Report")').show();
-$('#submenu-reports .nav-link:contains("Collect Refund")').show();
-// Hide specific dashboards links for Admin
-$("#submenu-dashboards .view-individualOrders-link").hide();
-}
+          // Hide specific reports links for Team Charlie
+          $("#submenu-reports .nav-link")
+            .not(':contains("My Sales Report")')
+            .hide();
+          // Hide specific dashboards links for Team Charlie
+          $(
+            "#submenu-dashboards .escalation,.view-ordersSheet-link,.view-orders-link,.view-all-orders-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+          ).hide();
+          // Hide teams and users sections for Team Charlie
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+        } else if (team === "Team Mark") {
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+          $(
+            "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+          ).hide();
+        } else if (team === "Team Sussane") {
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          $(".nav-item:has(#submenu-teams)").hide();
+          $(".nav-item:has(#submenu-users)").hide();
+          $(
+            "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+          ).hide();
+        } else if (role === "Admin") {
+          // Hide specific reports links for Admin
+          $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+          $('#submenu-reports .nav-link:contains("Refund Report")').show();
+          $('#submenu-reports .nav-link:contains("Collect Refund")').show();
+          // Hide specific dashboards links for Admin
+          $("#submenu-dashboards .view-individualOrders-link").hide();
+        }
 // Logout functionality
 $('#logoutLink').on('click', function() {
 window.localStorage.clear();
