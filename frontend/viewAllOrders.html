@@ -412,7 +412,7 @@ Escalation Status
 <span class="aToZ">&#9650;</span>
 </th>
 <th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">Send Invoice</th>
+<!-- <th style="cursor: pointer" scope="col">Send Invoice</th> -->
 <th style="cursor: pointer" scope="col">
 Email <span class="aToZ">&#9650;</span>
 </th>
@@ -710,9 +710,9 @@ item.orderNo
 orderStatus === "Cancelled" ? "disabled" : ""
 }>Cancel</button>
 `;
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-`;
+// const sendInvoice = `
+// <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+// `;
 var yardlength = item.additionalInfo.length;
 
 $("#infoTable").append(`
