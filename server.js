@@ -526,7 +526,7 @@ try {
 const orderNo = req.params.orderNo;
 console.log("oNo",orderNo);
 const cancelledOrder = await CancelledOrder.findOne({ orderNo });
-console.log("cOrder",cancelledOrder);
+// console.log("cOrder",cancelledOrder);
 if (!cancelledOrder) {
 return res.status(404).json({ message: "Cancelled order not found" });
 }
