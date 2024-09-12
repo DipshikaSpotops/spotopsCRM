@@ -2383,67 +2383,67 @@ $("#yardInfoContainer").append(buttonHtml);
 }
 
 function showYardDetails(yardIndex, orderNo) {
-const yardDetails = $(`#yard-details-${yardIndex}`);
-if (yardDetails.is(":visible")) {
-yardDetails.hide();
-} else {
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then((response) => {
-if (!response.ok) {
-// If not found in orders, check in cancelledOrders
-return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
-}
-return response.json();
-})
-.then((data) => {
-// If the order is found in cancelledOrders, disable the buttons
-if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-disableButtons(yardIndex);
-return;
-}
+  const yardDetails = $(`#yard-details-${yardIndex}`);
+  if (yardDetails.is(":visible")) {
+    yardDetails.hide();
+  } else {
+    fetch(`https://www.spotops360.com/orders/${orderNo}`)
+      .then((response) => {
+        if (!response.ok) {
+          // If not found in orders, check in cancelledOrders
+          return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // If the order is found in cancelledOrders, disable the buttons
+        if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+          disableButtons(yardIndex);
+          return;
+        }
 
-const yardData = data.additionalInfo[yardIndex - 1];
+        const yardData = data.additionalInfo[yardIndex - 1];
 
-// Check payment status and apply color
-if (yardData.paymentStatus === "Card charged") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-}
+        // Check payment status and apply color
+        if (yardData.paymentStatus === "Card charged") {
+          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+        }
 
-// Generate yard details HTML
-let yardDetailsHtml = `
-<table class="table table-bordered">
-<tr>
-  <td colspan="2">${formatYardData(yardData)}</td>
-</tr>
-<tr style="display:flex">
-  <td colspan="2">
-    <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
-    <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
-    <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
-    <button type="button" class="refundCollect" data-yard-index="${yardIndex}">Refund Status</button>
-  </td>
-</tr>
-</table>
-`;
-yardDetails.html(yardDetailsHtml).show();
+        // Generate yard details HTML
+        let yardDetailsHtml = `
+          <table class="table table-bordered">
+            <tr>
+              <td colspan="2">${formatYardData(yardData)}</td>
+            </tr>
+            <tr style="display:flex">
+              <td colspan="2">
+                <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
+                <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
+                <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
+                <button type="button" class="refundCollect" data-yard-index="${yardIndex}">Refund Status</button>
+              </td>
+            </tr>
+          </table>
+        `;
+        yardDetails.html(yardDetailsHtml).show();
 
-// If the order is found in cancelledOrders, disable the buttons
-if (data.isCancelledOrder) {
-disableButtons(yardIndex);
-}
-})
-.catch((error) => {
-console.error("Error fetching order or cancelled order:", error);
-});
-}
+        // If the order is found in cancelledOrders, disable the buttons
+        if (data.isCancelledOrder) {
+          disableButtons(yardIndex);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching order or cancelled order:", error);
+      });
+  }
 }
 
 // Disable the buttons if the order is in cancelledOrders
 function disableButtons(yardIndex) {
-$(`.edit-yard[data-yard-index="${yardIndex}"]`).attr("disabled", true);
-$(`.edit-yard-details[data-yard-index="${yardIndex}"]`).attr("disabled", true);
-$(`.cardcharged[data-yard-index="${yardIndex}"]`).attr("disabled", true);
-$(`.refundCollect[data-yard-index="${yardIndex}"]`).attr("disabled", true);
+  $(`.edit-yard[data-yard-index="${yardIndex}"]`).attr("disabled", true);
+  $(`.edit-yard-details[data-yard-index="${yardIndex}"]`).attr("disabled", true);
+  $(`.cardcharged[data-yard-index="${yardIndex}"]`).attr("disabled", true);
+  $(`.refundCollect[data-yard-index="${yardIndex}"]`).attr("disabled", true);
 }
 
 
