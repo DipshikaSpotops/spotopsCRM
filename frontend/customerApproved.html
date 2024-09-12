@@ -615,6 +615,7 @@ $(this).addClass("active");
 });
 
 // Apply team-based and role-based restrictions
+var team = localStorage.getItem("team");
 if (team === "Team Charlie") {
           // Hide specific reports links for Team Charlie
           $("#submenu-reports .nav-link")
