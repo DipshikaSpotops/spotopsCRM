@@ -2772,13 +2772,35 @@ fetchAndDisplaySaleNotes();
 }
 
 $("#orderStatus").on("change", function () {
-if ($(this).val() === "Yard PO sent") {
-showModal("#yardModal");
-$("#divTrackingEdit").hide();
+// if ($(this).val() === "Yard PO sent") {
+// showModal("#yardModal");
+// $("#divTrackingEdit").hide();
+// }
+if ($(this).val() === "Order cancelled") {
+  const id = $(this).data("id");
+
+console.log(`Cancel for order ID: ${orderNo}`,id); 
+fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+method: "DELETE",
+headers: {
+Authorization: `Bearer ${token}`
+},
+})
+.then((response) => {
+if (!response.ok) {
+console.error("Failed to delete order", response);
+throw new Error("Failed to delete order");
 }
-if ($(this).val() === "Part shipped") {
-$("#divTrackingEdit").show();
-$("#sendEmailButton").show();
+return response.json();
+})
+.then((data) => {
+console.log("Order cancelled successfully", data); // Added log
+window.location.reload();
+})
+.catch((error) => {
+console.error("Error cancelling order:", error);
+});
+
 }
 else {
 $("#divTrackingEdit").hide();
