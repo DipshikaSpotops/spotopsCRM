@@ -2776,9 +2776,10 @@ $("#orderStatus").on("change", function () {
 // showModal("#yardModal");
 // $("#divTrackingEdit").hide();
 // }
+console.log("orderStatus",$(this).val());
 if ($(this).val() === "Order cancelled") {
   const id = $(this).data("id");
-
+  
 console.log(`Cancel for order ID: ${orderNo}`,id); 
 fetch(`https://www.spotops360.com/orders/${orderNo}`, {
 method: "DELETE",
