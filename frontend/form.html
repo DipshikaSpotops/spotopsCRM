@@ -2437,7 +2437,8 @@ fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
           console.error("Error fetching cancelled order:", error);
         });
 }
- else {
+ else if(queryParams.includes(process=true)){
+  console.log("existing order");
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
