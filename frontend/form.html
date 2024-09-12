@@ -3415,6 +3415,7 @@ const yardShip = $("#yardShipping").val();
 const others = document.getElementById("others").value;
 const stockNo = $("#stockNo").val();
 const warrYard = $("#warr").val();
+console.lo("yard warr",warrYard);
 const faxNo = $('#faxNo').val();
 const ext = $('#ext').val();
 
@@ -3446,6 +3447,7 @@ status: "Yard located",
 shippingDetails: shippingMethod,
 others: others,
 faxNo: faxNo,
+warranty: warrYard
 };
 
 fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
@@ -3749,6 +3751,7 @@ $("#editOthers").val(yardData.others);
 $("#editPaymentStatus").val(yardData.paymentStatus);
 $("#editrefundAmount").val(yardData.refundedAmount);
 $("#editFax").val(yardData.faxNo);
+$('#editWarr').val(yardData.warranty)
 
 const shippingDetails = yardData.shippingDetails;
 console.log("shippingDetails:", shippingDetails);

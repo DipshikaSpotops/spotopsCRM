@@ -233,7 +233,7 @@ escalationDate: String,
 escTicked:String,
 partDeliveredDate:String,
 stockNo: String,
-warrYard: Number
+warranty: Number
 
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
