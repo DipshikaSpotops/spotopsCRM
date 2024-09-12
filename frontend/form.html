@@ -2903,7 +2903,7 @@ $("#sendEmailButton").hide();
 
 $("#yardInfoContainer").on("click", ".yard-btn", function () {
 yardIndex = $(this).data("yard-index");
-showYardDetails(yardIndex);
+showYardDetails(yardIndex,orderNo);
 });
 
 
@@ -3022,7 +3022,7 @@ return response.json();
 })
 .then((data) => {
 updateOrderHistory(data.orderHistory);
-showYardDetails(selectedYardIndex);
+showYardDetails(selectedYardIndex,orderNo);
 fetchAndUpdateYardInfo();
 })
 .catch((error) => {
@@ -3076,7 +3076,7 @@ return response.json();
 })
 .then((data) => {
 updateOrderHistory(data.orderHistory);
-showYardDetails(selectedYardIndex);
+showYardDetails(selectedYardIndex,orderNo);
 fetchAndUpdateYardInfo();
 })
 .catch((error) => {
@@ -3308,7 +3308,7 @@ console.log("Server response:", data);
 
 $("#editYardModal").modal("hide");
 updateOrderHistory(data.orderHistory);
-showYardDetails(yardIndex);
+showYardDetails(yardIndex,orderNo);
 fetchAndUpdateYardInfo();
 
 // Trigger the refund change manually after saving yard data
@@ -3875,7 +3875,7 @@ return response.json();
 $("#editYardDetailsModal").modal("hide");
 
 updateOrderHistory(data.orderHistory);
-showYardDetails(yardIndex);
+showYardDetails(yardIndex,orderNo);
 fetchAndUpdateYardInfo();
 })
 .catch((error) => {
