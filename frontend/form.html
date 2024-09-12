@@ -2384,6 +2384,7 @@ $("#yardInfoContainer").append(buttonHtml);
 
 function showYardDetails(yardIndex, orderNo) {
   const yardDetails = $(`#yard-details-${yardIndex}`);
+  
   if (yardDetails.is(":visible")) {
     yardDetails.hide();
   } else {
@@ -2403,8 +2404,9 @@ function showYardDetails(yardIndex, orderNo) {
         return response.json().then(data => ({ data, isCancelledOrder: false }));
       })
       .then(({ data, isCancelledOrder }) => {
-        // If the order is found but there's no additionalInfo or invalid yardIndex
-        if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+        // Check if the data is valid
+        if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+          console.error("Invalid or missing data");
           disableButtons(yardIndex);
           return;
         }
@@ -2432,7 +2434,6 @@ function showYardDetails(yardIndex, orderNo) {
             </tr>
           </table>
         `;
-
         yardDetails.html(yardDetailsHtml).show();
 
         // Disable buttons if the order is from cancelledOrders
