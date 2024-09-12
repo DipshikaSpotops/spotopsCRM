@@ -2384,7 +2384,8 @@ $("#yardInfoContainer").append(buttonHtml);
 
 function showYardDetails(yardIndex, orderNo) {
   const yardDetails = $(`#yard-details-${yardIndex}`);
-  console.log("index",yardIndex,orderNo);
+  console.log("index", yardIndex, orderNo);
+  
   if (yardDetails.is(":visible")) {
     yardDetails.hide();
   } else {
@@ -2393,16 +2394,16 @@ function showYardDetails(yardIndex, orderNo) {
       .then((response) => {
         if (!response.ok) {
           console.log("cancelled");
-          // If not found in orders, try fetching from cancelledOrders
-           fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+          // If not found in orders, return the fetch from cancelledOrders
+          return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
             .then((cancelledResponse) => {
-              console.log("cancelled res",cancelledResponse);
               if (!cancelledResponse.ok) {
                 throw new Error("Order not found in both collections.");
               }
               return cancelledResponse.json().then(data => ({ data, isCancelledOrder: true }));
             });
         }
+        // Parse the orders response and indicate it's not cancelled
         return response.json().then(data => ({ data, isCancelledOrder: false }));
       })
       .then(({ data, isCancelledOrder }) => {
