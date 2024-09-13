@@ -3667,38 +3667,40 @@ shippingPrice: shippingPrice
 console.log("updatedData",updatedData);
 
 fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(updatedData),
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
 })
 .then((response) => {
-if (!response.ok) {
-// If order is not found, check in cancelledOrders collection
-if (response.status === 404) {
-console.log('Order to put new orderStatus not found in orders, checking in cancelledOrders...');
-return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(updatedData),
-});
-}
-throw new Error("Network response was not ok");
-}
-return response.json();
+    if (!response.ok) {
+        // If the order is not found in the orders collection, check in cancelledOrders
+        if (response.status === 404) {
+            console.log('Order not found in orders, checking in cancelledOrders...');
+            return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}?firstName=${firstName}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedData),
+            });
+        }
+        throw new Error("Network response was not ok");
+    }
+    return response.json();
 })
 .then((data) => {
-if (!data) return;
-// Update the order status and order history in the UI
-console.log(":data to save",data)
-$("#orderStatus").val(newOrderStatus);
-updateOrderHistory(data.orderHistory);
+    if (!data) {
+        console.log("No data returned from either orders or cancelledOrders");
+        return;
+    }
+    console.log("Data to save:", data);
+    $("#orderStatus").val(newOrderStatus);
+    updateOrderHistory(data.orderHistory);
 })
 .catch((error) => {
-console.error("Error updating order status:", error);
+    console.error("Error updating order status:", error);
 });
 });
 

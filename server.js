@@ -371,52 +371,61 @@ res.status(400).send(err.message);
 }
 });
 app.put("/cancelledOrders/:orderNo", async (req, res) => {
-    console.log("updating the order status for cancelled")
-    const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-    console.log('US Central Time:', centralTime);
-    const date = new Date(centralTime);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day} ${month}, ${year}`;
-    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-    
-    try {
-    const order = await CancelledOrder.findOne({ orderNo: req.params.orderNo });
-    if (!order) return res.status(404).send("Order not found");
-    
-    const oldStatus = order.orderStatus;
-    
-    // Preserve existing customerApprovedDate if not provided
-    if (req.body.customerApprovedDate) {
-    order.customerApprovedDate = req.body.customerApprovedDate;
-    }
-    // Update only the fields provided in the request
-    for (let key in req.body) {
-    if (key !== 'customerApprovedDate') {
-    order[key] = req.body[key];
-    }
-    }
-    
-    const firstName = req.query.firstName;
-    console.log("Logged in user:", firstName);
-    
-    // Add timestamp to order history only if the status has changed
-    if (oldStatus !== order.orderStatus) {
-    order.orderHistory.push(
-    `Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`
-    );
-    }
-    
-    const updatedOrder = await order.save();
-    res.json(updatedOrder);
-    } catch (err) {
-    res.status(400).send(err.message);
-    }
-    });
+console.log("Updating the order status for cancelled orders:", req.params.orderNo);
+
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+
+try {
+const order = await CancelledOrder.findOne({ orderNo: req.params.orderNo });
+if (!order) {
+console.log("Cancelled order not found");
+return res.status(404).send("Order not found");
+}
+
+const oldStatus = order.orderStatus;
+console.log("Old status:", oldStatus);
+
+// Preserve customerApprovedDate if not provided
+if (req.body.customerApprovedDate) {
+order.customerApprovedDate = req.body.customerApprovedDate;
+}
+
+// Update fields provided in the request
+for (let key in req.body) {
+if (key !== 'customerApprovedDate') {
+order[key] = req.body[key];
+}
+}
+
+const firstName = req.query.firstName;
+console.log("Logged in user:", firstName);
+
+// Add history entry if the status has changed
+if (oldStatus !== order.orderStatus) {
+const historyEntry = `Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`;
+order.orderHistory.push(historyEntry);
+console.log("Added to history:", historyEntry);
+}
+
+const updatedOrder = await order.save();
+console.log("Order successfully updated:", updatedOrder);
+res.json(updatedOrder);
+} catch (err) {
+console.error("Error updating order:", err);
+res.status(400).send(err.message);
+}
+});
+
 
 // changing order status till here
 
