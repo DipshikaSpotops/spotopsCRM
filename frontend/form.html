@@ -3231,6 +3231,7 @@ try {
         if (response.status === 404) {
             console.log('Order not found in orders, checking in cancelledOrders...');
             response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+            console.log("response",response);
             if (!response.ok) {
                 throw new Error("Failed to fetch current yard data from both orders and cancelledOrders");
             }
