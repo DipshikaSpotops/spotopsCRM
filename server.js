@@ -992,25 +992,28 @@ res.status(500).json({ message: 'Failed to update support comments.', error });
 }
 });
 app.put('/cancelledOrders/:orderNo/supportNotes', async (req, res) => {
-    const { orderNo } = req.params;
-    console.log("sCancelled order",orderNo);
-    const { note, author, timestamp } = req.body;
-    var supportNote = `${author},${timestamp} : ${note}` 
-    try {
-    const cOrder = await CancelledOrder.findOne({ orderNo });
-    
-    if (cOrder) {
-    
-        cOrder.supportNotes.push(supportNote);
-    await cOrder.save();
-    res.status(200).json({ message: 'Support comments updated successfully.' });
-    } else {
-    res.status(404).json({ message: 'Order not found.' });
-    }
-    } catch (error) {
-    res.status(500).json({ message: 'Failed to update support comments.', error });
-    }
-    });
+console.log("pushing support notes for cancelled orders");    
+const { orderNo } = req.params;
+console.log("Updating support notes for cancelled order:", orderNo);
+const { note, author, timestamp } = req.body;
+var supportNote = `${author}, ${timestamp} : ${note}`;
+try {
+const cOrder = await CancelledOrder.findOne({ orderNo });
+if (cOrder) {
+if (!cOrder.supportNotes) {
+cOrder.supportNotes = [];
+}
+cOrder.supportNotes.push(supportNote);
+await cOrder.save();
+res.status(200).json({ message: 'Support comments updated successfully.' });
+} else {
+res.status(404).json({ message: 'Cancelled order not found.' });
+}
+} catch (error) {
+console.error("Error updating support notes:", error);
+res.status(500).json({ message: 'Failed to update support comments.', error });
+}
+});
 //notes section till here
 
 
