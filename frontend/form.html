@@ -2130,6 +2130,27 @@ setTimeout(function() {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
+// If the order is not found in the main orders collection, check in cancelledOrders
+if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
+console.log('Order not found, checking in cancelled orders...');
+return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+.then(cancelledResponse => cancelledResponse.json())
+.then(cancelledData => {
+if (!cancelledData || !cancelledData.additionalInfo || cancelledData.additionalInfo.length === 0) {
+console.log('No yard data found in cancelled orders.');
+return null; // No data found in either collection
+}
+return cancelledData; // Return data from cancelledOrders
+});
+}
+return data; // Return data from orders collection if found
+})
+.then(data => {
+if (!data) {
+return; // Exit if no data found in either collection
+}
+
+// Process the yard data
 data.additionalInfo.forEach((yard, index) => {
 const yardIndex = index + 1;
 console.log("yardIndex", yardIndex, yard);
@@ -2143,7 +2164,7 @@ $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f'
 }
 
 // Check if the status is "Escalation"
-console.log("=D=",yard.escTicked);
+console.log("=D=", yard.escTicked);
 if (yard.escTicked === "Yes") {
 $("#escTickBox").prop("checked", true);
 }
@@ -2151,8 +2172,6 @@ $("#escTickBox").prop("checked", true);
 })
 .catch(error => console.error("Error fetching yard data:", error));
 }, 500);
-
-
 // part to check the apymentStatus ends
 
 if (firstName) {
