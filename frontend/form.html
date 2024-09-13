@@ -3675,11 +3675,24 @@ body: JSON.stringify(updatedData),
 })
 .then((response) => {
 if (!response.ok) {
+// If order is not found, check in cancelledOrders collection
+if (response.status === 404) {
+console.log('Order not found in orders, checking in cancelledOrders...');
+return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedData),
+});
+}
 throw new Error("Network response was not ok");
 }
 return response.json();
 })
 .then((data) => {
+if (!data) return;
+// Update the order status and order history in the UI
 $("#orderStatus").val(newOrderStatus);
 updateOrderHistory(data.orderHistory);
 })
