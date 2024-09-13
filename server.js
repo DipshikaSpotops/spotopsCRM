@@ -991,6 +991,25 @@ res.status(404).json({ message: 'Order not found.' });
 res.status(500).json({ message: 'Failed to update support comments.', error });
 }
 });
+app.put('/cancelledOrders/:orderNo/supportNotes', async (req, res) => {
+    const { orderNo } = req.params;
+    const { note, author, timestamp } = req.body;
+    var supportNote = `${author},${timestamp} : ${note}` 
+    try {
+    const order = await Order.findOne({ orderNo });
+    
+    if (order) {
+    
+    order.supportNotes.push(supportNote);
+    await order.save();
+    res.status(200).json({ message: 'Support comments updated successfully.' });
+    } else {
+    res.status(404).json({ message: 'Order not found.' });
+    }
+    } catch (error) {
+    res.status(500).json({ message: 'Failed to update support comments.', error });
+    }
+    });
 //notes section till here
 
 
