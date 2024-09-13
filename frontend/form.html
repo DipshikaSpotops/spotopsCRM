@@ -4112,7 +4112,7 @@ alert(`Failed to update notes: ${error.message}`);
 });
 
 async function fetchSupportComment(orderNo) {
-console.log("Fetching and displaying support comments...");
+console.log("Fetching and displaying support comments...",orderNo);
 
 // First, check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
