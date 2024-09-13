@@ -3233,27 +3233,29 @@ const yardIndex = $(this).data("yard-index");
 let currentYardData = {};
 try {
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
-    console.log("res",response)
-    // Check if the response from the orders collection is OK
-    if (!response) {
-      console.log("not in orders, so search in cancelled");
-            // If the order is not found in the orders collection, check in cancelledOrders
-            console.log('Order not found in orders, checking in cancelledOrders...');
-            response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
-            console.log("Response from cancelledOrders:", response);
-
-            // If the order is not found in cancelledOrders either, throw an error
-            if (!response.ok) {
-                throw new Error("Failed to fetch current yard data from both orders and cancelledOrders");
-            }
-        else {
-            throw new Error("Failed to fetch current yard data");
-        }
-    }
-
+    console.log("Response from orders:", response);
+    
     // Parse the response as JSON
-    const orderData = await response.json();
-    console.log("Full data for yard:", orderData);
+    let orderData = await response.json();
+    console.log("Full data from orders:", orderData);
+
+    // Check if the order data is empty or doesn't contain the necessary information
+    if (!orderData || !orderData.additionalInfo || orderData.additionalInfo.length === 0) {
+        console.log("Order not found or additionalInfo is missing in orders, checking in cancelledOrders...");
+
+        // Fetch from cancelledOrders if no valid data is found in orders
+        response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+        console.log("Response from cancelledOrders:", response);
+
+        // If the order is not found in cancelledOrders either, throw an error
+        if (!response.ok) {
+            throw new Error("Failed to fetch current yard data from both orders and cancelledOrders");
+        }
+
+        // Parse the cancelledOrders response as JSON
+        orderData = await response.json();
+        console.log("Full data from cancelledOrders:", orderData);
+    }
 
     // Check if additionalInfo exists and if yard data is present
     if (orderData && orderData.additionalInfo && orderData.additionalInfo[yardIndex - 1]) {
