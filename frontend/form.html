@@ -4111,19 +4111,43 @@ alert(`Failed to update notes: ${error.message}`);
 }
 });
 
-async function fetchSupportComment() {
+async function fetchSupportComment(orderNo) {
 console.log("Fetching and displaying support comments...");
 
+// First, check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
-console.log("Fetched notes:", data.supportNotes);
+// If the order is not found or doesn't contain supportNotes, check in cancelledOrders
+if (!data || !data.supportNotes) {
+console.log('Order not found, checking in cancelled orders...');
+return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+} else {
+return Promise.resolve({ status: 200, json: () => data });
+}
+})
+.then((response) => {
+if (response.status === 404) {
+console.log("Order or cancelled order not found.");
+return;
+}
+return response.json();
+})
+.then((data) => {
+if (!data || !data.supportNotes) {
+console.log("No support notes found for this order.");
+return;
+}
+
+// Display the support notes
+console.log("Fetched support notes:", data.supportNotes);
 displaySnotes(data.supportNotes);
 })
 .catch((error) => {
-console.error("Error fetching notes:", error);
+console.error("Error fetching support notes:", error);
 });
 }
+
 
 function displaySnotes(notes) {
 const commentBox1 = $("#comment-boxSupport");
