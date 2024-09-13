@@ -3235,8 +3235,8 @@ try {
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
     
     // Check if the response from the orders collection is OK
-    if (!response.ok) {
-        if (response.status === 404) {
+    if (!response) {
+      console.log("not in orders, so search in cancelled");
             // If the order is not found in the orders collection, check in cancelledOrders
             console.log('Order not found in orders, checking in cancelledOrders...');
             response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
@@ -3246,7 +3246,7 @@ try {
             if (!response.ok) {
                 throw new Error("Failed to fetch current yard data from both orders and cancelledOrders");
             }
-        } else {
+        else {
             throw new Error("Failed to fetch current yard data");
         }
     }
