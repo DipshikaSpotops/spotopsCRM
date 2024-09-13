@@ -3236,12 +3236,10 @@ try {
     
     if (!response.ok) {
         if (response.status === 404) {
-            // If the order is not found in orders, check in cancelledOrders
             console.log('Order not found in orders, checking in cancelledOrders...');
             response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
             console.log("Response from cancelledOrders:", response);
 
-            // If the order is not found in cancelledOrders either, throw an error
             if (!response.ok) {
                 throw new Error("Failed to fetch current yard data from both orders and cancelledOrders");
             }
@@ -3252,16 +3250,15 @@ try {
 
     // Parse the response as JSON
     const orderData = await response.json();
-    console.log("Data for yard:", orderData);
+    console.log("Full data for yard:", orderData);
 
-    // Check if additionalInfo and the specified yard index exist
+    // Check if additionalInfo exists and if yard data is present
     if (orderData && orderData.additionalInfo && orderData.additionalInfo[yardIndex - 1]) {
         const currentYardData = orderData.additionalInfo[yardIndex - 1];
         console.log("Current yard data:", currentYardData);
-
-        // Process the yard data as needed (e.g., display in the UI)
     } else {
         console.error("Error: Yard data not found or additionalInfo is missing.");
+        console.log("Full response from API:", orderData);  // Log the full response
         throw new Error("Yard data not found in the fetched order");
     }
 
