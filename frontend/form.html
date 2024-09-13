@@ -4210,6 +4210,7 @@ window.location.href = "login_signup.html";
 // for descBar start hre
 fetchOrderDetails(orderNo)
 .then((order) => {
+console.log("descBar orderNo",order) ; 
 const year = order.year;
 const make = order.make;
 const model = order.model;
