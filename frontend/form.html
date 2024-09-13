@@ -3675,7 +3675,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
 })
 .then((response) => {
     if (!response.ok) {
-        // If the order is not found in the orders collection, check in cancelledOrders
+        // If order is not found in orders collection, check in cancelledOrders collection
         if (response.status === 404) {
             console.log('Order not found in orders, checking in cancelledOrders...');
             return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}?firstName=${firstName}`, {
@@ -3688,7 +3688,14 @@ fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
         }
         throw new Error("Network response was not ok");
     }
-    return response.json();
+    return response.json();  // Parse the JSON from orders collection
+})
+.then((response) => {
+    // If we came from cancelledOrders, parse the JSON
+    if (response instanceof Response) {
+        return response.json();  // Parse the JSON from cancelledOrders collection
+    }
+    return response;  // Already a JSON object from orders collection
 })
 .then((data) => {
     if (!data) {
@@ -3697,11 +3704,12 @@ fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
     }
     console.log("Data to save:", data);
     $("#orderStatus").val(newOrderStatus);
-    updateOrderHistory(data.orderHistory);
+    updateOrderHistory(data.orderHistory);  // Ensure data.orderHistory is defined
 })
 .catch((error) => {
     console.error("Error updating order status:", error);
 });
+
 });
 
 
