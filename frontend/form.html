@@ -2226,7 +2226,7 @@ $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
 
 // Disable all input fields since it's a cancelled order
-$('input, select, textarea').prop('disabled', true);
+// $('input, select, textarea').prop('disabled', true);
 $('#status').text('Order Status: Cancelled');
 
 // Optionally add a "Cancelled" label or status message in the UI
