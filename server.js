@@ -371,6 +371,7 @@ res.status(400).send(err.message);
 }
 });
 app.put("/cancelledOrders/:orderNo", async (req, res) => {
+    console.log("updating the order status for cancelled")
     const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
     console.log('US Central Time:', centralTime);
     const date = new Date(centralTime);
