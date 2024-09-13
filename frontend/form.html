@@ -2397,7 +2397,8 @@ const yardDetails = $(`#yard-details-${yardIndex}`);
 if (yardDetails.is(":visible")) {
 yardDetails.hide();
 } else {
-const orderNo = "your_order_no_variable_here"; // Define orderNo dynamically
+console.log("orderNo0",orderNo);  
+// const orderNo = "your_order_no_variable_here"; // Define orderNo dynamically
 // First check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
