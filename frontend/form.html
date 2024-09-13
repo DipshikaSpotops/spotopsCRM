@@ -2392,16 +2392,33 @@ const buttonHtml = `
 `;
 $("#yardInfoContainer").append(buttonHtml);
 }
-
 function showYardDetails(yardIndex) {
 const yardDetails = $(`#yard-details-${yardIndex}`);
 if (yardDetails.is(":visible")) {
 yardDetails.hide();
 } else {
+const orderNo = "your_order_no_variable_here"; // Define orderNo dynamically
+// First check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
-if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+// If order is not found, try checking in the cancelledOrders collection
+if (!data || !data.additionalInfo) {
+console.log('Order not found, checking in cancelled orders...');
+return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+} else {
+return Promise.resolve({ status: 200, json: () => data });
+}
+})
+.then((response) => {
+if (response.status === 404) {
+console.log("Order or cancelled order not found.");
+return;
+}
+return response.json();
+})
+.then((data) => {
+if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
 return;
 }
 const yardData = data.additionalInfo[yardIndex - 1];
@@ -2413,9 +2430,7 @@ $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f'
 
 let yardDetailsHtml = `
 <table class="table table-bordered">
-<tr>
-<td colspan="2">${formatYardData(yardData)}</td>
-</tr>
+<tr><td colspan="2">${formatYardData(yardData)}</td></tr>
 <tr style="display:flex">
 <td colspan="2">
 <button type="button" class="edit-yard" data-yard-index="${yardIndex}">Edit Status</button>
@@ -2427,6 +2442,9 @@ let yardDetailsHtml = `
 </table>
 `;
 yardDetails.html(yardDetailsHtml).show();
+})
+.catch((error) => {
+console.error("Error fetching order data:", error);
 });
 }
 }
