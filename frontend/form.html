@@ -3147,6 +3147,7 @@ return response;
 .then((response) => response.json())
 .then((data) => {
 if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+
 console.log("Order data or additionalInfo not found.");
 return;
 }
@@ -3353,31 +3354,54 @@ console.log("Sending data:", JSON.stringify(updatedData));
 
 // Send the updated data to the server
 fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(updatedData),
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
 })
 .then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
+    if (!response.ok) {
+        // If order is not found in orders collection, check in cancelledOrders collection
+        if (response.status === 404) {
+            console.log('Order not found in orders, checking in cancelledOrders...');
+            return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedData),
+            });
+        }
+        throw new Error("Network response was not ok");
+    }
+    return response.json();  // Parse the JSON from the orders collection
+})
+.then((response) => {
+    // If the response is still a fetch Response object (from cancelledOrders), parse it
+    if (response instanceof Response) {
+        return response.json();  // Parse the JSON from cancelledOrders collection
+    }
+    return response;  // Already a JSON object from orders collection
 })
 .then((data) => {
-console.log("Server response:", data);
+    if (!data) {
+        console.log("No data returned from either orders or cancelledOrders.");
+        return;
+    }
+    console.log("Server response:", data);
 
-$("#editYardModal").modal("hide");
-updateOrderHistory(data.orderHistory);
-showYardDetails(yardIndex);
-fetchAndUpdateYardInfo();
+    // Update the UI with the new data
+    $("#editYardModal").modal("hide");
+    updateOrderHistory(data.orderHistory);
+    showYardDetails(yardIndex);
+    fetchAndUpdateYardInfo();
 
-// Trigger the refund change manually after saving yard data
-$("#refund").trigger("change");
+    // Trigger the refund change manually after saving yard data
+    $("#refund").trigger("change");
 })
 .catch((error) => {
-console.error("Error:", error);
+    console.error("Error:", error);
 });
 
 window.location.reload();
