@@ -3224,13 +3224,10 @@ $("#editYardPopup").hide();
 
 const yardIndex = $(this).data("yard-index");
 
-// Fetch the current yard data from the server
 let currentYardData = {};
 try {
-    // First try fetching from the orders collection
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
     if (!response.ok) {
-        // If the order is not found, check in the cancelledOrders collection
         if (response.status === 404) {
             console.log('Order not found in orders, checking in cancelledOrders...');
             response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
@@ -3363,9 +3360,9 @@ fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?
 })
 .then((response) => {
     if (!response.ok) {
-        // If order is not found in orders collection, check in cancelledOrders collection
         if (response.status === 404) {
             console.log('Order not found in orders, checking in cancelledOrders...');
+            // Fetch from cancelledOrders if not found in orders
             return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
                 method: "PUT",
                 headers: {
@@ -3376,23 +3373,36 @@ fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?
         }
         throw new Error("Network response was not ok");
     }
-    return response.json();  // Parse the JSON from the orders collection
+    return response.json();  // Parse the JSON from orders collection
 })
 .then((response) => {
-    // If the response is still a fetch Response object (from cancelledOrders), parse it
+    // If response is a fetch Response object (from cancelledOrders), parse it
     if (response instanceof Response) {
-        return response.json();  // Parse the JSON from cancelledOrders collection
+        return response.json();
     }
-    return response;  // Already a JSON object from orders collection
+    return response;  // Already a JSON object
 })
 .then((data) => {
-    if (!data) {
-        console.log("No data returned from either orders or cancelledOrders.");
+    // Additional detailed logging for debugging
+    console.log("Full response data:", data);
+
+    // Check if data is valid and contains additionalInfo
+    if (!data || !data.additionalInfo) {
+        console.error("Error: No valid additionalInfo returned.");
         return;
     }
-    console.log("Server response:", data);
 
-    // Update the UI with the new data
+    // Check if yardIndex exists within additionalInfo
+    if (!data.additionalInfo[yardIndex - 1]) {
+        console.error(`Error: No yard data found at index ${yardIndex - 1}.`);
+        return;
+    }
+
+    // If additionalInfo is valid, assign it to the variable
+    const currentYardData = data.additionalInfo[yardIndex - 1];
+    console.log("Current yard data:", currentYardData);
+
+    // Update the UI with the yard data
     $("#editYardModal").modal("hide");
     updateOrderHistory(data.orderHistory);
     showYardDetails(yardIndex);
@@ -3402,7 +3412,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?
     $("#refund").trigger("change");
 })
 .catch((error) => {
-    console.error("Error:", error);
+    console.error("Error updating order status:", error);
 });
 
 window.location.reload();
