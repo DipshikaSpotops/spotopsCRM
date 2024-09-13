@@ -4231,10 +4231,27 @@ function fetchOrderDetails(orderNo) {
 return fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
-return data;
-
+// If the order is not found, check in cancelledOrders collection
+if (!data || Object.keys(data).length === 0) {
+console.log('Order not found, checking in cancelled orders...');
+return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+.then((cancelledResponse) => cancelledResponse.json())
+.then((cancelledData) => {
+if (!cancelledData || Object.keys(cancelledData).length === 0) {
+console.log('No order details found in cancelled orders.');
+return null; // No data found in either collection
+}
+return cancelledData; // Return data from cancelledOrders
 });
 }
+return data; // Return data from orders collection if found
+})
+.catch((error) => {
+console.error('Error fetching order details:', error);
+return null; // Handle errors and return null if needed
+});
+}
+
 //show deopdown on navbar
 // Show dropdown on hover
 $(".navbar .nav-item").hover(function () {
