@@ -2841,6 +2841,7 @@ $(this)
 });
 
 function fetchAndDisplaySaleNotes(orderNo) {
+console.log("orderNo",orderNo);  
 // First, check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
