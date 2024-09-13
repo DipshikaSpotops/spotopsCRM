@@ -999,6 +999,7 @@ const { note, author, timestamp } = req.body;
 var supportNote = `${author}, ${timestamp} : ${note}`;
 try {
 const cOrder = await CancelledOrder.findOne({ orderNo });
+console.log("cOrder",cOrder);
 if (cOrder) {
 if (!cOrder.supportNotes) {
 cOrder.supportNotes = [];
