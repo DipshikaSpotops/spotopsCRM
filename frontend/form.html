@@ -2234,21 +2234,21 @@ updateOrderHistory(data.orderHistory);
 console.error("Error fetching cancelled order data:", error);
 });
 
-function fetchAndDisplaySaleNotes() {
-fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
-const notes = data.notes;
-const saleNoteDiv = $("#saleNote");
-const noteHtml = `<p>${notes}</p>`;
-saleNoteDiv.append(noteHtml);
-})
-.catch((error) => {
-console.error("Error fetching sale notes:", error);
-});
-}
+// function fetchAndDisplaySaleNotes() {
+// fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+// .then((response) => response.json())
+// .then((data) => {
+// const notes = data.notes;
+// const saleNoteDiv = $("#saleNote");
+// const noteHtml = `<p>${notes}</p>`;
+// saleNoteDiv.append(noteHtml);
+// })
+// .catch((error) => {
+// console.error("Error fetching sale notes:", error);
+// });
+// }
 
-fetchAndDisplaySaleNotes(orderNo);
+// fetchAndDisplaySaleNotes(orderNo);
 }
 
 
