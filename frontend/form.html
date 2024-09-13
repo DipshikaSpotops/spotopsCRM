@@ -2429,7 +2429,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((data) => {
 // If order is not found, a check in the cancelledOrders collection
 if (!data || !data.additionalInfo) {
-console.log('Order not found, checking in cancelled orders...');
+console.log('Order not found for showing yard details, checking in cancelled orders...');
 return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
 } else {
 return Promise.resolve({ status: 200, json: () => data });
@@ -3233,11 +3233,15 @@ const yardIndex = $(this).data("yard-index");
 let currentYardData = {};
 try {
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
+    
     if (!response.ok) {
         if (response.status === 404) {
+            // If the order is not found in orders, check in cancelledOrders
             console.log('Order not found in orders, checking in cancelledOrders...');
             response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
-            console.log("response",response);
+            console.log("Response from cancelledOrders:", response);
+
+            // If the order is not found in cancelledOrders either, throw an error
             if (!response.ok) {
                 throw new Error("Failed to fetch current yard data from both orders and cancelledOrders");
             }
@@ -3246,18 +3250,26 @@ try {
         }
     }
 
+    // Parse the response as JSON
     const orderData = await response.json();
-    console.log("dT for yard",orderData);
-    if (orderData.additionalInfo && orderData.additionalInfo[yardIndex - 1]) {
-        currentYardData = orderData.additionalInfo[yardIndex - 1];
+    console.log("Data for yard:", orderData);
+
+    // Check if additionalInfo and the specified yard index exist
+    if (orderData && orderData.additionalInfo && orderData.additionalInfo[yardIndex - 1]) {
+        const currentYardData = orderData.additionalInfo[yardIndex - 1];
+        console.log("Current yard data:", currentYardData);
+
+        // Process the yard data as needed (e.g., display in the UI)
     } else {
+        console.error("Error: Yard data not found or additionalInfo is missing.");
         throw new Error("Yard data not found in the fetched order");
     }
 
 } catch (error) {
-console.error("Error fetching current yard data:", error);
-return;
+    console.error("Error fetching current yard data:", error);
+    return;
 }
+
 
 const status = $("#refund").val();
 const returnCharges = $(".returnShipment").val();
