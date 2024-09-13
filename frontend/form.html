@@ -2225,30 +2225,30 @@ $("#trackingInfoContainer").html(data.trackingInfo);
 updateOrderHistory(data.orderHistory);
 
 // Prevent any further form submission attempts
-$("#crmForm").on("submit", function (e) {
-e.preventDefault();
-alert('This order is cancelled. You cannot modify it.');
-});
+// $("#crmForm").on("submit", function (e) {
+// e.preventDefault();
+// alert('This order is cancelled. You cannot modify it.');
+// });
 })
 .catch((error) => {
 console.error("Error fetching cancelled order data:", error);
 });
 
-function fetchAndDisplaySaleNotes() {
-fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
-const notes = data.notes;
-const saleNoteDiv = $("#saleNote");
-const noteHtml = `<p>${notes}</p>`;
-saleNoteDiv.append(noteHtml);
-})
-.catch((error) => {
-console.error("Error fetching sale notes:", error);
-});
-}
+// function fetchAndDisplaySaleNotes() {
+// fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+// .then((response) => response.json())
+// .then((data) => {
+// const notes = data.notes;
+// const saleNoteDiv = $("#saleNote");
+// const noteHtml = `<p>${notes}</p>`;
+// saleNoteDiv.append(noteHtml);
+// })
+// .catch((error) => {
+// console.error("Error fetching sale notes:", error);
+// });
+// }
 
-fetchAndDisplaySaleNotes();
+fetchAndDisplaySaleNotes(orderNo);
 }
 
 
@@ -2840,8 +2840,8 @@ $(this)
 }
 });
 
+// for sale note 
 function fetchAndDisplaySaleNotes(orderNo) {
-console.log("orderNoForSaleNote",orderNo);  
 // First, check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
@@ -2877,9 +2877,9 @@ saleNoteDiv.append(noteHtml);
 console.error("Error fetching sale notes:", error);
 });
 }
+// sale ntes till here
 
-
-fetchAndDisplaySaleNotes();
+fetchAndDisplaySaleNotes(orderNo);
 }
 
 $("#orderStatus").on("change", function () {
