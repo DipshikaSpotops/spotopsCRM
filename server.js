@@ -996,12 +996,12 @@ app.put('/cancelledOrders/:orderNo/supportNotes', async (req, res) => {
     const { note, author, timestamp } = req.body;
     var supportNote = `${author},${timestamp} : ${note}` 
     try {
-    const order = await Order.findOne({ orderNo });
+    const cOrder = await CancelledOrder.findOne({ orderNo });
     
-    if (order) {
+    if (cOrder) {
     
-    order.supportNotes.push(supportNote);
-    await order.save();
+        cOrder.supportNotes.push(supportNote);
+    await cOrder.save();
     res.status(200).json({ message: 'Support comments updated successfully.' });
     } else {
     res.status(404).json({ message: 'Order not found.' });
