@@ -3233,7 +3233,7 @@ const yardIndex = $(this).data("yard-index");
 let currentYardData = {};
 try {
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
-    
+    console.log("res",response)
     // Check if the response from the orders collection is OK
     if (!response) {
       console.log("not in orders, so search in cancelled");
