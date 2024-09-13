@@ -3134,10 +3134,20 @@ $("#yardIndexEdit").val(yardIndex);
 $("#submit").data("yard-index", yardIndex);
 
 // Fetch order data from API
+// Fetch from the orders collection first
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => {
+// If order not found, check in cancelledOrders collection
+if (response.status === 404) {
+console.log('Order not found in orders, checking in cancelledOrders...');
+return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+}
+return response;
+})
 .then((response) => response.json())
 .then((data) => {
-if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+console.log("Order data or additionalInfo not found.");
 return;
 }
 
@@ -3191,7 +3201,7 @@ $("#editYardModal").modal("show");
 fetchAndDisplayNotes(yardIndex);
 })
 .catch((error) => {
-console.error("Error fetching yard data:", error);
+console.error("Error fetching order data:", error);
 });
 });
 
