@@ -3243,6 +3243,7 @@ try {
     }
 
     const orderData = await response.json();
+    console.log("dT for yard",orderData);
     if (orderData.additionalInfo && orderData.additionalInfo[yardIndex - 1]) {
         currentYardData = orderData.additionalInfo[yardIndex - 1];
     } else {
