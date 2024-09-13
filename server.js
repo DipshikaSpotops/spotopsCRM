@@ -993,6 +993,7 @@ res.status(500).json({ message: 'Failed to update support comments.', error });
 });
 app.put('/cancelledOrders/:orderNo/supportNotes', async (req, res) => {
     const { orderNo } = req.params;
+    console.log("sCancelled order",orderNo);
     const { note, author, timestamp } = req.body;
     var supportNote = `${author},${timestamp} : ${note}` 
     try {
