@@ -2398,12 +2398,11 @@ if (yardDetails.is(":visible")) {
 yardDetails.hide();
 } else {
 console.log("orderNo0",orderNo);  
-// const orderNo = "your_order_no_variable_here"; // Define orderNo dynamically
 // First check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
-// If order is not found, try checking in the cancelledOrders collection
+// If order is not found, a check in the cancelledOrders collection
 if (!data || !data.additionalInfo) {
 console.log('Order not found, checking in cancelled orders...');
 return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
@@ -2841,10 +2840,33 @@ $(this)
 }
 });
 
-function fetchAndDisplaySaleNotes() {
+function fetchAndDisplaySaleNotes(orderNo) {
+// First, check in the main orders collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
+// If the order is not found or doesn't contain notes, check in cancelledOrders
+if (!data || !data.notes) {
+console.log('Order not found, checking in cancelled orders...');
+return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+} else {
+return Promise.resolve({ status: 200, json: () => data });
+}
+})
+.then((response) => {
+if (response.status === 404) {
+console.log("Order or cancelled order not found.");
+return;
+}
+return response.json();
+})
+.then((data) => {
+if (!data || !data.notes) {
+console.log("No sale notes found for this order.");
+return;
+}
+
+// Display the sale notes
 const notes = data.notes;
 const saleNoteDiv = $("#saleNote");
 const noteHtml = `<p>${notes}</p>`;
@@ -2854,6 +2876,7 @@ saleNoteDiv.append(noteHtml);
 console.error("Error fetching sale notes:", error);
 });
 }
+
 
 fetchAndDisplaySaleNotes();
 }
