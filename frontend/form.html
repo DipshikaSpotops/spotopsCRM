@@ -3074,6 +3074,7 @@ $('#cardChargedSbmit').on('click', function() {
         })
         .then((data) => {
             if (data) {
+                console.log("then in card charged",data)
                 updateOrderHistory(data.orderHistory);
                 showYardDetails(selectedYardIndex);
                 fetchAndUpdateYardInfo();
