@@ -3074,7 +3074,9 @@ $('#cardChargedSbmit').on('click', function() {
         })
         .then((data) => {
             if (data) {
-                console.log("then in card charged",data)
+                console.log("Data successfully updated:", data);
+                alert("Yard details have been updated");
+
                 updateOrderHistory(data.orderHistory);
                 showYardDetails(selectedYardIndex);
                 fetchAndUpdateYardInfo();
@@ -3082,8 +3084,10 @@ $('#cardChargedSbmit').on('click', function() {
         })
         .catch((error) => {
             console.error("Error:", error);
+            alert("Error updating yard details. Please try again.");
         });
 });
+
 
 //  card charged part till here
 // refundCollect part 
