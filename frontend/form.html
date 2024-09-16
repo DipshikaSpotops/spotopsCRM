@@ -3276,7 +3276,7 @@ try {
 
 
 const status = $("#refund").val();
-console.log("yard status",status);
+console.log("yard status",status)
 const returnCharges = $(".returnShipment").val();
 const trackingNo = $("#trackingNoEdit").val();
 const eta = $("#etaEdit").val();
@@ -3859,75 +3859,92 @@ alert("Please fill in all the tracking information fields.");
 });
 
 $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
-console.log("edit yard details")
-$(".mainDiv").addClass("blur");
-yardIndex = $(this).data("yard-index");
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
-if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-return;
-}
-const yardData = data.additionalInfo[yardIndex - 1];
-console.log("yardData",yardData);
-$("#editYardName").val(yardData.yardName);
-$("#editAddress").val(yardData.street);
-$("#editYardRating").val(yardData.yardRating);
-const addressParts = yardData.address.split(" ");
-$("#editCity").val(yardData.city);
-$("#editState").val(yardData.state);
-$("#editZip").val(yardData.zipcode);
-$("#editPhone").val(yardData.phone);
-$("#editAltPhone").val(yardData.altPhone);
-$("#editEmail").val(yardData.email);
-$("#editAgentName").val(yardData.agentName);
-$("#editCountry").val(yardData.country);
-$("#editPartPrice").val(yardData.partPrice);
-$("#editOthers").val(yardData.others);
-$("#editPaymentStatus").val(yardData.paymentStatus);
-$("#editrefundAmount").val(yardData.refundedAmount);
-$("#editFax").val(yardData.faxNo);
-$('#editWarr').val(yardData.warranty)
+    console.log("edit yard details");
+    $(".mainDiv").addClass("blur");
+    yardIndex = $(this).data("yard-index");
 
-const shippingDetails = yardData.shippingDetails;
-console.log("shippingDetails:", shippingDetails);
-if (shippingDetails.includes("Own shipping")) {
-const ownShippingValue = shippingDetails.split(":")[1].trim(); 
-console.log("own ship", ownShippingValue);
-$("#editOwnShipping").val(ownShippingValue);
-$("#editYardShipping").val('');  
-} else if (shippingDetails.includes("Yard shipping")) {
-const yardShippingValue = shippingDetails.split(":")[1].trim();
-console.log("yard ship", yardShippingValue);
-$("#editYardShipping").val(yardShippingValue);
-$("#editOwnShipping").val('');  
-}
+    fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then((response) => response.json())
+    .then((data) => {
+        if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+            // If no data is found in orders, check in cancelledOrders
+            console.log("Order not found in orders, checking in cancelledOrders...");
+            return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+                        throw new Error("Yard data not found in cancelledOrders.");
+                    }
+                    return data;  // Return the data from cancelledOrders
+                });
+        } else {
+            return data;  // Return the data from orders
+        }
+    })
+    .then((data) => {
+        const yardData = data.additionalInfo[yardIndex - 1];
+        console.log("yardData", yardData);
 
+        // Set form fields with the yard data
+        $("#editYardName").val(yardData.yardName);
+        $("#editAddress").val(yardData.street);
+        $("#editYardRating").val(yardData.yardRating);
+        $("#editCity").val(yardData.city);
+        $("#editState").val(yardData.state);
+        $("#editZip").val(yardData.zipcode);
+        $("#editPhone").val(yardData.phone);
+        $("#editAltPhone").val(yardData.altPhone);
+        $("#editEmail").val(yardData.email);
+        $("#editAgentName").val(yardData.agentName);
+        $("#editCountry").val(yardData.country);
+        $("#editPartPrice").val(yardData.partPrice);
+        $("#editOthers").val(yardData.others);
+        $("#editPaymentStatus").val(yardData.paymentStatus);
+        $("#editrefundAmount").val(yardData.refundedAmount);
+        $("#editFax").val(yardData.faxNo);
+        $('#editWarr').val(yardData.warranty);
 
-// Set other fields as needed
-$("#refund").val(yardData.status);
-$("#paymentStatusSelect").val(yardData.paymentStatus);
+        const shippingDetails = yardData.shippingDetails;
+        console.log("shippingDetails:", shippingDetails);
+        if (shippingDetails.includes("Own shipping")) {
+            const ownShippingValue = shippingDetails.split(":")[1].trim(); 
+            console.log("own ship", ownShippingValue);
+            $("#editOwnShipping").val(ownShippingValue);
+            $("#editYardShipping").val('');  
+        } else if (shippingDetails.includes("Yard shipping")) {
+            const yardShippingValue = shippingDetails.split(":")[1].trim();
+            console.log("yard ship", yardShippingValue);
+            $("#editYardShipping").val(yardShippingValue);
+            $("#editOwnShipping").val('');  
+        }
 
-if (yardData.paymentStatus === "Refund collected") {
-$("#refundedAmountContainer").show();
-$("#refundedAmount").val(yardData.refundedAmount);
-} else {
-$("#refundedAmountContainer").hide();
-}
+        // Set other fields as needed
+        $("#refund").val(yardData.status);
+        $("#paymentStatusSelect").val(yardData.paymentStatus);
 
-$("#esc").val(yardData.escalationCause);
-$("#escProcess").val(yardData.escalationProcess);
+        if (yardData.paymentStatus === "Refund collected") {
+            $("#refundedAmountContainer").show();
+            $("#refundedAmount").val(yardData.refundedAmount);
+        } else {
+            $("#refundedAmountContainer").hide();
+        }
 
-if (yardData.status === "Escalation") {
-$("#escalation").show();
-} else {
-$("#escalation").hide();
-}
+        $("#esc").val(yardData.escalationCause);
+        $("#escProcess").val(yardData.escalationProcess);
 
-$("#editYardDetailsModal").modal("show");
-$("#saveYardDetails").data("yard-index", yardIndex);
-});
+        if (yardData.status === "Escalation") {
+            $("#escalation").show();
+        } else {
+            $("#escalation").hide();
+        }
 
+        $("#editYardDetailsModal").modal("show");
+        $("#saveYardDetails").data("yard-index", yardIndex);
+    })
+    .catch((error) => {
+        console.error("Error fetching yard data:", error);
+        alert("Error fetching yard data. Please try again.");
+    });
 });
 
 
