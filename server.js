@@ -606,6 +606,7 @@ console.log("Order data:", order);
 const cancelledOrder = new CancelledOrder(order.toObject()); 
 console.log("Cancelled Order to save:", cancelledOrder);
 // Save the cancelled order
+cancelledOrder.orderStatus = "Order Cancelled";
 await cancelledOrder.save(); 
 console.log("Cancelled order saved");
 // Delete the original order
