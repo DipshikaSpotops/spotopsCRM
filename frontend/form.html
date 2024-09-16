@@ -3150,8 +3150,9 @@ $('#refundSubmit').on('click', function() {
         })
         .catch((error) => {
             console.error("Error:", error);
-            alert("Error updating refund details. Please try again.");
+            // alert("Error updating refund details. Please try again.");
         });
+        window.location.reload();
 });
 
 // refundCollect part ends here
