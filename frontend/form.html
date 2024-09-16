@@ -3094,57 +3094,65 @@ $('#cardChargedSbmit').on('click', function() {
 //  card charged part till here
 // refundCollect part 
 $('#refundSubmit').on('click', function() {
-$('#refundCollect').hide();
-$(".mainDiv").removeClass("blur");
-console.log("refunf collect status", selectedYardIndex, "oNo", orderNo);
+    $('#refundCollect').hide();
+    $(".mainDiv").removeClass("blur");
+    console.log("refund collect status", selectedYardIndex, "oNo", orderNo);
 
-const refundStatus = $(".paymentStatusRefund")
-.map(function () {
-return $(this).val();
-})
-.get()
-.filter(function (value) {
-return value !== "";
-})
-.join();
+    const refundStatus = $(".paymentStatusRefund")
+        .map(function () {
+            return $(this).val();
+        })
+        .get()
+        .filter(function (value) {
+            return value !== "";
+        })
+        .join();
 
-const refundedAmount = $("#refundedAmount").val();
-console.log("collect",refundStatus,refundedAmount);
-// // Update button color based on payment status
-// if (refundStatus === "Refund collected") {
-//   $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-// }
+    const refundedAmount = $("#refundedAmount").val();
+    console.log("collect", refundStatus, refundedAmount);
 
-const data1 = {
-refundStatus: refundStatus,
-refundedAmount:refundedAmount
-};
+    const data1 = {
+        refundStatus: refundStatus,
+        refundedAmount: refundedAmount
+    };
 
-fetch(
-`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
-{
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(data1),
-}
-)
-.then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
-})
-.then((data) => {
-updateOrderHistory(data.orderHistory);
-showYardDetails(selectedYardIndex);
-fetchAndUpdateYardInfo();
-})
-.catch((error) => {
-console.error("Error:", error);
+    const updateOrder = (url) => {
+        return fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data1),
+        });
+    };
+
+    // Try updating in orders collection first
+    updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`)
+        .then((response) => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // If order not found in orders, try cancelledOrders
+                    console.log('Order not found in orders, checking in cancelledOrders...');
+                    return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`);
+                } else {
+                    throw new Error("Network response was not ok");
+                }
+            }
+            return response.json();  // Successful update in orders
+        })
+        .then((data) => {
+            if (data) {
+                updateOrderHistory(data.orderHistory);
+                showYardDetails(selectedYardIndex);
+                fetchAndUpdateYardInfo();
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("Error updating refund details. Please try again.");
+        });
 });
-});
+
 // refundCollect part ends here
 
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
