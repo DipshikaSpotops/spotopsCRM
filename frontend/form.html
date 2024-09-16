@@ -2048,14 +2048,10 @@ OK
 
 <script>
 $(document).ready(async function () {
-const currentPath = window.location.pathname;   
-console.log("current path",currentPath);
-// Get the full query string from the URL
-const queryString = window.location.search; 
+const queryString = window.location.search.substring(1); 
 
-// Create a URLSearchParams object to easily get individual parameters
-const urlParams1 = new URLSearchParams(queryString);
-console.log("url params",urlParams1);
+console.log("queryString",queryString);
+
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
   console.log("sipp")
