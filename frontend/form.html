@@ -3035,44 +3035,55 @@ $(".mainDiv").removeClass("blur");
 // On clicking the submit button inside the popup
 // Saving the selected payment status
 $('#cardChargedSbmit').on('click', function() {
-$('#cardCharged').hide();
-$(".mainDiv").removeClass("blur");
+    $('#cardCharged').hide();
+    $(".mainDiv").removeClass("blur");
 
-const paymentStatus = $(".paymentStatus").val();
-localStorage.setItem('paymentStatus', paymentStatus);
-console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
+    const paymentStatus = $(".paymentStatus").val();
+    localStorage.setItem('paymentStatus', paymentStatus);
+    console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
 
-if (paymentStatus === "Card charged") {
-$(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
-}
+    if (paymentStatus === "Card charged") {
+        $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+    }
 
-const data1 = { paymentStatus };
+    const data1 = { paymentStatus };
 
-fetch(
-`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`,
-{
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(data1),
-}
-)
-.then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
-})
-.then((data) => {
-updateOrderHistory(data.orderHistory);
-showYardDetails(selectedYardIndex);
-fetchAndUpdateYardInfo();
-})
-.catch((error) => {
-console.error("Error:", error);
+    const updateOrder = (url) => {
+        return fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data1),
+        });
+    };
+
+    // First attempt to update in the orders collection
+    updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`)
+        .then((response) => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // If the order is not found in orders, try updating in cancelledOrders
+                    console.log('Order not found in orders, checking in cancelledOrders...');
+                    return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`);
+                } else {
+                    throw new Error("Network response was not ok");
+                }
+            }
+            return response.json();  // Successful update in orders
+        })
+        .then((data) => {
+            if (data) {
+                updateOrderHistory(data.orderHistory);
+                showYardDetails(selectedYardIndex);
+                fetchAndUpdateYardInfo();
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
 });
-});
+
 //  card charged part till here
 // refundCollect part 
 $('#refundSubmit').on('click', function() {
