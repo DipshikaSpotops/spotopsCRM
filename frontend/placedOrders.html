@@ -773,7 +773,7 @@ const cancelButton = $(this); // Store reference to the clicked button
 if (confirm(`Are you sure you want to cancel order ${orderNo}?`)) {
 const cancelData = { orderStatus: "Cancelled" }; // Data to update the order status
 
-fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
 method: "DELETE",
 headers: {
 "Content-Type": "application/json",

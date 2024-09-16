@@ -590,7 +590,18 @@ app.put("/cancelledOrders/:orderNo/additionalInfo/:yardIndex", async (req, res) 
 
 app.delete("/orders/:orderNo", async (req, res) => {
 console.log("Received request to delete order:", req.params);
-
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+const firstName = req.query.firstName;
 try {
 const orderNo = req.params.orderNo;
 console.log("Order No to delete:", orderNo);
@@ -607,6 +618,9 @@ const cancelledOrder = new CancelledOrder(order.toObject());
 console.log("Cancelled Order to save:", cancelledOrder);
 // Save the cancelled order
 cancelledOrder.orderStatus = "Order Cancelled";
+cancelledOrder.orderHistory.push(
+    `Order cancelled by ${firstName} on ${formattedDateTime}`
+    );
 await cancelledOrder.save(); 
 console.log("Cancelled order saved");
 // Delete the original order

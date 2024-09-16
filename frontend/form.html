@@ -2048,6 +2048,14 @@ OK
 
 <script>
 $(document).ready(async function () {
+const currentPath = window.location.pathname;   
+console.log("current path",currentPath);
+// Get the full query string from the URL
+const queryString = window.location.search; 
+
+// Create a URLSearchParams object to easily get individual parameters
+const urlParams1 = new URLSearchParams(queryString);
+console.log("url params",urlParams1);
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
   console.log("sipp")
@@ -4384,7 +4392,7 @@ $(this).closest(".nav-link").toggleClass("selected");
 });
 
 
-const currentPath = window.location.pathname;
+// const currentPath = window.location.pathname;
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
