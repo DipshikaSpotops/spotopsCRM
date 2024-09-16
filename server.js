@@ -473,9 +473,8 @@ res.json(order);
 res.status(500).json({ message: 'Server error', error });
 }
 });
-// //update average GP
-// app.put("/orders/:orderNo")
 
+//for updating yardStatus and all
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:,mnbjklkjhbv', centralTime);
@@ -531,6 +530,62 @@ console.error("Error in PUT request:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+app.put("/cancelledOrders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
+    const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+    console.log('US Central Time:,mnbjklkjhbv', centralTime);
+    const date = new Date(centralTime);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day} ${month}, ${year}`;
+    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+    try {
+    // console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
+    const order = await CancelledOrder.findOne({ orderNo: req.params.orderNo });
+    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+    console.log("Order found:", order);
+    console.log("Yard index:", yardIndex);
+    
+    if (!order) return res.status(404).send("Order not found");
+    
+    if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
+    const yardInfo = order.additionalInfo[yardIndex];
+    console.log("Existing yard info:", yardInfo);
+    
+    for (const key in req.body) {
+    if (req.body.hasOwnProperty(key)) {
+    yardInfo[key] = req.body[key];
+    }
+    }
+    
+    // Update the specific index in the additionalInfo array
+    order.additionalInfo[yardIndex] = yardInfo;
+    
+    // Add timestamp to order history
+    const timestamp = new Date().toLocaleString();
+    const firstName = req.query.firstName; // Get firstName from the request body
+    const status = req.body.status; // Get status from the request body
+    const paymentStatus = req.body.paymentStatus;
+    const refundStatus = req.body.refundStatus;
+    order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
+    
+    // Mark the additionalInfo array as modified
+    order.markModified("additionalInfo");
+    
+    await order.save();
+    res.json(order);
+    } else {
+    res.status(400).json({ message: "Invalid yard index" });
+    }
+    } catch (error) {
+    console.error("Error in PUT request:", error);
+    res.status(500).json({ message: "Server error", error });
+    }
+    });
+//for esiting yard sttus and all till here
 
 
 app.delete("/orders/:orderNo", async (req, res) => {
