@@ -2077,6 +2077,7 @@ if (queryString.includes("cancelled=true")) {
             .then((data) => {
                 console.log("Order moved successfully:", data);
                 alert("Order has been successfully moved back to orders.");
+                window.location.href = "viewAllOrders.html";
             })
             .catch((error) => {
                 console.error("Error:", error);
