@@ -3222,11 +3222,11 @@ $("#otherShipperInput").hide();
 });
 
 
-// $(".mainDiv").removeClass("blur");
-// $("#editYardPopup").hide();
+
 $("#editYardInfo").on("click", async function () {
 console.log("clicking on save");
-
+$(".mainDiv").removeClass("blur");
+$("#editYardPopup").hide();
 
 const yardIndex = $(this).data("yard-index");
 
@@ -3438,7 +3438,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?
     console.error("Error updating order status:", error);
 });
 
-window.location.reload();
+// window.location.reload();
 });
 
 
