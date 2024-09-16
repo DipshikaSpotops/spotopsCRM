@@ -3985,52 +3985,47 @@ $("#saveYardDetails").on("click", function () {
         escalationProcess: $("#escProcess").val(),
     };
 
-    // Try to update in the orders collection first
-    fetch(
-        `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`,
-        {
+    const updateOrder = (url) => {
+        return fetch(url, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(updatedData),
-        }
-    )
-    .then((response) => {
-        if (!response.ok) {
-            if (response.status === 404) {
-                // If the order is not found in orders, check in cancelledOrders
-                console.log('Order not found in orders, checking in cancelledOrders...');
-                return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(updatedData),
-                });
-            }
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then((data) => {
-        if (data) {
-            alert("Yard details have been updated");
-            $("#editYardDetailsModal").modal("hide");
-            $(".mainDiv").removeClass("blur");
+        });
+    };
 
-            // If we receive valid data, update the UI
-            updateOrderHistory(data.orderHistory);
-            showYardDetails(yardIndex);
-            fetchAndUpdateYardInfo();
-        }
-    })
-    .catch((error) => {
-        console.error("Error:", error);
-        // alert("Error updating yard details. Please try again.");
-    });
-    // window.location.reload();
+    updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`)
+        .then((response) => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // If order not found in orders, try cancelledOrders
+                    console.log('Order not found in orders, checking in cancelledOrders...');
+                    return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`);
+                }
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // If data exists after successful update, show success alert and update the UI
+            if (data) {
+                alert("Yard details have been updated");
+                $("#editYardDetailsModal").modal("hide");
+                $(".mainDiv").removeClass("blur");
+
+                updateOrderHistory(data.orderHistory);
+                showYardDetails(yardIndex);
+                fetchAndUpdateYardInfo();
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("Error updating yard details. Please try again.");
+        });
 });
+
+
 
 
 $("input[name='editShippingMethod']").on("change", function () {
