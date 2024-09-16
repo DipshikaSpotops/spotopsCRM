@@ -2048,9 +2048,42 @@ OK
 
 <script>
 $(document).ready(async function () {
-const queryString = window.location.search.substring(1); 
-
-console.log("queryString",queryString);
+    const queryString = window.location.search.substring(1);
+console.log("query string",queryString);
+if (queryString.includes("cancelled=true")) {
+    $("#crmForm input, #crmForm select").not("#orderStatus").prop("disabled", true);
+    $("#orderStatus").on("change", function() {
+        const newOrderStatus = $(this).val();
+        console.log("Order Status changed to:", newOrderStatus);
+        if (newOrderStatus !== "Order Cancelled") {
+            const orderNo = '50STARS1440'; 
+            const dataToSend = {
+                orderStatus: newOrderStatus
+            };
+            fetch(`https://www.spotops360.com/moveOrder/${orderNo}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToSend),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to move order from cancelledOrders.");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Order moved successfully:", data);
+                alert("Order has been successfully moved back to orders.");
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred while moving the order.");
+            });
+        }
+    });
+}
 
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
@@ -4388,7 +4421,7 @@ $(this).closest(".nav-link").toggleClass("selected");
 });
 
 
-// const currentPath = window.location.pathname;
+const currentPath = window.location.pathname;
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");

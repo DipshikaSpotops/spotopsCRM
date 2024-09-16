@@ -1315,6 +1315,33 @@ res.status(500).send('Internal server error');
 });
 
 
+// Move order from cancelledOrders to orders if orderStatus is not 'Order Cancelled'
+app.put('/moveOrder/:orderNo', async (req, res) => {
+    console.log("A PUT req to move orders from cancelled to orders if the status changes to Not cancelled");
+    const { orderNo } = req.params;
+    const { orderStatus } = req.body;
+    console.log("orderNo:",orderNo,"Status:",orderStatus);
+    try {
+        const cancelledOrder = await CancelledOrder.findOne({ orderNo });
+        if (!cancelledOrder) {
+            return res.status(404).json({ message: 'Order not found in cancelledOrders.' });
+        }
+        if (orderStatus === 'Order Cancelled') {
+            return res.status(400).json({ message: 'Order cannot be moved back because its status is "Order Cancelled".' });
+        }
+        const orderData = { ...cancelledOrder._doc, orderStatus: orderStatus }; 
+        const newOrder = new Order(orderData);
+        console.log("newOrder",newOrder);
+        await newOrder.save();
+        await CancelledOrder.findOneAndDelete({ orderNo });
+
+        res.status(200).json({ message: 'Order moved back to orders collection successfully.', newOrder });
+    } catch (error) {
+        console.error('Error moving order:', error);
+        res.status(500).json({ error: 'An error occurred while moving the order.' });
+    }
+});
+
 
 
 
