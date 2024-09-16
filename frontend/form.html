@@ -3866,7 +3866,7 @@ $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then((response) => response.json())
     .then((data) => {
-        if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+        if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
             // If no data is found in orders, check in cancelledOrders
             console.log("Order not found in orders, checking in cancelledOrders...");
             return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
