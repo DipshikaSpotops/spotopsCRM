@@ -3142,6 +3142,7 @@ $('#refundSubmit').on('click', function() {
         })
         .then((data) => {
             if (data) {
+                console.log("refund data",data);
                 updateOrderHistory(data.orderHistory);
                 showYardDetails(selectedYardIndex);
                 fetchAndUpdateYardInfo();
