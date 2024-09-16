@@ -3957,10 +3957,8 @@ $("#saveYardDetails").on("click", function () {
 
     if ($("#editOwnShipping").val()) {
         shippingDetails = `Own shipping: ${$("#editOwnShipping").val()}`;
-        console.log("oSHip", shippingDetails);
     } else if ($("#editYardShipping").val()) {
         shippingDetails = `Yard shipping: ${$("#editYardShipping").val()}`;
-        console.log("ySHip", shippingDetails);
     }
 
     const updatedData = {
@@ -4016,22 +4014,22 @@ $("#saveYardDetails").on("click", function () {
         return response.json();
     })
     .then((data) => {
-        alert("Yard details have been updated");
-        $("#editYardDetailsModal").modal("hide");
-        $(".mainDiv").removeClass("blur");
+        if (data) {
+            alert("Yard details have been updated");
+            $("#editYardDetailsModal").modal("hide");
+            $(".mainDiv").removeClass("blur");
 
-        // If we receive valid data, update the UI
-        updateOrderHistory(data.orderHistory);
-        showYardDetails(yardIndex);
-        fetchAndUpdateYardInfo();
+            // If we receive valid data, update the UI
+            updateOrderHistory(data.orderHistory);
+            showYardDetails(yardIndex);
+            fetchAndUpdateYardInfo();
+        }
     })
     .catch((error) => {
         console.error("Error:", error);
         alert("Error updating yard details. Please try again.");
     });
-    // window.location.reload();
 });
-
 
 
 $("input[name='editShippingMethod']").on("change", function () {
