@@ -1222,7 +1222,7 @@ style="margin-right: 94px;margin-top: -9px;"
 </div>
 <div id="yardButtonsContainer" class="d-flex flex-column align-items-center">
 <div id="yardInfoContainer" class="d-flex flex-row mb-3"></div>
-<button type="button" class="btn add-yard-btn">+</button>
+<button type="button" class="btn add-yard-btn">+</button> 
 </div>          
 <div id="trackingInfoContainer"></div>
 <button
@@ -2052,6 +2052,7 @@ $(document).ready(async function () {
 console.log("query string",queryString);
 if (queryString.includes("cancelled=true")) {
     $("#crmForm input, #crmForm select").not("#orderStatus").prop("disabled", true);
+    $(".add-yard-btn").hide();
     $("#orderStatus").on("change", function() {
         const newOrderStatus = $(this).val();
         console.log("Order Status changed to:", newOrderStatus);
