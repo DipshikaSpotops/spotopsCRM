@@ -3949,75 +3949,89 @@ $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
 
 
 $("#saveYardDetails").on("click", function () {
-$('#editYardDetailsModal').hide();
-$(".mainDiv").removeClass("blur");
-yardIndex = $(this).data("yard-index");
+    $('#editYardDetailsModal').hide();
+    $(".mainDiv").removeClass("blur");
+    yardIndex = $(this).data("yard-index");
 
-let shippingDetails = "";
+    let shippingDetails = "";
 
-if ($("#editOwnShipping").val()) {
-shippingDetails = `Own shipping: ${$("#editOwnShipping").val()}`;
-console.log("oSHip",shippingDetails);
-} else if ($("#editYardShipping").val()) {
-shippingDetails = `Yard shipping: ${$("#editYardShipping").val()}`;
-console.log("ySHip",shippingDetails);
-}
+    if ($("#editOwnShipping").val()) {
+        shippingDetails = `Own shipping: ${$("#editOwnShipping").val()}`;
+        console.log("oSHip", shippingDetails);
+    } else if ($("#editYardShipping").val()) {
+        shippingDetails = `Yard shipping: ${$("#editYardShipping").val()}`;
+        console.log("ySHip", shippingDetails);
+    }
 
-const updatedData = {
-yardName: $("#editYardName").val(),
-agentName: $("#editAgentName").val(),
-yardRating: $("#editYardRating").val(),
-phone: $("#editPhone").val(),
-editAlt: $("#editAltPhone").val(),
-address: $("#editAddress").val(),
-email: $("#editEmail").val(),
-country: $("#editCountry").val(),
-city:$("#editCity").val(),
-state:$("#editState").val(),
-street:$("#editAddress").val(),
-partPrice: $("#editPartPrice").val(),
-others: $("#editOthers").val(),
-warranty: $("#editWarr").val(),
-faxNo: $("#editFax").val(),
-shippingDetails: shippingDetails,
-status: $("#refund").val(),
-paymentStatus: $("#editPaymentStatus").val(),
-refundedAmount: $("#editrefundAmount").val(),
-escalationCause: $("#esc").val(),
-escalationProcess: $("#escProcess").val(),
-};
+    const updatedData = {
+        yardName: $("#editYardName").val(),
+        agentName: $("#editAgentName").val(),
+        yardRating: $("#editYardRating").val(),
+        phone: $("#editPhone").val(),
+        editAlt: $("#editAltPhone").val(),
+        address: $("#editAddress").val(),
+        email: $("#editEmail").val(),
+        country: $("#editCountry").val(),
+        city: $("#editCity").val(),
+        state: $("#editState").val(),
+        street: $("#editAddress").val(),
+        partPrice: $("#editPartPrice").val(),
+        others: $("#editOthers").val(),
+        warranty: $("#editWarr").val(),
+        faxNo: $("#editFax").val(),
+        shippingDetails: shippingDetails,
+        status: $("#refund").val(),
+        paymentStatus: $("#editPaymentStatus").val(),
+        refundedAmount: $("#editrefundAmount").val(),
+        escalationCause: $("#esc").val(),
+        escalationProcess: $("#escProcess").val(),
+    };
 
-fetch(
-`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`,
-{
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(updatedData),
-}
-)
-.then((response) => {
-alert("Yard details have been updated");
-$("#editYardDetailsModal").modal("hide");
-$(".mainDiv").removeClass("blur");
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
-})
-.then((data) => {
-$("#editYardDetailsModal").modal("hide");
+    // Try to update in the orders collection first
+    fetch(
+        `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+        }
+    )
+    .then((response) => {
+        if (!response.ok) {
+            if (response.status === 404) {
+                // If the order is not found in orders, check in cancelledOrders
+                console.log('Order not found in orders, checking in cancelledOrders...');
+                return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedData),
+                });
+            }
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        alert("Yard details have been updated");
+        $("#editYardDetailsModal").modal("hide");
+        $(".mainDiv").removeClass("blur");
 
-updateOrderHistory(data.orderHistory);
-showYardDetails(yardIndex);
-fetchAndUpdateYardInfo();
-})
-.catch((error) => {
-console.error("Error:", error);
+        // If we receive valid data, update the UI
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(yardIndex);
+        fetchAndUpdateYardInfo();
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        alert("Error updating yard details. Please try again.");
+    });
+    window.location.reload();
 });
-window.location.reload();
-});
+
 
 
 $("input[name='editShippingMethod']").on("change", function () {
