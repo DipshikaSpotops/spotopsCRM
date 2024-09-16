@@ -568,7 +568,7 @@ $("#infoTable").on("click", ".cancel-btn", function () {
 const id = $(this).data("id");
 console.log(`Cancel button clicked for order ID: ${id}`); // Added log
 if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-fetch(`https://www.spotops360.com/orders/${id}`, {
+fetch(`https://www.spotops360.com/orders/${id}?firstName=${firstName}`, {
 method: "DELETE",
 headers: {
 Authorization: `Bearer ${token}`
