@@ -697,11 +697,35 @@ $("#infoTable").on("click", ".approve-btn", async function () {
 $("#myModal").modal("show");
 
 // On click of the OK button, reload the window
+$("#okButton").click(function () {
+    $("#myModal").hide();
+window.location.reload();
+});
 // $("#okButton").click(function () {
-//     $("#myModal").hide();
-// // window.location.reload();
+//     // Hide the modal using Bootstrap's modal hide method
+//     $('#myModal').modal('hide');
+    
+//     // Manually remove the modal backdrop after the modal is hidden
+//     $('.modal-backdrop').remove();
+    
+//     // Optionally: remove 'modal-open' class from body to stop body scrolling
+//     $('body').removeClass('modal-open');
+//     console.log("currentOrderNo",currentOrderNo);
+//     // Find the row related to the currentOrderNo and remove the entire row
+//     const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
+//     console.log("orderRow to be removed:", orderRow);
+    
+//     // Remove the entire row from the table
+//     if (orderRow.length) {
+//         orderRow.remove(); // This should remove the entire row
+//         console.log("Row removed successfully.");
+//     } else {
+//         console.error("Error: Row not found for the given order.");
+//     }
+    
+//     // Stop body from being unclickable due to backdrop
+//     $('body').css('overflow', 'auto');
 // });
-
 
 const orderNo = $(this).data("id");
 // Get the current date and time in the 'America/Chicago' timezone
@@ -750,31 +774,6 @@ console.log("Order status updated successfully:", data);
 } catch (error) {
 console.error("Error updating order status:", error);
 }
-});
-$("#okButton").click(function () {
-    // Hide the modal using Bootstrap's modal hide method
-    $('#myModal').modal('hide');
-    
-    // Manually remove the modal backdrop after the modal is hidden
-    $('.modal-backdrop').remove();
-    
-    // Optionally: remove 'modal-open' class from body to stop body scrolling
-    $('body').removeClass('modal-open');
-    console.log("currentOrderNo",currentOrderNo);
-    // Find the row related to the currentOrderNo and remove the entire row
-    const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
-    console.log("orderRow to be removed:", orderRow);
-    
-    // Remove the entire row from the table
-    if (orderRow.length) {
-        orderRow.remove(); // This should remove the entire row
-        console.log("Row removed successfully.");
-    } else {
-        console.error("Error: Row not found for the given order.");
-    }
-    
-    // Stop body from being unclickable due to backdrop
-    $('body').css('overflow', 'auto');
 });
 $("#infoTable").on("click", ".cancel-btn", function () {
 const orderNo = $(this).data("id");
