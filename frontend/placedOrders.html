@@ -692,8 +692,6 @@ console.error("Error fetching orders:", error);
 
 $("#infoTable").on("click", ".approve-btn", async function () {
     const orderNoRow = $(this).data("id");
-    
-    // Save the order number to be used when removing the row
     currentOrderNo = orderNoRow;    
 
 $("#myModal").modal("show");
@@ -704,18 +702,24 @@ $("#myModal").modal("show");
 // // window.location.reload();
 // });
 $("#okButton").click(function () {
-// Hide the modal using Bootstrap's modal hide method
-$('#myModal').hide();
-// Manually remove the modal backdrop after the modal is hidden
-$('.modal-backdrop').remove();
-// Optionally: remove 'modal-open' class from body to stop body scrolling
-$('body').removeClass('modal-open');
-console.log("orderNo",currentOrderNo);
-const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
-console.log("orderRow",orderRow);
-orderRow.remove();
-// Stop body from being unclickable due to backdrop
-$('body').css('overflow', 'auto');
+    // Hide the modal using Bootstrap's modal hide method
+    $('#myModal').hide();
+    
+    // Manually remove the modal backdrop after the modal is hidden
+    $('.modal-backdrop').remove();
+    
+    // Optionally: remove 'modal-open' class from body to stop body scrolling
+    $('body').removeClass('modal-open');
+    
+    // Find the closest row related to the currentOrderNo and remove it
+    const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
+    console.log("orderRow", orderRow);
+    
+    // Remove the entire row from the table
+    orderRow.remove();
+    
+    // Stop body from being unclickable due to backdrop
+    $('body').css('overflow', 'auto');
 });
 
 const orderNo = $(this).data("id");
