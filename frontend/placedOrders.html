@@ -703,20 +703,25 @@ $("#myModal").modal("show");
 // });
 $("#okButton").click(function () {
     // Hide the modal using Bootstrap's modal hide method
-    $('#myModal').hide();
+    $('#myModal').modal('hide');
     
     // Manually remove the modal backdrop after the modal is hidden
     $('.modal-backdrop').remove();
     
     // Optionally: remove 'modal-open' class from body to stop body scrolling
     $('body').removeClass('modal-open');
-    
-    // Find the closest row related to the currentOrderNo and remove it
+    console.log("currentOrderNo",currentOrderNo);
+    // Find the row related to the currentOrderNo and remove the entire row
     const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
-    console.log("orderRow", orderRow);
+    console.log("orderRow to be removed:", orderRow);
     
     // Remove the entire row from the table
-    orderRow.remove();
+    if (orderRow.length) {
+        orderRow.remove(); // This should remove the entire row
+        console.log("Row removed successfully.");
+    } else {
+        console.error("Error: Row not found for the given order.");
+    }
     
     // Stop body from being unclickable due to backdrop
     $('body').css('overflow', 'auto');
