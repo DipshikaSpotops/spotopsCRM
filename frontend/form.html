@@ -2205,13 +2205,12 @@ var rStatus = yard.refundStatus;
 console.log("pStatus", pStatus,rStatus);
 
 // Check if the payment status is "Card charged"
-if (pStatus === "Card charged") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-}else if (pStatus === "Card charged" && rStatus === "Refund collected") {
- console.log("else if");   
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#fe8025');
+if (pStatus === "Card charged" && rStatus === "Refund collected") {
+    console.log("else if");   
+    $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#fe8025');
+} else if (pStatus === "Card charged") {
+    $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
 }
-
 // Check if the status is "Escalation
 console.log("=D=", yard.escTicked);
 if (yard.escTicked === "Yes") {
