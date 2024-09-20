@@ -2208,6 +2208,7 @@ console.log("pStatus", pStatus,rStatus);
 if (pStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
 }else if (pStatus === "Card charged" && rStatus === "Refund collected") {
+ console.log("else if");   
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#fe8025');
 }
 
