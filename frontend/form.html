@@ -2207,7 +2207,8 @@ console.log("pStatus", pStatus,rStatus);
 // Check if the payment status is "Card charged"
 if (pStatus === "Card charged" && rStatus === "Refund collected") {
     console.log("else if");   
-    $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#fe8025');
+    $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025','border': 'none'
+    });
 } else if (pStatus === "Card charged") {
     $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
 }
