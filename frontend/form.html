@@ -2201,11 +2201,14 @@ const yardIndex = index + 1;
 console.log("yardIndex", yardIndex, yard);
 
 var pStatus = yard.paymentStatus;
-console.log("pStatus", pStatus);
+var rStatus = yard.refundStatus;
+console.log("pStatus", pStatus,rStatus);
 
 // Check if the payment status is "Card charged"
 if (pStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+}else if (pStatus === "Card charged" && rStatus === "Refund collected") {
+$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', 'orange');
 }
 
 // Check if the status is "Escalation"
@@ -2552,9 +2555,7 @@ ${yardData.refundedAmount ? `Refunded Amount: $${yardData.refundedAmount}<br>` :
 
 return yardInfo;
 }
-
-// ${yardData.escReturnShipType ? `Shipping Type: ${yardData.escReturnShipType}<br>` : ""}
-// ${yardData.escReplaceShipType ? `Shipping Type: ${yardData.escReplaceShipType}<br>` : ""}
+// 
 
 function updateOrderHistory(orderHistory) {
 const orderHistoryList = $("#orderHistoryList");
@@ -3177,6 +3178,9 @@ $('#refundSubmit').on('click', function() {
 
     const refundedAmount = $("#refundedAmount").val();
     console.log("collect", refundStatus, refundedAmount);
+    if (refundStatus === "Refund collected") {
+        $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
+    }
 
     const data1 = {
         refundStatus: refundStatus,
