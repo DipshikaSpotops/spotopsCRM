@@ -2091,7 +2091,7 @@ if (queryString.includes("cancelled=true")) {
 $("#zip").on("keyup", function() {
     const zipCode = $(this).val();
     const selectedCountry = $("#country").val();
-    
+    console.log("country",selectedCountry);
     if (selectedCountry === "US" && zipCode.length === 5) {
         // U.S. ZIP code lookup
         axios.get(`https://api.zippopotam.us/us/${zipCode}`)
