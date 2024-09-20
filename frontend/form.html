@@ -3798,12 +3798,14 @@ $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 } else if (refundStatus === "Escalation") {
+newOrderStatus = "Escalation";
 $("#escalation").show();
 $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 } else if (refundStatus === "PO cancelled") {
+$("#escalation").hide();    
 $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
 $("#notesContainer").show();
