@@ -2208,10 +2208,10 @@ console.log("pStatus", pStatus,rStatus);
 if (pStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
 }else if (pStatus === "Card charged" && rStatus === "Refund collected") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', 'orange');
+$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#fe8025');
 }
 
-// Check if the status is "Escalation"
+// Check if the status is "Escalation
 console.log("=D=", yard.escTicked);
 if (yard.escTicked === "Yes") {
 $("#escTickBox").prop("checked", true);
