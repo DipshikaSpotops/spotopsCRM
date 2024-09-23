@@ -3327,223 +3327,102 @@ $("#otherShipperInput").hide();
 
 
 $("#editYardInfo").on("click", async function () {
-console.log("clicking on save");
-$(".mainDiv").removeClass("blur");
-$("#editYardPopup").hide();
+    console.log("clicking on save");
+    $(".mainDiv").removeClass("blur");
+    $("#editYardPopup").hide();
 
-const yardIndex = $(this).data("yard-index");
+    const yardIndex = $(this).data("yard-index");
+    let currentYardData = {};
 
-let currentYardData = {};
-try {
-    let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
-    console.log("Response from orders:", response);
-    
-    // Parse the response as JSON
-    let orderData = await response.json();
-    console.log("Full data from orders:", orderData);
+    try {
+        // Fetch the order or cancelled order data
+        let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
+        let orderData = await response.json();
 
-    // Check if the order data is empty or doesn't contain the necessary information
-    if (!orderData || !orderData.additionalInfo || orderData.additionalInfo.length === 0) {
-        console.log("Order not found or additionalInfo is missing in orders, checking in cancelledOrders...");
-
-        // Fetch from cancelledOrders if no valid data is found in orders
-        response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
-        console.log("Response from cancelledOrders:", response);
-
-        // If the order is not found in cancelledOrders either, throw an error
-        if (!response.ok) {
-            throw new Error("Failed to fetch current yard data from both orders and cancelledOrders");
+        if (!orderData || !orderData.additionalInfo) {
+            response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+            orderData = await response.json();
         }
 
-        // Parse the cancelledOrders response as JSON
-        orderData = await response.json();
-        console.log("Full data from cancelledOrders:", orderData);
-    }
-
-    // Check if additionalInfo exists and if yard data is present
-    if (orderData && orderData.additionalInfo && orderData.additionalInfo[yardIndex - 1]) {
         const currentYardData = orderData.additionalInfo[yardIndex - 1];
-        console.log("Current yard data:", currentYardData);
+        const status = $("#refund").val();
+        const returnCharges = $(".returnShipment").val();
+        const trackingNo = $("#trackingNoEdit").val();
+        const eta = $("#etaEdit").val();
+        let shipperName = $("#shipperNameEdit").val() === "Others" ? $("#otherShipperInput").val() : $("#shipperNameEdit").val();
+        const trackingLink = $("#linkInput").val();
+        const returnShippingMethod = $("input[name='returnValue']:checked").val();
+        const paymentStatus = $('.paymentStatus').val();
+        const refundedAmount = $("#refundedAmount").val();
 
-        // Process the yard data as needed (e.g., display in the UI)
-    } else {
-        console.error("Error: Yard data not found or additionalInfo is missing.");
-        console.log("Full response from API:", orderData);  // Log the full response
-        throw new Error("Yard data not found in the fetched order");
-    }
+        let newOrderStatus = $("#orderStatus").val();
 
-} catch (error) {
-    console.error("Error fetching current yard data:", error);
-    return;
-}
-
-
-const status = $("#refund").val();
-console.log("yard status",status)
-const returnCharges = $(".returnShipment").val();
-const trackingNo = $("#trackingNoEdit").val();
-const eta = $("#etaEdit").val();
-console.log("eta", eta);
-let shipperName = $("#shipperNameEdit").val();
-if (shipperName === "Others") {
-shipperName = $("#otherShipperInput").val();
-}
-const trackingLink = $("#linkInput").val();
-const returnShippingMethod = $("input[name='returnValue']:checked").val();
-const paymentStatus = $('.paymentStatus').val();
-let escCause = '';
-let escProcess = '';
-let escReplacementShippingType = '';
-let escReplacementShipCharge = '';
-let escReturnShippingType = '';
-let escReturnShipCharge = '';
-let refundedAmount = $("#refundedAmount").val();
-let rmaStatusValue = $('input[name="rma-status"]:checked').val();
-console.log("Selected RMA Status:", rmaStatusValue);
-
-// Variables to hold escalation-related data
-let escDate;
-let forEscDate;
-let escTicked;
-
-if (status === "Escalation") {
-// Update the escalation-related fields only if status is "Escalation"
-escCause = $("#esc").val();
-escProcess = $("#escProcess").val();
-escReplacementShippingType = $("#replacement-customer").val();
-escReplacementShipCharge = $("#replacement-shipping-charges").val();
-escReturnShippingType = $("#customer").val();
-escReturnShipCharge = $("#shipping-charges").val();
-
-escTicked = "Yes";
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-escDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-const date = new Date(escDate);
-
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const daySuffix = (day) => {
-if (day > 3 && day < 21) return "th";
-switch (day % 10) {
-case 1: return "st";
-case 2: return "nd";
-case 3: return "rd";
-default: return "th";
-}
-};
-forEscDate = `${day}${daySuffix(day)} ${month}, ${year}`;
-}
-
-// Construct the updated data object
-const updatedData = {
-...currentYardData,
-status: status,
-trackingNo: trackingNo || currentYardData.trackingNo,
-eta: eta,
-shipperName: shipperName,
-trackingLink: trackingLink,
-refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
-returnShipping: returnShippingMethod,
-returnShippingCharge: returnCharges,
-};
-
-// Add escalation fields only if status is "Escalation"
-if (status === "Escalation") {
-updatedData.escalationCause = escCause;
-updatedData.escalationDate = forEscDate || "";
-updatedData.escalationProcess = escProcess;
-updatedData.escTicked = escTicked;
-updatedData.escReturnShipType = escReturnShippingType;
-updatedData.escReturnShippingCharge = escReturnShipCharge;
-updatedData.escReplaceShipType = escReplacementShippingType;
-updatedData.escReplaceShippingCharge = escReplacementShipCharge;
-}
-
-console.log("Yard Index:", yardIndex);
-console.log("Order No:", orderNo);
-console.log("Sending data:", JSON.stringify(updatedData));
-
-// Send the updated data to the server
-fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
-    method: "PUT",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedData),
-})
-.then((response) => {
-    if (!response.ok) {
-        if (response.status === 404) {
-            console.log('Order not found in orders, checking in cancelledOrders...');
-            // Fetch from cancelledOrders if not found in orders
-            return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedData),
-            });
+        // Updating the order status with shipping and refund information
+        if (status === "Part shipped") {
+            newOrderStatus = "In Transit";
+        } else if (status === "PO confirmed") {
+            newOrderStatus = "PO confirmed";
+        } else if (status === "Escalation") {
+            newOrderStatus = "Escalation";
+        } else if (status === "PO cancelled") {
+            newOrderStatus = "PO cancelled";
+        } else if (status === "Part delivered") {
+            newOrderStatus = "Order Fulfilled";
+        } else if (status === "Yard PO Sent") {
+            newOrderStatus = "Yard Processing";
         }
-        throw new Error("Network response was not ok");
+
+        const updatedData = {
+            ...currentYardData,
+            status: status,
+            trackingNo: trackingNo,
+            eta: eta,
+            shipperName: shipperName,
+            trackingLink: trackingLink,
+            refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
+            returnShipping: returnShippingMethod,
+            returnShippingCharge: returnCharges,
+            orderStatus: newOrderStatus,  // Updated order status
+            shippingMethod: returnShippingMethod,
+            shippingPrice: returnCharges
+        };
+
+        // Send the updated data to the server
+        fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedData),
+                });
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // Handle the successful response here
+            $("#orderStatus").val(newOrderStatus);
+            updateOrderHistory(data.orderHistory);
+            showYardDetails(yardIndex);
+            fetchAndUpdateYardInfo();
+        })
+        .catch((error) => {
+            console.error("Error updating order status:", error);
+        });
+
+    } catch (error) {
+        console.error("Error fetching yard data:", error);
     }
-    return response.json();  // Parse the JSON from orders collection
-})
-.then((response) => {
-    // If response is a fetch Response object (from cancelledOrders), parse it
-    if (response instanceof Response) {
-        return response.json();
-    }
-    return response;  // Already a JSON object
-})
-.then((data) => {
-    // Additional detailed logging for debugging
-    console.log("Full response data:", data);
-
-    // Check if data is valid and contains additionalInfo
-    if (!data || !data.additionalInfo) {
-        console.error("Error: No valid additionalInfo returned.");
-        return;
-    }
-
-    // Check if yardIndex exists within additionalInfo
-    if (!data.additionalInfo[yardIndex - 1]) {
-        console.error(`Error: No yard data found at index ${yardIndex - 1}.`);
-        return;
-    }
-
-    // If additionalInfo is valid, assign it to the variable
-    const currentYardData = data.additionalInfo[yardIndex - 1];
-    console.log("Current yard data:", currentYardData);
-
-    // Update the UI with the yard data
-    $("#editYardModal").modal("hide");
-    updateOrderHistory(data.orderHistory);
-    showYardDetails(yardIndex);
-    fetchAndUpdateYardInfo();
-
-    // Trigger the refund change manually after saving yard data
-    $("#refund").trigger("change");
-})
-.catch((error) => {
-    console.error("Error updating order status:", error);
 });
 
-// window.location.reload();
-});
 
 
 
@@ -3775,121 +3654,49 @@ $("#shipping_own_cust").show();
 });
 
 $("#refund").on("change", function () {
-const refundStatus = $(this).val();
-const orderStatus = $("#orderStatus").val();
-
-let newOrderStatus = orderStatus;
-
-// Capture the selected shipping method before hiding any elements
-var selectedShipping = $("input[name='returnValue']:checked").val() || "";
-console.log("selectedShipping",selectedShipping);
-let shippingPrice = 0;
-
-if (selectedShipping === "Our shipping") {
-shippingPrice = $("#ourShippingInput").val();
-} else if (selectedShipping === "Customer shipping") {
-shippingPrice = $("#customerShippingInput").val();
-}else if(selectedShipping === "") {
-selectedShipping = "";
-shippingPrice = "";
-}
-
-if (refundStatus === "Part shipped") {
-newOrderStatus = "In Transit";
-$("#divTrackingEdit").show();
-$("#sendEmailButton").show();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-$("#escalation").hide();
-} else if (refundStatus === "PO confirmed") {
-$("#escalation").hide();
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-} else if (refundStatus === "Escalation") {
-newOrderStatus = "Escalation";
-$("#escalation").show();
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-} else if (refundStatus === "PO cancelled") {
-$("#escalation").hide();    
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").show();
-$("#cardCharged").hide();
-} else if (refundStatus === "Part delivered") {
-newOrderStatus = "Order Fulfilled";
-$("#notesContainer").show();
-$("#divTrackingEdit").hide();
-$("#cardCharged").hide();
-} else if (refundStatus === "Yard PO Sent") {
-newOrderStatus = "Yard Processing";
-$("#escalation").hide();
-$("#divTrackingEdit").hide();
-} else if (refundStatus === "Yard located") {
-$("#divTrackingEdit").hide();
-} else {
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-$("#notesContainer").hide();
-}
-
-// Updating the order status with shipping information
-const updatedData = {
-orderStatus: newOrderStatus,
-shippingMethod: selectedShipping,
-shippingPrice: shippingPrice
-};
-console.log("updatedData",updatedData);
-
-fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-    method: "PUT",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedData),
-})
-.then((response) => {
-    if (!response.ok) {
-        // If order is not found in orders collection, check in cancelledOrders collection
-        if (response.status === 404) {
-            console.log('Order not found in orders, checking in cancelledOrders...');
-            return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}?firstName=${firstName}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedData),
-            });
-        }
-        throw new Error("Network response was not ok");
+    const refundStatus = $(this).val();
+    
+    // Handle UI changes based on refund status
+    if (refundStatus === "Part shipped") {
+        $("#divTrackingEdit").show();
+        $("#sendEmailButton").show();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+        $("#escalation").hide();
+    } else if (refundStatus === "PO confirmed") {
+        $("#escalation").hide();
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+    } else if (refundStatus === "Escalation") {
+        $("#escalation").show();
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+    } else if (refundStatus === "PO cancelled") {
+        $("#escalation").hide();    
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").show();
+        $("#cardCharged").hide();
+    } else if (refundStatus === "Part delivered") {
+        $("#notesContainer").show();
+        $("#divTrackingEdit").hide();
+        $("#cardCharged").hide();
+    } else if (refundStatus === "Yard PO Sent") {
+        $("#escalation").hide();
+        $("#divTrackingEdit").hide();
+    } else if (refundStatus === "Yard located") {
+        $("#divTrackingEdit").hide();
+    } else {
+        $("#divTrackingEdit").hide();
+        $("#sendEmailButton").hide();
+        $("#notesContainer").hide();
     }
-    return response.json();  // Parse the JSON from orders collection
-})
-.then((response) => {
-    // If we came from cancelledOrders, parse the JSON
-    if (response instanceof Response) {
-        return response.json();  // Parse the JSON from cancelledOrders collection
-    }
-    return response;  // Already a JSON object from orders collection
-})
-.then((data) => {
-    if (!data) {
-        console.log("No data returned from either orders or cancelledOrders");
-        return;
-    }
-    console.log("Data to save:", data);
-    $("#orderStatus").val(newOrderStatus);
-    updateOrderHistory(data.orderHistory);  // Ensure data.orderHistory is defined
-})
-.catch((error) => {
-    console.error("Error updating order status:", error);
 });
 
-});
 
 
 $(".paymentStatus").on("change", function () {
