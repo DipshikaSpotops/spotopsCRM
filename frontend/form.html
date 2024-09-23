@@ -3683,6 +3683,7 @@ $("#refund").on("change", function () {
         $("#cardCharged").hide();
     } else if (refundStatus === "Part delivered") {
         $("#notesContainer").show();
+        $("#escalation").hide();
         $("#divTrackingEdit").hide();
         $("#cardCharged").hide();
     } else if (refundStatus === "Yard PO Sent") {
