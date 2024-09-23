@@ -3660,7 +3660,8 @@ $("#addYardInfo").on("click", function (event) {
         country: $("#country").val(),
         partPrice: $("#partPrice").val(),
         status: "Yard located",
-        shippingDetails: $("#ownShipping").val() ? `Own shipping: ${$("#ownShipping").val()}` : `Yard shipping: ${$("#yardShipping").val()}`,
+        shippingDetails: `${$("#ownShipping").val() ? `Own shipping: ${$("#ownShipping").val()}` : ""} ${$("#yardShipping").val() ? `Yard shipping: ${$("#yardShipping").val()}` : ""}`.trim(),
+        // shippingDetails: $("#ownShipping").val() ? `Own shipping: ${$("#ownShipping").val()}` : `Yard shipping: ${$("#yardShipping").val()}`,
         others: $("#others").val(),
         faxNo: $('#faxNo').val(),
         warranty: $("#warr").val()
