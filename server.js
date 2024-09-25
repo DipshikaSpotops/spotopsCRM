@@ -673,7 +673,7 @@ try {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
 console.log("inside send Invoice", order);
 if (!order) return res.status(404).send("Order not found");
-
+// invoice path
 const invoicePath = path.resolve(`./invoices/invoice_${order.orderNo}.pdf`);
 // const invoicePath = path.resolve(`./`)
 if (!fs.existsSync(invoicePath)) {
