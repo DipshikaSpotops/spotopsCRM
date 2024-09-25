@@ -125,7 +125,7 @@ await newOrder.save();
 
 
 // Generate an invoice for the new order
-// var orderId = newOrder.orderNo;
+var orderId = newOrder.orderNo;
 // console.log("orderNo",orderId);
 await generateInvoice(orderId, newOrder);
 res.status(201).json({ newOrder, team: newOrder.team });
