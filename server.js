@@ -15,6 +15,7 @@ const OrderNumber = require("./backend/models/OrderNo");
 const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
 const { url } = require("inspector");
+const { getMaxListeners } = require("events");
 
 const port = 3000;
 const app = express();
@@ -681,14 +682,15 @@ return res.status(404).json({ message: "Invoice not found" });
 const transporter = nodemailer.createTransport({
 service: "gmail",
 auth: {
-user: "your-email@gmail.com",
-pass: "your-email-password",
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
 },
 });
 
 const mailOptions = {
-from: "your-email@gmail.com",
-to: order.email,
+from: "service@50starsautoparts.com",
+// to: order.email,
+to: "dipsikha.spotopsdigital@gmail.com",
 subject: "Your Order Invoice",
 text: `Dear ${order.customerName},\n\nPlease find attached the invoice for your order #${order.orderNo}.\n\nThank you for your business!\n\nBest regards,\nYour Company Name`,
 attachments: [
