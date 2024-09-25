@@ -125,8 +125,8 @@ await newOrder.save();
 
 
 // Generate an invoice for the new order
-var orderId = newOrder.orderNo;
-console.log("orderNo",orderId);
+// var orderId = newOrder.orderNo;
+// console.log("orderNo",orderId);
 await generateInvoice(orderId, newOrder);
 res.status(201).json({ newOrder, team: newOrder.team });
 } catch (error) {
@@ -824,7 +824,8 @@ orderData.phone;
 console.log("billing and shipping", billingaddress, shippingaddress);
 const replacements = [
 {
-text: `50STARS${orderNo.toString().padStart(4, "0")}`,
+// text: `50STARS${orderNo.toString().padStart(4, "0")}`,
+text:`${orderNo}`,
 x: 450,
 y: 728,
 size: 11,
