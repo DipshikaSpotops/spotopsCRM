@@ -126,7 +126,7 @@ await newOrder.save();
 
 // Generate an invoice for the new order
 // await generateInvoice(newOrder.orderNo, newOrder);
-
+console.log("orderNo",newOrder.orderNo);
 res.status(201).json({ newOrder, team: newOrder.team });
 } catch (error) {
 console.error("Error in invoice creation:", error);
