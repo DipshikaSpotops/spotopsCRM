@@ -675,6 +675,7 @@ console.log("inside send Invoice", order);
 if (!order) return res.status(404).send("Order not found");
 
 const invoicePath = path.resolve(`./invoices/invoice_${order.orderNo}.pdf`);
+// const invoicePath = path.resolve(`./`)
 if (!fs.existsSync(invoicePath)) {
 return res.status(404).json({ message: "Invoice not found" });
 }
