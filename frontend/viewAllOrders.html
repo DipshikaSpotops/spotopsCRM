@@ -193,6 +193,10 @@ margin-left: 10px;
 .sort-icon {
 cursor: pointer;
 }
+.green-background {
+background-color: lightgreen;
+}
+
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -549,36 +553,36 @@ const table = $("#infoTable");
 const rows = table.find("tr").toArray();
 
 rows.sort((a, b) => {
-  let valA = $(a).find("td").eq(column).text().trim().toLowerCase();
-  let valB = $(b).find("td").eq(column).text().trim().toLowerCase();
+let valA = $(a).find("td").eq(column).text().trim().toLowerCase();
+let valB = $(b).find("td").eq(column).text().trim().toLowerCase();
 
-  if (type === "date") {
-    valA = parseCustomDate(valA); // Use the helper function to parse the date
-    valB = parseCustomDate(valB);
-      // return sortOrder[type] === "asc" ? valA - valB : valB - valA;
-  } else if (type === "number") {
-      valA = parseInt(valA.replace(/\D/g, ""), 10);
-      valB = parseInt(valB.replace(/\D/g, ""), 10);
-      return sortOrder[type] === "asc" ? valA - valB : valB - valA;
-  } else if (type === "aToZ") {
-      if (sortOrder[type] === "asc") {
-          return valA.localeCompare(valB);
-      } else {
-          return valB.localeCompare(valA);
-      }
-  } else {
-      // Default String comparison for other types
-      if (sortOrder[type] === "asc") {
-          return valA > valB ? 1 : -1;
-      } else {
-          return valA < valB ? 1 : -1;
-      }
-  }
+if (type === "date") {
+valA = parseCustomDate(valA); // Use the helper function to parse the date
+valB = parseCustomDate(valB);
+// return sortOrder[type] === "asc" ? valA - valB : valB - valA;
+} else if (type === "number") {
+valA = parseInt(valA.replace(/\D/g, ""), 10);
+valB = parseInt(valB.replace(/\D/g, ""), 10);
+return sortOrder[type] === "asc" ? valA - valB : valB - valA;
+} else if (type === "aToZ") {
+if (sortOrder[type] === "asc") {
+return valA.localeCompare(valB);
+} else {
+return valB.localeCompare(valA);
+}
+} else {
+// Default String comparison for other types
+if (sortOrder[type] === "asc") {
+return valA > valB ? 1 : -1;
+} else {
+return valA < valB ? 1 : -1;
+}
+}
 });
 
 // Re-append sorted rows
 $.each(rows, function (index, row) {
-  table.append(row);
+table.append(row);
 });
 
 // Toggle sort order for next click
@@ -592,9 +596,9 @@ updateSortIcons(column, sortOrder[type]);
 function updateSortIcons(columnIndex, order) {
 $("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
 $("th").each(function (index) {
-  if (index === columnIndex) {
-      $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-  }
+if (index === columnIndex) {
+$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+}
 });
 }
 
@@ -604,22 +608,22 @@ const th = $(this);
 let type = th.hasClass("aToZ") ? "aToZ" : th.text().trim().toLowerCase().replace(/\s/g, "");
 
 if (type === "orderdate") {
-  th.on("click", function () {
-      sortTable(index, "date");
-  });
+th.on("click", function () {
+sortTable(index, "date");
+});
 } else if (type === "orderno") {
-  th.on("click", function () {
-      sortTable(index, "number");
-  });
+th.on("click", function () {
+sortTable(index, "number");
+});
 } else if (type === "aToZ") {
-  // Handle A-Z sorting for columns with the aToZ class
-  th.on("click", function () {
-      sortTable(index, "aToZ");
-  });
+// Handle A-Z sorting for columns with the aToZ class
+th.on("click", function () {
+sortTable(index, "aToZ");
+});
 } else {
-  th.on("click", function () {
-      sortTable(index, type);
-  });
+th.on("click", function () {
+sortTable(index, type);
+});
 }
 });
 // Get the current time and the login timestamp
@@ -643,7 +647,7 @@ const firstName = localStorage.getItem("firstName");
 const lastName = localStorage.getItem("lastName");
 const email = localStorage.getItem("email");
 const role = localStorage.getItem("role");
- team = localStorage.getItem("team");
+team = localStorage.getItem("team");
 
 if (firstName) {
 $("#user-name").text(firstName);
@@ -697,10 +701,16 @@ const orderStatus = isCancelledOrder
 ? "Cancelled"
 : item.orderStatus;
 const isDisabled = orderStatus === "Placed" || orderStatus === "Customer approved";
+const escalationStatus = item.additionalInfo &&
+                item.additionalInfo[0] &&
+                item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "No";
 
+const escalationClass = orderStatus === "Order Fulfilled" && escalationStatus === "Yes" 
+              ? "green-background" 
+              : "";
 const editButton = (team === "Team Mark" || team === "Team Sussane")
-        ? "" // Hide the edit button
-        : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+? "" // Hide the edit button
+: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 
 const actions = `
 ${editButton}
@@ -922,5 +932,4 @@ window.location.href = "login_signup.html";
 </script>
 </body>
 </html>
-
 
