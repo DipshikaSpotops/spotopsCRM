@@ -702,15 +702,15 @@ sortTable(index, type);
     );
   });
 
-  // // Reset the page number if the current page exceeds the total pages after filtering
-  // const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-  // if (currentPage > totalPages) {
-  //   currentPage = totalPages;
-  // }
+  // Reset the page number if the current page exceeds the total pages after filtering
+  const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+  if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
 
-  // // Re-render the table with the filtered results
-  // renderTableRows(currentPage, filteredOrders);
-  // createPaginationControls(totalPages);
+  // Re-render the table with the filtered results
+  renderTableRows(currentPage, filteredOrders);
+  createPaginationControls(totalPages);
 });
 
   
