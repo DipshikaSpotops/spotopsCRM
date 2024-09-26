@@ -173,10 +173,21 @@ table.table td.actions {
 display: flex;
 gap: 5px;
 }
-/* Enable horizontal scrolling for the table */
-.table-scroll {
-  overflow-x: auto; /* Allows horizontal scrolling when needed */
-  white-space: nowrap; /* Prevents text from wrapping */
+/* Ensure the entire viewport can scroll horizontally */
+body, html {
+  overflow-x: auto; /* Allow horizontal scrolling across the entire page */
+}
+
+/* Optional: Ensure that the table has a width larger than the viewport */
+.table {
+  min-width: 120vw; /* Makes the table wider than the viewport */
+}
+
+/* Ensure the table container scrolls if necessary */
+.table-scroll-viewport {
+  width: 100vw; /* Full viewport width */
+  overflow-x: auto; /* Allows horizontal scrolling within the viewport */
+  white-space: nowrap; /* Prevents wrapping */
 }
 
 .btn {
@@ -397,8 +408,8 @@ required
         placeholder="Search..."
       />
     </div>
-    <!-- Wrap the table in a div with horizontal scrolling enabled -->
-    <div class="table-scroll">
+    <!-- Wrap the table in a div with viewport scrolling enabled -->
+    <div class="table-scroll-viewport">
       <table class="table table-bordered mt-4">
         <thead>
           <tr>
@@ -440,6 +451,7 @@ required
     </div>
   </div>
 </div>
+
 </div>
 
 <!-- Profile Modal -->
@@ -931,4 +943,3 @@ window.location.href = "login_signup.html";
 </script>
 </body>
 </html>
-<!-- now in the above html page, please have a horizontal scollbar at the bottom of the page at the viewport -->
