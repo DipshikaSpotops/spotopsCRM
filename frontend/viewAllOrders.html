@@ -703,7 +703,7 @@ const orderStatus = isCancelledOrder
 const isDisabled = orderStatus === "Placed" || orderStatus === "Customer approved";
 const escalationStatus = item.additionalInfo &&
                 item.additionalInfo[0] &&
-                item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "No";
+                item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
 
                 let escalationStyle = '';
     if (orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
