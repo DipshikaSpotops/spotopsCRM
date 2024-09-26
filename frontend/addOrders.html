@@ -264,9 +264,6 @@ window.location.href = "login_signup.html";
 <h2 style="margin: 0% 0% -3% 18%;color: grey;">ADD NEW ORDER</h2>
 <div id="firstRow" style="display: flex; margin: 0% 28%;">
 <div>
-<input type="text" id="orderNo" placeholder="Enter Order No." required />
-</div>
-<div>
 <input type="text" id="salesAgent" required readonly/>
 </div>
 <div>
@@ -609,7 +606,9 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 <!-- price and gp info till here -->
-
+<div>
+  <input type="text" id="orderNo" required placeholder="Enter Order No."/>
+  </div>
 <button type="submit" class="btn" id="addoBtn">Add New Order</button>
 </div>
 </form>
@@ -861,9 +860,10 @@ const cusLName = $("#lastName").val();
 const customerName = cusFName + " " + cusLName;
 const note = $("#notes").val();
 const orderDate = getFormattedOrderDate(); 
+newOrderNo = ("#orderNo").val();
 const newOrder = {
-// orderNo: newOrderNo,
-orderNo:$("#orderNo").val(),
+orderNo: newOrderNo,
+// orderNo:$("#orderNo").val(),
 orderDate: orderDate,
 salesAgent: $("#salesAgent").val(),
 customerName: customerName,
