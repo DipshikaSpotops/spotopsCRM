@@ -483,7 +483,7 @@ if (!firstName) {
             <td>${item.pReq || item.partName}</td>
             <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
             <td>${item.orderStatus}</td>
-            <td ${escalationStyle}>${escalationStatus}</td> <!-- Target this td explicitly -->
+            <td ${escalationStyle}>${escalationStatus}</td>
             <td class="actions">${actions}</td>
             <td>${sendInvoice}</td>
             <td>${item.email}</td>
@@ -543,7 +543,7 @@ if (!firstName) {
       }
     });
   
-    // Fetch token logic
+    // Function to fetch token logic
     async function fetchToken() {
       try {
         const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
@@ -616,27 +616,22 @@ if (!firstName) {
       });
     });
   
+    // Sort orders by Order No in descending order
+    function sortOrdersByOrderNoDesc(orders) {
+      return orders.sort((a, b) => {
+        const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+        const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+        return orderNoB - orderNoA;
+      });
+    }
+  
     // Other unchanged code...
   
     $("#logoutLink").click(function () {
       window.localStorage.clear();
       window.location.href = "login_signup.html";
     });
-  
-    // Apply team-based and role-based restrictions
-    team = localStorage.getItem("team");
-    role = localStorage.getItem("role");
-  
-    if (team === "Team Charlie") {
-      $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
-      // Hide unnecessary dashboard links
-    } else if (team === "Team Mark") {
-      $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-      // Hide unnecessary dashboard links
-    } else if (role === "Admin") {
-      // Admin-specific display logic
-    }
   });
-  </script>
-  </body>
+  </script>  
+</body>
 </html>
