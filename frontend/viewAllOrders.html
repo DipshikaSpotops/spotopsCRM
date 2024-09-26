@@ -364,6 +364,8 @@ if (!firstName) {
           placeholder="Search..."
           />
           </div>
+          <!-- pagination controls -->
+          <div id="pagination-controls" class="mt-3 mb-3"></div>
         <div class="table-responsive">
             <table class="table table-bordered mt-4">
                 <thead>
@@ -385,421 +387,365 @@ if (!firstName) {
                     <!-- Table data goes here -->
                 </tbody>
             </table>
+            <!-- Pagination Controls (also at the bottom for convenience) -->
+    <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
         </div>
     </div>
 </div>
 <script>
-$(document).ready(async function () {
-// Sorting Order Object
-var team;
-let sortOrder = {
-orderDate: "asc",
-orderNo: "asc",
-agentName: "asc",
-customerName: "asc",
-partName: "asc",
-yard: "asc",
-orderStatus: "asc",
-email: "asc",
-};
-function parseCustomDate(dateString) {
-const months = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-Nov: "11", Dec: "12"
-};
-
-// Extract parts from the string (day, month, year, time)
-const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
-
-if (parts) {
-const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
-const month = months[parts[2]];
-const year = parts[3];
-const hour = parts[4];
-const minute = parts[5];
-
-// Return a valid date string for comparison
-return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-}
-
-return null;
-}
-// Function to sort the table
-function sortTable(column, type) {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray();
-
-rows.sort((a, b) => {
-let valA = $(a).find("td").eq(column).text().trim().toLowerCase();
-let valB = $(b).find("td").eq(column).text().trim().toLowerCase();
-
-if (type === "date") {
-valA = parseCustomDate(valA); // Use the helper function to parse the date
-valB = parseCustomDate(valB);
-// return sortOrder[type] === "asc" ? valA - valB : valB - valA;
-} else if (type === "number") {
-valA = parseInt(valA.replace(/\D/g, ""), 10);
-valB = parseInt(valB.replace(/\D/g, ""), 10);
-return sortOrder[type] === "asc" ? valA - valB : valB - valA;
-} else if (type === "aToZ") {
-if (sortOrder[type] === "asc") {
-return valA.localeCompare(valB);
-} else {
-return valB.localeCompare(valA);
-}
-} else {
-// Default String comparison for other types
-if (sortOrder[type] === "asc") {
-return valA > valB ? 1 : -1;
-} else {
-return valA < valB ? 1 : -1;
-}
-}
-});
-
-// Re-append sorted rows
-$.each(rows, function (index, row) {
-table.append(row);
-});
-
-// Toggle sort order for next click
-sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-// Update sort icon
-updateSortIcons(column, sortOrder[type]);
-}
-
-// Function to update sort icons
-function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-$("th").each(function (index) {
-if (index === columnIndex) {
-$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-}
-});
-}
-
-// Event listeners for sorting
-$("th").each(function (index) {
-const th = $(this);
-let type = th.hasClass("aToZ") ? "aToZ" : th.text().trim().toLowerCase().replace(/\s/g, "");
-
-if (type === "orderdate") {
-th.on("click", function () {
-sortTable(index, "date");
-});
-} else if (type === "orderno") {
-th.on("click", function () {
-sortTable(index, "number");
-});
-} else if (type === "aToZ") {
-// Handle A-Z sorting for columns with the aToZ class
-th.on("click", function () {
-sortTable(index, "aToZ");
-});
-} else {
-th.on("click", function () {
-sortTable(index, type);
-});
-}
-});
-// Get the current time and the login timestamp
-const currentTime = Date.now();
-const loginTimestamp = localStorage.getItem("loginTimestamp");
-if (loginTimestamp) {
-const timeDifference =
-(currentTime - loginTimestamp) / (1000 * 60 * 60);
-if (timeDifference >= 12) {
-alert(
-"Your session has expired. You will be redirected to the login page."
-);
-window.localStorage.clear();
-window.location.href = "login_signup.html";
-}
-} else {
-window.location.href = "login_signup.html";
-}
-
-const firstName = localStorage.getItem("firstName");
-const lastName = localStorage.getItem("lastName");
-const email = localStorage.getItem("email");
-const role = localStorage.getItem("role");
-team = localStorage.getItem("team");
-
-if (firstName) {
-$("#user-name").text(firstName);
-}
-if (!firstName) {
-window.location.href = "login_signup.html";
-}
-
-const token = localStorage.getItem("token");
-
-try {
-// Fetch orders from both the orders and cancelledOrders collections
-const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-axios.get("https://www.spotops360.com/orders", {
-headers: token
-? {
-Authorization: `Bearer ${token}`,
-}
-: {},
-}),
-axios.get("https://www.spotops360.com/cancelledOrders", {
-headers: token
-? {
-Authorization: `Bearer ${token}`,
-}
-: {},
-}),
-]);
-
-if (
-ordersResponse.status !== 200 ||
-cancelledOrdersResponse.status !== 200
-) {
-throw new Error("Failed to fetch orders");
-}
-
-var orders = ordersResponse.data;
-var cancelledOrders = cancelledOrdersResponse.data;
-
-// Combine both orders and cancelled orders
-var allOrders = [...orders, ...cancelledOrders];
-
-// Render the combined orders in the table
-allOrders = sortOrdersByOrderNoDesc(allOrders);
-allOrders.forEach((item) => {
-// Check if the order is from the cancelledOrders collection
-const isCancelledOrder = cancelledOrders.some(
-(cancelledItem) => cancelledItem.orderNo === item.orderNo
-);
-const orderStatus = isCancelledOrder
-? "Cancelled"
-: item.orderStatus;
-const isDisabled = orderStatus === "Placed" || orderStatus === "Customer approved";
-const escalationStatus = item.additionalInfo &&
-                item.additionalInfo[0] &&
-                item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
-
-                let escalationStyle = '';
-    if (orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-        escalationStyle = 'style="background-color: lightgreen;"';
+  $(document).ready(async function () {
+    // Pagination related variables
+    let allOrders = [];
+    const rowsPerPage = 25;
+    let currentPage = 1;
+  
+    // Function to render rows based on the page
+    function renderTableRows(page) {
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const ordersForPage = allOrders.slice(start, end);
+  
+      $('#infoTable').empty(); // Clear the table
+      ordersForPage.forEach((item) => {
+        const escalationStatus = item.additionalInfo &&
+          item.additionalInfo[0] &&
+          item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+  
+        let escalationStyle = '';
+        if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+            escalationStyle = 'style="background-color: lightgreen;"';
+        }
+  
+        const editButton = (team === "Team Mark" || team === "Team Sussane")
+          ? "" // Hide the edit button
+          : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+  
+        const actions = `
+          ${editButton}
+          <button class="btn btn-success btn-sm process-btn" data-id="${
+          item.orderNo
+        }" style="background-color: #cae8c9; border: none; color: #61a55e;" ${
+          item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""
+        }>View</button>
+          <button class="btn btn-danger btn-sm cancel-btn" data-id="${
+          item.orderNo
+        }" style="background-color: #fcdfda; border: none; color: #72504a" ${
+          item.orderStatus === "Cancelled" ? "disabled" : ""
+        }>Cancel</button>
+        `;
+  
+        const sendInvoice = `
+          <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+        `;
+        var yardlength = item.additionalInfo.length;
+  
+        $("#infoTable").append(`
+          <tr>
+            <td>${item.orderDate}</td>
+            <td>${item.orderNo}</td>
+            <td>${item.salesAgent}</td>
+            <td>${item.customerName}</td>
+            <td>${item.pReq || item.partName}</td>
+            <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+            <td>${item.orderStatus}</td>
+            <td ${escalationStyle}>${escalationStatus}</td> <!-- Target this td explicitly -->
+            <td class="actions">${actions}</td>
+            <td>${sendInvoice}</td>
+            <td>${item.email}</td>
+          </tr>
+        `);
+      });
     }
-    // console.log("===",orderStatus,escalationStatus,escalationStyle);              
-const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${
-item.orderNo
-}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${
-isDisabled ? "disabled" : ""
-}>View</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${
-item.orderNo
-}" style="background-color: #fcdfda; border: none; color: #72504a" ${
-orderStatus === "Cancelled" ? "disabled" : ""
-}>Cancel</button>
-`;
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-`;
-var yardlength = item.additionalInfo.length;
-
-$("#infoTable").append(`
-      <tr>
-        <td>${item.orderDate}</td>
-        <td>${item.orderNo}</td>
-        <td>${item.salesAgent}</td>
-        <td>${item.customerName}</td>
-        <td>${item.pReq || item.partName}</td>
-        <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-        <td>${orderStatus}</td>
-        <td ${escalationStyle}>${escalationStatus}</td> <!-- Target this td explicitly -->
-        <td class="actions">${actions}</td>
-        <td>${sendInvoice}</td>
-        <td>${item.email}</td>
-      </tr>
-    `);
-});
-} catch (error) {
-console.error("Error fetching orders:", error);
-}
-
-$("#searchInput").on("keyup", function () {
-let value = $(this).val().toLowerCase();
-$("#infoTable tr").filter(function () {
-$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-});
-});
-
-$("#infoTable").on("click", ".edit-btn", function () {
-const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}`;
-});
-
-$("#infoTable").on("click", ".process-btn", function () {
-const orderNo = $(this).data("id");
-const orderStatus = $(this)
-.closest("tr")
-.find("td:nth-child(7)")
-.text(); // Find the status cell
-
-if (orderStatus === "Cancelled") {
-fetchCancelledOrderDetails(orderNo, true);
-} else {
-window.location.href = `form.html?orderNo=${orderNo}&process=true`;
-}
-});
-
-function fetchCancelledOrderDetails(orderNo) {
-console.log("Fetching Cancelled Order", orderNo);
-fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`, {
-headers: { Authorization: `Bearer ${token}` },
-})
-.then((response) => response.json())
-.then((data) => {
-localStorage.setItem("orderDetails", JSON.stringify(data));
-window.location.href = `form.html?orderNo=${orderNo}&cancelled=true`;
-})
-.catch((error) =>
-console.error("Error fetching cancelled order details:", error)
-);
-}
-
-$("#infoTable").on("click", ".cancel-btn", function () {
-const id = $(this).data("id");
-console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-
-if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-fetch(`https://www.spotops360.com/orders/${id}?firstName=${firstName}`, {
-method: "DELETE",
-headers: {
-Authorization: `Bearer ${token}`,
-"Content-Type": "application/json", // Ensure correct content type
-},
-})
-.then((response) => {
-if (!response.ok) {
-console.error("Failed to delete order", response.statusText);
-throw new Error("Failed to delete order");
-}
-return response.json(); // Assuming your server returns JSON
-})
-.then((data) => {
-console.log("Order cancelled successfully", data); // Added log
-alert("Order cancelled successfully"); // Add alert for user feedback
-window.location.reload();
-})
-.catch((error) => {
-console.error("Error cancelling order:", error);
-alert(`Error cancelling order: ${error.message}`); // Add alert for user feedback
-});
-}
-});
-
-$("#infoTable").on("click", ".send-invoice-btn", function () {
-const id = $(this).data("id");
-fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-method: "POST",
-headers: {
-Authorization: `Bearer ${token}`,
-},
-})
-.then((response) => response.json())
-.then((data) => {
-alert(data.message);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-});
-
-$("#addNewEntry").on("click", function (e) {
-e.preventDefault();
-window.location.href = "form.html?newEntry=true";
-});
-
-$(".toggle-sidebar").on("click", function () {
-$("#offcanvasSidebar").toggleClass("show");
-});
-
-$(".nav-link.menu").on("click", function (event) {
-event.preventDefault();
-const submenu = $(this).next(".submenu");
-submenu.toggle();
-$(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-});
-
-$("#profileLink").click(function () {
-$("#profileFirstName").val(firstName);
-$("#profileLastName").val(lastName);
-$("#profileEmail").val(email);
-$("#profileRole").val(role);
-$("#profileModal").modal("show");
-});
-
-$(".close").click(function () {
-console.log("close button clicked");
-location.reload();
-});
-
-// Apply team-based and role-based restrictions
-if (team === "Team Charlie") {
-$("#submenu-reports .nav-link")
-.not(':contains("My Sales Report")')
-.hide();
-$(
-"#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-).hide();
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-} else if (team === "Team Mark") {
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-$(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
-).hide();
-} else if (team === "Team Sussane") {
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-$(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
-).hide();
-} else if (role === "Admin") {
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$('#submenu-reports .nav-link:contains("Refund Report")').show();
-$('#submenu-reports .nav-link:contains("Collect Refund")').show();
-$("#submenu-dashboards .view-individualOrders-link").hide();
-}
-
-const currentPath = window.location.pathname;
-$(".nav-link").each(function () {
-if (currentPath.includes($(this).attr("href"))) {
-$(this).addClass("active");
-}
-});
-function sortOrdersByOrderNoDesc(orders) {
-console.log("sort in ascending order initially")  
-return orders.sort((a, b) => {
-const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
-const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
-return orderNoB - orderNoA;
-});
-}
-
-$("#logoutLink").click(function () {
-window.localStorage.clear();
-window.location.href = "login_signup.html";
-});
-});
-</script>
+  
+    // Function to create pagination controls
+    function createPaginationControls(totalPages) {
+      const paginationControls = $('#pagination-controls');
+      paginationControls.empty(); // Clear pagination controls
+      
+      if (totalPages > 1) {
+        // "Previous" button
+        paginationControls.append(
+          `<button class="btn btn-primary" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
+        );
+        
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+          paginationControls.append(
+            `<button class="btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`
+          );
+        }
+        
+        // "Next" button
+        paginationControls.append(
+          `<button class="btn btn-primary" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
+        );
+      }
+    }
+  
+    // Event listener for pagination buttons
+    $('#pagination-controls').on('click', '.page-btn', function () {
+      const page = $(this).data('page');
+      currentPage = page;
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    });
+  
+    // "Previous" and "Next" button functionality
+    $('#pagination-controls').on('click', '#prevPage', function () {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTableRows(currentPage);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+      }
+    });
+  
+    $('#pagination-controls').on('click', '#nextPage', function () {
+      const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTableRows(currentPage);
+        createPaginationControls(totalPages);
+      }
+    });
+  
+    // Sorting Order Object
+    var team;
+    let sortOrder = {
+      orderDate: "asc",
+      orderNo: "asc",
+      agentName: "asc",
+      customerName: "asc",
+      partName: "asc",
+      yard: "asc",
+      orderStatus: "asc",
+      email: "asc",
+    };
+  
+    // Function to sort the table
+    function sortTable(column, type) {
+      allOrders.sort((a, b) => {
+        let valA = a[column].toLowerCase();
+        let valB = b[column].toLowerCase();
+    
+        if (sortOrder[column] === "asc") {
+          return valA > valB ? 1 : -1;
+        } else {
+          return valA < valB ? 1 : -1;
+        }
+      });
+      renderTableRows(currentPage);
+      sortOrder[column] = sortOrder[column] === "asc" ? "desc" : "asc";
+    }
+  
+    // Event listeners for sorting
+    $("th").each(function (index) {
+      const th = $(this);
+      let column = th.text().trim().toLowerCase().replace(/\s/g, "");
+    
+      th.on("click", function () {
+        sortTable(index, column);
+      });
+    });
+  
+    // Fetch and display orders
+    try {
+      const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+        axios.get("https://www.spotops360.com/orders", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }),
+        axios.get("https://www.spotops360.com/cancelledOrders", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }),
+      ]);
+  
+      if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+        throw new Error("Failed to fetch orders");
+      }
+  
+      var orders = ordersResponse.data;
+      var cancelledOrders = cancelledOrdersResponse.data;
+      allOrders = [...orders, ...cancelledOrders];
+  
+      // Sort and render the orders
+      allOrders = sortOrdersByOrderNoDesc(allOrders);
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  
+    // Other unchanged code
+    $("#searchInput").on("keyup", function () {
+      let value = $(this).val().toLowerCase();
+      $("#infoTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+      });
+    });
+  
+    $("#infoTable").on("click", ".edit-btn", function () {
+      const id = $(this).data("id");
+      window.location.href = `form.html?orderNo=${id}`;
+    });
+  
+    $("#infoTable").on("click", ".process-btn", function () {
+      const orderNo = $(this).data("id");
+      const orderStatus = $(this)
+        .closest("tr")
+        .find("td:nth-child(7)")
+        .text(); // Find the status cell
+  
+      if (orderStatus === "Cancelled") {
+        fetchCancelledOrderDetails(orderNo, true);
+      } else {
+        window.location.href = `form.html?orderNo=${orderNo}&process=true`;
+      }
+    });
+  
+    function fetchCancelledOrderDetails(orderNo) {
+      console.log("Fetching Cancelled Order", orderNo);
+      fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          localStorage.setItem("orderDetails", JSON.stringify(data));
+          window.location.href = `form.html?orderNo=${orderNo}&cancelled=true`;
+        })
+        .catch((error) =>
+          console.error("Error fetching cancelled order details:", error)
+        );
+    }
+  
+    $("#infoTable").on("click", ".cancel-btn", function () {
+      const id = $(this).data("id");
+      console.log(`Cancel button clicked for order ID: ${id}`); // Added log
+  
+      if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+        fetch(`https://www.spotops360.com/orders/${id}?firstName=${firstName}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // Ensure correct content type
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              console.error("Failed to delete order", response.statusText);
+              throw new Error("Failed to delete order");
+            }
+            return response.json(); // Assuming your server returns JSON
+          })
+          .then((data) => {
+            console.log("Order cancelled successfully", data); // Added log
+            alert("Order cancelled successfully"); // Add alert for user feedback
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error("Error cancelling order:", error);
+            alert(`Error cancelling order: ${error.message}`); // Add alert for user feedback
+          });
+      }
+    });
+  
+    $("#infoTable").on("click", ".send-invoice-btn", function () {
+      const id = $(this).data("id");
+      fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          alert(data.message);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  
+    $("#addNewEntry").on("click", function (e) {
+      e.preventDefault();
+      window.location.href = "form.html?newEntry=true";
+    });
+  
+    $(".toggle-sidebar").on("click", function () {
+      $("#offcanvasSidebar").toggleClass("show");
+    });
+  
+    $(".nav-link.menu").on("click", function (event) {
+      event.preventDefault();
+      const submenu = $(this).next(".submenu");
+      submenu.toggle();
+      $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+    });
+  
+    $("#profileLink").click(function () {
+      $("#profileFirstName").val(firstName);
+      $("#profileLastName").val(lastName);
+      $("#profileEmail").val(email);
+      $("#profileRole").val(role);
+      $("#profileModal").modal("show");
+    });
+  
+    $(".close").click(function () {
+      console.log("close button clicked");
+      location.reload();
+    });
+  
+    // Apply team-based and role-based restrictions
+    if (team === "Team Charlie") {
+      $("#submenu-reports .nav-link")
+        .not(':contains("My Sales Report")')
+        .hide();
+      $(
+        "#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+      ).hide();
+      $(".nav-item:has(#submenu-teams)").hide();
+      $(".nav-item:has(#submenu-users)").hide();
+    } else if (team === "Team Mark") {
+      $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+      $(".nav-item:has(#submenu-teams)").hide();
+      $(".nav-item:has(#submenu-users)").hide();
+      $(
+        "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+      ).hide();
+    } else if (team === "Team Sussane") {
+      $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+      $(".nav-item:has(#submenu-teams)").hide();
+      $(".nav-item:has(#submenu-users)").hide();
+      $(
+        "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+      ).hide();
+    } else if (role === "Admin") {
+      $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+      $('#submenu-reports .nav-link:contains("Refund Report")').show();
+      $('#submenu-reports .nav-link:contains("Collect Refund")').show();
+      $("#submenu-dashboards .view-individualOrders-link").hide();
+    }
+  
+    const currentPath = window.location.pathname;
+    $(".nav-link").each(function () {
+      if (currentPath.includes($(this).attr("href"))) {
+        $(this).addClass("active");
+      }
+    });
+  
+    function sortOrdersByOrderNoDesc(orders) {
+      console.log("sort in ascending order initially");
+      return orders.sort((a, b) => {
+        const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+        const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+        return orderNoB - orderNoA;
+      });
+    }
+  
+    $("#logoutLink").click(function () {
+      window.localStorage.clear();
+      window.location.href = "login_signup.html";
+    });
+  });
+  </script>
+  
 </body>
 </html>
-
