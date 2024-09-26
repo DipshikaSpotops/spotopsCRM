@@ -682,44 +682,37 @@ sortTable(index, type);
     //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     //   });
     // });
+
     // Filtering functionalit
     $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
 
-  // Check if allOrders is populated
-  if (allOrders && allOrders.length > 0) {
-    console.log("Total Orders:", allOrders.length, "First Order:", allOrders[0]);
+  // Filter from the entire allOrders dataset
+  const filteredOrders = allOrders.filter(order => {
+    return (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
+    );
+  });
 
-    // Filter from the entire allOrders dataset
-    const filteredOrders = allOrders.filter(order => {
-      return (
-        (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-        (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-        (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-        (order.customerName && order.customerName.toLowerCase().includes(value)) ||
-        ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-        (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
-        (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-        (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
-        (order.email && order.email.toLowerCase().includes(value))
-      );
-    });
-
-    // Calculate total pages based on filtered results
-    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-
-    // Adjust current page if it exceeds total pages
-    if (currentPage > totalPages) {
-      currentPage = totalPages;
-    }
-
-    // Update the table with the filtered results
-    renderTableRows(currentPage, filteredOrders);
-    createPaginationControls(totalPages);
-  } else {
-    console.error("allOrders array is empty or not loaded yet.");
+  // Reset the page number if the current page exceeds the total pages after filtering
+  const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+  if (currentPage > totalPages) {
+    currentPage = totalPages;
   }
+
+  // Re-render the table with the filtered results
+  renderTableRows(currentPage, filteredOrders);
+  createPaginationControls(totalPages);
 });
+
   
   
     // Sort orders by Order No in descending order
