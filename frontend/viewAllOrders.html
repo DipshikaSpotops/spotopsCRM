@@ -730,30 +730,20 @@ const sendInvoice = `
 var yardlength = item.additionalInfo.length;
 
 $("#infoTable").append(`
-<tr>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
-<td>${item.pReq || item.partName}</td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo[yardlength - 1].yardName
-: ""
-}</td>
-<td>${orderStatus}</td>
-<td>${
-item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked
-? item.additionalInfo[0].escTicked
-: ""
-}</td>
-<td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
-<td>${item.email}</td>
-</tr>
-`);
+      <tr>
+        <td>${item.orderDate}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
+        <td>${item.customerName}</td>
+        <td>${item.pReq || item.partName}</td>
+        <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+        <td>${orderStatus}</td>
+        <td ${escalationStyle}>${escalationStatus}</td> <!-- Target this td explicitly -->
+        <td class="actions">${actions}</td>
+        <td>${sendInvoice}</td>
+        <td>${item.email}</td>
+      </tr>
+    `);
 });
 } catch (error) {
 console.error("Error fetching orders:", error);
