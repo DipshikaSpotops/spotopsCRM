@@ -419,7 +419,7 @@ if (!firstName) {
         Nov: "11", Dec: "12"
       };
   
-      const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+      const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d{2}):(\d{2})/);
   
       if (parts) {
         const day = parts[1].padStart(2, '0');
@@ -543,7 +543,7 @@ if (!firstName) {
       }
     });
   
-    // Function to fetch token logic
+    // Token fetching logic
     async function fetchToken() {
       try {
         const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
@@ -606,6 +606,14 @@ if (!firstName) {
       sortOrder[column] = sortOrder[column] === "asc" ? "desc" : "asc";
     }
   
+    // Filtering functionality
+    $("#searchInput").on("keyup", function () {
+      const value = $(this).val().toLowerCase();
+      $("#infoTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+      });
+    });
+  
     // Event listeners for sorting
     $("th").each(function (index) {
       const th = $(this);
@@ -625,13 +633,12 @@ if (!firstName) {
       });
     }
   
-    // Other unchanged code...
-  
     $("#logoutLink").click(function () {
       window.localStorage.clear();
       window.location.href = "login_signup.html";
     });
   });
-  </script>  
+  </script>
+  
 </body>
 </html>
