@@ -369,18 +369,38 @@ if (!firstName) {
         <div class="table-responsive">
             <table class="table table-bordered mt-4">
                 <thead>
-                    <tr>
-                        <th>Order Date</th>
-                        <th>Order No.</th>
-                        <th>Agent Name</th>
-                        <th>Customer Name</th>
-                        <th>Part Name</th>
-                        <th>Yard</th>
-                        <th>Order Status</th>
-                        <th>Escalation Status</th>
-                        <th>Actions</th>
-                        <th>Send Invoice</th>
-                        <th>Email</th>
+                  <tr>
+                    <th style="cursor: pointer" scope="col">
+                    Order Date <span class="sort-icon onlyNumber">&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">
+                    Order No. <span class="sort-icon onlyNumber">&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">
+                    Agent Name <span class="aToZ" >&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">
+                    Customer Name
+                    <span class="aToZ">&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">
+                    Part Name <span class="aToZ">&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">
+                    Yard <span class="aToZ">&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">
+                    Order Status <span class="aToZ">&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">
+                    Escalation Status
+                    <span class="aToZ">&#9650;</span>
+                    </th>
+                    <th style="cursor: pointer" scope="col">Actions</th>
+                    <th style="cursor: pointer" scope="col">Send Invoice</th>
+                    <th style="cursor: pointer" scope="col">
+                    Email <span class="aToZ">&#9650;</span>
+                    </th>
                     </tr>
                 </thead>
                 <tbody id="infoTable">
