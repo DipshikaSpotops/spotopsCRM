@@ -687,7 +687,7 @@ $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
 
   // Filter from the entire allOrders dataset
-  console.log("no of orders",allOrders.length)
+  console.log("no of orders",allOrders.length,allOrders)
   const filteredOrders = allOrders.filter(order => {
     return (
       order.orderDate.toLowerCase().includes(value) ||
