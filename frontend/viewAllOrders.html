@@ -682,7 +682,17 @@ sortTable(index, type);
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
       });
     });
-    
+  
+  
+    // Sort orders by Order No in descending order
+    function sortOrdersByOrderNoDesc(orders) {
+      return orders.sort((a, b) => {
+        const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+        const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+        return orderNoB - orderNoA;
+      });
+    }
+  
     $("#logoutLink").click(function () {
       window.localStorage.clear();
       window.location.href = "login_signup.html";
