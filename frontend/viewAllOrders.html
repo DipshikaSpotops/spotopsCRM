@@ -173,6 +173,12 @@ table.table td.actions {
 display: flex;
 gap: 5px;
 }
+/* Enable horizontal scrolling for the table */
+.table-scroll {
+  overflow-x: auto; /* Allows horizontal scrolling when needed */
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
 .btn {
 padding: 0.375rem 0.75rem;
 }
@@ -378,60 +384,61 @@ required
 </form>
 </div>
 <div class="container-fluid mt-2" style="margin: -1%">
-<!-- Search Bar -->
-<div class="table-responsive" style="margin-top: -40px">
-<h1 class="fixed-header" style="text-align: center; margin-top: 20px">
-View All Orders
-</h1>
-<div style="align-items: center; justify-content: center">
-<input
-type="text"
-class="form-control"
-id="searchInput"
-placeholder="Search..."
-/>
-</div>
-<table class="table table-bordered mt-4">
-<thead>
-<tr>
-<th style="cursor: pointer" scope="col">
-Order Date <span class="sort-icon onlyNumber">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Order No. <span class="sort-icon onlyNumber">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Agent Name <span class="aToZ" >&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Customer Name
-<span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Part Name <span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Yard <span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Order Status <span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Escalation Status
-<span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">Send Invoice</th>
-<th style="cursor: pointer" scope="col">
-Email <span class="aToZ">&#9650;</span>
-</th>
-</tr>
-</thead>
-<tbody id="infoTable">
-<!-- Information from the form will be appended here -->
-</tbody>
-</table>
-</div>
+  <!-- Search Bar -->
+  <div class="table-responsive" style="margin-top: -40px">
+    <h1 class="fixed-header" style="text-align: center; margin-top: 20px">
+      View All Orders
+    </h1>
+    <div style="align-items: center; justify-content: center">
+      <input
+        type="text"
+        class="form-control"
+        id="searchInput"
+        placeholder="Search..."
+      />
+    </div>
+    <!-- Wrap the table in a div with horizontal scrolling enabled -->
+    <div class="table-scroll">
+      <table class="table table-bordered mt-4">
+        <thead>
+          <tr>
+            <th style="cursor: pointer" scope="col">
+              Order Date <span class="sort-icon onlyNumber">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">
+              Order No. <span class="sort-icon onlyNumber">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">
+              Agent Name <span class="aToZ">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">
+              Customer Name <span class="aToZ">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">
+              Part Name <span class="aToZ">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">
+              Yard <span class="aToZ">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">
+              Order Status <span class="aToZ">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">
+              Escalation Status <span class="aToZ">&#9650;</span>
+            </th>
+            <th style="cursor: pointer" scope="col">Actions</th>
+            <th style="cursor: pointer" scope="col">Send Invoice</th>
+            <th style="cursor: pointer" scope="col">
+              Email <span class="aToZ">&#9650;</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="infoTable">
+          <!-- Information from the form will be appended here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -924,4 +931,4 @@ window.location.href = "login_signup.html";
 </script>
 </body>
 </html>
-
+now in the above html page, please have a horizontal scollbar at the bottom of the page at the viewport
