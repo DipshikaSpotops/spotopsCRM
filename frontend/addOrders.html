@@ -264,6 +264,9 @@ window.location.href = "login_signup.html";
 <h2 style="margin: 0% 0% -3% 18%;color: grey;">ADD NEW ORDER</h2>
 <div id="firstRow" style="display: flex; margin: 0% 28%;">
 <div>
+<input type="text" id="orderNo" placeholder="Enter Order No." required />
+</div>
+<div>
 <input type="text" id="salesAgent" required readonly/>
 </div>
 <div>
@@ -805,49 +808,49 @@ $("#newOrderForm").on("submit", function (e) {
 e.preventDefault();
 
 // Fetch the latest order numbers right before submitting the form
-axios
-.all([
-axios.get(`https://www.spotops360.com/orders`),
-axios.get(`https://www.spotops360.com/cancelledOrders`)
-])
-.then(
-axios.spread((orders, cancelledOrders) => {
-// Extract the highest order number from both collections
-var orderarr = orders.data;
-var orderleng = orderarr.length - 1;
-const highestOrderInOrders = orderarr[orderleng].orderNo;
+// // axios
+// // .all([
+// // axios.get(`https://www.spotops360.com/orders`),
+// // axios.get(`https://www.spotops360.com/cancelledOrders`)
+// // ])
+// // .then(
+// // axios.spread((orders, cancelledOrders) => {
+// // // Extract the highest order number from both collections
+// // var orderarr = orders.data;
+// // var orderleng = orderarr.length - 1;
+// // const highestOrderInOrders = orderarr[orderleng].orderNo;
 
-var canOrdersArr = cancelledOrders.data;
-const canOrderarrlength = canOrdersArr.length - 1;
-let highestOrderInCancelledOrders = "";
+// // var canOrdersArr = cancelledOrders.data;
+// // const canOrderarrlength = canOrdersArr.length - 1;
+// // let highestOrderInCancelledOrders = "";
 
-// Check if the cancelled orders array has any elements and if the orderNo exists
-if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
-highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
-}
+// // // Check if the cancelled orders array has any elements and if the orderNo exists
+// // if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
+// // highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
+// // }
 
-// Extract the numeric part from the order numbers by removing the prefix
-const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
-const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
-? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
-: 0;
-const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
-const incrementedNumber = highestOrderNo + 1;
-const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
-const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
+// // // Extract the numeric part from the order numbers by removing the prefix
+// // const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
+// // const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
+// // ? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
+// // : 0;
+// // const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
+// // const incrementedNumber = highestOrderNo + 1;
+// // const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
+// // const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
 
-// Construct the new order number
-newOrderNo = `50STARS${incrementedNumberStr}`;
+// // Construct the new order number
+// newOrderNo = `50STARS${incrementedNumberStr}`;
 
-console.log("newOrderNo", newOrderNo);
+// console.log("newOrderNo", newOrderNo);
 
-// Now submit the new order with the updated order number
-submitNewOrder(newOrderNo);
-})
-)
-.catch((error) => {
-console.error("Error fetching latest order:", error);
-});
+// // Now submit the new order with the updated order number
+// submitNewOrder(newOrderNo);
+// })
+// )
+// .catch((error) => {
+// console.error("Error fetching latest order:", error);
+// });
 });
 
 // Function to handle actual order submission after new order number is generated
@@ -859,7 +862,8 @@ const customerName = cusFName + " " + cusLName;
 const note = $("#notes").val();
 const orderDate = getFormattedOrderDate(); 
 const newOrder = {
-orderNo: newOrderNo,
+// orderNo: newOrderNo,
+orderNo:$("#orderNo").val(),
 orderDate: orderDate,
 salesAgent: $("#salesAgent").val(),
 customerName: customerName,
