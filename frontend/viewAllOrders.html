@@ -682,39 +682,44 @@ sortTable(index, type);
     //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     //   });
     // });
-    // Filtering functionality
-$("#searchInput").on("keyup", function () {
+    // Filtering functionalit
+    $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
 
-  // Filter from the entire allOrders dataset
-  console.log("no of orders",allOrders.length,allOrders[0])
-  const filteredOrders = allOrders.filter(order => {
-    return (
-      order.orderDate.toLowerCase().includes(value) ||
-      order.orderNo.toLowerCase().includes(value) ||
-      order.salesAgent.toLowerCase().includes(value) ||
-      order.customerName.toLowerCase().includes(value) ||
-      (order.pReq || order.partName).toLowerCase().includes(value) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
-      order.orderStatus.toLowerCase().includes(value) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
-      order.email.toLowerCase().includes(value)
-    );
-  });
+  // Check if allOrders is populated
+  if (allOrders && allOrders.length > 0) {
+    console.log("Total Orders:", allOrders.length, "First Order:", allOrders[0]);
 
-  // Calculate total pages based on filtered results
-  const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+    // Filter from the entire allOrders dataset
+    const filteredOrders = allOrders.filter(order => {
+      return (
+        (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+        (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+        (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+        (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+        ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+        (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+        (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+        (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+        (order.email && order.email.toLowerCase().includes(value))
+      );
+    });
 
-  // Adjust current page if it exceeds total pages
-  if (currentPage > totalPages) {
-    currentPage = totalPages;
+    // Calculate total pages based on filtered results
+    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+
+    // Adjust current page if it exceeds total pages
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    // Update the table with the filtered results
+    renderTableRows(currentPage, filteredOrders);
+    createPaginationControls(totalPages);
+  } else {
+    console.error("allOrders array is empty or not loaded yet.");
   }
-
-  // Update the table with the filtered results
-  renderTableRows(currentPage, filteredOrders);
-  createPaginationControls(totalPages);
 });
-
   
   
     // Sort orders by Order No in descending order
