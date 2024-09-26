@@ -519,87 +519,73 @@ sortTable(index, type);
 });
   
     // Function to render rows based on the page
-    function renderTableRows(page) {
-      const start = (page - 1) * rowsPerPage;
-      const end = start + rowsPerPage;
-      const ordersForPage = allOrders.slice(start, end);
-  
-      $('#infoTable').empty(); // Clear the table
-      ordersForPage.forEach((item) => {
-        const escalationStatus = item.additionalInfo &&
-          item.additionalInfo[0] &&
-          item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
-  
-        let escalationStyle = '';
-        if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-          escalationStyle = 'style="background-color: lightgreen;"';
-        }
-  
-        const editButton = (team === "Team Mark" || team === "Team Sussane")
-          ? "" // Hide the edit button
-          : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-  
-        const actions = `
-          ${editButton}
-          <button class="btn btn-success btn-sm process-btn" data-id="${
-          item.orderNo
-        }" style="background-color: #cae8c9; border: none; color: #61a55e;" ${
-          item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""
-        }>View</button>
-          <button class="btn btn-danger btn-sm cancel-btn" data-id="${
-          item.orderNo
-        }" style="background-color: #fcdfda; border: none; color: #72504a" ${
-          item.orderStatus === "Cancelled" ? "disabled" : ""
-        }>Cancel</button>
-        `;
-  
-        const sendInvoice = `
-          <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-        `;
-        var yardlength = item.additionalInfo.length;
-  
-        $("#infoTable").append(`
-          <tr>
-            <td>${item.orderDate}</td>
-            <td>${item.orderNo}</td>
-            <td>${item.salesAgent}</td>
-            <td>${item.customerName}</td>
-            <td>${item.pReq || item.partName}</td>
-            <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-            <td>${item.orderStatus}</td>
-            <td ${escalationStyle}>${escalationStatus}</td>
-            <td class="actions">${actions}</td>
-            <td>${sendInvoice}</td>
-            <td>${item.email}</td>
-          </tr>
-        `);
-      });
+    function renderTableRows(page, orders = allOrders) {
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const ordersForPage = orders.slice(start, end);
+
+  $('#infoTable').empty(); // Clear the table
+  ordersForPage.forEach((item) => {
+    const escalationStatus = item.additionalInfo &&
+      item.additionalInfo[0] &&
+      item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+
+    let escalationStyle = '';
+    if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+      escalationStyle = 'style="background-color: lightgreen;"';
     }
+
+    const editButton = (team === "Team Mark" || team === "Team Sussane")
+      ? "" // Hide the edit button
+      : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
+    const actions = `
+      ${editButton}
+      <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+      <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Cancelled" ? "disabled" : ""}>Cancel</button>
+    `;
+
+    const sendInvoice = `
+      <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+    `;
+
+    const yardlength = item.additionalInfo.length;
+
+    $("#infoTable").append(`
+      <tr>
+        <td>${item.orderDate}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
+        <td>${item.customerName}</td>
+        <td>${item.pReq || item.partName}</td>
+        <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+        <td>${item.orderStatus}</td>
+        <td ${escalationStyle}>${escalationStatus}</td>
+        <td class="actions">${actions}</td>
+        <td>${sendInvoice}</td>
+        <td>${item.email}</td>
+      </tr>
+    `);
+  });
+}
+
   
     // Function to create pagination controls
-    function createPaginationControls(totalPages) {
-      const paginationControls = $('#pagination-controls');
-      paginationControls.empty(); // Clear pagination controls
-      
-      if (totalPages > 1) {
-        // "Previous" button
-        paginationControls.append(
-          `<button class="btn btn-primary" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
-        );
-        
-        // Page numbers
-        for (let i = 1; i <= totalPages; i++) {
-          paginationControls.append(
-            `<button class="btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`
-          );
-        }
-        
-        // "Next" button
-        paginationControls.append(
-          `<button class="btn btn-primary" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
-        );
-      }
+    function createPaginationControls(totalPages, orders = allOrders) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty(); // Clear pagination controls
+  
+  if (totalPages > 1) {
+    paginationControls.append(`<button class="btn btn-primary" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+    
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(`<button class="btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
     }
+    
+    paginationControls.append(`<button class="btn btn-primary" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+  }
+}
+
   
     // Event listener for pagination buttons
     $('#pagination-controls').on('click', '.page-btn', function () {
@@ -683,11 +669,11 @@ sortTable(index, type);
     //   });
     // });
 
-    // Filtering functionalit
+    // Filtering functionality for  the search bar
     $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
 
-  // Filter from the entire allOrders dataset
+  // Filter the entire allOrders dataset based on the search term
   const filteredOrders = allOrders.filter(order => {
     return (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
@@ -702,18 +688,16 @@ sortTable(index, type);
     );
   });
 
-  // Reset the page number if the current page exceeds the total pages after filtering
-  const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-  if (currentPage > totalPages) {
-    currentPage = totalPages;
+  // If a search is active, display the filtered results, otherwise reset to the full dataset
+  if (filteredOrders.length > 0 || value === "") {
+    renderTableRows(1, filteredOrders); // Render the first page of filtered results
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  } else {
+    $("#infoTable").empty(); // Clear the table if no results are found
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
   }
-
-  // Re-render the table with the filtered results
-  renderTableRows(currentPage, filteredOrders);
-  createPaginationControls(totalPages);
 });
 
-  
   
     // Sort orders by Order No in descending order
     function sortOrdersByOrderNoDesc(orders) {
