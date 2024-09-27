@@ -585,7 +585,13 @@ sortTable(index, type);
   });
 }
 
-  
+  var firstname = localStorage.getItem("firstName");
+  if (firstName) {
+        $("#user-name").text(firstName);
+      }
+      if (!firstName) {
+        window.location.href = "login_signup.html";
+      }
     // Function to create pagination controls
     function createPaginationControls(totalPages, orders = allOrders) {
   const paginationControls = $('#pagination-controls');
