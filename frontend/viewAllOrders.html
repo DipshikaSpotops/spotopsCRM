@@ -596,7 +596,7 @@ sortTable(index, type);
       paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
     }
     
-    paginationControls.append(`<button class="btn previousNext btn-primary" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
   }
 }
 
