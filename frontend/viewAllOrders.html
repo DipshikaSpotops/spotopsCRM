@@ -547,10 +547,10 @@ sortTable(index, type);
     if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
       escalationStyle = 'style="background-color: lightgreen;"';
     }
-
     const editButton = (team === "Team Mark" || team === "Team Sussane")
-      ? "" // Hide the edit button
-      : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+        ? "" // Hide the edit button
+        : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
 
       const actions = `
   ${editButton}
