@@ -795,6 +795,13 @@ alert(data.message);
 console.error("Error:", error);
 });
 });
+const currentPath = window.location.pathname + "?newEntry=true";
+console.log("currentPath",currentPath)
+$(".nav-link").each(function () {
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
+});
     $("#logoutLink").click(function () {
       window.localStorage.clear();
       window.location.href = "login_signup.html";
