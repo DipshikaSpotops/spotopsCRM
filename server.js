@@ -589,52 +589,97 @@ app.put("/cancelledOrders/:orderNo/additionalInfo/:yardIndex", async (req, res) 
     });
 //for esiting yard sttus and all till here
 
+app.put("/orders/:orderNo/cancel", async (req, res) => {
+    console.log("Received request to cancel order:", req.params);
+    
+    const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+    console.log('US Central Time:', centralTime);
+    const date = new Date(centralTime);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day} ${month}, ${year}`;
+    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+    const firstName = req.body.firstName;
+  
+    try {
+      const orderNo = req.params.orderNo;
+      console.log("Order No to cancel:", orderNo);
+  
+      const order = await Order.findOne({ orderNo });
+      console.log("Order found:", order);
+  
+      if (!order) {
+        console.log("Order not found with orderNo:", orderNo);
+        return res.status(404).json({ message: "Order not found" });
+      }
+  
+      // Update the order status and history
+      order.orderStatus = "Order Cancelled";
+      order.orderHistory.push(
+        `Order cancelled by ${firstName} on ${formattedDateTime}`
+      );
+  
+      // Save the updated order
+      await order.save();
+      console.log("Order status updated");
+  
+      res.json({ message: "Order cancelled successfully" });
+  
+    } catch (err) {
+      console.error("Error updating order:", err);
+      res.status(500).json({ message: "Error updating order", error: err.message });
+    }
+  });
+  
+// app.delete("/orders/:orderNo", async (req, res) => {
+// console.log("Received request to delete order:", req.params);
+// const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+// console.log('US Central Time:', centralTime);
+// const date = new Date(centralTime);
+// const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+// const day = date.getDate();
+// const month = months[date.getMonth()];
+// const year = date.getFullYear();
+// const hours = date.getHours().toString().padStart(2, '0');
+// const minutes = date.getMinutes().toString().padStart(2, '0');
+// const formattedDate = `${day} ${month}, ${year}`;
+// const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+// const firstName = req.query.firstName;
+// try {
+// const orderNo = req.params.orderNo;
+// console.log("Order No to delete:", orderNo);
 
-app.delete("/orders/:orderNo", async (req, res) => {
-console.log("Received request to delete order:", req.params);
-const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:', centralTime);
-const date = new Date(centralTime);
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const hours = date.getHours().toString().padStart(2, '0');
-const minutes = date.getMinutes().toString().padStart(2, '0');
-const formattedDate = `${day} ${month}, ${year}`;
-const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-const firstName = req.query.firstName;
-try {
-const orderNo = req.params.orderNo;
-console.log("Order No to delete:", orderNo);
+// const order = await Order.findOne({ orderNo });
+// console.log("Order found:", order);
 
-const order = await Order.findOne({ orderNo });
-console.log("Order found:", order);
+// if (!order) {
+// console.log("Order not found with orderNo:", orderNo);
+// return res.status(404).json({ message: "Order not found" });
+// }
+// console.log("Order data:", order);
+// const cancelledOrder = new CancelledOrder(order.toObject()); 
+// console.log("Cancelled Order to save:", cancelledOrder);
+// // Save the cancelled order
+// cancelledOrder.orderStatus = "Order Cancelled";
+// cancelledOrder.orderHistory.push(
+//     `Order cancelled by ${firstName} on ${formattedDateTime}`
+//     );
+// await cancelledOrder.save(); 
+// console.log("Cancelled order saved");
+// // Delete the original order
+// await Order.deleteOne({ orderNo });
+// console.log("Order deleted");
+// res.json({ message: "Order canceled and saved as cancelled" });
 
-if (!order) {
-console.log("Order not found with orderNo:", orderNo);
-return res.status(404).json({ message: "Order not found" });
-}
-console.log("Order data:", order);
-const cancelledOrder = new CancelledOrder(order.toObject()); 
-console.log("Cancelled Order to save:", cancelledOrder);
-// Save the cancelled order
-cancelledOrder.orderStatus = "Order Cancelled";
-cancelledOrder.orderHistory.push(
-    `Order cancelled by ${firstName} on ${formattedDateTime}`
-    );
-await cancelledOrder.save(); 
-console.log("Cancelled order saved");
-// Delete the original order
-await Order.deleteOne({ orderNo });
-console.log("Order deleted");
-res.json({ message: "Order canceled and saved as cancelled" });
-
-} catch (err) {
-console.error("Error deleting order:", err);
-res.status(500).json({ message: "Error deleting order", error: err.message });
-}
-});
+// } catch (err) {
+// console.error("Error deleting order:", err);
+// res.status(500).json({ message: "Error deleting order", error: err.message });
+// }
+// });
 
 
 // Route to fetch all cancelled orders
