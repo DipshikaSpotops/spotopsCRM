@@ -368,6 +368,13 @@ window.location.href = "login_signup.html";
 </div>
 
 <script>
+// var data = response.data;
+
+// Filter out orders with status "Customer approved" or "Placed"
+
+// var filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
+// filteredData = sortOrdersByOrderNoDesc(filteredData);
+
 $(document).ready(async function () {
     // Pagination related variables
     let allOrders = [];
@@ -610,10 +617,13 @@ sortTable(index, type);
         throw new Error("Failed to fetch orders");
       }
   
-      var data = ordersResponse.data;
+      var orders = ordersResponse.data;
       
-      var filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
-      filteredData = sortOrdersByOrderNoDesc(filteredData);
+      var cancelledOrders = cancelledOrdersResponse.data;
+      allOrders = [...orders, ...cancelledOrders];
+  
+      // Sort and render the orders
+      allOrders = sortOrdersByOrderNoDesc(allOrders);
       renderTableRows(currentPage);
       createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     } catch (error) {
