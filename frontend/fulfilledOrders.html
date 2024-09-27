@@ -9,7 +9,7 @@
 <style>
 body {
 display: flex;
-overflow-x: hidden;
+overflow-x: auto;
 flex-direction: column;
 }
 #logoImg {
@@ -70,6 +70,7 @@ padding: 20px;
 margin-left: 14%;
 margin-top: 60px;
 transition: margin-left 0.3s ease;
+overflow-x: auto;
 }
 .submenu {
 display: block; /* Show all submenus by default */
@@ -128,6 +129,7 @@ transform: translateX(0);
 }
 .main-content {
 margin-left: 0;
+overflow-x: auto;
 }
 .toggle-sidebar {
 display: block;
@@ -163,6 +165,9 @@ margin-top: 0;
 border-collapse: collapse;
 width: 100%;
 text-align: center;
+}
+.table-responsive {
+  overflow-x: auto; /* Ensure table can scroll horizontally */
 }
 table.table th,
 table.table td {
@@ -497,7 +502,7 @@ sortTable(index, type);
     // Function to render rows based on the page
     function renderTableRows(page, orders = allOrders) {
   // Filter orders where the status is not "Placed" or "Customer approved"
-  const filteredOrders = orders.filter(item => item.orderStatus === "Order Fulfilled");
+  const filteredOrders = orders.filter(item => item.orderStatus === "Order Cancelled");
 
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
