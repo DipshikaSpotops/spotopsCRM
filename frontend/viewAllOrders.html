@@ -56,7 +56,7 @@ body {
     width: 100%;
     position: fixed;
     top: 0;
-    z-index: 2;
+    z-index: 1001;
     border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
@@ -122,8 +122,13 @@ body {
     cursor: pointer;
 }
 .fixed-header {
-    flex-shrink: 0; /* Prevents the header from shrinking */
-    margin: 0% 30%;
+  position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: white;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
 }
 @media (max-width: 768px) {
     .sidebar {
@@ -141,16 +146,20 @@ body {
     }
 }
 #searchInput {
-    width: 40%;
-    border-radius: 30px;
-    border: 1px solid grey;
-    margin: 0% 28%;
-    background: white
-    url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png)
-    5px center no-repeat;
-    background-size: 20px 20px;
-    padding-left: 35px;
-    height: 40px;
+  position: sticky;
+  top: 60px; /* Below the header */
+  z-index: 999;
+  width: 40%;
+  border-radius: 30px;
+  border: 1px solid grey;
+  margin: 10px auto;
+  background: white
+  url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png)
+  5px center no-repeat;
+  background-size: 20px 20px;
+  padding-left: 35px;
+  height: 40px;
+  background-color: white;
 }
 .profile-table {
     width: 50%;
@@ -191,6 +200,13 @@ table.table th {
 table.table td.actions {
     display: flex;
     gap: 5px;
+}
+/* Fix Table Header */
+table thead th {
+    position: sticky;
+    top: 120px; /* Below the search bar */
+    background-color: #f2f2f2;
+    z-index: 998;
 }
 .btn {
     padding: 0.375rem 0.75rem;
@@ -368,7 +384,7 @@ if (!firstName) {
 
 <div class="main-content">
     <div class="container-fluid mt-2">
-        <h1 class="fixed-header" style="text-align: center; margin-top: 20px">View All Orders</h1>
+        <h1 class="fixed-header" style="text-align: center; margin-right: 4%;">View All Orders</h1>
         <div>
           <input
           type="text"
@@ -794,3 +810,13 @@ console.error("Error:", error);
   
 </body>
 </html>
+when i scroll down or up that is a vertical scroll, the first thing i want is to keep <h1 class="fixed-header" style="text-align: center; margin-right: 4%;">View All Orders</h1> wherever it is when the page is loaded
+second is <div>
+  <input
+  type="text"
+  class="form-control"
+  id="searchInput"
+  placeholder="Search..."
+  />
+  </div> should also be there wherever it is when the page is loaded 
+  and finally the headers of columns to be fixated wherever they are
