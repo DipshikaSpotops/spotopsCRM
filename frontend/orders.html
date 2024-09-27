@@ -25,6 +25,14 @@ color: white;
 color: white;
 cursor: pointer;
 }
+.previousNext{
+  background-color: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
 .navbar {
 color: white;
 background-color: black;
@@ -305,6 +313,7 @@ window.location.href = "login_signup.html";
 <h1 class="fixed-header" style="    text-align: center;margin-right: 35%;margin-top: 20px;">View Orders</h1>
 <div style="align-items: center;justify-content: center;">
 <input type="text" class="form-control" id="searchInput" placeholder="Search..." />
+
 </div>
 <table class="table table-bordered mt-4">
 <thead>
@@ -325,7 +334,8 @@ window.location.href = "login_signup.html";
 <tbody id="infoTable">
 <!-- Information from the form will be appended here -->
 </tbody>
-</table>          
+</table>    
+<div id="pagination-controls-bottom" class="mt-3 mb-3"></div>      
 </div>
 </div>
 </div>
@@ -386,6 +396,49 @@ Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
 Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
 Nov: "11", Dec: "12"
 };
+// Function to create pagination controls
+function createPaginationControls(totalPages, orders = allOrders) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty(); // Clear pagination controls
+  
+  if (totalPages > 1) {
+    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+    
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
+    }
+    
+    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+  }
+}
+
+  
+    // Event listener for pagination buttons
+    $('#pagination-controls').on('click', '.page-btn', function () {
+      const page = $(this).data('page');
+      currentPage = page;
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    });
+  
+    // "Previous" and "Next" button functionality
+    $('#pagination-controls').on('click', '#prevPage', function () {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTableRows(currentPage);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+      }
+    });
+  
+    $('#pagination-controls').on('click', '#nextPage', function () {
+      const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTableRows(currentPage);
+        createPaginationControls(totalPages);
+      }
+    });
+  
 
 // Extract parts from the string (day, month, year, time)
 const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
