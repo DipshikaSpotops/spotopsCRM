@@ -380,6 +380,11 @@ window.location.href = "login_signup.html";
 <script>
 var team;
 $(document).ready(async function () {
+// Pagination related variables
+let allOrders = [];
+const rowsPerPage = 25;
+let currentPage = 1;        
+
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
