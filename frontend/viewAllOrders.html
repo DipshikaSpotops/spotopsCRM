@@ -537,7 +537,7 @@ sortTable(index, type);
     function renderTableRows(page, orders = allOrders) {
   // Filter orders where the status is not "Placed" or "Customer approved"
   const filteredOrders = orders.filter(item => item.orderStatus !== "Placed" && item.orderStatus !== "Customer approved");
-
+console.log("orderstatus",item.orderStatus);
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
   const ordersForPage = filteredOrders.slice(start, end);
