@@ -47,7 +47,7 @@ body {
     cursor: pointer;
 }
 .navbar {
-    color: white;
+  color: white;
     background-color: black;
     padding: 10px 20px;
     display: flex;
@@ -56,8 +56,8 @@ body {
     width: 100%;
     position: fixed;
     top: 0;
-    z-index: 2;
-    border-bottom: 1px solid #e0e0e0;
+    z-index: 4;
+    border-bottom: 1px solid #e0e0e0;;
 }
 .sidebar {
     background-color: black;
@@ -86,12 +86,12 @@ body {
     border: none;
 }
 .main-content {
-    flex-grow: 1;
+  flex-grow: 1;
     padding: 20px;
     margin-left: 14%;
     margin-top: 60px;
-    transition: margin-left 0.3s ease;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .submenu {
     display: block; /* Show all submenus by default */
@@ -122,10 +122,13 @@ body {
     cursor: pointer;
 }
 .fixed-header {
-    flex-shrink: 0; /* Prevents the header from shrinking */
-    margin: 0% 30%;
     position: sticky;
+    top: 0;
     z-index: 3;
+    background-color: white;
+    text-align: center;
+    padding: 10px 0;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 @media (max-width: 768px) {
     .sidebar {
@@ -143,16 +146,18 @@ body {
     }
 }
 #searchInput {
-    width: 40%;
+  width: 40%;
     border-radius: 30px;
     border: 1px solid grey;
-    margin: 0% 28%;
-    background: white
-    url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png)
-    5px center no-repeat;
+    margin: 1% auto;
+    background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
     height: 40px;
+    position: sticky;
+    top: 50px;
+    z-index: 3;
+    background-color: white;
 }
 .profile-table {
     width: 50%;
@@ -188,7 +193,10 @@ table.table td {
     border-bottom: 1px solid #ddd;
 }
 table.table th {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
+    position: sticky;
+    top: 85px; /* Adjust this value based on your layout */
+    z-index: 2;
 }
 table.table td.actions {
     display: flex;
