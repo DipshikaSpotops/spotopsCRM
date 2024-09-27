@@ -535,12 +535,9 @@ sortTable(index, type);
   
     // Function to render rows based on the page
     function renderTableRows(page, orders = allOrders) {
-  // Filter orders where the status is not "Placed" or "Customer approved"
-  const filteredOrders = orders.filter(item => item.orderStatus !== "Placed" && item.orderStatus !== "Customer approved");
-console.log("orderstatus",item.orderStatus);
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  const ordersForPage = filteredOrders.slice(start, end);
+  const ordersForPage = orders.slice(start, end);
 
   $('#infoTable').empty(); // Clear the table
   ordersForPage.forEach((item) => {
@@ -552,18 +549,17 @@ console.log("orderstatus",item.orderStatus);
     if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
       escalationStyle = 'style="background-color: lightgreen;"';
     }
-    
     team = localStorage.getItem('team');
-    
+    // console.log("team",team);
     const editButton = (team === "Team Mark" || team === "Team Sussane")
         ? "" // Hide the edit button
         : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 
-    const actions = `
-      ${editButton}
-      <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-      <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
-    `;
+
+      const actions = `
+  ${editButton}
+  <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+  <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
 
     const sendInvoice = `
       <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
@@ -588,7 +584,6 @@ console.log("orderstatus",item.orderStatus);
     `);
   });
 }
-
 
   var firstname = localStorage.getItem("firstName");
   if (firstName) {
