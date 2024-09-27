@@ -122,16 +122,10 @@ body {
     cursor: pointer;
 }
 .fixed-header {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    background-color: white; /* Ensure it doesn't overlap content */
-    padding: 10px; /* Some padding to make it look better */
+    flex-shrink: 0; /* Prevents the header from shrinking */
     margin: 0% 30%;
-    text-align: center;
-    font-size: 24px;
-    border-bottom: 1px solid #ddd;
-    width: 100%; /* Ensure it spans the full width */
+    position: sticky;
+    z-index: 3;
 }
 @media (max-width: 768px) {
     .sidebar {
