@@ -3,30 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Yard Info</title>
-<link
-href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-rel="stylesheet"
-/>
-<link
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-rel="stylesheet"
-/>
+<title>CRM Orders</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 <style>
 body {
 display: flex;
 overflow-x: hidden;
 flex-direction: column;
-}
-#searchInput {
-width: 40%;
-border-radius: 30px;
-border: 1px solid grey;
-margin: 0% 28%;
-background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
-background-size: 20px 20px;
-padding-left: 35px;
-height: 40px;
 }
 #logoImg {
 height: auto;
@@ -40,10 +24,6 @@ color: white;
 .navbar .user-icon {
 color: white;
 cursor: pointer;
-}
-.fixed-header {
-flex-shrink: 0; /* Prevents the header from shrinking */
-margin: 0% 30%;
 }
 .navbar {
 color: white;
@@ -87,9 +67,8 @@ border: none;
 .main-content {
 flex-grow: 1;
 padding: 20px;
-text-align: center;
 margin-left: 14%;
-margin-top: 30px;
+margin-top: 60px;
 transition: margin-left 0.3s ease;
 }
 .submenu {
@@ -120,11 +99,30 @@ color: white;
 font-size: 24px;
 cursor: pointer;
 }
+.fixed-header {
+flex-shrink: 0; /* Prevents the header from shrinking */
+margin: 0% 30%;
+}
 @media (max-width: 768px) {
 .sidebar {
 transform: translateX(-100%);
 width: 70%;
 }
+/* btn pagination */
+.pageNo{
+background-color: white;
+color: black;
+border: none;
+}
+.previousNexts{
+background-color: black;
+color: white;
+border: none;
+padding: 10px;
+border-radius: 10px;
+text-align: center;
+}
+/* btn pagination ends here */
 .sidebar.show {
 transform: translateX(0);
 }
@@ -134,6 +132,73 @@ margin-left: 0;
 .toggle-sidebar {
 display: block;
 }
+}
+#searchInput {
+width: 40%;
+border-radius: 30px;
+border: 1px solid grey;
+margin: 0% 28%;
+background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
+background-size: 20px 20px;
+padding-left: 35px;
+height: 40px;
+}
+.profile-table {
+width: 50%;
+margin: 20px auto;
+border: 1px solid #e0e0e0;
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.profile-table input {
+width: 100%;
+padding: 8px;
+margin-bottom: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+table.table {
+margin-top: 0;
+border-collapse: collapse;
+width: 100%;
+text-align: center;
+}
+table.table th,
+table.table td {
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+padding: 8px;
+text-align: center;
+border-bottom: 1px solid #ddd;
+}
+table.table th {
+background-color: #f2f2f2;
+}
+table.table td.actions {
+display: flex;
+gap: 5px;
+}
+.btn {
+padding: 0.375rem 0.75rem;
+}
+.disabled {
+pointer-events: none;
+opacity: 0.6;
+}
+.filter-bar {
+display: flex;
+justify-content: flex-end;
+align-items: center;
+gap: 10px;
+margin-bottom: 10px;
+}
+.filter-bar button {
+margin-left: 10px;
+}
+.sort-icon {
+cursor: pointer;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -156,39 +221,24 @@ window.location.href = "login_signup.html";
 </div>
 <div class="user-info dropdown">
 <span>Welcome <span id="user-name"></span></span>
-<i
-class="fas fa-user-circle fa-2x user-icon"
-id="userMenu"
-data-toggle="dropdown"
-aria-haspopup="true"
-aria-expanded="false"
-></i>
-<div
-class="dropdown-menu dropdown-menu-right"
-aria-labelledby="userMenu"
->
-<a class="dropdown-item" href="#" id="profileLink"
-><i class="fas fa-user"></i> My Profile</a
->
+<i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+<a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user"></i> My Profile</a>
 <div class="dropdown-divider"></div>
-<a class="dropdown-item" href="#" id="logoutLink"
-><i class="fas fa-sign-out-alt"></i> Log Out</a
->
+<a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
 </div>
 </div>
 </div>
 
-<div class="sidebar show" id="offcanvasSidebar">
+<div class="sidebar" id="offcanvasSidebar">
 <div class="offcanvas-body">
 <nav class="nav flex-column">
-<div class="nav-item dashboards-item">
-<a class="nav-link dashboards-link" href="#">
+<div class="nav-item dashboards">
+<a class="nav-link menu" href="#" id="default-link">
 <i class="fas fa-home"></i> Dashboards
-<span class="chevron-icon"
-><i class="fas fa-chevron-down"></i
-></span>
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
 </a>
-<div class="submenu dashboards-submenu" id="submenu-dashboards">
+<div class="submenu" id="submenu-dashboards">
 <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
 <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
 <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
@@ -204,52 +254,39 @@ aria-labelledby="userMenu"
 <a class="nav-link" href="escalatedOrders.html">Escalation</a>
 </div>
 </div>
-<div class="nav-item users-item">
-<a class="nav-link users-link" href="#">
+<div class="nav-item">
+<a class="nav-link menu" href="#">
 <i class="fas fa-users"></i> Users
-<span class="chevron-icon"
-><i class="fas fa-chevron-down"></i
-></span>
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
 </a>
-<div class="submenu users-submenu" id="submenu-users">
-<a class="nav-link create-user-link" href="createUser.html"
->Create User</a
->
-<a class="nav-link view-users-link" href="viewallUsers.html"
->View Users</a
->
+<div class="submenu" id="submenu-users">
+<a class="nav-link" href="createUser.html">Create User</a>
+<a class="nav-link" href="viewallUsers.html">View Users</a>
 </div>
 </div>
-<div class="nav-item teams-item">
-<a class="nav-link teams-link" href="#">
-<i class="fas fa-users-cog"></i> Teams
-<span class="chevron-icon"
-><i class="fas fa-chevron-down"></i
-></span>
+<div class="nav-item teams">
+<a class="nav-link menu" href="#">
+<i class="fas fa-users"></i> Teams
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
 </a>
-<div class="submenu teams-submenu" id="submenu-teams">
-<a class="nav-link view-teams-link" href="teams.html"
->View Teams</a
->
+<div class="submenu" id="submenu-teams">
+<a class="nav-link" href="teams.html">View Teams</a>
 </div>
 </div>
-<div class="nav-item reports-item">
-<a class="nav-link reports-link" href="#">
+<div class="nav-item">
+<a class="nav-link menu" href="#">
 <i class="fas fa-chart-bar"></i> Reports
-<span class="chevron-icon"
-><i class="fas fa-chevron-down"></i
-></span>
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
 </a>
-<div class="submenu reports-submenu" id="submenu-reports">
-<!-- <a class="nav-link placed-orders-link" href="placedOrders.html"
->Placed Orders</a
-> -->
-<a class="nav-link shipping-expenses-link" href="shippingExpenses.html">Shipping Expenses</a>
-<a class="nav-link purchases-link" href="purchases.html">Purchases</a>
-<a class="nav-link po-report-link" href="poReport.html">PO Report</a>
+<div class="submenu" id="submenu-reports">
+<a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+<a class="nav-link" href="purchases.html">Purchases</a>
+<a class="nav-link" href="refundReport.html">Refund Report</a>
+<a class="nav-link" href="poReport.html">PO Report</a>
+<a class="nav-link" href="salesReport.html">My Sales Report</a>
+<!-- <a class="nav-link" href="moreThan2CardC.html">Collect Refund</a> -->
 <a class="nav-link" href="collectRefund.html">Collect Refunds</a>
 <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
-
 </div>
 </div>
 </nav>
@@ -257,66 +294,65 @@ aria-labelledby="userMenu"
 </div>
 
 <div class="main-content">
-<div id="yard-info-content">
-<h1 class="fixed-header" style="text-align: center; margin-right: 90px; margin-top: 20px">
-Yard Information
-</h1>
-<div style="align-items: center; justify-content: center">
-<input
-type="text"
-class="form-control"
-id="searchInput"
-placeholder="Search..."
-/>
+<div id="default-content"></div>
+<div id="add-order-content" class="d-none">
+<h1>Add New Order</h1>
+<form>
+<div class="form-group">
+<label for="orderNo">Order No</label>
+<input type="number" class="form-control" id="orderNo" required />
 </div>
-<div class="table-responsive mx-auto" style="max-width: 90%">
-<table class="table table-bordered mt-4">
-<thead>
-<tr  style="background-color: #f2f2f2;text-align: center;" id="tableHeader">
-<th style="cursor: pointer;" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer;" scope="col" data-sort="orderDate">Customer Name <span class="sort-icon fYardName">&#9650;</span></th>
-</tr>
-</thead>
-<tbody id="yardInfoTable">
-<!-- Yard information will be appended here -->
-</tbody>
-</table>
+<div class="form-group">
+<label for="customerName">Customer Name</label>
+<input type="text" class="form-control" id="customerName" required />
 </div>
+<div class="form-group">
+<label for="email">Email</label>
+<input type="email" class="form-control" id="email" required />
+</div>
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
 </div>
 
-<div id="profile-content" class="d-none">
-<h1>User Profile</h1>
-<div class="profile-table">
-<label for="profileName">Name:</label>
-<input type="text" id="profileName" readonly />
-<label for="profileRole">Team:</label>
-<input type="text" id="profileRole" readonly />
-<label for="profileEmail">Email Id:</label>
-<input type="text" id="profileEmail" readonly />
-<button class="btn btn-primary" id="backToOrders">Back</button>
+<div class="container-fluid mt-2" style="margin: -1%;">
+<!-- Search Bar -->
+<div class="table-responsive" style="margin-top: -40px;">
+<h1 class="fixed-header" style="    text-align: center;margin-right: 35%;margin-top: 20px;">Yard Processing Orders</h1>
+<div style="align-items: center;justify-content: center;">
+<input type="text" class="form-control" id="searchInput" placeholder="Search..." />
+</div>
+<div id="pagination-controls" class="mt-3 mb-3"></div>
+<table class="table table-bordered mt-4">
+<thead>
+<tr>
+<th style="cursor:pointer;" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor:pointer;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor:pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th id="aToZ-3" style="cursor:pointer;" scope="col">Customer Name <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-4" style="cursor:pointer;" scope="col">Part Name <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-5" style="cursor:pointer;" scope="col">Yard <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-6" style="cursor:pointer;" scope="col">Order Status <span class="sort-icon">&#9650;</span></th>
+<th id="aToZ-7" style="cursor:pointer;" scope="col">Escalation Status <span class="sort-icon">&#9650;</span></th>
+<th style="cursor:pointer;" scope="col">Actions</th>
+<th style="cursor:pointer;" scope="col">Send Invoice</th>
+<th id="aToZ-10" style="cursor:pointer;" scope="col">Email <span class="sort-icon">&#9650;</span></th>
+</tr>
+</thead>
+<tbody id="infoTable">
+<!-- Information from the form will be appended here -->
+</tbody>
+</table>          
 </div>
 </div>
 </div>
 
 <!-- Profile Modal -->
-<div
-class="modal fade"
-id="profileModal"
-tabindex="-1"
-role="dialog"
-aria-labelledby="profileModalLabel"
-aria-hidden="true"
->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
-<button
-type="button"
-class="close"
-data-dismiss="modal"
-aria-label="Close"
->
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
 </div>
@@ -324,378 +360,440 @@ aria-label="Close"
 <form id="profileForm">
 <div class="form-group">
 <label for="profileFirstName">First Name</label>
-<input
-type="text"
-class="form-control"
-id="profileFirstName"
-readonly
-/>
+<input type="text" class="form-control" id="profileFirstName" readonly>
 </div>
 <div class="form-group">
 <label for="profileLastName">Last Name</label>
-<input
-type="text"
-class="form-control"
-id="profileLastName"
-readonly
-/>
+<input type="text" class="form-control" id="profileLastName" readonly>
 </div>
 <div class="form-group">
 <label for="profileEmail">Email</label>
-<input
-type="email"
-class="form-control"
-id="profileEmail"
-readonly
-/>
+<input type="email" class="form-control" id="profileEmail" readonly>
 </div>
 <div class="form-group">
 <label for="profileRole">Role</label>
-<input
-type="text"
-class="form-control"
-id="profileRole"
-readonly
-/>
+<input type="text" class="form-control" id="profileRole" readonly>
 </div>
 </form>
 </div>
 <div class="modal-footer">
-<button
-type="button"
-class="btn btn-secondary close"
-data-dismiss="modal"
->
-Close
-</button>
+<button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
 </div>
 </div>
 </div>
 </div>
 
 <script>
+// var data = response.data;
+
+// Filter out orders with status "Customer approved" or "Placed"
+
+// var filteredData = data.filter(item => item.orderStatus !== "Customer approved" && item.orderStatus !== "Placed");
+// filteredData = sortOrdersByOrderNoDesc(filteredData);
+
 $(document).ready(async function () {
-let currentSort = {
-column: "",
-order: "asc" // ascending by default
+    // Pagination related variables
+    let allOrders = [];
+    const rowsPerPage = 25;
+    let currentPage = 1;
+  
+    // Sorting Order Object
+    var team, role;
+    let sortOrder = {
+      orderDate: "asc",
+      orderNo: "asc",
+      agentName: "asc",
+      customerName: "asc",
+      partName: "asc",
+      yard: "asc",
+      orderStatus: "asc",
+      email: "asc",
+    };
+  
+    function parseCustomDate(dateString) {
+const months = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+Nov: "11", Dec: "12"
 };
 
-function sortTable(column, order, isDateColumn, isYardColumn) {
-const tbody = $("#yardInfoTable");
-const rows = tbody.find("tr").toArray();
+// Extract parts from the string (day, month, year, time)
+const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
 
-rows.sort(function (a, b) {
-let cellA = $(a).find("td").eq(column).text().trim();
-let cellB = $(b).find("td").eq(column).text().trim();
+if (parts) {
+const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
+const month = months[parts[2]];
+const year = parts[3];
+const hour = parts[4];
+const minute = parts[5];
 
-if (isDateColumn) {
-// Convert date strings into Date objects for sorting
-cellA = new Date(cellA);
-cellB = new Date(cellB);
-return order === "asc" ? cellA - cellB : cellB - cellA;
-} else if (isYardColumn) {
-// Sort Yard columns alphabetically
-return order === "asc" 
-? cellA.localeCompare(cellB) 
-: cellB.localeCompare(cellA);
+// Return a valid date string for comparison
+return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+}
+
+return null;
+}
+function sortTable(column, type) {
+const table = $("#infoTable");
+const rows = table.find("tr").toArray();
+
+rows.sort((a, b) => {
+let valA = $(a).find("td").eq(column).text().trim();
+let valB = $(b).find("td").eq(column).text().trim();
+
+if (type === "date") {
+valA = parseCustomDate(valA); // Use the helper function to parse the date
+valB = parseCustomDate(valB);
+}else if (type === "number") {
+valA = parseInt(valA.replace(/\D/g, ""), 10);
+valB = parseInt(valB.replace(/\D/g, ""), 10);
+}
+
+if (sortOrder[type] === "asc") {
+return valA > valB ? 1 : -1;
 } else {
-// General string comparison for other columns
-return order === "asc"
-? cellA.localeCompare(cellB)
-: cellB.localeCompare(cellA);
+return valA < valB ? 1 : -1;
 }
 });
 
-// Append sorted rows back to the table body
 $.each(rows, function (index, row) {
-tbody.append(row);
+table.append(row);
+});
+
+// Toggle sort order
+sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+
+// Update the sort icon
+updateSortIcons(column, sortOrder[type]);
+}
+
+function updateSortIcons(columnIndex, order) {
+$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$("th").each(function (index) {
+if (index === columnIndex) {
+$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+}
 });
 }
 
-// Click event for sorting the Order Date column
-$(document).on("click", ".onlyNumber", function () {
-const column = $(this).closest("th").index();
-const sortBy = $(this).closest("th").data("sort");
+// Event listeners for sorting
+$("th").each(function (index) {
+const th = $(this);
+let type = th.text().trim().toLowerCase().replace(/\s/g, "");
 
-// Determine if the column is a date column
-const isDateColumn = sortBy === "orderDate";
-const isYardColumn = sortBy.startsWith("yard");
-
-// Toggle the sort order
-currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-currentSort.column = sortBy;
-
-sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-
-// Update sort icon
-$(".onlyNumber").html("&#9650;"); // Reset all icons to ascending
-$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+if (type === "orderdate") {
+th.on("click", function () {
+sortTable(index, "date");
 });
-
-// Click event for sorting Yard columns
-$(document).on("click", ".fYardName", function () {
-const column = $(this).closest("th").index();
-const sortBy = $(this).closest("th").data("sort");
-
-// Determine if the column is a Yard column
-const isYardColumn = sortBy.startsWith("yard");
-
-// Toggle the sort order
-currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-currentSort.column = sortBy;
-
-sortTable(column, currentSort.order, false, isYardColumn);
-
-// Update sort icon
-$(".fYardName").html("&#9650;"); // Reset all icons to ascending
-$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+} else if (type === "orderno") {
+th.on("click", function () {
+sortTable(index, "number");
 });
-
-// Click event for sorting any sortable column
-$(document).on("click", "th[data-sort], th[data-sort] .sort-icon", function (event) {
-const $target = $(event.target);
-const $th = $target.closest("th");
-const column = $th.index();
-const sortBy = $th.data("sort");
-
-// Determine if the column is a date column or a yard column
-const isDateColumn = sortBy === "orderDate";
-const isYardColumn = sortBy.startsWith("yard");
-
-// Toggle the sort order
-currentSort.order = currentSort.column === sortBy && currentSort.order === "asc" ? "desc" : "asc";
-currentSort.column = sortBy;
-
-sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-
-// Update sort icon
-$("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
-$th.find(".sort-icon").html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-});
-
-// Get the current time and the login timestamp
-const currentTime = Date.now();
-const loginTimestamp = localStorage.getItem("loginTimestamp");
-if (loginTimestamp) {
-const timeDifference =
-(currentTime - loginTimestamp) / (1000 * 60 * 60);
-if (timeDifference >= 12) {
-alert(
-"Your session has expired. You will be redirected to the login page."
-);
-window.localStorage.clear(); 
-window.location.href = "login_signup.html";
-}
 } else {
-window.location.href = "login_signup.html";
+th.on("click", function () {
+sortTable(index, type);
+});
 }
-const firstName = localStorage.getItem("firstName");
-const lastName = localStorage.getItem("lastName");
-const role = localStorage.getItem("role");
-const email = localStorage.getItem("email");
-const team = localStorage.getItem("team");
+});
+  
+    // Function to render rows based on the page
+    function renderTableRows(page, orders = allOrders) {
+  // Filter orders where the status is not "Placed" or "Customer approved"
+  const filteredOrders = orders.filter(item => item.orderStatus === "Yard Processing");
 
-if (firstName) {
-$("#user-name").text(firstName);
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
+
+  $('#infoTable').empty(); // Clear the table
+
+  if (ordersForPage.length === 0) {
+    $('#infoTable').append('<tr><td colspan="11">No orders to display</td></tr>'); // If no orders, show a message
+  }
+
+  // Iterate over filtered and paginated orders
+  ordersForPage.forEach((item) => {
+    const escalationStatus = item.additionalInfo &&
+      item.additionalInfo[0] &&
+      item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+
+    let escalationStyle = '';
+    if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+      escalationStyle = 'style="background-color: lightgreen;"';
+    }
+
+    team = localStorage.getItem('team');
+
+    const editButton = (team === "Team Mark" || team === "Team Sussane")
+      ? "" // Hide the edit button
+      : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
+    const actions = `
+      ${editButton}
+      <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+      <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
+    `;
+
+    const sendInvoice = `
+      <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+    `;
+
+    const yardlength = item.additionalInfo.length;
+
+    $("#infoTable").append(`
+      <tr>
+        <td>${item.orderDate}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
+        <td>${item.customerName}</td>
+        <td>${item.pReq || item.partName}</td>
+        <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+        <td>${item.orderStatus}</td>
+        <td ${escalationStyle}>${escalationStatus}</td>
+        <td class="actions">${actions}</td>
+        <td>${sendInvoice}</td>
+        <td>${item.email}</td>
+      </tr>
+    `);
+  });
 }
-if (!firstName) {
-window.location.href = "login_signup.html";
-}
-const token = localStorage.getItem("token");
 
-// Apply team-based and role-based restrictions
-if (team === "Team Charlie") {
-// Hide specific reports links for Team Charlie
-$("#submenu-reports .nav-link")
-.not(':contains("My Sales Report")')
-.hide();
-// Hide specific dashboards links for Team Charlie
-$(
-"#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
-).hide();
-// Hide teams and users sections for Team Charlie
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-} else if (team === "Team Mark") {
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-$(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
-).hide();
-} else if (team === "Team Sussane") {
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$(".nav-item:has(#submenu-teams)").hide();
-$(".nav-item:has(#submenu-users)").hide();
-$(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
-).hide();
-} else if (role === "Admin") {
-// Hide specific reports links for Admin
-$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
-$('#submenu-reports .nav-link:contains("Refund Report")').show();
-$('#submenu-reports .nav-link:contains("Collect Refund")').show();
-// Hide specific dashboards links for Admin
-$("#submenu-dashboards .view-individualOrders-link").hide();
+
+  var firstname = localStorage.getItem("firstName");
+  if (firstName) {
+        $("#user-name").text(firstName);
+      }
+      if (!firstName) {
+        window.location.href = "login_signup.html";
+      }
+    // Function to create pagination controls
+    function createPaginationControls(totalPages, orders = allOrders) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty(); // Clear pagination controls
+  
+  if (totalPages > 1) {
+    paginationControls.append(`<button class="previousNexts" id="prevPage" ${currentPage === 1 ? 'disabled' : ''} style="background-color: black;
+color: white;
+border: none;
+padding: 10px;
+border-radius: 10px;
+text-align: center;">Previous</button>`);
+    
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(`<button class="pageNo btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}" style="background-color: white;
+color: black;
+border: none;">${i}</button>`);
+    }
+    
+    paginationControls.append(`<button class="previousNexts" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''} style="background-color: black;
+color: white;
+border: none;
+padding: 10px;
+border-radius: 10px;
+text-align: center;">Next</button>`);
+  }
 }
 
-// Toggle sidebar visibility on smaller screens
-$(".toggle-sidebar").on("click", function () {
-$("#offcanvasSidebar").toggleClass("show");
+  
+    // Event listener for pagination buttons
+    $('#pagination-controls').on('click', '.page-btn', function () {
+      const page = $(this).data('page');
+      currentPage = page;
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    });
+  
+    // "Previous" and "Next" button functionality
+    $('#pagination-controls').on('click', '#prevPage', function () {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTableRows(currentPage);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+      }
+    });
+  
+    $('#pagination-controls').on('click', '#nextPage', function () {
+      const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTableRows(currentPage);
+        createPaginationControls(totalPages);
+      }
+    });
+  
+    // Token fetching logic
+    async function fetchToken() {
+      try {
+        const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
+        if (response.status === 200) {
+          localStorage.setItem("token", response.data.token);
+        } else {
+          throw new Error("Failed to fetch token");
+        }
+      } catch (error) {
+        console.error("Error fetching token:", error);
+      }
+    }
+  
+    let token = localStorage.getItem("token");
+    if (!token) {
+      await fetchToken();
+      token = localStorage.getItem("token");
+    }
+  
+    // Fetch orders and apply pagination
+    try {
+      const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+        axios.get("https://www.spotops360.com/orders", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }),
+        axios.get("https://www.spotops360.com/cancelledOrders", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }),
+      ]);
+  
+      if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+        throw new Error("Failed to fetch orders");
+      }
+  
+      var orders = ordersResponse.data;
+      
+      var cancelledOrders = cancelledOrdersResponse.data;
+      allOrders = [...orders, ...cancelledOrders];
+  
+      // Sort and render the orders
+      allOrders = sortOrdersByOrderNoDesc(allOrders);
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  
+  
+    // Filtering functionality
+    // $("#searchInput").on("keyup", function () {
+    //   const value = $(this).val().toLowerCase();
+    //   $("#infoTable tr").filter(function () {
+    //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    //   });
+    // });
+
+    // Filtering functionality for  the search bar
+    $("#searchInput").on("keyup", function () {
+  const value = $(this).val().toLowerCase();
+
+  // Filter the entire allOrders dataset based on the search term
+  const filteredOrders = allOrders.filter(order => {
+    return (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
+    );
+  });
+
+  // If a search is active, display the filtered results, otherwise reset to the full dataset
+  if (filteredOrders.length > 0 || value === "") {
+    renderTableRows(1, filteredOrders); // Render the first page of filtered results
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  } else {
+    $("#infoTable").empty(); // Clear the table if no results are found
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+  }
 });
 
-$(".nav-link").on("click", function () {
-$(".nav-link").removeClass("active selected");
-$(this).addClass("selected");
-
-const contentMap = {
-"default-link": "#default-content",
-"add-order-link": "#add-order-content",
-"view-order-link": "#view-order-content",
-};
-
-$(".main-content > div").addClass("d-none");
-$(contentMap[this.id]).removeClass("d-none");
-$("#offcanvasSidebar").removeClass("show");
+  
+    // Sort orders by Order No in descending order
+    function sortOrdersByOrderNoDesc(orders) {
+      return orders.sort((a, b) => {
+        const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+        const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+        return orderNoB - orderNoA;
+      });
+    }
+    $("#infoTable").on("click", ".edit-btn", function () {
+const id = $(this).data("id");
+window.location.href = `form.html?orderNo=${id}`;
 });
 
-$(".chevron-icon, .nav-link").on("click", function (event) {
-event.stopPropagation();
-const submenu = $(this).closest(".nav-item").find(".submenu");
-submenu.toggle();
-$(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
-$(this).closest(".nav-link").toggleClass("selected");
+$("#infoTable").on("click", ".process-btn", function () {
+const id = $(this).data("id");
+window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-$("#profileLink").click(function () {
-$("#profileFirstName").val(firstName);
-$("#profileLastName").val(lastName);
-$("#profileEmail").val(email);
-$("#profileRole").val(role);
-$("#profileModal").modal("show");
+$("#infoTable").on("click", ".cancel-btn", function () {
+  const id = $(this).data("id");
+  console.log(`Cancel button clicked for order ID: ${id}`); // Added log
+
+  if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+    // Change the order status to "Order Cancelled" in the HTML
+    $(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
+
+    // Optionally, disable the cancel button
+    $(this).prop("disabled", true);
+
+    // Send a request to update the order status in the backend
+    fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        firstName: firstName
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        console.error("Failed to update order status", response);
+        throw new Error("Failed to update order status");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Order status updated successfully", data); // Added log
+      alert("Order status updated to 'Order Cancelled'");
+    })
+    .catch(error => {
+      console.error("Error updating order status:", error);
+    });
+  }
 });
 
-$(".close").click(function () {
-console.log("close button clicked");
-location.reload();
-});
 
-$("#searchInput").on("keyup", function () {
-let value = $(this).val().toLowerCase();
-$("#yardInfoTable tr").filter(function () {
-$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+$("#infoTable").on("click", ".send-invoice-btn", function () {
+const id = $(this).data("id");
+fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
+method: "POST",
+headers: {
+Authorization: `Bearer ${token}`
+},
+})
+.then((response) => response.json())
+.then((data) => {
+alert(data.message);
+})
+.catch((error) => {
+console.error("Error:", error);
 });
 });
-
-
-$('#logoutLink').on('click', function() {
-window.localStorage.clear();
-window.location.href = 'login_signup.html';
-});
-
-// Highlight active link based on current URL
-const currentPath = window.location.pathname;
+const currentPath = window.location.pathname + "?newEntry=true";
+console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
-
-try {
-const response = await axios.get("https://www.spotops360.com/yardInfo", {
-headers: { Authorization: `Bearer ${token}` },
-});
-
-if (response.status !== 200) {
-throw new Error("Failed to fetch yard information");
-}
-
-var data = response.data;
-
-// Determine the maximum number of yards
-let maxYards = 0;
-data = sortOrdersByOrderNoDesc(data);
-data.forEach((item) => {
-if (item.additionalInfo.length > maxYards) {
-maxYards = item.additionalInfo.length;
-}
-});
-
-// Update the table header to include the correct number of Yard columns
-const tableHeader = $("#tableHeader");
-for (let i = 1; i <= maxYards; i++) {
-tableHeader.append(`<th style="cursor:pointer;" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`);
-}
-
-// Append the yard information to the table body
-data.forEach((item) => {
-if (item.additionalInfo.length > 0) {
-let yardInfoHtml = "";
-for (let i = 0; i < maxYards; i++) {
-if (item.additionalInfo[i]) {
-const paymentStatus =
-item.additionalInfo[i].paymentStatus === "Card charged"
-? `<span class="highlight-red-button">${item.additionalInfo[i].paymentStatus}</span>`
-: item.additionalInfo[i].paymentStatus;
-
-const yardInfo = [
-item.additionalInfo[i].yardName || "",
-item.additionalInfo[i].address || "",
-item.additionalInfo[i].phone || "",
-]
-.filter(Boolean)
-.join(" | ");
-
-const contactInfo = [
-item.additionalInfo[i].email || "",
-item.additionalInfo[i].agentName || "",
-item.additionalInfo[i].partPrice || "",
-item.additionalInfo[i].shippingMethod || "",
-item.additionalInfo[i].shippingDetails
-? `(${item.additionalInfo[i].shippingDetails})`
-: "",
-]
-.filter(Boolean)
-.join(" | ");
-
-const statusInfo = [
-item.additionalInfo[i].status || "",
-paymentStatus,
-item.additionalInfo[i].paymentDetails || "",
-item.additionalInfo[i].trackingNo || "",
-item.additionalInfo[i].shipperName || "",
-]
-.filter(Boolean)
-.join(" | ");
-
-yardInfoHtml += `<td>${yardInfo}<br>${contactInfo}<br>${statusInfo}</td>`;
-} else {
-yardInfoHtml += "<td></td>";
-}
-}
-
-$("#yardInfoTable").append(
-`<tr>
-<td>${item.orderNo}</td>
-<td>${item.customerName}</td>
-${yardInfoHtml}
-</tr>`
-);
-}
-});
-} catch (error) {
-console.error("Error fetching yard information:", error);
-alert("Error fetching yard information: " + error.message);
-}
-});
-function sortOrdersByOrderNoDesc(orders) {
-console.log("sort in ascending order initially")  
-return orders.sort((a, b) => {
-const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
-const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
-return orderNoB - orderNoA;
-});
-}
+    $("#logoutLink").click(function () {
+      window.localStorage.clear();
+      window.location.href = "login_signup.html";
+    });
+  });
 </script>
 </body>
 </html>
