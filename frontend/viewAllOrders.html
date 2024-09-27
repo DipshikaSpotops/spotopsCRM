@@ -548,7 +548,7 @@ sortTable(index, type);
       escalationStyle = 'style="background-color: lightgreen;"';
     }
     team = localStorage.getItem('team');
-    console.log("team",team);
+    // console.log("team",team);
     const editButton = (team === "Team Mark" || team === "Team Sussane")
         ? "" // Hide the edit button
         : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
