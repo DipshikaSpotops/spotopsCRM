@@ -502,7 +502,7 @@ sortTable(index, type);
     // Function to render rows based on the page
     function renderTableRows(page, orders = allOrders) {
   // Filter orders where the status is not "Placed" or "Customer approved"
-  const filteredOrders = orders.filter(item => item.orderStatus === "Order Cancelled");
+  const filteredOrders = orders.filter(item => item.orderStatus === "Order Fulfilled");
 
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
