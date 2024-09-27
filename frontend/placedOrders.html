@@ -692,30 +692,30 @@ console.error("Error fetching orders:", error);
 }
 
 $("#infoTable").on("click", ".approve-btn", async function () {
-    const orderNoRow = $(this).data("id");
-    currentOrderNo = orderNoRow;    
+const orderNoRow = $(this).data("id");
+currentOrderNo = orderNoRow;    
 
 $("#myModal").modal("show");
 
 // On click of the OK button, reload the window
 $("#okButton").click(function () {
-    $("#myModal").hide();
+$("#myModal").hide();
 window.location.reload();
 });
 // $("#okButton").click(function () {
 //     // Hide the modal using Bootstrap's modal hide method
 //     $('#myModal').modal('hide');
-    
+
 //     // Manually remove the modal backdrop after the modal is hidden
 //     $('.modal-backdrop').remove();
-    
+
 //     // Optionally: remove 'modal-open' class from body to stop body scrolling
 //     $('body').removeClass('modal-open');
 //     console.log("currentOrderNo",currentOrderNo);
 //     // Find the row related to the currentOrderNo and remove the entire row
 //     const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
 //     console.log("orderRow to be removed:", orderRow);
-    
+
 //     // Remove the entire row from the table
 //     if (orderRow.length) {
 //         orderRow.remove(); // This should remove the entire row
@@ -723,7 +723,7 @@ window.location.reload();
 //     } else {
 //         console.error("Error: Row not found for the given order.");
 //     }
-    
+
 //     // Stop body from being unclickable due to backdrop
 //     $('body').css('overflow', 'auto');
 // });
@@ -777,36 +777,40 @@ console.error("Error updating order status:", error);
 }
 });
 $("#infoTable").on("click", ".cancel-btn", function () {
-const orderNo = $(this).data("id");
-const cancelButton = $(this); // Store reference to the clicked button
+const id = $(this).data("id");
+console.log(`Cancel button clicked for order ID: ${id}`); // Added log
 
-if (confirm(`Are you sure you want to cancel order ${orderNo}?`)) {
-const cancelData = { orderStatus: "Cancelled" }; // Data to update the order status
+if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+// Change the order status to "Order Cancelled" in the HTML
+$(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
 
-fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-method: "DELETE",
+// Optionally, disable the cancel button
+$(this).prop("disabled", true);
+
+// Send a request to update the order status in the backend
+fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
+method: "PUT",
 headers: {
-"Content-Type": "application/json",
 Authorization: `Bearer ${token}`,
+"Content-Type": "application/json"
 },
-body: JSON.stringify(cancelData),
+body: JSON.stringify({
+firstName: firstName
+})
 })
 .then(response => {
 if (!response.ok) {
-throw new Error('Failed to cancel the order');
+console.error("Failed to update order status", response);
+throw new Error("Failed to update order status");
 }
 return response.json();
 })
 .then(data => {
-alert('Order cancelled successfully');
-// Update the status in the table and disable the button
-cancelButton.closest('tr').find('td:eq(6)').text("Cancelled");
-cancelButton.prop('disabled', true);
-window.location.reload();
+console.log("Order status updated successfully", data); // Added log
+alert("Order status updated to 'Order Cancelled'");
 })
 .catch(error => {
-console.error('Error:', error);
-alert(`Error cancelling order: ${error.message}`);
+console.error("Error updating order status:", error);
 });
 }
 });
