@@ -566,31 +566,44 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
 $("#infoTable").on("click", ".cancel-btn", function () {
-const id = $(this).data("id");
-console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-fetch(`https://www.spotops360.com/orders/${id}?firstName=${firstName}`, {
-method: "DELETE",
-headers: {
-Authorization: `Bearer ${token}`
-},
-})
-.then((response) => {
-if (!response.ok) {
-console.error("Failed to delete order", response);
-throw new Error("Failed to delete order");
-}
-return response.json();
-})
-.then((data) => {
-console.log("Order cancelled successfully", data); // Added log
-window.location.reload();
-})
-.catch((error) => {
-console.error("Error cancelling order:", error);
+  const id = $(this).data("id");
+  console.log(`Cancel button clicked for order ID: ${id}`); // Added log
+
+  if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+    // Change the order status to "Order Cancelled" in the HTML
+    $(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
+
+    // Optionally, disable the cancel button
+    $(this).prop("disabled", true);
+
+    // Send a request to update the order status in the backend
+    fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        firstName: firstName
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        console.error("Failed to update order status", response);
+        throw new Error("Failed to update order status");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Order status updated successfully", data); // Added log
+      alert("Order status updated to 'Order Cancelled'");
+    })
+    .catch(error => {
+      console.error("Error updating order status:", error);
+    });
+  }
 });
-}
-});
+
 
 $("#infoTable").on("click", ".send-invoice-btn", function () {
 const id = $(this).data("id");
