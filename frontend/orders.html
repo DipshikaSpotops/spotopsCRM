@@ -561,13 +561,25 @@ sortTable(index, type);
   paginationControls.empty(); // Clear pagination controls
   
   if (totalPages > 1) {
-    paginationControls.append(`<button class="previousNexts" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+    paginationControls.append(`<button class="previousNexts" id="prevPage" ${currentPage === 1 ? 'disabled' : ''} style="background-color: black;
+color: white;
+border: none;
+padding: 10px;
+border-radius: 10px;
+text-align: center;">Previous</button>`);
     
     for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(`<button class="pageNo btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
+      paginationControls.append(`<button class="pageNo btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}" style="background-color: white;
+color: black;
+border: none;">${i}</button>`);
     }
     
-    paginationControls.append(`<button class="previousNexts" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    paginationControls.append(`<button class="previousNexts" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''} style="background-color: black;
+color: white;
+border: none;
+padding: 10px;
+border-radius: 10px;
+text-align: center;">Next</button>`);
   }
 }
 
