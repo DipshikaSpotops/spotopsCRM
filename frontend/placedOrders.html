@@ -777,38 +777,38 @@ console.error("Error updating order status:", error);
 }
 });
 $("#infoTable").on("click", ".cancel-btn", function () {
-    const id = $(this).data("id");
+const id = $(this).data("id");
 
-    if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-        // Send a request to update the order status in the backend
-        fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                firstName: firstName
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                console.error("Failed to update order status", response);
-                throw new Error("Failed to update order status");
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Order status updated successfully", data);
-            alert("Order status updated to 'Order Cancelled'");
+if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+// Send a request to update the order status in the backend
+fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
+method: "PUT",
+headers: {
+Authorization: `Bearer ${token}`,
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+firstName: firstName
+})
+})
+.then(response => {
+if (!response.ok) {
+console.error("Failed to update order status", response);
+throw new Error("Failed to update order status");
+}
+return response.json();
+})
+.then(data => {
+console.log("Order status updated successfully", data);
+alert("Order status updated to 'Order Cancelled'");
 
-            // Remove the entire row from the table
-            $(this).closest("tr").remove();
-        })
-        .catch(error => {
-            console.error("Error updating order status:", error);
-        });
-    }
+// Remove the entire row from the table
+$(this).closest("tr").remove();
+})
+.catch(error => {
+console.error("Error updating order status:", error);
+});
+}
 });
 
 // Sorting orders by orderNo in descending order
