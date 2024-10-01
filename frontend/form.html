@@ -1515,10 +1515,10 @@ border: 1px solid #d9d4d4;
 height: 4vh;
 ">
 <option value="">Choose</option>
-<option value="RMA Sent">Under Progress</option>
 <option value="Replacement">Replacement</option>
 <!-- <option value="Return tracking sent">Return Tracking Sent</option> -->
 <option value="Return">Return</option>
+<option value="Junk">Junk</option>
 </select>
 </div>
 
@@ -3063,6 +3063,13 @@ $('#yardInfoContainer').on('click', '.refundCollect', function () {
 selectedYardIndex = $(this).data('yard-index');
 console.log("refund collected part",selectedYardIndex);
 $("#refundCollect").fadeIn(); 
+$(".mainDiv").addClass("blur");
+});
+// for esc part in yard
+$('#yardInfoContainer').on('click', '.escalation', function () {
+selectedYardIndex = $(this).data('yard-index');
+console.log("refund collected part",selectedYardIndex);
+$("#escRMA").fadeIn(); 
 $(".mainDiv").addClass("blur");
 });
 
