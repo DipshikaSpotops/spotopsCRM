@@ -3065,14 +3065,10 @@ $(".mainDiv").addClass("blur");
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', function () {
 selectedYardIndex = $(this).data('yard-index');
-console.log("refund collected part", selectedYardIndex);
+console.log("escalationPart", selectedYardIndex);
 $("#escRMA").fadeIn();
 $(".mainDiv").addClass("blur");
 });
-
-
-
-
 
 $("#closeCardCharged").on("click", function () {
 $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
