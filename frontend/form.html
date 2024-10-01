@@ -4386,13 +4386,12 @@ window.location.reload();
   // On change of the Escalation Process dropdown
   $('#escProcess').on('change', function () {
     const selectedValue = $(this).val();
-    console.log("value",selectedValue);
+    console.log("r/r value",selectedValue);
     if (selectedValue === 'Replacement') {
       $('#replacementColumns').fadeIn();
       $('#partFromCustomer').fadeIn();  
       $('#partFromYard').fadeIn();    
-    }
-     else {
+    } else {
       $('#replacementColumns').fadeOut(); 
       $('#partFromCustomer').fadeOut();
       $('#partFromYard').fadeOut();
