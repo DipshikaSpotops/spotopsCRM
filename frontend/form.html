@@ -1979,12 +1979,18 @@ aria-label="Close"
 
 <!-- First Column (Part from Customer) -->
 <div id="partFromCustomer" class="replacement-column">
-<h4>Part from Customer</h4>
+    <div style="display: flex;">    
+        <div><h4>Part from Customer:</h4></div>
+        <div><select id="yardShippingStatus" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin:0%  10%;">
+            <option value="">Reason</option>
+            <option value="Junked">Junked</option>
+<option value="Return">Return</option>
+            </select>
+        </div>
+        </div>
 <label>Shipping Method:</label>
 <select id="customerShippingMethod" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
-<option value="Junked">Junked</option>
-<option value="Return">Return</option>
 <option value="Customer shipping">Customer shipping</option>
 <option value="Yard shipping">Yard shipping</option>
 <option value="Own shipping">Own shipping</option>
@@ -2012,9 +2018,9 @@ aria-label="Close"
 <!-- Second Column (Part from Yard) -->
 <div id="partFromYard" class="replacement-column">
 <div style="display: flex;">    
-<div><h4>Part from Yard</h4></div>
-<div><select id="yardShippingStatus" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
-    <option value="">Choose</option>
+<div><h4>Part from Yard:</h4></div>
+<div><select id="yardShippingStatus" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin:0%  10%;">
+    <option value="">Shipping Method</option>
     <option value="Ready to ship">Ready to ship</option>
     <option value="In transit">In transit</option>
     <option value="Delivered">Delivered</option>
@@ -2024,8 +2030,6 @@ aria-label="Close"
 <label>Shipping Method:</label>
 <select id="customerShippingMethod" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
-<option value="Junked">Junked</option>
-<option value="Return">Return</option>
 <option value="Customer shipping">Customer shipping</option>
 <option value="Yard shipping">Yard shipping</option>
 <option value="Own shipping">Own shipping</option>
