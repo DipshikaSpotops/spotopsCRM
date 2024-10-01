@@ -1518,7 +1518,7 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
 </div>
 
 <!-- // escalation part for yard status ends here -->
-<!-- Escalation Process Dropdown -->
+<!-- esc part for yard button -->
 <div id="escRMA">
     <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
     <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
@@ -1529,11 +1529,11 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
     </select>
   </div>
   
-  <!-- Columns for Part from Customer and Part from Yard, hidden by default -->
-  <div id="replacementColumns" style="display: none; margin-top: 20px;">
+  <!-- Replacement Columns (Hidden by default) -->
+  <div id="replacementColumns" style="display: none;">
   
-    <!-- Part from Customer Column -->
-    <div id="partFromCustomer" style="float: left; width: 48%;">
+    <!-- First Column (Part from Customer) -->
+    <div id="partFromCustomer">
       <h4>Part from Customer</h4>
       <label>Shipping Method:</label>
       <select id="customerShippingMethod">
@@ -1564,11 +1564,11 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
       <input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
     </div>
   
-    <!-- Part from Yard Column -->
-    <div id="partFromYard" style="float: right; width: 48%;">
+    <!-- Second Column (Part from Yard) -->
+    <div id="partFromYard">
       <h4>Part from Yard</h4>
-      <label>Part Status:</label>
-      <select id="yardPartStatus">
+      <label>Shipping Status:</label>
+      <select id="yardShippingStatus">
         <option value="">Choose</option>
         <option value="Ready to ship">Ready to ship</option>
         <option value="In transit">In transit</option>
@@ -1601,7 +1601,6 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
       <label>Tracking Number:</label>
       <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
     </div>
-  
   </div>  
 <!-- esc part for yard button ends here  -->
 
@@ -4383,18 +4382,14 @@ $("#okButton").click(function () {
 window.location.reload();
 });
 
-  // On change of the Escalation Process dropdown
-  $('#escProcess').on('change', function () {
+// script for escalation button on yards
+$('#escProcess').on('change', function () {
     const selectedValue = $(this).val();
-    console.log("r/r value",selectedValue);
+
     if (selectedValue === 'Replacement') {
-      $('#replacementColumns').fadeIn();
-      $('#partFromCustomer').fadeIn();  
-      $('#partFromYard').fadeIn();    
+      $('#replacementColumns').fadeIn(); 
     } else {
       $('#replacementColumns').fadeOut(); 
-      $('#partFromCustomer').fadeOut();
-      $('#partFromYard').fadeOut();
     }
   });
 
@@ -4416,14 +4411,18 @@ window.location.reload();
     }
   });
 
-  // Change yardStatus when 'Delivered' is selected for Part from Yard
-  $('#yardPartStatus').on('change', function () {
+  // Change yard status to "Part Delivered" when "Delivered" is selected
+  $('#yardShippingStatus').on('change', function () {
     if ($(this).val() === 'Delivered') {
-      $('#yardStatus').text('Part delivered');
-    } else {
-      $('#yardStatus').text('');
+      alert('Yard Status: Part Delivered');
     }
   });
+
+
+
+
+
+
 });
 </script>
 </body>   
