@@ -3318,7 +3318,7 @@ if (!orderData || !orderData.additionalInfo) {
 response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
 orderData = await response.json();
 }
-
+let escCause = "";
 const currentYardData = orderData.additionalInfo[yardIndex - 1];
 const status = $("#refund").val();
 const returnCharges = $(".returnShipment").val();
@@ -3338,7 +3338,7 @@ newOrderStatus = "In Transit";
 newOrderStatus = "PO confirmed";
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
-const escCause = $("#esc").val();
+escCause = $("#esc").val();
 console.log("escCause",escCause);
 const now = new Date();
 const options = {
