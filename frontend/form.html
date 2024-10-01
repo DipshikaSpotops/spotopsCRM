@@ -3329,7 +3329,8 @@ $("#editYardInfo").on("click", async function () {
         const returnShippingMethod = $("input[name='returnValue']:checked").val();
         const paymentStatus = $('.paymentStatus').val();
         const refundedAmount = $("#refundedAmount").val();
-
+        const escCause = $("#esc").val();
+        console.log("escCause",escCause);
         let newOrderStatus = $("#orderStatus").val();
 
         // Updating the order status with shipping and refund information
@@ -3359,7 +3360,8 @@ $("#editYardInfo").on("click", async function () {
             returnShippingCharge: returnCharges,
             orderStatus: newOrderStatus,  // Updated order status
             shippingMethod: returnShippingMethod,
-            shippingPrice: returnCharges
+            shippingPrice: returnCharges,
+            escalationCause: escCause
         };
 
         // Send the updated data to the server
