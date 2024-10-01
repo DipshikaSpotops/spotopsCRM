@@ -1516,105 +1516,6 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
 <option value="Not programming">Not programming</option>
 </select>
 </div>
-
-<!-- // escalation part for yard status ends here -->
-<!-- esc part for yard button -->
-<div id="escRMA">
-<label for="reason" style="white-space: nowrap;">Escalation Process:</label>
-<select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
-<option value="">Choose</option>
-<option value="Replacement">Replacement</option>
-<option value="Return">Return</option>
-<option value="Junk">Junk</option>
-</select>
-</div>
-  
-
-<div id="shipping_own_cust">
-<div class="form-group">
-<div class="form-row">
-<div class="col-md-6">
-<label class="radio-inline">
-<input type="radio" name="returnValue" value="Our shipping" />
-Our Shipping
-</label>
-<input
-type="number"
-class="returnShipment"
-id="ourShippingInput"
-placeholder="Our Shipping Price"
-/>
-</div>
-<div class="col-md-6">
-<label class="radio-inline">
-<input
-type="radio"
-value="Customer shipping"
-name="returnValue"
-/>
-Customer Shipping
-</label>
-<input
-type="number"
-class="returnShipment"
-value="0"
-id="customerShippingInput"
-placeholder="Customer Shipping Price"
-/>
-</div>
-</div>
-</div>
-</div>
-<!--escalation return div -->
-<div class="escalationReturn" style="display: none;">
-<div id="rma-status-group">
-<label for="rma-status">RMA Status:</label>
-<div class="checkbox-group">
-<div>
-<input value="RMA Sent" type="checkbox" id="rma-sent" name="rma-status">
-<label for="rma-sent">RMA Sent</label>
-</div>
-<div>
-<input value="Junked" type="checkbox" id="junked" name="rma-status">
-<label for="junked">Junked</label>
-</div>
-</div>
-</div>   
-
-<div>
-<label for="shipping-type">Shipping Type:</label>
-<select id="customer" name="customer" class="form-control">
-<option value="Customer shipping">Customer</option>
-<option value="Return- Yard shipping">Yard Shipping</option>
-<option value="Return- Own shipping">Own Shipping</option>
-</select>
-</div>
-
-<div id="shipping-charges-container" style="display: none;">
-<label for="shipping-charges">Shipping Charges</label>
-<input type="number" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
-</div>
-</div>
-
-<!-- escalation replacement div -->
-<div class="escalationReplacement" style="display: none;">
-<div>
-<label for="shipping-type">Shipping Type:</label>
-<select id="replacement-customer" name="customer" class="form-control">
-<option value="Customer shipping">Customer</option>
-<option value="Replacement- Yard shipping">Yard Shipping</option>
-<option value="Replacement- Own shipping">Own Shipping</option>
-</select>
-</div>
-
-<div id="replacement-shipping-charges-container" style="display: none;">
-<label for="shipping-charges">Shipping Charges</label>
-<input type="number" id="replacement-shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
-</div>
-</div>
-<!-- escalation replacement div ends here -->
-<!-- esc part for yard button ends here  -->
-
 <div class="inputForCust"></div>
 <div class="form-group" id="divTrackingEdit">
 <label>Tracking Information:</label>
@@ -2028,7 +1929,105 @@ style="display: none;"
 OK
 </button>
 </div>
-
+<!-- Escalation modal for yard in button click -->
+ <!-- // escalation part for yard status ends here -->
+<!-- esc part for yard button -->
+<div id="escRMA">
+    <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
+    <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
+    <option value="">Choose</option>
+    <option value="Replacement">Replacement</option>
+    <option value="Return">Return</option>
+    <option value="Junk">Junk</option>
+    </select>
+    </div>
+      
+    
+    <div id="shipping_own_cust">
+    <div class="form-group">
+    <div class="form-row">
+    <div class="col-md-6">
+    <label class="radio-inline">
+    <input type="radio" name="returnValue" value="Our shipping" />
+    Our Shipping
+    </label>
+    <input
+    type="number"
+    class="returnShipment"
+    id="ourShippingInput"
+    placeholder="Our Shipping Price"
+    />
+    </div>
+    <div class="col-md-6">
+    <label class="radio-inline">
+    <input
+    type="radio"
+    value="Customer shipping"
+    name="returnValue"
+    />
+    Customer Shipping
+    </label>
+    <input
+    type="number"
+    class="returnShipment"
+    value="0"
+    id="customerShippingInput"
+    placeholder="Customer Shipping Price"
+    />
+    </div>
+    </div>
+    </div>
+    </div>
+    <!--escalation return div -->
+    <div class="escalationReturn" style="display: none;">
+    <div id="rma-status-group">
+    <label for="rma-status">RMA Status:</label>
+    <div class="checkbox-group">
+    <div>
+    <input value="RMA Sent" type="checkbox" id="rma-sent" name="rma-status">
+    <label for="rma-sent">RMA Sent</label>
+    </div>
+    <div>
+    <input value="Junked" type="checkbox" id="junked" name="rma-status">
+    <label for="junked">Junked</label>
+    </div>
+    </div>
+    </div>   
+    
+    <div>
+    <label for="shipping-type">Shipping Type:</label>
+    <select id="customer" name="customer" class="form-control">
+    <option value="Customer shipping">Customer</option>
+    <option value="Return- Yard shipping">Yard Shipping</option>
+    <option value="Return- Own shipping">Own Shipping</option>
+    </select>
+    </div>
+    
+    <div id="shipping-charges-container" style="display: none;">
+    <label for="shipping-charges">Shipping Charges</label>
+    <input type="number" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
+    </div>
+    </div>
+    
+    <!-- escalation replacement div -->
+    <div class="escalationReplacement" style="display: none;">
+    <div>
+    <label for="shipping-type">Shipping Type:</label>
+    <select id="replacement-customer" name="customer" class="form-control">
+    <option value="Customer shipping">Customer</option>
+    <option value="Replacement- Yard shipping">Yard Shipping</option>
+    <option value="Replacement- Own shipping">Own Shipping</option>
+    </select>
+    </div>
+    
+    <div id="replacement-shipping-charges-container" style="display: none;">
+    <label for="shipping-charges">Shipping Charges</label>
+    <input type="number" id="replacement-shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
+    </div>
+    </div>
+    <!-- escalation replacement div ends here -->
+    <!-- esc part for yard button ends here  -->
+    <!-- Esca part till here -->
 <script>
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
