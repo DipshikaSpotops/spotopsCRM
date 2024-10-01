@@ -1476,35 +1476,6 @@ text-align: center;">
 <option value="Part delivered">Part Delivered</option>
 <option value="Escalation">Escalation</option>
 </select>
-<!-- <div id="cardCharged">
-<label for="paymentStatusCard">Card Charged:</label>
-<select class="form-control paymentStatus">
-<option value="">Choose</option>
-<option value="Card charged">Charged</option>
-<option value="">Not charged</option>
-</select>
-</div> -->
-<!-- <label for="paymentStatusRefund" style="display: none"
->Refund Collected:</label
->
-<select
-class="form-control paymentStatus"
-id="paymentStatusSelect"
-style="display: none"
->
-<option value="">Choose</option>
-<option value="Refund collected">Yes</option>
-<option value="">No</option>
-</select>
-<div id="refundedAmountContainer">
-<label for="refundedAmount">Refunded Amount:</label>
-<input
-type="number"
-class="form-control"
-id="refundedAmount"
-placeholder="Enter refunded amount"
-/>
-</div> -->
 <div>
 <button
 type="button"
@@ -1517,6 +1488,7 @@ Save
 </div>
 
 <div id="escalation" style="display: flex;">
+ <!-- escalation part for yard status-->
 <div>
 <label for="reason1">Reason:</label>
 <select
@@ -1531,22 +1503,25 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4"
 <option value="Not programming">Not programming</option>
 </select>
 </div>
-<div id="escRMA" style="display: flex;">
-<label for="reason" style="white-space: nowrap;">Escalation Process:</label>
-<select
-name="esc"
-id="escProcess"
-style="width: 51.8%;
-border: 1px solid #d9d4d4;
-height: 4vh;
-">
-<option value="">Choose</option>
-<option value="RMA Sent">Under Progress</option>
-<option value="Replacement">Replacement</option>
-<!-- <option value="Return tracking sent">Return Tracking Sent</option> -->
-<option value="Return">Return</option>
-</select>
-</div>
+<!-- // escalation part for yard status ends here -->
+ <!-- esc part for yard button -->
+ <div id="escRMA" style="display: flex;">
+    <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
+    <select
+    name="esc"
+    id="escProcess"
+    style="width: 51.8%;
+    border: 1px solid #d9d4d4;
+    height: 4vh;
+    ">
+    <option value="">Choose</option>
+    <option value="RMA Sent">Under Progress</option>
+    <option value="Replacement">Replacement</option>
+    <!-- <option value="Return tracking sent">Return Tracking Sent</option> -->
+    <option value="Return">Return</option>
+    </select>
+    </div>
+    <!-- esc part for yard button ends here  -->
 </div>
 <div id="shipping_own_cust">
 <div class="form-group">
@@ -1584,7 +1559,6 @@ placeholder="Customer Shipping Price"
 </div>
 </div>
 <!--escalation return div -->
-
 <div class="escalationReturn" style="display: none;">
 <div id="rma-status-group">
 <label for="rma-status">RMA Status:</label>
@@ -2508,6 +2482,7 @@ let yardDetailsHtml = `
 <button type="button" class="edit-yard-details" data-yard-index="${yardIndex}">Edit Details</button>
 <button type="button" class="cardcharged" data-yard-index="${yardIndex}">Card Charged</button>
 <button type="button" class="refundCollect" data-yard-index="${yardIndex}">Refund Status</button>
+<button type="button" class="escalation" data-yard-index="${yardIndex}">Escalation</button>
 </td>
 </tr>
 </table>
