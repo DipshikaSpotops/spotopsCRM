@@ -206,7 +206,14 @@ width: 100%;
 border: 1px solid rgb(168, 164, 164);
 overflow-y: scroll;
 }
-
+#saveEsc {
+margin: 3% 44%;
+background-color: #ff914d;
+/* border: none; */
+width: 10%;
+height: 3vh;
+border-radius: 18px;
+}
 #comment-box {
 border-radius: 4px;
 overflow-y: scroll;
@@ -1948,6 +1955,14 @@ OK
 <!-- esc part for yard button -->
 <div id="escRMA">
 <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
+<button
+type="button"
+class="close"
+data-dismiss="modal"
+aria-label="Close"
+>
+<span id="crossBtnEditYard" aria-hidden="true">&times;</span>
+</button>
 <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
 <option value="">Choose</option>
 <option value="Replacement">Replacement</option>
