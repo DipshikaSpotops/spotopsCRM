@@ -1529,11 +1529,11 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
     </select>
   </div>
   
-  <!-- Container for Replacement Columns -->
+  <!-- Columns for Part from Customer and Part from Yard, hidden by default -->
   <div id="replacementColumns" style="display: none; margin-top: 20px;">
   
-    <!-- Part from Customer -->
-    <div id="partFromCustomer" style="display: none;">
+    <!-- Part from Customer Column -->
+    <div id="partFromCustomer" style="float: left; width: 48%;">
       <h4>Part from Customer</h4>
       <label>Shipping Method:</label>
       <select id="customerShippingMethod">
@@ -1564,8 +1564,8 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
       <input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
     </div>
   
-    <!-- Part from Yard -->
-    <div id="partFromYard" style="display: none;">
+    <!-- Part from Yard Column -->
+    <div id="partFromYard" style="float: right; width: 48%;">
       <h4>Part from Yard</h4>
       <label>Part Status:</label>
       <select id="yardPartStatus">
@@ -4384,33 +4384,47 @@ window.location.reload();
 });
 
   // On change of the Escalation Process dropdown
-  $(document).ready(function () {
-  // On change of the Escalation Process dropdown
   $('#escProcess').on('change', function () {
     const selectedValue = $(this).val();
-    console.log("value selected:", selectedValue);
-
-    // Case 1: Replacement
+    console.log("value",selectedValue);
     if (selectedValue === 'Replacement') {
-      $('#replacementColumns').fadeIn();  // Show both sections for Replacement
-      $('#partFromCustomer').fadeIn();    // Show Part from Customer
-      $('#partFromYard').fadeIn();        // Show Part from Yard
+      $('#replacementColumns').fadeIn();
+      $('#partFromCustomer').fadeIn();  
+      $('#partFromYard').fadeIn();    
     }
-    // Case 2: Return
-    else if (selectedValue === 'Return') {
-      $('#replacementColumns').fadeIn();  // Show the Part from Customer section
-      $('#partFromCustomer').fadeIn();    // Show Part from Customer
-      $('#partFromYard').fadeOut();       // Hide Part from Yard
-    }
-    // Case 3: Junk or any other case
-    else {
-      $('#replacementColumns').fadeOut(); // Hide both columns for any other option (e.g., Junk)
+     else {
+      $('#replacementColumns').fadeOut(); 
       $('#partFromCustomer').fadeOut();
       $('#partFromYard').fadeOut();
     }
   });
-});
 
+  // Show or hide "Own Shipping" input for Part from Customer
+  $('#customerShippingMethod').on('change', function () {
+    if ($(this).val() === 'Own shipping') {
+      $('#customerShippingValue').fadeIn();
+    } else {
+      $('#customerShippingValue').fadeOut();
+    }
+  });
+
+  // Show or hide "Own Shipping" input for Part from Yard
+  $('#yardShippingMethod').on('change', function () {
+    if ($(this).val() === 'Own shipping') {
+      $('#yardShippingValue').fadeIn();
+    } else {
+      $('#yardShippingValue').fadeOut();
+    }
+  });
+
+  // Change yardStatus when 'Delivered' is selected for Part from Yard
+  $('#yardPartStatus').on('change', function () {
+    if ($(this).val() === 'Delivered') {
+      $('#yardStatus').text('Part delivered');
+    } else {
+      $('#yardStatus').text('');
+    }
+  });
 });
 </script>
 </body>   
