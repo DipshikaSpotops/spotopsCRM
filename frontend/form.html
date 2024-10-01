@@ -3308,7 +3308,7 @@ $("#editYardPopup").hide();
 
 const yardIndex = $(this).data("yard-index");
 let currentYardData = {};
-var escCause;
+
 try {
 // Fetch the order or cancelled order data
 let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
@@ -3338,7 +3338,7 @@ newOrderStatus = "In Transit";
 newOrderStatus = "PO confirmed";
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
-escCause = $("#esc").val();
+const escCause = $("#esc").val();
 console.log("escCause",escCause);
 const now = new Date();
 const options = {
