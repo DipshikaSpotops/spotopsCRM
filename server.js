@@ -1002,8 +1002,8 @@ pass: "hweg vrnk qyxx gktv",
 
 const mailOptions = {
 from: "service@50starsautoparts.com",
-to: `${order.email}`,
-// to: `dipsikha.spotopsdigital@gmail.com`,
+// to: `${order.email}`,
+to: `dipsikha.spotopsdigital@gmail.com`,
 subject: `Tracking Details / Order No. ${req.params.orderNo}`,
 html: `<p>Hi ${order.customerName},</p>
 <p>This email is regarding the order you placed with 50 stars auto parts, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
