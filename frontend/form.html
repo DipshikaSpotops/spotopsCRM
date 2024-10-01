@@ -22,18 +22,18 @@ rel="stylesheet"
 display: none;
 }
 #escRMA {
-  display: none; 
-  position: fixed; 
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgb(222, 22, 22); 
-  padding: 20px; 
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  width: 400px; 
-  height: auto;
-  border-radius: 10px; 
+display: none; 
+position: fixed; 
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+background-color: white; 
+padding: 20px; 
+box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+z-index: 1000;
+width: 400px; 
+height: auto;
+border-radius: 10px; 
 }
 
 #yardSuggestionsList {
@@ -396,7 +396,19 @@ border: none;
 background-color: #0056b3;
 border-color: #004085;
 }
+.replacement-container {
+display: flex;
+justify-content: space-between;
+gap: 20px; /* Add space between the two columns */
+margin-top: 20px; /* Adjust the margin if needed */
+}
 
+.replacement-column {
+flex: 1;
+padding: 20px;
+border: 1px solid #d9d4d4;
+border-radius: 10px;
+}
 .timeline {
 position: relative;
 padding: 21px 0;
@@ -1932,91 +1944,98 @@ OK
 </button>
 </div>
 <!-- escalation part for yards -->
- <!-- // escalation part for yard status ends here -->
+<!-- // escalation part for yard status ends here -->
 <!-- esc part for yard button -->
 <div id="escRMA">
-    <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
-    <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
-      <option value="">Choose</option>
-      <option value="Replacement">Replacement</option>
-      <option value="Return">Return</option>
-      <option value="Junk">Junk</option>
-    </select>
-  
-  
-  <!-- Replacement Columns (Hidden by default) -->
-  <div id="replacementColumns" style="display: none;">
-  
-    <!-- First Column (Part from Customer) -->
-    <div id="partFromCustomer">
-      <h4>Part from Customer</h4>
-      <label>Shipping Method:</label>
-      <select id="customerShippingMethod">
-        <option value="">Choose</option>
-        <option value="Junked">Junked</option>
-        <option value="Return">Return</option>
-        <option value="Customer shipping">Customer shipping</option>
-        <option value="Yard shipping">Yard shipping</option>
-        <option value="Own shipping">Own shipping</option>
-      </select>
-  
-      <!-- If "Own shipping" is selected, show this input -->
-      <div id="customerShippingValue" style="display: none;">
-        <label>Enter Shipping Value:</label>
-        <input type="text" placeholder="Shipping details">
-      </div>
-  
-      <label>Shipper:</label>
-      <select id="customerShipper">
-        <option value="">Choose</option>
-        <option value="UPS">UPS</option>
-        <option value="FedEx">FedEx</option>
-        <option value="World Wide Express">World Wide Express</option>
-        <option value="Others">Others</option>
-      </select>
-  
-      <label>Tracking Number:</label>
-      <input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
-    </div>
-  
-    <!-- Second Column (Part from Yard) -->
-    <div id="partFromYard">
-      <h4>Part from Yard</h4>
-      <label>Shipping Status:</label>
-      <select id="yardShippingStatus">
-        <option value="">Choose</option>
-        <option value="Ready to ship">Ready to ship</option>
-        <option value="In transit">In transit</option>
-        <option value="Delivered">Delivered</option>
-      </select>
-  
-      <label>Shipping Method:</label>
-      <select id="yardShippingMethod">
-        <option value="">Choose</option>
-        <option value="Customer shipping">Customer shipping</option>
-        <option value="Yard shipping">Yard shipping</option>
-        <option value="Own shipping">Own shipping</option>
-      </select>
-  
-      <!-- If "Own shipping" is selected, show this input -->
-      <div id="yardShippingValue" style="display: none;">
-        <label>Enter Shipping Value:</label>
-        <input type="text" placeholder="Shipping details">
-      </div>
-  
-      <label>Shipper:</label>
-      <select id="yardShipper">
-        <option value="">Choose</option>
-        <option value="UPS">UPS</option>
-        <option value="FedEx">FedEx</option>
-        <option value="World Wide Express">World Wide Express</option>
-        <option value="Others">Others</option>
-      </select>
-  
-      <label>Tracking Number:</label>
-      <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
-    </div>
-  </div>  
+<label for="reason" style="white-space: nowrap;">Escalation Process:</label>
+<select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
+<option value="">Choose</option>
+<option value="Replacement">Replacement</option>
+<option value="Return">Return</option>
+<option value="Junk">Junk</option>
+</select>
+
+
+<!-- Replacement Columns-->
+<div id="replacementColumns" style="display: none;">
+
+<!-- Flexbox container for two columns -->
+<div class="replacement-container">
+
+<!-- First Column (Part from Customer) -->
+<div id="partFromCustomer" class="replacement-column">
+<h4>Part from Customer</h4>
+<label>Shipping Method:</label>
+<select id="customerShippingMethod">
+<option value="">Choose</option>
+<option value="Junked">Junked</option>
+<option value="Return">Return</option>
+<option value="Customer shipping">Customer shipping</option>
+<option value="Yard shipping">Yard shipping</option>
+<option value="Own shipping">Own shipping</option>
+</select>
+
+<!-- If "Own shipping" is selected, show this input -->
+<div id="customerShippingValue" style="display: none;">
+<label>Enter Shipping Value:</label>
+<input type="text" placeholder="Shipping details">
+</div>
+
+<label>Shipper:</label>
+<select id="customerShipper">
+<option value="">Choose</option>
+<option value="UPS">UPS</option>
+<option value="FedEx">FedEx</option>
+<option value="World Wide Express">World Wide Express</option>
+<option value="Others">Others</option>
+</select>
+
+<label>Tracking Number:</label>
+<input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
+</div>
+
+<!-- Second Column (Part from Yard) -->
+<div id="partFromYard" class="replacement-column">
+<h4>Part from Yard</h4>
+<label>Shipping Status:</label>
+<select id="yardShippingStatus">
+<option value="">Choose</option>
+<option value="Ready to ship">Ready to ship</option>
+<option value="In transit">In transit</option>
+<option value="Delivered">Delivered</option>
+</select>
+
+<label>Shipping Method:</label>
+<select id="yardShippingMethod">
+<option value="">Choose</option>
+<option value="Customer shipping">Customer shipping</option>
+<option value="Yard shipping">Yard shipping</option>
+<option value="Own shipping">Own shipping</option>
+</select>
+
+<!-- If "Own shipping" is selected, show this input -->
+<div id="yardShippingValue" style="display: none;">
+<label>Enter Shipping Value:</label>
+<input type="text" placeholder="Shipping details">
+</div>
+
+<label>Shipper:</label>
+<select id="yardShipper">
+<option value="">Choose</option>
+<option value="UPS">UPS</option>
+<option value="FedEx">FedEx</option>
+<option value="World Wide Express">World Wide Express</option>
+<option value="Others">Others</option>
+</select>
+
+<label>Tracking Number:</label>
+<input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
+</div>
+
+</div>
+</div>
+
+
 </div>
 <!-- esc part for yard button ends here  -->
 
@@ -2684,7 +2703,7 @@ console.log('Order not found in orders, checking in cancelledOrders...');
 return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
 .then((response) => {
 if (!response.ok) {
-    throw new Error("Order not found in both orders and cancelledOrders.");
+throw new Error("Order not found in both orders and cancelledOrders.");
 }
 return response.json();  // Parse the cancelledOrders data
 });
@@ -4382,46 +4401,59 @@ window.location.reload();
 
 // script for escalation button on yards
 $('#escProcess').on('change', function () {
-    const selectedValue = $(this).val();
+const selectedValue = $(this).val();
 
-    if (selectedValue === 'Replacement') {
-      $('#replacementColumns').fadeIn(); 
-    } else {
-      $('#replacementColumns').fadeOut(); 
-    }
-  });
-
-  // Show or hide "Own Shipping" input for Part from Customer
-  $('#customerShippingMethod').on('change', function () {
-    if ($(this).val() === 'Own shipping') {
-      $('#customerShippingValue').fadeIn();
-    } else {
-      $('#customerShippingValue').fadeOut();
-    }
-  });
-
-  // Show or hide "Own Shipping" input for Part from Yard
-  $('#yardShippingMethod').on('change', function () {
-    if ($(this).val() === 'Own shipping') {
-      $('#yardShippingValue').fadeIn();
-    } else {
-      $('#yardShippingValue').fadeOut();
-    }
-  });
-
-  // Change yard status to "Part Delivered" when "Delivered" is selected
-  $('#yardShippingStatus').on('change', function () {
-    if ($(this).val() === 'Delivered') {
-      alert('Yard Status: Part Delivered');
-    }
-  });
-
-
-
-
-
-
+if (selectedValue === 'Replacement') {
+// Show both columns when 'Replacement' is selected
+$('#replacementColumns').fadeIn();
+$('#partFromCustomer').fadeIn();
+$('#partFromYard').fadeIn();
+} else if (selectedValue === 'Return') {
+// Show only the 'Part from Customer' section when 'Return' is selected
+$('#replacementColumns').fadeOut();
+$('#partFromCustomer').fadeIn();
+$('#partFromYard').fadeOut();
+} else {
+// Hide both columns for other cases like 'Junk'
+$('#replacementColumns').fadeOut();
+$('#partFromCustomer').fadeOut();
+$('#partFromYard').fadeOut();
+}
 });
+
+const selectedValue = $(this).val();
+console.log("slectedValue",selectedValue);
+if (selectedValue === 'Replacement') {
+$('#replacementColumns').fadeIn(); 
+} else {
+$('#replacementColumns').fadeOut(); 
+}
+});
+
+// Show or hide "Own Shipping" input for Part from Customer
+$('#customerShippingMethod').on('change', function () {
+if ($(this).val() === 'Own shipping') {
+$('#customerShippingValue').fadeIn();
+} else {
+$('#customerShippingValue').fadeOut();
+}
+});
+
+// Show or hide "Own Shipping" input for Part from Yard
+$('#yardShippingMethod').on('change', function () {
+if ($(this).val() === 'Own shipping') {
+$('#yardShippingValue').fadeIn();
+} else {
+$('#yardShippingValue').fadeOut();
+}
+});
+$('#yardShippingStatus').on('change', function () {
+if ($(this).val() === 'Delivered') {
+alert('Yard Status: Part Delivered');
+}
+});
+
+
 </script>
 </body>   
 </html>
