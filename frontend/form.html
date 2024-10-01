@@ -1516,6 +1516,95 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
 <option value="Not programming">Not programming</option>
 </select>
 </div>
+
+<!-- // escalation part for yard status ends here -->
+<!-- Escalation Process Dropdown -->
+<div id="escRMA">
+    <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
+    <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
+      <option value="">Choose</option>
+      <option value="Replacement">Replacement</option>
+      <option value="Return">Return</option>
+      <option value="Junk">Junk</option>
+    </select>
+  </div>
+  
+  <!-- Columns for Part from Customer and Part from Yard, hidden by default -->
+  <div id="replacementColumns" style="display: none; margin-top: 20px;">
+  
+    <!-- Part from Customer Column -->
+    <div id="partFromCustomer" style="float: left; width: 48%;">
+      <h4>Part from Customer</h4>
+      <label>Shipping Method:</label>
+      <select id="customerShippingMethod">
+        <option value="">Choose</option>
+        <option value="Junked">Junked</option>
+        <option value="Return">Return</option>
+        <option value="Customer shipping">Customer shipping</option>
+        <option value="Yard shipping">Yard shipping</option>
+        <option value="Own shipping">Own shipping</option>
+      </select>
+  
+      <!-- If "Own shipping" is selected, show this input -->
+      <div id="customerShippingValue" style="display: none;">
+        <label>Enter Shipping Value:</label>
+        <input type="text" placeholder="Shipping details">
+      </div>
+  
+      <label>Shipper:</label>
+      <select id="customerShipper">
+        <option value="">Choose</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+        <option value="World Wide Express">World Wide Express</option>
+        <option value="Others">Others</option>
+      </select>
+  
+      <label>Tracking Number:</label>
+      <input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
+    </div>
+  
+    <!-- Part from Yard Column -->
+    <div id="partFromYard" style="float: right; width: 48%;">
+      <h4>Part from Yard</h4>
+      <label>Part Status:</label>
+      <select id="yardPartStatus">
+        <option value="">Choose</option>
+        <option value="Ready to ship">Ready to ship</option>
+        <option value="In transit">In transit</option>
+        <option value="Delivered">Delivered</option>
+      </select>
+  
+      <label>Shipping Method:</label>
+      <select id="yardShippingMethod">
+        <option value="">Choose</option>
+        <option value="Customer shipping">Customer shipping</option>
+        <option value="Yard shipping">Yard shipping</option>
+        <option value="Own shipping">Own shipping</option>
+      </select>
+  
+      <!-- If "Own shipping" is selected, show this input -->
+      <div id="yardShippingValue" style="display: none;">
+        <label>Enter Shipping Value:</label>
+        <input type="text" placeholder="Shipping details">
+      </div>
+  
+      <label>Shipper:</label>
+      <select id="yardShipper">
+        <option value="">Choose</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+        <option value="World Wide Express">World Wide Express</option>
+        <option value="Others">Others</option>
+      </select>
+  
+      <label>Tracking Number:</label>
+      <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
+    </div>
+  
+  </div>  
+<!-- esc part for yard button ends here  -->
+
 <div class="inputForCust"></div>
 <div class="form-group" id="divTrackingEdit">
 <label>Tracking Information:</label>
@@ -1929,105 +2018,7 @@ style="display: none;"
 OK
 </button>
 </div>
-<!-- Escalation modal for yard in button click -->
- <!-- // escalation part for yard status ends here -->
-<!-- esc part for yard button -->
-<div id="escRMA">
-    <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
-    <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
-    <option value="">Choose</option>
-    <option value="Replacement">Replacement</option>
-    <option value="Return">Return</option>
-    <option value="Junk">Junk</option>
-    </select>
-    </div>
-      
-    
-    <div id="shipping_own_cust">
-    <div class="form-group">
-    <div class="form-row">
-    <div class="col-md-6">
-    <label class="radio-inline">
-    <input type="radio" name="returnValue" value="Our shipping" />
-    Our Shipping
-    </label>
-    <input
-    type="number"
-    class="returnShipment"
-    id="ourShippingInput"
-    placeholder="Our Shipping Price"
-    />
-    </div>
-    <div class="col-md-6">
-    <label class="radio-inline">
-    <input
-    type="radio"
-    value="Customer shipping"
-    name="returnValue"
-    />
-    Customer Shipping
-    </label>
-    <input
-    type="number"
-    class="returnShipment"
-    value="0"
-    id="customerShippingInput"
-    placeholder="Customer Shipping Price"
-    />
-    </div>
-    </div>
-    </div>
-    </div>
-    <!--escalation return div -->
-    <div class="escalationReturn" style="display: none;">
-    <div id="rma-status-group">
-    <label for="rma-status">RMA Status:</label>
-    <div class="checkbox-group">
-    <div>
-    <input value="RMA Sent" type="checkbox" id="rma-sent" name="rma-status">
-    <label for="rma-sent">RMA Sent</label>
-    </div>
-    <div>
-    <input value="Junked" type="checkbox" id="junked" name="rma-status">
-    <label for="junked">Junked</label>
-    </div>
-    </div>
-    </div>   
-    
-    <div>
-    <label for="shipping-type">Shipping Type:</label>
-    <select id="customer" name="customer" class="form-control">
-    <option value="Customer shipping">Customer</option>
-    <option value="Return- Yard shipping">Yard Shipping</option>
-    <option value="Return- Own shipping">Own Shipping</option>
-    </select>
-    </div>
-    
-    <div id="shipping-charges-container" style="display: none;">
-    <label for="shipping-charges">Shipping Charges</label>
-    <input type="number" id="shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
-    </div>
-    </div>
-    
-    <!-- escalation replacement div -->
-    <div class="escalationReplacement" style="display: none;">
-    <div>
-    <label for="shipping-type">Shipping Type:</label>
-    <select id="replacement-customer" name="customer" class="form-control">
-    <option value="Customer shipping">Customer</option>
-    <option value="Replacement- Yard shipping">Yard Shipping</option>
-    <option value="Replacement- Own shipping">Own Shipping</option>
-    </select>
-    </div>
-    
-    <div id="replacement-shipping-charges-container" style="display: none;">
-    <label for="shipping-charges">Shipping Charges</label>
-    <input type="number" id="replacement-shipping-charges" name="shipping-charges" class="form-control" placeholder="Enter Shipping Charges">
-    </div>
-    </div>
-    <!-- escalation replacement div ends here -->
-    <!-- esc part for yard button ends here  -->
-    <!-- Esca part till here -->
+
 <script>
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
@@ -4391,67 +4382,52 @@ $(".add-yard-btn").prop('disabled', false);
 $("#okButton").click(function () {
 window.location.reload();
 });
-// script for escalationReturn
-document.getElementById("escProcess").addEventListener("change", function() {
-var selectedValue = this.value;
-var escalationReturnDiv = document.querySelector(".escalationReturn");
-var escalationReplacementDiv = document.querySelector(".escalationReplacement");
-console.log("escalationreturn",escalationReturnDiv);
-if (selectedValue === "Return") {
-escalationReturnDiv.style.display = "flex";
-escalationReplacementDiv.style.display = "none";
-}
-else if (selectedValue === "Replacement") {
-escalationReplacementDiv.style.display = "flex";
-escalationReturnDiv.style.display = "none";
-}
-else {
-escalationReturnDiv.style.display = "none";
-escalationReplacementDiv.style.display = "none";
-}
-});
-//for showing shipping charges
-//for showing shipping charges
-document.getElementById("customer").addEventListener("change", function() {
-var selectedValue = this.value;
-// For the escalationReturn div
-const shippingChargesContainer = document.getElementById('shipping-charges-container');
-if (selectedValue === 'Return- Own shipping') {
-shippingChargesContainer.style.display = 'block';
-} else {
-shippingChargesContainer.style.display = 'none';
-}
-});
 
-document.getElementById("replacement-customer").addEventListener("change", function() {
-var selectedValue = this.value;
-const replacementShippingChargesContainer = document.getElementById('replacement-shipping-charges-container');
-console.log("escReplace",replacementShippingChargesContainer);
-if (selectedValue === 'Replacement- Own shipping') {
-replacementShippingChargesContainer.style.display = 'block';
-} else {
-replacementShippingChargesContainer.style.display = 'none';
-}
+  // On change of the Escalation Process dropdown
+  $('#escProcess').on('change', function () {
+    const selectedValue = $(this).val();
+    console.log("value",selectedValue);
+    if (selectedValue === 'Replacement') {
+      $('#replacementColumns').fadeIn();
+      $('#partFromCustomer').fadeIn();  
+      $('#partFromYard').fadeIn();    
+    }else if (selectedValue === 'Return') {
+      $('#replacementColumns').fadeOut();
+      $('#partFromCustomer').fadeIn();  
+      $('#partFromYard').fadeOut();    
+    }
+     else {
+      $('#replacementColumns').fadeOut(); 
+      $('#partFromCustomer').fadeOut();
+      $('#partFromYard').fadeOut();
+    }
+  });
 
-});
+  $('#customerShippingMethod').on('change', function () {
+    if ($(this).val() === 'Own shipping') {
+      $('#customerShippingValue').fadeIn();
+    } else {
+      $('#customerShippingValue').fadeOut();
+    }
+  });
 
-document.getElementById("rma-status-group").addEventListener("change", function(event) {
-const checkboxes = document.querySelectorAll('#rma-status-group input[type="checkbox"]');
-const selectedCheckbox = event.target;
+ 
+  $('#yardShippingMethod').on('change', function () {
+    if ($(this).val() === 'Own shipping') {
+      $('#yardShippingValue').fadeIn();
+    } else {
+      $('#yardShippingValue').fadeOut();
+    }
+  });
 
-// Uncheck all checkboxes except the one that was just clicked
-checkboxes.forEach(checkbox => {
-if (checkbox !== selectedCheckbox) {
-checkbox.checked = false;
-}
-});
-
-// Get the value of the selected checkbox
-const selectedValue = selectedCheckbox.checked ? selectedCheckbox.value : null;
-console.log("Selected RMA Status:", selectedValue);
-});
-
-
+  // Change yardStatus when 'Delivered' is selected for Part from Yard
+  $('#yardPartStatus').on('change', function () {
+    if ($(this).val() === 'Delivered') {
+      $('#yardStatus').text('Part delivered');
+    } else {
+      $('#yardStatus').text('');
+    }
+  });
 });
 </script>
 </body>   
