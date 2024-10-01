@@ -3376,6 +3376,7 @@ default: return "th";
 };
 
 var escalationDate= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+var escTicked = "Yes";
 } else if (status === "PO cancelled") {
 newOrderStatus = "PO cancelled";
 } else if (status === "Part delivered") {
@@ -3398,7 +3399,8 @@ orderStatus: newOrderStatus,  // Updated order status
 shippingMethod: returnShippingMethod,
 shippingPrice: returnCharges,
 escalationCause: escCause,
-escalationDate :escalationDate
+escalationDate :escalationDate,
+escTicked: escTicked
 };
 
 // Send the updated data to the server
