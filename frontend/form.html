@@ -1489,7 +1489,6 @@ Save
 
 <div id="escalation" style="display: flex;">
  <!-- escalation part for yard status-->
-<div>
 <label for="reason1">Reason:</label>
 <select
 name="esc"
@@ -1503,10 +1502,10 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4"
 <option value="Not programming">Not programming</option>
 </select>
 </div>
-</div>
+
 <!-- // escalation part for yard status ends here -->
  <!-- esc part for yard button -->
- <div id="escRMA" style="display: flex;">
+ <div id="escRMA" style="display: none;">
     <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
     <select
     name="esc"
@@ -1522,7 +1521,6 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4"
     <option value="Return">Return</option>
     </select>
     </div>
-    <!-- esc part for yard button ends here  -->
 
 <div id="shipping_own_cust">
 <div class="form-group">
@@ -1607,6 +1605,7 @@ placeholder="Customer Shipping Price"
 </div>
 </div>
 <!-- escalation replacement div ends here -->
+ <!-- esc part for yard button ends here  -->
 
 <div class="inputForCust"></div>
 <div class="form-group" id="divTrackingEdit">
