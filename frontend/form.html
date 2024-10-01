@@ -2012,14 +2012,6 @@ aria-label="Close"
 <!-- Second Column (Part from Yard) -->
 <div id="partFromYard" class="replacement-column">
 <h4>Part from Yard</h4>
-<label>Shipping Status:</label>
-<select id="yardShippingStatus">
-<option value="">Choose</option>
-<option value="Ready to ship">Ready to ship</option>
-<option value="In transit">In transit</option>
-<option value="Delivered">Delivered</option>
-</select>
-
 <label>Shipping Method:</label>
 <select id="yardShippingMethod">
 <option value="">Choose</option>
@@ -2027,13 +2019,6 @@ aria-label="Close"
 <option value="Yard shipping">Yard shipping</option>
 <option value="Own shipping">Own shipping</option>
 </select>
-
-<!-- If "Own shipping" is selected, show this input -->
-<div id="yardShippingValue" style="display: none;">
-<label>Enter Shipping Value:</label>
-<input type="text" placeholder="Shipping details">
-</div>
-
 <label>Shipper:</label>
 <select id="yardShipper">
 <option value="">Choose</option>
@@ -2042,6 +2027,21 @@ aria-label="Close"
 <option value="World Wide Express">World Wide Express</option>
 <option value="Others">Others</option>
 </select>
+<label>Shipping Status:</label>
+<select id="yardShippingStatus">
+<option value="">Choose</option>
+<option value="Ready to ship">Ready to ship</option>
+<option value="In transit">In transit</option>
+<option value="Delivered">Delivered</option>
+</select>
+
+
+
+<!-- If "Own shipping" is selected, show this input -->
+<div id="yardShippingValue" style="display: none;">
+<label>Enter Shipping Value:</label>
+<input type="text" placeholder="Shipping details">
+</div>
 
 <label>Tracking No:</label>
 <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
