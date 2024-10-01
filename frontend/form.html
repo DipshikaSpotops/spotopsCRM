@@ -2011,14 +2011,32 @@ aria-label="Close"
 
 <!-- Second Column (Part from Yard) -->
 <div id="partFromYard" class="replacement-column">
-<h4>Part from Yard</h4>
-<label>Shipping Status:</label>
+<div style="display: flex;">    
+<div><h4>Part from Yard</h4></div>
+<div><select id="yardShippingStatus" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
+    <option value="">Choose</option>
+    <option value="Ready to ship">Ready to ship</option>
+    <option value="In transit">In transit</option>
+    <option value="Delivered">Delivered</option>
+    </select>
+</div>
+</div>
+<label>Shipping Method:</label>
+<select id="customerShippingMethod" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<option value="">Choose</option>
+<option value="Junked">Junked</option>
+<option value="Return">Return</option>
+<option value="Customer shipping">Customer shipping</option>
+<option value="Yard shipping">Yard shipping</option>
+<option value="Own shipping">Own shipping</option>
+</select>
+<!-- <label>Shipping Status:</label>
 <select id="yardShippingStatus" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
 <option value="">Choose</option>
 <option value="Ready to ship">Ready to ship</option>
 <option value="In transit">In transit</option>
 <option value="Delivered">Delivered</option>
-</select>
+</select> -->
 
 
 
