@@ -2012,23 +2012,8 @@ aria-label="Close"
 <!-- Second Column (Part from Yard) -->
 <div id="partFromYard" class="replacement-column">
 <h4>Part from Yard</h4>
-<label>Shipping Method:</label>
-<select id="yardShippingMethod">
-<option value="">Choose</option>
-<option value="Customer shipping">Customer shipping</option>
-<option value="Yard shipping">Yard shipping</option>
-<option value="Own shipping">Own shipping</option>
-</select>
-<label>Shipper:</label>
-<select id="yardShipper">
-<option value="">Choose</option>
-<option value="UPS">UPS</option>
-<option value="FedEx">FedEx</option>
-<option value="World Wide Express">World Wide Express</option>
-<option value="Others">Others</option>
-</select>
 <label>Shipping Status:</label>
-<select id="yardShippingStatus">
+<select id="yardShippingStatus" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
 <option value="">Choose</option>
 <option value="Ready to ship">Ready to ship</option>
 <option value="In transit">In transit</option>
@@ -2042,6 +2027,15 @@ aria-label="Close"
 <label>Enter Shipping Value:</label>
 <input type="text" placeholder="Shipping details">
 </div>
+
+<label>Shipper:</label>
+<select id="yardShipper" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
+<option value="">Choose</option>
+<option value="UPS">UPS</option>
+<option value="FedEx">FedEx</option>
+<option value="World Wide Express">World Wide Express</option>
+<option value="Others">Others</option>
+</select>
 
 <label>Tracking No:</label>
 <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
