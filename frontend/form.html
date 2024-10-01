@@ -1961,7 +1961,7 @@ class="close"
 data-dismiss="modal"
 aria-label="Close"
 >
-<span id="crossBtnEditYard" aria-hidden="true">&times;</span>
+<span id="crossEsc" aria-hidden="true">&times;</span>
 </button>
 <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
 <option value="">Choose</option>
@@ -4304,6 +4304,10 @@ $(this).addClass("active");
 });
 $('#crossBtnEditYard').on('click', function(e) {
 $('#editYardPopup').hide();
+$(".mainDiv").removeClass("blur");
+});
+$('#crossEsc').on('click', function(e) {
+$('#escRMA').hide();
 $(".mainDiv").removeClass("blur");
 });
 $('#EYdetails') .on('click', function(e){
