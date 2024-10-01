@@ -1517,92 +1517,6 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
 </select>
 </div>
 
-<!-- // escalation part for yard status ends here -->
-<!-- esc part for yard button -->
-<div id="escRMA">
-    <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
-    <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
-      <option value="">Choose</option>
-      <option value="Replacement">Replacement</option>
-      <option value="Return">Return</option>
-      <option value="Junk">Junk</option>
-    </select>
-  </div>
-  
-  <!-- Replacement Columns (Hidden by default) -->
-  <div id="replacementColumns" style="display: none;">
-  
-    <!-- First Column (Part from Customer) -->
-    <div id="partFromCustomer">
-      <h4>Part from Customer</h4>
-      <label>Shipping Method:</label>
-      <select id="customerShippingMethod">
-        <option value="">Choose</option>
-        <option value="Junked">Junked</option>
-        <option value="Return">Return</option>
-        <option value="Customer shipping">Customer shipping</option>
-        <option value="Yard shipping">Yard shipping</option>
-        <option value="Own shipping">Own shipping</option>
-      </select>
-  
-      <!-- If "Own shipping" is selected, show this input -->
-      <div id="customerShippingValue" style="display: none;">
-        <label>Enter Shipping Value:</label>
-        <input type="text" placeholder="Shipping details">
-      </div>
-  
-      <label>Shipper:</label>
-      <select id="customerShipper">
-        <option value="">Choose</option>
-        <option value="UPS">UPS</option>
-        <option value="FedEx">FedEx</option>
-        <option value="World Wide Express">World Wide Express</option>
-        <option value="Others">Others</option>
-      </select>
-  
-      <label>Tracking Number:</label>
-      <input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
-    </div>
-  
-    <!-- Second Column (Part from Yard) -->
-    <div id="partFromYard">
-      <h4>Part from Yard</h4>
-      <label>Shipping Status:</label>
-      <select id="yardShippingStatus">
-        <option value="">Choose</option>
-        <option value="Ready to ship">Ready to ship</option>
-        <option value="In transit">In transit</option>
-        <option value="Delivered">Delivered</option>
-      </select>
-  
-      <label>Shipping Method:</label>
-      <select id="yardShippingMethod">
-        <option value="">Choose</option>
-        <option value="Customer shipping">Customer shipping</option>
-        <option value="Yard shipping">Yard shipping</option>
-        <option value="Own shipping">Own shipping</option>
-      </select>
-  
-      <!-- If "Own shipping" is selected, show this input -->
-      <div id="yardShippingValue" style="display: none;">
-        <label>Enter Shipping Value:</label>
-        <input type="text" placeholder="Shipping details">
-      </div>
-  
-      <label>Shipper:</label>
-      <select id="yardShipper">
-        <option value="">Choose</option>
-        <option value="UPS">UPS</option>
-        <option value="FedEx">FedEx</option>
-        <option value="World Wide Express">World Wide Express</option>
-        <option value="Others">Others</option>
-      </select>
-  
-      <label>Tracking Number:</label>
-      <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
-    </div>
-  </div>  
-<!-- esc part for yard button ends here  -->
 
 <div class="inputForCust"></div>
 <div class="form-group" id="divTrackingEdit">
@@ -2017,6 +1931,93 @@ style="display: none;"
 OK
 </button>
 </div>
+<!-- escalation part for yards -->
+ <!-- // escalation part for yard status ends here -->
+<!-- esc part for yard button -->
+<div id="escRMA">
+    <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
+    <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
+      <option value="">Choose</option>
+      <option value="Replacement">Replacement</option>
+      <option value="Return">Return</option>
+      <option value="Junk">Junk</option>
+    </select>
+  </div>
+  
+  <!-- Replacement Columns (Hidden by default) -->
+  <div id="replacementColumns" style="display: none;">
+  
+    <!-- First Column (Part from Customer) -->
+    <div id="partFromCustomer">
+      <h4>Part from Customer</h4>
+      <label>Shipping Method:</label>
+      <select id="customerShippingMethod">
+        <option value="">Choose</option>
+        <option value="Junked">Junked</option>
+        <option value="Return">Return</option>
+        <option value="Customer shipping">Customer shipping</option>
+        <option value="Yard shipping">Yard shipping</option>
+        <option value="Own shipping">Own shipping</option>
+      </select>
+  
+      <!-- If "Own shipping" is selected, show this input -->
+      <div id="customerShippingValue" style="display: none;">
+        <label>Enter Shipping Value:</label>
+        <input type="text" placeholder="Shipping details">
+      </div>
+  
+      <label>Shipper:</label>
+      <select id="customerShipper">
+        <option value="">Choose</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+        <option value="World Wide Express">World Wide Express</option>
+        <option value="Others">Others</option>
+      </select>
+  
+      <label>Tracking Number:</label>
+      <input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
+    </div>
+  
+    <!-- Second Column (Part from Yard) -->
+    <div id="partFromYard">
+      <h4>Part from Yard</h4>
+      <label>Shipping Status:</label>
+      <select id="yardShippingStatus">
+        <option value="">Choose</option>
+        <option value="Ready to ship">Ready to ship</option>
+        <option value="In transit">In transit</option>
+        <option value="Delivered">Delivered</option>
+      </select>
+  
+      <label>Shipping Method:</label>
+      <select id="yardShippingMethod">
+        <option value="">Choose</option>
+        <option value="Customer shipping">Customer shipping</option>
+        <option value="Yard shipping">Yard shipping</option>
+        <option value="Own shipping">Own shipping</option>
+      </select>
+  
+      <!-- If "Own shipping" is selected, show this input -->
+      <div id="yardShippingValue" style="display: none;">
+        <label>Enter Shipping Value:</label>
+        <input type="text" placeholder="Shipping details">
+      </div>
+  
+      <label>Shipper:</label>
+      <select id="yardShipper">
+        <option value="">Choose</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+        <option value="World Wide Express">World Wide Express</option>
+        <option value="Others">Others</option>
+      </select>
+  
+      <label>Tracking Number:</label>
+      <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
+    </div>
+  </div>  
+<!-- esc part for yard button ends here  -->
 
 <script>
 $(document).ready(async function () {
