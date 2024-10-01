@@ -21,6 +21,20 @@ rel="stylesheet"
 #divTrackingEdit {
 display: none;
 }
+#escRMA {
+  display: none; 
+  position: fixed; 
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white; 
+  padding: 20px; 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  width: 400px; 
+  height: auto;
+  border-radius: 10px; 
+}
 
 #yardSuggestionsList {
 position: absolute;
@@ -1505,22 +1519,16 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
 
 <!-- // escalation part for yard status ends here -->
 <!-- esc part for yard button -->
-<div id="escRMA" style="display: none;">
+<div id="escRMA">
 <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
-<select
-name="esc"
-id="escProcess"
-style="width: 51.8%;
-border: 1px solid #d9d4d4;
-height: 4vh;
-">
+<select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
 <option value="">Choose</option>
 <option value="Replacement">Replacement</option>
-<!-- <option value="Return tracking sent">Return Tracking Sent</option> -->
 <option value="Return">Return</option>
 <option value="Junk">Junk</option>
 </select>
 </div>
+  
 
 <div id="shipping_own_cust">
 <div class="form-group">
@@ -3068,10 +3076,11 @@ $(".mainDiv").addClass("blur");
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', function () {
 selectedYardIndex = $(this).data('yard-index');
-console.log("refund collected part",selectedYardIndex);
-$("#escRMA").fadeIn(); 
+console.log("refund collected part", selectedYardIndex);
+$("#escRMA").fadeIn();
 $(".mainDiv").addClass("blur");
 });
+
 
 
 
