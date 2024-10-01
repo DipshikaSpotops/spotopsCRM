@@ -2685,7 +2685,7 @@ console.log('Order not found in orders, checking in cancelledOrders...');
 return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
 .then((response) => {
 if (!response.ok) {
-throw new Error("Order not found in both orders and cancelledOrders.");
+    throw new Error("Order not found in both orders and cancelledOrders.");
 }
 return response.json();  // Parse the cancelledOrders data
 });
@@ -3376,7 +3376,6 @@ default: return "th";
 };
 
 var escalationDate= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
-console.log("escDate",escalationDate);
 } else if (status === "PO cancelled") {
 newOrderStatus = "PO cancelled";
 } else if (status === "Part delivered") {
