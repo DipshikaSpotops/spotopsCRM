@@ -3096,17 +3096,17 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
   const token = localStorage.getItem('token'); 
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
-      {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      }
-    );
+`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
 
-    if (response.status !== 200) {
+if (response.status !== 200){
       throw new Error("Failed to fetch order data");
     }
 
-    const additionalInfo = response.data;
+    const additionalInfo = response;
     console.log("Fetched additionalInfo", additionalInfo);
     if (additionalInfo.escProcess) {
       $("#escProcess").val(additionalInfo.escProcess);
