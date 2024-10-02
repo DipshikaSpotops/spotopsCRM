@@ -595,42 +595,47 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
   try {
     const updateData = req.body; 
     console.log("updatedData", updateData);
-  //   var 
-  // const order = await Order.findOne({ orderNo: req.params.orderNo });
-  // const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
-  // console.log("Order found:", order);
-  // console.log("Yard index:", yardIndex);
+    var orderNo = updateData.orderNo;
+  const order = await Order.findOne({ orderNo }); 
+  const yardIndex = updateData.yardIndex;
+  var actualYardIndex = yardIndex - 1;
+  console.log("Order found:", order);
+  console.log("Yard index:", actualYardIndex);
   
-  // if (!order) return res.status(404).send("Order not found");
+  if (!order) return res.status(404).send("Order not found");
   
-  // if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
-  // const yardInfo = order.additionalInfo[yardIndex];
-  // console.log("Existing yard info:", yardInfo);
+  if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
+  const yardInfo = order.additionalInfo[actualYardIndex];
+  console.log("Existing yard info:", yardInfo);
   
-  // for (const key in req.body) {
-  // if (req.body.hasOwnProperty(key)) {
-  // yardInfo[key] = req.body[key];
-  // }
-  // }
+  for (const key in req.body) {
+  if (req.body.hasOwnProperty(key)) {
+  yardInfo[key] = req.body[key];
+  }
+  }
+
+  order.additionalInfo[yardIndex] = yardInfo;
   
-  // // Update the specific index in the additionalInfo array
-  // order.additionalInfo[yardIndex] = yardInfo;
+  // Add timestamp to order history
+  const timestamp = new Date().toLocaleString();
+  const firstName = req.query.firstName;
   
-  // // Add timestamp to order history
-  // const timestamp = new Date().toLocaleString();
-  // const firstName = req.query.firstName;
+  var escProcess = updateData.escProcess || "";
+  var customerShippingMethod = updateData.customerShippingMethod || "";
+  var customerShipper = updateData.customerShipper || "";
+  var customerTrackingNumber = updateData.customerTrackingNumber || "";
+  var custOwnShipping = updateData.custOwnShipping || "";
+  var yardShippingStatus = updateData.yardShippingStatus || "";
+  var yardShippingMethod = updateData.yardShippingMethod || "";
+  var yardShipper = updateData.yardShipper || "";
+var yardTrackingNumber= updateData.yardTrackingNumber || "";
+  order.orderHistory.push(`Escalation Process: ${escProcess} || ${customerShippingMethod} || ${customerShippingMethod} || ${customerShippingMethod}  || ${customerShipper}  || ${customerTrackingNumber}   || ${custOwnShipping} || ${yardShippingStatus} || ${yardShippingMethod} || ${yardShipper} || ${yardTrackingNumber} updated by ${firstName} on ${formattedDateTime}`);
   
-  // const escProcess = req.body.escProcess;
-  // order.orderHistory.push(`Escalation Process: ${escProcess} updated by ${firstName} on ${formattedDateTime}`);
-  
-  // // Mark the additionalInfo array as modified
-  // order.markModified("additionalInfo");
-  
-  // await order.save();
-  // res.json(order);
-  // } else {
-  // res.status(400).json({ message: "Invalid yard index" });
-  // }
+  await order.save();
+  res.json(order);
+  } else {
+  res.status(400).json({ message: "Invalid yard index" });
+  }
   } catch (error) {
   console.error("Error in PUT request:", error);
   res.status(500).json({ message: "Server error", error });
