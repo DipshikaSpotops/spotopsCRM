@@ -487,6 +487,7 @@ throw new Error("Failed to fetch orders");
 var data = response.data;
 data = sortOrdersByOrderNoDesc(data);
 data.forEach((item) => {
+console.log("length",data.length);  
 if (item.orderStatus === "Customer approved") {
 var bAddress = item.bAddress;
 
