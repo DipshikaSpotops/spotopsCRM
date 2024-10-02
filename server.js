@@ -1420,27 +1420,40 @@ app.get("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
 // PATCH route to update additionalInfo for a specific order and yardIndex
 app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   const { orderNo, yardIndex } = req.params;
-  const actualYardIndex = yardIndex - 1;
-  console.log("actualYardIndex",actualYardIndex);
+  
+  // Convert yardIndex to a number for proper comparison
+  const actualYardIndex = parseInt(yardIndex) - 1;
+  console.log("actualYardIndex", actualYardIndex);
+  
   const updateData = req.body; 
-  console.log("updatedData",updateData);
+  console.log("updatedData", updateData);
+
   try {
+    // Find the order by orderNo
     const order = await Order.findOne({ orderNo });
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
+
+    // Find the specific additionalInfo object by yardIndex
     const additionalInfo = order.additionalInfo.find(
-      (info) => info.yardIndex === parseInt(yardIndex)
+      (info) => info.yardIndex === actualYardIndex
     );
-  console.log("fetched additionalInfo",additionalInfo);
+    console.log("fetched additionalInfo", additionalInfo);
+
     if (!additionalInfo) {
       return res.status(404).json({ error: "Yard index not found" });
     }
+
+    // Update only the fields that were provided in the request body
     Object.keys(updateData).forEach((key) => {
       additionalInfo[key] = updateData[key];
     });
+
+    // Save the updated order
     await order.save();
 
+    // Send success response
     res.status(200).json({ message: "Order updated successfully" });
   } catch (err) {
     console.error(err);
