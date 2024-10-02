@@ -3086,7 +3086,7 @@ $(".mainDiv").addClass("blur");
 });
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', function () {
-selectedYardIndex = $(this).data('yard-index');
+const selectedYardIndex = $(this).data('yard-index');
 console.log("escalationPart", selectedYardIndex);
 $("#escRMA").fadeIn();
 $(".mainDiv").addClass("blur");
