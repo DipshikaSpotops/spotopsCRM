@@ -3103,8 +3103,8 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
     if (response.status !== 200) {
       throw new Error("Failed to fetch order data");
     }
-    
-    const additionalInfo = response.data.additionalInfo[selectedValue - 1];
+    var actualyIndex = selectedYardIndex - 1;
+    const additionalInfo = response.data.additionalInfo[actualyIndex];
     console.log("Fetched additionalInfo", additionalInfo);
     if (additionalInfo.escalationProcess) {
       $("#escProcess").val(additionalInfo.escalationProcess);
