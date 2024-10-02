@@ -433,7 +433,51 @@ res.status(400).send(err.message);
 
 
 // changing order status till here
+app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
+console.log("additionalInfo");
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+const firstName = req.query.firstname;
+console.log("fName",firstName);
+if (!order) return res.status(404).send('Order not found');
 
+// Count the number of existing yards
+const countYard = order.additionalInfo.length + 1;
+console.log(countYard,"countyard")
+console.log("body",req.body);
+
+
+order.additionalInfo.push(req.body);
+console.log("additional updated",order)
+var pp = order.additionalInfo[countYard -1 ].partPrice;
+var yardname = order.additionalInfo[countYard - 1].yardName;
+var shipping = order.additionalInfo[countYard - 1].shippingDetails;
+var others = order.additionalInfo[countYard - 1].others;
+
+console.log("yard details",pp,yardname,shipping,others);
+// Add timestamp to order history
+const timestamp = new Date().toLocaleString();
+order.orderHistory.push(`Yard ${countYard} Located Yard Name: ${yardname} PP: ${pp} Shipping: ${shipping} Others: ${others}   by ${firstName} on ${formattedDateTime}`);
+
+await order.save();
+
+res.json(order);
+} catch (error) {
+res.status(500).json({ message: 'Server error', error });
+}
+});
+// for adding escalation status to orderHistory
 app.post('/orders/:orderNo/additionalInfo', async (req, res) => {
 console.log("additionalInfo");
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
@@ -535,6 +579,59 @@ console.error("Error in PUT request:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+// to update escalation in order history
+app.put("/orders/:orderNo/escalation", async (req, res) => {
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+  console.log('US Central Time:,mnbjklkjhbv', centralTime);
+  const date = new Date(centralTime);
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const formattedDate = `${day} ${month}, ${year}`;
+  const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+  try {
+    const updateData = req.body; 
+    console.log("updatedData", updateData);
+  
+  if (!order) return res.status(404).send("Order not found");
+  
+  if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
+  const yardInfo = order.additionalInfo[yardIndex];
+  console.log("Existing yard info:", yardInfo);
+  
+  for (const key in req.body) {
+  if (req.body.hasOwnProperty(key)) {
+  yardInfo[key] = req.body[key];
+  }
+  }
+  
+  // Update the specific index in the additionalInfo array
+  order.additionalInfo[yardIndex] = yardInfo;
+  
+  // Add timestamp to order history
+  const timestamp = new Date().toLocaleString();
+  const firstName = req.query.firstName;
+  
+  const escProcess = req.body.escProcess;
+  order.orderHistory.push(`Escalation Process: ${escProcess} updated by ${firstName} on ${formattedDateTime}`);
+  
+  // Mark the additionalInfo array as modified
+  order.markModified("additionalInfo");
+  
+  await order.save();
+  res.json(order);
+  } else {
+  res.status(400).json({ message: "Invalid yard index" });
+  }
+  } catch (error) {
+  console.error("Error in PUT request:", error);
+  res.status(500).json({ message: "Server error", error });
+  }
+  });
+  // escalation in order history ends here
 app.put("/cancelledOrders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
     const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
     console.log('US Central Time:,mnbjklkjhbv', centralTime);

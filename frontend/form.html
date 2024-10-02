@@ -3111,8 +3111,6 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
     // Populate form fields if data is present
     if (additionalInfo.escalationProcess) {
       $("#escProcess").val(additionalInfo.escalationProcess);
-
-      // Logic to show/hide divs based on escalationProcess
       if (additionalInfo.escalationProcess === 'Replacement') {
 // Show both columns when 'Replacement' is selected
 $('#replacementColumns').fadeIn();
@@ -3537,92 +3535,124 @@ console.error("Error fetching yard data:", error);
 });
 
 $("#saveEsc").on("click", async function () {
-$(".mainDiv").removeClass("blur");
-$("#escRMA").hide();
-const yardIndex = $(this).data("yard-index");
-const orderNo = urlParams.get("orderNo");  
-console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
-const escalationProcess = $("#escProcess").val();
-const custReason = $("#custReason").val();
-const customerShippingMethod = $("#customerShippingMethod").val();
-const customerShipper = $("#customerShipper").val();
-const customerTrackingNumber = $("#customerTrackingNumber").val();
-const custOwnShipping = $("#custOwnShipping").val();
-const yardShippingStatus = $("#yardShippingStatus").val();
-const yardShippingMethod = $("#yardShippingMethod").val();
-const yardShipper = $("#yardShipper").val();
-const yardTrackingNumber = $("#yardTrackingNumber").val();
-const yardOwnShipping = $("#yardOwnShipping").val();
-console.log("inputs",escalationProcess,custReason,customerShippingMethod,customerShipper,customerTrackingNumber,custOwnShipping,yardShippingStatus,yardShippingMethod,yardShipper,yardTrackingNumber,yardOwnShipping)
-const token = localStorage.getItem('token');     
-try {
-const response = await axios.get(
-`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
+  $(".mainDiv").removeClass("blur");
+  $("#escRMA").hide();
 
-if (response.status !== 200) {
-throw new Error("Failed to fetch order data");
-}
-const currentAdditionalInfo = response.data;
-const updatedData = {};
-if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
-updatedData.escalationProcess = escProcess;
-}
-if (currentAdditionalInfo.custReason !== custReason) {
-updatedData.custReason = custReason;
-}
-if (currentAdditionalInfo.customerShippingMethod !== customerShippingMethod) {
-updatedData.customerShippingMethod = customerShippingMethod;
-}
-if (currentAdditionalInfo.customerShipper !== customerShipper) {
-updatedData.customerShipper = customerShipper;
-}
-if (currentAdditionalInfo.customerTrackingNumber !== customerTrackingNumber) {
-updatedData.customerTrackingNumber = customerTrackingNumber;
-}
-if (currentAdditionalInfo.custOwnShipping !== custOwnShipping) {
-updatedData.custOwnShipping = custOwnShipping;
-}
-if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
-updatedData.yardShippingStatus = yardShippingStatus;
-}
-if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
-updatedData.yardShippingMethod = yardShippingMethod;
-}
-if (currentAdditionalInfo.yardShipper !== yardShipper) {
-updatedData.yardShipper = yardShipper;
-}
-if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
-updatedData.yardTrackingNumber = yardTrackingNumber;
-}
-if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
-updatedData.yardOwnShipping = yardOwnShipping;
-}
-if (Object.keys(updatedData).length > 0) {
-const patchResponse = await axios.patch(
-`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-updatedData,
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
+  const yardIndex = $(this).data("yard-index");
+  const orderNo = urlParams.get("orderNo");  
+  const firstName = localStorage.getItem('firstName'); // Assuming the firstName is stored in localStorage
 
-if (patchResponse.status === 200) {
-alert("Yard Index information updated successfully!");
-} else {
-throw new Error("Failed to update Yard Index information");
-}
-} else {
-console.log("No changes detected, no update required.");
-}
-} catch (error) {
-console.error("Error saving Yard Index information", error);
-alert("Error saving Yard Index information");
-}
+  console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
+
+  // Collect form data
+  const escalationProcess = $("#escProcess").val();
+  const custReason = $("#custReason").val();
+  const customerShippingMethod = $("#customerShippingMethod").val();
+  const customerShipper = $("#customerShipper").val();
+  const customerTrackingNumber = $("#customerTrackingNumber").val();
+  const custOwnShipping = $("#custOwnShipping").val();
+  const yardShippingStatus = $("#yardShippingStatus").val();
+  const yardShippingMethod = $("#yardShippingMethod").val();
+  const yardShipper = $("#yardShipper").val();
+  const yardTrackingNumber = $("#yardTrackingNumber").val();
+  const yardOwnShipping = $("#yardOwnShipping").val();
+
+  console.log("inputs", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping, yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+
+  const token = localStorage.getItem('token');
+
+  try {
+    // Fetch the current data for comparison
+    const response = await axios.get(
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch order data");
+    }
+
+    const currentAdditionalInfo = response.data;
+    const updatedData = {};
+    let hasChanges = false;
+
+    // Check for changes and prepare the update object
+    if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
+      updatedData.escProcess = escalationProcess;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.custReason !== custReason) {
+      updatedData.custReason = custReason;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.customerShippingMethod !== customerShippingMethod) {
+      updatedData.customerShippingMethod = customerShippingMethod;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.customerShipper !== customerShipper) {
+      updatedData.customerShipper = customerShipper;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.customerTrackingNumber !== customerTrackingNumber) {
+      updatedData.customerTrackingNumber = customerTrackingNumber;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.custOwnShipping !== custOwnShipping) {
+      updatedData.custOwnShipping = custOwnShipping;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
+      updatedData.yardShippingStatus = yardShippingStatus;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
+      updatedData.yardShippingMethod = yardShippingMethod;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.yardShipper !== yardShipper) {
+      updatedData.yardShipper = yardShipper;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
+      updatedData.yardTrackingNumber = yardTrackingNumber;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
+      updatedData.yardOwnShipping = yardOwnShipping;
+      hasChanges = true;
+    }
+
+    // If there are changes, update the Yard Info and Order History
+    if (hasChanges) {
+      const patchResponse = await axios.put(
+        `https://www.spotops360.com/orders/${orderNo}/escalation`,
+        {
+          ...updatedData,
+          yardIndex: yardIndex,
+          firstName: firstName,
+          orderNo: orderNo   
+        },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+
+      if (patchResponse.status === 200) {
+        alert("Yard Index information and orderHistory updated successfully!");
+      } else {
+        throw new Error("Failed to update Yard Index information and orderHistory");
+      }
+    } else {
+      console.log("No changes detected, no update required.");
+    }
+  } catch (error) {
+    console.error("Error saving Yard Index information", error);
+    alert("Error saving Yard Index information");
+  }
 });
+
 
 
 
