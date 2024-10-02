@@ -595,8 +595,8 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
   try {
   const updateData = req.body; 
   console.log("updatedData", updateData);
-  const orderNo = updateData.orderNo;
-  const order = await Order.findOne({ orderNo }); 
+  const existingOrderNo = updateData.orderNo;
+  const order = await Order.findOne({ existingOrderNo }); 
   const yardIndex = updateData.yardIndex;
   var actualYardIndex = yardIndex - 1;
   console.log("Order found:", order);
