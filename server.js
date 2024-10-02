@@ -593,9 +593,9 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
   const formattedDate = `${day} ${month}, ${year}`;
   const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
   try {
-    const updateData = req.body; 
-    console.log("updatedData", updateData);
-    const orderNo = updateData.orderNo;
+  const updateData = req.body; 
+  console.log("updatedData", updateData);
+  const orderNo = updateData.orderNo;
   const order = await Order.findOne({ orderNo }); 
   const yardIndex = updateData.yardIndex;
   var actualYardIndex = yardIndex - 1;
