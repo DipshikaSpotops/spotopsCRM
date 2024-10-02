@@ -3086,12 +3086,42 @@ $("#refundCollect").fadeIn();
 $(".mainDiv").addClass("blur");
 });
 // for esc part in yard
-$('#yardInfoContainer').on('click', '.escalation', function () {
+$('#yardInfoContainer').on('click', '.escalation', async function () {
 const selectedYardIndex = $(this).data('yard-index');
 console.log("escalationPart", selectedYardIndex);
+const orderNo = urlParams.get("orderNo");
+try {
+const token = localStorage.getItem('token');
+const response = await axios.get(
+`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
+if (response.status === 200 && response.data) {
+const additionalInfo = response.data;
+$("#escProcess").val(additionalInfo.escProcess || "");
+$("#custReason").val(additionalInfo.custReason || "");
+$("#customerShippingMethod").val(additionalInfo.customerShippingMethod || "");
+$("#customerShipper").val(additionalInfo.customerShipper || "");
+$("#customerTrackingNumber").val(additionalInfo.customerTrackingNumber || "");
+$("#custOwnShipping").val(additionalInfo.custOwnShipping || "");
+$("#yardShippingStatus").val(additionalInfo.yardShippingStatus || "");
+$("#yardShippingMethod").val(additionalInfo.yardShippingMethod || "");
+$("#yardShipper").val(additionalInfo.yardShipper || "");
+$("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber || "");
+$("#yardownShipping").val(additionalInfo.yardOwnShipping || "");
 $("#escRMA").fadeIn();
 $(".mainDiv").addClass("blur");
 $("#saveEsc").data("yard-index", selectedYardIndex);
+} else {
+console.error("No additional info found");
+alert("No additional info found for this yard.");
+}
+} catch (error) {
+console.error("Error fetching additional info:", error);
+alert("Failed to fetch additional info. Please try again.");
+}
 });
 
 $("#closeCardCharged").on("click", function () {
@@ -3493,7 +3523,7 @@ throw new Error("Failed to fetch order data");
 const currentAdditionalInfo = response.data;
 const updatedData = {};
 if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
-updatedData.escalationProcess = escalationProcess;
+updatedData.escalationProcess = escProcess;
 }
 if (currentAdditionalInfo.custReason !== custReason) {
 updatedData.custReason = custReason;
