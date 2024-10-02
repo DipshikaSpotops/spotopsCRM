@@ -3106,8 +3106,8 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
 
     const additionalInfo = response.data.additionalInfo[selectedValue];
     console.log("Fetched additionalInfo", additionalInfo);
-    if (additionalInfo.escProcess) {
-      $("#escProcess").val(additionalInfo.escProcess);
+    if (additionalInfo.escalationProcess) {
+      $("#escProcess").val(additionalInfo.escalationProcess);
     }
     if (additionalInfo.custReason) {
       $("#custReason").val(additionalInfo.custReason);
