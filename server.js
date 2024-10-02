@@ -596,6 +596,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
     const updateData = req.body; 
     console.log("updatedData", updateData);
     var orderNo = updateData.orderNo;
+    console.log("orderNo",orderNo);
   const order = await Order.findOne({ orderNo }); 
   const yardIndex = updateData.yardIndex;
   var actualYardIndex = yardIndex - 1;
