@@ -473,65 +473,73 @@ $('#placed-order-content').removeClass('d-none');
 });
 
 try {
-const response = await axios.get(
-"https://www.spotops360.com/orders?status=placed",
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
+  const response = await axios.get(
+    "https://www.spotops360.com/orders?status=placed",
+    {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    }
+  );
 
-if (response.status !== 200) {
-throw new Error("Failed to fetch orders");
-}
+  if (response.status !== 200) {
+    throw new Error("Failed to fetch orders");
+  }
 
-var data = response.data;
-data = sortOrdersByOrderNoDesc(data);
-data.forEach((item) => {
-// console.log("length",data.length);  
-if (item.orderStatus === "Customer approved") {
-console.log("item length",item, item.length);  
-var bAddress = item.bAddress;
+  var data = response.data;
+  data = sortOrdersByOrderNoDesc(data);
 
-const bParts = bAddress.split(',');
-const firstLineB = `${bParts[0].trim()}, ${bParts[1].trim()}`;
-const secondLineB = `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}`;
-const formattedBAddress = `${firstLineB}<br>${secondLineB}`;
-var sAddress = item.sAddress;
+  // Initialize a counter for "Customer approved" orders
+  let approvedOrdersCount = 0;
 
-const sParts = sAddress.split(',');
-const firstLineS = `${sParts[0].trim()}, ${sParts[1].trim()}`;
-const secondLineS = `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}`;
-const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
-$("#infoTable").append(
-`<tr>
-<td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>Name: ${item.customerName}</br>
-          Email: ${item.email}</br>
-          Phone: ${item.phone}</br>
-          Alt Phone: ${item.altPhone}</br>
-          Billing Address:</br> ${formattedBAddress}</br>
+  data.forEach((item) => {
+    if (item.orderStatus === "Customer approved") {
+      approvedOrdersCount++;  // Increment the count
+      // console.log("item length", item, item.length);
+
+      var bAddress = item.bAddress;
+      const bParts = bAddress.split(',');
+      const firstLineB = `${bParts[0].trim()}, ${bParts[1].trim()}`;
+      const secondLineB = `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}`;
+      const formattedBAddress = `${firstLineB}<br>${secondLineB}`;
+
+      var sAddress = item.sAddress;
+      const sParts = sAddress.split(',');
+      const firstLineS = `${sParts[0].trim()}, ${sParts[1].trim()}`;
+      const secondLineS = `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}`;
+      const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
+
+      $("#infoTable").append(
+        `<tr>
+        <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
+        <td>${item.orderDate}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
+        <td>Name: ${item.customerName}</br>
+              Email: ${item.email}</br>
+              Phone: ${item.phone}</br>
+              Alt Phone: ${item.altPhone}</br>
+              Billing Address:</br> ${formattedBAddress}</br>
+            </td>
+        <td> ${formattedSAddress}</br>                
+        <td>${item.pReq || item.partName}</td>
+        <td>Year: ${item.year}</br>
+        Make: ${item.make}</br>
+        Model: ${item.model}</br>
+        Part Description: ${item.desc}</br>
+        VIN: ${item.vin}</br>
+        Warranty: ${item.warranty} days</br>
         </td>
-<td> ${formattedSAddress}</br>                
-<td>${item.pReq || item.partName}</td>
-<td>Year: ${item.year}</br>
-Make: ${item.make}</br>
-Model: ${item.model}</br>
-Part Description: ${item.desc}</br>
-VIN: ${item.vin}</br>
-Warranty: ${item.warranty} days</br>
-</td>
-<td>${item.orderStatus}</td>
-<td>${item.email}</td>
+        <td>${item.orderStatus}</td>
+        <td>${item.email}</td>
+        </tr>`
+      );
+    }
+  });
 
-</tr>`
-);
-}
-});
+  // Log the total count of "Customer approved" orders
+  console.log(`Total "Customer approved" orders: ${approvedOrdersCount}`);
+
 } catch (error) {
-console.error("Error fetching orders:", error);
+  console.error("Error fetching orders", error);
 }
 
 $("#infoTable").on("click", ".edit-btn", function () {
