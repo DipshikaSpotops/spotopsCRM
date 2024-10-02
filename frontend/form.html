@@ -1993,7 +1993,7 @@ aria-label="Close"
 </select>
 <div id="customerShippingValue" style="display: none;">
 <label>Enter Shipping Value:</label>
-<input type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
+<input id="custOwnShipping" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
 
 <label>Shipper:</label>
@@ -2028,7 +2028,7 @@ aria-label="Close"
 </select>
 <div id="yardShippingValue" style="display: none;">
 <label>Enter Shipping Value:</label>
-<input type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%">
+<input id="yardownShipping" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%">
 </div>
 <label>Shipper:</label>
 <select id="yardShipper" style="text-align: center;color:grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
@@ -3344,12 +3344,10 @@ orderData = await response.json();
 let escCause = "";
 const currentYardData = orderData.additionalInfo[yardIndex - 1];
 const status = $("#refund").val();
-const returnCharges = $(".returnShipment").val();
 const trackingNo = $("#trackingNoEdit").val();
 const eta = $("#etaEdit").val();
 let shipperName = $("#shipperNameEdit").val() === "Others" ? $("#otherShipperInput").val() : $("#shipperNameEdit").val();
 const trackingLink = $("#linkInput").val();
-const returnShippingMethod = $("input[name='returnValue']:checked").val();
 const paymentStatus = $('.paymentStatus').val();
 const refundedAmount = $("#refundedAmount").val();
 let newOrderStatus = $("#orderStatus").val();
@@ -3401,7 +3399,7 @@ default: return "th";
 var escalationDate= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 var escTicked = "Yes";
 } else if (status === "PO cancelled") {
-newOrderStatus = "PO cancelled";
+newOrderStatus = "Yard Processing";
 } else if (status === "Part delivered") {
 newOrderStatus = "Order Fulfilled";
 } else if (status === "Yard PO Sent") {
@@ -3416,11 +3414,7 @@ eta: eta,
 shipperName: shipperName,
 trackingLink: trackingLink,
 refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
-returnShipping: returnShippingMethod,
-returnShippingCharge: returnCharges,
-orderStatus: newOrderStatus,  // Updated order status
-shippingMethod: returnShippingMethod,
-shippingPrice: returnCharges,
+orderStatus: newOrderStatus, 
 escalationCause: escCause,
 escalationDate :escalationDate,
 escTicked: escTicked
@@ -4457,9 +4451,98 @@ $('#yardShippingStatus').on('change', function () {
 if ($(this).val() === 'Delivered') {
 alert('Yard Status: Part Delivered');
 }
+
+// saveEsc(escalation) btn click
+
+
+$("#saveEsc").on("click", async function () {
+  try {
+    const yardIndex = $(this).data("yard-index");
+    const orderNo = urlParams.get("orderNo");  
+    console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
+    const escProcess = $("#escProcess").val();
+    const custReason = $("#custReason").val();
+    const customerShippingMethod = $("#customerShippingMethod").val();
+    const customerShipper = $("#customerShipper").val();
+    const customerTrackingNumber = $("#customerTrackingNumber").val();
+    const custOwnShipping = $("#custOwnShipping").val();
+    const yardShippingStatus = $("#yardShippingStatus").val();
+    const yardShippingMethod = $("#yardShippingMethod").val();
+    const yardShipper = $("#yardShipper").val();
+    const yardTrackingNumber = $("#yardTrackingNumber").val();
+    const yardOwnShipping = $("#yardOwnShipping").val();
+    console.log("inputs",escProcess,custReason,customerShippingMethod,customerShipper,customerTrackingNumber,custOwnShipping,yardShippingStatus,yardShippingMethod,yardShipper,yardTrackingNumber,yardOwnShipping)
+    const token = localStorage.getItem('token'); 
+    const response = await axios.get(
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch order data");
+    }
+    const currentAdditionalInfo = response.data;
+    const updatedData = {};
+    if (currentAdditionalInfo.escProcess !== escProcess) {
+      updatedData.escProcess = escProcess;
+    }
+    if (currentAdditionalInfo.custReason !== custReason) {
+      updatedData.custReason = custReason;
+    }
+    if (currentAdditionalInfo.customerShippingMethod !== customerShippingMethod) {
+      updatedData.customerShippingMethod = customerShippingMethod;
+    }
+    if (currentAdditionalInfo.customerShipper !== customerShipper) {
+      updatedData.customerShipper = customerShipper;
+    }
+    if (currentAdditionalInfo.customerTrackingNumber !== customerTrackingNumber) {
+      updatedData.customerTrackingNumber = customerTrackingNumber;
+    }
+    if (currentAdditionalInfo.custOwnShipping !== custOwnShipping) {
+      updatedData.custOwnShipping = custOwnShipping;
+    }
+    if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
+      updatedData.yardShippingStatus = yardShippingStatus;
+    }
+    if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
+      updatedData.yardShippingMethod = yardShippingMethod;
+    }
+    if (currentAdditionalInfo.yardShipper !== yardShipper) {
+      updatedData.yardShipper = yardShipper;
+    }
+    if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
+      updatedData.yardTrackingNumber = yardTrackingNumber;
+    }
+    if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
+      updatedData.yardOwnShipping = yardOwnShipping;
+    }
+    if (Object.keys(updatedData).length > 0) {
+      const patchResponse = await axios.patch(
+        `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+        updatedData,
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+
+      if (patchResponse.status === 200) {
+        alert("Yard Index information updated successfully!");
+      } else {
+        throw new Error("Failed to update Yard Index information");
+      }
+    } else {
+      console.log("No changes detected, no update required.");
+    }
+  } catch (error) {
+    console.error("Error saving Yard Index information", error);
+    alert("Error saving Yard Index information");
+  }
 });
 
 
+});
 </script>
 </body>   
 </html>
