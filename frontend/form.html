@@ -404,17 +404,17 @@ background-color: #0056b3;
 border-color: #004085;
 }
 .replacement-container {
-display: flex;
-justify-content: space-between;
-gap: 20px; /* Add space between the two columns */
-margin-top: 20px; /* Adjust the margin if needed */
+  display: flex;
+  justify-content: space-between;
 }
 
 .replacement-column {
-flex: 1;
-padding: 12px;
-border: 1px solid #d9d4d4;
-border-radius: 10px;
+  flex-basis: 48%; /* Each column takes up about half of the container */
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin: 10px;
 }
 .timeline {
 position: relative;
@@ -2004,7 +2004,7 @@ OK
         <div><h4>Part from Yard:</h4></div>
         <div>
           <select id="yardShippingStatus" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 0% 4%; width: 110%;">
-            <option value="">Shipping Method</option>
+            <option value="">Shipping Status</option>
             <option value="Ready to ship">Ready to ship</option>
             <option value="In transit">In transit</option>
             <option value="Delivered">Delivered</option>
@@ -4405,11 +4405,13 @@ $('#escProcess').on('change', function () {
   const selectedValue = $(this).val();
 
   if (selectedValue === 'Replacement') {
-    // Show both columns when 'Replacement' is selected
+    // Show both columns when 'Replacement' is selected, in a row layout
+    $('.replacement-container').css('display', 'flex');
     $('#partFromCustomer').fadeIn();
     $('#partFromYard').fadeIn();
   } else if (selectedValue === 'Return') {
     // Show only the 'Part from Customer' section when 'Return' is selected
+    $('.replacement-container').css('display', 'block'); // Single column layout
     $('#partFromCustomer').fadeIn();
     $('#partFromYard').fadeOut();
   } else {
@@ -4436,7 +4438,7 @@ $('#yardShippingMethod').on('change', function () {
     $('#yardShippingValue').fadeOut();
   }
 });
-})
+
 </script>
 </body>   
 </html>
