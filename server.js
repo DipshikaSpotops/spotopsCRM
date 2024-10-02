@@ -1396,19 +1396,52 @@ app.put('/moveOrder/:orderNo', async (req, res) => {
     }
 });
 
+// GET route to fetch additionalInfo for a specific order and yardIndex
+app.get("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
+  const { orderNo, yardIndex } = req.params;
+  try {
+    const order = await Order.findOne({ orderNo });
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    const additionalInfo = order.additionalInfo.find(
+      (info) => info.yardIndex === parseInt(yardIndex)
+    );
 
+    if (!additionalInfo) {
+      return res.status(404).json({ error: "Yard index not found" });
+    }
+    res.status(200).json(additionalInfo);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+// PATCH route to update additionalInfo for a specific order and yardIndex
+app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
+  const { orderNo, yardIndex } = req.params;
+  const updateData = req.body; 
+  console.log("updatedData",updateData);
+  try {
+    const order = await Order.findOne({ orderNo });
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    const additionalInfo = order.additionalInfo.find(
+      (info) => info.yardIndex === parseInt(yardIndex)
+    );
 
+    if (!additionalInfo) {
+      return res.status(404).json({ error: "Yard index not found" });
+    }
+    Object.keys(updateData).forEach((key) => {
+      additionalInfo[key] = updateData[key];
+    });
+    await order.save();
 
-// api for giving yard suggestions
-// app.get('/orders/:orderNo/additionalInfo', (req, res) => {
-//   console.log("Yard suggestions endpoint hit with query:", req.query.query);
-//   const query = req.query.query;
-//   console.log("query",query);
-//   Yard.find({ name: new RegExp(query, 'i') }) 
-//       .then(yards => res.json(yards))
-//       .catch(err => {
-//         console.error("Error fetching yards:", err);
-//         res.status(500).json({ error: err.message });
-//       });
-// });
-
+    res.status(200).json({ message: "Order updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});

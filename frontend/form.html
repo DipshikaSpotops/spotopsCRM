@@ -3688,8 +3688,6 @@ $("#shipping_own_cust").show();
 
 $("#refund").on("change", function () {
 const refundStatus = $(this).val();
-
-// Handle UI changes based on refund status
 if (refundStatus === "Part shipped") {
 $("#divTrackingEdit").show();
 $("#sendEmailButton").show();
