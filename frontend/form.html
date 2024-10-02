@@ -3103,12 +3103,35 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
     if (response.status !== 200) {
       throw new Error("Failed to fetch order data");
     }
+
     var actualyIndex = selectedYardIndex - 1;
     const additionalInfo = response.data.additionalInfo[actualyIndex];
     console.log("Fetched additionalInfo", additionalInfo);
+
+    // Populate form fields if data is present
     if (additionalInfo.escalationProcess) {
       $("#escProcess").val(additionalInfo.escalationProcess);
+
+      // Logic to show/hide divs based on escalationProcess
+      if (additionalInfo.escalationProcess === 'Replacement') {
+// Show both columns when 'Replacement' is selected
+$('#replacementColumns').fadeIn();
+$('#partFromCustomer').fadeIn();
+$('#partFromYard').fadeIn();
+$('#partFromCustomerReturn').fadeOut();
+} else if (additionalInfo.escalationProcess === 'Return') {
+$('#replacementColumns').fadeIn();
+// $('#partFromCustomerReturn').fadeIn();
+$('#partFromCustomer').fadeIn();
+$('#partFromYard').fadeOut();
+} else {
+// Hide both columns for other cases like 'Junk'
+$('#replacementColumns').fadeOut();
+$('#partFromCustomer').fadeOut();
+$('#partFromYard').fadeOut();
+}
     }
+
     if (additionalInfo.custReason) {
       $("#custReason").val(additionalInfo.custReason);
     }
@@ -3144,6 +3167,7 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
     alert("Error fetching yard information");
   }
 });
+
 
 
 $("#closeCardCharged").on("click", function () {
