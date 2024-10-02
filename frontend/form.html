@@ -3631,7 +3631,8 @@ $("#saveEsc").on("click", async function () {
         {
           ...updatedData,
           yardIndex: yardIndex,
-          firstName: firstName
+          firstName: firstName,
+          orderNo: orderNo   
         },
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
