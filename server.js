@@ -1430,7 +1430,7 @@ app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
     const additionalInfo = order.additionalInfo.find(
       (info) => info.yardIndex === parseInt(yardIndex)
     );
-
+  console.log("fetched additionalInfo",additionalInfo);
     if (!additionalInfo) {
       return res.status(404).json({ error: "Yard index not found" });
     }
