@@ -3456,7 +3456,91 @@ console.error("Error fetching yard data:", error);
 }
 });
 
+$("#saveEsc").on("click", async function () {
+const yardIndex = $(this).data("yard-index");
+const orderNo = urlParams.get("orderNo");  
+console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
+const escProcess = $("#escProcess").val();
+const custReason = $("#custReason").val();
+const customerShippingMethod = $("#customerShippingMethod").val();
+const customerShipper = $("#customerShipper").val();
+const customerTrackingNumber = $("#customerTrackingNumber").val();
+const custOwnShipping = $("#custOwnShipping").val();
+const yardShippingStatus = $("#yardShippingStatus").val();
+const yardShippingMethod = $("#yardShippingMethod").val();
+const yardShipper = $("#yardShipper").val();
+const yardTrackingNumber = $("#yardTrackingNumber").val();
+const yardOwnShipping = $("#yardOwnShipping").val();
+console.log("inputs",escProcess,custReason,customerShippingMethod,customerShipper,customerTrackingNumber,custOwnShipping,yardShippingStatus,yardShippingMethod,yardShipper,yardTrackingNumber,yardOwnShipping)
+const token = localStorage.getItem('token');     
+try {
+const response = await axios.get(
+`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
 
+if (response.status !== 200) {
+throw new Error("Failed to fetch order data");
+}
+const currentAdditionalInfo = response.data;
+const updatedData = {};
+if (currentAdditionalInfo.escProcess !== escProcess) {
+updatedData.escProcess = escProcess;
+}
+if (currentAdditionalInfo.custReason !== custReason) {
+updatedData.custReason = custReason;
+}
+if (currentAdditionalInfo.customerShippingMethod !== customerShippingMethod) {
+updatedData.customerShippingMethod = customerShippingMethod;
+}
+if (currentAdditionalInfo.customerShipper !== customerShipper) {
+updatedData.customerShipper = customerShipper;
+}
+if (currentAdditionalInfo.customerTrackingNumber !== customerTrackingNumber) {
+updatedData.customerTrackingNumber = customerTrackingNumber;
+}
+if (currentAdditionalInfo.custOwnShipping !== custOwnShipping) {
+updatedData.custOwnShipping = custOwnShipping;
+}
+if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
+updatedData.yardShippingStatus = yardShippingStatus;
+}
+if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
+updatedData.yardShippingMethod = yardShippingMethod;
+}
+if (currentAdditionalInfo.yardShipper !== yardShipper) {
+updatedData.yardShipper = yardShipper;
+}
+if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
+updatedData.yardTrackingNumber = yardTrackingNumber;
+}
+if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
+updatedData.yardOwnShipping = yardOwnShipping;
+}
+if (Object.keys(updatedData).length > 0) {
+const patchResponse = await axios.patch(
+`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+updatedData,
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
+
+if (patchResponse.status === 200) {
+alert("Yard Index information updated successfully!");
+} else {
+throw new Error("Failed to update Yard Index information");
+}
+} else {
+console.log("No changes detected, no update required.");
+}
+} catch (error) {
+console.error("Error saving Yard Index information", error);
+alert("Error saving Yard Index information");
+}
+});
 
 
 
@@ -4453,91 +4537,7 @@ alert('Yard Status: Part Delivered');
 // saveEsc(escalation) btn click
 
 
-$("#saveEsc").on("click", async function () {
-  try {
-    const yardIndex = $(this).data("yard-index");
-    const orderNo = urlParams.get("orderNo");  
-    console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
-    const escProcess = $("#escProcess").val();
-    const custReason = $("#custReason").val();
-    const customerShippingMethod = $("#customerShippingMethod").val();
-    const customerShipper = $("#customerShipper").val();
-    const customerTrackingNumber = $("#customerTrackingNumber").val();
-    const custOwnShipping = $("#custOwnShipping").val();
-    const yardShippingStatus = $("#yardShippingStatus").val();
-    const yardShippingMethod = $("#yardShippingMethod").val();
-    const yardShipper = $("#yardShipper").val();
-    const yardTrackingNumber = $("#yardTrackingNumber").val();
-    const yardOwnShipping = $("#yardOwnShipping").val();
-    console.log("inputs",escProcess,custReason,customerShippingMethod,customerShipper,customerTrackingNumber,custOwnShipping,yardShippingStatus,yardShippingMethod,yardShipper,yardTrackingNumber,yardOwnShipping)
-    const token = localStorage.getItem('token'); 
-    const response = await axios.get(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-      {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      }
-    );
 
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch order data");
-    }
-    const currentAdditionalInfo = response.data;
-    const updatedData = {};
-    if (currentAdditionalInfo.escProcess !== escProcess) {
-      updatedData.escProcess = escProcess;
-    }
-    if (currentAdditionalInfo.custReason !== custReason) {
-      updatedData.custReason = custReason;
-    }
-    if (currentAdditionalInfo.customerShippingMethod !== customerShippingMethod) {
-      updatedData.customerShippingMethod = customerShippingMethod;
-    }
-    if (currentAdditionalInfo.customerShipper !== customerShipper) {
-      updatedData.customerShipper = customerShipper;
-    }
-    if (currentAdditionalInfo.customerTrackingNumber !== customerTrackingNumber) {
-      updatedData.customerTrackingNumber = customerTrackingNumber;
-    }
-    if (currentAdditionalInfo.custOwnShipping !== custOwnShipping) {
-      updatedData.custOwnShipping = custOwnShipping;
-    }
-    if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
-      updatedData.yardShippingStatus = yardShippingStatus;
-    }
-    if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
-      updatedData.yardShippingMethod = yardShippingMethod;
-    }
-    if (currentAdditionalInfo.yardShipper !== yardShipper) {
-      updatedData.yardShipper = yardShipper;
-    }
-    if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
-      updatedData.yardTrackingNumber = yardTrackingNumber;
-    }
-    if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
-      updatedData.yardOwnShipping = yardOwnShipping;
-    }
-    if (Object.keys(updatedData).length > 0) {
-      const patchResponse = await axios.patch(
-        `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-        updatedData,
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
-      );
-
-      if (patchResponse.status === 200) {
-        alert("Yard Index information updated successfully!");
-      } else {
-        throw new Error("Failed to update Yard Index information");
-      }
-    } else {
-      console.log("No changes detected, no update required.");
-    }
-  } catch (error) {
-    console.error("Error saving Yard Index information", error);
-    alert("Error saving Yard Index information");
-  }
-});
 
 
 });
