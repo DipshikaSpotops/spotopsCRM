@@ -4455,10 +4455,11 @@ if (selectedValue === 'Replacement') {
 $('#replacementColumns').fadeIn();
 $('#partFromCustomer').fadeIn();
 $('#partFromYard').fadeIn();
+$('#partFromCustomerReturn').fadeOut();
 } else if (selectedValue === 'Return') {
-// Show only the 'Part from Customer' section when 'Return' is selected
-$('#replacementColumns').fadeOut();
+$('#replacementColumns').fadeIn();
 $('#partFromCustomerReturn').fadeIn();
+$('#partFromCustomer').fadeIn();
 $('#partFromYard').fadeOut();
 } else {
 // Hide both columns for other cases like 'Junk'
