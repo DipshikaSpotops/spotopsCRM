@@ -3460,6 +3460,8 @@ console.error("Error fetching yard data:", error);
 });
 
 $("#saveEsc").on("click", async function () {
+$(".mainDiv").removeClass("blur");
+$("#escRMA").hide();
 const yardIndex = $(this).data("yard-index");
 const orderNo = urlParams.get("orderNo");  
 console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
