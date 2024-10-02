@@ -599,7 +599,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
   const order = await Order.findOne({ existingOrderNo }); 
   const yardIndex = updateData.yardIndex;
   var actualYardIndex = yardIndex - 1;
-  console.log("Order found:", existingOrderNo);
+  console.log("Order found:", order,existingOrderNo);
   console.log("Yard index:", actualYardIndex);
   
   if (!order) return res.status(404).send("Order not found");
