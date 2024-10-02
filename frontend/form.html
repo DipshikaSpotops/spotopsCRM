@@ -3100,6 +3100,7 @@ headers: token ? { Authorization: `Bearer ${token}` } : {},
 );
 if (response.status === 200 && response.data) {
 const additionalInfo = response.data;
+console.log("additionalInfo",additionalInfo);
 $("#escProcess").val(additionalInfo.escProcess || "");
 $("#custReason").val(additionalInfo.custReason || "");
 $("#customerShippingMethod").val(additionalInfo.customerShippingMethod || "");
