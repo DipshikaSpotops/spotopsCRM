@@ -3104,7 +3104,7 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
       throw new Error("Failed to fetch order data");
     }
 
-    const additionalInfo = response.data;
+    const additionalInfo = response.data.additionalInfo[selectedValue];
     console.log("Fetched additionalInfo", additionalInfo);
     if (additionalInfo.escProcess) {
       $("#escProcess").val(additionalInfo.escProcess);
