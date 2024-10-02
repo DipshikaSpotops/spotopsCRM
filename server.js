@@ -1420,6 +1420,8 @@ app.get("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
 // PATCH route to update additionalInfo for a specific order and yardIndex
 app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   const { orderNo, yardIndex } = req.params;
+  const actualYardIndex = yardIndex - 1;
+  console.log("actualYardIndex",actualYardIndex);
   const updateData = req.body; 
   console.log("updatedData",updateData);
   try {
