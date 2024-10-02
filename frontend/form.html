@@ -1973,11 +1973,7 @@ aria-label="Close"
 
 <!-- Replacement Columns-->
 <div id="replacementColumns" style="display: none;">
-
-<!-- Flexbox container for two columns -->
 <div class="replacement-container">
-
-<!-- First Column (Part from Customer) -->
 <div id="partFromCustomer" class="replacement-column">
     <div style="display: flex;">    
         <div><h4>Part from Customer:</h4></div>
@@ -1995,8 +1991,6 @@ aria-label="Close"
 <option value="Yard shipping">Yard shipping</option>
 <option value="Own shipping">Own shipping</option>
 </select>
-
-<!-- If "Own shipping" is selected, show this input -->
 <div id="customerShippingValue" style="display: none;">
 <label>Enter Shipping Value:</label>
 <input type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
@@ -2014,8 +2008,6 @@ aria-label="Close"
 <label>Tracking No:</label>
 <input type="text" id="customerTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
 </div>
-
-<!-- Second Column (Part from Yard) -->
 <div id="partFromYard" class="replacement-column">
 <div style="display: flex;">    
 <div><h4>Part from Yard:</h4></div>
@@ -2034,22 +2026,10 @@ aria-label="Close"
 <option value="Yard shipping">Yard shipping</option>
 <option value="Own shipping">Own shipping</option>
 </select>
-<!-- <label>Shipping Status:</label>
-<select id="yardShippingStatus" style="text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
-<option value="">Choose</option>
-<option value="Ready to ship">Ready to ship</option>
-<option value="In transit">In transit</option>
-<option value="Delivered">Delivered</option>
-</select> -->
-
-
-
-<!-- If "Own shipping" is selected, show this input -->
 <div id="yardShippingValue" style="display: none;">
 <label>Enter Shipping Value:</label>
 <input type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%">
 </div>
-
 <label>Shipper:</label>
 <select id="yardShipper" style="text-align: center;color:grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
 <option value="">Choose</option>
@@ -2058,15 +2038,47 @@ aria-label="Close"
 <option value="World Wide Express">World Wide Express</option>
 <option value="Others">Others</option>
 </select>
-
 <label>Tracking No:</label>
 <input type="text" id="yardTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
 </div>
-
 </div>
+<!-- div for return -->
+  <!-- Part from Customer -->
+  <div id="partFromCustomerReturn" class="replacement-column" style="display: none;">
+    <div style="display: flex;">
+      <div><h4>Part from Customer:</h4></div>
+      <div>
+        <select id="custReason" style="color: grey; text-align: center; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 0% 10%; width: 128%;">
+          <option value="">Reason</option>
+          <option value="Junked">Junked</option>
+          <option value="Return">Return</option>
+        </select>
+      </div>
+    </div>
+    <label>Shipping Method:</label>
+    <select id="customerShippingMethod" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+      <option value="">Choose</option>
+      <option value="Customer shipping">Customer shipping</option>
+      <option value="Yard shipping">Yard shipping</option>
+      <option value="Own shipping">Own shipping</option>
+    </select>
+    <div id="customerShippingValue" style="display: none;">
+      <label>Enter Shipping Value:</label>
+      <input type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;">
+    </div>
+    <label>Shipper:</label>
+    <select id="customerShipper" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+      <option value="">Choose</option>
+      <option value="UPS">UPS</option>
+      <option value="FedEx">FedEx</option>
+      <option value="World Wide Express">World Wide Express</option>
+      <option value="Others">Others</option>
+    </select>
+    <label>Tracking No:</label>
+    <input type="text" id="customerTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center;">
+  </div>
 </div>
 <button type="button" id="saveEsc">Save</button>
-
 </div>
 <!-- esc part for yard button ends here  -->
 
@@ -4446,7 +4458,7 @@ $('#partFromYard').fadeIn();
 } else if (selectedValue === 'Return') {
 // Show only the 'Part from Customer' section when 'Return' is selected
 $('#replacementColumns').fadeOut();
-$('#partFromCustomer').fadeIn();
+$('#partFromCustomerReturn').fadeIn();
 $('#partFromYard').fadeOut();
 } else {
 // Hide both columns for other cases like 'Junk'
