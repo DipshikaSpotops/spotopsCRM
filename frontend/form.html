@@ -1953,6 +1953,9 @@ OK
 <!-- esc part for yard button -->
 <div id="escRMA">
     <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span id="crossEsc" aria-hidden="true">&times;</span>
+    </button>
     <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
       <option value="">Choose</option>
       <option value="Replacement">Replacement</option>
@@ -1960,68 +1963,75 @@ OK
       <option value="Junk">Junk</option>
     </select>
   
-    <!-- Replacement Columns Container (Initially Hidden) -->
-    <div id="replacementColumns" style="display: none;">
-      <div class="replacement-container">
-        <!-- Part from Customer Column -->
-        <div id="partFromCustomer" class="replacement-column">
-          <h4>Part from Customer:</h4>
-          <label>Shipping Method:</label>
-          <select id="customerShippingMethod">
-            <option value="">Choose</option>
-            <option value="Customer shipping">Customer shipping</option>
-            <option value="Yard shipping">Yard shipping</option>
-            <option value="Own shipping">Own shipping</option>
+    <!-- Part from Customer -->
+    <div id="partFromCustomer" class="replacement-column" style="display: none;">
+      <div style="display: flex;">
+        <div><h4>Part from Customer:</h4></div>
+        <div>
+          <select id="custReason" style="color: grey; text-align: center; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 0% 10%; width: 128%;">
+            <option value="">Reason</option>
+            <option value="Junked">Junked</option>
+            <option value="Return">Return</option>
           </select>
-          <div id="customerShippingValue" style="display: none;">
-            <label>Enter Shipping Value:</label>
-            <input type="text" placeholder="Shipping value">
-          </div>
-          <label>Shipper:</label>
-          <select id="customerShipper">
-            <option value="">Choose</option>
-            <option value="UPS">UPS</option>
-            <option value="FedEx">FedEx</option>
-            <option value="World Wide Express">World Wide Express</option>
-            <option value="Others">Others</option>
-          </select>
-          <label>Tracking No:</label>
-          <input type="text" id="customerTrackingNumber" placeholder="Tracking Number">
         </div>
+      </div>
+      <label>Shipping Method:</label>
+      <select id="customerShippingMethod" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+        <option value="">Choose</option>
+        <option value="Customer shipping">Customer shipping</option>
+        <option value="Yard shipping">Yard shipping</option>
+        <option value="Own shipping">Own shipping</option>
+      </select>
+      <div id="customerShippingValue" style="display: none;">
+        <label>Enter Shipping Value:</label>
+        <input type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;">
+      </div>
+      <label>Shipper:</label>
+      <select id="customerShipper" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+        <option value="">Choose</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+        <option value="World Wide Express">World Wide Express</option>
+        <option value="Others">Others</option>
+      </select>
+      <label>Tracking No:</label>
+      <input type="text" id="customerTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center;">
+    </div>
   
-        <!-- Part from Yard Column -->
-        <div id="partFromYard" class="replacement-column">
-          <h4>Part from Yard:</h4>
-          <label>Shipping Status:</label>
-          <select id="yardShippingStatus">
-            <option value="">Choose</option>
+    <!-- Part from Yard -->
+    <div id="partFromYard" class="replacement-column" style="display: none;">
+      <div style="display: flex;">
+        <div><h4>Part from Yard:</h4></div>
+        <div>
+          <select id="yardShippingStatus" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 0% 4%; width: 110%;">
+            <option value="">Shipping Method</option>
             <option value="Ready to ship">Ready to ship</option>
             <option value="In transit">In transit</option>
             <option value="Delivered">Delivered</option>
           </select>
-          <label>Shipping Method:</label>
-          <select id="yardShippingMethod">
-            <option value="">Choose</option>
-            <option value="Customer shipping">Customer shipping</option>
-            <option value="Yard shipping">Yard shipping</option>
-            <option value="Own shipping">Own shipping</option>
-          </select>
-          <div id="yardShippingValue" style="display: none;">
-            <label>Enter Shipping Value:</label>
-            <input type="text" placeholder="Shipping value">
-          </div>
-          <label>Shipper:</label>
-          <select id="yardShipper">
-            <option value="">Choose</option>
-            <option value="UPS">UPS</option>
-            <option value="FedEx">FedEx</option>
-            <option value="World Wide Express">World Wide Express</option>
-            <option value="Others">Others</option>
-          </select>
-          <label>Tracking No:</label>
-          <input type="text" id="yardTrackingNumber" placeholder="Tracking Number">
         </div>
       </div>
+      <label>Shipping Method:</label>
+      <select id="yardShippingMethod" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+        <option value="">Choose</option>
+        <option value="Customer shipping">Customer shipping</option>
+        <option value="Yard shipping">Yard shipping</option>
+        <option value="Own shipping">Own shipping</option>
+      </select>
+      <div id="yardShippingValue" style="display: none;">
+        <label>Enter Shipping Value:</label>
+        <input type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;">
+      </div>
+      <label>Shipper:</label>
+      <select id="yardShipper" style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+        <option value="">Choose</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+        <option value="World Wide Express">World Wide Express</option>
+        <option value="Others">Others</option>
+      </select>
+      <label>Tracking No:</label>
+      <input type="text" id="yardTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center;">
     </div>
   </div>  
 <!-- esc part for yard button ends here  -->
@@ -4395,18 +4405,15 @@ $('#escProcess').on('change', function () {
   const selectedValue = $(this).val();
 
   if (selectedValue === 'Replacement') {
-    // Show both columns in flex layout for 'Replacement'
-    $('#replacementColumns').fadeIn();
+    // Show both columns when 'Replacement' is selected
     $('#partFromCustomer').fadeIn();
     $('#partFromYard').fadeIn();
   } else if (selectedValue === 'Return') {
-    // Only show the 'Part from Customer' for 'Return'
-    $('#replacementColumns').fadeOut();
+    // Show only the 'Part from Customer' section when 'Return' is selected
     $('#partFromCustomer').fadeIn();
     $('#partFromYard').fadeOut();
   } else {
-    // Hide everything for other cases like 'Junk'
-    $('#replacementColumns').fadeOut();
+    // Hide both columns for other cases like 'Junk'
     $('#partFromCustomer').fadeOut();
     $('#partFromYard').fadeOut();
   }
