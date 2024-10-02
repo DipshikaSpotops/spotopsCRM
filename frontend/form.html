@@ -3090,24 +3090,24 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
   const selectedYardIndex = $(this).data('yard-index');
   const orderNo = urlParams.get("orderNo");  
   console.log("escalationPart", selectedYardIndex);
+  
   $("#escRMA").fadeIn();
   $(".mainDiv").addClass("blur");
   $("#saveEsc").data("yard-index", selectedYardIndex);
-  const token = localStorage.getItem('token');
-  console.log("token",token); 
+
   try {
     const response = await axios.get(
-`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`
+    );
 
-if (response.status !== 200) {
-throw new Error("Failed to fetch order data");
-}
-const additionalInfo = response.data;
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch order data");
+    }
+
+    const additionalInfo = response.data;
     console.log("Fetched additionalInfo", additionalInfo);
+
+    // Populate the fields with the fetched data if available
     if (additionalInfo.escProcess) {
       $("#escProcess").val(additionalInfo.escProcess);
     }
