@@ -1436,9 +1436,7 @@ app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
     }
 
     // Find the specific additionalInfo object by yardIndex
-    const additionalInfo = order.additionalInfo.find(
-      (info) => info.yardIndex === actualYardIndex
-    );
+    const additionalInfo = order.additionalInfo[actualYardIndex]
     console.log("fetched additionalInfo", additionalInfo);
 
     if (!additionalInfo) {
