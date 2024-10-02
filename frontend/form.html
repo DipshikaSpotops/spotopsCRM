@@ -3094,10 +3094,10 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
   $("#escRMA").fadeIn();
   $(".mainDiv").addClass("blur");
   $("#saveEsc").data("yard-index", selectedYardIndex);
-
+  
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`
+      `https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`
     );
 
     if (response.status !== 200) {
@@ -3106,8 +3106,6 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
 
     const additionalInfo = response.data;
     console.log("Fetched additionalInfo", additionalInfo);
-
-    // Populate the fields with the fetched data if available
     if (additionalInfo.escProcess) {
       $("#escProcess").val(additionalInfo.escProcess);
     }
