@@ -3090,45 +3090,24 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
   const selectedYardIndex = $(this).data('yard-index');
   const orderNo = urlParams.get("orderNo");  
   console.log("escalationPart", selectedYardIndex);
-  
   $("#escRMA").fadeIn();
   $(".mainDiv").addClass("blur");
   $("#saveEsc").data("yard-index", selectedYardIndex);
-
-  // Fetch token
   const token = localStorage.getItem('token');
-  
-  // If token is missing, handle the error early
-  if (!token) {
-    alert("Authentication token is missing. Please log in.");
-    window.location.href = "/login"; // Redirect to login if necessary
-    return;
-  }
-  
+  console.log("token",token); 
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}`,
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
 
-    // Log the full response for debugging
-    console.log("Full response:", response);
-
-    // Check if the response is HTML (which may indicate a redirection or login page)
-    if (response.headers['content-type'].includes('text/html')) {
-      throw new Error("Received an HTML response instead of JSON. Check if you're authenticated.");
-    }
-
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch order data");
-    }
-
-    const additionalInfo = response.data;
+if (response.status !== 200) {
+throw new Error("Failed to fetch order data");
+}
+const additionalInfo = response.data;
     console.log("Fetched additionalInfo", additionalInfo);
-
-    // Populate the form fields if data exists
     if (additionalInfo.escProcess) {
       $("#escProcess").val(additionalInfo.escProcess);
     }
@@ -3164,14 +3143,7 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
     }
   } catch (error) {
     console.error("Error fetching data:", error);
-
-    // Specific error message if you received HTML instead of JSON
-    if (error.message.includes('HTML response')) {
-      alert("Authentication issue. Please log in again.");
-      window.location.href = "/login"; // Redirect to login page
-    } else {
-      alert("Error fetching yard information. Please try again later.");
-    }
+    alert("Error fetching yard information");
   }
 });
 
