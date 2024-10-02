@@ -1399,14 +1399,14 @@ app.put('/moveOrder/:orderNo', async (req, res) => {
 // GET route to fetch additionalInfo for a specific order and yardIndex
 app.get("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   const { orderNo, yardIndex } = req.params;
+  console.log("getting additional info",orderNo,yardIndex);
+  const actualYardIndex = yardIndex - 1 ;
   try {
     const order = await Order.findOne({ orderNo });
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
-    const additionalInfo = order.additionalInfo.find(
-      (info) => info.yardIndex === parseInt(yardIndex)
-    );
+    const additionalInfo = order.additionalInfo[actualYardIndex];
 
     if (!additionalInfo) {
       return res.status(404).json({ error: "Yard index not found" });
