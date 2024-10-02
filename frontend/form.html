@@ -2544,6 +2544,7 @@ ${yardData.trackingNo ? `Cx Tracking No: ${yardData.trackingNo}<br>` : ""}
 ${yardData.shipperName ? `Carrier: ${yardData.shipperName}<br>` : ""}
 ${yardData.escalationDate ? `Escalation Date: ${yardData.escalationDate}<br>` : ""}
 ${yardData.escalationCause ? `Escalation Reason: ${yardData.escalationCause}<br>` : ""}
+${yardData.escProcess ? `Escalation Process: ${yardData.escProcess}<br>` : ""}
 ${yardData.refundStatus ? `Refund Status: ${yardData.refundStatus}<br>` : ""}
 ${yardData.refundedAmount ? `Refunded Amount: $${yardData.refundedAmount}<br>` : ""}
 </td>
@@ -3465,7 +3466,7 @@ $("#escRMA").hide();
 const yardIndex = $(this).data("yard-index");
 const orderNo = urlParams.get("orderNo");  
 console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
-const escProcess = $("#escProcess").val();
+const escalationProcess = $("#escProcess").val();
 const custReason = $("#custReason").val();
 const customerShippingMethod = $("#customerShippingMethod").val();
 const customerShipper = $("#customerShipper").val();
@@ -3476,7 +3477,7 @@ const yardShippingMethod = $("#yardShippingMethod").val();
 const yardShipper = $("#yardShipper").val();
 const yardTrackingNumber = $("#yardTrackingNumber").val();
 const yardOwnShipping = $("#yardOwnShipping").val();
-console.log("inputs",escProcess,custReason,customerShippingMethod,customerShipper,customerTrackingNumber,custOwnShipping,yardShippingStatus,yardShippingMethod,yardShipper,yardTrackingNumber,yardOwnShipping)
+console.log("inputs",escalationProcess,custReason,customerShippingMethod,customerShipper,customerTrackingNumber,custOwnShipping,yardShippingStatus,yardShippingMethod,yardShipper,yardTrackingNumber,yardOwnShipping)
 const token = localStorage.getItem('token');     
 try {
 const response = await axios.get(
@@ -3491,8 +3492,8 @@ throw new Error("Failed to fetch order data");
 }
 const currentAdditionalInfo = response.data;
 const updatedData = {};
-if (currentAdditionalInfo.escProcess !== escProcess) {
-updatedData.escProcess = escProcess;
+if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
+updatedData.escalationProcess = escalationProcess;
 }
 if (currentAdditionalInfo.custReason !== custReason) {
 updatedData.custReason = custReason;
