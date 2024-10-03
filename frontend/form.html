@@ -2092,17 +2092,16 @@ aria-label="Close"
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
 console.log("query string",queryString);
-if (queryString.includes("cancelled=true")) {
-$("#crmForm input, #crmForm select").not("#orderStatus").prop("disabled", true);
-$(".add-yard-btn").hide();
+
 $("#orderStatus").on("change", function() {
 const newOrderStatus = $(this).val();
 console.log("Order Status changed to:", newOrderStatus);
 if (newOrderStatus == "Dispute") {
+console.log("dispute?",newOrderStatus);
 $("#disputeDiv").fadeIn();
 }
 });
-}
+
 
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
