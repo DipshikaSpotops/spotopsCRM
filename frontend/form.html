@@ -2104,7 +2104,7 @@ aria-label="Close"
 </select>
 
 <label>Tracking No:</label>
-<input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
+<input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;">
 <label>Delivery Status:</label>
 <select id="custReturnDelivery" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
@@ -2325,6 +2325,19 @@ $("#escTickBox").prop("checked", true);
 }else{
   $("#escTickBox").prop("checked", false);
 }
+var yardStatus = yard.status;
+console.log("current yard status",yardStatus);
+if (yardStatus == "Yard Located" || yardStatus === "Yard PO Sent" || yardStatus === "PO confirmed" || yardStatus === "PO confirmed"){
+  $("#orderStatus").val("Yard Processing");
+}else if(yardStatus === "Part shipped"){
+  $("#orderStatus").val("In Transit");
+}
+else if(yardStatus === "Part delivered"){
+  $("#orderStatus").val("Order Fulfilled");
+}else if(yardStatus === "Escalation"){
+  $("#orderStatus").val("Escalation");
+}
+
 });
 })
 .catch(error => console.error("Error fetching yard data:", error));
@@ -3356,7 +3369,7 @@ fetchAndUpdateYardInfo();
 console.error("Error:", error);
 // alert("Error updating yard details. Please try again.");
 });
-// window.location.reload();
+window.location.reload();
 });
 
 
@@ -3424,7 +3437,7 @@ fetchAndUpdateYardInfo();
 console.error("Error:", error);
 // alert("Error updating refund details. Please try again.");
 });
-// window.location.reload();
+window.location.reload();
 });
 
 // refundCollect part ends here
@@ -4171,14 +4184,16 @@ return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
 if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
 throw new Error("Yard data not found in cancelledOrders.");
 }
-return data;  
+return data;  // Return the data from cancelledOrders
 });
 } else {
-return data;  
+return data;  // Return the data from orders
 }
 })
 .then((data) => {
 const yardData = data.additionalInfo[yardIndex - 1];
+console.log("yardData", yardData);
+
 // Set form fields with the yard data
 $("#editYardName").val(yardData.yardName);
 $("#editAddress").val(yardData.street);
