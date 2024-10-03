@@ -319,7 +319,9 @@ notes: [String],
 isCancelled: { type: Boolean, default: false },
 teamOrder:String,
 actualGP:Number,
-supportNotes:[String]
+supportNotes:[String],
+disputedDate: String ,  
+disputeReason: String,
 });
 
 const Order = mongoose.model("Order", OrderSchema);
@@ -1578,5 +1580,33 @@ app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
+  }
+});
+//for storing disputes
+// Update dispute information for a specific order
+app.put('/orders/:orderId/dispute', async (req, res) => {
+  const { orderId } = req.params;
+  const { disputedDate, disputeReason } = req.body;
+
+  try {
+    // Find the order by ID and update the dispute details
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { 
+        disputedDate: disputedDate, 
+        disputeReason: disputeReason 
+      },
+      { new: true }  // Returns the updated document
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Send the updated order as a response
+    res.json(order);
+  } catch (error) {
+    console.error('Error updating dispute information:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });

@@ -4833,7 +4833,34 @@ if ($(this).val() === 'Delivered') {
 alert('Yard Status: Part Delivered');
 }
 // saveEsc(escalation) btn click
-
+//for dispute
+$("#disputeSubmit").on("click", function () {
+  $("#disputeDiv").fadeOut();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  const disputedDate = $("#disputedDate").val();
+  const disputeReason = $("#disputeReason").val();
+  const orderNo = urlParams.get("orderNo");
+  console.log("orderId",orderNo);
+  const disputeData = {
+    disputedDate: disputedDate,
+    disputeReason: disputeReason,
+  };
+  $.ajax({
+    url: `https://www.spotops360.com/orders/${orderNo}/dispute`,
+    method: "PUT",
+    data: JSON.stringify(disputeData),
+    contentType: "application/json",
+    success: function (response) {
+      alert("Dispute information updated successfully!");
+    },
+    error: function (error) {
+      console.error("Error updating dispute:", error);
+      alert("Failed to update dispute information.");
+    }
+  });
+});
+// for dispute till here
 });
 </script>
 </body>   
