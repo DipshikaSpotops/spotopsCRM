@@ -4835,6 +4835,7 @@ alert('Yard Status: Part Delivered');
 // saveEsc(escalation) btn click
 //for dispute
 $("#disputeSubmit").on("click", function () {
+  console.log("disputeSbmit")
   $("#disputeDiv").fadeOut();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
