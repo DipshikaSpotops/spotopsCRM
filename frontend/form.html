@@ -3585,11 +3585,11 @@ $("#saveEsc").on("click", async function () {
   const yardOwnShipping = $("#yardOwnShipping").val();
 // return parts
   const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
-  const customerShipperReturn = $("#customerShipperReturn");
-  const customerTrackingNumberReturn = $("#customerTrackingNumberReturn");
+  const customerShipperReturn = $("#customerShipperReturn").val();
+  const customerTrackingNumberReturn = $("#customerTrackingNumberReturn").val();
   const customerShippingValueReturn = $("#customerShippingValueReturn").val();
   console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping, yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,customerTrackingNumber);
+  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,customerTrackingNumber,customerShippingValueReturn);
   const token = localStorage.getItem('token');
 
   try {
