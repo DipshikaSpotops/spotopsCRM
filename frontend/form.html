@@ -3644,7 +3644,7 @@ console.error("Error fetching yard data:", error);
 $("#saveEsc").on("click", async function () {
   $(".mainDiv").removeClass("blur");
   $("#escRMA").hide();
-
+  $("#orderStatus").val("Escalation");
   const yardIndex = $(this).data("yard-index");
   const orderNo = urlParams.get("orderNo");  
   const firstName = localStorage.getItem('firstName'); // Assuming the firstName is stored in localStorage
