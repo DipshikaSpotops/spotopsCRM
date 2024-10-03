@@ -3679,6 +3679,7 @@ $("#saveEsc").on("click", async function () {
     } else {
       console.log("No changes detected, no update required.");
     }
+    window.location.reload();
   } catch (error) {
     console.error("Error saving Yard Index information", error);
     alert("Error saving Yard Index information");
