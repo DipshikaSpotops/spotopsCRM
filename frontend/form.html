@@ -2043,6 +2043,35 @@ aria-label="Close"
 </div>
 </div>
 </div>
+<!-- div only for Return -->
+<div id="partFromCustomerReturn" class="return-column">
+  <div style="display: flex;">    
+      <div><h4>Part from Customer:</h4></div>
+      </div>
+<label>Shipping Method:</label>
+<select id="customerShippingMethod" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<option value="">Choose</option>
+<option value="Customer shipping">Customer shipping</option>
+<option value="Yard shipping">Yard shipping</option>
+<option value="Own shipping">Own shipping</option>
+</select>
+<div id="customerShippingValue" style="display: none;">
+<label>Enter Shipping Value:</label>
+<input id="custOwnShipping" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
+</div>
+
+<label>Shipper:</label>
+<select id="customerShipper" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<option value="">Choose</option>
+<option value="UPS">UPS</option>
+<option value="FedEx">FedEx</option>
+<option value="World Wide Express">World Wide Express</option>
+<option value="Others">Others</option>
+</select>
+
+<label>Tracking No:</label>
+<input type="text" id="customerTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+</div>
 <button type="button" id="saveEsc">Save</button>
 </div>
 <!-- esc part for yard button ends here  -->
@@ -4604,15 +4633,16 @@ $('#partFromCustomer').fadeIn();
 $('#partFromYard').fadeIn();
 $('#partFromCustomerReturn').fadeOut();
 } else if (selectedValue === 'Return') {
-$('#replacementColumns').fadeIn();
-// $('#partFromCustomerReturn').fadeIn();
-$('#partFromCustomer').fadeIn();
+$('#partFromCustomerReturn').fadeIn();
+$('#replacementColumns').fadeOut();
+$('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 } else {
 // Hide both columns for other cases like 'Junk'
 $('#replacementColumns').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
+$('#partFromCustomerReturn').fadeOut();
 }
 });
 
@@ -4646,7 +4676,6 @@ $('#yardShippingStatus').on('change', function () {
 if ($(this).val() === 'Delivered') {
 alert('Yard Status: Part Delivered');
 }
-
 // saveEsc(escalation) btn click
 
 });
