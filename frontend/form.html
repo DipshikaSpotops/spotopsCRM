@@ -3424,7 +3424,7 @@ fetchAndUpdateYardInfo();
 console.error("Error:", error);
 // alert("Error updating refund details. Please try again.");
 });
-window.location.reload();
+// window.location.reload();
 });
 
 // refundCollect part ends here
@@ -4171,10 +4171,10 @@ return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
 if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
 throw new Error("Yard data not found in cancelledOrders.");
 }
-return data;  // Return the data from cancelledOrders
+return data;  
 });
 } else {
-return data;  // Return the data from orders
+return data;  
 }
 })
 .then((data) => {
