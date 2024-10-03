@@ -3770,6 +3770,7 @@ $("#saveEsc").on("click", async function () {
       } else {
         throw new Error("Failed to update Yard Index information and orderHistory");
       }
+      window.location.reload();
     } else {
       console.log("No changes detected, no update required.");
     }
