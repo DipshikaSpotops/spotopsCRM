@@ -3356,7 +3356,7 @@ fetchAndUpdateYardInfo();
 console.error("Error:", error);
 // alert("Error updating yard details. Please try again.");
 });
-window.location.reload();
+// window.location.reload();
 });
 
 
@@ -4305,7 +4305,7 @@ return response.json();
 // If data exists after successful update, show success alert and update the UI
 if (data) {
 alert("Yard details have been updated");
-// window.location.reload();
+window.location.reload();
 $("#editYardDetailsModal").modal("hide");
 $(".mainDiv").removeClass("blur");
 
