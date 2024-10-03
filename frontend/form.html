@@ -4592,6 +4592,11 @@ $('#crossEsc').on('click', function(e) {
 $('#escRMA').hide();
 $(".mainDiv").removeClass("blur");
 });
+$('#closeDispute').on('click', function(e) {
+  $("#disputeDiv").fadeOut();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+});
 $('#EYdetails') .on('click', function(e){
 // $(".mainDiv").removeClass("blur");
 $('#editYardDetailsModal').hide();
