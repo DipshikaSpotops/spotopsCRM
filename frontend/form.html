@@ -4179,12 +4179,6 @@ return data;
 })
 .then((data) => {
 const yardData = data.additionalInfo[yardIndex - 1];
-console.log("yardData", yardData);
-let yardStatus = yardData.status;
-cosole.log("yardStatus in refund button",yardStatus);
-if(yardStatus === "Escalation"){
-  $("#orderStatus").val("Escalation");
-}
 // Set form fields with the yard data
 $("#editYardName").val(yardData.yardName);
 $("#editAddress").val(yardData.street);
