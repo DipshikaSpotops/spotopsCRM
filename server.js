@@ -241,7 +241,7 @@ stockNo: String,
 warranty: Number,
 customerShippingMethodReturn: String,
 customerShipperReturn: String,
-customerTrackingNoReturn: String,
+returnTrackingCust: String,
 customerShippingValueReturn: String
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
