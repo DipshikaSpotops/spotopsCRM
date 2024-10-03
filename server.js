@@ -238,8 +238,10 @@ escalationDate: String,
 escTicked:String,
 partDeliveredDate:String,
 stockNo: String,
-warranty: Number
-
+warranty: Number,
+customerShippingMethodReturn: String,
+custShipperReturn: String,
+customerTrackingNumberReturn: String
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
