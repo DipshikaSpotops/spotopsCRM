@@ -3611,7 +3611,7 @@ $("#saveEsc").on("click", async function () {
 
     // Check for changes and prepare the update object
     if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
-      updatedData.escProcess = escalationProcess;
+      updatedData.escalationProcess = escalationProcess;
       hasChanges = true;
     }
     if (currentAdditionalInfo.custReason !== custReason) {
@@ -3922,13 +3922,7 @@ $("#ourShippingInput").hide();
 }
 });
 
-$("#escProcess").on("change", function () {
-var escpMethod = $("#escProcess").val();
-console.log("method", escpMethod);
-if (escpMethod === "Return tracking sent") {
-$("#shipping_own_cust").show();
-}
-});
+
 
 $("#refund").on("change", function () {
 const refundStatus = $(this).val();
@@ -4644,7 +4638,7 @@ window.location.reload();
 
 $('#escProcess').on('change', function () {
 const selectedValue = $(this).val();
-
+console.log("esc process",selectedValue);
 if (selectedValue === 'Replacement') {
 // Show both columns when 'Replacement' is selected
 $('#replacementColumns').fadeIn();
