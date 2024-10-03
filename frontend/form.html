@@ -3569,7 +3569,8 @@ default: return "th";
 
 var escalationDate= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 var escTicked = "Yes";
-window.location.reload();
+$("#escTickBox").prop("checked", true);
+// window.location.reload();
 } else if (status === "PO cancelled") {
 newOrderStatus = "Yard Processing";
 } else if (status === "Part delivered") {
