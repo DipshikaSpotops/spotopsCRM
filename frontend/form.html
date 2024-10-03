@@ -2070,7 +2070,7 @@ aria-label="Close"
 </select>
 
 <label>Tracking No:</label>
-<input type="text" id="customerTrackingNumberReturn" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+<input type="text" id="customerTrackingNoReturn" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
 </div>
 <button type="button" id="saveEsc">Save</button>
 </div>
@@ -3570,7 +3570,7 @@ $("#saveEsc").on("click", async function () {
 // return parts
   const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
   const customerShipperReturn = $("#customerShipperReturn").val();
-  const customerTrackingNumberReturn = $("#customerTrackingNumberReturn").val();
+  const customerTrackingNoReturn = $("#customerTrackingNoReturn").val();
   const customerShippingValueReturn = $("#customerShippingValueReturn").val();
   console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping, yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
   console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,customerTrackingNumber,customerShippingValueReturn);
@@ -3646,8 +3646,8 @@ $("#saveEsc").on("click", async function () {
       updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.customerTrackingNumberReturn !== customerTrackingNumberReturn) {
-      updatedData.customerTrackingNumberReturn = customerTrackingNumberReturn;
+    if (currentAdditionalInfo.customerTrackingNoReturn !== customerTrackingNoReturn) {
+      updatedData.customerTrackingNoReturn = customerTrackingNoReturn;
       hasChanges = true;
     }
     if (currentAdditionalInfo.customerShippingValueReturn !== customerShippingValueReturn) {
