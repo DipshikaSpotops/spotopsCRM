@@ -797,6 +797,36 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+if (team === "Team Charlie") {
+$("#submenu-reports .nav-link")
+.not(':contains("My Sales Report")')
+.hide();
+$(
+"#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+).hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+} else if (team === "Team Mark") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+).hide();
+} else if (team === "Team Sussane") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+).hide();
+} else if (role === "Admin") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$('#submenu-reports .nav-link:contains("Refund Report")').show();
+$('#submenu-reports .nav-link:contains("Collect Refund")').show();
+$("#submenu-dashboards .view-individualOrders-link").hide();
+}
+
     $("#logoutLink").click(function () {
       window.localStorage.clear();
       window.location.href = "login_signup.html";
