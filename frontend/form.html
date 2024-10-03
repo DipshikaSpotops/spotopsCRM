@@ -3257,13 +3257,13 @@ $('#partFromYard').fadeOut();
       $("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber);
     }
     if (additionalInfo.customerShippingMethodReturn) {
-      $("#yardTrackingNumber").val(additionalInfo.customerShippingMethodReturn);
+      $("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn);
     }
     if (additionalInfo.customerShipperReturn) {
-      $("#yardTrackingNumber").val(additionalInfo.customerShipperReturn);
+      $("#customerShipperReturn").val(additionalInfo.customerShipperReturn);
     }
     if (additionalInfo.returnTrackingCust) {
-      $("#yardTrackingNumber").val(additionalInfo.returnTrackingCust);
+      $("#returnTrackingCust").val(additionalInfo.returnTrackingCust);
     }
   } catch (error) {
     console.error("Error fetching data:", error);
