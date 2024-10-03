@@ -640,7 +640,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       const yardTrackingNumber = updateData.yardTrackingNumber || "";
 
       order.orderHistory.push(
-        `Escalation Process: ${escProcess} || ${customerShippingMethod} || ${customerShippingMethod} || ${customerShippingMethod}  || ${customerShipper}  || ${customerTrackingNumber}   || ${custOwnShipping} || ${yardShippingStatus} || ${yardShippingMethod} || ${yardShipper} || ${yardTrackingNumber} updated by ${firstName} on ${formattedDateTime}`
+        `Escalation Process: ${escProcess || customerShippingMethod || customerShippingMethod || customerShippingMethod  || customerShipper  || customerTrackingNumber   || custOwnShipping || yardShippingStatus || yardShippingMethod || yardShipper || yardTrackingNumber} updated by ${firstName} on ${formattedDateTime}`
       );
 
       await order.save();
