@@ -3781,12 +3781,14 @@ $("#saveEsc").on("click", async function () {
       );
 
       if (patchResponse.status === 200) {
+        $("#orderStatus").val("Escalation");
         alert("Yard Index information and orderHistory updated successfully!");
-        window.location.reload();
+        
       } else {
         throw new Error("Failed to update Yard Index information and orderHistory");
       }
       // window.location.reload();
+      $("#orderStatus").val("Escalation");
     } else {
       console.log("No changes detected, no update required.");
     }
