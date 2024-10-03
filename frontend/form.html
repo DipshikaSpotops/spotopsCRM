@@ -1225,7 +1225,7 @@ required
 <option value="Escalation">Escalation</option>
 <option value="Order Fulfilled">Order Fulfilled</option>
 <option value="Order Cancelled">Order Cancelled</option>
-<option value="Part Delivered">Part Delivered</option>
+<option value="Dispute">Dispute</option>
 <option value="Refunded">Refunded</option>
 </select>
 </div>
@@ -2075,6 +2075,18 @@ aria-label="Close"
 <button type="button" id="saveEsc">Save</button>
 </div>
 <!-- esc part for yard button ends here  -->
+ <!-- div for dispute popup -->
+ <div id="disputeDiv" class="dispute">
+  <div style="display: flex;">    
+      <div><h4>Mark Dispute:</h4></div>
+      </div>
+<label>Date of Dispute:</label>
+<input type="text" id="disputedDate" placeholder="Disputed Date" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+<div id="customerShippingValueReturn" style="display: none;">
+<label>Reason of Dispute:</label>
+<input type="text" id="dispureReason" placeholder="Reason for Dispute" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+</div>
+  <!-- div for dispute popup ends here -->
 
 <script>
 $(document).ready(async function () {
@@ -2086,33 +2098,8 @@ $(".add-yard-btn").hide();
 $("#orderStatus").on("change", function() {
 const newOrderStatus = $(this).val();
 console.log("Order Status changed to:", newOrderStatus);
-if (newOrderStatus !== "Order Cancelled") {
-const orderNo = '50STARS1440'; 
-const dataToSend = {
-orderStatus: newOrderStatus
-};
-fetch(`https://www.spotops360.com/moveOrder/${orderNo}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(dataToSend),
-})
-.then((response) => {
-if (!response.ok) {
-throw new Error("Failed to move order from cancelledOrders.");
-}
-return response.json();
-})
-.then((data) => {
-console.log("Order moved successfully:", data);
-alert("Order has been successfully moved back to orders.");
-window.location.href = "viewAllOrders.html";
-})
-.catch((error) => {
-console.error("Error:", error);
-alert("An error occurred while moving the order.");
-});
+if (newOrderStatus == "Dispute") {
+$("#disputeDiv").fadeIn();
 }
 });
 }
