@@ -605,12 +605,12 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
     const yardIndex = updateData.yardIndex;
     const actualYardIndex = yardIndex - 1;
 
-    console.log("Order found:", order, orderNo);
+    console.log("Order found:", "orderNo:", order.orderNo);
     console.log("Yard index:", actualYardIndex);
 
     if (!order) return res.status(404).send("Order not found");
 
-    if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
+    if (actualYardIndex >= 0 && actualYardIndex < order.additionalInfo.length) {
       const yardInfo = order.additionalInfo[actualYardIndex];
       console.log("Existing yard info:", yardInfo);
 
