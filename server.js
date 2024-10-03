@@ -243,7 +243,8 @@ customerShippingMethodReturn: String,
 customerShipperReturn: String,
 returnTrackingCust: String,
 customerShippingValueReturn: String,
-custReturnDelivery: String
+custReturnDelivery: String,
+custreplacementDelivery: String
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
