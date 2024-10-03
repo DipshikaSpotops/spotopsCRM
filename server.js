@@ -629,7 +629,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       const timestamp = new Date().toLocaleString();
       const firstName = req.query.firstName;
       
-      const escProcess = updateData.escProcess || "";
+      const escProcess = updateData.escalationProcess || "";
       const customerShippingMethod = updateData.customerShippingMethod || "";
       const customerShipper = updateData.customerShipper || "";
       const customerTrackingNumber = updateData.customerTrackingNumber || "";
