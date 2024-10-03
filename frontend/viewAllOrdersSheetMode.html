@@ -914,6 +914,7 @@ const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
 return orderNoB - orderNoA;
 });
 }
+
 $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
