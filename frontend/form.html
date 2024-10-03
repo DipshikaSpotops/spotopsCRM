@@ -2650,12 +2650,13 @@ let yardInfo = `
 <td style="width: 50%; vertical-align: top;">
 Yard Name: ${yardData.yardName}<br>
 Address: ${yardData.address}<br>
-Email: ${yardData.email}<br>
+${yardData.email ? `Email: ${yardData.email}<br>` : ""}
+${yardData.faxNo ? `Fax No: ${yardData.faxNo}<br>` : ""}
 Phone No: ${yardData.phone}<br>
 Agent Name: ${yardData.agentName}<br>
 Part Price: $${yardData.partPrice}<br>
 Shipping Method: ${yardData.shippingDetails}<br>
-Others: $${yardData.others}<br>
+${yardData.others ? `Others: ${yardData.others}<br>` : ""}
 </td>
 <td style="width: 50%; vertical-align: top;">
 ${yardData.status ? `Status: ${yardData.status}<br>` : ""}
