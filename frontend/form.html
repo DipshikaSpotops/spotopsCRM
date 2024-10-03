@@ -3993,6 +3993,7 @@ $("#ourShippingInput").hide();
 
 $("#refund").on("change", function () {
 const refundStatus = $(this).val();
+console.log("yardStatus",refundStatus);
 if (refundStatus === "Part shipped") {
 $("#divTrackingEdit").show();
 $("#sendEmailButton").show();
