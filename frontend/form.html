@@ -2044,7 +2044,7 @@ aria-label="Close"
 </div>
 </div>
 <!-- div only for Return -->
-<div id="partFromCustomerReturn" class="return-column">
+<div id="partFromCustomerReturn" class="return-column" style="display: none;">
   <div style="display: flex;">    
       <div><h4>Part from Customer:</h4></div>
       </div>
@@ -2082,9 +2082,8 @@ aria-label="Close"
       </div>
 <label>Date of Dispute:</label>
 <input type="text" id="disputedDate" placeholder="Disputed Date" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
-<div id="customerShippingValueReturn" style="display: none;">
 <label>Reason of Dispute:</label>
-<input type="text" id="dispureReason" placeholder="Reason for Dispute" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+<input type="text" id="disputeReason" placeholder="Reason for Dispute" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
 </div>
   <!-- div for dispute popup ends here -->
 
@@ -2092,7 +2091,6 @@ aria-label="Close"
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
 console.log("query string",queryString);
-
 $("#orderStatus").on("change", function() {
 const newOrderStatus = $(this).val();
 console.log("Order Status changed to:", newOrderStatus);
