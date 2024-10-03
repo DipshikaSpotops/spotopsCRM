@@ -3522,7 +3522,7 @@ const trackingLink = $("#linkInput").val();
 const paymentStatus = $('.paymentStatus').val();
 const refundedAmount = $("#refundedAmount").val();
 let newOrderStatus = $("#orderStatus").val();
-
+console.log("yardStatus",status);
 // Updating the order status with shipping and refund information
 if (status === "Part shipped") {
 newOrderStatus = "In Transit";
