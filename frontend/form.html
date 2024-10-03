@@ -35,6 +35,34 @@ width: 830px;
 height: auto;
 border-radius: 10px; 
 }
+#disputeDiv {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%; /* Adjust the width as needed */
+  background-color: white;
+  border: 1px solid #c0c0c0;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000; /* Ensures it's on top of other content */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+body.modal-active {
+  overflow: hidden; /* Prevents background scrolling when modal is active */
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
+  z-index: 999; /* Places it just below the modal div */
+}
 
 #yardSuggestionsList {
 position: absolute;
@@ -2077,13 +2105,14 @@ aria-label="Close"
 <!-- esc part for yard button ends here  -->
  <!-- div for dispute popup -->
  <div id="disputeDiv" class="dispute">
-  <div style="display: flex;">    
-      <div><h4>Mark Dispute:</h4></div>
-      </div>
-<label>Date of Dispute:</label>
-<input type="text" id="disputedDate" placeholder="Disputed Date" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
-<label>Reason of Dispute:</label>
-<input type="text" id="disputeReason" placeholder="Reason for Dispute" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h4>Mark Dispute</h4>
+    <button type="button" id="closeDispute" style="background: none; border: none; font-size: 20px;">&times;</button>
+  </div>
+  <label for="disputedDate">Date of Dispute:</label>
+  <input type="text" id="disputedDate" placeholder="Disputed Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%; margin-bottom: 10px;">
+  <label for="disputeReason">Reason for Dispute:</label>
+  <input type="text" id="disputeReason" placeholder="Reason for Dispute" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
 </div>
   <!-- div for dispute popup ends here -->
 
@@ -2091,14 +2120,29 @@ aria-label="Close"
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
 console.log("query string",queryString);
-$("#orderStatus").on("change", function() {
-const newOrderStatus = $(this).val();
-console.log("Order Status changed to:", newOrderStatus);
-if (newOrderStatus == "Dispute") {
-console.log("dispute?",newOrderStatus);
-$("#disputeDiv").fadeIn();
-}
+$("#orderStatus").on("change", function () {
+  const newOrderStatus = $(this).val();
+  console.log("Order Status changed to:", newOrderStatus);
+
+  if (newOrderStatus == "Dispute") {
+    console.log("dispute?", newOrderStatus);
+    $("body").append('<div class="modal-overlay"></div>');
+    $("#disputeDiv").fadeIn();
+    $("body").addClass("modal-active");
+  } else {
+    $("#disputeDiv").fadeOut();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
+
+// Optional: If you want to close the modal when clicking outside it
+$(document).on("click", ".modal-overlay", function () {
+  $("#disputeDiv").fadeOut();
+  $(".modal-overlay").remove();
+  $("body").removeClass("modal-active");
+});
+
 
 
 // for auto-filling state,country
@@ -3446,7 +3490,7 @@ let newOrderStatus = $("#orderStatus").val();
 if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "PO confirmed") {
-newOrderStatus = "PO confirmed";
+newOrderStatus = "Yard Processing";
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
 escCause = $("#esc").val();
@@ -3495,7 +3539,7 @@ newOrderStatus = "Order Fulfilled";
 } else if (status === "Yard PO Sent") {
 newOrderStatus = "Yard Processing";
 }
-
+console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
 const updatedData = {
 ...currentYardData,
 status: status,
