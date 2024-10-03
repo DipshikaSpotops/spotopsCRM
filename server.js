@@ -242,7 +242,8 @@ warranty: Number,
 customerShippingMethodReturn: String,
 customerShipperReturn: String,
 returnTrackingCust: String,
-customerShippingValueReturn: String
+customerShippingValueReturn: String,
+custReturnDelivery: String
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema

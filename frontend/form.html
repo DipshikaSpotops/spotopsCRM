@@ -2099,6 +2099,12 @@ aria-label="Close"
 
 <label>Tracking No:</label>
 <input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+<label>Delivery Status:</label>
+<select id="custReturnDelivery" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<option value="">Choose</option>
+<option value="In Transit">In Transit</option>
+<option value="Delivered">Delivered</option>
+</select>
 </div>
 <button type="button" id="saveEsc">Save</button>
 </div>
@@ -3265,6 +3271,9 @@ $('#partFromYard').fadeOut();
     if (additionalInfo.returnTrackingCust) {
       $("#returnTrackingCust").val(additionalInfo.returnTrackingCust);
     }
+    if (additionalInfo.custReturnDelivery) {
+      $("#custReturnDelivery").val(additionalInfo.custReturnDelivery);
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
     alert("Error fetching yard information");
@@ -3666,8 +3675,9 @@ $("#saveEsc").on("click", async function () {
   const customerShipperReturn = $("#customerShipperReturn").val();
   const returnTrackingCust = $("#returnTrackingCust").val();
   const customerShippingValueReturn = $("#customerShippingValueReturn").val();
+  const custReturnDelivery = $("#custReturnDelivery").val();
   console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping, yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,customerTrackingNumber,customerShippingValueReturn);
+  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,customerTrackingNumber,customerShippingValueReturn,custReturnDelivery);
   const token = localStorage.getItem('token');
 
   try {
@@ -3748,6 +3758,11 @@ $("#saveEsc").on("click", async function () {
       updatedData.customerShippingValueReturn = customerShippingValueReturn;
       hasChanges = true;
     }
+    if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
+      updatedData.custReturnDelivery = custReturnDelivery;
+      hasChanges = true;
+    }
+    
     
 
     // If there are changes, update the Yard Info and Order History
