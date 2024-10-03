@@ -240,8 +240,9 @@ partDeliveredDate:String,
 stockNo: String,
 warranty: Number,
 customerShippingMethodReturn: String,
-custShipperReturn: String,
-customerTrackingNumberReturn: String
+customerShipperReturn: String,
+customerTrackingNumberReturn: String,
+customerShippingValueReturn: String
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
@@ -627,7 +628,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       // Add timestamp to order history
       const timestamp = new Date().toLocaleString();
       const firstName = req.query.firstName;
-
+      
       const escProcess = updateData.escProcess || "";
       const customerShippingMethod = updateData.customerShippingMethod || "";
       const customerShipper = updateData.customerShipper || "";

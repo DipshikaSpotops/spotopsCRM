@@ -3570,9 +3570,7 @@ $("#saveEsc").on("click", async function () {
   const yardIndex = $(this).data("yard-index");
   const orderNo = urlParams.get("orderNo");  
   const firstName = localStorage.getItem('firstName'); // Assuming the firstName is stored in localStorage
-
   console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
-
   // repplacementPart
   const escalationProcess = $("#escProcess").val();
   const custReason = $("#custReason").val();
@@ -3587,8 +3585,9 @@ $("#saveEsc").on("click", async function () {
   const yardOwnShipping = $("#yardOwnShipping").val();
 // return parts
   const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
-  const custShipperReturn = $("#customerShipperReturn");
+  const customerShipperReturn = $("#customerShipperReturn");
   const customerTrackingNumberReturn = $("#customerTrackingNumberReturn");
+  const customerShippingValueReturn = $("#customerShippingValueReturn").val();
   console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping, yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
   console.log("returns",escalationProcess,customerShippingMethodReturn,custShipperReturn,customerTrackingNumber);
   const token = localStorage.getItem('token');
@@ -3655,11 +3654,28 @@ $("#saveEsc").on("click", async function () {
       updatedData.yardOwnShipping = yardOwnShipping;
       hasChanges = true;
     }
+    if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
+      updatedData.customerShipperReturn = customerShipperReturn;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMethodReturn) {
+      updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.customerTrackingNumberReturn !== customerTrackingNumberReturn) {
+      updatedData.customerTrackingNumberReturn = customerTrackingNumberReturn;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.customerShippingValueReturn !== customerShippingValueReturn) {
+      updatedData.customerShippingValueReturn = customerShippingValueReturn;
+      hasChanges = true;
+    }
+    
 
     // If there are changes, update the Yard Info and Order History
     if (hasChanges) {
       const patchResponse = await axios.put(
-        `https://www.spotops360.com/orders/${orderNo}/escalation`,
+        `https://www.spotops360.com/orders/${orderNo}/escalation?firstName=${firstName}`,
         {
           ...updatedData,
           yardIndex: yardIndex,
@@ -4666,7 +4682,13 @@ $('#customerShippingValue').fadeIn();
 $('#customerShippingValue').fadeOut();
 }
 });
-
+$('#customerShippingMethodReturn').on('change', function () {
+if ($(this).val() === 'Own shipping') {
+$('#customerShippingValueReturn').fadeIn();
+} else {
+$('#customerShippingValueReturn').fadeOut();
+}
+});
 // Show or hide "Own Shipping" input for Part from Yard
 $('#yardShippingMethod').on('change', function () {
 if ($(this).val() === 'Own shipping') {
