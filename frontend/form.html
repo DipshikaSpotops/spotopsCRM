@@ -2049,19 +2049,19 @@ aria-label="Close"
       <div><h4>Part from Customer:</h4></div>
       </div>
 <label>Shipping Method:</label>
-<select id="customerShippingMethod" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<select id="customerShippingMethodReturn" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
 <option value="Customer shipping">Customer shipping</option>
 <option value="Yard shipping">Yard shipping</option>
 <option value="Own shipping">Own shipping</option>
 </select>
-<div id="customerShippingValue" style="display: none;">
+<div id="customerShippingValueReturn" style="display: none;">
 <label>Enter Shipping Value:</label>
 <input id="custOwnShipping" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
 
 <label>Shipper:</label>
-<select id="customerShipper" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<select id="customerShipperReturn" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
 <option value="UPS">UPS</option>
 <option value="FedEx">FedEx</option>
@@ -2070,7 +2070,7 @@ aria-label="Close"
 </select>
 
 <label>Tracking No:</label>
-<input type="text" id="customerTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
+<input type="text" id="customerTrackingNumberReturn" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;">
 </div>
 <button type="button" id="saveEsc">Save</button>
 </div>
@@ -3573,7 +3573,7 @@ $("#saveEsc").on("click", async function () {
 
   console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
 
-  // Collect form data
+  // repplacementPart
   const escalationProcess = $("#escProcess").val();
   const custReason = $("#custReason").val();
   const customerShippingMethod = $("#customerShippingMethod").val();
@@ -3585,9 +3585,13 @@ $("#saveEsc").on("click", async function () {
   const yardShipper = $("#yardShipper").val();
   const yardTrackingNumber = $("#yardTrackingNumber").val();
   const yardOwnShipping = $("#yardOwnShipping").val();
+// return parts
+  const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
+  const custShipperReturn = $("#customerShipperReturn");
+  const customerTrackingNumberReturn = $("#customerTrackingNumberReturn");
 
-  console.log("inputs", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping, yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-
+  console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping, yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+  console.log("returns",escalationProcess,customerShippingMethodReturn,custShipperReturn,customerTrackingNumber);
   const token = localStorage.getItem('token');
 
   try {
