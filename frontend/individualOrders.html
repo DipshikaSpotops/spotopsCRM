@@ -281,7 +281,10 @@ window.location.href = "login_signup.html";
 $(document).ready(async function () {    
 let sortedData = [];
 const rowsPerPage = 25;
-let currentPage = 1;  
+let currentPage = 1; 
+function sortOrdersByOrderNoDesc(orders) {
+    return orders.sort((a, b) => parseInt(b.orderNo) - parseInt(a.orderNo));
+  } 
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
@@ -448,15 +451,10 @@ throw new Error("Failed to fetch orders");
 
 const data = response.data;
 const filteredData = data.filter(order => order.salesAgent === firstName);
-sortedData = filteredData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+sortedData = sortOrdersByOrderNoDesc(filteredData);
 
-// Sort orders by orderNo in descending order (latest first)
-sortedData = filteredData.sort((a, b) => {
-      return parseInt(b.orderNo) - parseInt(a.orderNo);  // Sort by orderNo in descending order
-    });
+    renderTableRows(currentPage, sortedData); 
 
-    renderTableRows(currentPage, sortedData);  // Render the sorted table
-    sortedData = sortOrdersByOrderNoDesc(sortedData);
     createPaginationControls(Math.ceil(sortedData.length / rowsPerPage)); // Setup pagination controls
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -521,17 +519,8 @@ sortedData = filteredData.sort((a, b) => {
       renderTableRows(currentPage, sortedData);
     }
   });
-// Sort orders by Order No in descending order
-function sortOrdersByOrderNoDesc(orders) {
-      return orders.sort((a, b) => {
-        const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
-        const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
-        return orderNoB - orderNoA;
-      });
-    }
   $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
-
   const filteredOrders = sortedData.filter(order => {
     return (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
