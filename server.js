@@ -1583,33 +1583,52 @@ app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
   }
 });
 //for storing disputes
-// Update dispute information for a specific order
-// Update dispute information for a specific order
 app.put('/orders/:orderNo/dispute', async (req, res) => {
-  console.log("put request for dispute");
-  const { orderNo } = req.params;
-  const { disputedDate, disputeReason } = req.body;
-  console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo);
+console.log("put request for dispute");
+const { orderNo } = req.params;
+const { disputedDate, disputeReason } = req.body;
+console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo);
 
-  try {
-    // Find by orderNo instead of _id
-    const order = await Order.findOneAndUpdate(
-      { orderNo: orderNo }, // query by orderNo
-      { 
-        disputedDate: disputedDate, 
-        disputeReason: disputeReason 
-      },
-      { new: true }  // return the updated document
-    );
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    res.json(order);
-  } catch (error) {
-    console.error('Error updating dispute information:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
+try {
+const order = await Order.findOneAndUpdate(
+{ orderNo: orderNo }, 
+{ 
+disputedDate: disputedDate, 
+disputeReason: disputeReason 
+},
+{ new: true }  
+);
+if (!order) {
+return res.status(404).json({ message: 'Order not found' });
+}
+res.json(order);
+} catch (error) {
+console.error('Error updating dispute information:', error);
+res.status(500).json({ message: 'Server error' });
+}
 });
+// for storing custRefunds
+app.put('/orders/:orderNo/dispute', async (req, res) => {
+console.log("put request for dispute");
+const { orderNo } = req.params;
+const { custRefundDate, refundedAmount } = req.body;
+console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo);
 
+try {
+const order = await Order.findOneAndUpdate(
+{ orderNo: orderNo }, 
+{ 
+custRefundDate: custRefundDate,
+refundedAmount:refundedAmount
+},
+{ new: true }  
+);
+if (!order) {
+return res.status(404).json({ message: 'Order not found' });
+}
+res.json(order);
+} catch (error) {
+console.error('Error updating dispute information:', error);
+res.status(500).json({ message: 'Server error' });
+}
+});
