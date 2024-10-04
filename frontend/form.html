@@ -35,7 +35,7 @@ width: 830px;
 height: auto;
 border-radius: 10px; 
 }
-#disputeDiv {
+#disputeDiv, #custRefund {
   display: none; /* Hidden by default */
   position: fixed;
     top: 50%;
@@ -2131,21 +2131,30 @@ aria-label="Close"
 <button type="button" id="disputeSubmit" class="save">Save</button>
 </div>
   <!-- div for dispute popup ends here -->
+   <!-- customer refund - order refunding part -->
+   <div id="custRefund">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1>Customer Refund:</h1>
+      <button type="button" id="closeRefund" style="background: none; border: none; font-size: 20px;">&times;</button>
+    </div>
+    <div style="display: flex;">
+    <label for="custRefundedDate" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Date of Refund:</label>
+    <input type="text" id="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 11%;">
+  </div>
+  <div style="display: flex;">
+    <label for="refundAmount" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Refunded Amount:</label>
+    <input type="text" id="refundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 4%;">
+  </div>
+  <button type="button" id="disputeSubmit" class="save">Save</button>
+  </div>
+  <!-- customer refund - order refunding part ends here -->
 
 <script>
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
 console.log("query string",queryString);
-$("#orderStatus").on("change", function () {
-  const newOrderStatus = $(this).val();
-  console.log("Order Status changed to:", newOrderStatus);
-
-  if (newOrderStatus == "Dispute") {
-    console.log("dispute?", newOrderStatus);
-    $("body").append('<div class="modal-overlay"></div>');
-    $("#disputeDiv").fadeIn();
-    $("body").addClass("modal-active");
-    const now = new Date();
+// current datetime - US Central time
+const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
 year: 'numeric',
@@ -2180,9 +2189,27 @@ default: return "th";
 }
 };
 
-var disputedDate= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
-$("#disputedDate").val(disputedDate);
-} else {
+var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+
+$("#orderStatus").on("change", function () {
+  const newOrderStatus = $(this).val();
+  console.log("Order Status changed to:", newOrderStatus);
+
+  if (newOrderStatus == "Dispute") {
+    console.log("dispute?", newOrderStatus);
+    $("#disputedDate").val(currentDateTime);
+    $("body").append('<div class="modal-overlay"></div>');
+    $("#disputeDiv").fadeIn();
+    $("body").addClass("modal-active");
+} 
+else if (newOrderStatus == "Refunded") {
+    console.log("refunded?", newOrderStatus);
+    $("#refundedDate").val(currentDateTime);
+    $("body").append('<div class="modal-overlay"></div>');
+    $("#custRefund").fadeIn();
+    $("body").addClass("modal-active");
+} 
+else {
     $("#disputeDiv").fadeOut();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
@@ -4685,6 +4712,11 @@ $(".mainDiv").removeClass("blur");
 });
 $('#closeDispute').on('click', function(e) {
   $("#disputeDiv").fadeOut();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+});
+$('#closeRefund').on('click', function(e) {
+  $("#custRefund").fadeOut();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
 });
