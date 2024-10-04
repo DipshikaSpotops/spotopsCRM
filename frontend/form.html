@@ -2143,7 +2143,7 @@ aria-label="Close"
   </div>
   <div style="display: flex;">
     <label for="refundAmount" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Refunded Amount:</label>
-    <input type="text" id="refundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 6%;">
+    <input type="number" id="custRefundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 6%;">
   </div>
   <button type="button" id="custRefundSubmit" class="save">Save</button>
   </div>
@@ -2254,12 +2254,12 @@ console.log("custRefundSubmit");
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
 const custRefundDate = $("#refundedDate").val();
-const refundedAmount = $("#refundedAmount").val();
+const custRefundedAmount = $("#custRefundedAmount").val();
 const orderNo = urlParams.get("orderNo");
 console.log("orderId:", orderNo,"refundedAmount:",refundedAmount,"custRefundDate:",custRefundDate);
 const custRefundData = {
 custRefundDate: custRefundDate,
-refundedAmount: refundedAmount,
+custRefundedAmount: custRefundedAmount,
 };
 axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
 .then(function (response) {
