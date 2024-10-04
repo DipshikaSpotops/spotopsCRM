@@ -322,6 +322,8 @@ actualGP:Number,
 supportNotes:[String],
 disputedDate: String ,  
 disputeReason: String,
+custRefundDate: String,
+custRefundedAmount: Number,
 });
 
 const Order = mongoose.model("Order", OrderSchema);
@@ -1611,7 +1613,7 @@ res.status(500).json({ message: 'Server error' });
 app.put('/orders/:orderNo/dispute', async (req, res) => {
 console.log("put request for dispute");
 const { orderNo } = req.params;
-const { custRefundDate, refundedAmount } = req.body;
+const { custRefundDate, custRefundedAmount } = req.body;
 console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo);
 
 try {
@@ -1619,7 +1621,7 @@ const order = await Order.findOneAndUpdate(
 { orderNo: orderNo }, 
 { 
 custRefundDate: custRefundDate,
-refundedAmount:refundedAmount
+custRefundedAmount:custRefundedAmount
 },
 { new: true }  
 );
