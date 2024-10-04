@@ -284,7 +284,7 @@ const rowsPerPage = 25;
 let currentPage = 1; 
 function sortOrdersByOrderNoDesc(orders) {
     
-    return orders.sort((a, b) => parseInt(b.orderNo) - parseInt(a.orderNo));
+    return orders.sort((a, b) => parseInt(a.orderNo) - parseInt(b.orderNo));
   } 
 let sortOrder = {
 orderDate: "asc",
