@@ -456,7 +456,7 @@ sortedData = filteredData.sort((a, b) => {
     });
 
     renderTableRows(currentPage, sortedData);  // Render the sorted table
-
+    sortedData = sortOrdersByOrderNoDesc(sortedData);
     createPaginationControls(Math.ceil(sortedData.length / rowsPerPage)); // Setup pagination controls
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -521,11 +521,17 @@ sortedData = filteredData.sort((a, b) => {
       renderTableRows(currentPage, sortedData);
     }
   });
-
+// Sort orders by Order No in descending order
+function sortOrdersByOrderNoDesc(orders) {
+      return orders.sort((a, b) => {
+        const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
+        const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
+        return orderNoB - orderNoA;
+      });
+    }
   $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
 
-  // Filter the entire allOrders dataset based on the search term
   const filteredOrders = sortedData.filter(order => {
     return (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
