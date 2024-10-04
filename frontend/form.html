@@ -2145,7 +2145,7 @@ aria-label="Close"
     <label for="refundAmount" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Refunded Amount:</label>
     <input type="text" id="refundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 6%;">
   </div>
-  <button type="button" id="disputeSubmit" class="save">Save</button>
+  <button type="button" id="custRefundSubmit" class="save">Save</button>
   </div>
   <!-- customer refund - order refunding part ends here -->
 
@@ -2247,6 +2247,30 @@ alert("Failed to update dispute information.");
 });
 });
 // for dispute till here
+//for custRefund
+$("#custRefundSubmit").on("click", function () {
+console.log("custRefundSubmit");
+ $("#custRefund").fadeOut();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+const custRefundDate = $("#refundedDate").val();
+const refundedAmount = $("#refundedAmount").val();
+const orderNo = urlParams.get("orderNo");
+console.log("orderId:", orderNo,"refundedAmount:",refundedAmount,"custRefundDate:",custRefundDate);
+const custRefundData = {
+custRefundDate: custRefundDate,
+refundedAmount: refundedAmount,
+};
+axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
+.then(function (response) {
+console.log("Refund information updated successfully:", response);
+alert("Refund information updated successfully!");
+})
+.catch(function (error) {
+console.error("Error updating refund:", error);
+alert("Failed to update refund information.");
+});
+});
 
 
 
