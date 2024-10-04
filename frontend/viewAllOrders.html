@@ -275,46 +275,16 @@ if (!firstName) {
   ></span>
   </a>
   <div class="submenu" id="submenu-dashboards">
-  <a
-  class="nav-link add-order-link"
-  id="add-order-link"
-  href="addOrders.html?newEntry=true"
-  >Add New Order</a
-  >
-  <a
-  class="nav-link placed-orders-link"
-  id="placed-orders-link"
-  href="placedOrders.html"
-  >Placed Orders</a
-  >
-  <a
-  class="nav-link customer-approved-link"
-  id="customer-approved-link"
-  href="customerApproved.html"
-  >Customer Approved</a
-  >
-  <a
-  class="nav-link view-orders-link"
-  id="view-orders-link"
-  href="orders.html"
-  >View Orders</a
-  >
-  <a
-  class="nav-link view-all-orders-link"
-  id="view-all-orders-link"
-  href="viewAllOrders.html"
-  >View All Orders</a
-  >
+  <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
+  <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+  <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
+  <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
+  <a class="nav-link view-all-orders-link"id="view-all-orders-link"href="viewAllOrders.html">View All Orders</a>
   <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
-  <a
-  class="nav-link cancelled-orders-link"
-  id="cancelled-orders-link"
-  href="cancelledOrders.html"
-  >Cancelled Orders</a
-  >
-  <a class="nav-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a>
-  <a class="nav-link" href="fulfilledOrders.html">Fulfilled Orders</a>
-  <a class="nav-link" href="escalatedOrders.html">Escalation</a>
+  <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+  <a class="nav-link view-all-ordersSheetMode-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a>
+  <a class="nav-link fulfilled-orders" href="fulfilledOrders.html">Fulfilled Orders</a>
+  <a class="nav-link escalated-orders" href="escalatedOrders.html">Escalation</a>
   </div>
   </div>
   <div class="nav-item">
@@ -802,7 +772,7 @@ $("#submenu-reports .nav-link")
 .not(':contains("My Sales Report")')
 .hide();
 $(
-"#submenu-dashboards .view-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+"#submenu-dashboards .view-orders-link,#submenu-dashboards .customer-approved-link,#submenu-dashboards .view-all-ordersSheetMode-link ,#submenu-dashboards .fulfilled-orders ,#submenu-dashboards .escalated-orders,#submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
 ).hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
