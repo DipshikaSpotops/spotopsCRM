@@ -2206,7 +2206,7 @@ const disputeData = {
 disputedDate: disputedDate,
 disputeReason: disputeReason,
 };
-axios.put(`http://localhost:5000/orders/${orderNo}/dispute`, disputeData)
+axios.put(`https://www.spotops360.com/orders/${orderNo}/dispute`, disputeData)
 .then(function (response) {
 console.log("Dispute information updated successfully:", response);
 alert("Dispute information updated successfully!");
