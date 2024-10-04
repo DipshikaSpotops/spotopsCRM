@@ -283,9 +283,17 @@ let sortedData = [];
 const rowsPerPage = 25;
 let currentPage = 1; 
 function sortOrdersByOrderNoDesc(orders) {
-    console.log("sort orders in desc")
-    return orders.sort((a, b) => parseInt(a.orderNo) - parseInt(b.orderNo));
-  } 
+  console.log("Sorting orders by orderNo in descending order");
+  
+  return orders.sort((a, b) => {
+    const orderANum = parseInt(a.orderNo.replace(/\D/g, ''), 10);  
+    const orderBNum = parseInt(b.orderNo.replace(/\D/g, ''), 10); 
+    if (isNaN(orderANum) || isNaN(orderBNum)) {
+      return 0;  
+    }
+    return orderBNum - orderANum; 
+  });
+}
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
