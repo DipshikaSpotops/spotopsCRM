@@ -2199,8 +2199,8 @@ $("#orderStatus").on("change", function () {
     console.log("dispute?", newOrderStatus);
     $("#disputedDate").val(currentDateTime);
     $("body").append('<div class="modal-overlay"></div>');
-    $("#disputeDiv").fadeIn();
     $("body").addClass("modal-active");
+    $("#disputeDiv").fadeIn();
 } 
 else if (newOrderStatus == "Refunded") {
     console.log("refunded?", newOrderStatus);
@@ -3525,11 +3525,11 @@ window.location.reload();
 // refundCollect part ends here
 
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
-// Show the edit popup and add blur effect
 $("#editYardPopup").show();
 $(".mainDiv").addClass("blur");
 // $(".modal-overlay").remove();
-$("body").removeClass("modal-active");//prevents background scrolling
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");// for preventing bg scrolling
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
 $("#yardIndexEdit").val(yardIndex);
