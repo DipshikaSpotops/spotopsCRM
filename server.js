@@ -1610,8 +1610,8 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 // for storing custRefunds
-app.put('/orders/:orderNo/dispute', async (req, res) => {
-console.log("put request for dispute");
+app.put('/orders/:orderNo/custRefund', async (req, res) => {
+console.log("put request for custRefund");
 const { orderNo } = req.params;
 const { custRefundDate, custRefundedAmount } = req.body;
 console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo);
