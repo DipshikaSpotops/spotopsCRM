@@ -2195,6 +2195,28 @@ $(document).on("click", ".modal-overlay", function () {
   $(".modal-overlay").remove();
   $("body").removeClass("modal-active");
 });
+//for dispute
+$("#disputeSubmit").on("click", function () {
+console.log("disputeSubmit");
+const disputedDate = $("#disputedDate").val();
+const disputeReason = $("#disputeReason").val();
+const orderNo = urlParams.get("orderNo");
+console.log("orderId:", orderNo,"disputedReason:",disputeReason,"disputedDate:",disputedDate);
+const disputeData = {
+disputedDate: disputedDate,
+disputeReason: disputeReason,
+};
+axios.put(`http://localhost:5000/orders/${orderNo}/dispute`, disputeData)
+.then(function (response) {
+console.log("Dispute information updated successfully:", response);
+alert("Dispute information updated successfully!");
+})
+.catch(function (error) {
+console.error("Error updating dispute:", error);
+alert("Failed to update dispute information.");
+});
+});
+// for dispute till here
 
 
 
@@ -4833,28 +4855,6 @@ if ($(this).val() === 'Delivered') {
 alert('Yard Status: Part Delivered');
 }
 // saveEsc(escalation) btn click
-//for dispute
-$("#disputeSubmit").on("click", function () {
-console.log("disputeSubmit");
-const disputedDate = $("#disputedDate").val();
-const disputeReason = $("#disputeReason").val();
-const orderNo = urlParams.get("orderNo");
-console.log("orderId:", orderNo,"disputedReason:",disputeReason,"disputedDate:",disputedDate);
-const disputeData = {
-disputedDate: disputedDate,
-disputeReason: disputeReason,
-};
-axios.put(`http://localhost:5000/orders/${orderNo}/dispute`, disputeData)
-.then(function (response) {
-console.log("Dispute information updated successfully:", response);
-alert("Dispute information updated successfully!");
-})
-.catch(function (error) {
-console.error("Error updating dispute:", error);
-alert("Failed to update dispute information.");
-});
-});
-// for dispute till here
 });
 </script>
 </body>   
