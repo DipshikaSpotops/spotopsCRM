@@ -1585,28 +1585,26 @@ app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
 //for storing disputes
 // Update dispute information for a specific order
 app.put('/orders/:orderId/dispute', async (req, res) => {
-  const { orderId } = req.params;
-  const { disputedDate, disputeReason } = req.body;
+console.log("put request for dispute");
+const { orderId } = req.params;
+const { disputedDate, disputeReason } = req.body;
+console.log("Disputes:",disputedDate,disputeReason,"OrderId:",orderId);
+try {
+const order = await Order.findByIdAndUpdate(
+orderId,
+{ 
+disputedDate: disputedDate, 
+disputeReason: disputeReason 
+},
+{ new: true }  
+);
 
-  try {
-    // Find the order by ID and update the dispute details
-    const order = await Order.findByIdAndUpdate(
-      orderId,
-      { 
-        disputedDate: disputedDate, 
-        disputeReason: disputeReason 
-      },
-      { new: true }  // Returns the updated document
-    );
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    // Send the updated order as a response
-    res.json(order);
-  } catch (error) {
-    console.error('Error updating dispute information:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
+if (!order) {
+return res.status(404).json({ message: 'Order not found' });
+}
+res.json(order);
+} catch (error) {
+console.error('Error updating dispute information:', error);
+res.status(500).json({ message: 'Server error' });
+}
 });
