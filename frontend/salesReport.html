@@ -338,6 +338,7 @@ const lastName = localStorage.getItem("lastName");
 const email = localStorage.getItem("email");
 const role = localStorage.getItem("role");
 const token = localStorage.getItem("token");
+console.log("name",firstName);
 if (firstName) {
 $("#user-name").text(firstName);
 }
@@ -345,6 +346,7 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 if (firstName === "John") {
+  console.log("first",firstName);
           $("#submenu-dashboards .view-all-orders-link").show();
         } else{
           $("#submenu-dashboards .view-all-orders-link").hide();
