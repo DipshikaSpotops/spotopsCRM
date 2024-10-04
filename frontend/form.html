@@ -2198,6 +2198,9 @@ $(document).on("click", ".modal-overlay", function () {
 //for dispute
 $("#disputeSubmit").on("click", function () {
 console.log("disputeSubmit");
+ $("#disputeDiv").fadeOut();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
 const disputedDate = $("#disputedDate").val();
 const disputeReason = $("#disputeReason").val();
 const orderNo = urlParams.get("orderNo");
