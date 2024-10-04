@@ -3528,7 +3528,8 @@ $("#yardInfoContainer").on("click", ".edit-yard", function () {
 // Show the edit popup and add blur effect
 $("#editYardPopup").show();
 $(".mainDiv").addClass("blur");
-
+// $(".modal-overlay").remove();
+$("body").removeClass("modal-active");//prevents background scrolling
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
 $("#yardIndexEdit").val(yardIndex);
