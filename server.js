@@ -1614,7 +1614,7 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
 console.log("put request for custRefund");
 const { orderNo } = req.params;
 const { custRefundDate, custRefundedAmount } = req.body;
-console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo);
+console.log("Refunds:", custRefundDate, custRefundedAmount, "OrderNo:", orderNo);
 
 try {
 const order = await Order.findOneAndUpdate(
