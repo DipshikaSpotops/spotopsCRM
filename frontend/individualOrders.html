@@ -461,7 +461,7 @@ throw new Error("Failed to fetch orders");
 const data = response.data;
 const filteredData = data.filter(order => order.salesAgent === firstName);
 sortedData = sortOrdersByOrderNoDesc(filteredData);
-console.log("sortedData",sortedData);
+// console.log("sortedData",sortedData);
     renderTableRows(currentPage, sortedData); 
 
     createPaginationControls(Math.ceil(sortedData.length / rowsPerPage)); // Setup pagination controls
