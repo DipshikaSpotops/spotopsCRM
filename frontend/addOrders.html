@@ -871,7 +871,7 @@ last4digits: $("#issueOrder").val(),
 notes: `${note}<br>${firstName},${orderDate}`,
 orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
 };
-
+console.log("newOrder",newOrder);
 axios.post("https://www.spotops360.com/orders", newOrder)
 .then(() => {
 alert(`Order No. ${newOrderNo} has been placed successfully.`);
