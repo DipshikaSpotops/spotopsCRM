@@ -2350,6 +2350,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
 console.log("data in setTimeOut",data);
+var spMinusTax = data.spMinusTax; // salePrice minus tax 
 if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
 console.log('Order not found in orders collection.');
 return null; 
@@ -2386,6 +2387,20 @@ $("#orderStatus").val("Order Fulfilled");
 } else if (yardStatus === "Escalation") {
 $("#orderStatus").val("Escalation");
 }
+//for calculating yardSpent
+var yardPP = yard.partPrice;
+var yardOSorYS = yard.shippingDetails;
+if (yardOSorYS.includes("Own shipping")) {
+const os = yardOSorYS.split(":")[1].trim(); 
+console.log("own ship", os);
+$("#editOwnShipping").val(ownShippingValue);
+$("#editYardShipping").val('');  
+} else if (yardOSorYS.includes("Yard shipping")) {
+const ys = yardOSorYS.split(":")[1].trim();
+console.log("yard ship", ys);
+}
+
+var yardOthers = yard.others;
 });
 })
 .catch(error => console.error("Error fetching yard data:", error));
@@ -3715,7 +3730,7 @@ $("#saveEsc").on("click", async function () {
   const returnTrackingCust = $("#returnTrackingCust").val();
   const customerShippingValueReturn = $("#customerShippingValueReturn").val();
   const custReturnDelivery = $("#custReturnDelivery").val();
-  console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, custOwnShipping,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+  console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, "custOwnShipping",custOwnShipping,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
   console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,customerTrackingNumber,customerShippingValueReturn,custReturnDelivery);
   const token = localStorage.getItem('token');
 
