@@ -2393,7 +2393,7 @@ setTimeout(function() {
         }
 
         // For calculating yardSpent
-        var yardPP = yard.partPrice || 0;
+        var yardPP = parseFloat(yard.partPrice) || 0;
         var yardOSorYS = yard.shippingDetails || '';
         var shippingValueYard = 0;  
         if (yardOSorYS.includes("Own shipping")) {
@@ -2403,10 +2403,10 @@ setTimeout(function() {
           shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
           console.log("yard ship", shippingValueYard);
         }
-        var yardOthers = yard.others || 0;
-        var escOwnShipReturn = yard.custOwnShippingReturn || 0;   // part from customer- return
-        var escOwnShipReplacement = yard.custOwnShipReplacement || 0;  // part from customer- replacement
-        var yardOwnShippingReplacement = yard.yardOwnShipping || 0;
+        var yardOthers = parseFloat(yard.others) || 0;
+        var escOwnShipReturn = parseFloat(yard.custOwnShippingReturn) || 0;
+        var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
+        var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
         console.log("add",yardPP,shippingValueYard,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement);
         // Calculate yardSpent for this yard
         var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement;
