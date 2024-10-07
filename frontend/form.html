@@ -2344,72 +2344,53 @@ console.log("process:", process);
 console.log("newEntry:", newEntry);
 console.log("team", team, token);
 
-// part to check the paymentStatus
+// part to check the paymentStatus and other things
 setTimeout(function() {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
-// If the order is not found in the main orders collection, check in cancelledOrders
 if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
-console.log('Order not found, checking in cancelled orders...');
-return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
-.then(cancelledResponse => cancelledResponse.json())
-.then(cancelledData => {
-if (!cancelledData || !cancelledData.additionalInfo || cancelledData.additionalInfo.length === 0) {
-console.log('No yard data found in cancelled orders.');
+console.log('Order not found in orders collection.');
 return null; 
 }
-return cancelledData; 
-});
-}
-return data; 
-})
-.then(data => {
-if (!data) {
-return; 
-}
-
-// Process the yard data
+console.log("data in setTimeOut",data)
 data.additionalInfo.forEach((yard, index) => {
 const yardIndex = index + 1;
 console.log("yardIndex", yardIndex, yard);
-
 var pStatus = yard.paymentStatus;
 var rStatus = yard.refundStatus;
-console.log("pStatus", pStatus,rStatus);
-
-// Check if the payment status is "Card charged"
+console.log("pStatus", pStatus, rStatus);
 if (pStatus === "Card charged" && rStatus === "Refund collected") {
 console.log("else if");   
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025','border': 'none'});
+$(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025', 'border': 'none'});
 } else if (pStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
 }
-// Check if the status is "Escalation
+// Check if the status is "Escalation"
 console.log("=D=", yard.escTicked);
 if (yard.escTicked === "Yes") {
 $("#escTickBox").prop("checked", true);
-}else{
-  $("#escTickBox").prop("checked", false);
+} else {
+$("#escTickBox").prop("checked", false);
 }
 var yardStatus = yard.status;
-console.log("current yard status",yardStatus);
-if (yardStatus == "Yard Located" || yardStatus === "Yard PO Sent" || yardStatus === "PO confirmed" || yardStatus === "PO confirmed"){
-  $("#orderStatus").val("Yard Processing");
-}else if(yardStatus === "Part shipped"){
-  $("#orderStatus").val("In Transit");
+console.log("current yard status", yardStatus);
+// Update order status based on yard status
+if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent" || yardStatus === "PO confirmed") {
+$("#orderStatus").val("Yard Processing");
+} else if (yardStatus === "Part shipped") {
+$("#orderStatus").val("In Transit");
+} else if (yardStatus === "Part delivered") {
+$("#orderStatus").val("Order Fulfilled");
+} else if (yardStatus === "Escalation") {
+$("#orderStatus").val("Escalation");
 }
-else if(yardStatus === "Part delivered"){
-  $("#orderStatus").val("Order Fulfilled");
-}else if(yardStatus === "Escalation"){
-  $("#orderStatus").val("Escalation");
-}
-
 });
 })
 .catch(error => console.error("Error fetching yard data:", error));
 }, 500);
-// part to check the apymentStatus ends
+// part to check paymentStatus and other things end here
+
 
 if (firstName) {
 $("#user-name").text(firstName);
