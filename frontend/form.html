@@ -2081,7 +2081,7 @@ aria-label="Close"
 </select>
 <div id="customerShippingValueReturn" style="display: none;">
 <label>Enter Shipping Value:</label>
-<input id="custOwnShippingRetuen" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
+<input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
 
 <label>Shipper:</label>
@@ -2393,8 +2393,6 @@ var yardOSorYS = yard.shippingDetails;
 if (yardOSorYS.includes("Own shipping")) {
 const os = yardOSorYS.split(":")[1].trim(); 
 console.log("own ship", os);
-$("#editOwnShipping").val(ownShippingValue);
-$("#editYardShipping").val('');  
 } else if (yardOSorYS.includes("Yard shipping")) {
 const ys = yardOSorYS.split(":")[1].trim();
 console.log("yard ship", ys);
