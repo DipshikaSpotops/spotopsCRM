@@ -1272,18 +1272,18 @@ style="margin-right: 94px;margin-top: -9px;"
 />
 </div>
 </div>
+<div class="form-row">
+  <div class="form-group col-md-6">
+  <label for="custRefundedAmount">Refund Amount</label>
+  <input type="text" class="form-control" id="custRefundedAmount"/>
+  </div>
+  </div>
 <div id="yardButtonsContainer" class="d-flex flex-column align-items-center">
 <div id="yardInfoContainer" class="d-flex flex-row mb-3"></div>
 <button type="button" class="btn add-yard-btn">+</button> 
 </div>          
 <div id="trackingInfoContainer"></div>
-<button
-type="submit"
-class="btn btn-block"
-id="submitBtn"
->
-Submit
-</button>
+<buttontype="submit" class="btn btn-block" id="submitBtn">Submit</buttontype=>
 </form>
 </div>
 
@@ -2355,6 +2355,7 @@ setTimeout(function() {
       console.log("data in setTimeOut", data);
       var spMinusTax = data.spMinusTax || 0; // Sale price minus tax
       var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
+      $("#custRefundedAmount").val(custRefundedAmount.toFixed(2))
       console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
       if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
         console.log('Order not found in orders collection.');
@@ -2363,7 +2364,6 @@ setTimeout(function() {
       data.additionalInfo.forEach((yard, index) => {
         const yardIndex = index + 1;
         console.log("yardIndex", yardIndex, yard);
-
         var pStatus = yard.paymentStatus;
         var rStatus = yard.refundStatus;
         console.log("pStatus", pStatus, rStatus);
@@ -2372,13 +2372,11 @@ setTimeout(function() {
         } else if (pStatus === "Card charged") {
           $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
         }
-
         if (yard.escTicked === "Yes") {
           $("#escTickBox").prop("checked", true);
         } else {
           $("#escTickBox").prop("checked", false);
         }
-
         var yardStatus = yard.status;
         console.log("current yard status", yardStatus);
         // Update order status based on yard status
@@ -2391,7 +2389,6 @@ setTimeout(function() {
         } else if (yardStatus === "Escalation") {
           $("#orderStatus").val("Escalation");
         }
-
         // For calculating yardSpent
         var yardPP = parseFloat(yard.partPrice) || 0;
         var yardOSorYS = yard.shippingDetails || '';
@@ -2408,26 +2405,15 @@ setTimeout(function() {
         var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
         var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
         console.log("add",yardPP,shippingValueYard,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement);
-        // Calculate yardSpent for this yard
         var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement;
         console.log("yardSpent", yardSpent);
-
-        // Push yardSpent to the totalSpend array
         totalSpend.push(yardSpent);
-
-        // Add the current yardSpent to the total sum
         totalSum += yardSpent;
-
-        // Log the updated total
         console.log("Current totalSpend array:", totalSpend);
         console.log("Total sum of all yards:", totalSum);
-
-        // Calculate actualGP
         var actualGP = (spMinusTax - custRefundedAmount) - totalSum;
         console.log("Calculated actualGP:", actualGP);
-
-        // Reflect actualGP in the input field with id "actualGP"
-        $("#actualGP").val(actualGP.toFixed(2)); // Set the value in the input field, formatted to 2 decimal places
+        $("#actualGP").val(actualGP.toFixed(2)); 
       });
     })
     .catch(error => console.error("Error fetching yard data:", error));
