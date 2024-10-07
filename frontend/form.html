@@ -2382,16 +2382,16 @@ return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
 .then(cancelledData => {
 if (!cancelledData || !cancelledData.additionalInfo || cancelledData.additionalInfo.length === 0) {
 console.log('No yard data found in cancelled orders.');
-return null; // No data found in either collection
+return null; 
 }
-return cancelledData; // Return data from cancelledOrders
+return cancelledData; 
 });
 }
-return data; // Return data from orders collection if found
+return data; 
 })
 .then(data => {
 if (!data) {
-return; // Exit if no data found in either collection
+return; 
 }
 
 // Process the yard data
