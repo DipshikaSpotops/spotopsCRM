@@ -3010,6 +3010,7 @@ console.log("newOrderNo", newOrderNo);
 console.error("Error fetching latest order:", error);
 });
 $("#crmForm").on("submit", function (e) {
+console.log("submmmmiting s form");
 e.preventDefault();
 const firstName = localStorage.getItem("firstName");
 var cusFName = document.getElementById("firstName").value;
