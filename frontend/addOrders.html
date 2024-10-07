@@ -758,7 +758,6 @@ const yardPrice = parseFloat($("#costP").val()) || 0;
 const shipping = parseFloat($("#shippingFee").val()) || 0;
 const salesTax = 0.05 * quotedPrice;
 const grossProfit = quotedPrice - yardPrice - shipping - salesTax;
-
 $("#salestax").val(salesTax.toFixed(2));
 $("#grossProfit").val(grossProfit.toFixed(2));
 }
@@ -824,7 +823,7 @@ return numberPart;
 // console.error("Error fetching latest order:", error);
 // });
 
-
+var ab;//variable for sale price - salesTax
 $("#newOrderForm").on("submit", function (e) {
 e.preventDefault();
 // just for the time being
@@ -834,6 +833,11 @@ const cusLName = $("#lastName").val();
 const customerName = cusFName + " " + cusLName;
 const note = $("#notes").val();
 const orderDate = getFormattedOrderDate(); 
+//for salePrice - salesTax
+const soldP = $("#soldP").val();
+const salesTax = $("#salestax").val();
+ ab = soldP - salesTax
+ console.log("soldP - salestax",ab)
 var newOrderNo = $("#orderNo").val();
 console.log("orderNo",newOrderNo);
 const newOrder = {
@@ -853,11 +857,12 @@ year: $("#year").val(),
 pReq: $("#pReq").val(),
 desc: $("#desc").val(),
 warranty: $("#warranty").val(),
-soldP: $("#soldP").val(),
+soldP: soldP,
 costP: $("#costP").val(),
 businessName: $("#sBusinessName").val(),
 shippingFee: $("#shippingFee").val(),
-salestax: $("#salestax").val(),
+salestax: salesTax,
+ab:ab,
 grossProfit: $("#grossProfit").val(),
 orderStatus: "Placed",
 vin: $("#vin").val(),
