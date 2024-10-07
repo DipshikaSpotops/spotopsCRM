@@ -823,7 +823,7 @@ return numberPart;
 // console.error("Error fetching latest order:", error);
 // });
 
-var ab;//variable for sale price - salesTax
+var spMinusTax;//variable for sale price - salesTax
 $("#newOrderForm").on("submit", function (e) {
 e.preventDefault();
 // just for the time being
@@ -836,8 +836,8 @@ const orderDate = getFormattedOrderDate();
 //for salePrice - salesTax
 const soldP = $("#soldP").val();
 const salesTax = $("#salestax").val();
- ab = soldP - salesTax
- console.log("soldP - salestax",ab)
+spMinusTax = soldP - salesTax
+ console.log("soldP - salestax",spMinusTax)
 var newOrderNo = $("#orderNo").val();
 console.log("orderNo",newOrderNo);
 const newOrder = {
@@ -845,7 +845,7 @@ orderNo: newOrderNo,
 // orderNo:$("#orderNo").val(),
 orderDate: orderDate,
 salesAgent: $("#salesAgent").val(),
-ab:ab,
+spMinusTax: spMinusTax,
 customerName: customerName,
 bAddress: `${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()}`,
 sAddress: `${$("#sAddress").val()},\n${$("#sCity").val()},\n${$("#sState").val()},\n${$("#sZip").val()},\n${$("#sCountry").val()}`,
