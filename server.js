@@ -236,7 +236,7 @@ custReason: String,
 customerShippingMethodReplacement: String,
 customerShipperReplacement: String,
 customerTrackingNumberReplacement: String,
-custOwnShippingReplacement: String,
+custOwnShipValue: String,
 custreplacementDelivery: String,
 // part from yard
 yardShippingStatus: String,
