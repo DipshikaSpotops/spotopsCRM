@@ -2015,7 +2015,7 @@ aria-label="Close"
 </div>
 
 <label>Shipper:</label>
-<select id="customerShipper" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<select id="customerShipperReplacement" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
 <option value="UPS">UPS</option>
 <option value="FedEx">FedEx</option>
@@ -2024,7 +2024,7 @@ aria-label="Close"
 </select>
 
 <label>Tracking No:</label>
-<input type="text" id="customerTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
+<input type="text" id="customerTrackingNumberReplacement" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
 <label>Delivery Status:</label>
 <select id="custreplacementDelivery" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
@@ -3296,7 +3296,6 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
     if (additionalInfo.escalationProcess) {
       $("#escProcess").val(additionalInfo.escalationProcess);
       if (additionalInfo.escalationProcess === 'Replacement') {
-// Show both columns when 'Replacement' is selected
 $('#replacementColumns').fadeIn();
 $('#partFromCustomer').fadeIn();
 $('#partFromYard').fadeIn();
@@ -3312,25 +3311,23 @@ $('#replacementColumns').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 }
-    }
+}
 
+// return__part from customer
     if (additionalInfo.custReason) {
       $("#custReason").val(additionalInfo.custReason);
     }
-    if (additionalInfo.customerShippingMethodReturn) {
-      $("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn);
+    if (additionalInfo.customerShippingMethodReplacement) {
+      $("#customerShippingMethodReplacement").val(additionalInfo.customerShippingMethodReplacement);
+    }
+    if (additionalInfo.customerShipperReplacement) {
+      $("#customerShipperReplacement").val(additionalInfo.customerShipperReplacement);
+    }
+    if (additionalInfo.customerTrackingNumberReplacement) {
+      $("#customerTrackingNumberReplacement").val(additionalInfo.customerTrackingNumberReplacement).parent().show();
     }
     if (additionalInfo.custOwnShippingReplacement) {
       $("#custOwnShippingReplacement").val(additionalInfo.custOwnShippingReplacement);
-    }
-    if (additionalInfo.custOwnShippingReplacement) {
-      $("#custOwnShippingReplacement").val(additionalInfo.custOwnShippingReplacement).parent().show();
-    }
-    if (additionalInfo.customerShipper) {
-      $("#customerShipper").val(additionalInfo.customerShipper);
-    }
-    if (additionalInfo.customerTrackingNumber) {
-      $("#customerTrackingNumber").val(additionalInfo.customerTrackingNumber);
     }
     if (additionalInfo.custreplacementDelivery) {
       $("#custreplacementDelivery").val(additionalInfo.custreplacementDelivery);
@@ -3356,14 +3353,14 @@ $('#partFromYard').fadeOut();
     if (additionalInfo.customerShipperReturn) {
       $("#customerShipperReturn").val(additionalInfo.customerShipperReturn);
     }
+    if (additionalInfo.custOwnShippingReturn) {
+      $("#custOwnShippingReturn").val(additionalInfo.custOwnShippingReturn);
+    }
     if (additionalInfo.returnTrackingCust) {
-      $("#returnTrackingCust").val(additionalInfo.returnTrackingCust);
+      $("#custReturnDelivery").val(additionalInfo.returnTrackingCust);
     }
     if (additionalInfo.custReturnDelivery) {
-      $("#custReturnDelivery").val(additionalInfo.custReturnDelivery);
-    }
-    if (additionalInfo.custOwnShippingReturm) {
-      $("#custOwnShippingReturm").val(additionalInfo.custOwnShippingReturm);
+      $("#custOwnShippingReturm").val(additionalInfo.custReturnDelivery);
     }
     // window.location.reload();
   } catch (error) {
@@ -3719,23 +3716,25 @@ $("#saveEsc").on("click", async function () {
   const escalationProcess = $("#escProcess").val();
   const custReason = $("#custReason").val();
   const customerShippingMethodReplacement= $("#customerShippingMethodReplacement").val();
+  const custOwnShipValue = $("custOwnShipValue").val();
   const customerShipper = $("#customerShipper").val();
   const customerTrackingNumber = $("#customerTrackingNumber").val();
-  const custOwnShippingReplacement = $("#custOwnShippingReplacement").val();
+  const custreplacementDelivery = $("#custreplacementDelivery").val();
+  //yard part for replacement
   const yardShippingStatus = $("#yardShippingStatus").val();
   const yardShippingMethod = $("#yardShippingMethod").val();
   const yardShipper = $("#yardShipper").val();
   const yardTrackingNumber = $("#yardTrackingNumber").val();
-  const yardOwnShipping = $("#yardOwnShipping").val();
-  const custreplacementDelivery = $("#custreplacementDelivery").val();
+  const yardOwnShipping = $("#yardownShipping").val();
+  
 // return parts
   const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
   const customerShipperReturn = $("#customerShipperReturn").val();
   const returnTrackingCust = $("#returnTrackingCust").val();
   const custOwnShippingReturn = $("#custOwnShippingReturn").val();
   const custReturnDelivery = $("#custReturnDelivery").val();
-  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipper, customerTrackingNumber, "custOwnShipping",custOwnShippingReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,customerTrackingNumber,custReturnDelivery);
+  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipper, customerTrackingNumber, "custOwnShipping",custOwnShipValue,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
   const token = localStorage.getItem('token');
 
   try {
@@ -3754,40 +3753,36 @@ $("#saveEsc").on("click", async function () {
     const currentAdditionalInfo = response.data;
     const updatedData = {};
     let hasChanges = false;
-
-    // Check for changes and prepare the update object
     if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
       updatedData.escalationProcess = escalationProcess;
       hasChanges = true;
     }
+    // for replacement__ part from customer
     if (currentAdditionalInfo.custReason !== custReason) {
       updatedData.custReason = custReason;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.customerShippingMethod !== customerShippingMethod) {
-      updatedData.customerShippingMethod = customerShippingMethod;
+    if (currentAdditionalInfo.customerShippingMethodReplacement !== customerShippingMethodReplacement) {
+      updatedData.customerShippingMethodReplacement = customerShippingMethodReplacement;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.customerShipper !== customerShipper) {
-      updatedData.customerShipper = customerShipper;
+    if (currentAdditionalInfo.customerShipperReplacement !== customerShipperReplacement) {
+      updatedData.customerShipperReplacement = customerShipperReplacement;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.customerTrackingNumber !== customerTrackingNumber) {
-      updatedData.customerTrackingNumber = customerTrackingNumber;
+    if (currentAdditionalInfo.custOwnShipValue !== custOwnShipValue) {
+      updatedData.custOwnShipValue = custOwnShipValue;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.custOwnShippingReturn !== custOwnShippingReturn) {
-      updatedData.custOwnShippingReturn = custOwnShippingReturn;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.custOwnShippingReplacement !== custOwnShippingReplacement) {
-      updatedData.custOwnShippingReplacement = custOwnShippingReplacement;
+    if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
+      updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
       hasChanges = true;
     }
     if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
       updatedData.custreplacementDelivery = custreplacementDelivery;
       hasChanges = true;
     }
+    // part from yard
     if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
       updatedData.yardShippingStatus = yardShippingStatus;
       hasChanges = true;
@@ -3808,22 +3803,23 @@ $("#saveEsc").on("click", async function () {
       updatedData.yardOwnShipping = yardOwnShipping;
       hasChanges = true;
     }
+    // part from yard
+    if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMethodReturn) {
+      updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
+      hasChanges = true;
+    }
     if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
       updatedData.customerShipperReturn = customerShipperReturn;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMethodReturn) {
-      updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
+    if (currentAdditionalInfo.custOwnShippingReturn !== custOwnShippingReturn) {
+      updatedData.custOwnShippingReturn = custOwnShippingReturn;
       hasChanges = true;
     }
     if (currentAdditionalInfo.returnTrackingCust !== returnTrackingCust) {
       updatedData.returnTrackingCust = returnTrackingCust;
       hasChanges = true;
     }
-    // if (currentAdditionalInfo.customerShippingValueReturn !== customerShippingValueReturn) {
-    //   updatedData.customerShippingValueReturn = customerShippingValueReturn;
-    //   hasChanges = true;
-    // }
     if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
       updatedData.custReturnDelivery = custReturnDelivery;
       hasChanges = true;
