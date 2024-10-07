@@ -2411,7 +2411,8 @@ setTimeout(function() {
         totalSum += yardSpent;
         console.log("Current totalSpend array:", totalSpend);
         console.log("Total sum of all yards:", totalSum);
-        var actualGP = (spMinusTax - custRefundedAmount) - totalSum;
+        var subtractRefund = spMinusTax - custRefundedAmount;
+        var actualGP = subtractRefund - totalSum;
         console.log("Calculated actualGP:", actualGP);
         $("#actualGP").val(actualGP.toFixed(2)); 
       });
