@@ -2011,7 +2011,7 @@ aria-label="Close"
 </select>
 <div id="custOwnShippingReplacement" style="display: none;">
 <label>Enter Shipping Value:</label>
-<input id="custOwnShipValue" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
+<input id="custOwnShippingReplacement" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
 
 <label>Shipper:</label>
@@ -3718,7 +3718,7 @@ $("#saveEsc").on("click", async function () {
   const escalationProcess = $("#escProcess").val();
   const custReason = $("#custReason").val();
   const customerShippingMethodReplacement= $("#customerShippingMethodReplacement").val();
-  const custOwnShipValue = $("custOwnShipValue").val();
+  const custOwnShippingReplacement = $("custOwnShippingReplacement").val();
   const customerShipperReplacement = $("#customerShipperReplacement").val();
   const customerTrackingNumberReplacement = $("#customerTrackingNumberReplacement").val();
   const custreplacementDelivery = $("#custreplacementDelivery").val();
@@ -3734,7 +3734,7 @@ $("#saveEsc").on("click", async function () {
   const returnTrackingCust = $("#returnTrackingCust").val();
   const custOwnShippingReturn = $("#custOwnShippingReturn").val();
   const custReturnDelivery = $("#custReturnDelivery").val();
-  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipValue,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShippingReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
   console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
   const token = localStorage.getItem('token');
 
@@ -3771,8 +3771,8 @@ $("#saveEsc").on("click", async function () {
       updatedData.customerShipperReplacement = customerShipperReplacement;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.custOwnShipValue !== custOwnShipValue) {
-      updatedData.custOwnShipValue = custOwnShipValue;
+    if (currentAdditionalInfo.custOwnShippingReplacement !== custOwnShippingReplacement) {
+      updatedData.custOwnShippingReplacement = custOwnShippingReplacement;
       hasChanges = true;
     }
     if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
