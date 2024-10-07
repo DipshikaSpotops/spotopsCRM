@@ -243,9 +243,11 @@ partDeliveredDate:String,
 stockNo: String,
 warranty: Number,
 customerShippingMethodReturn: String,
+customerShippingMethodReplacement: String,
+custOwnShippingReturn: String,
+custOwnShippingReplacement: String,
 customerShipperReturn: String,
 returnTrackingCust: String,
-customerShippingValueReturn: String,
 custReturnDelivery: String,
 custreplacementDelivery: String
 });

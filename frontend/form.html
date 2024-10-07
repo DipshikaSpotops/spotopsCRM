@@ -3713,7 +3713,7 @@ $("#saveEsc").on("click", async function () {
   $("#orderStatus").val("Escalation");
   const yardIndex = $(this).data("yard-index");
   const orderNo = urlParams.get("orderNo");  
-  const firstName = localStorage.getItem('firstName'); // Assuming the firstName is stored in localStorage
+  const firstName = localStorage.getItem('firstName'); 
   console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
   // repplacementPart
   const escalationProcess = $("#escProcess").val();
@@ -4807,11 +4807,11 @@ $('#replacementColumns').fadeOut();
 });
 
 // Show or hide "Own Shipping" input for Part from Customer
-$('#customerShippingMethod').on('change', function () {
+$('#customerShippingMethodReplacement').on('change', function () {
 if ($(this).val() === 'Own shipping') {
-$('#customerShippingValue').fadeIn();
+$('#customerShippingValueReplacement').fadeIn();
 } else {
-$('#customerShippingValue').fadeOut();
+$('#customerShippingValueReplacement').fadeOut();
 }
 });
 $('#customerShippingMethodReturn').on('change', function () {
