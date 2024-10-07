@@ -1245,6 +1245,7 @@ class="d-block text-center font-weight-bold py-2"
 <option value="Order Cancelled">Order Cancelled</option>
 <option value="Dispute">Dispute</option>
 <option value="Refunded">Refunded</option>
+<option value="Voided">Voided</option>
 </select>
 </div>
 <div class="form-group col-md-6">
@@ -2412,7 +2413,7 @@ setTimeout(function() {
         console.log("Current totalSpend array:", totalSpend);
         console.log("Total sum of all yards:", totalSum);
         var subtractRefund = spMinusTax - custRefundedAmount;
-        var actualGP = subtractRefund - totalSum;
+        actualGP = subtractRefund - totalSum;
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
       });
