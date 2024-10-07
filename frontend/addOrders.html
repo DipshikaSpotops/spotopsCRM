@@ -1063,16 +1063,16 @@ const data = response.data.filter((order) => order.salesAgent === firstName);
 let validOrders = [];
 
 // Filter orders by the current month
-data.forEach((order) => {
-// const orderDate = parseOrderDate(order.orderDate);
-const orderMonth = orderDate.getMonth();
-const orderYear = orderDate.getFullYear();
+// data.forEach((order) => {
+// // const orderDate = parseOrderDate(order.orderDate);
+// const orderMonth = orderDate.getMonth();
+// const orderYear = orderDate.getFullYear();
 
-// Only consider orders from the current month and year
-if (orderMonth === currentMonth && orderYear === currentYear) {
-validOrders.push(order);
-}
-});
+// // Only consider orders from the current month and year
+// if (orderMonth === currentMonth && orderYear === currentYear) {
+// validOrders.push(order);
+// }
+// });
 
 // Process the filtered orders
 updateOrdersUI(validOrders);
