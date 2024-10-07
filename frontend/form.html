@@ -2011,7 +2011,7 @@ aria-label="Close"
 </select>
 <div id="customerShippingValue" style="display: none;">
 <label>Enter Shipping Value:</label>
-<input id="custOwnShipping" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
+<input id="custOwnShippingReplacement" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
 
 <label>Shipper:</label>
@@ -2081,7 +2081,7 @@ aria-label="Close"
 </select>
 <div id="customerShippingValueReturn" style="display: none;">
 <label>Enter Shipping Value:</label>
-<input id="custOwnShipping" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
+<input id="custOwnShippingRetuen" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
 
 <label>Shipper:</label>
@@ -3322,8 +3322,8 @@ $('#partFromYard').fadeOut();
     if (additionalInfo.customerShippingMethod) {
       $("#customerShippingMethod").val(additionalInfo.customerShippingMethod);
     }
-    if (additionalInfo.custOwnShipping) {
-      $("#custOwnShipping").val(additionalInfo.custOwnShipping).parent().show();
+    if (additionalInfo.custOwnShippingReplacement) {
+      $("#custOwnShippingReplacement").val(additionalInfo.custOwnShippingReplacement).parent().show();
     }
     if (additionalInfo.customerShipper) {
       $("#customerShipper").val(additionalInfo.customerShipper);
@@ -3360,6 +3360,9 @@ $('#partFromYard').fadeOut();
     }
     if (additionalInfo.custReturnDelivery) {
       $("#custReturnDelivery").val(additionalInfo.custReturnDelivery);
+    }
+    if (additionalInfo.custOwnShippingReturm) {
+      $("#custOwnShippingReturm").val(additionalInfo.custOwnShippingReturm);
     }
     // window.location.reload();
   } catch (error) {
@@ -3717,7 +3720,7 @@ $("#saveEsc").on("click", async function () {
   const customerShippingMethod = $("#customerShippingMethod").val();
   const customerShipper = $("#customerShipper").val();
   const customerTrackingNumber = $("#customerTrackingNumber").val();
-  const custOwnShipping = $("#custOwnShipping").val();
+  const custOwnShippingReplacement = $("#custOwnShippingReplacement").val();
   const yardShippingStatus = $("#yardShippingStatus").val();
   const yardShippingMethod = $("#yardShippingMethod").val();
   const yardShipper = $("#yardShipper").val();
@@ -3728,10 +3731,10 @@ $("#saveEsc").on("click", async function () {
   const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
   const customerShipperReturn = $("#customerShipperReturn").val();
   const returnTrackingCust = $("#returnTrackingCust").val();
-  const customerShippingValueReturn = $("#customerShippingValueReturn").val();
+  const custOwnShippingReturn = $("#custOwnShippingReturn").val();
   const custReturnDelivery = $("#custReturnDelivery").val();
-  console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, "custOwnShipping",custOwnShipping,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,customerTrackingNumber,customerShippingValueReturn,custReturnDelivery);
+  console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, "custOwnShipping",custOwnShippingReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,customerTrackingNumber,customerShippingValueReturn,custReturnDelivery);
   const token = localStorage.getItem('token');
 
   try {
@@ -3772,8 +3775,12 @@ $("#saveEsc").on("click", async function () {
       updatedData.customerTrackingNumber = customerTrackingNumber;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.custOwnShipping !== custOwnShipping) {
-      updatedData.custOwnShipping = custOwnShipping;
+    if (currentAdditionalInfo.custOwnShippingReturn !== custOwnShippingReturn) {
+      updatedData.custOwnShippingReturn = custOwnShippingReturn;
+      hasChanges = true;
+    }
+    if (currentAdditionalInfo.custOwnShippingReplacement !== custOwnShippingReplacement) {
+      updatedData.custOwnShippingReplacement = custOwnShippingReplacement;
       hasChanges = true;
     }
     if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
