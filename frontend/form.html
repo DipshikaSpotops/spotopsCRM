@@ -2003,7 +2003,7 @@ aria-label="Close"
         </div>
         </div>
 <label>Shipping Method:</label>
-<select id="customerShippingMethod" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
+<select id="customerShippingMethodReplacement" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
 <option value="Customer shipping">Customer shipping</option>
 <option value="Yard shipping">Yard shipping</option>
@@ -3317,8 +3317,11 @@ $('#partFromYard').fadeOut();
     if (additionalInfo.custReason) {
       $("#custReason").val(additionalInfo.custReason);
     }
-    if (additionalInfo.customerShippingMethod) {
-      $("#customerShippingMethod").val(additionalInfo.customerShippingMethod);
+    if (additionalInfo.customerShippingMethodReturn) {
+      $("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn);
+    }
+    if (additionalInfo.custOwnShippingReplacement) {
+      $("#custOwnShippingReplacement").val(additionalInfo.custOwnShippingReplacement);
     }
     if (additionalInfo.custOwnShippingReplacement) {
       $("#custOwnShippingReplacement").val(additionalInfo.custOwnShippingReplacement).parent().show();
@@ -3715,7 +3718,7 @@ $("#saveEsc").on("click", async function () {
   // repplacementPart
   const escalationProcess = $("#escProcess").val();
   const custReason = $("#custReason").val();
-  const customerShippingMethod = $("#customerShippingMethod").val();
+  const customerShippingMethodReplacement= $("#customerShippingMethodReplacement").val();
   const customerShipper = $("#customerShipper").val();
   const customerTrackingNumber = $("#customerTrackingNumber").val();
   const custOwnShippingReplacement = $("#custOwnShippingReplacement").val();
@@ -3731,7 +3734,7 @@ $("#saveEsc").on("click", async function () {
   const returnTrackingCust = $("#returnTrackingCust").val();
   const custOwnShippingReturn = $("#custOwnShippingReturn").val();
   const custReturnDelivery = $("#custReturnDelivery").val();
-  console.log("replacements", escalationProcess, custReason, customerShippingMethod, customerShipper, customerTrackingNumber, "custOwnShipping",custOwnShippingReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipper, customerTrackingNumber, "custOwnShipping",custOwnShippingReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
   console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,customerTrackingNumber,custReturnDelivery);
   const token = localStorage.getItem('token');
 
@@ -4813,9 +4816,9 @@ $('#customerShippingValue').fadeOut();
 });
 $('#customerShippingMethodReturn').on('change', function () {
 if ($(this).val() === 'Own shipping') {
-$('#custOwnShippingReturn').fadeIn();
+$('#customerShippingValueReturn').fadeIn();
 } else {
-$('#custOwnShippingReturn').fadeOut();
+$('#customerShippingValueReturn').fadeOut();
 }
 });
 // Show or hide "Own Shipping" input for Part from Yard
