@@ -3817,10 +3817,10 @@ $("#saveEsc").on("click", async function () {
       updatedData.returnTrackingCust = returnTrackingCust;
       hasChanges = true;
     }
-    if (currentAdditionalInfo.customerShippingValueReturn !== customerShippingValueReturn) {
-      updatedData.customerShippingValueReturn = customerShippingValueReturn;
-      hasChanges = true;
-    }
+    // if (currentAdditionalInfo.customerShippingValueReturn !== customerShippingValueReturn) {
+    //   updatedData.customerShippingValueReturn = customerShippingValueReturn;
+    //   hasChanges = true;
+    // }
     if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
       updatedData.custReturnDelivery = custReturnDelivery;
       hasChanges = true;
@@ -4813,9 +4813,9 @@ $('#customerShippingValue').fadeOut();
 });
 $('#customerShippingMethodReturn').on('change', function () {
 if ($(this).val() === 'Own shipping') {
-$('#customerShippingValueReturn').fadeIn();
+$('#custOwnShippingReturn').fadeIn();
 } else {
-$('#customerShippingValueReturn').fadeOut();
+$('#custOwnShippingReturn').fadeOut();
 }
 });
 // Show or hide "Own Shipping" input for Part from Yard
