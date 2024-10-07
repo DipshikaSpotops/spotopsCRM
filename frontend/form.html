@@ -3717,7 +3717,7 @@ $("#saveEsc").on("click", async function () {
   const custReason = $("#custReason").val();
   const customerShippingMethodReplacement= $("#customerShippingMethodReplacement").val();
   const custOwnShipValue = $("custOwnShipValue").val();
-  const customerShipper = $("#customerShipper").val();
+  const customerShipperReplacement = $("#customerShipperReplacement").val();
   const customerTrackingNumberReplacement = $("#customerTrackingNumberReplacement").val();
   const custreplacementDelivery = $("#custreplacementDelivery").val();
   //yard part for replacement
@@ -3732,7 +3732,7 @@ $("#saveEsc").on("click", async function () {
   const returnTrackingCust = $("#returnTrackingCust").val();
   const custOwnShippingReturn = $("#custOwnShippingReturn").val();
   const custReturnDelivery = $("#custReturnDelivery").val();
-  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipper, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipValue,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipValue,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
   console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
   const token = localStorage.getItem('token');
 
