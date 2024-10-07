@@ -2355,12 +2355,11 @@ setTimeout(function() {
       console.log("data in setTimeOut", data);
       var spMinusTax = data.spMinusTax || 0; // Sale price minus tax
       var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
-
+      console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
       if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
         console.log('Order not found in orders collection.');
         return null; 
       }
-
       data.additionalInfo.forEach((yard, index) => {
         const yardIndex = index + 1;
         console.log("yardIndex", yardIndex, yard);
@@ -2396,8 +2395,7 @@ setTimeout(function() {
         // For calculating yardSpent
         var yardPP = yard.partPrice || 0;
         var yardOSorYS = yard.shippingDetails || '';
-        var shippingValueYard = 0;  // Default to 0 if no shipping is found
-        
+        var shippingValueYard = 0;  
         if (yardOSorYS.includes("Own shipping")) {
           shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
           console.log("own ship", shippingValueYard);
@@ -2405,12 +2403,11 @@ setTimeout(function() {
           shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
           console.log("yard ship", shippingValueYard);
         }
-
         var yardOthers = yard.others || 0;
         var escOwnShipReturn = yard.custOwnShippingReturn || 0;   // part from customer- return
         var escOwnShipReplacement = yard.custOwnShipReplacement || 0;  // part from customer- replacement
         var yardOwnShippingReplacement = yard.yardOwnShipping || 0;
-
+        console.log("add",yardPP,shippingValueYard,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement);
         // Calculate yardSpent for this yard
         var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement;
         console.log("yardSpent", yardSpent);
