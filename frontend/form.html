@@ -2190,7 +2190,7 @@ $("#orderStatus").on("change", function () {
     $("body").addClass("modal-active");
     $("#disputeDiv").fadeIn();
 } 
-else if (newOrderStatus == "Refunded") {
+else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
     console.log("refunded?", newOrderStatus);
     $("#refundedDate").val(currentDateTime);
     $("body").append('<div class="modal-overlay"></div>');
