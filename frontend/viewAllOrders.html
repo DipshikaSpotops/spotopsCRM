@@ -271,7 +271,7 @@ window.location.href = "login_signup.html";
   ></span>
   </a>
   <div class="submenu" id="submenu-dashboards">
-  <a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
+  <a class="nav-link add-orderS-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
   <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
   <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
   <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
@@ -780,14 +780,14 @@ $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 $(
-"#submenu-dashboards .add-order-link,#submenu-dashboards .view-individualOrders-link, .teamB-orders-link,"
+"#submenu-dashboards .add-orderS-link,#submenu-dashboards .view-individualOrders-link, .teamB-orders-link,"
 ).hide();
 } else if (team === "Team Sussane") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 $(
-"#submenu-dashboards .add-order-link,#submenu-dashboards .view-individualOrders-link, .teamA-orders-link"
+"#submenu-dashboards .add-orderS-link,#submenu-dashboards .view-individualOrders-link, .teamA-orders-link"
 ).hide();
 } else if (role === "Admin") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
