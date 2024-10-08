@@ -2187,20 +2187,20 @@ default: return "th";
 };
 var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 // common frtch of orders
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log("data in setTimeOut", data);
-      var spMinusTax = data.spMinusTax || 0; // Sale price minus tax
-      var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
-      $("#custRefunds").val(custRefundedAmount.toFixed(2))
-      // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
-      if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
-        console.log('Order not found in orders collection.');
-        return null; 
-      }
-    })
-    .catch(error => console.error("Error fetching yard data:", error));
+// fetch(`https://www.spotops360.com/orders/${orderNo}`)
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log("common fetch", data);
+//       var orderPlacedDate = data.spMinusTax || 0; // Sale price minus tax
+//       var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
+//       $("#custRefunds").val(custRefundedAmount.toFixed(2))
+//       // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
+//       if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
+//         console.log('Order not found in orders collection.');
+//         return null; 
+//       }
+//     })
+//     .catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
 $("#orderStatus").on("change", function () {
   const newOrderStatus = $(this).val();
