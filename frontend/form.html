@@ -4712,14 +4712,17 @@ $('#escRMA').hide();
 $(".mainDiv").removeClass("blur");
 });
 $('#closeDispute').on('click', function(e) {
-  $("#disputeDiv").fadeOut();
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
+$("#disputeDiv").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+window.location.reload();
 });
 $('#closeRefund').on('click', function(e) {
-  $("#custRefund").fadeOut();
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
+$("#custRefund").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+window.location.reload();
+
 });
 $('#EYdetails') .on('click', function(e){
 // $(".mainDiv").removeClass("blur");
