@@ -2110,30 +2110,24 @@ aria-label="Close"
 </div>
 <!-- esc part for yard button ends here  -->
  <!-- div for dispute popup -->
-<div id="disputeDiv" class="dispute" style="display: flex; flex-direction: column; gap: 20px;">
-<div style="display: flex; justify-content: center; align-items: center; position: relative;">
-<h1 style="margin: 0; text-align: center;">Mark Dispute</h1>
-<button type="button" id="closeDispute" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
+ <div id="disputeDiv" class="dispute">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1>Mark Dispute</h1>
+    <button type="button" id="closeDispute" style="background: none; border: none; font-size: 20px;">&times;</button>
+  </div>
+  <div style="display: flex;">
+    <label for="disputedDate" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Date of Order:</label>
+    <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 11%;"readonly >
+  </div>
+  <div style="display: flex;">
+  <label for="disputedDate" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Date of Dispute:</label>
+  <input type="text" id="disputedDate" placeholder="Disputed Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 11%;"readonly >
 </div>
-<!-- Container for the three divs -->
-<div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-<div style="flex: 1; min-width: 300px;">
-<label for="orderedDate" style="white-space: nowrap;">Date of Order:</label>
-<input type="text" class="orderedDate" placeholder="Order Date" 
-style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
+<div style="display: flex;">
+  <label for="disputeReason" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Reason for Dispute:</label>
+  <input type="text" id="disputeReason" placeholder="Reason for Dispute" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 4%;">
 </div>
-<div style="flex: 1; min-width: 300px;">
-<label for="disputedDate" style="white-space: nowrap;">Date of Dispute:</label>
-<input type="text" id="disputedDate" placeholder="Disputed Date" 
-style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
-</div>
-<div style="flex: 1; min-width: 300px;">
-<label for="disputeReason" style="white-space: nowrap;">Reason for Dispute:</label>
-<input type="text" id="disputeReason" placeholder="Reason for Dispute" 
-style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
-</div>
-</div>
-<button type="button" id="disputeSubmit" class="save" style="align-self: flex-start;">Save</button>
+<button type="button" id="disputeSubmit" class="save">Save</button>
 </div>
   <!-- div for dispute popup ends here -->
    <!-- customer refund - order refunding part -->
