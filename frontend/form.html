@@ -2396,7 +2396,9 @@ setTimeout(function() {
     .then(response => response.json())
     .then(data => {
       console.log("data in setTimeOut", data);
-      var spMinusTax = data.spMinusTax || 0; // Sale price minus tax
+      var sp = data.soldP;
+      var tax = data.salestax;
+      var spMinusTax = data.spMinusTax || 0 || sp - tax; // Sale price minus tax
       var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
       $("#custRefunds").val(custRefundedAmount.toFixed(2))
       // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
