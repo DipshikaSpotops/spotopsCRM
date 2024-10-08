@@ -1579,7 +1579,7 @@ required
 </td>
 <td>
 <input
-type="number"
+type="text"
 class="form-control"
 id="etaEdit"
 placeholder="Enter ETA"
@@ -2113,6 +2113,10 @@ aria-label="Close"
     <button type="button" id="closeDispute" style="background: none; border: none; font-size: 20px;">&times;</button>
   </div>
   <div style="display: flex;">
+    <label for="disputedDate" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Date of Order:</label>
+    <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 11%;"readonly >
+  </div>
+  <div style="display: flex;">
   <label for="disputedDate" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Date of Dispute:</label>
   <input type="text" id="disputedDate" placeholder="Disputed Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 11%;"readonly >
 </div>
@@ -2125,6 +2129,10 @@ aria-label="Close"
   <!-- div for dispute popup ends here -->
    <!-- customer refund - order refunding part -->
    <div id="custRefund">
+    <div style="display: flex;">
+      <label for="orderedDate" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Date of Order:</label>
+      <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: -1% 0% 6% 11%;"readonly >
+    </div>
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <h1>Customer Refund:</h1>
       <button type="button" id="closeRefund" style="background: none; border: none; font-size: 20px;">&times;</button>
@@ -2178,7 +2186,22 @@ default: return "th";
 }
 };
 var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
-
+// common frtch of orders
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("data in setTimeOut", data);
+      var spMinusTax = data.spMinusTax || 0; // Sale price minus tax
+      var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
+      $("#custRefunds").val(custRefundedAmount.toFixed(2))
+      // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
+      if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
+        console.log('Order not found in orders collection.');
+        return null; 
+      }
+    })
+    .catch(error => console.error("Error fetching yard data:", error));
+// common fetch of orders ends here
 $("#orderStatus").on("change", function () {
   const newOrderStatus = $(this).val();
   console.log("Order Status changed to:", newOrderStatus);
@@ -2186,6 +2209,8 @@ $("#orderStatus").on("change", function () {
   if (newOrderStatus == "Dispute") {
     console.log("dispute?", newOrderStatus);
     $("#disputedDate").val(currentDateTime);
+    // orderedDate
+    $(".orderedDate").val(currentDateTime);
     $("body").append('<div class="modal-overlay"></div>');
     $("body").addClass("modal-active");
     $("#disputeDiv").fadeIn();
