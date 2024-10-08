@@ -2153,6 +2153,7 @@ aria-label="Close"
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
 console.log("query string",queryString);
+const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
 // current datetime - US Central time
 const now = new Date();
@@ -2349,7 +2350,7 @@ const token = localStorage.getItem("token");
 const email = localStorage.getItem("email");
 const role = localStorage.getItem("role");
 const team = localStorage.getItem("team");
-const urlParams = new URLSearchParams(window.location.search);
+// const urlParams = new URLSearchParams(window.location.search);
 const isCancelled = urlParams.get('cancelled') === 'true';
 // const orderNo = urlParams.get("orderNo");
 const process = urlParams.get("process");
