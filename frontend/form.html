@@ -1233,22 +1233,21 @@ class="d-block text-center font-weight-bold py-2"
   </div>
 </div>
 <div class="form-row">
-  <div class="form-group col-md-6">
-    <label for="orderStatus">Order Status</label>
-    <select class="form-control" id="orderStatus" required>
-      <option value="" disabled selected>Select Order Status</option>
-      <option value="Placed" disabled>Order Placed</option>
-      <option value="Customer approved" disabled>Customer Approved</option>
-      <option value="Yard Processing" disabled>Yard Processing</option>
-      <option value="In Transit" disabled>In Transit</option>
-      <option value="Escalation" disabled>Escalation</option>
-      <option value="Order Fulfilled" disabled>Order Fulfilled</option>
-      <option value="Order Cancelled">Order Cancelled</option>
-      <option value="Dispute">Dispute</option>
-      <option value="Refunded">Refunded</option>
-      <option value="Voided">Voided</option>
-    </select>
-  </div>  
+<div class="form-group col-md-6">
+<label for="orderStatus">Order Status</label>
+<select class="form-control" id="orderStatus" required>
+<option value="Placed" disabled>Order Placed</option>
+<option value="Customer approved" >Customer Approved</option>
+<option value="Yard Processing" >Yard Processing</option>
+<option value="In Transit" >In Transit</option>
+<option value="Escalation" >Escalation</option>
+<option value="Order Fulfilled">Order Fulfilled</option>
+<option value="Order Cancelled">Order Cancelled</option>
+<option value="Dispute">Dispute</option>
+<option value="Refunded">Refunded</option>
+<option value="Voided">Voided</option>
+</select>
+</div>
 <div class="form-group col-md-6">
 <label for="vin">VIN No.</label>
 <input type="text" class="form-control" id="vin" required />
@@ -2156,7 +2155,6 @@ const queryString = window.location.search.substring(1);
 console.log("query string",queryString);
 const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
-var orderPlacedDate;
 // current datetime - US Central time
 const now = new Date();
 const options = {
@@ -2195,8 +2193,8 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
     .then(data => {
       console.log("common fetch", data);
-      orderPlacedDate = data.orderDate;
-      console.log("orderDate",orderPlacedDate);
+      var orderPlacedDate = data.orderDate;
+      console.log("orderDate",orderPlacedDate)
       })
     .catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
