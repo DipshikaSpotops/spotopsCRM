@@ -2127,21 +2127,34 @@ aria-label="Close"
 </div>
   <!-- div for dispute popup ends here -->
    <!-- customer refund - order refunding part -->
-   <div id="custRefund">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h1 style="margin: 2% 32%;">Customer Refund</h1>
-      <button type="button" id="closeRefund" style="background: none; border: none; font-size: 20px;">&times;</button>
+   <div id="custRefund" style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; justify-content: center; align-items: center; position: relative;">
+      <h1 style="margin: 0; text-align: center;">Customer Refund</h1>
+      <button type="button" id="closeRefund" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
     </div>
-    <div style="display: flex;">
-        <label for="orderedDate" style="white-space: nowrap;;">Date of Order:</label>
-        <input type="text" class="orderedDate" placeholder="Order Date" style="order: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;margin: 6% 0% 0% -35%;"readonly >
-    <label for="custRefundedDate" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;display: inherit;">Date of Refund:</label>
-    <input type="text" id="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 50%;margin: 6% 0% 6% -30%;" readonly>
-    <label for="refundAmount" style="white-space: nowrap;margin: 2% 12%;">Refunded Amount:</label>
-    <input type="number" class="custRefundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;margin: 6% 0% 0% -32%;">
-  </div>
-  <button type="button" id="custRefundSubmit" class="save">Save</button>
-  </div>
+  
+    <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 300px;">
+        <label for="orderedDate" style="white-space: nowrap;">Date of Order:</label>
+        <input type="text" class="orderedDate" placeholder="Order Date" 
+          style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
+      </div>
+  
+      <div style="flex: 1; min-width: 300px;">
+        <label for="custRefundedDate" style="white-space: nowrap;">Date of Refund:</label>
+        <input type="text" id="refundedDate" placeholder="Refund Date" 
+          style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
+      </div>
+  
+      <div style="flex: 1; min-width: 300px;">
+        <label for="refundAmount" style="white-space: nowrap;">Refunded Amount:</label>
+        <input type="number" class="custRefundedAmount" placeholder="Refunded Amount" 
+          style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+      </div>
+    </div>
+  
+    <button type="button" id="custRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
+  </div>  
   <!-- customer refund - order refunding part ends here -->
 
 <script>
