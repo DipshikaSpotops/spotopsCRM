@@ -2155,6 +2155,7 @@ const queryString = window.location.search.substring(1);
 console.log("query string",queryString);
 const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
+var orderPlacedDate;
 // current datetime - US Central time
 const now = new Date();
 const options = {
@@ -2193,7 +2194,8 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
     .then(data => {
       console.log("common fetch", data);
-      var orderPlacedDate = data.orderDate;
+      orderPlacedDate = data.orderDate;
+      console.log("orderDate",orderPlacedDate);
       })
     .catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
