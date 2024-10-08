@@ -12,6 +12,10 @@ display: flex;
 overflow-x: hidden;
 flex-direction: column;
 }
+body {
+    overflow-x: visible; /* Ensure the horizontal scroll is visible */
+    height: 100vh; /* Make sure the body takes up the full height of the viewport */
+}
 #searchInput {
     width: 40%;
     border-radius: 30px;
@@ -98,6 +102,8 @@ flex-grow: 1;
 padding: 20px;
 margin-left: 14%;
 margin-top: 60px;
+overflow-x: auto; /* Enable horizontal scrolling */
+height: calc(100vh - 60px);
 }
 .toggle-btn,
 .close-btn {
@@ -143,6 +149,11 @@ margin-left: 20px;
 height: auto;
 width: 150px;
 margin: -16px 6px;
+}
+table {
+    width: 100%; /* Ensure the table takes up all available space */
+    display: block; /* Ensure the table respects the container's overflow */
+    overflow-x: auto; /* Ensure the table allows horizontal scrolling */
 }
 table.table td,
 table.table th {
@@ -208,7 +219,7 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <!-- <h1>My Orders</h1> -->
-<h1 class="fixed-header" style="text-align: center; margin-right: 2%;padding: 1%;">My Orders</h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 6%;padding: 1%;">My Orders</h1>
         <div>
           <input
           type="text"
