@@ -3563,7 +3563,9 @@ console.error("Error fetching yard data:", error);
 });
 
 $("#saveEsc").on("click", async function () {
-$(".mainDiv").removeClass("blur");
+// $(".mainDiv").removeClass("blur");
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 $("#escRMA").hide();
 $("#orderStatus").val("Escalation");
 const yardIndex = $(this).data("yard-index");
