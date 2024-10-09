@@ -433,8 +433,8 @@ border-color: #004085;
 .replacement-container {
 display: flex;
 justify-content: space-between;
-gap: 20px; /* Add space between the two columns */
-margin-top: 20px; /* Adjust the margin if needed */
+gap: 20px; 
+margin-top: 20px; 
 }
 
 .replacement-column {
@@ -535,7 +535,7 @@ position: fixed;
 top: 0;
 z-index: 2;
 border-bottom: 1px solid #e0e0e0;
-height: 60px; /* Set a fixed height for the navbar */
+height: 60px; 
 }
 
 .navbar.black {
@@ -572,12 +572,12 @@ cursor: pointer;
 .dropdown-menu {
 background-color: black;
 border: none;
-position: absolute; /* Position dropdown menus absolutely */
-top: 60px; /* Align dropdowns with the bottom of the navbar */
+position: absolute; 
+top: 60px; 
 left: 0;
 right: 0;
 z-index: 9999;
-display: none; /* Initially hide dropdowns */
+display: none; 
 }
 
 .dropdown-item {
@@ -593,7 +593,7 @@ color: black;
 color: #ff914d;
 }
 .navbar .dropdown:hover .dropdown-menu {
-display: block; /* Show dropdowns on hover */
+display: block; 
 }
 
 .sidebar {
@@ -721,15 +721,6 @@ height: auto;
 position: relative;
 }
 
-/* .sidebarOrder,
-.main-content,
-.new-div {
-width: 100%;
-height: 100vh;
-margin-top: 20px;
-padding: 10px;
-} */
-
 .navbar {
 flex-direction: column;
 align-items: flex-start;
@@ -806,9 +797,9 @@ box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 input:disabled,
 textarea:disabled,
 select:disabled {
-background-color: #e9ecef; /* Ensure disabled inputs are visually distinguishable */
-opacity: 1; /* Fix opacity to make it look consistent */
-cursor: not-allowed; /* Show a not-allowed cursor */
+background-color: #e9ecef;
+opacity: 1; 
+cursor: not-allowed; 
 }
 .escalationReturn,.escalationReplacement {
 display: none;
@@ -821,14 +812,14 @@ padding: 33px;
 }
 
 .escalationReturn .form-group {
-flex: 1; /* Each item will take up equal width */
-min-width: 200px; /* Ensure a minimum width for smaller screens */
+flex: 1;
+min-width: 200px; 
 }
 
 .checkbox-group {
 display: flex;
 gap: 10px;
-flex-direction: column; /* Ensure checkboxes are in a column within the form group */
+flex-direction: column; 
 }
 
 .form-group label {
@@ -837,7 +828,7 @@ margin-bottom: 5px;
 }
 
 .form-group input[type="text"], .form-group select {
-width: 100%; /* Make input fields and select dropdowns take full width */
+width: 100%; 
 }
 
 
@@ -859,9 +850,8 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar" id="navbar" style="display: flex">
 <div class="logo">
-<!-- <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" /> -->
 <a href="viewAllOrders.html">
-  <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
 </a>
 </div>
 <div class="navbar-nav" style="    flex-direction: row;justify-content: center;align-items: center;margin-left: 62%;font-family: sans-serif;">
@@ -1048,40 +1038,21 @@ aria-labelledby="userMenu"
 </div>
 <div class="form-group col-md-6">
 <label for="salesAgent">Sales Agent</label>
-<input
-type="text"
-class="form-control"
-id="salesAgent"
-required
-/>
+<input type="text" class="form-control" id="salesAgent" required />
 </div>
 </div>
 <div class="form-group">
 <div id="custInfo" style="border: 1px solid grey">
-<label
-for="customerInfo"
-class="d-block text-center font-weight-bold py-2"
->CUSTOMER INFO</label
->
+<label for="customerInfo" class="d-block text-center font-weight-bold py-2">CUSTOMER INFO</label>
 </div>
 <div class="form-row">
 <div class="form-group col-md-6">
 <label for="firstName">First Name</label>
-<input
-type="text"
-class="form-control"
-id="firstName"
-required
-/>
+<input type="text" class="form-control" id="firstName" required />
 </div>
 <div class="form-group col-md-6">
 <label for="lastName">Last Name</label>
-<input
-type="text"
-class="form-control"
-id="lastname"
-required
-/>
+<input type="text" class="form-control" id="lastname" required />
 </div>
 </div>
 <div class="form-row">
@@ -1097,31 +1068,17 @@ required
 <div class="form-row">
 <div class="form-group col-md-6">
 <label for="bAddress">Billing Address</label>
-<input
-type="text"
-class="form-control"
-id="bAddress"
-required
-/>
+<input type="text" class="form-control" id="bAddress" required />
 </div>
 <div class="form-group col-md-6">
 <label for="sAddress">Shipping Address</label>
-<input
-type="text"
-class="form-control"
-id="sAddress"
-required
-/>
+<input type="text" class="form-control" id="sAddress" required />
 </div>
 </div>
 </div>
 <div class="form-group">
 <div id="partDesc" style="border: 1px solid grey">
-<label
-for="partDescription"
-class="d-block text-center font-weight-bold py-2"
->PART DESCRIPTION</label
->
+<label for="partDescription" class="d-block text-center font-weight-bold py-2">PART DESCRIPTION</label>
 </div>
 <div class="form-row">
 <div class="form-group col-md-6">
@@ -1168,11 +1125,7 @@ class="d-block text-center font-weight-bold py-2"
 </div>
 <div class="form-group">
 <div class="pricenGp" style="border: 1px solid grey">
-<label
-for="priceProfit"
-class="d-block text-center font-weight-bold py-2"
->PRICE AND GP INFORMATION</label
->
+<label for="priceProfit" class="d-block text-center font-weight-bold py-2">PRICE AND GP INFORMATION</label>
 </div>
 <div class="form-row">
 <div class="form-group col-md-6">
@@ -1215,25 +1168,25 @@ class="d-block text-center font-weight-bold py-2"
 </div>
 </div>
 <div class="form-row">
-  <div class="form-group col-md-6">
-    <label for="grossProfit">Est. GP</label>
-    <div class="input-group">
-    <div class="input-group-prepend">
-    <span class="input-group-text">$</span>
-    </div>
-    <input type="number" class="form-control" id="grossProfit" step="any" min="0" readonly required/>
-    </div>
-  </div>
-  <div class="form-group col-md-6">
-  <label for="salestax">Actual GP</label>
-  <div class="input-group">
-  <div class="input-group-prepend">
-  <span class="input-group-text">$</span>
-  </div>
-  <input type="number" class="form-control" id="actualGP" step="any" min="0" readonly/>
-  </div>
-  </div>
-  </div>
+<div class="form-group col-md-6">
+<label for="grossProfit">Est. GP</label>
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">$</span>
+</div>
+<input type="number" class="form-control" id="grossProfit" step="any" min="0" readonly required/>
+</div>
+</div>
+<div class="form-group col-md-6">
+<label for="salestax">Actual GP</label>
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">$</span>
+</div>
+<input type="number" class="form-control" id="actualGP" step="any" min="0" readonly/>
+</div>
+</div>
+</div>
 </div>
 <div class="form-row">
 <div class="form-group col-md-6">
@@ -1277,11 +1230,11 @@ style="margin-right: 94px;margin-top: -9px;"
 </div>
 </div>
 <div class="form-row">
-  <div class="form-group col-md-6">
-  <label for="custRefundedAmount">Refund Amount</label>
-  <input type="text" class="form-control" id="custRefunds"/>
-  </div>
-  </div>
+<div class="form-group col-md-6">
+<label for="custRefundedAmount">Refund Amount</label>
+<input type="text" class="form-control" id="custRefunds"/>
+</div>
+</div>
 <div id="yardButtonsContainer" class="d-flex flex-column align-items-center">
 <div id="yardInfoContainer" class="d-flex flex-row mb-3"></div>
 <button type="button" class="btn add-yard-btn">+</button> 
@@ -1290,41 +1243,24 @@ style="margin-right: 94px;margin-top: -9px;"
 <button type="submit" class="btn btn-block" id="submitBtn">Submit</button>
 </form>
 </div>
-
-
-
+<!-- third new-div starts here -->
 <div class="new-div">
 <div id="saleNote">
-<h2 style="padding-left: 10px;text-align: center;font-weight: 600;">
-Sale Note
-</h2>
+<h2 style="padding-left: 10px;text-align: center;font-weight: 600;">Sale Note</h2>
 </div>
-<h2 style="padding-left: 10px;text-align: center;font-weight: 600;">
-Comments
-</h2>
-<div
-id="comment-boxSupport"
-style="padding: 10px 20px 20px 10px"
-></div>
+<h2 style="padding-left: 10px;text-align: center;font-weight: 600;">Comments</h2>
+<div id="comment-boxSupport" style="padding: 10px 20px 20px 10px"></div>
 <div class="commentsInput" id="commentsContainer"></div>
 <div class="containers">
 <form>
-<input
-id="commentInput"
-placeholder="Type Your Comments here..."
-></input>
+<input id="commentInput" placeholder="Type Your Comments here..."></input>
 <div class="btn">
-<input
-id="submitComments"
-type="submitComments"
-value="Update Comments"
-/>
+<input id="submitComments" type="submitComments" value="Update Comments" />
 </div>
 </form>
 </div>
 </div>
 </div>
-
 <!-- add yard starts here -->
 <div class="modal fade" id="yardModal" tabindex="-1" aria-labelledby="yardModalLabel" aria-hidden="true" style="display: none;">
 <div class="modal-dialog">
@@ -1435,7 +1371,6 @@ value="Update Comments"
 <option value="WV">West Virginia</option>
 <option value="WI">Wisconsin</option>
 <option value="WY">Wyoming</option>
-
 <!-- Canadian Provinces -->
 <option value="AB">Alberta</option>
 <option value="BC">British Columbia</option>
@@ -1492,7 +1427,6 @@ value="Update Comments"
 <input type="number" class="form-control" id="warr" placeholder="Warranty" style="margin-top:-2%;"/>
 </div>
 </div>
-
 </div>
 <button type="button" class="btn save" id="addYardInfo">Submit</button>
 </div>
@@ -1502,26 +1436,14 @@ value="Update Comments"
 
 <div id="editYardPopup" style="display: none">
 <div >
-<button
-type="button"
-class="close"
-data-dismiss="modal"
-aria-label="Close"
->
+<button type="button" class="close" data-dismiss="modal"aria-label="Close">
 <span id="crossBtnEditYard" aria-hidden="true">&times;</span>
 </button>
 </div>
 <div class="modal-body">
 <div class="form-group" id="editPopInfo">
-<label for="refund"  style="font-size: 25px;
-margin: 4%;">Status:</label>
-<select id="refund" style="    width: 66%;
-border-radius: 25px;
-margin: 5% -12% 6% 0%;
-background-color: black;
-color: white;
-padding: 15px 8px 15px 8px;
-text-align: center;">
+<label for="refund"  style="font-size: 25px;margin: 4%;">Status:</label>
+<select id="refund" style="width: 66%;border-radius: 25px;margin: 5% -12% 6% 0%;background-color: black;color: white;padding: 15px 8px 15px 8px;text-align: center;">
 <!-- <option value="">Choose</option> -->
 <option value="Yard located">Yard Located</option>
 <option value="Yard PO Sent">PO Sent</option>
@@ -1532,11 +1454,7 @@ text-align: center;">
 <option value="Escalation">Escalation</option>
 </select>
 <div>
-<button
-type="button"
-class="btn save"
-id="editYardInfo"
-style="border-radius: 22px;align-items: center;margin: 6% 2% 8% 72%;width: 170%;height: 4vh;">
+<button type="button"class="btn save" id="editYardInfo" style="border-radius: 22px;align-items: center;margin: 6% 2% 8% 72%;width: 170%;height: 4vh;">
 Save
 </button>
 </div>
@@ -1545,11 +1463,7 @@ Save
 <div id="escalation" style="width: 34%;display: block;margin: 2%;border: 1px solid #c0c0c0;height: 6vh;padding: 2% 2%;">
 <!-- escalation part for yard status-->
 <label for="reason1">Reason:</label>
-<select
-name="esc"
-id="esc"
-style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;margin: 1% 4%;"
->
+<select name="esc" id="esc" style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;margin: 1% 4%;">
 <option value="">Choose</option>
 <option value="Damaged">Damaged</option>
 <option value="Defective">Defective</option>
@@ -1572,22 +1486,10 @@ style="padding: 0.6%; width: 59%; border: 1px solid #d9d4d4;text-align: center;m
 <tbody>
 <tr>
 <td>
-<input
-type="text"
-class="form-control"
-id="trackingNoEdit"
-placeholder="Enter Tracking No"
-required
-/>
+<input type="text" class="form-control" id="trackingNoEdit" placeholder="Enter Tracking No" required />
 </td>
 <td>
-<input
-type="text"
-class="form-control"
-id="etaEdit"
-placeholder="Enter ETA"
-required
-/>
+<input type="text" class="form-control" id="etaEdit" placeholder="Enter ETA" required />
 </td>
 </tr>
 <tr>
@@ -1599,21 +1501,13 @@ required
 <option value="FedEx">FedEx</option>
 <option value="Others">Others</option> <!-- Others option -->
 </select>
-
 <!-- This input will only be shown if 'Others' is selected -->
 <input type="text" class="form-control mt-2" id="otherShipperInput" placeholder="Please specify other shipper" style="display:none;">
 </td>
-
 </tr>
 <tr>
 <td colspan="2">
-<input
-type="url"
-class="form-control"
-id="linkInput"
-placeholder="Enter Link"
-required
-/>
+<input type="url" class="form-control" id="linkInput" placeholder="Enter Link" required />
 </td>
 </tr>
 </tbody>
@@ -1628,39 +1522,19 @@ Send Email
 </div>
 <div class="container">
 <form>
-<textarea
-id="noteInput"
-placeholder="Type Your Notes here..."
-></textarea>
+<textarea id="noteInput" placeholder="Type Your Notes here..."></textarea>
 <div class="btn">
-<input
-id="submit"
-type="submit"
-value="Update Notes"
-style="
-margin: -60% 0% 7% 522%;
-border-radius: 20px;
-background-color: grey;
-border: none;
-"
-/>
+<input id="submit" type="submit" value="Update Notes" style="margin: -60% 0% 7% 522%;border-radius: 20px;background-color: grey;border: none;"/>
 </div>
 </form>
 </div>
 </div>
 <input type="hidden" id="yardIndexEdit" />
 </div>
-
 <!-- edit yard details -->
 <div class="modal fade" id="editYardDetailsModal" tabindex="-1" aria-labelledby="editYardDetailsModalLabel" aria-hidden="true" style="display: none;">
-<!-- <div class="modal-dialog"> -->
-<!-- <div class="modal-content" > -->
-
 <div class="modal-header">
-<h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 26%;
-font-weight: bold;
-overflow: hidden;
-white-space: nowrap;">Edit Yard Details- </h5>
+<h5 class="modal-title" id="editYardDetailsModalLabel" style="margin: 0% 26%;font-weight: bold;overflow: hidden;white-space: nowrap;">Edit Yard Details- </h5>
 <button type="button" id="EYdetails" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
@@ -1761,7 +1635,6 @@ white-space: nowrap;">Edit Yard Details- </h5>
 <option value="WV">West Virginia</option>
 <option value="WI">Wisconsin</option>
 <option value="WY">Wyoming</option>
-
 <!-- Canadian Provinces -->
 <option value="AB">Alberta</option>
 <option value="BC">British Columbia</option>
@@ -1778,10 +1651,6 @@ white-space: nowrap;">Edit Yard Details- </h5>
 <option value="YT">Yukon</option>
 </select>
 </div>
-
-<!-- <div class="form-group col-md-4">
-<input type="text" class="form-control" id="editState" placeholder="Enter State" />
-</div> -->
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
@@ -1823,27 +1692,13 @@ white-space: nowrap;">Edit Yard Details- </h5>
 <input type="number" class="form-control" id="editWarr" placeholder="Warranty" />
 </div>
 </div>
-
-<!-- <div class="form-row">
-<div class="form-group " style="margin: 0% -56%;width: 60%;">
-<input type="number" class="form-control" id="editOthers" placeholder="Other Charges" style="     margin: 0% 0% 0% -140%;
-width: 203%;" />
-</div> -->
-<!-- <div class="form">
-<label class="form-control" id="totalSpending" style="border: none;text-align: center;margin: 17% 148%;">Total Yard Spending: $100.25</label>
-</div> -->
 </div>
 <div >
-<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
 <button type="button" class="btn save" id="saveYardDetails">Save</button>
 </div>
 </div>
-
-<!-- </div> -->
-<!-- </div> -->
 </div>
 <!-- edit yard details ends here -->
-
 <!-- card charged div starts here -->
 <div id="cardCharged">
 <button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
@@ -1858,48 +1713,26 @@ width: 203%;" />
 <!-- card charged div ends here -->
 <!-- refund  div starts here -->
 <div id="refundCollect">
-<button id="closeRefundCollected" style"float: right; background: none; border: none; font-size: 20px;">&times;</button>
-<label for="paymentStatusRefund">Refund Collected:</label
->
-<select
-class="form-control paymentStatusRefund"
-id="paymentStatusSelect">
+<button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+<label for="paymentStatusRefund">Refund Collected:</label>
+<select class="form-control paymentStatusRefund" id="paymentStatusSelect">
 <option value="">Choose</option>
 <option value="Refund collected">Yes</option>
 <option value="">No</option>
 </select>
 <div id="refundedAmountContainer">
 <label for="refundedAmount">Refunded Amount:</label>
-<input
-type="number"
-class="form-control"
-id="refundedAmount"
-placeholder="Enter refunded amount"
-/>
+<input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount"/>
 </div>
 <button id="refundSubmit">Submit</button>
 </div>        
 <!-- refund div ends here -->
-
-
-<div
-class="modal fade"
-id="profileModal"
-tabindex="-1"
-role="dialog"
-aria-labelledby="profileModalLabel"
-aria-hidden="true"
->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
-<button
-type="button"
-class="close"
-data-dismiss="modal"
-aria-label="Close"
->
+<button type="button" class="close"data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
 </div>
@@ -1907,82 +1740,38 @@ aria-label="Close"
 <form id="profileForm">
 <div class="form-group">
 <label for="profileFirstName">First Name</label>
-<input
-type="text"
-class="form-control"
-id="profileFirstName"
-readonly
-/>
+<input type="text" class="form-control" id="profileFirstName" readonly />
 </div>
 <div class="form-group">
 <label for="profileLastName">Last Name</label>
-<input
-type="text"
-class="form-control"
-id="profileLastName"
-readonly
-/>
+<input type="text" class="form-control" id="profileLastName" readonly />
 </div>
 <div class="form-group">
 <label for="profileEmail">Email</label>
-<input
-type="email"
-class="form-control"
-id="profileEmail"
-readonly
-/>
+<input type="email" class="form-control" id="profileEmail" readonly />
 </div>
 <div class="form-group">
 <label for="profileRole">Role</label>
-<input
-type="text"
-class="form-control"
-id="profileRole"
-readonly
-/>
+<input type="text" class="form-control" id="profileRole" readonly />
 </div>
 </form>
 </div>
 <div class="modal-footer">
-<button
-type="button"
-class="btn btn-secondary close"
-data-dismiss="modal"
->
-Close
-</button>
+<button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
 </div>
 </div>
 </div>
 </div>
-
-
 <!-- Approve Modal popup -->
-<div
-class="modal fade modalPopup"
-id="addFailed"
-tabindex="-1"
-role="dialog"
-aria-labelledby="myModalLabel"
-aria-hidden="true"
-style="display: none;"
->
+<div class="modal fade modalPopup" id="addFailed" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 <p>You cannot add a new yard until the current yard status is either PO Cancelled or Escalation.</p>
-<button type="button" class="btn btn-primary" id="okButton">
-OK
-</button>
+<button type="button" class="btn btn-primary" id="okButton">OK</button>
 </div>
-<!-- escalation part for yards -->
 <!-- // escalation part for yard status ends here -->
 <!-- esc part for yard button -->
 <div id="escRMA">
 <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
-<button
-type="button"
-class="close"
-data-dismiss="modal"
-aria-label="Close"
->
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 <span id="crossEsc" aria-hidden="true">&times;</span>
 </button>
 <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
@@ -1991,21 +1780,19 @@ aria-label="Close"
 <option value="Return">Return</option>
 <option value="Junk">Junk</option>
 </select>
-
-
 <!-- Replacement Columns-->
 <div id="replacementColumns" style="display: none;">
 <div class="replacement-container">
 <div id="partFromCustomer" class="replacement-column">
-    <div style="display: flex;">    
-        <div><h4>Part from Customer:</h4></div>
-        <div><select id="custReason" style="color: grey;text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin:0%  10%;width: 128%;">
-            <option value="">Reason</option>
-            <option value="Junked">Junked</option>
+<div style="display: flex;">    
+<div><h4>Part from Customer:</h4></div>
+<div><select id="custReason" style="color: grey;text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin:0%  10%;width: 128%;">
+<option value="">Reason</option>
+<option value="Junked">Junked</option>
 <option value="Return">Return</option>
-            </select>
-        </div>
-        </div>
+</select>
+</div>
+</div>
 <label>Shipping Method:</label>
 <select id="customerShippingMethodReplacement" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
@@ -2017,7 +1804,6 @@ aria-label="Close"
 <label>Enter Shipping Value:</label>
 <input id="custOwnShipReplacement" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
-
 <label>Shipper:</label>
 <select id="customerShipperReplacement" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
@@ -2026,7 +1812,6 @@ aria-label="Close"
 <option value="World Wide Express">World Wide Express</option>
 <option value="Others">Others</option>
 </select>
-
 <label>Tracking No:</label>
 <input type="text" id="customerTrackingNumberReplacement" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
 <label>Delivery Status:</label>
@@ -2040,11 +1825,11 @@ aria-label="Close"
 <div style="display: flex;">    
 <div><h4>Part from Yard:</h4></div>
 <div><select id="yardShippingStatus" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin:0%  4%;width: 110%;">
-    <option value="">Shipping Method</option>
-    <option value="Ready to ship">Ready to ship</option>
-    <option value="In transit">In transit</option>
-    <option value="Delivered">Delivered</option>
-    </select>
+<option value="">Shipping Method</option>
+<option value="Ready to ship">Ready to ship</option>
+<option value="In transit">In transit</option>
+<option value="Delivered">Delivered</option>
+</select>
 </div>
 </div>
 <label>Shipping Method:</label>
@@ -2073,9 +1858,9 @@ aria-label="Close"
 </div>
 <!-- div only for Return -->
 <div id="partFromCustomerReturn" class="return-column" style="display: none;">
-  <div style="display: flex;">    
-      <div><h4>Part from Customer:</h4></div>
-      </div>
+<div style="display: flex;">    
+<div><h4>Part from Customer:</h4></div>
+</div>
 <label>Shipping Method:</label>
 <select id="customerShippingMethodReturn" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
@@ -2087,7 +1872,6 @@ aria-label="Close"
 <label>Enter Shipping Value:</label>
 <input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
-
 <label>Shipper:</label>
 <select id="customerShipperReturn" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
@@ -2096,7 +1880,6 @@ aria-label="Close"
 <option value="World Wide Express">World Wide Express</option>
 <option value="Others">USPS</option>
 </select>
-
 <label>Tracking No:</label>
 <input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;">
 <label>Delivery Status:</label>
@@ -2115,61 +1898,49 @@ aria-label="Close"
 <h1 style="margin: 0; text-align: center;">Mark Dispute</h1>
 <button type="button" id="closeDispute" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
 </div>
-
 <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
 <div style="flex: 1; min-width: 300px;">
 <label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
 <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
 </div>
-
 <div style="flex: 1; min-width: 300px;">
 <label for="disputedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Dispute:</label>
-<input type="text" id="disputedDate" placeholder="Disputed Date" 
-style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+<input type="text" id="disputedDate" placeholder="Disputed Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
 </div>
-
 <div style="flex: 1; min-width: 300px;">
 <label for="disputeReason" style="white-space: nowrap;margin: 4% 30%;">Reason for Dispute:</label>
-<input type="text" id="disputeReason" placeholder="Reason for Dispute" 
-style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+<input type="text" id="disputeReason" placeholder="Reason for Dispute" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
 </div>
 </div>
-
 <button type="button" id="disputeSubmit" class="save" style="align-self: flex-start;">Save</button>
 </div>
   <!-- div for dispute popup ends here -->
-   <!-- customer refund - order refunding part -->
-   <div id="custRefund" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
-    <div style="display: flex; justify-content: center; align-items: center; position: relative;">
-      <h1 style="margin: 0; text-align: center;">Customer Refund</h1>
-      <button type="button" id="closeRefund" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
-    </div>
-  
-    <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-      <div style="flex: 1; min-width: 300px;">
-        <label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
-        <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
-      </div>
-  
-      <div style="flex: 1; min-width: 300px;">
-        <label for="custRefundedDate" style="white-space: nowrap;margin: 4% 28%;">Date of Refund:</label>
-        <input type="text" id="refundedDate" placeholder="Refund Date" 
-          style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
-      </div>
-  <div class="containerForScroll">
-    <label for=h></label>
-  </div>
-      <div style="flex: 1; min-width: 300px;">
-        <label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
-        <input type="number" class="custRefundedAmount" placeholder="Refunded Amount" 
-          style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
-      </div>
-    </div>
-  
-    <button type="button" id="custRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
-  </div>  
-  <!-- customer refund - order refunding part ends here -->
-
+<!-- customer refund - order refunding part -->
+<div id="custRefund" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
+<div style="display: flex; justify-content: center; align-items: center; position: relative;">
+<h1 style="margin: 0; text-align: center;">Customer Refund</h1>
+<button type="button" id="closeRefund" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+<div style="flex: 1; min-width: 300px;">
+<label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
+<input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="custRefundedDate" style="white-space: nowrap;margin: 4% 28%;">Date of Refund:</label>
+<input type="text" id="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+</div>
+<div class="containerForScroll">
+<label for=h></label>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
+<input type="number" class="custRefundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+</div>
+</div>
+<button type="button" id="custRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
+</div>  
+<!-- customer refund - order refunding part ends here -->
 <script>
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
@@ -2212,54 +1983,53 @@ default: return "th";
 var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 // common fetch of orders
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log("common fetch", data);
-      orderPlacedDate = data.orderDate;
-      console.log("orderDate",orderPlacedDate)
-      })
-    .catch(error => console.error("Error fetching yard data:", error));
+.then(response => response.json())
+.then(data => {
+console.log("common fetch", data);
+orderPlacedDate = data.orderDate;
+console.log("orderDate",orderPlacedDate)
+})
+.catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
 $("#orderStatus").on("change", function () {
-  const newOrderStatus = $(this).val();
-  console.log("Order Status changed to:", newOrderStatus);
+const newOrderStatus = $(this).val();
+console.log("Order Status changed to:", newOrderStatus);
 
-  if (newOrderStatus == "Dispute") {
-    console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
-    $("#disputedDate").val(currentDateTime);
-    // orderedDate
-    $(".orderedDate").val(orderPlacedDate);
-    $("body").append('<div class="modal-overlay"></div>');
-    $("body").addClass("modal-active");
-    $("#disputeDiv").fadeIn();
+if (newOrderStatus == "Dispute") {
+console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
+$("#disputedDate").val(currentDateTime);
+// orderedDate
+$(".orderedDate").val(orderPlacedDate);
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
+$("#disputeDiv").fadeIn();
 } 
 else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
-    console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
-    $(".orderedDate").val(orderPlacedDate);
-    $("#refundedDate").val(currentDateTime);
-    $("body").append('<div class="modal-overlay"></div>');
-    $("#custRefund").fadeIn();
-    $("body").addClass("modal-active");
+console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
+$(".orderedDate").val(orderPlacedDate);
+$("#refundedDate").val(currentDateTime);
+$("body").append('<div class="modal-overlay"></div>');
+$("#custRefund").fadeIn();
+$("body").addClass("modal-active");
 } 
 else {
-    $("#disputeDiv").fadeOut();
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
-  }
+$("#disputeDiv").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+}
 });
-
-// Optional: If you want to close the modal when clicking outside it
+// To close the modal when clicking outside it
 $(document).on("click", ".modal-overlay", function () {
-  $("#disputeDiv").fadeOut();
-  $(".modal-overlay").remove();
-  $("body").removeClass("modal-active");
+$("#disputeDiv").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 });
 //for dispute
 $("#disputeSubmit").on("click", function () {
 console.log("disputeSubmit");
- $("#disputeDiv").fadeOut();
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
+$("#disputeDiv").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 const disputedDate = $("#disputedDate").val();
 const disputeReason = $("#disputeReason").val();
 // const orderNo = urlParams.get("orderNo");
@@ -2283,8 +2053,8 @@ alert("Failed to update dispute information.");
 $("#custRefundSubmit").on("click", function () {
 console.log("custRefundSubmit");
  $("#custRefund").fadeOut();
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 const custRefundDate = $("#refundedDate").val();
 const custRefundedAmount = $(".custRefundedAmount").val();
 const orderNo = urlParams.get("orderNo");
@@ -3577,9 +3347,10 @@ window.location.reload();
 
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
 $("#editYardPopup").show();
-$(".mainDiv").addClass("blur");
+// $(".mainDiv").addClass("blur");
 // $(".modal-overlay").remove();
-// $("body").append('<div class="modal-overlay"></div>');
+$("body").append('<div class="modal-overlay"></div>');
+$("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");// for preventing bg scrolling
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
