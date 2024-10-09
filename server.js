@@ -394,59 +394,54 @@ res.status(400).send(err.message);
 });
 // changing the orderStatus and yrdStatus when reimbursement amount is added
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
-  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-  console.log('US Central Time:', centralTime);
-  const date = new Date(centralTime);
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const formattedDate = `${day} ${month}, ${year}`;
-  const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+const { orderStatus, yardStatus, yardIndex } = req.body;
+const firstName = req.query.firstName;
 
-  try {
-      const order = await Order.findOne({ orderNo: req.params.orderNo });
-      if (!order) return res.status(404).send("Order not found");
+// Get the current date and time in US Central Time
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 
-      const oldStatus = order.orderStatus;
+try {
+// Find the order by orderNo
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+if (!order) return res.status(404).send("Order not found");
 
-      // Preserve existing customerApprovedDate if not provided
-      if (req.body.customerApprovedDate) {
-          order.customerApprovedDate = req.body.customerApprovedDate;
-      }
+// Store the old status for comparison
+const oldStatus = order.orderStatus;
 
-      // Update the order status and yard status
-      for (let key in req.body) {
-          if (key !== 'customerApprovedDate') {
-              if (key === 'yardStatus' && req.body.yardIndex != null) {
-                  // Update the specific yard index in the additionalInfo array
-                  const yardIndex = req.body.yardIndex;
-                  if (order.additionalInfo[yardIndex]) {
-                      order.additionalInfo[yardIndex].status = req.body.yardStatus;
-                  }
-              } else {
-                  order[key] = req.body[key];  // Update the rest of the fields like orderStatus
-              }
-          }
-      }
+// Update the order status
+order.orderStatus = orderStatus;
 
-      const firstName = req.query.firstName;
-      console.log("Logged in user:", firstName);
+// Update the specific yard status in the additionalInfo array using yardIndex
+if (order.additionalInfo && order.additionalInfo[yardIndex]) {
+order.additionalInfo[yardIndex].status = yardStatus;
+} else {
+return res.status(400).send("Invalid yard index");
+}
 
-      // Add timestamp to order history only if the status has changed
-      if (oldStatus !== order.orderStatus) {
-          order.orderHistory.push(
-              `Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`
-          );
-      }
+// Add the change to the order history if the status has changed
+if (oldStatus !== orderStatus || yardStatus !== order.additionalInfo[yardIndex].status) {
+order.orderHistory.push(
+`Order status updated to ${orderStatus}, Yard status updated to ${yardStatus} by ${firstName} on ${formattedDateTime}`
+);
+}
 
-      const updatedOrder = await order.save();
-      res.json(updatedOrder);
-  } catch (err) {
-      res.status(400).send(err.message);
-  }
+// Save the updated order
+const updatedOrder = await order.save();
+res.json(updatedOrder);
+
+} catch (err) {
+res.status(400).send(err.message);
+}
 });
 app.put("/cancelledOrders/:orderNo", async (req, res) => {
 console.log("Updating the order status for cancelled orders:", req.params.orderNo);

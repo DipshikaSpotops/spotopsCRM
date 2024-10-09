@@ -3600,17 +3600,13 @@ const isReimbursedChecked = $('#reimbursed').prop('checked');
 if (reimbursementAmount) {
   var yardStatus = "Part delivered";  
   const newOrderStatus = "Order Fulfilled";
-
-  // Prepare the data for the backend
   const newOrderStatusR = {
     orderStatus: newOrderStatus,
     yardStatus: yardStatus,
-    yardIndex: yardIndex  // Send the yard index so the backend knows which yard to update
+    yardIndex: yardIndex  
   };
 
   console.log("New order status:", newOrderStatus, "Yard status:", yardStatus);
-
-  // Make the PUT request to update the order and yard statuses
   fetch(`https://www.spotops360.com/orderAndYardStatus/${orderNo}?firstName=${firstName}`, {
     method: "PUT",
     headers: {
@@ -3626,7 +3622,7 @@ if (reimbursementAmount) {
   })
   .then((data) => {
     console.log("Order and Yard status updated successfully:", data);
-    updateOrderHistory(data.orderHistory);  // Update the order history on the frontend
+    updateOrderHistory(data.orderHistory);  
   })
   .catch((error) => {
     console.error("Error updating order and yard status:", error);
