@@ -249,7 +249,9 @@ customerShipperReturn: String,
 custOwnShippingReturn: String,
 returnTrackingCust: String,
 custReturnDelivery: String,
-
+// reimburesement part
+reimbursementAmount: String,
+isReimbursedChecked: String
 });
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
