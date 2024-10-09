@@ -2174,7 +2174,7 @@ console.log("team", team, token);
 // part to check the paymentStatus and other things
 var totalSpend = []; // Array to hold the yardSpent values
 var totalSum = 0;    // Variable to hold the cumulative total of yardSpent
-
+var pStatus;
 setTimeout(function() {
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
@@ -2195,7 +2195,7 @@ setTimeout(function() {
       data.additionalInfo.forEach((yard, index) => {
         const yardIndex = index + 1;
         console.log("yardIndex", yardIndex, yard);
-        var pStatus = yard.paymentStatus;
+        pStatus = yard.paymentStatus;
         var rStatus = yard.refundStatus;
         console.log("pStatus", pStatus, rStatus);
         if (pStatus === "Card charged" && rStatus === "Refund collected") {
@@ -2221,6 +2221,7 @@ setTimeout(function() {
           $("#orderStatus").val("Escalation");
         }
         // For calculating yardSpent
+        if(pStatus === "Card charged"){
         var yardPP = parseFloat(yard.partPrice) || 0;
         var yardOSorYS = yard.shippingDetails || '';
         var shippingValueYard = 0;  
@@ -2247,6 +2248,7 @@ setTimeout(function() {
         actualGP = subtractRefund - totalSum;
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
+      }
       });
     })
     .catch(error => console.error("Error fetching yard data:", error));
