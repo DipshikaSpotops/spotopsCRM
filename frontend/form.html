@@ -3350,7 +3350,6 @@ $("#editYardPopup").show();
 // $(".mainDiv").addClass("blur");
 // $(".modal-overlay").remove();
 $("body").append('<div class="modal-overlay"></div>');
-$("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");// for preventing bg scrolling
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
@@ -4040,7 +4039,9 @@ alert("Please fill in all the tracking information fields.");
 
 $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
 console.log("edit yard details");
-$(".mainDiv").addClass("blur");
+// $(".mainDiv").addClass("blur");
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
 yardIndex = $(this).data("yard-index");
 
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
@@ -4481,6 +4482,7 @@ $(this).addClass("active");
 $('#crossBtnEditYard').on('click', function(e) {
 $('#editYardPopup').hide();
 $(".mainDiv").removeClass("blur");
+$("body").removeClass("modal-active");
 });
 $('#crossEsc').on('click', function(e) {
 $('#escRMA').hide();
@@ -4501,6 +4503,7 @@ window.location.reload();
 });
 $('#EYdetails') .on('click', function(e){
 // $(".mainDiv").removeClass("blur");
+$("body").removeClass("modal-active");
 $('#editYardDetailsModal').hide();
 window.location.reload();
 })     
