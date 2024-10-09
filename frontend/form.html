@@ -3122,7 +3122,9 @@ $('#yardInfoContainer').on('click', '.escalation', async function () {
   console.log("escalationPart", selectedYardIndex);
   
   $("#escRMA").fadeIn();
-  $(".mainDiv").addClass("blur");
+  // $(".mainDiv").addClass("blur");
+  $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
   $("#saveEsc").data("yard-index", selectedYardIndex);
   
   try {
@@ -4506,7 +4508,8 @@ $("body").removeClass("modal-active");
 });
 $('#crossEsc').on('click', function(e) {
 $('#escRMA').hide();
-$(".mainDiv").removeClass("blur");
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 });
 $('#closeDispute').on('click', function(e) {
 $("#disputeDiv").fadeOut();
