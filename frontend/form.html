@@ -1777,6 +1777,7 @@ Send Email
 <select name="esc" id="escProcess" style="width: 100%; border: 1px solid #d9d4d4; height: 4vh;">
 <option value="">Choose</option>
 <option value="Replacement">Replacement</option>
+<option value="Reimbursement">Reimbursement </option>
 <option value="Return">Return</option>
 <option value="Junk">Junk</option>
 </select>
@@ -1888,6 +1889,17 @@ Send Email
 <option value="In Transit">In Transit</option>
 <option value="Delivered">Delivered</option>
 </select>
+</div>
+<!-- div only for reinmursements -->
+<div id="reimbursement" class="return-column" style="display: none;">
+<div style="display: flex;">
+<label>Reimbursement Amount:</label>
+<input type="text" id="reimAmount" placeholder="Reimbursement Amount" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;">
+</div>
+<div style="display: flex; align-items: center; margin-top: 10px;">
+<label for="reimbursed" style="margin-right: 10px;">Reimbursed:</label>
+<input type="checkbox" id="reimbursed" style="width: 20px; height: 20px;">
+</div>
 </div>
 <button type="button" id="saveEsc">Save</button>
 </div>
@@ -3539,126 +3551,135 @@ console.error("Error fetching yard data:", error);
 });
 
 $("#saveEsc").on("click", async function () {
-  $(".mainDiv").removeClass("blur");
-  $("#escRMA").hide();
-  $("#orderStatus").val("Escalation");
-  const yardIndex = $(this).data("yard-index");
-  const orderNo = urlParams.get("orderNo");  
-  const firstName = localStorage.getItem('firstName'); 
-  console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
-  // repplacementPart
-  const escalationProcess = $("#escProcess").val();
-  const custReason = $("#custReason").val();
-  const customerShippingMethodReplacement= $("#customerShippingMethodReplacement").val();
-  const custOwnShipReplacement = $("#custOwnShipReplacement").val();
-  const customerShipperReplacement = $("#customerShipperReplacement").val();
-  const customerTrackingNumberReplacement = $("#customerTrackingNumberReplacement").val();
-  const custreplacementDelivery = $("#custreplacementDelivery").val();
-  //yard part for replacement
-  const yardShippingStatus = $("#yardShippingStatus").val();
-  const yardShippingMethod = $("#yardShippingMethod").val();
-  const yardShipper = $("#yardShipper").val();
-  const yardTrackingNumber = $("#yardTrackingNumber").val();
-  const yardOwnShipping = $("#yardownShipping").val();
+$(".mainDiv").removeClass("blur");
+$("#escRMA").hide();
+$("#orderStatus").val("Escalation");
+const yardIndex = $(this).data("yard-index");
+const orderNo = urlParams.get("orderNo");  
+const firstName = localStorage.getItem('firstName'); 
+console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
+// repplacementPart
+const escalationProcess = $("#escProcess").val();
+const custReason = $("#custReason").val();
+const customerShippingMethodReplacement= $("#customerShippingMethodReplacement").val();
+const custOwnShipReplacement = $("#custOwnShipReplacement").val();
+const customerShipperReplacement = $("#customerShipperReplacement").val();
+const customerTrackingNumberReplacement = $("#customerTrackingNumberReplacement").val();
+const custreplacementDelivery = $("#custreplacementDelivery").val();
+//yard part for replacement
+const yardShippingStatus = $("#yardShippingStatus").val();
+const yardShippingMethod = $("#yardShippingMethod").val();
+const yardShipper = $("#yardShipper").val();
+const yardTrackingNumber = $("#yardTrackingNumber").val();
+const yardOwnShipping = $("#yardownShipping").val();
 // return parts
-  const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
-  const customerShipperReturn = $("#customerShipperReturn").val();
-  const returnTrackingCust = $("#returnTrackingCust").val();
-  const custOwnShippingReturn = $("#custOwnShippingReturn").val();
-  const custReturnDelivery = $("#custReturnDelivery").val();
-  console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-  console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
-  const token = localStorage.getItem('token');
-
-  try {
-    // Fetch the current data for comparison
-    const response = await axios.get(
-      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-      {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      }
-    );
-
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch order data");
-    }
-
-    const currentAdditionalInfo = response.data;
-    const updatedData = {};
-    let hasChanges = false;
-    if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
-      updatedData.escalationProcess = escalationProcess;
-      hasChanges = true;
-    }
-    // for replacement__ part from customer
-    if (currentAdditionalInfo.custReason !== custReason) {
-      updatedData.custReason = custReason;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.customerShippingMethodReplacement !== customerShippingMethodReplacement) {
-      updatedData.customerShippingMethodReplacement = customerShippingMethodReplacement;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.customerShipperReplacement !== customerShipperReplacement) {
-      updatedData.customerShipperReplacement = customerShipperReplacement;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.custOwnShipReplacement !== custOwnShipReplacement) {
-      updatedData.custOwnShipReplacement = custOwnShipReplacement;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
-      updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
-      updatedData.custreplacementDelivery = custreplacementDelivery;
-      hasChanges = true;
-    }
-    // part from yard
-    if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
-      updatedData.yardShippingStatus = yardShippingStatus;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
-      updatedData.yardShippingMethod = yardShippingMethod;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.yardShipper !== yardShipper) {
-      updatedData.yardShipper = yardShipper;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
-      updatedData.yardTrackingNumber = yardTrackingNumber;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
-      updatedData.yardOwnShipping = yardOwnShipping;
-      hasChanges = true;
-    }
-    // part from yard
-    if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMethodReturn) {
-      updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
-      updatedData.customerShipperReturn = customerShipperReturn;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.custOwnShippingReturn !== custOwnShippingReturn) {
-      updatedData.custOwnShippingReturn = custOwnShippingReturn;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.returnTrackingCust !== returnTrackingCust) {
-      updatedData.returnTrackingCust = returnTrackingCust;
-      hasChanges = true;
-    }
-    if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
-      updatedData.custReturnDelivery = custReturnDelivery;
-      hasChanges = true;
-    }
-    
-    
+const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
+const customerShipperReturn = $("#customerShipperReturn").val();
+const returnTrackingCust = $("#returnTrackingCust").val();
+const custOwnShippingReturn = $("#custOwnShippingReturn").val();
+const custReturnDelivery = $("#custReturnDelivery").val();
+console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
+const token = localStorage.getItem('token');
+// reimbursement parts
+const reimbursementAmount = $("#reimAmount").val();
+const isReimbursedChecked = $('#reimbursed').prop('checked');
+console.log('Reimbursement Amount:', reimbursementAmount);
+console.log('Is Reimbursed Checked:', isReimbursedChecked);
+try {
+// Fetching the current data for comparison
+const response = await axios.get(
+`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
+if (response.status !== 200) {
+throw new Error("Failed to fetch order data");
+}
+const currentAdditionalInfo = response.data;
+const updatedData = {};
+let hasChanges = false;
+if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
+updatedData.escalationProcess = escalationProcess;
+hasChanges = true;
+}
+// for replacement__ part from customer
+if (currentAdditionalInfo.custReason !== custReason) {
+updatedData.custReason = custReason;
+hasChanges = true;
+}
+if (currentAdditionalInfo.customerShippingMethodReplacement !== customerShippingMethodReplacement) {
+updatedData.customerShippingMethodReplacement = customerShippingMethodReplacement;
+hasChanges = true;
+}
+if (currentAdditionalInfo.customerShipperReplacement !== customerShipperReplacement) {
+updatedData.customerShipperReplacement = customerShipperReplacement;
+hasChanges = true;
+}
+if (currentAdditionalInfo.custOwnShipReplacement !== custOwnShipReplacement) {
+updatedData.custOwnShipReplacement = custOwnShipReplacement;
+hasChanges = true;
+}
+if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
+updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
+hasChanges = true;
+}
+if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
+updatedData.custreplacementDelivery = custreplacementDelivery;
+hasChanges = true;
+}
+// part from yard
+if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
+updatedData.yardShippingStatus = yardShippingStatus;
+hasChanges = true;
+}
+if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
+updatedData.yardShippingMethod = yardShippingMethod;
+hasChanges = true;
+}
+if (currentAdditionalInfo.yardShipper !== yardShipper) {
+updatedData.yardShipper = yardShipper;
+hasChanges = true;
+}
+if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
+updatedData.yardTrackingNumber = yardTrackingNumber;
+hasChanges = true;
+}
+if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
+updatedData.yardOwnShipping = yardOwnShipping;
+hasChanges = true;
+}
+// part from yard
+if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMethodReturn) {
+updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
+hasChanges = true;
+}
+if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
+updatedData.customerShipperReturn = customerShipperReturn;
+hasChanges = true;
+}
+if (currentAdditionalInfo.custOwnShippingReturn !== custOwnShippingReturn) {
+updatedData.custOwnShippingReturn = custOwnShippingReturn;
+hasChanges = true;
+}
+if (currentAdditionalInfo.returnTrackingCust !== returnTrackingCust) {
+updatedData.returnTrackingCust = returnTrackingCust;
+hasChanges = true;
+}
+if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
+updatedData.custReturnDelivery = custReturnDelivery;
+hasChanges = true;
+}
+// for reimburesement
+if (currentAdditionalInfo.reimbursementAmount !== reimbursementAmount) {
+updatedData.reimbursementAmount = reimbursementAmount;
+hasChanges = true;
+}
+if (currentAdditionalInfo.isReimbursedChecked !== isReimbursedChecked) {
+updatedData.isReimbursedChecked = isReimbursedChecked;
+hasChanges = true;
+}   
 
     // If there are changes, update the Yard Info and Order History
     if (hasChanges) {
@@ -4501,13 +4522,11 @@ window.location.reload();
 
 });
 $('#EYdetails') .on('click', function(e){
-// $(".mainDiv").removeClass("blur");
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 $('#editYardDetailsModal').hide();
-// window.location.reload();
+window.location.reload();
 })     
-
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
@@ -4621,12 +4640,21 @@ $('#replacementColumns').fadeIn();
 $('#partFromCustomer').fadeIn();
 $('#partFromYard').fadeIn();
 $('#partFromCustomerReturn').fadeOut();
+$('#reimbursement').fadeOut();
 } else if (selectedValue === 'Return') {
 $('#partFromCustomerReturn').fadeIn();
 $('#replacementColumns').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
-} else {
+$('#reimbursement').fadeOut();
+} else if (selectedValue === "Reimbursement"){
+$('#reimbursement').fadeIn();   
+$('#partFromCustomerReturn').fadeOut();
+$('#replacementColumns').fadeOut();
+$('#partFromCustomer').fadeOut();
+$('#partFromYard').fadeOut();
+}
+else {
 // Hide both columns for other cases like 'Junk'
 $('#replacementColumns').fadeOut();
 $('#partFromCustomer').fadeOut();
