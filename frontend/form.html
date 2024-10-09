@@ -3598,32 +3598,39 @@ const reimbursementAmount = $("#reimAmount").val();
 const isReimbursedChecked = $('#reimbursed').prop('checked');
 
 if (reimbursementAmount) {
-$("#orderStatus").val("Order Fulfilled");
-console.log("inside reimursement",orderNo);
-const newOrderStatus = "Order Fulfilled";
-console.log("New order status", newOrderStatus,"reimbursed:",reimbursementAmount);
-$("#orderStatus").val(newOrderStatus);  
-const newOrderStatusR = { orderStatus: newOrderStatus };
-fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(newOrderStatusR),
-})
-.then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
-})
-.then((data) => {
-console.log("Order status updated successfully:", data);
-updateOrderHistory(data.orderHistory);
-})
-.catch((error) => {
-console.error("Error updating order status:", error);
-});
+  var yardStatus = "Part delivered";  
+  const newOrderStatus = "Order Fulfilled";
+
+  // Prepare the data for the backend
+  const newOrderStatusR = {
+    orderStatus: newOrderStatus,
+    yardStatus: yardStatus,
+    yardIndex: yardIndex  // Send the yard index so the backend knows which yard to update
+  };
+
+  console.log("New order status:", newOrderStatus, "Yard status:", yardStatus);
+
+  // Make the PUT request to update the order and yard statuses
+  fetch(`https://www.spotops360.com/orderAndYardStatus/${orderNo}?firstName=${firstName}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newOrderStatusR),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    console.log("Order and Yard status updated successfully:", data);
+    updateOrderHistory(data.orderHistory);  // Update the order history on the frontend
+  })
+  .catch((error) => {
+    console.error("Error updating order and yard status:", error);
+  });
 }
 console.log('Reimbursement Amount:', reimbursementAmount);
 console.log('Is Reimbursed Checked:', isReimbursedChecked);
