@@ -3601,13 +3601,13 @@ if (reimbursementAmount) {
 const newOrderStatus = "Order Fulfilled";
 console.log("New order status", newOrderStatus,"reimbursed:",reimbursementAmount);
 $("#orderStatus").val(newOrderStatus);  
-const orderStatus = { orderStatus: newOrderStatus };
+const newOrderStatusR = { orderStatus: newOrderStatus };
 fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
 method: "PUT",
 headers: {
 "Content-Type": "application/json",
 },
-body: JSON.stringify(updatedData),
+body: JSON.stringify(newOrderStatusR),
 })
 .then((response) => {
 if (!response.ok) {
