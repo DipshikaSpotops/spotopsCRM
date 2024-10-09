@@ -414,10 +414,10 @@ app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
       if (!order) return res.status(404).send("Order not found");
       const oldStatus = order.orderStatus;
       const oldYardStatus = order.additionalInfo[yardIndex + 1].status;
-
+console.log("oldYarsStatus",oldYardStatus)
       // Update the order status and yard status
       order.orderStatus = orderStatus;
-      order.additionalInfo[yardIndex].status = yardStatus;
+      order.additionalInfo[yardIndex + 1].status = yardStatus;
 
       // Add the change to the order history if the status has changed
       if (oldStatus !== orderStatus || oldYardStatus !== yardStatus) {
