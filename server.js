@@ -396,7 +396,7 @@ res.status(400).send(err.message);
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
   const { orderStatus, yardStatus, yardIndex } = req.body;
   const firstName = req.query.firstName;
-
+ console.log("changing order and yardStatus",orderStatus,yardStatus,yardIndex,firstName);
   // Get the current date and time in US Central Time
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
   console.log('US Central Time:', centralTime);
