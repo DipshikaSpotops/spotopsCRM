@@ -512,8 +512,8 @@ console.log("status",statuses);
 const isValidOrderStatus = validStatuses.includes(statuses);
 console.log("valid or not",isValidOrderStatus);
 const hasEscalation = item.additionalInfo && item.additionalInfo.some(yard => yard.escTicked === "Yes");
-if (isValidOrderStatus && hasEscalation) {
-const escalationStatus = hasEscalation ? "Yes" : "";
+if (isValidOrderStatus === true && item.additionalInfo.escTicked === "Yes") {
+// const escalationStatus = hasEscalation ? "Yes" : "";
 const yardlength = item.additionalInfo.length;
 let escalationStyle = '';
 if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
