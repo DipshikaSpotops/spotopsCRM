@@ -2186,9 +2186,11 @@ setTimeout(function() {
       var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
       $("#custRefunds").val(custRefundedAmount.toFixed(2))
       // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
-      if (!data || !data.additionalInfo || data.additionalInfo.length === 0) {
-        console.log('Order not found in orders collection.');
-        return null; 
+      if (!data.additionalInfo || data.additionalInfo.length === 0) {
+        console.log('Yards not presesnt.');
+        actualGP = sp - tax - custRefundedAmount; 
+        console.log("actualGp without yards",actualGP);
+        $("#actualGP").val(actualGP.toFixed(2)); 
       }
       data.additionalInfo.forEach((yard, index) => {
         const yardIndex = index + 1;
