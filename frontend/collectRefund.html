@@ -354,7 +354,7 @@ Order Date <span class="sort-icon onlyNumber">&#x25B2;</span>
 $(document).ready(async function () {
 let currentSort = {
 column: "",
-order: "asc", // ascending by default
+order: "asc", 
 };
 
 function sortTable(column, order, isDateColumn, isYardColumn) {
@@ -414,7 +414,7 @@ sortTable(column, currentSort.order, isDateColumn, isYardColumn);
 $(".sort-icon").html("&#9650;"); // Reset all icons to ascending
 $(this)
 .find(".sort-icon")
-.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
 });
 // Click event for sorting Yard columns
 $(document).on("click", ".fYardName", function () {
@@ -623,7 +623,7 @@ item.additionalInfo[i].partPrice ? " | " : ""
 }<br>
             ${item.additionalInfo[i].shippingMethod || ""}${
 item.additionalInfo[i].shippingMethod ? " | " : ""
-}${shippingType} | (${
+}${shippingType}  (${
 shippingCharge || "0"
 }) | Others: ${otherC}<br>
             ${
