@@ -513,7 +513,8 @@ const isValidOrderStatus = validStatuses.includes(statuses);
 console.log("valid or not",isValidOrderStatus);
 const hasEscalation = item.additionalInfo && item.additionalInfo.some(yard => yard.escTicked === "Yes");
 console.log("hasEscalation",hasEscalation);
-if (isValidOrderStatus === true && item.additionalInfo.escTicked === true) {
+if (isValidOrderStatus && item.additionalInfo.escTicked) {
+ console.log("valid")   
 // const escalationStatus = hasEscalation ? "Yes" : "";
 const yardlength = item.additionalInfo.length;
 let escalationStyle = '';
