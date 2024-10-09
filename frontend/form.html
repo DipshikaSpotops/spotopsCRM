@@ -3598,6 +3598,7 @@ const reimbursementAmount = $("#reimAmount").val();
 const isReimbursedChecked = $('#reimbursed').prop('checked');
 
 if (reimbursementAmount) {
+  $("#orderStatus").val("Order Fulfilled");
 const newOrderStatus = "Order Fulfilled";
 console.log("New order status", newOrderStatus,"reimbursed:",reimbursementAmount);
 $("#orderStatus").val(newOrderStatus);  
