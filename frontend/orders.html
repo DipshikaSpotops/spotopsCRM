@@ -508,7 +508,7 @@ $('#infoTable').empty(); // Clear the table
 
 ordersForPage.forEach((item) => {
 // Check if orderStatus is not "Placed" or "Customer approved"
-if (item.orderStatus === "Placed" || item.orderStatus === "Customer approved") {
+if (item.orderStatus === "Placed" || item.orderStatus === "Customer approved" || item.orderStatus === "Order Fulfilled") {
 return; 
 }
 
