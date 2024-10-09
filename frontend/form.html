@@ -1192,7 +1192,7 @@ aria-labelledby="userMenu"
 <div class="form-group col-md-6">
 <label for="orderStatus">Order Status</label>
 <select class="form-control" id="orderStatus" required>
-<option value="Placed" disabled>Order Placed</option>
+<option value="Placed">Order Placed</option>
 <option value="Customer approved" >Customer Approved</option>
 <option value="Yard Processing" >Yard Processing</option>
 <option value="In Transit" >In Transit</option>
@@ -3117,33 +3117,28 @@ $(".mainDiv").addClass("blur");
 });
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', async function () {
-  const selectedYardIndex = $(this).data('yard-index');
-  const orderNo = urlParams.get("orderNo");  
-  console.log("escalationPart", selectedYardIndex);
-  
-  $("#escRMA").fadeIn();
-  // $(".mainDiv").addClass("blur");
-  $("body").append('<div class="modal-overlay"></div>');
+const selectedYardIndex = $(this).data('yard-index');
+const orderNo = urlParams.get("orderNo");  
+console.log("escalationPart", selectedYardIndex);
+$("#escRMA").fadeIn();
+$("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-  $("#saveEsc").data("yard-index", selectedYardIndex);
-  
-  try {
-    const response = await axios.get(
-      `https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`
-    );
+$("#saveEsc").data("yard-index", selectedYardIndex);
+try {
+const response = await axios.get(
+`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`
+);
 
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch order data");
-    }
-
-    var actualyIndex = selectedYardIndex - 1;
-    const additionalInfo = response.data.additionalInfo[actualyIndex];
-    console.log("Fetched additionalInfo", additionalInfo);
-
-    // Populate form fields if data is present
-    if (additionalInfo.escalationProcess) {
-      $("#escProcess").val(additionalInfo.escalationProcess);
-      if (additionalInfo.escalationProcess === 'Replacement') {
+if (response.status !== 200) {
+throw new Error("Failed to fetch order data");
+}
+var actualyIndex = selectedYardIndex - 1;
+const additionalInfo = response.data.additionalInfo[actualyIndex];
+console.log("Fetched additionalInfo", additionalInfo);
+// Populate form fields if data is present
+if (additionalInfo.escalationProcess) {
+$("#escProcess").val(additionalInfo.escalationProcess);
+if (additionalInfo.escalationProcess === 'Replacement') {
 $('#replacementColumns').fadeIn();
 $('#partFromCustomer').fadeIn();
 $('#partFromYard').fadeIn();
@@ -3151,6 +3146,12 @@ $('#partFromCustomerReturn').fadeOut();
 } else if (additionalInfo.escalationProcess === 'Return') {
 $('#replacementColumns').fadeIn();
 $('#partFromCustomerReturn').fadeIn();
+$('#partFromCustomer').fadeOut();
+$('#partFromYard').fadeOut();
+} 
+else if (additionalInfo.escalationProcess === 'Reimbursement') {
+$('#replacementColumns').fadeOut();
+$('#partFromCustomerReturn').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 } else {
