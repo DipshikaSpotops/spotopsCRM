@@ -507,6 +507,8 @@ $('#infoTable').empty();
 const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
 
 ordersForPage.forEach((item) => {
+var statuses = item.status;
+console.log("status",statuses);    
 const isValidOrderStatus = validStatuses.includes(item.orderStatus);
 const hasEscalation = item.additionalInfo && item.additionalInfo.some(yard => yard.escTicked === "Yes");
 if (isValidOrderStatus && hasEscalation) {
