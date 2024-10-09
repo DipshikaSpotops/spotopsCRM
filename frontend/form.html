@@ -3347,8 +3347,6 @@ window.location.reload();
 
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
 $("#editYardPopup").show();
-// $(".mainDiv").addClass("blur");
-// $(".modal-overlay").remove();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");// for preventing bg scrolling
 yardIndex = $(this).data("yard-index");
@@ -4481,7 +4479,8 @@ $(this).addClass("active");
 });
 $('#crossBtnEditYard').on('click', function(e) {
 $('#editYardPopup').hide();
-$(".mainDiv").removeClass("blur");
+$(".modal-overlay").remove();
+// $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
 });
 $('#crossEsc').on('click', function(e) {
@@ -4503,9 +4502,10 @@ window.location.reload();
 });
 $('#EYdetails') .on('click', function(e){
 // $(".mainDiv").removeClass("blur");
+$(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 $('#editYardDetailsModal').hide();
-window.location.reload();
+// window.location.reload();
 })     
 
 $("#logoutLink").click(function () {
