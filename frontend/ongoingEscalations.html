@@ -506,46 +506,54 @@ const ordersForPage = orders.slice(start, end);
 $('#infoTable').empty();
 const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
 
-ordersForPage.forEach((item) => {
-var statuses = item.orderStatus;
-console.log("status",statuses);    
-const isValidOrderStatus = validStatuses.includes(statuses);
-console.log("valid or not",isValidOrderStatus);
-const hasEscalation = item.additionalInfo && item.additionalInfo.some(yard => yard.escTicked === "Yes");
-console.log("hasEscalation",hasEscalation);
-if (isValidOrderStatus && item.additionalInfo.escTicked) {
- console.log("valid")   
-// const escalationStatus = hasEscalation ? "Yes" : "";
-const yardlength = item.additionalInfo.length;
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
-}
-const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
+ordersForPage.forEach((item) => { 
+    var statuses = item.orderStatus;
+    console.log("status", statuses);    
 
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+    const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"]; // Define valid statuses
+    const isValidOrderStatus = validStatuses.includes(statuses);
+    console.log("valid or not", isValidOrderStatus);
 
-$("#infoTable").append(`
-<tr>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
-<td>${item.pReq || item.partName}</td>
-<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-<td>${item.orderStatus}</td>
-<td ${escalationStyle}>${escalationStatus}</td>
-<td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
-<td>${item.email}</td>
-</tr>
-`);
-}
+    const hasEscalation = item.additionalInfo && item.additionalInfo.some(yard => yard.escTicked === "Yes");
+    console.log("hasEscalation", hasEscalation);
+
+    // Check if both the order status is valid and there's an escalation
+    if (isValidOrderStatus && hasEscalation) {
+        console.log("valid");   
+
+        const yardlength = item.additionalInfo.length;
+        let escalationStyle = '';
+        
+        if (item.orderStatus === "Order Fulfilled" && hasEscalation) {
+            escalationStyle = 'style="background-color: lightgreen;"';
+        }
+
+        const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
+        const actions = `
+            ${editButton}
+            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
+
+        const sendInvoice = `
+            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+
+        $("#infoTable").append(`
+            <tr>
+                <td>${item.orderDate}</td>
+                <td>${item.orderNo}</td>
+                <td>${item.salesAgent}</td>
+                <td>${item.customerName}</td>
+                <td>${item.pReq || item.partName}</td>
+                <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+                <td>${item.orderStatus}</td>
+                <td ${escalationStyle}>${hasEscalation ? 'Yes' : ''}</td>
+                <td class="actions">${actions}</td>
+                <td>${sendInvoice}</td>
+                <td>${item.email}</td>
+            </tr>
+        `);
+    }
 });
 }
 
