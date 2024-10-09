@@ -509,7 +509,8 @@ const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Es
 ordersForPage.forEach((item) => {
 var statuses = item.orderStatus;
 console.log("status",statuses);    
-const isValidOrderStatus = validStatuses.includes(item.orderStatus);
+const isValidOrderStatus = validStatuses.includes(statuses);
+console.log("valid or not",isValidOrderStatus);
 const hasEscalation = item.additionalInfo && item.additionalInfo.some(yard => yard.escTicked === "Yes");
 if (isValidOrderStatus && hasEscalation) {
 const escalationStatus = hasEscalation ? "Yes" : "";
