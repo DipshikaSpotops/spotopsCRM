@@ -2233,9 +2233,10 @@ setTimeout(function() {
         var escOwnShipReturn = parseFloat(yard.custOwnShippingReturn) || 0;
         var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
         var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
+        var escReimbursement = parseFloat(yard.reimbursementAmount) || 0;
         console.log("add",yardPP,shippingValueYard,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement);
         var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement;
-        console.log("yardSpent", yardSpent);
+        console.log("yardSpent", yardSpent,"escReimbursement",escReimbursement);
         totalSpend.push(yardSpent);
         totalSum += yardSpent;
         console.log("Current totalSpend array:", totalSpend);
@@ -3595,6 +3596,33 @@ const token = localStorage.getItem('token');
 // reimbursement parts
 const reimbursementAmount = $("#reimAmount").val();
 const isReimbursedChecked = $('#reimbursed').prop('checked');
+
+if (reimbursementAmount) {
+const newOrderStatus = "Order Fulfilled";
+console.log("New order status", newOrderStatus,"reimbursed:",reimbursementAmount);
+$("#orderStatus").val(newOrderStatus);  
+const orderStatus = { orderStatus: newOrderStatus };
+fetch(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedData),
+})
+.then((response) => {
+if (!response.ok) {
+throw new Error("Network response was not ok");
+}
+return response.json();
+})
+.then((data) => {
+console.log("Order status updated successfully:", data);
+updateOrderHistory(data.orderHistory);
+})
+.catch((error) => {
+console.error("Error updating order status:", error);
+});
+}
 console.log('Reimbursement Amount:', reimbursementAmount);
 console.log('Is Reimbursed Checked:', isReimbursedChecked);
 try {
