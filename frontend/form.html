@@ -3598,7 +3598,8 @@ const reimbursementAmount = $("#reimAmount").val();
 const isReimbursedChecked = $('#reimbursed').prop('checked');
 
 if (reimbursementAmount) {
-  $("#orderStatus").val("Order Fulfilled");
+$("#orderStatus").val("Order Fulfilled");
+console.log("inside reimursement",orderNo);
 const newOrderStatus = "Order Fulfilled";
 console.log("New order status", newOrderStatus,"reimbursed:",reimbursementAmount);
 $("#orderStatus").val(newOrderStatus);  
@@ -3721,38 +3722,38 @@ updatedData.isReimbursedChecked = isReimbursedChecked;
 hasChanges = true;
 }   
 
-    // If there are changes, update the Yard Info and Order History
-    if (hasChanges) {
-      const patchResponse = await axios.put(
-        `https://www.spotops360.com/orders/${orderNo}/escalation?firstName=${firstName}`,
-        {
-          ...updatedData,
-          yardIndex: yardIndex,
-          firstName: firstName,
-          orderNo: orderNo   
-        },
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
-      );
+// If there are changes, update the Yard Info and Order History
+if (hasChanges) {
+const patchResponse = await axios.put(
+`https://www.spotops360.com/orders/${orderNo}/escalation?firstName=${firstName}`,
+{
+...updatedData,
+yardIndex: yardIndex,
+firstName: firstName,
+orderNo: orderNo   
+},
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
 
-      if (patchResponse.status === 200) {
-        $("#orderStatus").val("Escalation");
-        alert("Yard Index information and orderHistory updated successfully!");
-        
-      } else {
-        throw new Error("Failed to update Yard Index information and orderHistory");
-      }
-      // window.location.reload();
-      $("#orderStatus").val("Escalation");
-    } else {
-      console.log("No changes detected, no update required.");
-    }
-    // window.location.reload();
-  } catch (error) {
-    console.error("Error saving Yard Index information", error);
-    alert("Error saving Yard Index information");
-  }
+if (patchResponse.status === 200) {
+$("#orderStatus").val("Escalation");
+alert("Yard Index information and orderHistory updated successfully!");
+
+} else {
+throw new Error("Failed to update Yard Index information and orderHistory");
+}
+// window.location.reload();
+$("#orderStatus").val("Escalation");
+} else {
+console.log("No changes detected, no update required.");
+}
+// window.location.reload();
+} catch (error) {
+console.error("Error saving Yard Index information", error);
+alert("Error saving Yard Index information");
+}
 });
 
 
