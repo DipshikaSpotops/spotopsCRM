@@ -409,15 +409,11 @@ app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
   const minutes = date.getMinutes().toString().padStart(2, '0');
   const formattedDate = `${day} ${month}, ${year}`;
   const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-
   try {
-      // Find the order by orderNo
       const order = await Order.findOne({ orderNo: req.params.orderNo });
       if (!order) return res.status(404).send("Order not found");
-
-      // Store the old statuses for comparison
       const oldStatus = order.orderStatus;
-      const oldYardStatus = order.additionalInfo[yardIndex].status;
+      const oldYardStatus = order.additionalInfo[yardIndex + 1].status;
 
       // Update the order status and yard status
       order.orderStatus = orderStatus;
