@@ -2245,41 +2245,6 @@ setTimeout(function() {
         actualGP = subtractRefund - totalSum;
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
-        if (escReimbursement >= 0) {
-          console.log("reimbursedAmount",escReimbursement);
-const yardStatus = "Part delivered";  
-const newOrderStatus = "Order Fulfilled";
-const yardIndex = 0;  // Example index
-
-const newOrderStatusR = {
-orderStatus: newOrderStatus,
-yardStatus: yardStatus,
-yardIndex: yardIndex  
-};
-
-console.log("Sending data:", newOrderStatusR);
-
-fetch(`https://www.spotops360.com/orderAndYardStatus/${orderNo}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(newOrderStatusR),
-})
-.then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
-})
-.then((data) => {
-console.log("Order and Yard status updated successfully:", data);
-updateOrderHistory(data.orderHistory);  
-})
-.catch((error) => {
-console.error("Error updating order and yard status:", error);
-});
-}
       });
     })
     .catch(error => console.error("Error fetching yard data:", error));
@@ -3631,6 +3596,41 @@ const token = localStorage.getItem('token');
 // reimbursement parts
 const reimbursementAmount = $("#reimAmount").val();
 const isReimbursedChecked = $('#reimbursed').prop('checked');
+if (reimbursementAmount) {
+          console.log("reimbursedAmount",reimbursementAmount);
+const yardStatus = "Part delivered";  
+const newOrderStatus = "Order Fulfilled";
+const yardIndex = 0;  // Example index
+
+const newOrderStatusR = {
+orderStatus: newOrderStatus,
+yardStatus: yardStatus,
+yardIndex: yardIndex  
+};
+
+console.log("Sending data:", newOrderStatusR);
+
+fetch(`https://www.spotops360.com/orderAndYardStatus/${orderNo}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(newOrderStatusR),
+})
+.then((response) => {
+if (!response.ok) {
+throw new Error("Network response was not ok");
+}
+return response.json();
+})
+.then((data) => {
+console.log("Order and Yard status updated successfully:", data);
+updateOrderHistory(data.orderHistory);  
+})
+.catch((error) => {
+console.error("Error updating order and yard status:", error);
+});
+}
 console.log('Reimbursement Amount:', reimbursementAmount);
 console.log('Is Reimbursed Checked:', isReimbursedChecked);
 try {
