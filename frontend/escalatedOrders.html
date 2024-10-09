@@ -1,10 +1,9 @@
-even after sorting,the sorted data is not getting sorted like how i want in the following html...see the above images,,,dont change anything else
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CRM Orders</title>
+<title>Overall Escalations</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 <style>
@@ -73,7 +72,7 @@ margin-top: 60px;
 transition: margin-left 0.3s ease;
 }
 .submenu {
-display: block; /* Show all submenus by default */
+display: block; 
 }
 .nav-item > .submenu {
 padding-left: 20px;
@@ -235,7 +234,8 @@ window.location.href = "login_signup.html";
 <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
 <a class="nav-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a>
 <a class="nav-link" href="fulfilledOrders.html">Fulfilled Orders</a>
-<a class="nav-link" href="escalatedOrders.html">Escalation</a>
+<a class="nav-link" href="escalatedOrders.html">Overall Escalation</a>
+<a class="nav-link" href="currentEscalations.html">Escalation</a>
 </div>
 </div>
 <div class="nav-item">
@@ -300,7 +300,7 @@ window.location.href = "login_signup.html";
 <div class="container-fluid mt-2" style="margin: -1%;">
 <!-- Search Bar -->
 <div class="table-responsive" style="margin-top: -40px;">
-<h1 style="text-align: center; margin-right: 90px;margin-top: 20px;">Escalations</h1>
+<h1 style="text-align: center; margin-right: 90px;margin-top: 20px;">Overall Escalations</h1>
 <div style="align-items: center;justify-content: center;">
 <input type="text" class="form-control" id="searchInput" placeholder="Search..." />
 </div>
@@ -401,11 +401,11 @@ const table = $("#infoTable");
 const rows = table.find("tr").toArray();
 
 rows.sort((a, b) => {
-let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
-let valB = $(b).find("td").eq(column).text().trim().toLowerCase();  // convert to lowercase for proper string sorting
+let valA = $(a).find("td").eq(column).text().trim().toLowerCase();  
+let valB = $(b).find("td").eq(column).text().trim().toLowerCase(); 
 
 if (type === "date") {
-valA = parseCustomDate(valA); // Use the helper function to parse the date
+valA = parseCustomDate(valA); 
 valB = parseCustomDate(valB);
 } else if (type === "number") {
 valA = parseInt(valA.replace(/\D/g, ""), 10);
@@ -422,24 +422,18 @@ return valA < valB ? 1 : -1;
 $.each(rows, function (index, row) {
 table.append(row);
 });
-
-// Toggle sort order
 sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-// Update the sort icon
 updateSortIcons(column, sortOrder[type]);
 }
 
 function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$("th .sort-icon").html("&#9650;"); 
 $("th").each(function (index) {
 if (index === columnIndex) {
 $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
 }
 });
 }
-
-// Event listeners for sorting
 $("th").each(function (index) {
 const th = $(this);
 let type = th.text().trim().toLowerCase().replace(/\s/g, "");
@@ -458,8 +452,6 @@ sortTable(index, type);
 });
 }
 });
-
-// Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
 if (loginTimestamp) {
@@ -487,9 +479,7 @@ $("#user-name").text(firstName);
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
-
 const token = localStorage.getItem("token");
-
 try {
 const response = await axios.get("https://www.spotops360.com/orders", {
 headers: token ? {
@@ -500,7 +490,6 @@ Authorization: `Bearer ${token}`
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
-
 const data = response.data;
 
 data.forEach((item) => {
