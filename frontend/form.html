@@ -3218,8 +3218,8 @@ $("#custOwnShippingReturm").val(additionalInfo.custReturnDelivery);
 if (additionalInfo.reimbursementAmount) {
 $("#reimAmount").val(additionalInfo.reimbursementAmount);
 }
-if (additionalInfo.isReimbursedChecked) {
-$("#reimbursed").val(additionalInfo.isReimbursedChecked);
+if (additionalInfo.isReimbursedChecked === true) {
+  $('#reimbursed').prop('checked', true);
 }
 // window.location.reload();
 } catch (error) {
