@@ -548,7 +548,10 @@ let overAllwithRefund = 0;
 let tRefunds = 0;
 for (let i = 0; i < maxYards; i++) {
   console.log("paymentStatus",item.additionalInfo[i].paymentStatus,"yardStatus",item.additionalInfo[i].status,"escP",item.additionalInfo[i].escalationProcess)
-  if ((item.additionalInfo[i].paymentStatus === "Card charged"  && item.additionalInfo[i].status === "PO cancelled") || (item.additionalInfo[i].status === "Escalation" && (item.additionalInfo[i].escalationProcess === "Return" || item.additionalInfo[i].escalationProcess === "Junked"))) {
+  if (item.additionalInfo[i] && 
+        ((item.additionalInfo[i].paymentStatus === "Card charged" && item.additionalInfo[i].status === "PO cancelled") || 
+        (item.additionalInfo[i].status === "Escalation" && 
+        (item.additionalInfo[i].escalationProcess === "Return" || item.additionalInfo[i].escalationProcess === "Junked")))) {
  
 appendOrder = true;
 const partPrice = parseFloat(
