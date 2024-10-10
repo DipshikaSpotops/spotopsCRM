@@ -1684,3 +1684,23 @@ console.error('Error updating dispute information:', error);
 res.status(500).json({ message: 'Server error' });
 }
 });
+// Route to update actualGP for a specific order
+app.put('/orders/:orderId/updateActualGP', async (req, res) => {
+const { orderId } = req.params;
+const { actualGP } = req.body;
+console.log("actualGP",orderId,actualGP);
+try {
+const order = await Order.findById(orderId);
+
+if (!order) {
+return res.status(404).json({ message: "Order not found" });
+}
+order.actualGP = actualGP;
+await order.save();
+
+return res.status(200).json({ message: "actualGP updated successfully" });
+} catch (error) {
+console.error("Error updating actualGP:", error);
+return res.status(500).json({ message: "Internal server error" });
+}
+});
