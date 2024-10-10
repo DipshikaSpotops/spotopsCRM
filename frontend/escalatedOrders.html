@@ -350,7 +350,7 @@ placeholder="Search..."
 <thead>
 <tr>
 <th style="cursor: pointer" scope="col">
-Order Date <span class="sort-icon onlyNumber">&#9650;</span>
+Order Date <span class="sort-icon">&#9650;</span>
 </th>
 <th style="cursor: pointer" scope="col">
 Order No. <span class="sort-icon onlyNumber">&#9650;</span>
@@ -433,6 +433,27 @@ return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
 
 return null;
 }
+function sortTableByDate() {
+const table = $("#infoTable");
+const rows = table.find("tr").toArray(); 
+
+rows.sort((a, b) => {
+let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
+let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
+if (!dateA) return 1;
+if (!dateB) return -1;
+if (sortOrder.orderDate === "asc") {
+return dateA - dateB;
+} else {
+return dateB - dateA;
+}
+});
+$.each(rows, function (index, row) {
+table.append(row);
+});
+sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
+updateSortIcons(0, sortOrder.orderDate);
+}
 function sortTable(column, type) {
 const table = $("#infoTable");
 const rows = table.find("tr").toArray();
@@ -441,10 +462,7 @@ rows.sort((a, b) => {
 let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
 
-if (type === "date") {
-valA = parseCustomDate(valA); // Use the helper function to parse the date
-valB = parseCustomDate(valB);
-}else if (type === "number") {
+ if (type === "number") {
 valA = parseInt(valA.replace(/\D/g, ""), 10);
 valB = parseInt(valB.replace(/\D/g, ""), 10);
 }
