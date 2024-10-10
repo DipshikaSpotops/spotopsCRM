@@ -528,7 +528,7 @@ let appendOrder = false; // flag to check if the order should be appended
 let yardInfoHtml = "";
 let totalPartPrice = 0;
 let totalShipping = 0;
-
+console.log("item",item);
 for (let i = 0; i < maxYards; i++) {
 if (item.additionalInfo[i] && item.additionalInfo[i].paymentStatus === "Refund collected") {
 appendOrder = true; 
