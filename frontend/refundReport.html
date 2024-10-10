@@ -518,7 +518,7 @@ const tableFooter = $("#tableFooter");
 $("#yardInfoTable").empty();
 let maxYards = 0;
 let totalPartPriceSum = 0;
-let totalShippingSum = 0;
+let totalRefundSum  = 0;
 
 data.forEach((item) => {
 if (item.additionalInfo.length > maxYards) {
@@ -568,7 +568,7 @@ $("#yardInfoTable").append(
 <td>${item.orderDate}</td>
 ${yardInfoHtml}
 <td>${totalPartPrice.toFixed(2)}</td>
-<td>${totalRefundSum.toFixed(2)}</td>
+<td>${totalrefund.toFixed(2)}</td>
 <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
 </tr>`
 );
@@ -582,7 +582,7 @@ footerHtml += '<td></td>';
 }
 footerHtml += `
 <td id="totalPartPrice">$${totalPartPriceSum.toFixed(2)}</td>
-<td id="totalShipping">$${totalShippingSum.toFixed(2)}</td>
+<td id="totalShipping">$${totalRefundSum .toFixed(2)}</td>
 <td></td>
 </tr>`;
 tableFooter.html(footerHtml);
