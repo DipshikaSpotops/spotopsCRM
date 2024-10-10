@@ -531,22 +531,22 @@ for (let i = 1; i <= maxYards; i++) {
 tableHeader.append(`<th scope="col">Yard ${i}</th>`);
 }
 tableHeader.append('<th scope="col">Total Part Price</th>');
-tableHeader.append('<th scope="col">Total Shipping($)</th>');
+tableHeader.append('<th scope="col">Total Refund($)</th>');
 tableHeader.append('<th scope="col">Actions</th>');
 
 data.forEach((item) => {
 let appendOrder = false; // flag to check if the order should be appended
 let yardInfoHtml = "";
 let totalPartPrice = 0;
-let totalShipping = 0;
+let totalrefund = 0;
 console.log("item",item);
 for (let i = 0; i < maxYards; i++) {
 if (item.additionalInfo[i] && item.additionalInfo[i].refundStatus === "Refund collected") {
 appendOrder = true; 
 const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
-const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
+const refunds = parseFloat(item.additionalInfo[i].refundedAmount || 0);
 totalPartPrice += partPrice;
-totalShipping += shippingCharge;
+totalrefund += refunds;
 
 yardInfoHtml += `<td>
 ${item.additionalInfo[i].yardName || ""}${item.additionalInfo[i].yardName ? ' | ' : ''}${item.additionalInfo[i].partPrice || ""}${item.additionalInfo[i].partPrice ? ' | ' : ''}<br>
@@ -560,7 +560,7 @@ yardInfoHtml += "<td></td>";
 
 if (appendOrder) {
 totalPartPriceSum += totalPartPrice;
-totalShippingSum += totalShipping;
+totalRefundSum += totalrefund;
 
 $("#yardInfoTable").append(
 `<tr>
@@ -568,7 +568,7 @@ $("#yardInfoTable").append(
 <td>${item.orderDate}</td>
 ${yardInfoHtml}
 <td>${totalPartPrice.toFixed(2)}</td>
-<td>${totalShipping.toFixed(2)}</td>
+<td>${totalRefundSum.toFixed(2)}</td>
 <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
 </tr>`
 );
