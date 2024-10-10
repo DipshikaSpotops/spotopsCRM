@@ -2220,7 +2220,7 @@ setTimeout(function() {
         } else if (yardStatus === "Escalation") {
           $("#orderStatus").val("Escalation");
         }
-        // For calculating yardSpent
+        // For calculating 
         if(pStatus === "Card charged"){
         var yardPP = parseFloat(yard.partPrice) || 0;
         var yardOSorYS = yard.shippingDetails || '';
@@ -2248,6 +2248,8 @@ setTimeout(function() {
         actualGP = subtractRefund - totalSum;
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
+      }else{
+        actualGP = sp - tax - custRefundedAmount; 
       }
       });
     })
