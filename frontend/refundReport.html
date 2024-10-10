@@ -564,7 +564,7 @@ $(this).toggle(isMatch);
 if (isMatch) {
 // Find the total shipping column and parse its value
 const totalRefund = parseFloat($(this).find("td").eq(-2).text()) || 0;
-const totalPP = parseFloat($(this).find("td").eq(-1).text()) || 0;
+const totalPP = parseFloat($(this).find("td").eq(-3).text()) || 0;
 totalRefundSum += totalRefund;
 totalPPSum += totalPP;
 }
