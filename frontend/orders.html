@@ -500,60 +500,101 @@ sortTable(index, type);
 
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = orders.slice(start, end);
+    // Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
+    const filteredOrders = orders.filter(item => {
+        return !(item.orderStatus === "Placed" || item.orderStatus === "Customer approved" || item.orderStatus === "Order Fulfilled");
+    });
 
-$('#infoTable').empty(); // Clear the table
+    // Pagination logic after filtering
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
 
-ordersForPage.forEach((item) => {
-// Check if orderStatus is not "Placed" or "Customer approved"
-if (item.orderStatus === "Placed" || item.orderStatus === "Customer approved" || item.orderStatus === "Order Fulfilled") {
-return; 
+    $('#infoTable').empty(); // Clear the table
+
+    ordersForPage.forEach((item) => {
+        const escalationStatus = item.additionalInfo &&
+            item.additionalInfo[0] &&
+            item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+
+        let escalationStyle = '';
+        if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+            escalationStyle = 'style="background-color: lightgreen;"';
+        }
+
+        const team = localStorage.getItem('team');
+        const editButton = (team === "Team Mark" || team === "Team Sussane")
+            ? "" // Hide the edit button
+            : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
+        const actions = `
+            ${editButton}
+            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
+
+        const sendInvoice = `
+            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+
+        const yardlength = item.additionalInfo.length;
+
+        $("#infoTable").append(`
+            <tr>
+                <td>${item.orderDate}</td>
+                <td>${item.orderNo}</td>
+                <td>${item.salesAgent}</td>
+                <td>${item.customerName}</td>
+                <td>${item.pReq || item.partName}</td>
+                <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+                <td>${item.orderStatus}</td>
+                <td ${escalationStyle}>${escalationStatus}</td>
+                <td class="actions">${actions}</td>
+                <td>${sendInvoice}</td>
+                <td>${item.email}</td>
+            </tr>
+        `);
+    });
+
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+// Function to create pagination controls based on filtered data
+function createPaginationControls(totalPages, filteredOrders = allOrders) {
+    const paginationControls = $('#pagination-controls');
+    paginationControls.empty(); // Clear pagination controls
 
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
+    if (totalPages > 1) {
+        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
+        }
+
+        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    }
 }
 
-const team = localStorage.getItem('team');
-const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
-
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-`;
-
-const yardlength = item.additionalInfo.length;
-
-$("#infoTable").append(`
-<tr>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
-<td>${item.pReq || item.partName}</td>
-<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-<td>${item.orderStatus}</td>
-<td ${escalationStyle}>${escalationStatus}</td>
-<td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
-<td>${item.email}</td>
-</tr>
-`);
+// Event listener for pagination buttons
+$('#pagination-controls').on('click', '.page-btn', function () {
+    const page = $(this).data('page');
+    currentPage = page;
+    renderTableRows(currentPage); // Use the filtered orders
 });
-}
+
+$('#pagination-controls').on('click', '#prevPage', function () {
+    if (currentPage > 1) {
+        currentPage--;
+        renderTableRows(currentPage); // Use the filtered orders
+    }
+});
+
+$('#pagination-controls').on('click', '#nextPage', function () {
+    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderTableRows(currentPage); // Use the filtered orders
+    }
+});
+
 
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
@@ -562,48 +603,7 @@ $("#user-name").text(firstName);
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
-// Function to create pagination controls
-function createPaginationControls(totalPages, orders = allOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
 
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
-}
-
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
-}
-
-
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-});
-
-// "Previous" and "Next" button functionality
-$('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-}
-});
-
-$('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(allOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
-}
-});
 
 // Token fetching logic
 async function fetchToken() {
