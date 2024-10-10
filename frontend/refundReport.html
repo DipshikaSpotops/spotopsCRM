@@ -541,7 +541,7 @@ let totalPartPrice = 0;
 let totalShipping = 0;
 console.log("item",item);
 for (let i = 0; i < maxYards; i++) {
-if (item.additionalInfo[i] && item.additionalInfo[i].paymentStatus === "Refund collected") {
+if (item.additionalInfo[i] && item.additionalInfo[i].refundStatus === "Refund collected") {
 appendOrder = true; 
 const partPrice = parseFloat(item.additionalInfo[i].partPrice || 0);
 const shippingCharge = parseFloat(item.additionalInfo[i].shippingDetails || 0);
