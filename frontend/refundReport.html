@@ -556,20 +556,23 @@ location.reload();
 $("#searchInput").on("keyup", function () {
 let value = $(this).val().toLowerCase();
 let totalRefundSum = 0;
-
+let totalPPSum = 0;
 $("#yardInfoTable tr").filter(function () {
 const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
 $(this).toggle(isMatch);
 
 if (isMatch) {
 // Find the total shipping column and parse its value
-const totalShipping = parseFloat($(this).find("td").eq(-2).text()) || 0;
-totalRefundSum += totalShipping;
+const totalRefund = parseFloat($(this).find("td").eq(-2).text()) || 0;
+const totalPP = parseFloat($(this).find("td").eq(-1).text()) || 0;
+totalRefundSum += totalRefund;
+totalPPSum += totalPP;
 }
 });
 
 // Update the footer with the new total shipping value
 $("#totalShipping").text(`$${totalRefundSum.toFixed(2)}`);
+$("#totalPartPrice").text(`$${totalPPSum.toFixed(2)}`);
 });
 
 
@@ -665,7 +668,7 @@ $("#yardInfoTable").append(
 ${yardInfoHtml}
 <td>${totalPartPrice.toFixed(2)}</td>
 <td>${totalrefund.toFixed(2)}</td>
-<td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button></td>
+<td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button></td>
 </tr>`
 );
 }
