@@ -555,9 +555,21 @@ location.reload();
 
 $("#searchInput").on("keyup", function () {
 let value = $(this).val().toLowerCase();
-$("#infoTable tr").filter(function () {
-$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+let totalRefundSum = 0;
+
+$("#yardInfoTable tr").filter(function () {
+const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+$(this).toggle(isMatch);
+
+if (isMatch) {
+// Find the total shipping column and parse its value
+const totalShipping = parseFloat($(this).find("td").eq(-2).text()) || 0;
+totalRefundSum += totalShipping;
+}
 });
+
+// Update the footer with the new total shipping value
+$("#totalShipping").text(`$${totalRefundSum.toFixed(2)}`);
 });
 
 
