@@ -2249,7 +2249,9 @@ setTimeout(function() {
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
       }else{
-        actualGP = sp - tax - custRefundedAmount; 
+        actualGP = sp - tax - custRefundedAmount;
+        console.log("Calculated actualGP for card not charged:", actualGP);
+        $("#actualGP").val(actualGP.toFixed(2)); 
       }
       });
     })
