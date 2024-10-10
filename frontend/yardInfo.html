@@ -646,30 +646,35 @@ text-align: center;">Next</button>`);
   
     // Fetch orders and apply pagination
     try {
-      const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-        axios.get("https://www.spotops360.com/orders", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-        axios.get("https://www.spotops360.com/cancelledOrders", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-      ]);
-  
-      if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-        throw new Error("Failed to fetch orders");
-      }
-  
-      var orders = ordersResponse.data;
-      
-      var cancelledOrders = cancelledOrdersResponse.data;
-      allOrders = [...orders, ...cancelledOrders];
-  
-      // Sort and render the orders
-      allOrders = sortOrdersByOrderNoDesc(allOrders);
-      renderTableRows(currentPage);
-      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+        // Fetch orders and cancelled orders from the API
+        const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+            axios.get("https://www.spotops360.com/orders", {
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
+            }),
+            axios.get("https://www.spotops360.com/cancelledOrders", {
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
+            }),
+        ]);
+
+        // Check if both fetch requests were successful
+        if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+            throw new Error("Failed to fetch orders");
+        }
+
+        // Combine orders and cancelled orders
+        var orders = ordersResponse.data;
+        var cancelledOrders = cancelledOrdersResponse.data;
+        allOrders = [...orders, ...cancelledOrders];
+
+        // Filter orders where the status is "Yard Processing"
+        filteredOrders = allOrders.filter(item => item.orderStatus === "Yard Processing");
+
+        // Sort and render the filtered orders
+        allOrders = sortOrdersByOrderNoDesc(filteredOrders); // Sort by Order No descending if needed
+        renderTableRows(currentPage); // Start with the first page of filtered data
+        createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
     } catch (error) {
-      console.error("Error fetching orders:", error);
+        console.error("Error fetching orders:", error);
     }
   
   
