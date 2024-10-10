@@ -550,7 +550,7 @@ totalShipping += shippingCharge;
 
 yardInfoHtml += `<td>
 ${item.additionalInfo[i].yardName || ""}${item.additionalInfo[i].yardName ? ' | ' : ''}${item.additionalInfo[i].partPrice || ""}${item.additionalInfo[i].partPrice ? ' | ' : ''}<br>
-${item.additionalInfo[i].shippingDetails || ""} | ${item.additionalInfo[i].refundStatus || ""}${item.additionalInfo[i].refundedAmount || ""}<br>
+${item.additionalInfo[i].shippingDetails || ""} | ${item.additionalInfo[i].refundStatus || ""}: $${item.additionalInfo[i].refundedAmount || ""}<br>
 ${item.additionalInfo[i].status}<br>
 </td>`;
 } else {
