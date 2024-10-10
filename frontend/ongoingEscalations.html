@@ -331,10 +331,9 @@ aria-labelledby="userMenu"
 </nav>
 </div>
 </div>
-
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Ongoing Escalations</h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;margin: 1%;">Ongoing Escalations</h1>
 <div>
 <input
 type="text"
@@ -347,44 +346,44 @@ placeholder="Search..."
 <div id="pagination-controls" class="mt-3 mb-3"></div>
 <div class="table-responsive">
 <table class="table table-bordered mt-4">
-  <thead>
-    <tr>
-      <th style="cursor: pointer" scope="col">
-      Order Date <span class="sort-icon onlyNumber">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Order No. <span class="sort-icon onlyNumber">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Agent Name <span class="aToZ" >&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Customer Name
-      <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Part Name <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Yard <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Order Status <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Escalation Status
-      <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">Actions</th>
-      <th style="cursor: pointer" scope="col">Send Invoice</th>
-      <th style="cursor: pointer" scope="col">
-      Email <span class="aToZ">&#9650;</span>
-      </th>
-      </tr>
-  </thead>
-  <tbody id="infoTable">
-      <!-- Table data goes here -->
-  </tbody>
+<thead>
+<tr>
+<th style="cursor: pointer" scope="col">
+Order Date <span class="sort-icon onlyNumber">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Order No. <span class="sort-icon onlyNumber">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Agent Name <span class="aToZ" >&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Customer Name
+<span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Part Name <span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Yard <span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Order Status <span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Escalation Status
+<span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">Actions</th>
+<th style="cursor: pointer" scope="col">Send Invoice</th>
+<th style="cursor: pointer" scope="col">
+Email <span class="aToZ">&#9650;</span>
+</th>
+</tr>
+</thead>
+<tbody id="infoTable">
+<!-- Table data goes here -->
+</tbody>
 </table>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
@@ -397,7 +396,6 @@ $(document).ready(async function () {
 let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
-
 // Sorting Order Object
 var team, role;
 let sortOrder = {
@@ -497,97 +495,80 @@ sortTable(index, type);
 }
 });
 
-
 function renderTableRows(page, orders = allOrders) {
-    const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
+const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
+//  orders based on valid statuses and escalation
+const filteredOrders = orders.filter(order => {
+const isValidOrderStatus = validStatuses.includes(order.orderStatus);
+const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
+return isValidOrderStatus && hasEscalation;
+});
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = filteredOrders.slice(start, end);  
+$('#infoTable').empty(); 
 
-    // Filter orders based on valid statuses and escalation
-    const filteredOrders = orders.filter(order => {
-        const isValidOrderStatus = validStatuses.includes(order.orderStatus);
-        const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
-        return isValidOrderStatus && hasEscalation; // Only include orders meeting both conditions
-    });
+ordersForPage.forEach((item) => { 
+const yardlength = item.additionalInfo.length;
+let escalationStyle = '';
 
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end);  // Slice after filtering
-
-    $('#infoTable').empty(); // Clear the table
-
-    ordersForPage.forEach((item) => { 
-        const yardlength = item.additionalInfo.length;
-        let escalationStyle = '';
-        
-        if (item.orderStatus === "Order Fulfilled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
-            escalationStyle = 'style="background-color: lightgreen;"';
-        }
-
-        const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-
-        const actions = `
-            ${editButton}
-            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
-
-        const sendInvoice = `
-            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
-
-        $("#infoTable").append(`
-            <tr>
-                <td>${item.orderDate}</td>
-                <td>${item.orderNo}</td>
-                <td>${item.salesAgent}</td>
-                <td>${item.customerName}</td>
-                <td>${item.pReq || item.partName}</td>
-                <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-                <td>${item.orderStatus}</td>
-                <td ${escalationStyle}>${item.additionalInfo.some(yard => yard.escTicked === "Yes") ? 'Yes' : ''}</td>
-                <td class="actions">${actions}</td>
-                <td>${sendInvoice}</td>
-                <td>${item.email}</td>
-            </tr>
-        `);
-    });
-
-    // Create pagination controls based on the filtered orders
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+if (item.orderStatus === "Order Fulfilled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
+escalationStyle = 'style="background-color: lightgreen;"';
+}
+const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+const actions = `
+${editButton}
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
+const sendInvoice = `
+<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+$("#infoTable").append(`
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
+<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+<td>${item.orderStatus}</td>
+<td ${escalationStyle}>${item.additionalInfo.some(yard => yard.escTicked === "Yes") ? 'Yes' : ''}</td>
+<td class="actions">${actions}</td>
+<td>${sendInvoice}</td>
+<td>${item.email}</td>
+</tr>
+`);
+});
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
 // Function to create pagination controls
 function createPaginationControls(totalPages, filteredOrders = allOrders) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); // Clear pagination controls
-
-    if (totalPages > 1) {
-        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
-        }
-
-        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-    }
-
-    // Handle pagination button clicks
-    $('#pagination-controls').on('click', '.page-btn', function () {
-        currentPage = $(this).data('page');
-        renderTableRows(currentPage, filteredOrders); // Re-render the table with filtered orders
-    });
-
-    // Handle "Previous" and "Next" button functionality
-    $('#pagination-controls').on('click', '#prevPage', function () {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTableRows(currentPage, filteredOrders);
-        }
-    });
-
-    $('#pagination-controls').on('click', '#nextPage', function () {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTableRows(currentPage, filteredOrders);
-        }
-    });
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); 
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+for (let i = 1; i <= totalPages; i++) {
+    paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
+}
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
+// pagination button clicks
+$('#pagination-controls').on('click', '.page-btn', function () {
+currentPage = $(this).data('page');
+renderTableRows(currentPage, filteredOrders); // Re-render the table with filtered orders
+});
+$('#pagination-controls').on('click', '#prevPage', function () {
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage, filteredOrders);
+}
+});
+$('#pagination-controls').on('click', '#nextPage', function () {
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage, filteredOrders);
+}
+});
 }
 
 // Token fetching logic
