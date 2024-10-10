@@ -611,30 +611,40 @@ token = localStorage.getItem("token");
 }
 
 // Fetch orders and apply pagination
+// Fetch orders and apply pagination
 try {
-const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-axios.get("https://www.spotops360.com/orders", {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}),
-axios.get("https://www.spotops360.com/cancelledOrders", {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}),
-]);
+    const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+        axios.get("https://www.spotops360.com/orders", {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }),
+        axios.get("https://www.spotops360.com/cancelledOrders", {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }),
+    ]);
 
-if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-throw new Error("Failed to fetch orders");
-}
+    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+        throw new Error("Failed to fetch orders");
+    }
 
-var orders = ordersResponse.data;
-var cancelledOrders = cancelledOrdersResponse.data;
-allOrders = [...orders, ...cancelledOrders];
+    var orders = ordersResponse.data;
+    var cancelledOrders = cancelledOrdersResponse.data;
+    allOrders = [...orders, ...cancelledOrders];
 
-// Sort and render the orders
-allOrders = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    // Now filter orders based on validStatuses and escalation right after fetching
+    const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
+    const filteredOrders = allOrders.filter(order => {
+        const isValidOrderStatus = validStatuses.includes(order.orderStatus);
+        const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
+        return isValidOrderStatus && hasEscalation; // Only include orders meeting both conditions
+    });
+
+    // Sort and render the filtered orders
+    filteredOrders = sortOrdersByOrderNoDesc(filteredOrders); // Assuming you're sorting by order number
+    renderTableRows(currentPage, filteredOrders); // Render filtered orders on page load
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders); // Set pagination based on filtered orders
+
 } catch (error) {
-console.error("Error fetching orders:", error);
+    console.error("Error fetching orders:", error);
 }
 
 
