@@ -632,7 +632,7 @@ try {
 
     // Now filter orders based on validStatuses and escalation right after fetching
     const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
-    const filteredOrders = allOrders.filter(order => {
+    let filteredOrders = allOrders.filter(order => {
         const isValidOrderStatus = validStatuses.includes(order.orderStatus);
         const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
         return isValidOrderStatus && hasEscalation; // Only include orders meeting both conditions
