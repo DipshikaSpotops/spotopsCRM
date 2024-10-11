@@ -2206,7 +2206,7 @@ setTimeout(function() {
       var currentActualGp = data.actualGP || 0;
       console.log("actualGP rn",currentActualGp);
       $("#custRefunds").val(custRefundedAmount.toFixed(2))
-      // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
+      console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
       if (!data.additionalInfo || data.additionalInfo.length === 0) {
         console.log('Yards not presesnt.');
         actualGP = (sp - custRefundedAmount) - tax;
