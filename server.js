@@ -1426,7 +1426,7 @@ res.status(500).json({ error: 'Failed to get token' });
 
 
 // Route to update actualGP
-app.put('/orders/updateActualGP/:orderNo', async (req, res) => {
+app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
 const { orderNo } = req.params;
 const { actualGP } = req.body;
 
