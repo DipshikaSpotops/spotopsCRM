@@ -1426,25 +1426,25 @@ res.status(500).json({ error: 'Failed to get token' });
 
 
 // Route to update actualGP
-app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
-const { orderNo } = req.params;
+app.put('/orders/:orderId/updateActualGP', async (req, res) => {
+const { orderId } = req.params;
 const { actualGP } = req.body;
 
 try {
-const order = await Order.findOne({ orderNo });
+if (typeof actualGP !== 'number') {
+return res.status(400).json({ message: 'actualGP must be a number' });
+}
+const order = await Order.findById(orderId);
 
 if (!order) {
-return res.status(404).send('Order not found');
+return res.status(404).json({ message: "Order not found" });
 }
-
-const lastIndex = order.additionalInfo.length - 1;
 order.actualGP = actualGP;
-console.log("actualGP",actualGP,order);
 await order.save();
-// console.log("saved actualGP")
-res.status(200).send('Actual GP updated successfully');
+res.status(200).json({ message: "actualGP updated successfully" });
 } catch (error) {
-res.status(500).send('Error updating actual GP');
+console.error("Error updating actualGP:", error);
+res.status(500).json({ message: "Internal server error" });
 }
 });
 
