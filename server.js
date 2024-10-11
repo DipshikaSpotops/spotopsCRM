@@ -1690,7 +1690,7 @@ const { orderId } = req.params;
 const { actualGP } = req.body;
 console.log("actualGP",orderId,actualGP);
 const order = await Order.findOne({ orderNumber: orderId });
-
+console.log("found order for actualGp",actualGP);
 if (order) {
   order.actualGP = actualGP;
   await order.save();
