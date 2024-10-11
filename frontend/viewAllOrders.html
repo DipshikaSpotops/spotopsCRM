@@ -802,7 +802,7 @@ $("#submenu-reports .nav-link")
 .not(':contains("My Sales Report")')
 .hide();
 $(
-"#submenu-dashboards .view-orders-link,#submenu-dashboards .customer-approved-link,#submenu-dashboards .view-all-ordersSheetMode-link ,#submenu-dashboards .fulfilled-orders ,#submenu-dashboards .escalated-orders,#submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link,"
+"#submenu-dashboards .view-orders-link,#submenu-dashboards .customer-approved-link,#submenu-dashboards .view-all-ordersSheetMode-link ,#submenu-dashboards .fulfilled-orders ,#submenu-dashboards .escalated-orders,#submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
 ).hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
@@ -823,7 +823,9 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }else if (team === "Team Charlie" && firstName === "John"){
   console.log("loggedIn:",firstName)
-$("#submenu-dashboards .view-ordersSheet-link,#submenu-dashboards .view-fulfilled-link,#submenu-dashboards .ongoingEscalated-orders").hide();
+$("#submenu-dashboards .view-orders-link,#submenu-dashboards .customer-approved-link,#submenu-dashboards .view-all-ordersSheetMode-link ,#submenu-dashboards .fulfilled-orders ,#submenu-dashboards .escalated-orders,#submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .view-ordersSheet-link,#submenu-dashboards .view-fulfilled-link,#submenu-dashboards .ongoingEscalated-orders").hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
 }
 
 $("#logoutLink").click(function () {
