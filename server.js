@@ -1689,18 +1689,10 @@ app.put('/orders/:orderId/updateActualGP', async (req, res) => {
 const { orderId } = req.params;
 const { actualGP } = req.body;
 console.log("actualGP",orderId,actualGP);
-try {
-  const result = await Order.findOneAndUpdate(
-    { orderNumber: orderId }, 
-    { actualGP: actualGP },    
-    { new: true }              
-  );
-  if (!result) {
-    console.error(`Order with orderNumber ${orderId} not found.`);
-  } else {
-    console.log(`actualGP updated successfully for order: ${orderId}`);
-  }
-} catch (error) {
-  console.error("Error updating actualGP:", error.message);
+const order = await Order.findOne({ orderNumber: orderId });
+
+if (order) {
+  order.actualGP = actualGP;
+  await order.save();
 }
 });
