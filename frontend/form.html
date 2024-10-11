@@ -2178,12 +2178,19 @@ var pStatus;
 // to update the actualGp in the backend
 async function updateActualGP(orderId, actualGP) {
 const parsedActualGP = parseFloat(actualGP);
+console.log("parsedActualGP",parsedActualGP);
 if (isNaN(parsedActualGP)) {
 console.error("Invalid actualGP value. It must be a number.");
 return;
 }
-console.log("Function to update actualGP", orderId, parsedActualGP);
 try {
+if (mongoose.Types.ObjectId.isValid(orderId)) { 
+orderId = new mongoose.Types.ObjectId(orderId);
+} else {
+console.error("Invalid orderId. Expected a valid ObjectId.");
+return;
+}
+console.log("Updating actualGP for order:", orderId, parsedActualGP);
 const response = await axios.put(`https://www.spotops360.com/orders/${orderId}/updateActualGP`, {
 actualGP: parsedActualGP
 });
