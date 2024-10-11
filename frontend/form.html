@@ -2177,24 +2177,22 @@ var totalSum = 0;    // Variable to hold the cumulative total of yardSpent
 var pStatus;
 // to update the actualGp in the backend
 async function updateActualGP(orderId, actualGP) {
-  console.log("function to update actualGP", orderId, actualGP);
-  try {
-    // Use 'orderNumber' instead of '_id'
-    const response = await axios.put(`https://www.spotops360.com/orders/updateActualGP`, {
-      orderNumber: orderId,  // Assuming 'orderId' is your custom order number, not _id
-      actualGP: actualGP
-    });
+console.log("function to update actualGP", orderId, actualGP);
+try {
+const response = await axios.put(`https://www.spotops360.com/orders/${orderId}/updateActualGP`, {
+orderNumber: orderId,  
+actualGP: actualGP
+});
 
-    if (response.status === 200) {
-      console.log("actualGP updated successfully");
-    } else {
-      console.error("Failed to update actualGP");
-    }
-  } catch (error) {
-    console.error("Error updating actualGP:", error);
-  }
+if (response.status === 200) {
+console.log("actualGP updated successfully");
+} else {
+console.error("Failed to update actualGP");
 }
-
+} catch (error) {
+console.error("Error updating actualGP:", error);
+}
+}
 // updating gp in the backend till now
 setTimeout(function() {
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
