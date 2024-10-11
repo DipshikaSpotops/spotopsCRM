@@ -2209,7 +2209,7 @@ setTimeout(function() {
       // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
       if (!data.additionalInfo || data.additionalInfo.length === 0) {
         console.log('Yards not presesnt.');
-        actualGP = sp - custRefundedAmount - tax;
+        actualGP = (sp - custRefundedAmount) - tax;
         console.log("actualGp without yards",actualGP);
         $("#actualGP").val(actualGP.toFixed(2)); 
         // if(currentActualGp !== actualGP){
