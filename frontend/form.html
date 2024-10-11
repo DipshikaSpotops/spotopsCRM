@@ -2177,6 +2177,7 @@ var totalSum = 0;    // Variable to hold the cumulative total of yardSpent
 var pStatus;
 // to update the actualGp in the backend
 async function updateActualGP(orderId, actualGP) {
+console.log("to update actualGP")  
 const parsedActualGP = parseFloat(actualGP);
 console.log("parsedActualGP",parsedActualGP);
 if (isNaN(parsedActualGP)) {
