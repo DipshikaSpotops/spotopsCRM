@@ -2271,11 +2271,11 @@ setTimeout(function() {
         axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, actualGP)
 .then(function (response) {
 console.log("Actual information updated successfully:", response);
-alert("ActualGP information updated successfully!");
+// alert("ActualGP information updated successfully!");
 })
 .catch(function (error) {
 console.error("Error updating actualGP:", error);
-alert("Failed to update gp information.");
+// alert("Failed to update gp information.");
 });
       }
       // else{
