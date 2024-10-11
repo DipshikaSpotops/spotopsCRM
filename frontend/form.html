@@ -2257,8 +2257,8 @@ setTimeout(function() {
         var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
         var yardRefundAmount = parseFloat(yard.refundedAmount) || 0;
         var escReimbursement = parseFloat(yard.reimbursementAmount) || 0;
-        console.log("add",yardPP,shippingValueYard,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,"yardrefundAmount:",yardRefundAmount);
-        var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement + yardRefundAmount;
+        console.log("add",yardPP,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,"yardrefundAmount:",yardRefundAmount);
+        var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement - yardRefundAmount;
         console.log("yardSpent", yardSpent,"escReimbursement",escReimbursement);
         totalSpend.push(yardSpent);
         totalSum += yardSpent;
