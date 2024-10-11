@@ -2212,7 +2212,8 @@ setTimeout(function() {
         if(custRefundedAmount){
         actualGP = (sp - custRefundedAmount) - tax;
         console.log("actualGp without yards",actualGP);
-        $("#actualGP").val(actualGP.toFixed(2)); 
+        $("#actualGP").val(actualGP.toFixed(2));
+        }
         if(currentActualGp !== actualGP){
         axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
   .then(function (response) {
@@ -2224,8 +2225,8 @@ setTimeout(function() {
 }
 else{
   console.log("same actualGPS")
-}      
 }
+      }
       data.additionalInfo.forEach((yard, index) => {
         const yardIndex = index + 1;
         console.log("yardIndex", yardIndex, yard);
