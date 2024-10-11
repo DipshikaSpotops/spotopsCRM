@@ -1690,17 +1690,17 @@ const { orderId } = req.params;
 const { actualGP } = req.body;
 console.log("actualGP",orderId,actualGP);
 try {
-const order = await Order.findById(orderId);
-
-if (!order) {
-return res.status(404).json({ message: "Order not found" });
-}
-order.actualGP = actualGP;
-await order.save();
-
-return res.status(200).json({ message: "actualGP updated successfully" });
+  const result = await Order.findOneAndUpdate(
+    { orderNumber: orderId }, 
+    { actualGP: actualGP },    
+    { new: true }              
+  );
+  if (!result) {
+    console.error(`Order with orderNumber ${orderId} not found.`);
+  } else {
+    console.log(`actualGP updated successfully for order: ${orderId}`);
+  }
 } catch (error) {
-console.error("Error updating actualGP:", error);
-return res.status(500).json({ message: "Internal server error" });
+  console.error("Error updating actualGP:", error.message);
 }
 });
