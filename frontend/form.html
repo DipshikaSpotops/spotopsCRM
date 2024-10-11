@@ -2268,15 +2268,13 @@ setTimeout(function() {
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
         // updateActualGP(orderNo, actualGP);
-        axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, actualGP)
-.then(function (response) {
-console.log("Actual information updated successfully:", response);
-// alert("ActualGP information updated successfully!");
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-// alert("Failed to update gp information.");
-});
+        axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+  .then(function (response) {
+    console.log("ActualGP information updated successfully:", response);
+  })
+  .catch(function (error) {
+    console.error("Error updating actualGP:", error);
+  });
       }
       // else{
       //   actualGP = sp - tax - custRefundedAmount;
