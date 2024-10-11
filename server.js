@@ -1426,27 +1426,56 @@ res.status(500).json({ error: 'Failed to get token' });
 
 
 // Route to update actualGP
+// app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
+// const { orderNo } = req.params;
+// const { actualGP } = req.body;
+// console.log("updating actualGP",orderNo,actualGP)
+// try {
+// const order = await Order.findOne({ orderNo });
+
+// if (!order) {
+// return res.status(404).send('Order not found');
+// }
+
+// const lastIndex = order.additionalInfo.length - 1;
+// order.actualGP = actualGP;
+// console.log("actualGP",actualGP,order);
+// await order.save();
+// // console.log("saved actualGP")
+// res.status(200).send('Actual GP updated successfully');
+// } catch (error) {
+// res.status(500).send('Error updating actual GP');
+// }
+// });
+// Route to update actualGP for a specific order
 app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
-const { orderNo } = req.params;
-const { actualGP } = req.body;
-console.log("updating actualGP",orderNo,actualGP)
-try {
-const order = await Order.findOne({ orderNo });
+  console.log("PUT request for actualGP");
+  const { orderNo } = req.params;  // 'orderNo' from the URL params
+  const { actualGP } = req.body;   // 'actualGP' from the request body
+  
+  console.log("GPS:", actualGP, "OrderNo:", orderNo);
+  
+  try {
+    // Query by 'orderNo' explicitly and ensure it's treated as a string
+    const order = await Order.findOneAndUpdate(
+      { orderNo: String(orderNo) },  // Force 'orderNo' as a string
+      { 
+        actualGP: actualGP  // Update the 'actualGP' field
+      },
+      { new: true }  // Return the updated document
+    );
+    
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
 
-if (!order) {
-return res.status(404).send('Order not found');
-}
-
-const lastIndex = order.additionalInfo.length - 1;
-order.actualGP = actualGP;
-console.log("actualGP",actualGP,order);
-await order.save();
-// console.log("saved actualGP")
-res.status(200).send('Actual GP updated successfully');
-} catch (error) {
-res.status(500).send('Error updating actual GP');
-}
+    res.json(order);  // Respond with the updated order
+  } catch (error) {
+    console.error('Error updating gp information:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
+
 
 
 // to delete a user
@@ -1683,33 +1712,5 @@ res.json(order);
 console.error('Error updating dispute information:', error);
 res.status(500).json({ message: 'Server error' });
 }
-});
-// Route to update actualGP for a specific order
-app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
-  console.log("PUT request for actualGP");
-  const { orderNo } = req.params;  // 'orderNo' from the URL params
-  const { actualGP } = req.body;   // 'actualGP' from the request body
-  
-  console.log("GPS:", actualGP, "OrderNo:", orderNo);
-  
-  try {
-    // Query by 'orderNo' explicitly and ensure it's treated as a string
-    const order = await Order.findOneAndUpdate(
-      { orderNo: String(orderNo) },  // Force 'orderNo' as a string
-      { 
-        actualGP: actualGP  // Update the 'actualGP' field
-      },
-      { new: true }  // Return the updated document
-    );
-    
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    res.json(order);  // Respond with the updated order
-  } catch (error) {
-    console.error('Error updating gp information:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
 });
 
