@@ -1693,13 +1693,15 @@ app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
   console.log("GPS:", actualGP, "OrderNo:", orderNo);
   
   try {
-    // Explicitly query by 'orderNo' which is a string, not _id
+    // Query by 'orderNo' explicitly and ensure it's treated as a string
     const order = await Order.findOneAndUpdate(
-      { orderNo: orderNo },  // Query by 'orderNo'
-      { actualGP: actualGP }, // Update the 'actualGP'
-      { new: true }           // Return the updated document
+      { orderNo: String(orderNo) },  // Force 'orderNo' as a string
+      { 
+        actualGP: actualGP  // Update the 'actualGP' field
+      },
+      { new: true }  // Return the updated document
     );
-
+    
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -1710,3 +1712,4 @@ app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
