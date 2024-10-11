@@ -2204,6 +2204,7 @@ setTimeout(function() {
       var spMinusTax = data.spMinusTax || 0 || sp - tax; // Sale price minus tax
       var custRefundedAmount = data.custRefundedAmount || 0; // Customer 
       var currentActualGp = data.actualGP || 0;
+      console.log("actualGP rn",currentActualGp);
       $("#custRefunds").val(custRefundedAmount.toFixed(2))
       // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
       if (!data.additionalInfo || data.additionalInfo.length === 0) {
