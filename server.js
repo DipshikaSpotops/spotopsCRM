@@ -326,7 +326,7 @@ orderHistory: [String],
 notes: [String],
 isCancelled: { type: Boolean, default: false },
 teamOrder:String,
-actualGP:Number,
+actualGP:String,
 supportNotes:[String],
 disputedDate: String ,  
 disputeReason: String,
@@ -1426,25 +1426,25 @@ res.status(500).json({ error: 'Failed to get token' });
 
 
 // Route to update actualGP
-app.put('/orders/:orderId/updateActualGP', async (req, res) => {
-const { orderId } = req.params;
+app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
+const { orderNo } = req.params;
 const { actualGP } = req.body;
-
+console.log("updating actualGP",orderNo,actualGP)
 try {
-if (typeof actualGP !== 'number') {
-return res.status(400).json({ message: 'actualGP must be a number' });
-}
-const order = await Order.findById(orderId);
+const order = await Order.findOne({ orderNo });
 
 if (!order) {
-return res.status(404).json({ message: "Order not found" });
+return res.status(404).send('Order not found');
 }
+
+const lastIndex = order.additionalInfo.length - 1;
 order.actualGP = actualGP;
+console.log("actualGP",actualGP,order);
 await order.save();
-res.status(200).json({ message: "actualGP updated successfully" });
+// console.log("saved actualGP")
+res.status(200).send('Actual GP updated successfully');
 } catch (error) {
-console.error("Error updating actualGP:", error);
-res.status(500).json({ message: "Internal server error" });
+res.status(500).send('Error updating actual GP');
 }
 });
 
