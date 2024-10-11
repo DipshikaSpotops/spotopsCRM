@@ -1691,6 +1691,7 @@ var body = req.body;
 console.log("body",body);
   const { orderNo } = body.orderNo;
   const { actualGP } = body.actualGP;
+  console.log("--",orderNo,actualGP);
   try {
   const order = await Order.findOneAndUpdate(
   { orderNo: orderNo },
