@@ -2202,14 +2202,16 @@ setTimeout(function() {
       var sp = data.soldP;
       var tax = data.salestax;
       var spMinusTax = data.spMinusTax || 0 || sp - tax; // Sale price minus tax
-      var custRefundedAmount = data.custRefundedAmount || 0; // Customer refund
+      var custRefundedAmount = data.custRefundedAmount || 0; // Customer 
+      var currentActualGp = data.actualGP || 0;
       $("#custRefunds").val(custRefundedAmount.toFixed(2))
       // console.log("saleP - tax",spMinusTax,"custRefund",custRefundedAmount);
       if (!data.additionalInfo || data.additionalInfo.length === 0) {
         console.log('Yards not presesnt.');
-        actualGP = sp - tax - custRefundedAmount; 
+        actualGP = sp - tax - custRefundedAmount;
         console.log("actualGp without yards",actualGP);
         $("#actualGP").val(actualGP.toFixed(2)); 
+        if(currentActualGp == actualGP){
         axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
   .then(function (response) {
     console.log("ActualGP information updated successfully:", response);
@@ -2217,6 +2219,9 @@ setTimeout(function() {
   .catch(function (error) {
     console.error("Error updating actualGP:", error);
   });
+}else{
+  console.log("same actualGPS")
+}
       }
       data.additionalInfo.forEach((yard, index) => {
         const yardIndex = index + 1;
@@ -2276,6 +2281,7 @@ setTimeout(function() {
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
         // updateActualGP(orderNo, actualGP);
+        if(currentActualGp == actualGP){
         axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
   .then(function (response) {
     console.log("ActualGP information updated successfully:", response);
@@ -2283,6 +2289,9 @@ setTimeout(function() {
   .catch(function (error) {
     console.error("Error updating actualGP:", error);
   });
+        }else{
+          console.log("same actyal gp foe card charged")
+        }
       }
       // else{
       //   actualGP = sp - tax - custRefundedAmount;
