@@ -1698,6 +1698,7 @@ console.log("body",body);
   {$push: { actualGP: actualGP } },
   { new: true }
   );
+  console.log("oredre found for actualGp",order);
   if (!order) {
   return res.status(404).json({ message: 'Order not found' });
   }
