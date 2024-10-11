@@ -2176,23 +2176,23 @@ var totalSpend = []; // Array to hold the yardSpent values
 var totalSum = 0;    // Variable to hold the cumulative total of yardSpent
 var pStatus;
 // to update the actualGp in the backend
-async function updateActualGP(orderId, actualGP) {
-console.log("function to update actualGP", orderId, actualGP);
-try {
-const response = await axios.put(`https://www.spotops360.com/orders/${orderId}/updateActualGP`, {
-orderNumber: orderId,  
-actualGP: actualGP
-});
+// async function updateActualGP(orderId, actualGP) {
+// console.log("function to update actualGP", orderId, actualGP);
+// try {
+// const response = await axios.put(`https://www.spotops360.com/orders/${orderId}/updateActualGP`, {
+//   orderNumber: orderId,  
+//   actualGP: actualGP
+// });
 
-if (response.status === 200) {
-console.log("actualGP updated successfully");
-} else {
-console.error("Failed to update actualGP");
-}
-} catch (error) {
-console.error("Error updating actualGP:", error);
-}
-}
+// if (response.status === 200) {
+//   console.log("actualGP updated successfully");
+// } else {
+//   console.error("Failed to update actualGP");
+// }
+// } catch (error) {
+// console.error("Error updating actualGP:", error);
+// }
+// }
 // updating gp in the backend till now
 setTimeout(function() {
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
@@ -2267,13 +2267,22 @@ setTimeout(function() {
         actualGP = subtractRefund - totalSum;
         console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
         $("#actualGP").val(actualGP.toFixed(2)); 
-        updateActualGP(orderNo, actualGP);
+        // updateActualGP(orderNo, actualGP);
+        axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, actualGP)
+.then(function (response) {
+console.log("Actual information updated successfully:", response);
+alert("ActualGP information updated successfully!");
+})
+.catch(function (error) {
+console.error("Error updating actualGP:", error);
+alert("Failed to update gp information.");
+});
       }
-      else{
-        actualGP = sp - tax - custRefundedAmount;
-        console.log("Calculated actualGP for card not charged:", actualGP);
-        $("#actualGP").val(actualGP.toFixed(2)); 
-      }
+      // else{
+      //   actualGP = sp - tax - custRefundedAmount;
+      //   console.log("Calculated actualGP for card not charged:", actualGP);
+      //   $("#actualGP").val(actualGP.toFixed(2)); 
+      // }
       });
     })
     .catch(error => console.error("Error fetching yard data:", error));
