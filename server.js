@@ -1685,8 +1685,8 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 // Route to update actualGP for a specific order
-app.put('/orders/:orderId/updateActualGP', async (req, res) => {
-const { orderId } = req.params;
+app.put('/orders//updateActualGP', async (req, res) => {
+const { orderId } = req.body;
 const { actualGP } = req.body;
 console.log("actualGP",orderId,actualGP);
 const order = await Order.findOne({ orderNumber: orderId });
