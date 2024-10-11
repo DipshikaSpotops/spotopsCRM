@@ -1685,26 +1685,28 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 // Route to update actualGP for a specific order
-  app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
-    console.log("put request for actualGP");
-    const { orderNo } = req.params;
-    const { actualGP } = req.body;
-    console.log("GPS:", actualGP, "OrderNo:", orderNo);
-    
-    try {
+app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
+  console.log("PUT request for actualGP");
+  const { orderNo } = req.params;  // 'orderNo' from the URL params
+  const { actualGP } = req.body;   // 'actualGP' from the request body
+  
+  console.log("GPS:", actualGP, "OrderNo:", orderNo);
+  
+  try {
+    // Explicitly query by 'orderNo' which is a string, not _id
     const order = await Order.findOneAndUpdate(
-    { orderNo: orderNo }, 
-    { 
-      actualGP: actualGP
-    },
-    { new: true }  
+      { orderNo: orderNo },  // Query by 'orderNo'
+      { actualGP: actualGP }, // Update the 'actualGP'
+      { new: true }           // Return the updated document
     );
+
     if (!order) {
-    return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: 'Order not found' });
     }
-    res.json(order);
-    } catch (error) {
+
+    res.json(order);  // Respond with the updated order
+  } catch (error) {
     console.error('Error updating gp information:', error);
     res.status(500).json({ message: 'Server error' });
-    }
-    });
+  }
+});
