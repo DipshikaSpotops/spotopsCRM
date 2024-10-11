@@ -821,6 +821,8 @@ $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $('#submenu-reports .nav-link:contains("Refund Report")').show();
 $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
+}else if (firstName === "John"){
+$("#submenu-dashboards .view-ordersSheet-link,#submenu-dashboards .view-fulfilled-link,#submenu-dashboards .ongoingEscalated-orders").hide();
 }
 
 $("#logoutLink").click(function () {
