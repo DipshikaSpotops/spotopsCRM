@@ -2212,7 +2212,7 @@ setTimeout(function() {
         actualGP = sp - tax - custRefundedAmount;
         console.log("actualGp without yards",actualGP);
         $("#actualGP").val(actualGP.toFixed(2)); 
-        if(currentActualGp == actualGP){
+        if(currentActualGp === actualGP){
         axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
   .then(function (response) {
     console.log("ActualGP information updated successfully:", response);
