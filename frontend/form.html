@@ -2185,12 +2185,6 @@ console.error("Invalid actualGP value. It must be a number.");
 return;
 }
 try {
-if (mongoose.Types.ObjectId.isValid(orderId)) { 
-orderId = new mongoose.Types.ObjectId(orderId);
-} else {
-console.error("Invalid orderId. Expected a valid ObjectId.");
-return;
-}
 console.log("Updating actualGP for order:", orderId, parsedActualGP);
 const response = await axios.put(`https://www.spotops360.com/orders/${orderId}/updateActualGP`, {
 actualGP: parsedActualGP
