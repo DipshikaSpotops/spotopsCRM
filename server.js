@@ -1714,7 +1714,7 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 // API to get daily orders count for the current month
-app.get('/api/orders/daily', async (req, res) => {
+app.get('/orders/daily', async (req, res) => {
   try {
     const currentMonth = new Date().getMonth(); // Get current month (0-11)
     const orders = await Order.aggregate([
@@ -1740,7 +1740,7 @@ app.get('/api/orders/daily', async (req, res) => {
 });
 
 // API to get monthly order data
-app.get('/api/orders/monthly', async (req, res) => {
+app.get('/orders/monthly', async (req, res) => {
   try {
     const orders = await Order.aggregate([
       {
@@ -1757,7 +1757,7 @@ app.get('/api/orders/monthly', async (req, res) => {
 });
 
 // API to get salesperson performance
-app.get('/api/orders/salesperson/:salesperson', async (req, res) => {
+app.get('/orders/salesperson/:salesperson', async (req, res) => {
   const salesperson = req.params.salesperson;
   try {
     const orders = await Order.aggregate([
@@ -1781,7 +1781,7 @@ app.get('/api/orders/salesperson/:salesperson', async (req, res) => {
 });
 
 // API to get yearly progress
-app.get('/api/orders/yearly', async (req, res) => {
+app.get('/orders/yearly', async (req, res) => {
   try {
     const orders = await Order.aggregate([
       {
