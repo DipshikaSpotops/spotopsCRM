@@ -420,7 +420,8 @@ estimatedGP += estGP;
 
 let totalSpending = 0;
 let validOrder = false;
-
+actualGP = order.actualGP || 0;
+console.log("info",info,"actualGP",actualGP);
 if (order.additionalInfo && order.additionalInfo.length > 0) {
 validOrdersCount++;
 order.forEach((info) => {
@@ -432,8 +433,6 @@ order.forEach((info) => {
 // const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
 // totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
-actualGP = info.actualGP || 0;
-console.log("info",info,"actualGP",actualGP);
 if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
 validOrder = true;
 }
