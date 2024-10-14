@@ -423,7 +423,7 @@ let validOrder = false;
 
 if (order.additionalInfo && order.additionalInfo.length > 0) {
 validOrdersCount++;
-order.additionalInfo.forEach((info) => {
+order.forEach((info) => {
 // const shippingDetails = info.shippingDetails ? info.shippingDetails.split(":")[1].trim() : "0";
 // const shippingCharge = parseFloat(shippingDetails) || 0;
 // const partPrice = parseFloat(info.partPrice) || 0;
