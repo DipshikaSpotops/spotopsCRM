@@ -478,7 +478,7 @@ $("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
 $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
 $("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
 $("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
-$("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
+$("#AverageGP").text(`Actual GP: $${stats.actualGPForOrder.toFixed(2)}`);
 }
 
 // Fetch data based on the selected filter (daily or monthly) for the chart
@@ -533,9 +533,6 @@ updateSalesChart(salesData, labels, filter); // Update chart based on the select
 console.error("Error fetching sales data:", error);
 }
 }
-
-
-
 // Chart update function
 function updateSalesChart(salesData, labels, filter) {
 const ctx = document.getElementById("salesChart").getContext("2d");
@@ -548,11 +545,11 @@ data: {
 labels: labels,
 datasets: [
 {
-    label: "Number of Orders",
-    data: salesData,
-    backgroundColor: "rgba(75, 192, 192, 0.2)",
-    borderColor: "rgba(75, 192, 192, 1)",
-    borderWidth: 1,
+label: "Number of Orders",
+data: salesData,
+backgroundColor: "rgba(75, 192, 192, 0.2)",
+borderColor: "rgba(75, 192, 192, 1)",
+borderWidth: 1,
 },
 ],
 },
@@ -560,56 +557,50 @@ options: {
 responsive: true,
 scales: {
 x: {
-    display: true,
-    title: {
-        display: true,
-        text: filter === "daily" ? "Days of the Month" : "Months",
-    },
+display: true,
+title: {
+display: true,
+text: filter === "daily" ? "Days of the Month" : "Months",
+},
 },
 y: {
-    display: true,
-    title: {
-        display: true,
-        text: "Number of Orders",
-    },
-    ticks: {
-        stepSize: 1,
-        beginAtZero: true,
-    },
+display: true,
+title: {
+display: true,
+text: "Number of Orders",
+},
+ticks: {
+stepSize: 1,
+beginAtZero: true,
+},
 },
 },
 },
 });
 }
-
 // Initial fetch for daily data (for the stats)
 await fetchSalesDataForCurrentMonth();
 
 function updateRecentOrders(orders) {
-  const recentOrdersTable = $("#recentOrdersTable");
-  recentOrdersTable.empty();  // Clear previous entries
-
-  // Sort orders by date in ascending order (oldest to newest)
-  orders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate));
-
-  // Get the last 10 orders after sorting
-  var latestOrders = orders.slice(-10); // Get the last 10 orders
-  latestOrders = sortOrdersByOrderNoDesc(latestOrders);
-  // Populate the table with the latest 10 orders
-  latestOrders.forEach((order) => {
-    recentOrdersTable.append(`
-      <tr>
-        <td>${order.orderNo}</td>
-        <td>${order.customerName}</td>
-        <td>${order.orderDate}</td>
-        <td>$${order.grossProfit.toFixed(2)}</td>
-      </tr>
-    `);
-  });
+const recentOrdersTable = $("#recentOrdersTable");
+recentOrdersTable.empty();  // Clear previous entries
+// Sort orders by date in ascending order (oldest to newest)
+orders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate));
+// Get the last 10 orders after sorting
+var latestOrders = orders.slice(-10); // Get the last 10 orders
+latestOrders = sortOrdersByOrderNoDesc(latestOrders);
+// Populate the table with the latest 10 orders
+latestOrders.forEach((order) => {
+recentOrdersTable.append(`
+<tr>
+<td>${order.orderNo}</td>
+<td>${order.customerName}</td>
+<td>${order.orderDate}</td>
+<td>$${order.grossProfit.toFixed(2)}</td>
+</tr>
+`);
+});
 }
-
-
-
 function updateBrandSummary(data) {
 const brandSummary = data.reduce((acc, order) => {
 if (!acc[order.make]) {
@@ -619,10 +610,8 @@ acc[order.make].count += 1;
 acc[order.make].grossProfit += order.grossProfit;
 return acc;
 }, {});
-
 const brandSummaryTable = $("#brandSummaryTable");
-brandSummaryTable.empty();  // Clear previous entries
-
+brandSummaryTable.empty(); 
 for (const brand in brandSummary) {
 brandSummaryTable.append(`
 <tr>
@@ -641,15 +630,12 @@ fetchSalesData(filter);
 });
 // Initial fetch for the chart (daily view)
 fetchSalesData("daily");
-
 $(".toggle-btn").on("click", function () {
 $("#offcanvasSidebar").removeClass("hide");
 });
-
 $(".close-btn").on("click", function () {
 $("#offcanvasSidebar").addClass("hide");
 });
-
 $(document).click(function (event) {
 if (!$(event.target).closest("#offcanvasSidebar, .toggle-btn").length) {
 $("#offcanvasSidebar").addClass("hide");
