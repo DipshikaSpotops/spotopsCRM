@@ -470,9 +470,9 @@ window.location.href = "login_signup.html";
 // Fetch and render data for each chart
 async function fetchAndRenderCharts() {
 await fetchDailyOrders();
-await fetchMonthlyOrders();
-await fetchSalespersonPerformance();
-await fetchYearlyProgress();
+// await fetchMonthlyOrders();
+// await fetchSalespersonPerformance();
+// await fetchYearlyProgress();
 }
 
 // Fetch daily orders
@@ -509,122 +509,122 @@ console.error("Error fetching daily orders:", error);
 }
 }
 
-// Fetch monthly orders with filter
-async function fetchMonthlyOrders() {
-try {
-const month = $("#monthFilter").val();
-const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-headers: { Authorization: `Bearer ${token}` }
-});
-const orders = response.data;
+// // Fetch monthly orders with filter
+// async function fetchMonthlyOrders() {
+// try {
+// const month = $("#monthFilter").val();
+// const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+// headers: { Authorization: `Bearer ${token}` }
+// });
+// const orders = response.data;
 
-// Ensure orders is an array
-if (!orders || !Array.isArray(orders)) {
-console.error("Invalid monthly orders data.");
-return;
-}
+// // Ensure orders is an array
+// if (!orders || !Array.isArray(orders)) {
+// console.error("Invalid monthly orders data.");
+// return;
+// }
 
-const labels = orders.map(order => order.month);
-const data = orders.map(order => order.totalOrders);
+// const labels = orders.map(order => order.month);
+// const data = orders.map(order => order.totalOrders);
 
-new Chart(document.getElementById("monthlyOrdersChart"), {
-type: "bar",
-data: {
-labels: labels,
-datasets: [{
-label: "Monthly Orders",
-backgroundColor: "rgba(75, 192, 192, 0.5)",
-borderColor: "rgba(75, 192, 192, 1)",
-data: data
-}]
-}
-});
-} catch (error) {
-console.error("Error fetching monthly orders:", error);
-}
-}
+// new Chart(document.getElementById("monthlyOrdersChart"), {
+// type: "bar",
+// data: {
+// labels: labels,
+// datasets: [{
+// label: "Monthly Orders",
+// backgroundColor: "rgba(75, 192, 192, 0.5)",
+// borderColor: "rgba(75, 192, 192, 1)",
+// data: data
+// }]
+// }
+// });
+// } catch (error) {
+// console.error("Error fetching monthly orders:", error);
+// }
+// }
 
-// Fetch salesperson performance
-async function fetchSalespersonPerformance() {
-try {
-const salesperson = $("#salespersonFilter").val();
-const response = await axios.get(`https://www.spotops360.com/orders/salesperson/${salesperson}`, {
-headers: { Authorization: `Bearer ${token}` }
-});
-const orders = response.data;
+// // Fetch salesperson performance
+// async function fetchSalespersonPerformance() {
+// try {
+// const salesperson = $("#salespersonFilter").val();
+// const response = await axios.get(`https://www.spotops360.com/orders/salesperson/${salesperson}`, {
+// headers: { Authorization: `Bearer ${token}` }
+// });
+// const orders = response.data;
 
-// Ensure orders is an array
-if (!orders || !Array.isArray(orders)) {
-console.error("Invalid salesperson performance data.");
-return;
-}
+// // Ensure orders is an array
+// if (!orders || !Array.isArray(orders)) {
+// console.error("Invalid salesperson performance data.");
+// return;
+// }
 
-const labels = orders.map(order => order.day);
-const totalOrders = orders.map(order => order.totalOrders);
-const totalGP = orders.map(order => order.totalGP);
+// const labels = orders.map(order => order.day);
+// const totalOrders = orders.map(order => order.totalOrders);
+// const totalGP = orders.map(order => order.totalGP);
 
-new Chart(document.getElementById("salespersonPerformanceChart"), {
-type: "line",
-data: {
-labels: labels,
-datasets: [
-{
-label: "Orders",
-backgroundColor: "rgba(255, 159, 64, 0.5)",
-borderColor: "rgba(255, 159, 64, 1)",
-data: totalOrders
-},
-{
-label: "Actual GP",
-backgroundColor: "rgba(75, 192, 192, 0.5)",
-borderColor: "rgba(75, 192, 192, 1)",
-data: totalGP
-}
-]
-}
-});
-} catch (error) {
-console.error("Error fetching salesperson performance:", error);
-}
-}
+// new Chart(document.getElementById("salespersonPerformanceChart"), {
+// type: "line",
+// data: {
+// labels: labels,
+// datasets: [
+// {
+// label: "Orders",
+// backgroundColor: "rgba(255, 159, 64, 0.5)",
+// borderColor: "rgba(255, 159, 64, 1)",
+// data: totalOrders
+// },
+// {
+// label: "Actual GP",
+// backgroundColor: "rgba(75, 192, 192, 0.5)",
+// borderColor: "rgba(75, 192, 192, 1)",
+// data: totalGP
+// }
+// ]
+// }
+// });
+// } catch (error) {
+// console.error("Error fetching salesperson performance:", error);
+// }
+// }
 
-// Fetch yearly progress
-async function fetchYearlyProgress() {
-try {
-const response = await axios.get("https://www.spotops360.com/orders/yearly", {
-headers: { Authorization: `Bearer ${token}` }
-});
-const orders = response.data;
+// // Fetch yearly progress
+// async function fetchYearlyProgress() {
+// try {
+// const response = await axios.get("https://www.spotops360.com/orders/yearly", {
+// headers: { Authorization: `Bearer ${token}` }
+// });
+// const orders = response.data;
 
-// Ensure orders is an array
-if (!orders || !Array.isArray(orders)) {
-console.error("Invalid yearly progress data.");
-return;
-}
+// // Ensure orders is an array
+// if (!orders || !Array.isArray(orders)) {
+// console.error("Invalid yearly progress data.");
+// return;
+// }
 
-const labels = orders.map(order => order.month);
-const data = orders.map(order => order.totalOrders);
+// const labels = orders.map(order => order.month);
+// const data = orders.map(order => order.totalOrders);
 
-new Chart(document.getElementById("yearlyProgressChart"), {
-type: "bar",
-data: {
-labels: labels,
-datasets: [{
-label: "Yearly Orders",
-backgroundColor: "rgba(153, 102, 255, 0.5)",
-borderColor: "rgba(153, 102, 255, 1)",
-data: data
-}]
-}
-});
-} catch (error) {
-console.error("Error fetching yearly progress:", error);
-}
-}
+// new Chart(document.getElementById("yearlyProgressChart"), {
+// type: "bar",
+// data: {
+// labels: labels,
+// datasets: [{
+// label: "Yearly Orders",
+// backgroundColor: "rgba(153, 102, 255, 0.5)",
+// borderColor: "rgba(153, 102, 255, 1)",
+// data: data
+// }]
+// }
+// });
+// } catch (error) {
+// console.error("Error fetching yearly progress:", error);
+// }
+// }
 
-// Event listeners for filters
-$("#monthFilter").change(fetchMonthlyOrders);
-$("#salespersonFilter").change(fetchSalespersonPerformance);
+// // Event listeners for filters
+// $("#monthFilter").change(fetchMonthlyOrders);
+// $("#salespersonFilter").change(fetchSalespersonPerformance);
 
 // Initial chart rendering
 fetchAndRenderCharts();
