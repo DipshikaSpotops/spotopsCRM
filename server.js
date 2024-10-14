@@ -1713,4 +1713,86 @@ console.error('Error updating dispute information:', error);
 res.status(500).json({ message: 'Server error' });
 }
 });
+// API to get daily orders count for the current month
+app.get('/api/orders/daily', async (req, res) => {
+  try {
+    const currentMonth = new Date().getMonth(); // Get current month (0-11)
+    const orders = await Order.aggregate([
+      {
+        $match: {
+          orderDate: {
+            $gte: new Date(new Date().setDate(1)), // From the first day of this month
+            $lt: new Date(new Date().setMonth(currentMonth + 1)), // Until the first day of the next month
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $dayOfMonth: "$orderDate" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+    ]);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching daily orders', error });
+  }
+});
 
+// API to get monthly order data
+app.get('/api/orders/monthly', async (req, res) => {
+  try {
+    const orders = await Order.aggregate([
+      {
+        $group: {
+          _id: { $month: "$orderDate" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+    ]);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching monthly orders', error });
+  }
+});
+
+// API to get salesperson performance
+app.get('/api/orders/salesperson/:salesperson', async (req, res) => {
+  const salesperson = req.params.salesperson;
+  try {
+    const orders = await Order.aggregate([
+      {
+        $match: {
+          salesAgent: salesperson,
+        },
+      },
+      {
+        $group: {
+          _id: { $dayOfMonth: "$orderDate" },
+          totalOrders: { $sum: 1 },
+          totalGP: { $sum: "$actualGP" }, // Assuming actualGP is part of the schema
+        },
+      },
+    ]);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching salesperson performance', error });
+  }
+});
+
+// API to get yearly progress
+app.get('/api/orders/yearly', async (req, res) => {
+  try {
+    const orders = await Order.aggregate([
+      {
+        $group: {
+          _id: { $month: "$orderDate" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+    ]);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching yearly progress', error });
+  }
+});
