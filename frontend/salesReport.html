@@ -433,6 +433,7 @@ order.additionalInfo.forEach((info) => {
 
 // totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
 actualGP = info.actualGP || 0;
+console.log("info",info,"actualGP",actualGP);
 if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
 validOrder = true;
 }
