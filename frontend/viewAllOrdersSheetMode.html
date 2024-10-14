@@ -771,7 +771,7 @@ yardColumns += `
 ${info.address || ""} <br>
 ${info.yardRating || ""}<br>
 ${info.email || ""} | ${info.phone || ""}<br>
-${info.stockNo || ""}  | Warranty: ${info.warranty || ""}<br>
+${info.stockNo ? `Stock No: ${info.stockNo}` : ""}  | Warranty: ${info.warranty || ""}<br>
 </td>
 <td>  Part price:  ${info.partPrice || ""} <br>
 ${info.shippingDetails || ""} <br>
