@@ -432,7 +432,7 @@ order.additionalInfo.forEach((info) => {
 // const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
 // totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
-actualGP = info.actualGP;
+actualGP = info.actualGP || 0;
 if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
 validOrder = true;
 }
