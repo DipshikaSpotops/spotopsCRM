@@ -1741,23 +1741,25 @@ app.get('/orders/daily', async (req, res) => {
 
 // API to get monthly order data
 app.get('/orders/monthly', async (req, res) => {
-  try {
-    const orders = await Order.aggregate([
-      {
-        $group: {
-          _id: { $month: "$orderDate" },
-          totalOrders: { $sum: 1 },
-        },
-      },
-    ]);
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching monthly orders', error });
-  }
+console.log("monthly orders data");
+try {
+const orders = await Order.aggregate([
+{
+$group: {
+_id: { $month: "$orderDate" },
+totalOrders: { $sum: 1 },
+},
+},
+]);
+res.json(orders);
+} catch (error) {
+res.status(500).json({ message: 'Error fetching monthly orders', error });
+}
 });
 
 // API to get salesperson performance
 app.get('/orders/salesperson/:salesperson', async (req, res) => {
+  console.log("salesperson performace api");
   const salesperson = req.params.salesperson;
   try {
     const orders = await Order.aggregate([
@@ -1782,6 +1784,7 @@ app.get('/orders/salesperson/:salesperson', async (req, res) => {
 
 // API to get yearly progress
 app.get('/orders/yearly', async (req, res) => {
+  console.log("yearly order progress");
   try {
     const orders = await Order.aggregate([
       {
