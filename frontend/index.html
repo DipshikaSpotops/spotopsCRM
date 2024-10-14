@@ -478,7 +478,7 @@ await fetchYearlyProgress();
 // Fetch daily orders
 async function fetchDailyOrders() {
 try {
-const response = await axios.get("/api/orders/daily", {
+const response = await axios.get("https://www.spotops360.com/api/orders/daily", {
 headers: { Authorization: `Bearer ${token}` }
 });
 const orders = response.data;
@@ -506,7 +506,7 @@ console.error("Error fetching daily orders:", error);
 async function fetchMonthlyOrders() {
 try {
 const month = $("#monthFilter").val();
-const response = await axios.get(`/api/orders/monthly`, {
+const response = await axios.get(`https://www.spotops360.com/api/orders/monthly`, {
 headers: { Authorization: `Bearer ${token}` }
 });
 const orders = response.data;
@@ -534,7 +534,7 @@ console.error("Error fetching monthly orders:", error);
 async function fetchSalespersonPerformance() {
 try {
 const salesperson = $("#salespersonFilter").val();
-const response = await axios.get(`/api/orders/salesperson/${salesperson}`, {
+const response = await axios.get(`https://www.spotops360.com/api/orders/salesperson/${salesperson}`, {
 headers: { Authorization: `Bearer ${token}` }
 });
 const orders = response.data;
@@ -570,7 +570,7 @@ console.error("Error fetching salesperson performance:", error);
 // Fetch yearly progress
 async function fetchYearlyProgress() {
 try {
-const response = await axios.get("/api/orders/yearly", {
+const response = await axios.get("https://www.spotops360.com/api/orders/yearly", {
 headers: { Authorization: `Bearer ${token}` }
 });
 const orders = response.data;
