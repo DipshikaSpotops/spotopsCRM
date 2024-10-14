@@ -407,6 +407,7 @@ let estimatedGP = 0;
 let highestGP = 0;
 let actualAGPArr = [];
 let totalAgp = 0;
+var actualGPForOrder
 let validOrdersCount = 0;
 
 data.forEach((order) => {
@@ -431,14 +432,14 @@ order.additionalInfo.forEach((info) => {
 // const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
 // totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
-
+actualGPForOrder = info.actualGP;
 if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
     validOrder = true;
 }
 });
 
 if (validOrder) {
-const actualGPForOrder = info.actualGP;
+
 console.log("ActualGp",actualGPForOrder);
 // actualAGPArr.push(actualGPForOrder);
 highestGP = Math.max(highestGP, actualGPForOrder);
