@@ -416,6 +416,7 @@ const salePrice = order.soldP;
 const salestax = order.salestax || 0;
 const estGP = order.grossProfit;
 
+
 estimatedGP += estGP;
 
 let totalSpending = 0;
@@ -424,7 +425,7 @@ actualGP = order.actualGP || 0;
 console.log("actualGP",actualGP);
 if (order.additionalInfo && order.additionalInfo.length > 0) {
 validOrdersCount++;
-order.forEach((info) => {
+order.additionalInfo.forEach((info) => {
 // const shippingDetails = info.shippingDetails ? info.shippingDetails.split(":")[1].trim() : "0";
 // const shippingCharge = parseFloat(shippingDetails) || 0;
 // const partPrice = parseFloat(info.partPrice) || 0;
