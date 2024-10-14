@@ -1720,7 +1720,6 @@ app.get('/orders/daily', async (req, res) => {
 
     const orders = await Order.aggregate([
       {
-        // Add a field to parse orderDate from string to Date object
         $addFields: {
           orderDateParsed: {
             $dateFromString: {
