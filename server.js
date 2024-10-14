@@ -1713,16 +1713,19 @@ console.error('Error updating dispute information:', error);
 res.status(500).json({ message: 'Server error' });
 }
 });
-// API to get daily orders count for the current month
 app.get('/orders/daily', async (req, res) => {
   try {
     const currentMonth = new Date().getMonth(); // Get current month (0-11)
+    const startOfMonth = new Date(new Date().setDate(1)); // Start of current month
+    const endOfMonth = new Date(new Date().setMonth(currentMonth + 1)); // Start of next month
+
+    // If orderDate is stored as a string, you may need to convert it to Date before matching
     const orders = await Order.aggregate([
       {
         $match: {
           orderDate: {
-            $gte: new Date(new Date().setDate(1)), // From the first day of this month
-            $lt: new Date(new Date().setMonth(currentMonth + 1)), // Until the first day of the next month
+            $gte: startOfMonth,
+            $lt: endOfMonth,
           },
         },
       },
@@ -1732,34 +1735,47 @@ app.get('/orders/daily', async (req, res) => {
           totalOrders: { $sum: 1 },
         },
       },
+      {
+        $sort: { _id: 1 } // Sort by day in ascending order
+      }
     ]);
-    res.json(orders);
+    
+    const formattedOrders = orders.map(order => ({
+      day: order._id,
+      totalOrders: order.totalOrders,
+    }));
+
+    res.json(formattedOrders);
   } catch (error) {
+    console.error("Error fetching daily orders:", error);
     res.status(500).json({ message: 'Error fetching daily orders', error });
   }
 });
-
-// API to get monthly order data
 app.get('/orders/monthly', async (req, res) => {
-console.log("monthly orders data");
-try {
-const orders = await Order.aggregate([
-{
-$group: {
-_id: { $month: "$orderDate" },
-totalOrders: { $sum: 1 },
-},
-},
-]);
-res.json(orders);
-} catch (error) {
-res.status(500).json({ message: 'Error fetching monthly orders', error });
-}
-});
+  try {
+    const orders = await Order.aggregate([
+      {
+        $group: {
+          _id: { $month: "$orderDate" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 } // Sort by month in ascending order (January to December)
+      }
+    ]);
 
-// API to get salesperson performance
+    const formattedOrders = orders.map(order => ({
+      month: order._id, // This will be a month number (1 for January, etc.)
+      totalOrders: order.totalOrders,
+    }));
+
+    res.json(formattedOrders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching monthly orders', error });
+  }
+});
 app.get('/orders/salesperson/:salesperson', async (req, res) => {
-  console.log("salesperson performace api");
   const salesperson = req.params.salesperson;
   try {
     const orders = await Order.aggregate([
@@ -1772,19 +1788,26 @@ app.get('/orders/salesperson/:salesperson', async (req, res) => {
         $group: {
           _id: { $dayOfMonth: "$orderDate" },
           totalOrders: { $sum: 1 },
-          totalGP: { $sum: "$actualGP" }, // Assuming actualGP is part of the schema
+          totalGP: { $sum: { $ifNull: ["$actualGP", 0] } }, // Handle missing actualGP
         },
       },
+      {
+        $sort: { _id: 1 } // Sort by day in ascending order
+      }
     ]);
-    res.json(orders);
+
+    const formattedOrders = orders.map(order => ({
+      day: order._id,
+      totalOrders: order.totalOrders,
+      totalGP: order.totalGP
+    }));
+
+    res.json(formattedOrders);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching salesperson performance', error });
   }
 });
-
-// API to get yearly progress
 app.get('/orders/yearly', async (req, res) => {
-  console.log("yearly order progress");
   try {
     const orders = await Order.aggregate([
       {
@@ -1793,9 +1816,19 @@ app.get('/orders/yearly', async (req, res) => {
           totalOrders: { $sum: 1 },
         },
       },
+      {
+        $sort: { _id: 1 } // Sort by month in ascending order (January to December)
+      }
     ]);
-    res.json(orders);
+
+    const formattedOrders = orders.map(order => ({
+      month: order._id, // This will be a month number (1 for January, etc.)
+      totalOrders: order.totalOrders,
+    }));
+
+    res.json(formattedOrders);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching yearly progress', error });
   }
 });
+
