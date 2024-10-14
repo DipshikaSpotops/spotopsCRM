@@ -1956,7 +1956,7 @@ Send Email
 <script>
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
-console.log("query string",queryString);
+// console.log("query string",queryString);
 const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
 var orderPlacedDate;
@@ -1997,9 +1997,9 @@ var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
-console.log("common fetch", data);
+// console.log("common fetch", data);
 orderPlacedDate = data.orderDate;
-console.log("orderDate",orderPlacedDate)
+// console.log("orderDate",orderPlacedDate)
 })
 .catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
@@ -2008,7 +2008,7 @@ const newOrderStatus = $(this).val();
 console.log("Order Status changed to:", newOrderStatus);
 
 if (newOrderStatus == "Dispute") {
-console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
+// console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
 $("#disputedDate").val(currentDateTime);
 // orderedDate
 $(".orderedDate").val(orderPlacedDate);
@@ -2017,7 +2017,7 @@ $("body").addClass("modal-active");
 $("#disputeDiv").fadeIn();
 } 
 else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
-console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
+// console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
 $(".orderedDate").val(orderPlacedDate);
 $("#refundedDate").val(currentDateTime);
 $("body").append('<div class="modal-overlay"></div>');
@@ -2038,46 +2038,46 @@ $("body").removeClass("modal-active");
 });
 //for dispute
 $("#disputeSubmit").on("click", function () {
-console.log("disputeSubmit");
+// console.log("disputeSubmit");
 $("#disputeDiv").fadeOut();
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 const disputedDate = $("#disputedDate").val();
 const disputeReason = $("#disputeReason").val();
 // const orderNo = urlParams.get("orderNo");
-console.log("orderId:", orderNo,"disputedReason:",disputeReason,"disputedDate:",disputedDate);
+// console.log("orderId:", orderNo,"disputedReason:",disputeReason,"disputedDate:",disputedDate);
 const disputeData = {
 disputedDate: disputedDate,
 disputeReason: disputeReason,
 };
 axios.put(`https://www.spotops360.com/orders/${orderNo}/dispute`, disputeData)
 .then(function (response) {
-console.log("Dispute information updated successfully:", response);
+// console.log("Dispute information updated successfully:", response);
 alert("Dispute information updated successfully!");
 })
 .catch(function (error) {
-console.error("Error updating dispute:", error);
+// console.error("Error updating dispute:", error);
 alert("Failed to update dispute information.");
 });
 });
 // for dispute till here
 //for custRefund
 $("#custRefundSubmit").on("click", function () {
-console.log("custRefundSubmit");
+// console.log("custRefundSubmit");
  $("#custRefund").fadeOut();
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 const custRefundDate = $("#refundedDate").val();
 const custRefundedAmount = $(".custRefundedAmount").val();
 const orderNo = urlParams.get("orderNo");
-console.log("orderId:", orderNo,"refundedAmount:",custRefundedAmount,"custRefundDate:",custRefundDate);
+// console.log("orderId:", orderNo,"refundedAmount:",custRefundedAmount,"custRefundDate:",custRefundDate);
 const custRefundData = {
 custRefundDate: custRefundDate,
 custRefundedAmount: custRefundedAmount,
 };
 axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
 .then(function (response) {
-console.log("Refund information updated successfully:", response);
+// console.log("Refund information updated successfully:", response);
 alert("Refund information updated successfully!");
 })
 .catch(function (error) {
@@ -2086,11 +2086,9 @@ alert("Failed to update refund information.");
 });
 });
 
-
-
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
-console.log("sipp")
+// console.log("sipp")
 const zipCode = $(this).val();
 if (zipCode.length === 5) {
 if (zipCode) {
@@ -2100,7 +2098,7 @@ const data = response.data;
 const city = data.places[0]['place name'];
 const stateAbbr = data.places[0]['state abbreviation'];
 const country = data['country abbreviation'];
-console.log("country",country);
+// console.log("country",country);
 $("#city").val(city);
 $("#state").val(stateAbbr);
 $("#country").val(country); 
@@ -2145,7 +2143,7 @@ window.location.href = "login_signup.html";
 }
 // when i am trying to do the following: i am getting an error because
 const savedPaymentStatus = localStorage.getItem('paymentStatus');
-console.log("paymentStatus",savedPaymentStatus);
+// console.log("paymentStatus",savedPaymentStatus);
 if (savedPaymentStatus) {
 $('.paymentStatus').val(savedPaymentStatus);
 }
@@ -2164,148 +2162,126 @@ var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
 document.getElementById("yardModalLabel").textContent += orderNo;
 document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
-
-
-console.log("orderNo:", orderNo); 
-console.log("process:", process);
-console.log("newEntry:", newEntry);
-console.log("team", team, token);
-
+// console.log("orderNo:", orderNo); 
+// console.log("process:", process);
+// console.log("newEntry:", newEntry);
+// console.log("team", team, token);
 // part to check the paymentStatus and other things
-var totalSpend = []; // Array to hold the yardSpent values
-var totalSum = 0;    // Variable to hold the cumulative total of yardSpent
+var totalSpend = []; 
+var totalSum = 0;    
 var pStatus;
-// to update the actualGp in the backend
-// async function updateActualGP(orderId, actualGP) {
-// console.log("function to update actualGP", orderId, actualGP);
-// try {
-// const response = await axios.put(`https://www.spotops360.com/orders/${orderId}/updateActualGP`, {
-//   orderNumber: orderId,  
-//   actualGP: actualGP
-// });
-
-// if (response.status === 200) {
-//   console.log("actualGP updated successfully");
-// } else {
-//   console.error("Failed to update actualGP");
-// }
-// } catch (error) {
-// console.error("Error updating actualGP:", error);
-// }
-// }
-// updating gp in the backend till now
 setTimeout(function() {
-  fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log("data in setTimeOut", data);
-      var sp = data.soldP;
-      var tax = data.salestax;
-      var spMinusTax = data.spMinusTax || 0 || sp - tax; // Sale price minus tax
-      var custRefundedAmount = data.custRefundedAmount || 0; // Customer 
-      var currentActualGp = data.actualGP || 0;
-      console.log("actualGP rn",currentActualGp);
-      $("#custRefunds").val(custRefundedAmount.toFixed(2))
-      console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
-      if (!data.additionalInfo || data.additionalInfo.length === 0) {
-        console.log('Yards not presesnt.');
-        if(custRefundedAmount){
-        actualGP = (sp - custRefundedAmount) - tax;
-        console.log("actualGp without yards",actualGP);
-        $("#actualGP").val(actualGP.toFixed(2));
-        
-        if(currentActualGp !== actualGP){
-        axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-  .then(function (response) {
-    console.log("ActualGP information updated successfully:", response);
-  })
-  .catch(function (error) {
-    console.error("Error updating actualGP:", error);
-  });
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then(response => response.json())
+.then(data => {
+// console.log("data in setTimeOut", data);
+var sp = data.soldP;
+var tax = data.salestax;
+var spMinusTax = data.spMinusTax || 0 || sp - tax; 
+var custRefundedAmount = data.custRefundedAmount || 0;  
+var currentActualGp = data.actualGP || 0;
+// console.log("actualGP rn",currentActualGp);
+$("#custRefunds").val(custRefundedAmount.toFixed(2))
+// console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
+if (!data.additionalInfo || data.additionalInfo.length === 0) {
+// console.log('Yards not presesnt.');
+if(custRefundedAmount){
+actualGP = (sp - custRefundedAmount) - tax;
+// console.log("actualGp without yards",actualGP);
+$("#actualGP").val(actualGP.toFixed(2));
+
+if(currentActualGp !== actualGP){
+axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+.then(function (response) {
+// console.log("ActualGP information updated successfully:", response);
+})
+.catch(function (error) {
+console.error("Error updating actualGP:", error);
+});
 }
 else{
-  console.log("same actualGPS")
+console.log("same actualGPS")
 }
-        }
-      }
-      data.additionalInfo.forEach((yard, index) => {
-        const yardIndex = index + 1;
-        console.log("yardIndex", yardIndex, yard);
-        pStatus = yard.paymentStatus;
-        var rStatus = yard.refundStatus;
-        console.log("pStatus", pStatus, rStatus);
-        if (pStatus === "Card charged" && rStatus === "Refund collected") {
-          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025', 'border': 'none'});
-        } else if (pStatus === "Card charged") {
-          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-        }
-        if (yard.escTicked === "Yes") {
-          $("#escTickBox").prop("checked", true);
-        } else {
-          $("#escTickBox").prop("checked", false);
-        }
-        var yardStatus = yard.status;
-        console.log("current yard status", yardStatus);
-        // Update order status based on yard status
-        if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent" || yardStatus === "PO confirmed") {
-          $("#orderStatus").val("Yard Processing");
-        } else if (yardStatus === "Part shipped") {
-          $("#orderStatus").val("In Transit");
-        } else if (yardStatus === "Part delivered") {
-          $("#orderStatus").val("Order Fulfilled");
-        } else if (yardStatus === "Escalation") {
-          $("#orderStatus").val("Escalation");
-        }
+}
+}
+data.additionalInfo.forEach((yard, index) => {
+const yardIndex = index + 1;
+// console.log("yardIndex", yardIndex, yard);
+pStatus = yard.paymentStatus;
+var rStatus = yard.refundStatus;
+// console.log("pStatus", pStatus, rStatus);
+if (pStatus === "Card charged" && rStatus === "Refund collected") {
+$(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025', 'border': 'none'});
+} else if (pStatus === "Card charged") {
+$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
+}
+if (yard.escTicked === "Yes") {
+$("#escTickBox").prop("checked", true);
+} else {
+$("#escTickBox").prop("checked", false);
+}
+var yardStatus = yard.status;
+// console.log("current yard status", yardStatus);
+// Update order status based on yard status
+if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent" || yardStatus === "PO confirmed") {
+$("#orderStatus").val("Yard Processing");
+} else if (yardStatus === "Part shipped") {
+$("#orderStatus").val("In Transit");
+} else if (yardStatus === "Part delivered") {
+$("#orderStatus").val("Order Fulfilled");
+} else if (yardStatus === "Escalation") {
+$("#orderStatus").val("Escalation");
+}
         // For calculating 
-        if(pStatus === "Card charged"){
-        var yardPP = parseFloat(yard.partPrice) || 0;
-        var yardOSorYS = yard.shippingDetails || '';
-        var shippingValueYard = 0;  
-        if (yardOSorYS.includes("Own shipping")) {
-          shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
-          console.log("own ship", shippingValueYard);
-        } else if (yardOSorYS.includes("Yard shipping")) {
-          shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-          console.log("yard ship", shippingValueYard);
-        }
-        var yardOthers = parseFloat(yard.others) || 0;
-        var escOwnShipReturn = parseFloat(yard.custOwnShippingReturn) || 0;
-        var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
-        var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
-        var yardRefundAmount = parseFloat(yard.refundedAmount) || 0;
-        var escReimbursement = parseFloat(yard.reimbursementAmount) || 0;
-        console.log("add",yardPP,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,"yardrefundAmount:",yardRefundAmount);
-        var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement - yardRefundAmount;
-        console.log("yardSpent", yardSpent,"escReimbursement",escReimbursement);
-        totalSpend.push(yardSpent);
-        totalSum += yardSpent;
-        console.log("Current totalSpend array:", totalSpend);
-        console.log("Total sum of all yards:", totalSum);
-        var subtractRefund = spMinusTax - custRefundedAmount;
-        actualGP = subtractRefund - totalSum;
-        console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
-        $("#actualGP").val(actualGP.toFixed(2)); 
-        // updateActualGP(orderNo, actualGP);
-        if(currentActualGp !== actualGP){
-        axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-  .then(function (response) {
-    console.log("ActualGP information updated successfully:", response);
-  })
-  .catch(function (error) {
-    console.error("Error updating actualGP:", error);
-  });
-        }else{
-          console.log("same actyal gp foe card charged")
-        }
-      }
-      // else{
-      //   actualGP = sp - tax - custRefundedAmount;
-      //   console.log("Calculated actualGP for card not charged:", actualGP);
-      //   $("#actualGP").val(actualGP.toFixed(2)); 
-      // }
-      });
-    })
-    .catch(error => console.error("Error fetching yard data:", error));
+if(pStatus === "Card charged"){
+var yardPP = parseFloat(yard.partPrice) || 0;
+var yardOSorYS = yard.shippingDetails || '';
+var shippingValueYard = 0;  
+if (yardOSorYS.includes("Own shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
+// console.log("own ship", shippingValueYard);
+} else if (yardOSorYS.includes("Yard shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+// console.log("yard ship", shippingValueYard);
+}
+var yardOthers = parseFloat(yard.others) || 0;
+var escOwnShipReturn = parseFloat(yard.custOwnShippingReturn) || 0;
+var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
+var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
+var yardRefundAmount = parseFloat(yard.refundedAmount) || 0;
+var escReimbursement = parseFloat(yard.reimbursementAmount) || 0;
+// console.log("add",yardPP,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,"yardrefundAmount:",yardRefundAmount);
+var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement - yardRefundAmount;
+// console.log("yardSpent", yardSpent,"escReimbursement",escReimbursement);
+totalSpend.push(yardSpent);
+totalSum += yardSpent;
+// console.log("Current totalSpend array:", totalSpend);
+// console.log("Total sum of all yards:", totalSum);
+var subtractRefund = spMinusTax - custRefundedAmount;
+actualGP = subtractRefund - totalSum;
+// console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
+$("#actualGP").val(actualGP.toFixed(2)); 
+// updateActualGP(orderNo, actualGP);
+if(currentActualGp !== actualGP){
+axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+.then(function (response) {
+// console.log("ActualGP information updated successfully:", response);
+})
+.catch(function (error) {
+console.error("Error updating actualGP:", error);
+});
+}else{
+console.log("same actyal gp foe card charged")
+}
+}
+// else{
+//   actualGP = sp - tax - custRefundedAmount;
+//   console.log("Calculated actualGP for card not charged:", actualGP);
+//   $("#actualGP").val(actualGP.toFixed(2)); 
+// }
+});
+})
+.catch(error => console.error("Error fetching yard data:", error));
 }, 500);
 // part to check paymentStatus and other things end here
 
@@ -2314,103 +2290,8 @@ if (firstName) {
 $("#user-name").text(firstName);
 $("#salesAgent").val(firstName);
 }
-
-const isCancelledOrder = urlParams.get('cancelled') === 'true';
-const cancelledOrderNo = urlParams.get("orderNo");
-
-if (isCancelledOrder && cancelledOrderNo) {
-console.log("cancelled orders")
-fetch(`https://www.spotops360.com/cancelledOrders/${cancelledOrderNo}`, {
-headers: { Authorization: `Bearer ${token}` }
-})
-.then((response) => response.json())
-.then((data) => {
-console.log("Fetched cancelled order data:", data);
-
-// Populate the form fields with the cancelled order data
-var customerNameE = data.customerName;
-const nameParts = customerNameE.split(" ");
-const firstNameE = nameParts[0];
-const lastNameE = nameParts[1];
-var notes = data.notes;
-var notes1 = notes.toString();
-var resultNotes = notes1.split('</br>')[0];
-var onlyNotes = resultNotes.trim();
-console.log("lastName",lastNameE);
-$("#orderDate").val(data.orderDate);
-$("#salesAgent").val(data.salesAgent);            
-$("#bAddress").val(data.bAddress);
-$("#firstName").val(firstNameE);
-$("#lastname").val(lastNameE);
-$("#sAddress").val(data.sAddress);
-$("#email").val(data.email);
-$("#phone").val(data.phone);
-$("#make").val(data.make);
-$("#model").val(data.model);
-$("#year").val(data.year);
-$("#pReq").val(data.pReq);
-$("#desc").val(data.desc);
-$("#warranty").val(data.warranty);
-$("#soldP").val(data.soldP);
-$("#costP").val(data.costP);
-$("#shippingFee").val(data.shippingFee);
-$("#salestax").val(data.salestax);
-$("#grossProfit").val(data.grossProfit);
-$("#orderStatus").val(data.orderStatus);
-$("#vin").val(data.vin);
-$("#issueOrder").val(data.last4digits);
-$("#notes").val(`${onlyNotes}`);
-
-// Disable all input fields since it's a cancelled order
-// $('input, select, textarea').prop('disabled', true);
-$('#status').text('Order Status: Cancelled');
-
-// Optionally add a "Cancelled" label or status message in the UI
-// $('#cancelledOrderLabel').text(`Order No: ${cancelledOrderNo} is Cancelled`);
-
-// If there are any additional info (e.g., yard details, tracking info)
-data.additionalInfo.forEach((info, index) => {
-addYardButton(index + 1, `Yard ${index + 1}`);
-});
-
-if (data.trackingInfo) {
-$("#trackingInfoContainer").html(data.trackingInfo);
-}
-
-updateOrderHistory(data.orderHistory);
-
-// Prevent any further form submission attempts
-// $("#crmForm").on("submit", function (e) {
-// e.preventDefault();
-// alert('This order is cancelled. You cannot modify it.');
-// });
-})
-.catch((error) => {
-console.error("Error fetching cancelled order data:", error);
-});
-
-// function fetchAndDisplaySaleNotes() {
-// fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
-// .then((response) => response.json())
-// .then((data) => {
-// const notes = data.notes;
-// const saleNoteDiv = $("#saleNote");
-// const noteHtml = `<p>${notes}</p>`;
-// saleNoteDiv.append(noteHtml);
-// })
-// .catch((error) => {
-// console.error("Error fetching sale notes:", error);
-// });
-// }
-
-// fetchAndDisplaySaleNotes(orderNo);
-}
-
-
-
 let userRole = null;
 let userEmail = null;
-
 if (team === "Team Charlie") {
 $("#submenu-reports .nav-link")
 .not(':contains("My Sales Report")')
@@ -2425,7 +2306,6 @@ if (role === "Admin") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-
 if (role === "Admin" && team === "Team Charlie") {
 $(".sidebarOrder").hide();
 $(".add-yard-btn").hide();
@@ -2608,7 +2488,6 @@ console.error("Error fetching order data:", error);
 }
 }
 
-
 function formatYardData(yardData) {
 let dateTimeStr = yardData.escalationDate;
 let datePart = "";
@@ -2650,7 +2529,6 @@ ${yardData.refundedAmount ? `Refunded Amount: $${yardData.refundedAmount}<br>` :
 
 return yardInfo;
 }
-// 
 
 function updateOrderHistory(orderHistory) {
 const orderHistoryList = $("#orderHistoryList");
@@ -2677,11 +2555,10 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
 document.getElementById("estPP").textContent += data.costP;
-console.log("Fetched order data:", data);
+// console.log("Fetched order data:", data);
 var customerNameE = data.customerName;
-console.log("cusName", customerNameE);
+// console.log("cusName", customerNameE);
 // updateOrderNotes(data);
-
 const nameParts = customerNameE.split(" ");
 const firstNameE = nameParts[0];
 const lastNameE = nameParts[1];
@@ -2719,11 +2596,9 @@ $("#notes").val(`${onlyNotes}`);
 data.additionalInfo.forEach((info, index) => {
 addYardButton(index + 1, `Yard ${index + 1}`);
 });
-
 if (data.trackingInfo) {
 $("#trackingInfoContainer").html(data.trackingInfo);
 }
-
 updateOrderHistory(data.orderHistory);
 
 if (process) {
@@ -2741,16 +2616,14 @@ showModal("#trackingModal");
 }
 });
 }
-
 // Listen for form submission
 $("#crmForm").on("submit", function (e) {
 e.preventDefault(); // Prevent the form from submitting normally
-console.log("submitting a form");
+// console.log("submitting a form");
 const firstName = localStorage.getItem("firstName");
 var cusFName = document.getElementById("firstName").value;
 var cuLName = document.getElementById("lastname").value;
 var customerName = cusFName + " " + cuLName;
-
 // Function to update the order
 const updateOrder = (url, existingOrderData) => {
 // Create the updatedData object, using the existing orderDate if the input is empty
@@ -2780,7 +2653,6 @@ last4digits: $("#issueOrder").val(),
 notes: $("#notes").val(),
 firstName: firstName,
 };
-
 // Send the updated data to the API using the PUT method
 return fetch(`${url}?firstName=${firstName}`, {
 method: "PUT",
@@ -2790,44 +2662,39 @@ headers: {
 body: JSON.stringify(updatedData), 
 });
 };
-
 // First, try to fetch the existing order from the `orders` collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => {
 if (!response.ok) {
 if (response.status === 404) {
-// If the order is not found in `orders`, try fetching from `cancelledOrders`
-console.log('Order not found in orders, checking in cancelledOrders...');
+
+// console.log('Order not found in orders, checking in cancelledOrders...');
 return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
 .then((response) => {
 if (!response.ok) {
 throw new Error("Order not found in both orders and cancelledOrders.");
 }
-return response.json();  // Parse the cancelledOrders data
+return response.json();  
 });
 }
 throw new Error("Network response was not ok");
 }
-return response.json();  // Parse the orders data
+return response.json();
 })
 .then((existingOrderData) => {
-// Update the order in either `orders` or `cancelledOrders` depending on which was fetched
 const isCancelledOrder = existingOrderData.isCancelled || false;
 const updateUrl = isCancelledOrder 
 ? `https://www.spotops360.com/cancelledOrders/${orderNo}` 
 : `https://www.spotops360.com/orders/${orderNo}`;
-
-// Call the function to update the order
 return updateOrder(updateUrl, existingOrderData);
 })
 .then((response) => {
 if (!response.ok) {
 throw new Error("Network response was not ok");
 }
-return response.json();  // Parse the response after updating
+return response.json(); 
 })
 .then((data) => {
-// If the update was successful, update the order history and redirect the user
 updateOrderHistory(data.orderHistory);
 const team = localStorage.getItem("team");
 if (team === "Team Charlie") {
@@ -3079,8 +2946,7 @@ $("#orderStatus").on("change", function () {
 console.log("orderStatus",$(this).val());
 if ($(this).val() === "Order Cancelled") {
 const id = $(this).data("id");
-
-console.log(`Cancel for order ID: ${orderNo}`,id); 
+// console.log(`Cancel for order ID: ${orderNo}`,id); 
 fetch(`https://www.spotops360.com/orders/${orderNo}`, {
 method: "DELETE",
 headers: {
@@ -3089,13 +2955,13 @@ Authorization: `Bearer ${token}`
 })
 .then((response) => {
 if (!response.ok) {
-console.error("Failed to delete order", response);
+// console.error("Failed to delete order", response);
 throw new Error("Failed to delete order");
 }
 return response.json();
 })
 .then((data) => {
-console.log("Order cancelled successfully", data); // Added log
+console.log("Order cancelled successfully", data);
 window.location.reload();
 })
 .catch((error) => {
@@ -3116,43 +2982,34 @@ showYardDetails(yardIndex);
 
 
 $(".add-yard-btn").on("click", function () {
-console.log("add new yard")
+// console.log("add new yard")
 // Fetch the order data first to get the order status and additionalInfo
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
 const orderStatus = data.orderStatus;
-console.log("orderStatus",orderStatus);
+// console.log("orderStatus",orderStatus);
 const lastYardBtn = $("#yardInfoContainer .yard-btn").last();
-
 if (orderStatus === "Placed") {
 $('#yardModal').modal('hide'); // Hide modal
 alert("You cannot add a new yard until the customer approves the order.");
 } else if (lastYardBtn.length > 0) {
 let yardIndex = lastYardBtn.data("yard-index");
 const yardData = data.additionalInfo[yardIndex - 1];
-console.log("yardData suggestions", yardData, orderStatus);
+// console.log("yardData suggestions", yardData, orderStatus);
 
 if (yardData.status === "PO cancelled" || yardData.status === "Escalation") {
-showModal("#yardModal"); // Show modal if status is PO cancelled or Escalation
+showModal("#yardModal"); 
 } else {
-$('#yardModal').modal('hide'); // Hide modal
+$('#yardModal').modal('hide'); 
 alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
 }
 } else {
-// If there are no yards, allow adding the first yard
-showModal("#yardModal"); // Show modal to add the first yard
+showModal("#yardModal");
 }
 })
 .catch(error => console.error("Error fetching yard data:", error));
 });
-
-
-
-
-
-
-
 // card charged part starts here
 let selectedYardIndex;
 // On clicking the "Card Charged" button
@@ -3186,7 +3043,7 @@ $(".mainDiv").addClass("blur");
 $('#yardInfoContainer').on('click', '.escalation', async function () {
 const selectedYardIndex = $(this).data('yard-index');
 const orderNo = urlParams.get("orderNo");  
-console.log("escalationPart", selectedYardIndex);
+// console.log("escalationPart", selectedYardIndex);
 $("#escRMA").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
@@ -3200,7 +3057,7 @@ throw new Error("Failed to fetch order data");
 }
 var actualyIndex = selectedYardIndex - 1;
 const additionalInfo = response.data.additionalInfo[actualyIndex];
-console.log("Fetched additionalInfo", additionalInfo);
+// console.log("Fetched additionalInfo", additionalInfo);
 // Populate form fields if data is present
 if (additionalInfo.escalationProcess) {
 $("#escProcess").val(additionalInfo.escalationProcess);
@@ -3295,8 +3152,6 @@ alert("Error fetching yard information");
 }
 });
 
-
-
 $("#closeCardCharged").on("click", function () {
 $("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
 $(".mainDiv").removeClass("blur");
@@ -3315,7 +3170,7 @@ $(".mainDiv").removeClass("blur");
 
 const paymentStatus = $(".paymentStatus").val();
 localStorage.setItem('paymentStatus', paymentStatus);
-console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
+// console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
 
 if (paymentStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
@@ -3355,7 +3210,6 @@ alert("Yard details have been updated");
 updateOrderHistory(data.orderHistory);
 showYardDetails(selectedYardIndex);
 fetchAndUpdateYardInfo();
-
 }
 })
 .catch((error) => {
@@ -3364,15 +3218,12 @@ console.error("Error:", error);
 });
 window.location.reload();
 });
-
-
 //  card charged part till here
 // refundCollect part 
 $('#refundSubmit').on('click', function() {
 $('#refundCollect').hide();
 $(".mainDiv").removeClass("blur");
-console.log("refund collect status", selectedYardIndex, "oNo", orderNo);
-
+// console.log("refund collect status", selectedYardIndex, "oNo", orderNo);
 const refundStatus = $(".paymentStatusRefund")
 .map(function () {
 return $(this).val();
@@ -3382,9 +3233,8 @@ return $(this).val();
 return value !== "";
 })
 .join();
-
 const refundedAmount = $("#refundedAmount").val();
-console.log("collect", refundStatus, refundedAmount);
+// console.log("collect", refundStatus, refundedAmount);
 if (refundStatus === "Refund collected") {
 $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
 }
@@ -3410,7 +3260,7 @@ updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selec
 if (!response.ok) {
 if (response.status === 404) {
 // If order not found in orders, try cancelledOrders
-console.log('Order not found in orders, checking in cancelledOrders...');
+// console.log('Order not found in orders, checking in cancelledOrders...');
 return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`);
 } else {
 throw new Error("Network response was not ok");
@@ -3420,7 +3270,7 @@ return response.json();  // Successful update in orders
 })
 .then((data) => {
 if (data) {
-console.log("refund data",data);
+// console.log("refund data",data);
 updateOrderHistory(data.orderHistory);
 showYardDetails(selectedYardIndex);
 fetchAndUpdateYardInfo();
@@ -3428,11 +3278,9 @@ fetchAndUpdateYardInfo();
 })
 .catch((error) => {
 console.error("Error:", error);
-// alert("Error updating refund details. Please try again.");
 });
 window.location.reload();
 });
-
 // refundCollect part ends here
 
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
@@ -3443,14 +3291,11 @@ yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
 $("#yardIndexEdit").val(yardIndex);
 $("#submit").data("yard-index", yardIndex);
-
-// Fetch order data from API
 // Fetch from the orders collection first
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => {
-// If order not found, check in cancelledOrders collection
 if (response.status === 404) {
-console.log('Order not found in orders, checking in cancelledOrders...');
+// console.log('Order not found in orders, checking in cancelledOrders...');
 return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
 }
 return response;
@@ -3458,8 +3303,7 @@ return response;
 .then((response) => response.json())
 .then((data) => {
 if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-
-console.log("Order data or additionalInfo not found.");
+// console.log("Order data or additionalInfo not found.");
 return;
 }
 
@@ -3527,8 +3371,6 @@ $("#otherShipperInput").hide();
 }
 });
 
-
-
 $("#editYardInfo").on("click", async function () {
 console.log("clicking on save");
 $(".mainDiv").removeClass("blur");
@@ -3556,7 +3398,7 @@ const trackingLink = $("#linkInput").val();
 const paymentStatus = $('.paymentStatus').val();
 const refundedAmount = $("#refundedAmount").val();
 let newOrderStatus = $("#orderStatus").val();
-console.log("yardStatus",status);
+// console.log("yardStatus",status);
 // Updating the order status with shipping and refund information
 if (status === "Part shipped") {
 newOrderStatus = "In Transit";
@@ -3576,7 +3418,7 @@ newOrderStatus = "Order Fulfilled";
 } else if (status === "Yard PO Sent") {
 newOrderStatus = "Yard Processing";
 }
-console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
+// console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
 const updatedData = {
 ...currentYardData,
 status: status,
@@ -3637,7 +3479,7 @@ $("#orderStatus").val("Escalation");
 const yardIndex = $(this).data("yard-index");
 const orderNo = urlParams.get("orderNo");  
 const firstName = localStorage.getItem('firstName'); 
-console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
+// console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
 // repplacementPart
 const escalationProcess = $("#escProcess").val();
 const custReason = $("#custReason").val();
@@ -3658,14 +3500,14 @@ const customerShipperReturn = $("#customerShipperReturn").val();
 const returnTrackingCust = $("#returnTrackingCust").val();
 const custOwnShippingReturn = $("#custOwnShippingReturn").val();
 const custReturnDelivery = $("#custReturnDelivery").val();
-console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
+// console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
+// console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
 const token = localStorage.getItem('token');
 // reimbursement parts
 const reimbursementAmount = $("#reimAmount").val();
 const isReimbursedChecked = $('#reimbursed').prop('checked');
 if (reimbursementAmount) {
-          console.log("reimbursedAmount",reimbursementAmount);
+          // console.log("reimbursedAmount",reimbursementAmount);
 const yardStatus = "Part delivered";  
 const newOrderStatus = "Order Fulfilled";
 const yardIndex = 0;  // Example index
