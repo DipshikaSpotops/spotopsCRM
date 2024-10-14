@@ -767,12 +767,11 @@ let yardColumns = "";
 if (item.additionalInfo && item.additionalInfo.length > 0) {
 item.additionalInfo.forEach((info, index) => {
 yardColumns += `
-<td> ${info.yardName || ""} | ${info.address || ""} | ${
-info.yardRating || ""
-}<br>
-${info.email || ""} | ${info.phone || ""}  | ${
-info.stockNo || ""
-}  | Warranty: ${info.warranty || ""}<br>
+<td> ${info.yardName || ""} <br>
+${info.address || ""} <br>
+${info.yardRating ||}<br>
+${info.email || ""} | ${info.phone || ""}<br>
+${info.stockNo || ""}  | Warranty: ${info.warranty || ""}<br>
 </td>
 <td>  Part price:  ${info.partPrice || ""} <br>
 ${info.shippingDetails || ""} <br>
