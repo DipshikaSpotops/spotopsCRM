@@ -397,6 +397,7 @@ placeholder="Search..."
 <th style="cursor: pointer" scope="col">Part Info <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Sale Price <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Est. GP <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Actual GP <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
 </tr>
 </thead>
@@ -420,8 +421,6 @@ placeholder="Search..."
 </div>
 </div>
 </div>
-
-
 <!-- Approve Modal popup -->
 <div
 class="modal fade modalPopup"
@@ -692,13 +691,10 @@ const response = await axios.get(
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 }
 );
-
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
-
 var data = response.data;
-
 // Determine the maximum number of additionalInfo items to create headers dynamically
 let maxAdditionalInfoLength = 0;
 data = sortOrdersByOrderNoDesc(data);
@@ -710,7 +706,6 @@ item.additionalInfo.length > maxAdditionalInfoLength
 maxAdditionalInfoLength = item.additionalInfo.length;
 }
 });
-
 // Create additional headers for each additionalInfo item
 let additionalHeaders = "";
 for (let i = 0; i < maxAdditionalInfoLength; i++) {
@@ -822,6 +817,7 @@ item.vin
 }<br>Warranty: ${item.warranty} days</td>
 <td>${item.soldP}</td>
 <td>${item.grossProfit}</td>
+<td>${item.actualGP}</td>
 <td>${item.orderStatus}</td>
 ${yardColumns}
 </tr>`
@@ -883,7 +879,6 @@ throw new Error("Network response was not ok");
 const data = await response.json();
 $(this).closest("tr").find("td:eq(5)").text("Customer approved");
 $(this).remove();
-
 console.log("Order status updated successfully:", data);
 } catch (error) {
 console.error("Error updating order status:", error);

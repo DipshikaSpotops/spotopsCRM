@@ -215,6 +215,10 @@ cursor: pointer;
 .green-background {
 background-color: green;
 }
+.active-page {
+background-color: grey;
+color: white;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -572,40 +576,36 @@ function renderTableRows(page, orders = allOrders) {
 
 // Function to create pagination controls based on filtered data
 function createPaginationControls(totalPages, filteredOrders = allOrders) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); // Clear pagination controls
-
-    if (totalPages > 1) {
-        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
-        }
-
-        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-    }
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); 
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);        }
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
 }
 
 // Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-    const page = $(this).data('page');
-    currentPage = page;
-    renderTableRows(currentPage); // Use the filtered orders
+const page = $(this).data('page');
+currentPage = page;
+renderTableRows(currentPage); // Use the filtered orders
 });
 
 $('#pagination-controls').on('click', '#prevPage', function () {
-    if (currentPage > 1) {
-        currentPage--;
-        renderTableRows(currentPage); // Use the filtered orders
-    }
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage); // Use the filtered orders
+}
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-    if (currentPage < totalPages) {
-        currentPage++;
-        renderTableRows(currentPage); // Use the filtered orders
-    }
+const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage); // Use the filtered orders
+}
 });
 
 
