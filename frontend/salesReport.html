@@ -348,11 +348,11 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 if (firstName === "John") {
-  console.log("first",firstName);
-          $("#submenu-dashboards .view-all-orders-link").show();
-        } else{
-          $("#submenu-dashboards .view-all-orders-link").hide();
-        }
+console.log("first",firstName);
+$("#submenu-dashboards .view-all-orders-link").show();
+} else{
+$("#submenu-dashboards .view-all-orders-link").hide();
+}
 
 $("#profileLink").click(function () {
 $("#profileFirstName").val(firstName);
@@ -407,8 +407,8 @@ let estimatedGP = 0;
 let highestGP = 0;
 let actualAGPArr = [];
 let totalAgp = 0;
-var actualGPForOrder
 let validOrdersCount = 0;
+let actualGP = 0;
 
 data.forEach((order) => {
 totalOrders += 1;
@@ -432,31 +432,33 @@ order.additionalInfo.forEach((info) => {
 // const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
 // totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
-actualGPForOrder = info.actualGP || 0;
+actualGP = info.actualGP;
 if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
-    validOrder = true;
+validOrder = true;
 }
 });
 
 if (validOrder) {
-
-console.log("ActualGp",actualGPForOrder);
-// actualAGPArr.push(actualGPForOrder);
-highestGP = Math.max(highestGP, actualGPForOrder);
+// const actualGPForOrder = salePrice - salestax - totalSpending;
+console.log("valid",validOrder,actualGP)
+actualAGPArr.push(actualGP);
+highestGP = Math.max(highestGP, actualGP);
 }
 }
 });
 
-// totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
-const averageGP = validOrdersCount > 0 ? actualGPForOrder / validOrdersCount : 0;
+totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
+const averageGP = validOrdersCount > 0 ? totalAgp / validOrdersCount : 0;
 
 currentMonthStats = {
 totalOrders,
 estimatedGP,
 highestGP,
 estimatedAverageGP: averageGP,
-actualGPForOrder,
+totalAgp,
 };
+
+// Update the stats-container with the current month's stats
 updateStats(currentMonthStats);
 updateRecentOrders(data);
 updateBrandSummary(data);
@@ -472,32 +474,28 @@ date.setDate(date.getDate() + 1);
 return days;
 }
 
-// Update the stats-container with the provided stats
+// Updating the stats-container with the provided stats
 function updateStats(stats) {
 $("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
 $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
 $("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
 $("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
-$("#AverageGP").text(`Actual GP: $${stats.actualGPForOrder.toFixed(2)}`);
+$("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
 }
 
 // Fetch data based on the selected filter (daily or monthly) for the chart
 async function fetchSalesData(filter) {
 const currentDate = new Date();
-const currentMonth = currentDate.getMonth(); // Get the current month
+const currentMonth = currentDate.getMonth(); 
 const currentYear = currentDate.getFullYear();
-
 try {
 const response = await axios.get(`https://www.spotops360.com/orders`, {
 headers: { Authorization: `Bearer ${token}` },
 });
-
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
-
 const data = response.data.filter((order) => order.salesAgent === firstName);
-
 const salesData = [];
 const labels = filter === "daily" 
 ? getDaysInMonth(currentMonth, currentYear) 
@@ -506,22 +504,18 @@ const labels = filter === "daily"
 labels.forEach((label) => {
 salesData.push(0);
 });
-
 data.forEach((order) => {
 const parsedOrderDate = parseOrderDate(order.orderDate);
 if (!parsedOrderDate) return;
-
 // For daily, only include orders from the current month
 if (filter === "daily") {
 const orderMonth = parsedOrderDate.getMonth();
 const orderYear = parsedOrderDate.getFullYear();
 if (orderMonth !== currentMonth || orderYear !== currentYear) return;
 }
-
 const label = filter === "daily" 
 ? parsedOrderDate.getDate().toString() 
 : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
-
 const labelIndex = labels.indexOf(label);
 if (labelIndex !== -1) {
 salesData[labelIndex] += 1;
@@ -533,7 +527,7 @@ updateSalesChart(salesData, labels, filter); // Update chart based on the select
 console.error("Error fetching sales data:", error);
 }
 }
-// Chart update function
+
 function updateSalesChart(salesData, labels, filter) {
 const ctx = document.getElementById("salesChart").getContext("2d");
 if (window.salesChart instanceof Chart) {
@@ -578,18 +572,19 @@ beginAtZero: true,
 },
 });
 }
+
 // Initial fetch for daily data (for the stats)
 await fetchSalesDataForCurrentMonth();
 
 function updateRecentOrders(orders) {
 const recentOrdersTable = $("#recentOrdersTable");
 recentOrdersTable.empty();  // Clear previous entries
-// Sort orders by date in ascending order (oldest to newest)
+// Sorting orders by date in ascending order (oldest to newest)
 orders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate));
-// Get the last 10 orders after sorting
+//Get the last 10 orders after sorting
 var latestOrders = orders.slice(-10); // Get the last 10 orders
 latestOrders = sortOrdersByOrderNoDesc(latestOrders);
-// Populate the table with the latest 10 orders
+// Populating the table with the latest 10 orders
 latestOrders.forEach((order) => {
 recentOrdersTable.append(`
 <tr>
@@ -601,6 +596,7 @@ recentOrdersTable.append(`
 `);
 });
 }
+
 function updateBrandSummary(data) {
 const brandSummary = data.reduce((acc, order) => {
 if (!acc[order.make]) {
@@ -611,7 +607,7 @@ acc[order.make].grossProfit += order.grossProfit;
 return acc;
 }, {});
 const brandSummaryTable = $("#brandSummaryTable");
-brandSummaryTable.empty(); 
+brandSummaryTable.empty();  
 for (const brand in brandSummary) {
 brandSummaryTable.append(`
 <tr>
@@ -623,13 +619,13 @@ brandSummaryTable.append(`
 }
 }
 
-
 $("#salesFilter").on("change", function () {
 const filter = $(this).val();
 fetchSalesData(filter);
 });
 // Initial fetch for the chart (daily view)
 fetchSalesData("daily");
+
 $(".toggle-btn").on("click", function () {
 $("#offcanvasSidebar").removeClass("hide");
 });
