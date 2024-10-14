@@ -423,14 +423,14 @@ let validOrder = false;
 if (order.additionalInfo && order.additionalInfo.length > 0) {
 validOrdersCount++;
 order.additionalInfo.forEach((info) => {
-const shippingDetails = info.shippingDetails ? info.shippingDetails.split(":")[1].trim() : "0";
-const shippingCharge = parseFloat(shippingDetails) || 0;
-const partPrice = parseFloat(info.partPrice) || 0;
-const otherCost = parseFloat(info.others) || 0;
-const returnShippingCharge = parseFloat(info.returnShippingCharge) || 0;
-const refundedAmount = parseFloat(info.refundedAmount) || 0;
+// const shippingDetails = info.shippingDetails ? info.shippingDetails.split(":")[1].trim() : "0";
+// const shippingCharge = parseFloat(shippingDetails) || 0;
+// const partPrice = parseFloat(info.partPrice) || 0;
+// const otherCost = parseFloat(info.others) || 0;
+// const returnShippingCharge = parseFloat(info.returnShippingCharge) || 0;
+// const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
-totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
+// totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
 
 if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
     validOrder = true;
@@ -438,34 +438,28 @@ if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund coll
 });
 
 if (validOrder) {
-const actualGPForOrder = salePrice - salestax - totalSpending;
-actualAGPArr.push(actualGPForOrder);
+const actualGPForOrder = info.actualGP;
+console.log("ActualGp",actualGPForOrder);
+// actualAGPArr.push(actualGPForOrder);
 highestGP = Math.max(highestGP, actualGPForOrder);
 }
 }
 });
 
-totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
-const averageGP = validOrdersCount > 0 ? totalAgp / validOrdersCount : 0;
+// totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
+const averageGP = validOrdersCount > 0 ? actualGPForOrder / validOrdersCount : 0;
 
 currentMonthStats = {
 totalOrders,
 estimatedGP,
 highestGP,
 estimatedAverageGP: averageGP,
-totalAgp,
+actualGPForOrder,
 };
-
-// Update the stats-container with the current month's stats
 updateStats(currentMonthStats);
 updateRecentOrders(data);
 updateBrandSummary(data);
 }
-
-
-
-
-
 
 function getDaysInMonth(month, year) {
 const date = new Date(year, month, 1);
@@ -476,7 +470,6 @@ date.setDate(date.getDate() + 1);
 }
 return days;
 }
-
 
 // Update the stats-container with the provided stats
 function updateStats(stats) {
