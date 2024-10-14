@@ -1714,6 +1714,7 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 app.get('/orders/daily', async (req, res) => {
+  console.log("daily orders");
   try {
     const currentMonth = new Date().getMonth(); // Get current month (0-11)
 
@@ -1772,6 +1773,7 @@ app.get('/orders/daily', async (req, res) => {
   }
 });
 app.get('/orders/monthly', async (req, res) => {
+  console.log("monthly orders");
   try {
     const orders = await Order.aggregate([
       {
@@ -1876,10 +1878,10 @@ app.get('/orders/salesperson/:salesperson', async (req, res) => {
   }
 });
 app.get('/orders/yearly', async (req, res) => {
+  console.log("yearly orders");
   try {
     const orders = await Order.aggregate([
       {
-        // Parse orderDate from string to Date object
         $addFields: {
           orderDateParsed: {
             $dateFromString: {
