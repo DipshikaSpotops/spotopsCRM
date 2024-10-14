@@ -2611,8 +2611,9 @@ console.error("Error fetching order data:", error);
 
 function formatYardData(yardData) {
 let dateTimeStr = yardData.escalationDate;
+let datePart = "";
 if(dateTimeStr){
-let datePart = dateTimeStr.split(' ')[0] + ' ' + dateTimeStr.split(' ')[1] + ' ' + dateTimeStr.split(' ')[2];
+datePart = dateTimeStr.split(' ')[0] + ' ' + dateTimeStr.split(' ')[1] + ' ' + dateTimeStr.split(' ')[2];
 console.log(datePart);
 }else{
   console.log("come out");
