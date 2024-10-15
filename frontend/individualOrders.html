@@ -606,7 +606,10 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
-
+$('#logoutLink').on('click', function() {
+window.localStorage.clear();
+window.location.href = 'login_signup.html';
+});
 
 });
 </script>
