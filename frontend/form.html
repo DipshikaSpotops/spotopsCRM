@@ -1997,7 +1997,6 @@ var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
-// console.log("common fetch", data);
 orderPlacedDate = data.orderDate;
 // console.log("orderDate",orderPlacedDate)
 })
@@ -2006,7 +2005,6 @@ orderPlacedDate = data.orderDate;
 $("#orderStatus").on("change", function () {
 const newOrderStatus = $(this).val();
 console.log("Order Status changed to:", newOrderStatus);
-
 if (newOrderStatus == "Dispute") {
 // console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
 $("#disputedDate").val(currentDateTime);
@@ -2114,7 +2112,6 @@ $('.state-select').select2({
 placeholder: "Select State",
 allowClear: true
 });
-
 const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
 updateAddYardButton();
 if (orderDetails) {
@@ -2122,10 +2119,9 @@ $("#orderNo").val(orderDetails.orderNo);
 $("#customerName").val(orderDetails.customerName);
 $("#email").val(orderDetails.email);
 }
-
 // Clear order details from localStorage after loading
 localStorage.removeItem('orderDetails');
-// Get the current time and the login timestamp
+// Get the current time and the login timestamp so that the user gets automatically logged out after 12 hours
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
 if (loginTimestamp) {
@@ -2141,7 +2137,6 @@ window.location.href = "login_signup.html";
 } else {
 window.location.href = "login_signup.html";
 }
-// when i am trying to do the following: i am getting an error because
 const savedPaymentStatus = localStorage.getItem('paymentStatus');
 // console.log("paymentStatus",savedPaymentStatus);
 if (savedPaymentStatus) {
@@ -2157,7 +2152,7 @@ const team = localStorage.getItem("team");
 const isCancelled = urlParams.get('cancelled') === 'true';
 // const orderNo = urlParams.get("orderNo");
 const process = urlParams.get("process");
-const newEntry = urlParams.get("newEntry");
+// const newEntry = urlParams.get("newEntry");
 var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
 document.getElementById("yardModalLabel").textContent += orderNo;
@@ -2232,7 +2227,6 @@ $("#orderStatus").val("Order Fulfilled");
 } else if (yardStatus === "Escalation") {
 $("#orderStatus").val("Escalation");
 }
-        // For calculating 
 if(pStatus === "Card charged"){
 var yardPP = parseFloat(yard.partPrice) || 0;
 var yardOSorYS = yard.shippingDetails || '';
@@ -2283,7 +2277,7 @@ console.log("same actyal gp foe card charged")
 })
 .catch(error => console.error("Error fetching yard data:", error));
 }, 500);
-// part to check paymentStatus and other things end here
+// part to check paymentStatus and other things like updated actualGP end here
 
 
 if (firstName) {
@@ -2377,7 +2371,6 @@ success: function (teams) {
 const teamCharlie = $("#team-charlie");
 const teamMark = $("#team-mark");
 const teamSussane = $("#team-sussane");
-
 teams.forEach((team) => {
 const teamHtml = `
 ${team.name}<br>
@@ -2398,28 +2391,10 @@ alert("Error fetching teams: " + error.responseJSON.message);
 },
 });
 
-function calculateProfit() {
-const quotedPrice = parseFloat($("#soldP").val()) || 0;
-const yardPrice = parseFloat($("#costP").val()) || 0;
-const shipping = parseFloat($("#shippingFee").val()) || 0;
-
-const salesTax = 0.05 * quotedPrice;
-const grossProfit = quotedPrice - yardPrice;
-const netProfit = grossProfit - shipping - salesTax;
-
-$("#salestax").val(salesTax.toFixed(2));
-$("#grossProfit").val(netProfit.toFixed(2));
-}
-
-const today = new Date().toISOString().split("T")[0];
-$("#orderDate").val(today);
-
-$("#soldP, #costP, #shippingFee").on("input", calculateProfit);
-
 function showModal(modalId) {
 $(modalId).modal("show");
 }
-
+// to add yard  buttons which increments as the yards are added
 function addYardButton(yardIndex, buttonText) {
 const buttonHtml = `
 <button type="button" class="btn btn-info yard-btn" data-yard-index="${yardIndex}">${buttonText}</button>
@@ -2457,7 +2432,6 @@ if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
 return;
 }
 const yardData = data.additionalInfo[yardIndex - 1];
-
 // Check payment status and apply color
 if (yardData.paymentStatus === "Card charged" && yardData.refundStatus === "Refund collected") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025','border': 'none'});
@@ -2465,7 +2439,6 @@ $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025
 else if (yardData.paymentStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
 }
-
 let yardDetailsHtml = `
 <table class="table table-bordered">
 <tr><td colspan="2">${formatYardData(yardData)}</td></tr>
@@ -2495,7 +2468,7 @@ if(dateTimeStr){
 datePart = dateTimeStr.split(' ')[0] + ' ' + dateTimeStr.split(' ')[1] + ' ' + dateTimeStr.split(' ')[2];
 console.log(datePart);
 }else{
-  console.log("come out");
+console.log("come out");
 }
 let yardInfo = `
 <table style="width: 100%;">
@@ -2529,7 +2502,7 @@ ${yardData.refundedAmount ? `Refunded Amount: $${yardData.refundedAmount}<br>` :
 
 return yardInfo;
 }
-
+// to update the orderHistory for multiple scenarios
 function updateOrderHistory(orderHistory) {
 const orderHistoryList = $("#orderHistoryList");
 orderHistoryList.empty();
@@ -2550,7 +2523,6 @@ orderHistoryList.append(listItem);
 var vinNo = document.getElementById("vin").value;
 console.log("vin");
 if (orderNo) {
-
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
@@ -2718,173 +2690,7 @@ Desc: ${data.desc}
 VIN: ${data.vin}
 Warranty: ${data.warranty}`;
 });
-}
 
-
-else var newOrderNo;
-if (newEntry) {
-$('.navbar-nav').hide();
-$('#offcanvasSidebar').show();
-$(".sidebarOrder").hide();
-$(".add-yard-btn").hide();
-$(".new-div").hide();
-
-$("#orderStatus").val("Placed");
-$("#orderStatus").prop("disabled", true);
-$("#mainContent").addClass("centered-form");
-
-// Function to extract the highest order number from a collection
-function getHighestOrderNo(orderArr, existingOrderNo) {
-if (orderArr.length === 0) return existingOrderNo;
-
-const lastElement = orderArr[orderArr.length - 1];
-const lastOrderNo = lastElement.orderNo;
-
-const numberPart = parseInt(lastOrderNo.slice(7), 10);
-return numberPart;
-}
-
-axios
-.all([
-axios.get(`https://www.spotops360.com/orders`),
-axios.get(`https://www.spotops360.com/cancelledOrders`),
-])
-.then(
-axios.spread((orders, cancelledOrders) => {
-// Get the highest existing order number from all collections
-let existingOrderNo = "50STARS0000"; // Default if no orders exist
-let orderNoArr = [];
-
-orderNoArr.push(getHighestOrderNo(orders.data, existingOrderNo));
-orderNoArr.push(getHighestOrderNo(cancelledOrders.data, existingOrderNo));
-
-// Find the maximum order number
-const highestOrderNo = Math.max(...orderNoArr);
-
-// Increment to get the new order number
-const incrementedNumber = highestOrderNo + 1;
-const incrementedNumberStr = incrementedNumber.toString().padStart(4, "0");
-
-newOrderNo = `50STARS${incrementedNumberStr}`;
-console.log("newOrderNo", newOrderNo);
-})
-)
-.catch((error) => {
-console.error("Error fetching latest order:", error);
-});
-$("#crmForm").on("submit", function (e) {
-console.log("submmmmiting s form");
-e.preventDefault();
-const firstName = localStorage.getItem("firstName");
-var cusFName = document.getElementById("firstName").value;
-var cusLName = document.getElementById("lastname").value;
-console.log("name", cusFName, cusLName);
-var customerName = cusFName + " " + cusLName;
-var note = $("#notes").val()
-var salesAgent = $("#salesAgent").val();
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-console.log('US Central Time:,mnbjklkjhbv', formattedDate);
-var orderNote = ` ${note}</br>
-${salesAgent},${formattedDate} :`
-const newOrder = {
-orderNo: newOrderNo,
-orderDate: $("#orderDate").val(),
-salesAgent: $("#salesAgent").val(),
-customerName: customerName,
-bAddress: $("#bAddress").val(),
-sAddress: $("#sAddress").val(),
-email: $("#email").val(),
-phone: $("#phone").val(),
-make: $("#make").val(),
-model: $("#model").val(),
-year: $("#year").val(),
-pReq: $("#pReq").val(),
-desc: $("#desc").val(),
-warranty: $("#warranty").val(),
-soldP: $("#soldP").val(),
-costP: $("#costP").val(),
-shippingFee: $("#shippingFee").val(),
-salestax: $("#salestax").val(),
-grossProfit: $("#grossProfit").val(),
-orderStatus: $("#orderStatus").val(),
-vin: $("#vin").val(),
-last4digits: $("#issueOrder").val(),
-notes: orderNote,
-orderHistory: [
-`Order placed by ${firstName} on ${formattedDate}`,
-],
-};
-
-fetch("https://www.spotops360.com/orders", {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(newOrder),
-})
-.then((response) => response.json())
-.then((data) => {
-const team = localStorage.getItem("team");
-console.log("Team assigned:", team);
-console.log("teamU", team);
-alert(`Order No ${newOrderNo} has been placed.`);
-
-if (team === "Team Charlie") {
-window.location.href = "individualOrders.html";
-} else {
-window.location.href = "orders.html";
-}
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-});
-}
-else {
-$("#offcanvasSidebar").hide();
-$("#navbar-nav").show();
-$(".navbar-nav").css({
-"flex-direction": "row",
-"justify-content": "center",
-"align-items": "center",
-"margin-left": "62%",
-});
-$(".nav-item").addClass("mx-2");
-$(".sidebar").hide();
-$(".main-content").css("width", "70%");
-$("#mainContent").removeClass("centered-form");
-
-$(".navbar").css({
-"background-color": "black",
-color: "white",
-});
-$(".navbar .nav-link").css({
-color: "white",
-cursor: "pointer",
-});
-
-$(".navbar .user-info span").css({
-color: "white",
-});
-$(".navbar .user-icon").css({
-color: "white",
-});
-
-const sidebarLinks = $(".sidebar .nav-link").clone();
-$(".navbar").append(sidebarLinks);
 
 $(".nav-link").on("click", function () {
 const submenu = $(this).next(".submenu");
@@ -2937,6 +2743,12 @@ console.error("Error fetching sale notes:", error);
 
 fetchAndDisplaySaleNotes(orderNo);
 }
+
+else {
+console.log("Order not found");
+}
+
+
 
 $("#orderStatus").on("change", function () {
 // if ($(this).val() === "Yard PO sent") {
