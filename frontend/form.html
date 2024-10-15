@@ -2277,6 +2277,17 @@ error: function (error) {
 alert("Error fetching teams: " + error.responseJSON.message);
 },
 });
+function calculateProfit() {
+const quotedPrice = parseFloat($("#soldP").val()) || 0;
+const yardPrice = parseFloat($("#costP").val()) || 0;
+const shipping = parseFloat($("#shippingFee").val()) || 0;
+const salesTax = 0.05 * quotedPrice;
+const grossProfit = quotedPrice - yardPrice;
+const netProfit = grossProfit - shipping - salesTax;
+$("#salestax").val(salesTax.toFixed(2));
+$("#grossProfit").val(netProfit.toFixed(2));
+}
+$("#soldP, #costP, #shippingFee").on("input", calculateProfit);
 
 function showModal(modalId) {
 $(modalId).modal("show");
