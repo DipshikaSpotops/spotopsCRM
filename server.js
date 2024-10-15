@@ -1714,22 +1714,21 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 app.get('/orders/daily', async (req, res) => {
-  console.log("daily orders");
-  try {
-    const currentMonth = new Date().getMonth(); // Get current month (0-11)
-
-    const orders = await Order.aggregate([
-      {
-        $addFields: {
-          orderDateParsed: {
-            $dateFromString: {
-              dateString: {
-                $reduce: {
-                  input: { $split: ["$orderDate", " "] }, // Split the date string
-                  initialValue: "",
-                  in: {
-                    $cond: {
-                      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } }, // Check for suffixes
+console.log("daily orders");
+try {
+const currentMonth = new Date().getMonth(); 
+const orders = await Order.aggregate([
+{
+$addFields: {
+orderDateParsed: {
+$dateFromString: {
+dateString: {
+$reduce: {
+input: { $split: ["$orderDate", " "] },
+initialValue: "",
+in: {
+$cond: {
+if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } }, // Check for suffixes
                       then: "$$value", // Skip if suffix
                       else: { $concat: ["$$value", " ", "$$this"] } // Rebuild date string without suffixes
                     }
