@@ -739,7 +739,13 @@ margin: auto;
 .sidebar.hide {
 transform: translateX(-100%);
 }
-
+.navbar-nav {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: 58%;
+  font-family: sans-serif;
+}
 .sidebar.show {
 transform: translateX(0);
 }
@@ -850,11 +856,9 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar" id="navbar" style="display: flex">
 <div class="logo">
-<a href="viewAllOrders.html">
-<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-</a>
+<a href="viewAllOrders.html"><img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" /></a>
 </div>
-<div class="navbar-nav" style="flex-direction: row;justify-content: center;align-items: center;margin-left: 58%;font-family: sans-serif;">
+<div class="navbar-nav">
 <div class="nav-item dropdown">
 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDashboards" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dashboards</a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownDashboards">
@@ -874,54 +878,22 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 <div class="nav-item dropdown">
-<a
-class="nav-link dropdown-toggle"
-href="#"
-id="navbarDropdownUsers"
-role="button"
-data-toggle="dropdown"
-aria-haspopup="true"
-aria-expanded="false"
->
-Users
-</a>
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsers" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Users</a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownUsers">
 <a class="dropdown-item" href="createUser.html">Create User</a>
 <a class="dropdown-item" href="viewallUsers.html">View Users</a>
 </div>
 </div>
 <div class="nav-item dropdown">
-<a
-class="nav-link dropdown-toggle"
-href="#"
-id="navbarDropdownTeams"
-role="button"
-data-toggle="dropdown"
-aria-haspopup="true"
-aria-expanded="false"
->
-Teams
-</a>
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTeams" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Teams</a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownTeams">
 <a class="dropdown-item" href="teams.html">View Teams</a>
 </div>
 </div>
 <div class="nav-item dropdown">
-<a
-class="nav-link dropdown-toggle"
-href="#"
-id="navbarDropdownReports"
-role="button"
-data-toggle="dropdown"
-aria-haspopup="true"
-aria-expanded="false"
->
-Reports
-</a>
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReports" role="button" data-toggle="dropdown" aria-haspopup="true"aria-expanded="false">Reports</a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownReports">
-<a class="dropdown-item" href="shippingExpenses.html"
->Shipping Expenses</a
->
+<a class="dropdown-item" href="shippingExpenses.html">Shipping Expenses</a>
 <a class="dropdown-item" href="purchases.html">Purchases</a>
 <a class="dropdown-item" href="poReport.html">PO Report</a>
 <a class="dropdown-item" href="salesReport.html">My Sales Report</a>
@@ -932,40 +904,22 @@ Reports
 </div>
 <div class="user-info dropdown">
 <span>Welcome <span id="user-name">Shankar</span></span>
-<i
-class="fas fa-user-circle fa-2x user-icon"
-id="userMenu"
-data-toggle="dropdown"
-aria-haspopup="true"
-aria-expanded="false"
-></i>
-<div
-class="dropdown-menu dropdown-menu-right"
-aria-labelledby="userMenu"
->
-<a class="dropdown-item" href="#" id="profileLink"
-><i class="fas fa-user"></i> My Profile</a
->
+<i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+<a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user"></i> My Profile</a>
 <div class="dropdown-divider"></div>
-<a class="dropdown-item" href="#" id="logoutLink"
-><i class="fas fa-sign-out-alt"></i> Log Out</a
->
+<a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
 </div>
 </div>
 </div>
-
 <div class="close-btn">
 <span>&times;</span>
 </div>
-
-
 <div style="display: flex" class="mainDiv">
-
 <div class="sidebarOrder">
 <h2 id="orderHistory">Order History - </h2>
 <ul id="orderHistoryList" class="timeline"></ul>
 </div>
-
 <div class="main-content" id="mainContent">
 <form id="crmForm" class="form-container">
 <div class="form-row">
