@@ -1723,58 +1723,44 @@ console.error('Error updating dispute information:', error);
 res.status(500).json({ message: 'Server error' });
 }
 });
+const moment = require('moment-timezone');
+
 app.get('/orders/daily', async (req, res) => {
-  console.log("daily orders");
+  console.log("Fetching daily orders for Dallas timezone");
+
   try {
-    const currentMonth = new Date().getMonth(); 
-    console.log("current month", currentMonth);
+    // Get the start of the current month in Dallas time
+    const startOfMonth = moment.tz("America/Chicago").startOf('month').toDate();
+    // Get the start of the next month in Dallas time
+    const startOfNextMonth = moment.tz("America/Chicago").add(1, 'month').startOf('month').toDate();
+
+    console.log("Dallas Start of Month:", startOfMonth, "Start of Next Month:", startOfNextMonth);
 
     const orders = await Order.aggregate([
       {
-        $addFields: {
-          orderDateParsed: {
-            $dateFromString: {
-              dateString: {
-                $reduce: {
-                  input: { $split: ["$orderDate", " "] },
-                  initialValue: "",
-                  in: {
-                    $cond: {
-                      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
-                      then: "$$value",
-                      else: { $concat: ["$$value", " ", "$$this"] }
-                    }
-                  }
-                }
-              },
-              format: "%d %b, %Y %H:%M",
-              timezone: "UTC"
-            }
-          }
-        }
-      },
-      {
         $match: {
-          orderDateParsed: {
-            $gte: new Date(new Date().setDate(1)), // First day of the month
-            $lt: new Date(new Date().setMonth(currentMonth + 1, 1)) // First day of next month
-          }
-        }
+          orderDate: {
+            $gte: ISO(startOfMonth), 
+            $lt: ISO(startOfNextMonth),
+          },
+        },
       },
       {
         $group: {
-          _id: { $dayOfMonth: "$orderDateParsed" },
-          totalOrders: { $sum: 1 }
-        }
+          _id: { $dayOfMonth: "$orderDate" }, // Group by day of the month
+          totalOrders: { $sum: 1 }, // Count total orders for each day
+        },
       },
-      { $sort: { _id: 1 } }
+      {
+        $sort: { _id: 1 }, // Sort by day in ascending order
+      },
     ]);
 
-    console.log("daily found orders", orders);
+    console.log("Daily Orders:", orders);
 
     const formattedOrders = orders.map(order => ({
       day: order._id,
-      totalOrders: order.totalOrders
+      totalOrders: order.totalOrders,
     }));
 
     res.json(formattedOrders);
