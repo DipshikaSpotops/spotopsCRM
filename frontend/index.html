@@ -634,27 +634,28 @@ min: 0,
 console.error("Error fetching daily orders:", error);
 }
 }
+// Get the last three months
 function getLastThreeMonths() {
   const now = new Date();
-  const months = [];
-  for (let i = 2; i >= 0; i--) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push({
+  return Array.from({ length: 3 }, (_, i) => {
+    const date = new Date(now.getFullYear(), now.getMonth() - (2 - i), 1);
+    return {
       name: date.toLocaleString("default", { month: "long" }),
-      number: date.getMonth() + 1, // Month as 1-indexed
+      number: date.getMonth() + 1,
       year: date.getFullYear(),
-    });
-  }
-  return months;
+    };
+  });
 }
 
 const lastThreeMonths = getLastThreeMonths();
+let currentMonthIndex = 0;
+generateCarouselContent();
 function generateCarouselContent() {
   const carouselContent = document.getElementById("carousel-content");
   lastThreeMonths.forEach((month, index) => {
     const isActive = index === 0 ? "active" : "";
     const monthDiv = `
-      <div class="carousel-item ${isActive} chart-item-monthly" >
+      <div class="carousel-item ${isActive}" data-month="${month.number}" data-year="${month.year}">
         <div class="chart-item-monthly">
           <h4>${month.name} Orders</h4>
           <canvas id="chart-${month.name}"></canvas>
@@ -663,42 +664,22 @@ function generateCarouselContent() {
     `;
     carouselContent.insertAdjacentHTML("beforeend", monthDiv);
   });
+
+  // Attach event listeners to carousel controls
+  document.getElementById("prev-month").addEventListener("click", () => {
+    currentMonthIndex = (currentMonthIndex - 1 + lastThreeMonths.length) % lastThreeMonths.length;
+    renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
+  });
+
+  document.getElementById("next-month").addEventListener("click", () => {
+    currentMonthIndex = (currentMonthIndex + 1) % lastThreeMonths.length;
+    renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
+  });
+
+  renderMonthlyChart(lastThreeMonths[currentMonthIndex]); // Render the first month
 }
 
-generateCarouselContent();
 
-
-async function fetchMonthlyOrders() {
-  console.log("Fetching monthly orders...");
-  try {
-    const response = await axios.get("https://www.spotops360.com/orders");
-    const orders = response.data;
-
-    if (!orders || !Array.isArray(orders)) {
-      console.error("Invalid monthly orders data.");
-      return;
-    }
-
-    const dallasDate = new Date().toLocaleString("en-US", {
-      timeZone: "America/Chicago",
-    });
-    const now = new Date(dallasDate);
-
-    lastThreeMonths.forEach((month) => {
-      const monthlyOrders = orders.filter((order) => {
-        const orderDate = parseOrderDate(order.orderDate);
-        return (
-          orderDate.getFullYear() === month.year &&
-          orderDate.getMonth() + 1 === month.number
-        );
-      });
-
-      renderMonthlyChart(month.name, monthlyOrders);
-    });
-  } catch (error) {
-    console.error("Error fetching monthly orders:", error);
-  }
-}
 
 function parseOrderDate(orderDate) {
   const parts = orderDate.split(" ");
@@ -708,56 +689,99 @@ function parseOrderDate(orderDate) {
   return new Date(year, month, day);
 }
 
-function renderMonthlyChart(monthName, orders) {
-  const totalDays = new Date(
-    orders[0]?.year || new Date().getFullYear(),
-    new Date().getMonth() + 1,
-    0
-  ).getDate();
+async function renderMonthlyChart(month) {
+  console.log(`Fetching data for ${month.name}...`);
+  try {
+    const response = await axios.get("https://www.spotops360.com/orders");
+    const orders = response.data;
 
-  const labels = Array.from({ length: totalDays }, (_, i) => `${i + 1}`);
-  const totalOrdersData = Array(totalDays).fill(0);
-  const totalGPData = Array(totalDays).fill(0);
+    const monthlyOrders = orders.filter((order) => {
+      const orderDate = parseOrderDate(order.orderDate);
+      return (
+        orderDate.getFullYear() === month.year &&
+        orderDate.getMonth() + 1 === month.number
+      );
+    });
 
-  orders.forEach((order) => {
-    const orderDate = parseOrderDate(order.orderDate);
-    const orderDay = orderDate.getDate() - 1;
-    totalOrdersData[orderDay] += 1;
-    totalGPData[orderDay] += order.actualGP || 0;
-  });
+    updateMonthlyChart(month.name, monthlyOrders);
+  } catch (error) {
+    console.error(`Error fetching orders for ${month.name}:`, error);
+  }
+}
+
+// Parse the order date
+function parseOrderDate(orderDate) {
+  const parts = orderDate.split(" ");
+  const day = parseInt(parts[0]);
+  const month = new Date(`${parts[1]} 1`).getMonth();
+  const year = parseInt(parts[2]);
+  return new Date(year, month, day);
+}
+
+// Update the monthly chart with data
+function updateMonthlyChart(monthName, orders) {
+  const statusLabels = [
+    "Placed",
+    "Customer Approved",
+    "Yard Processing",
+    "In Transit",
+    "Escalation",
+    "Order Fulfilled",
+    "Order Cancelled",
+    "Refunded",
+    "Dispute"
+  ];
+
+  const statusCounts = statusLabels.map((status) =>
+    orders.filter((order) => order.orderStatus === status).length
+  );
+
+  const totalOrders = orders.length;
 
   const ctx = document.getElementById(`chart-${monthName}`).getContext("2d");
   new Chart(ctx, {
     type: "bar",
     data: {
-      labels: labels,
+      labels: ["Total Orders", ...statusLabels],
       datasets: [
         {
-          label: "Total Orders",
-          backgroundColor: "rgba(54, 162, 235, 0.5)",
-          borderColor: "rgba(54, 162, 235, 1)",
-          data: totalOrdersData,
-          fill: true,
-        },
-        {
-          label: "Actual GP",
-          backgroundColor: "rgba(75, 192, 192, 0.5)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          data: totalGPData,
-          fill: true,
+          label: `Orders in ${monthName}`,
+          data: [totalOrders, ...statusCounts],
+          backgroundColor: [
+            "rgba(54, 162, 235, 0.5)",
+            "rgba(75, 192, 192, 0.5)",
+            "rgba(255, 159, 64, 0.5)",
+            "rgba(153, 102, 255, 0.5)",
+            "rgba(201, 203, 207, 0.5)",
+            "rgba(255, 99, 132, 0.5)",
+            "rgba(54, 162, 235, 0.5)",
+            "rgba(255, 206, 86, 0.5)",
+            "rgba(75, 192, 192, 0.5)"
+          ],
+          borderColor: [
+            "rgba(54, 162, 235, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(255, 159, 64, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(201, 203, 207, 1)",
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)"
+          ],
+          borderWidth: 1,
         },
       ],
     },
     options: {
       responsive: true,
       scales: {
-        x: { title: { display: true, text: "Day of the Month" } },
-        y: { beginAtZero: true, title: { display: true, text: "Values" } },
+        x: { title: { display: true, text: "Order Status" } },
+        y: { beginAtZero: true, title: { display: true, text: "Number of Orders" } },
       },
     },
   });
 }
-
 // // Fetch salesperson performance
 // async function fetchSalespersonPerformance() {
 // try {
