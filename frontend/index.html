@@ -131,14 +131,14 @@ display: block;
   }
 
   .chart-wrapper {
-    width: 42%;
+    width: 4%;
     min-width: 314px;
     aspect-ratio: 1 / 1;
     /* background-color: #f8f9fa; */
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    height: 394px;
+    height: 399px;
     margin: 1% 0%;
   }
 
@@ -146,7 +146,7 @@ display: block;
     width: 100% !important;
     height: 100% !important;
   }
-}
+
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -534,7 +534,7 @@ var orders;
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
     // Create an array for days of the current month (1 to daysInMonth)
-    const labels = Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`);
+    const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
       // Initialize order counts and GP data arrays with zeros
       const totalOrdersData = Array(daysInMonth).fill(0);
     const totalGPData = Array(daysInMonth).fill(0);
@@ -566,39 +566,51 @@ var orders;
     });
     // Create or update the chart
     const ctx = document.getElementById("dailyOrdersChart").getContext("2d");
-    new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Total Orders",
-            backgroundColor: "rgba(54, 162, 235, 0.5)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            data: totalOrdersData,
-            fill: true
-          },
-          {
-            label: "Actual GP",
-            backgroundColor: "rgba(75, 192, 192, 0.5)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            data: totalGPData,
-            fill: true
-          }
-        ]
+
+new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: "Total Orders",
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        data: totalOrdersData,
+        fill: true,
       },
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            title: { display: true, text: "Day of the Month" }
-          },
-          y: {
-            title: { display: true, text: "Count / GP" }
-          }
-        }
-      }
-    });
+      {
+        label: "Actual GP",
+        backgroundColor: "rgba(75, 192, 192, 0.5)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        data: totalGPData,
+        fill: true,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false, // Ensures the chart fits well in its container
+    scales: {
+      x: {
+        title: { 
+          display: true, 
+          text: "Day of the Month" 
+        },
+      },
+      y: {
+        title: { 
+          display: true, 
+          text: "Actual GP / Total Orders" 
+        },
+        beginAtZero: true, // Ensure y-axis starts at 0
+        ticks: {
+          stepSize: 1, // Optional: Control step size to avoid clutter
+        },
+      },
+    },
+  },
+});
   } catch (error) {
     console.error("Error fetching daily orders:", error);
   }
