@@ -534,7 +534,7 @@ var orders;
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
     // Create an array for days of the current month (1 to daysInMonth)
-    const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
+    const labels = Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`);
       // Initialize order counts and GP data arrays with zeros
       const totalOrdersData = Array(daysInMonth).fill(0);
     const totalGPData = Array(daysInMonth).fill(0);
@@ -594,7 +594,7 @@ var orders;
             title: { display: true, text: "Day of the Month" }
           },
           y: {
-            title: { display: true, text: "Actual GP" }
+            title: { display: true, text: "Count / GP" }
           }
         }
       }
