@@ -1243,7 +1243,11 @@ res.status(500).json({ message: "Internal Server Error" });
 }
 });
 
-
+app.get('/daily', async (req, res) => {
+  console.log("Fetching daily orders for Dallas timezone");
+  const orders = await Order.find({});
+  console.log("orderDates",orders)
+});
 
 
 
@@ -1725,11 +1729,7 @@ res.status(500).json({ message: 'Server error' });
 });
 const moment = require('moment-timezone');
 
-app.get('/orders/daily', async (req, res) => {
-  console.log("Fetching daily orders for Dallas timezone");
-  const orders = await Order.find({});
-  console.log("orderDates",orders)
-});
+
 app.get('/orders/monthly', async (req, res) => {
 console.log("monthly orders");
 try {
