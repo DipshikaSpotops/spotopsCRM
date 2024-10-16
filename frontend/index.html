@@ -482,8 +482,7 @@ try {
 fetch(`https://www.spotops360.com/orders/daily`)
 .then(response => response.json())
 .then(data => {
-orderPlacedDate = data.orderDate;
-const orders = response.data;
+const orders = data;
 console.log("found daily orders", orders);
 // console.log("orderDate",orderPlacedDate)
 })
