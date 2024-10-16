@@ -141,7 +141,15 @@ box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 height: 500px;
 margin: 1% 0%;
 }
+.carousel-inner {
+  width: 100%;
+}
 
+.carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 /* canvas {
 width: 100% !important;
 height: 100% !important;
@@ -281,23 +289,24 @@ aria-labelledby="userMenu"
 </div>
 </div>
 <div class="chart-item">
+    <h4>Daily Orders (This Month)</h4>
+    <div class="charts-container">
+    <div class="chart-wrapper">
+    <canvas id="dailyOrdersChart"></canvas>
     
-<div id="monthlyOrdersCarousel" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner" id="carousel-content"></div>
-  
-    <!-- Carousel Controls -->
-    <a class="carousel-control-prev" href="#monthlyOrdersCarousel" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#monthlyOrdersCarousel" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-</div>
-</div>
-</div>
+    <div class="charts-container" id="monthlyOrdersCarousel">
+        <div class="carousel-inner" id="carousel-content"></div>
+      
+        <!-- Carousel Controls -->
+        <a class="carousel-control-prev" href="#monthlyOrdersCarousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#monthlyOrdersCarousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>      
   
 
 <!-- Second row: Two charts -->
@@ -625,7 +634,7 @@ function generateCarouselContent() {
     const isActive = index === 0 ? "active" : "";
     const monthDiv = `
       <div class="carousel-item ${isActive}">
-        <div class="chart-item">
+        <div class="chart-wrapper">
           <h4>${month.name} Orders</h4>
           <canvas id="chart-${month.name}"></canvas>
         </div>
@@ -634,7 +643,6 @@ function generateCarouselContent() {
     carouselContent.insertAdjacentHTML("beforeend", monthDiv);
   });
 }
-
 generateCarouselContent();
 
 
