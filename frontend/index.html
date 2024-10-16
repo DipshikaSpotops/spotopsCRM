@@ -479,7 +479,7 @@ await fetchDailyOrders();
 function fetchDailyOrders() {
 console.log(token, "daily orders fetch");    
 try {
-fetch(`https://www.spotops360.com/orders/daily`)
+fetch(`https://www.spotops360.com/daily`)
 .then(response => response.json())
 .then(data => {
 const orders = data;
