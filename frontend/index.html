@@ -482,12 +482,11 @@ async function fetchDailyOrders() {
   console.log(token, "Fetching daily orders...");
 var orders;
   try {
-    fetch(`https://www.spotops360.com/orders`)
-.then(response => response.json())
-.then(data => {
-     orders = data;
+    const response = await axios.get("https://www.spotops360.com/orders/daily");
+
+    const orders = response.data;
     console.log("Found daily orders:", orders);
-})
+
     if (!orders || !Array.isArray(orders)) {
       console.error("Invalid daily orders data.");
       return;
