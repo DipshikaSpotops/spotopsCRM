@@ -151,6 +151,24 @@ margin: 1% 0%;
   transition: transform 0.5s ease-in-out;
 }
 
+/* Ensuring uniform styling with chart-wrapper-like appearance */
+.chart-item-monthly {
+  width: 42%;
+  min-width: 314px;
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  height: 500px;
+  margin: 1% 0%;
+}
+
+/* Ensure canvas within the chart-item fits properly */
+.chart-item canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
 
 /* Optional: Styling for the carousel controls */
 .carousel-control-prev-icon,
@@ -639,7 +657,7 @@ function generateCarouselContent() {
     const isActive = index === 0 ? "active" : "";
     const monthDiv = `
       <div class="carousel-item ${isActive} carouselMonthly">
-        <div class="chart-item">
+        <div class="chart-item-monthly">
           <h4>${month.name} Orders</h4>
           <canvas id="chart-${month.name}"></canvas>
         </div>
