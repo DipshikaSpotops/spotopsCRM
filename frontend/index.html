@@ -141,7 +141,41 @@ box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 height: 500px;
 margin: 1% 0%;
 }
+/* Styling for the carousel items specific to monthly orders */
+.carousel-item.carouselMonthly {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
+}
 
+/* Ensuring uniform styling with chart-wrapper-like appearance */
+.chart-item-monthly {
+  width: 42%;
+  min-width: 314px;
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  height: 500px;
+  margin: 1% 0%;
+}
+
+/* Ensure canvas within the chart-item fits properly */
+.chart-item canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Optional: Styling for the carousel controls */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: black;
+  border-radius: 50%;
+}
 /* canvas {
 width: 100% !important;
 height: 100% !important;
@@ -620,7 +654,7 @@ function generateCarouselContent() {
   lastThreeMonths.forEach((month, index) => {
     const isActive = index === 0 ? "active" : "";
     const monthDiv = `
-      <div class="carousel-item ${isActive}">
+      <div class="carousel-item ${isActive} chart-item-monthly" >
         <div class="chart-item">
           <h4>${month.name} Orders</h4>
           <canvas id="chart-${month.name}"></canvas>
