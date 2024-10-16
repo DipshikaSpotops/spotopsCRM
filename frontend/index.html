@@ -477,12 +477,13 @@ await fetchDailyOrders();
 
 // Fetch daily orders
 async function fetchDailyOrders() {
+console.log(token,"daily orders fetch");    
 try {
 const response = await axios.get("https://www.spotops360.com/orders/daily", {
 headers: { Authorization: `Bearer ${token}` }
 });
 const orders = response.data;
-
+console.log("found daily orders",orders);
 // Ensure orders is an array
 if (!orders || !Array.isArray(orders)) {
 console.error("Invalid daily orders data.");

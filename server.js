@@ -1717,6 +1717,7 @@ app.get('/orders/daily', async (req, res) => {
 console.log("daily orders");
 try {
 const currentMonth = new Date().getMonth(); 
+console.log("current month",currentMonth);
 const orders = await Order.aggregate([
 {
 $addFields: {
@@ -1759,7 +1760,7 @@ if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } }, // Check for
         $sort: { _id: 1 } // Sort by day in ascending order
       }
     ]);
-
+console.log("daily found orders",orders);
     const formattedOrders = orders.map(order => ({
       day: order._id,
       totalOrders: order.totalOrders,
@@ -1909,10 +1910,10 @@ app.get('/orders/yearly', async (req, res) => {
         },
       },
       {
-        $sort: { _id: 1 } // Sort by month in ascending order
+        $sort: { _id: 1 } 
       }
     ]);
-
+console.log("orders found",orders);
     const formattedOrders = orders.map(order => ({
       month: order._id,
       totalOrders: order.totalOrders,
@@ -1923,4 +1924,3 @@ app.get('/orders/yearly', async (req, res) => {
     res.status(500).json({ message: 'Error fetching yearly progress', error });
   }
 });
-
