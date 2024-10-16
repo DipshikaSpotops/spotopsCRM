@@ -3712,6 +3712,7 @@ body: JSON.stringify(data),
 .then((response) => response.json())
 .then((result) => {
 alert("Tracking details sent to the customer");
+$("#editYardInfo").prop("enabled", true).css("filter", "blur(2px)");
 console.log("Success:", result);
 })
 .catch((error) => {
