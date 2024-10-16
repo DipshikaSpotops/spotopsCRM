@@ -317,7 +317,7 @@ aria-labelledby="userMenu"
 </div>
 
     
-<div id="monthlyOrdersCarousel" class="carousel slide" data-bs-ride="carousel">
+<div id="monthlyOrdersCarousel" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner" id="carousel-content"></div>
   
     <!-- Carousel Controls -->
@@ -329,7 +329,7 @@ aria-labelledby="userMenu"
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="sr-only">Next</span>
     </a>
-  </div>  
+  </div>
   
 
 <!-- Second row: Two charts -->
@@ -651,13 +651,8 @@ function getLastThreeMonths() {
 }
 
 const lastThreeMonths = getLastThreeMonths();
-
 function generateCarouselContent() {
   const carouselContent = document.getElementById("carousel-content");
-  
-  // Clear any existing content to prevent duplication
-  carouselContent.innerHTML = '';
-
   lastThreeMonths.forEach((month, index) => {
     const isActive = index === 0 ? "active" : "";
     const monthDiv = `
@@ -670,9 +665,6 @@ function generateCarouselContent() {
     `;
     carouselContent.insertAdjacentHTML("beforeend", monthDiv);
   });
-
-  // Initialize the carousel explicitly
-  $('#monthlyOrdersCarousel').carousel();
 }
 
 generateCarouselContent();
