@@ -630,8 +630,9 @@ console.error("Error fetching daily orders:", error);
 }
 // monthly overview report start here
 let chartInstances = {}; // Store chart instances by month
+let cachedOrders = {}; // Store cached orders data
+let isNavigating = false; // Prevent rapid multiple clicks
 
-// Get last three months
 function getLastThreeMonths() {
   const now = new Date();
   const months = [];
@@ -639,7 +640,7 @@ function getLastThreeMonths() {
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
     months.push({
       name: date.toLocaleString("default", { month: "long" }),
-      number: date.getMonth() + 1, // 1-indexed month
+      number: date.getMonth() + 1,
       year: date.getFullYear(),
     });
   }
@@ -650,6 +651,7 @@ const lastThreeMonths = getLastThreeMonths();
 let currentMonthIndex = 0;
 
 generateCarouselContent();
+preloadOrders(); // Fetch all orders once on load
 
 // Generate carousel content
 function generateCarouselContent() {
@@ -667,25 +669,45 @@ function generateCarouselContent() {
     carouselContent.insertAdjacentHTML("beforeend", monthDiv);
   });
 
-  // Attach event listeners for navigation
-  document.getElementById("prev-month").addEventListener("click", () => {
-    navigateMonth(-1);
-  });
-
-  document.getElementById("next-month").addEventListener("click", () => {
-    navigateMonth(1);
-  });
+  document.getElementById("prev-month").addEventListener("click", () => navigateMonth(-1));
+  document.getElementById("next-month").addEventListener("click", () => navigateMonth(1));
 
   renderMonthlyChart(lastThreeMonths[currentMonthIndex]); // Initial render
 }
 
-// Handle month navigation
-function navigateMonth(direction) {
-  currentMonthIndex = (currentMonthIndex + direction + lastThreeMonths.length) % lastThreeMonths.length;
-  renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
+// Preload all orders for the last three months
+async function preloadOrders() {
+  console.log("Preloading orders...");
+  try {
+    const response = await axios.get("https://www.spotops360.com/orders");
+    const orders = response.data;
+    lastThreeMonths.forEach((month) => {
+      const monthlyOrders = orders.filter((order) => {
+        const orderDate = parseOrderDate(order.orderDate);
+        return (
+          orderDate.getFullYear() === month.year &&
+          orderDate.getMonth() + 1 === month.number
+        );
+      });
+      cachedOrders[month.name] = monthlyOrders; // Store data in cache
+    });
+  } catch (error) {
+    console.error("Error preloading orders:", error);
+  }
 }
 
-// Parse the order date
+// Handle month navigation
+function navigateMonth(direction) {
+  if (isNavigating) return; // Prevent multiple clicks
+  isNavigating = true;
+
+  currentMonthIndex = (currentMonthIndex + direction + lastThreeMonths.length) % lastThreeMonths.length;
+  renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
+
+  setTimeout(() => (isNavigating = false), 300); // Debounce clicks
+}
+
+// Parse custom order date format
 function parseOrderDate(orderDate) {
   const parts = orderDate.split(" ");
   const day = parseInt(parts[0]);
@@ -694,28 +716,15 @@ function parseOrderDate(orderDate) {
   return new Date(year, month, day);
 }
 
-// Render the chart for a given month
-async function renderMonthlyChart(month) {
-  console.log(`Fetching data for ${month.name}...`);
-  try {
-    const response = await axios.get("https://www.spotops360.com/orders");
-    const orders = response.data;
+// Render the chart for the selected month
+function renderMonthlyChart(month) {
+  console.log(`Rendering chart for ${month.name}...`);
 
-    const monthlyOrders = orders.filter((order) => {
-      const orderDate = parseOrderDate(order.orderDate);
-      return (
-        orderDate.getFullYear() === month.year &&
-        orderDate.getMonth() + 1 === month.number
-      );
-    });
-
-    updateMonthlyChart(month.name, monthlyOrders);
-  } catch (error) {
-    console.error(`Error fetching orders for ${month.name}:`, error);
-  }
+  const orders = cachedOrders[month.name] || [];
+  updateMonthlyChart(month.name, orders);
 }
 
-// Update or create a chart
+// Update the chart with order status data
 function updateMonthlyChart(monthName, orders) {
   const statusLabels = [
     "Placed",
@@ -726,7 +735,7 @@ function updateMonthlyChart(monthName, orders) {
     "Order Fulfilled",
     "Order Cancelled",
     "Refunded",
-    "Dispute"
+    "Dispute",
   ];
 
   const statusCounts = statusLabels.map((status) =>
@@ -760,7 +769,7 @@ function updateMonthlyChart(monthName, orders) {
             "rgba(255, 99, 132, 0.5)",
             "rgba(54, 162, 235, 0.5)",
             "rgba(255, 206, 86, 0.5)",
-            "rgba(75, 192, 192, 0.5)"
+            "rgba(75, 192, 192, 0.5)",
           ],
           borderColor: [
             "rgba(54, 162, 235, 1)",
@@ -771,7 +780,7 @@ function updateMonthlyChart(monthName, orders) {
             "rgba(255, 99, 132, 1)",
             "rgba(54, 162, 235, 1)",
             "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)"
+            "rgba(75, 192, 192, 1)",
           ],
           borderWidth: 1,
         },
@@ -786,7 +795,6 @@ function updateMonthlyChart(monthName, orders) {
     },
   });
 }
-
 
 // // Fetch salesperson performance
 // async function fetchSalespersonPerformance() {
