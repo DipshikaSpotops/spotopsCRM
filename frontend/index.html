@@ -149,13 +149,13 @@ margin: 1% 0%;
 }
 
 .chart-item-monthly {
-  width: 60%;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  margin: 0 auto;
-  height: 500px;
+    width: 62%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    margin: 0 -30%;
+    height: 430px;
 }
 
 .carousel-control-prev-icon,
@@ -306,19 +306,19 @@ aria-labelledby="userMenu"
     <h3>Monthly Orders Overview</h3>
     
     <!-- Carousel Wrapper -->
-    <div id="monthlyOrdersCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner" id="carousel-content"></div>
-  
-      <!-- Carousel Controls -->
-      <a class="carousel-control-prev" id="prev-month" role="button">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" id="next-month" role="button">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    </div>
+    <div id="monthlyOrdersCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" id="carousel-content"></div>
+      
+        <!-- Carousel Controls -->
+        <a class="carousel-control-prev" id="prev-month" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" id="next-month" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>      
   </div>
   
   
@@ -627,22 +627,27 @@ min: 0,
 console.error("Error fetching daily orders:", error);
 }
 }
-// Get the last three months
+// monthly overview report start here
 function getLastThreeMonths() {
   const now = new Date();
-  return Array.from({ length: 3 }, (_, i) => {
-    const date = new Date(now.getFullYear(), now.getMonth() - (2 - i), 1);
-    return {
+  const months = [];
+  for (let i = 2; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({
       name: date.toLocaleString("default", { month: "long" }),
       number: date.getMonth() + 1,
       year: date.getFullYear(),
-    };
-  });
+    });
+  }
+  return months;
 }
 
 const lastThreeMonths = getLastThreeMonths();
 let currentMonthIndex = 0;
+
 generateCarouselContent();
+
+// Function to generate carousel content
 function generateCarouselContent() {
   const carouselContent = document.getElementById("carousel-content");
   lastThreeMonths.forEach((month, index) => {
@@ -658,22 +663,25 @@ function generateCarouselContent() {
     carouselContent.insertAdjacentHTML("beforeend", monthDiv);
   });
 
-  // Attach event listeners to carousel controls
+  // Attach event listeners to the carousel controls
   document.getElementById("prev-month").addEventListener("click", () => {
-    currentMonthIndex = (currentMonthIndex - 1 + lastThreeMonths.length) % lastThreeMonths.length;
-    renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
+    navigateMonth(-1);
   });
 
   document.getElementById("next-month").addEventListener("click", () => {
-    currentMonthIndex = (currentMonthIndex + 1) % lastThreeMonths.length;
-    renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
+    navigateMonth(1);
   });
 
-  renderMonthlyChart(lastThreeMonths[currentMonthIndex]); // Render the first month
+  renderMonthlyChart(lastThreeMonths[currentMonthIndex]); // Initial render
 }
 
+// Navigate to the correct month based on user interaction
+function navigateMonth(direction) {
+  currentMonthIndex = (currentMonthIndex + direction + lastThreeMonths.length) % lastThreeMonths.length;
+  renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
+}
 
-
+// Parse custom date format from the orders
 function parseOrderDate(orderDate) {
   const parts = orderDate.split(" ");
   const day = parseInt(parts[0]);
@@ -682,18 +690,16 @@ function parseOrderDate(orderDate) {
   return new Date(year, month, day);
 }
 
+// Fetch and render the chart for the selected month
 async function renderMonthlyChart(month) {
   console.log(`Fetching data for ${month.name}...`);
   try {
     const response = await axios.get("https://www.spotops360.com/orders");
     const orders = response.data;
 
-    const monthlyOrders = orders.filter((order) => {
+    const monthlyOrders = orders.filter(order => {
       const orderDate = parseOrderDate(order.orderDate);
-      return (
-        orderDate.getFullYear() === month.year &&
-        orderDate.getMonth() + 1 === month.number
-      );
+      return orderDate.getFullYear() === month.year && orderDate.getMonth() + 1 === month.number;
     });
 
     updateMonthlyChart(month.name, monthlyOrders);
@@ -702,7 +708,7 @@ async function renderMonthlyChart(month) {
   }
 }
 
-// Update the monthly chart with data
+// Update the chart with order status data
 function updateMonthlyChart(monthName, orders) {
   const statusLabels = [
     "Placed",
@@ -716,8 +722,8 @@ function updateMonthlyChart(monthName, orders) {
     "Dispute"
   ];
 
-  const statusCounts = statusLabels.map((status) =>
-    orders.filter((order) => order.orderStatus === status).length
+  const statusCounts = statusLabels.map(status =>
+    orders.filter(order => order.orderStatus === status).length
   );
 
   const totalOrders = orders.length;
@@ -766,6 +772,7 @@ function updateMonthlyChart(monthName, orders) {
     },
   });
 }
+
 // // Fetch salesperson performance
 // async function fetchSalespersonPerformance() {
 // try {
