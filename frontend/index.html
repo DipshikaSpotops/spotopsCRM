@@ -515,8 +515,19 @@ var orders;
       const year = parseInt(parts[2]);
       return new Date(year, month, day);
     }
-    // Iterate over orders and update counts and GP data
-    orders.forEach(order => {
+  // Filter orders for the current month and year
+  const currentMonthOrders = orders.filter(order => {
+      const orderDate = parseOrderDate(order.orderDate);
+      return (
+        orderDate.getFullYear() === currentYear &&
+        orderDate.getMonth() === currentMonth
+      );
+    });
+
+    console.log("Current Month Orders:", currentMonthOrders);
+
+    // Iterate over the filtered orders and update counts and GP data
+    currentMonthOrders.forEach(order => {
       const orderDate = parseOrderDate(order.orderDate);
       const orderDay = orderDate.getDate() - 1; // Day as index (0-based)
       totalOrdersData[orderDay] += 1; // Increment order count
