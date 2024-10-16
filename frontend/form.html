@@ -3686,7 +3686,7 @@ $("#otherShipperInput").hide();
 }
 });
 $("#sendEmailButton").on("click", function () {
-  $("#sendEmailButton").prop("disabled", true).css("filter", "blur(2px)");
+$("#sendEmailButton, #editYardInfo").prop("disabled", true).css("filter", "blur(2px)");
 const trackingNo = $("#trackingNoEdit").val();
 const eta = $("#etaEdit").val();
 var shipperName = $("#shipperNameEdit").val();
