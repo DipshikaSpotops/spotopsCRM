@@ -505,6 +505,14 @@ var orders;
       // Initialize order counts and GP data arrays with zeros
       const totalOrdersData = Array(daysInMonth).fill(0);
     const totalGPData = Array(daysInMonth).fill(0);
+    // Function to parse the orderDate (e.g., '6th Aug, 2024 9:59')
+    function parseOrderDate(orderDate) {
+      const parts = orderDate.split(" ");
+      const day = parseInt(parts[0]); // Extract day (ignores 'st', 'nd', 'rd', 'th')
+      const month = new Date(`${parts[1]} 1`).getMonth(); // Convert month name to number
+      const year = parseInt(parts[2]);
+      return new Date(year, month, day);
+    }
     // Iterate over orders and update counts and GP data
     orders.forEach(order => {
       const orderDate = parseOrderDate(order.orderDate);
