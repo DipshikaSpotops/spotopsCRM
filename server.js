@@ -25,6 +25,16 @@ origin: 'https://spotops360.com', // Replace with your frontend's domain
 methods: 'GET,POST,PUT,DELETE,OPTIONS',
 credentials: true
 }));
+// to handle unknown paths
+app.use((req, res, next) => {
+  try {
+    decodeURIComponent(req.path);
+    next();
+  } catch (e) {
+    console.error('Malformed URI detected:', req.path);
+    res.status(400).send('Malformed URI');
+  }
+});
 app.use(bodyParser.json());
 
 // Corrected connection string with the '@' character properly URL-encoded
@@ -1714,62 +1724,64 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 app.get('/orders/daily', async (req, res) => {
-console.log("daily orders");
-try {
-const currentMonth = new Date().getMonth(); 
-console.log("current month",currentMonth);
-const orders = await Order.aggregate([
-{
-$addFields: {
-orderDateParsed: {
-$dateFromString: {
-dateString: {
-$reduce: {
-input: { $split: ["$orderDate", " "] },
-initialValue: "",
-in: {
-$cond: {
-if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } }, // Check for suffixes
-      then: "$$value", // Skip if suffix
-      else: { $concat: ["$$value", " ", "$$this"] } // Rebuild date string without suffixes
-    }
-  }
-}
-},
-format: "%d %b, %Y %H:%M", // Adjust format after removing suffix
-timezone: "UTC"
-}
-}
-}
-},
-{
-$match: {
-orderDateParsed: {
-$gte: new Date(new Date().setDate(1)), // From the first day of this month
-$lt: new Date(new Date().setMonth(currentMonth + 1)), // Until the first day of the next month
-},
-},
-},
-{
-$group: {
-_id: { $dayOfMonth: "$orderDateParsed" },
-totalOrders: { $sum: 1 },
-},
-},
-{
-$sort: { _id: 1 } // Sort by day in ascending order
-}
-]);
-console.log("daily found orders",orders);
-const formattedOrders = orders.map(order => ({
-day: order._id,
-totalOrders: order.totalOrders,
-}));
+  console.log("daily orders");
+  try {
+    const currentMonth = new Date().getMonth(); 
+    console.log("current month", currentMonth);
 
-res.json(formattedOrders);
-} catch (error) {
-res.status(500).json({ message: 'Error fetching daily orders', error });
-}
+    const orders = await Order.aggregate([
+      {
+        $addFields: {
+          orderDateParsed: {
+            $dateFromString: {
+              dateString: {
+                $reduce: {
+                  input: { $split: ["$orderDate", " "] },
+                  initialValue: "",
+                  in: {
+                    $cond: {
+                      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
+                      then: "$$value",
+                      else: { $concat: ["$$value", " ", "$$this"] }
+                    }
+                  }
+                }
+              },
+              format: "%d %b, %Y %H:%M",
+              timezone: "UTC"
+            }
+          }
+        }
+      },
+      {
+        $match: {
+          orderDateParsed: {
+            $gte: new Date(new Date().setDate(1)), // First day of the month
+            $lt: new Date(new Date().setMonth(currentMonth + 1, 1)) // First day of next month
+          }
+        }
+      },
+      {
+        $group: {
+          _id: { $dayOfMonth: "$orderDateParsed" },
+          totalOrders: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    console.log("daily found orders", orders);
+
+    const formattedOrders = orders.map(order => ({
+      day: order._id,
+      totalOrders: order.totalOrders
+    }));
+
+    res.json(formattedOrders);
+  } catch (error) {
+    console.error("Error fetching daily orders:", error);
+    res.status(500).json({ message: 'Error fetching daily orders', error });
+  }
 });
 app.get('/orders/monthly', async (req, res) => {
 console.log("monthly orders");
