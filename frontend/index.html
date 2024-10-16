@@ -476,7 +476,7 @@ await fetchDailyOrders();
 }
 
 // Fetch daily orders
-function fetchDailyOrders() {
+async function fetchDailyOrders() {
 console.log(token, "daily orders fetch");    
 try {
 fetch(`https://www.spotops360.com/orders`)
@@ -484,7 +484,49 @@ fetch(`https://www.spotops360.com/orders`)
 .then(data => {
 const orders = data;
 console.log("found daily orders", orders);
-// console.log("orderDate",orderPlacedDate)
+// Ensure orders is an array
+if (!orders || !Array.isArray(orders)) {
+console.error("Invalid daily orders data.");
+return;
+}
+//labels and data for the chart
+const labels = orders.map(order => `Day ${order.day}`);
+const totalOrdersData = orders.map(order => order.totalOrders);
+const totalGPData = orders.map(order => order.totalGP);
+const ctx = document.getElementById("dailyOrdersChart").getContext("2d");
+new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Total Orders",
+            backgroundColor: "rgba(54, 162, 235, 0.5)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            data: totalOrdersData,
+            fill: true
+          },
+          {
+            label: "Actual GP",
+            backgroundColor: "rgba(75, 192, 192, 0.5)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            data: totalGPData,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            title: { display: true, text: "Day of the Month" }
+          },
+          y: {
+            title: { display: true, text: "Count / GP" }
+          }
+        }
+      }
+    });
 })
     
 
