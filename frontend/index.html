@@ -476,25 +476,32 @@ await fetchDailyOrders();
 }
 
 // Fetch daily orders
+// Fetch daily orders and display them in a chart
 async function fetchDailyOrders() {
-console.log(token, "daily orders fetch");    
-try {
-fetch(`https://www.spotops360.com/orders`)
-.then(response => response.json())
-.then(data => {
-const orders = data;
-console.log("found daily orders", orders);
-// Ensure orders is an array
-if (!orders || !Array.isArray(orders)) {
-console.error("Invalid daily orders data.");
-return;
-}
-//labels and data for the chart
-const labels = orders.map(order => `Day ${order.day}`);
-const totalOrdersData = orders.map(order => order.totalOrders);
-const totalGPData = orders.map(order => order.totalGP);
-const ctx = document.getElementById("dailyOrdersChart").getContext("2d");
-new Chart(ctx, {
+  console.log(token, "Fetching daily orders...");
+
+  try {
+    const response = await axios.get("https://www.spotops360.com/orders/daily", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const orders = response.data;
+    console.log("Found daily orders:", orders);
+
+    // Ensure orders is an array
+    if (!orders || !Array.isArray(orders)) {
+      console.error("Invalid daily orders data.");
+      return;
+    }
+
+    // Prepare labels and data for the chart
+    const labels = orders.map(order => `Day ${order.day}`);
+    const totalOrdersData = orders.map(order => order.totalOrders);
+    const totalGPData = orders.map(order => order.totalGP);
+
+    // Create or update the chart
+    const ctx = document.getElementById("dailyOrdersChart").getContext("2d");
+    new Chart(ctx, {
       type: "line",
       data: {
         labels: labels,
@@ -527,7 +534,10 @@ new Chart(ctx, {
         }
       }
     });
-})
+  } catch (error) {
+    console.error("Error fetching daily orders:", error);
+  }
+}
     
 
     if (!orders || !Array.isArray(orders)) {
