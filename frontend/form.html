@@ -1399,9 +1399,7 @@ Save
 </tr>
 </tbody>
 </table>
-<button type="button" class="btn btn-primary" id="sendEmailButton">
-Send Email
-</button>
+<button type="button" class="btn btn-primary" id="sendEmailButton">Send Email</button>
 </div>
 <div class="comments" id="notesContainer">
 <h2>Yard Notes</h2>
@@ -3688,6 +3686,7 @@ $("#otherShipperInput").hide();
 }
 });
 $("#sendEmailButton").on("click", function () {
+  $("#sendEmailButton").prop("disabled", true).css("filter", "blur(2px)");
 const trackingNo = $("#trackingNoEdit").val();
 const eta = $("#etaEdit").val();
 var shipperName = $("#shipperNameEdit").val();
