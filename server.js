@@ -1730,95 +1730,95 @@ initialValue: "",
 in: {
 $cond: {
 if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } }, // Check for suffixes
-                      then: "$$value", // Skip if suffix
-                      else: { $concat: ["$$value", " ", "$$this"] } // Rebuild date string without suffixes
-                    }
-                  }
-                }
-              },
-              format: "%d %b, %Y %H:%M", // Adjust format after removing suffix
-              timezone: "UTC"
-            }
-          }
-        }
-      },
-      {
-        $match: {
-          orderDateParsed: {
-            $gte: new Date(new Date().setDate(1)), // From the first day of this month
-            $lt: new Date(new Date().setMonth(currentMonth + 1)), // Until the first day of the next month
-          },
-        },
-      },
-      {
-        $group: {
-          _id: { $dayOfMonth: "$orderDateParsed" },
-          totalOrders: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { _id: 1 } // Sort by day in ascending order
-      }
-    ]);
-console.log("daily found orders",orders);
-    const formattedOrders = orders.map(order => ({
-      day: order._id,
-      totalOrders: order.totalOrders,
-    }));
-
-    res.json(formattedOrders);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching daily orders', error });
+      then: "$$value", // Skip if suffix
+      else: { $concat: ["$$value", " ", "$$this"] } // Rebuild date string without suffixes
+    }
   }
+}
+},
+format: "%d %b, %Y %H:%M", // Adjust format after removing suffix
+timezone: "UTC"
+}
+}
+}
+},
+{
+$match: {
+orderDateParsed: {
+$gte: new Date(new Date().setDate(1)), // From the first day of this month
+$lt: new Date(new Date().setMonth(currentMonth + 1)), // Until the first day of the next month
+},
+},
+},
+{
+$group: {
+_id: { $dayOfMonth: "$orderDateParsed" },
+totalOrders: { $sum: 1 },
+},
+},
+{
+$sort: { _id: 1 } // Sort by day in ascending order
+}
+]);
+console.log("daily found orders",orders);
+const formattedOrders = orders.map(order => ({
+day: order._id,
+totalOrders: order.totalOrders,
+}));
+
+res.json(formattedOrders);
+} catch (error) {
+res.status(500).json({ message: 'Error fetching daily orders', error });
+}
 });
 app.get('/orders/monthly', async (req, res) => {
-  console.log("monthly orders");
-  try {
-    const orders = await Order.aggregate([
-      {
-        // Parse orderDate from string to Date object
-        $addFields: {
-          orderDateParsed: {
-            $dateFromString: {
-              dateString: {
-                $reduce: {
-                  input: { $split: ["$orderDate", " "] },
-                  initialValue: "",
-                  in: {
-                    $cond: {
-                      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
-                      then: "$$value",
-                      else: { $concat: ["$$value", " ", "$$this"] }
-                    }
-                  }
-                }
-              },
-              format: "%d %b, %Y %H:%M", // Adjust format after removing suffix
-              timezone: "UTC"
-            }
-          }
-        }
-      },
-      {
-        $group: {
-          _id: { $month: "$orderDateParsed" },
-          totalOrders: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { _id: 1 } // Sort by month in ascending order
-      }
-    ]);
-
-    const formattedOrders = orders.map(order => ({
-      month: order._id,
-      totalOrders: order.totalOrders,
-    }));
-
-    res.json(formattedOrders);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching monthly orders', error });
+console.log("monthly orders");
+try {
+const orders = await Order.aggregate([
+{
+// Parse orderDate from string to Date object
+$addFields: {
+orderDateParsed: {
+$dateFromString: {
+dateString: {
+$reduce: {
+  input: { $split: ["$orderDate", " "] },
+  initialValue: "",
+  in: {
+    $cond: {
+      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
+      then: "$$value",
+      else: { $concat: ["$$value", " ", "$$this"] }
+    }
   }
+}
+},
+format: "%d %b, %Y %H:%M", // Adjust format after removing suffix
+timezone: "UTC"
+}
+}
+}
+},
+{
+$group: {
+_id: { $month: "$orderDateParsed" },
+totalOrders: { $sum: 1 },
+},
+},
+{
+$sort: { _id: 1 } 
+}
+]);
+
+const formattedOrders = orders.map(order => ({
+month: order._id,
+totalOrders: order.totalOrders,
+}));
+
+res.json(formattedOrders);
+} catch (error) {
+res.status(500).json({ message: 'Error fetching monthly orders', error });
+}
 });
 app.get('/orders/salesperson/:salesperson', async (req, res) => {
   const salesperson = req.params.salesperson;

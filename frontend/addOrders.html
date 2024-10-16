@@ -841,105 +841,112 @@ return numberPart;
 // });
 
 var spMinusTax;//variable for sale price - salesTax
-$("#newOrderForm").on("submit", function (e) {
-e.preventDefault();
-// just for the time being
-const firstName = localStorage.getItem("firstName");
-const cusFName = $("#firstName").val();
-const cusLName = $("#lastName").val();
-const customerName = cusFName + " " + cusLName;
-const note = $("#notes").val();
-const orderDate = getFormattedOrderDate(); 
-//for salePrice - salesTax
-const soldP = $("#soldP").val();
-const salesTax = $("#salestax").val();
-spMinusTax = soldP - salesTax
- console.log("soldP - salestax",spMinusTax)
-var newOrderNo = $("#orderNo").val();
-console.log("orderNo",newOrderNo);
-const newOrder = {
-orderNo: newOrderNo,
-// orderNo:$("#orderNo").val(),
-orderDate: orderDate,
-salesAgent: $("#salesAgent").val(),
-spMinusTax: spMinusTax,
-customerName: customerName,
-bAddress: `${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()}`,
-sAddress: `${$("#sAddress").val()},\n${$("#sCity").val()},\n${$("#sState").val()},\n${$("#sZip").val()},\n${$("#sCountry").val()}`,
-email: $("#email").val(),
-phone: $("#phone").val(),
-altPhone: $("#altPhone").val(),
-make: $("#make").val(),
-model: $("#model").val(),
-year: $("#year").val(),
-pReq: $("#pReq").val(),
-desc: $("#desc").val(),
-warranty: $("#warranty").val(),
-soldP: soldP,
-costP: $("#costP").val(),
-businessName: $("#sBusinessName").val(),
-shippingFee: $("#shippingFee").val(),
-salestax: salesTax,
-grossProfit: $("#grossProfit").val(),
-orderStatus: "Placed",
-vin: $("#vin").val(),
-partNo: $("#partNo").val(),
-last4digits: $("#issueOrder").val(),
-notes: `${note}<br>${firstName},${orderDate}`,
-orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
-};
-console.log("newOrder",newOrder);
-axios.post("https://www.spotops360.com/orders", newOrder)
-.then(() => {
-alert(`Order No. ${newOrderNo} has been placed successfully.`);
-window.location.reload();
-})
-.catch((error) => {
-console.error("Error:", error);
+$(document).ready(function () {
+  // On form submission
+  $("#newOrderForm").on("submit", function (e) {
+    e.preventDefault();
+
+    // Disable the button to prevent multiple submissions
+    $("#addoBtn").prop("disabled", true).css("filter", "blur(2px)");
+
+    const firstName = localStorage.getItem("firstName");
+    const cusFName = $("#firstName").val();
+    const cusLName = $("#lastName").val();
+    const customerName = `${cusFName} ${cusLName}`;
+    const note = $("#notes").val();
+    const orderDate = getFormattedOrderDate();
+    const soldP = $("#soldP").val();
+    const salesTax = $("#salestax").val();
+    const spMinusTax = soldP - salesTax;
+    const newOrderNo = $("#orderNo").val();
+
+    const newOrder = {
+      orderNo: newOrderNo,
+      orderDate: orderDate,
+      salesAgent: $("#salesAgent").val(),
+      spMinusTax: spMinusTax,
+      customerName: customerName,
+      bAddress: `${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()}`,
+      sAddress: `${$("#sAddress").val()},\n${$("#sCity").val()},\n${$("#sState").val()},\n${$("#sZip").val()},\n${$("#sCountry").val()}`,
+      email: $("#email").val(),
+      phone: $("#phone").val(),
+      altPhone: $("#altPhone").val(),
+      make: $("#make").val(),
+      model: $("#model").val(),
+      year: $("#year").val(),
+      pReq: $("#pReq").val(),
+      desc: $("#desc").val(),
+      warranty: $("#warranty").val(),
+      soldP: soldP,
+      costP: $("#costP").val(),
+      businessName: $("#sBusinessName").val(),
+      shippingFee: $("#shippingFee").val(),
+      salestax: salesTax,
+      grossProfit: $("#grossProfit").val(),
+      orderStatus: "Placed",
+      vin: $("#vin").val(),
+      partNo: $("#partNo").val(),
+      last4digits: $("#issueOrder").val(),
+      notes: `${note}<br>${firstName},${orderDate}`,
+      orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
+    };
+
+    console.log("newOrder", newOrder);
+
+    // Make the API request to place the order
+    axios
+      .post("https://www.spotops360.com/orders", newOrder)
+      .then(() => {
+        alert(`Order No. ${newOrderNo} has been placed successfully.`);
+        // Enable the button and remove blur effect after success
+        $("#addoBtn").prop("disabled", false).css("filter", "none");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Re-enable the button if there was an error
+        $("#addoBtn").prop("disabled", false).css("filter", "none");
+      });
+  });
+
+  // Helper function to format order date
+  function getFormattedOrderDate() {
+    const now = new Date();
+    const options = {
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(now);
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+
+    const date = new Date(formattedDate);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hour = date.getHours();
+    const minute = date.getMinutes().toString().padStart(2, '0');
+
+    const daySuffix = (day) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    };
+
+    return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+  }
 });
-});
-// Helper function to format order date
-function getFormattedOrderDate() {
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-
-const date = new Date(formattedDate);
-
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const hour = date.getHours();
-const minute = date.getMinutes().toString().padStart(2, '0');
-
-const daySuffix = (day) => {
-if (day > 3 && day < 21) return "th"; // All days between 4th and 20th get 'th'
-switch (day % 10) {
-case 1: return "st";
-case 2: return "nd";
-case 3: return "rd";
-default: return "th";
-}
-};
-
-
-return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
-}
-
-
 
 // Sidebar and navigation functionality
 if (team === "Team Charlie") {
