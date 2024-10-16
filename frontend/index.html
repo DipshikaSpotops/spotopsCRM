@@ -628,6 +628,8 @@ console.error("Error fetching daily orders:", error);
 }
 }
 // monthly overview report start here
+let chartInstances = {}; // Store chart instances by month
+
 function getLastThreeMonths() {
   const now = new Date();
   const months = [];
@@ -635,7 +637,7 @@ function getLastThreeMonths() {
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
     months.push({
       name: date.toLocaleString("default", { month: "long" }),
-      number: date.getMonth() + 1,
+      number: date.getMonth() + 1, // 1-indexed month
       year: date.getFullYear(),
     });
   }
@@ -647,7 +649,7 @@ let currentMonthIndex = 0;
 
 generateCarouselContent();
 
-// Function to generate carousel content
+// Generate the carousel content with charts
 function generateCarouselContent() {
   const carouselContent = document.getElementById("carousel-content");
   lastThreeMonths.forEach((month, index) => {
@@ -663,7 +665,6 @@ function generateCarouselContent() {
     carouselContent.insertAdjacentHTML("beforeend", monthDiv);
   });
 
-  // Attach event listeners to the carousel controls
   document.getElementById("prev-month").addEventListener("click", () => {
     navigateMonth(-1);
   });
@@ -672,16 +673,16 @@ function generateCarouselContent() {
     navigateMonth(1);
   });
 
-  renderMonthlyChart(lastThreeMonths[currentMonthIndex]); // Initial render
+  renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
 }
 
-// Navigate to the correct month based on user interaction
+// Navigate between months and render the chart
 function navigateMonth(direction) {
   currentMonthIndex = (currentMonthIndex + direction + lastThreeMonths.length) % lastThreeMonths.length;
   renderMonthlyChart(lastThreeMonths[currentMonthIndex]);
 }
 
-// Parse custom date format from the orders
+// Parse the order date
 function parseOrderDate(orderDate) {
   const parts = orderDate.split(" ");
   const day = parseInt(parts[0]);
@@ -690,16 +691,19 @@ function parseOrderDate(orderDate) {
   return new Date(year, month, day);
 }
 
-// Fetch and render the chart for the selected month
+// Render chart for a given month and destroy previous instance if needed
 async function renderMonthlyChart(month) {
   console.log(`Fetching data for ${month.name}...`);
   try {
     const response = await axios.get("https://www.spotops360.com/orders");
     const orders = response.data;
 
-    const monthlyOrders = orders.filter(order => {
+    const monthlyOrders = orders.filter((order) => {
       const orderDate = parseOrderDate(order.orderDate);
-      return orderDate.getFullYear() === month.year && orderDate.getMonth() + 1 === month.number;
+      return (
+        orderDate.getFullYear() === month.year &&
+        orderDate.getMonth() + 1 === month.number
+      );
     });
 
     updateMonthlyChart(month.name, monthlyOrders);
@@ -708,7 +712,7 @@ async function renderMonthlyChart(month) {
   }
 }
 
-// Update the chart with order status data
+// Update the chart with order data and destroy the old one if needed
 function updateMonthlyChart(monthName, orders) {
   const statusLabels = [
     "Placed",
@@ -722,14 +726,21 @@ function updateMonthlyChart(monthName, orders) {
     "Dispute"
   ];
 
-  const statusCounts = statusLabels.map(status =>
-    orders.filter(order => order.orderStatus === status).length
+  const statusCounts = statusLabels.map((status) =>
+    orders.filter((order) => order.orderStatus === status).length
   );
 
   const totalOrders = orders.length;
 
   const ctx = document.getElementById(`chart-${monthName}`).getContext("2d");
-  new Chart(ctx, {
+
+  // Destroy the previous chart instance if it exists
+  if (chartInstances[monthName]) {
+    chartInstances[monthName].destroy();
+  }
+
+  // Create and store the new chart instance
+  chartInstances[monthName] = new Chart(ctx, {
     type: "bar",
     data: {
       labels: ["Total Orders", ...statusLabels],
