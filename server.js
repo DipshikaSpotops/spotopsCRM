@@ -1727,47 +1727,8 @@ const moment = require('moment-timezone');
 
 app.get('/orders/daily', async (req, res) => {
   console.log("Fetching daily orders for Dallas timezone");
-
-  try {
-    // Get the start of the current month in Dallas time
-    const startOfMonth = moment.tz("America/Chicago").startOf('month').toDate();
-    // Get the start of the next month in Dallas time
-    const startOfNextMonth = moment.tz("America/Chicago").add(1, 'month').startOf('month').toDate();
-
-    console.log("Dallas Start of Month:", startOfMonth, "Start of Next Month:", startOfNextMonth);
-
-    const orders = await Order.aggregate([
-      {
-        $match: {
-          orderDate: {
-            $gte: ISO(startOfMonth), 
-            $lt: ISO(startOfNextMonth),
-          },
-        },
-      },
-      {
-        $group: {
-          _id: { $dayOfMonth: "$orderDate" }, // Group by day of the month
-          totalOrders: { $sum: 1 }, // Count total orders for each day
-        },
-      },
-      {
-        $sort: { _id: 1 }, // Sort by day in ascending order
-      },
-    ]);
-
-    console.log("Daily Orders:", orders);
-
-    const formattedOrders = orders.map(order => ({
-      day: order._id,
-      totalOrders: order.totalOrders,
-    }));
-
-    res.json(formattedOrders);
-  } catch (error) {
-    console.error("Error fetching daily orders:", error);
-    res.status(500).json({ message: 'Error fetching daily orders', error });
-  }
+  const orders = await Order.find({});
+  console.log("orderDates",orders)
 });
 app.get('/orders/monthly', async (req, res) => {
 console.log("monthly orders");
