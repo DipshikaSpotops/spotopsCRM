@@ -702,15 +702,6 @@ async function renderMonthlyChart(month) {
   }
 }
 
-// Parse the order date
-function parseOrderDate(orderDate) {
-  const parts = orderDate.split(" ");
-  const day = parseInt(parts[0]);
-  const month = new Date(`${parts[1]} 1`).getMonth();
-  const year = parseInt(parts[2]);
-  return new Date(year, month, day);
-}
-
 // Update the monthly chart with data
 function updateMonthlyChart(monthName, orders) {
   const statusLabels = [
