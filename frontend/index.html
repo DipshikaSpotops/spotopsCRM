@@ -498,8 +498,8 @@ var orders;
     const now = new Date(dallasDate);
     console.log("now",now);
     const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1;
-    console.log("current month",currentMonth);
+    const currentMonth = now.getMonth();
+    console.log("current month","currentYear",currentYear);
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
     // Create an array for days of the current month (1 to daysInMonth)
