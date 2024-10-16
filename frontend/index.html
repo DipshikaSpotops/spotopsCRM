@@ -477,6 +477,7 @@ await fetchDailyOrders();
 
 // Fetch daily orders
 // Fetch daily orders and display them in a chart
+// Fetch daily orders and display them in a chart
 async function fetchDailyOrders() {
   console.log(token, "Fetching daily orders...");
 
@@ -538,32 +539,8 @@ async function fetchDailyOrders() {
     console.error("Error fetching daily orders:", error);
   }
 }
-    
 
-    if (!orders || !Array.isArray(orders)) {
-      console.error("Invalid daily orders data.");
-      return;
-    }
 
-    const labels = orders.map(order => order.day);
-    const data = orders.map(order => order.totalOrders);
-
-    new Chart(document.getElementById("dailyOrdersChart"), {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [{
-          label: "Total Orders",
-          backgroundColor: "rgba(54, 162, 235, 0.5)",
-          borderColor: "rgba(54, 162, 235, 1)",
-          data: data
-        }]
-      }
-    });
-  } catch (error) {
-    console.error("Error fetching daily orders:", error);
-  }
-}
 
 // // Fetch monthly orders with filter
 // async function fetchMonthlyOrders() {
