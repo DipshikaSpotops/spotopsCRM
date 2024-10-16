@@ -482,7 +482,7 @@ async function fetchDailyOrders() {
   console.log(token, "Fetching daily orders...");
 var orders;
   try {
-    const response = await axios.get("https://www.spotops360.com/orders/daily");
+    const response = await axios.get("https://www.spotops360.com/orders");
 
     const orders = response.data;
     console.log("Found daily orders:", orders);
