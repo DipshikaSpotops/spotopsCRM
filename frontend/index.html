@@ -480,26 +480,39 @@ await fetchDailyOrders();
 // Fetch daily orders and display them in a chart
 async function fetchDailyOrders() {
   console.log(token, "Fetching daily orders...");
-
+var orders;
   try {
-    const response = await axios.get("https://www.spotops360.com/orders/daily", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    const orders = response.data;
+    fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then(response => response.json())
+.then(data => {
+     orders = data;
     console.log("Found daily orders:", orders);
-
-    // Ensure orders is an array
+})
     if (!orders || !Array.isArray(orders)) {
       console.error("Invalid daily orders data.");
       return;
     }
+ // Get the total number of days in the current month (Dallas time)
+ const dallasDate = new Date().toLocaleString("en-US", {
+      timeZone: "America/Chicago"
+    });
+    const now = new Date(dallasDate);
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-    // Prepare labels and data for the chart
-    const labels = orders.map(order => `Day ${order.day}`);
-    const totalOrdersData = orders.map(order => order.totalOrders);
-    const totalGPData = orders.map(order => order.totalGP);
-
+    // Create an array for days of the current month (1 to daysInMonth)
+    const labels = Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`);
+      // Initialize order counts and GP data arrays with zeros
+      const totalOrdersData = Array(daysInMonth).fill(0);
+    const totalGPData = Array(daysInMonth).fill(0);
+    // Iterate over orders and update counts and GP data
+    orders.forEach(order => {
+      const orderDate = parseOrderDate(order.orderDate);
+      const orderDay = orderDate.getDate() - 1; // Day as index (0-based)
+      totalOrdersData[orderDay] += 1; // Increment order count
+      totalGPData[orderDay] += order.actualGP || 0; // Sum the GP value
+    });
     // Create or update the chart
     const ctx = document.getElementById("dailyOrdersChart").getContext("2d");
     new Chart(ctx, {
