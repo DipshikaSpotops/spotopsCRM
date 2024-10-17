@@ -532,7 +532,6 @@ sortTable(index, type);
 });
 
 // Function to render rows based on the page
-// Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
     const filteredOrders = orders.filter((item) => {
         // Ensure additionalInfo exists and has the expected structure
@@ -601,7 +600,7 @@ function generateActions(item) {
 
 
 // Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, filteredOrders = allOrders) {
+function createPaginationControls(totalPages, filteredOrders = filteredOrders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); 
 if (totalPages > 1) {
