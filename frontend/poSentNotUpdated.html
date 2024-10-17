@@ -338,7 +338,7 @@ aria-labelledby="userMenu"
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Yard Processing Orders </h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">PO Sent Not Orders </h1>
 <div>
 <input
 type="text"
@@ -532,6 +532,7 @@ sortTable(index, type);
 });
 
 // Function to render rows based on the page
+// Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
     const filteredOrders = orders.filter((item) => {
         // Ensure additionalInfo exists and has the expected structure
@@ -542,11 +543,15 @@ function renderTableRows(page, orders = allOrders) {
         return poInfoArray.some((info) => {
             const statusMatches = info.status === "Yard PO Sent";
 
+            // Ensure poSentDate exists before parsing it
+            if (!info.poSentDate) return false;
+
             // Parse and compare dates
             const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-console.log("diff",poSentDate,currentDate,differenceInDays);
+            console.log("diff", poSentDate, currentDate, differenceInDays);
+
             return statusMatches && differenceInDays > 1;
         });
     });
@@ -572,7 +577,7 @@ console.log("diff",poSentDate,currentDate,differenceInDays);
                 <td>${lastInfo.partName}</td>
                 <td>${lastInfo.yardName || ""}</td>
                 <td>${lastInfo.status}</td>
-                <td>${lastInfo.poSentDate} since ${differenceInDays} days</td>
+                <td>${lastInfo.poSentDate || "N/A"} since ${differenceInDays || "N/A"} days</td>
                 <td class="actions">${actions}</td>
                 <td>${item.email}</td>
             </tr>
