@@ -549,8 +549,8 @@ function renderTableRows(page, orders = allOrders) {
             // Parse and compare dates
             const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            differenceInDay = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            console.log("differ", poSentDate, currentDate, differenceInDays);
+            differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+            // console.log("diff", poSentDate, currentDate, differenceInDays);
 
             return statusMatches && differenceInDays > 1;
         });
@@ -565,11 +565,12 @@ function renderTableRows(page, orders = allOrders) {
     ordersForPage.forEach((item) => {
         // Extract the last entry in additionalInfo for display
          lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-         const poSentDate = new Date(Date.parse(item.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+         if (info.additionalInfo[lastInfo].poSentDate ){
+         const poSentDate = new Date(Date.parse(info.additionalInfo[lastInfo].poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
             console.log("diff", poSentDate, currentDate, differenceInDays);
-
+         }
         const actions = generateActions(item);
 
         const row = `
