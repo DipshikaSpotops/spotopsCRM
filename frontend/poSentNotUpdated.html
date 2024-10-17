@@ -582,10 +582,10 @@ function filterOrders(orders) {
         // Check if any entry in additionalInfo meets the status and date condition
         return poInfoArray.some((info) => {
             if (info.status !== "Yard PO Sent" || !info.poSentDate) return false;
-            const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            console.log("diff", poSentDate, currentDate, differenceInDays);
+            // const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+            // const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+            //  differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+            // console.log("diff", poSentDate, currentDate, differenceInDays);
         });
     });
 
@@ -601,6 +601,10 @@ function renderTableRows(page) {
     $('#infoTable').empty(); // Clear the table
 
     ordersForPage.forEach((item) => {
+        const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+            console.log("diff", poSentDate, currentDate, differenceInDays);
         const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
         const actions = generateActions(item);
         console.log("diff in days:",differenceInDays,lastInfo.status);
