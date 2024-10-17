@@ -571,14 +571,15 @@ function renderTableRows(page) {
 // Function to filter and store the orders with Yard PO Sent status and differenceInDays > 1
 let filteredOrders = [];
 let currentPage = 1;
-const rowsPerPage = 25; // Adjust as per requirement
+const rowsPerPage = 25; // Adjust as needed
 
-// Function to filter orders based on criteria
+// Function to filter orders based on conditions
 function filterOrders(orders) {
     filteredOrders = orders.filter((item) => {
         const poInfoArray = item.additionalInfo;
         if (!poInfoArray || poInfoArray.length === 0) return false;
 
+        // Check if any entry in additionalInfo meets the status and date condition
         return poInfoArray.some((info) => {
             if (info.status !== "Yard PO Sent" || !info.poSentDate) return false;
 
@@ -586,7 +587,7 @@ function filterOrders(orders) {
             const currentDate = new Date();
             const differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
 
-            item.differenceInDays = differenceInDays; // Store difference in days in the order object
+            item.differenceInDays = differenceInDays; // Store the difference in days
 
             return differenceInDays > 1;
         });
@@ -694,7 +695,6 @@ function renderTableRows(page) {
 function initializeOrders(orders) {
     filterOrders(orders); // Filter and display relevant orders
 }
-
 
 
 var firstname = localStorage.getItem("firstName");
