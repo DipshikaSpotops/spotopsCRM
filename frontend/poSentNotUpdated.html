@@ -338,7 +338,7 @@ aria-labelledby="userMenu"
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">PO Sent Not Orders </h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">PO Sent Not Updated </h1>
 <div>
 <input
 type="text"
@@ -585,7 +585,7 @@ function filterOrders(orders) {
 
             const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date();
-            const differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
 
             item.differenceInDays = differenceInDays; // Store the difference in days
 
