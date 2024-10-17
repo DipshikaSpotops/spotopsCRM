@@ -542,17 +542,7 @@ function renderTableRows(page, orders = allOrders) {
         // Check if any of the additionalInfo elements meet the status and date conditions
         return poInfoArray.some((info) => {
             const statusMatches = info.status === "Yard PO Sent";
-
-            // Ensure poSentDate exists before parsing it
-            if (!info.poSentDate) return false;
-
-            // Parse and compare dates
-            const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            // console.log("diff", poSentDate, currentDate, differenceInDays);
-
-            return statusMatches && differenceInDays > 1;
+            return statusMatches;
         });
     });
 
