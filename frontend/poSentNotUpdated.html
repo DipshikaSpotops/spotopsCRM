@@ -603,7 +603,7 @@ function renderTableRows(page) {
     ordersForPage.forEach((item) => {
         const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
         const actions = generateActions(item);
-
+if (differenceInDays > 1 && lastInfo.status == "Yard PO sent"){
         const row = `
             <tr>
                 <td>${item.orderDate}</td>
@@ -618,6 +618,7 @@ function renderTableRows(page) {
                 <td>${item.email}</td>
             </tr>`;
         $('#infoTable').append(row);
+}
     });
 
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
