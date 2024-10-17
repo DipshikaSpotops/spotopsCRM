@@ -573,10 +573,11 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${item.orderNo}</td>
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
-                <td>${lastInfo.partName}</td>
-                <td>${lastInfo.yardName || ""}</td>
+                <td>${lastInfo.yardName}</td>
+                <td>${lastInfo.yardName || ""} | ${lastInfo.address || ""} | ${lastInfo.email || ""} | ${lastInfo.phone || ""} </td>
                 <td>${lastInfo.status}</td>
-                <td>${lastInfo.poSentDate || "N/A"} since ${differenceInDays || "N/A"} days</td>
+                <td>${lastInfo.poSentDate || "N/A"}<br>
+                    PO sent since ${differenceInDays || "N/A"} days</td>
                 <td class="actions">${actions}</td>
                 <td>${item.email}</td>
             </tr>
