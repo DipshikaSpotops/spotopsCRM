@@ -1334,7 +1334,7 @@ style="margin-right: 94px;margin-top: -9px;"
 <!-- <option value="">Choose</option> -->
 <option value="Yard located">Yard Located</option>
 <option value="Yard PO Sent">PO Sent</option>
-<option value="PO confirmed">PO Confirmed</option>
+<option value="PO confirmed">Label Created</option>
 <option value="PO cancelled">PO Cancelled</option>
 <option value="Part shipped">Part Shipped</option>
 <option value="Part delivered">Part Delivered</option>
@@ -3125,11 +3125,14 @@ newOrderStatus = "Yard Processing";
 newOrderStatus = "Order Fulfilled";
 } else if (status === "Yard PO Sent") {
 newOrderStatus = "Yard Processing";
+var poSentDate = currentDateTime;
+console.log("po sent date",poSentDate);
 }
 // console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
 const updatedData = {
 ...currentYardData,
 status: status,
+poSentDate: poSentDate,
 trackingNo: trackingNo,
 eta: eta,
 shipperName: shipperName,
