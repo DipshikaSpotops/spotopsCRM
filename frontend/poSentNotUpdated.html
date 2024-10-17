@@ -533,32 +533,15 @@ sortTable(index, type);
 });
 var differenceInDays;
 // Function to render rows based on the page
-function renderTableRows(page, orders = allOrders) {
-    const filteredOrders = orders.filter((item) => {
-        // Ensure additionalInfo exists and has the expected structure
-        const poInfoArray = item.additionalInfo;
-        if (!poInfoArray || poInfoArray.length === 0) return false;
+let filteredOrders = []; // Move this outside for global scope
+let currentPage = 1; // Track the current page
+const rowsPerPage = 25; // Set rows per page
 
-        // Check if any of the additionalInfo elements meet the status and date conditions
-        return poInfoArray.some((info) => {
-            const statusMatches = info.status === "Yard PO Sent";
-
-            // Ensure poSentDate exists before parsing it
-            if (!info.poSentDate) return false;
-
-            // Parse and compare dates
-            const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            console.log("diff", poSentDate, currentDate, differenceInDays);
-
-            return statusMatches && differenceInDays > 1;
-        });
-    });
-
+// Function to render rows based on the page
+function renderTableRows(page) {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end);
+    const ordersForPage = filteredOrders.slice(start, end); // Use the filtered orders
 
     $('#infoTable').empty(); // Clear the table
 
@@ -581,7 +564,7 @@ function renderTableRows(page, orders = allOrders) {
                     ${lastInfo.phone || ""} </td>
                 <td>${lastInfo.status}</td>
                 <td>${lastInfo.poSentDate || "N/A"}<br>
-                    PO sent since ${differenceInDays || "N/A"} days</td>
+                    PO sent since ${item.differenceInDays || "N/A"} days</td>
                 <td class="actions">${actions}</td>
                 <td>${item.email}</td>
             </tr>
@@ -590,7 +573,29 @@ function renderTableRows(page, orders = allOrders) {
         $('#infoTable').append(row); // Add the row to the table
     });
 
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
+}
+
+// Function to filter and store the orders with Yard PO Sent status and differenceInDays > 1
+function filterOrders(orders) {
+    filteredOrders = orders.filter((item) => {
+        const poInfoArray = item.additionalInfo;
+        if (!poInfoArray || poInfoArray.length === 0) return false;
+
+        return poInfoArray.some((info) => {
+            if (info.status !== "Yard PO Sent" || !info.poSentDate) return false;
+
+            const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+            const currentDate = new Date();
+             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+
+            item.differenceInDays = differenceInDays; // Store differenceInDays in the order object
+
+            return differenceInDays > 1;
+        });
+    });
+
+    renderTableRows(currentPage); // Render the first page of filtered results
 }
 
 // Helper function to generate action buttons
@@ -599,39 +604,45 @@ function generateActions(item) {
     return ` ${processButton}`;
 }
 
+// Function to create pagination controls based on the number of pages
+function createPaginationControls(totalPages) {
+    const paginationControls = $('#pagination-controls');
+    paginationControls.empty(); 
 
-// Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, filteredOrders = filteredOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); 
-if (totalPages > 1) {
-for (let i = 1; i <= totalPages; i++) {
-    paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
-}
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
+    if (totalPages > 1) {
+        for (let i = 1; i <= totalPages; i++) {
+            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+        }
+        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    }
 }
 
-// Event listener for pagination buttons
+// Event listeners for pagination controls
 $('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage); // Use the filtered orders
+    currentPage = $(this).data('page');
+    renderTableRows(currentPage);
 });
 
 $('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage); // Use the filtered orders
-}
+    if (currentPage > 1) {
+        currentPage--;
+        renderTableRows(currentPage);
+    }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage); // Use the filtered orders
+    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderTableRows(currentPage);
+    }
+});
+
+// Call this function after fetching all orders to apply the filter and render the results
+function initializeOrders(orders) {
+    filterOrders(orders); // Filter and display only the relevant orders
 }
+
 });
 
 
