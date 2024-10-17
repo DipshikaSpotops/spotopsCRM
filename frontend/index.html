@@ -693,15 +693,21 @@ function updateMonthlyChart(index, monthName, orders) {
   );
 
   const totalOrders = orders.length;
+  const monthNameElement = document.getElementById(`month-name-${index}`);
+  monthNameElement.innerHTML = `${monthName} - Total Orders: ${totalOrders}`;
+
+  // Get the canvas context
   const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
+
+  // Create the Pie Chart for order statuses
   new Chart(ctx, {
-    type: "pie", // Use "pie" chart type for the visualization
+    type: "pie",
     data: {
-      labels: ["Total Orders", ...statusLabels],
+      labels: statusLabels, // Only show status labels inside the pie chart
       datasets: [
         {
-          label: `Orders in ${monthName}`,
-          data: [totalOrders, ...statusCounts],
+          label: `Order Status Distribution`,
+          data: statusCounts, // Only status counts are shown
           backgroundColor: [
             "#FF6384",
             "#36A2EB",
@@ -721,15 +727,17 @@ function updateMonthlyChart(index, monthName, orders) {
       responsive: true,
       plugins: {
         legend: {
-          position: "right", // Adjust legend position to the right
+          position: "right", // Legend on the right side
         },
         title: {
           display: true,
-          text: `Order Status for ${monthName}`,
+          text: `Order Status Distribution for ${monthName}`, // Title of the pie chart
         },
       },
     },
   });
+}
+
 
   // Set the month name in the header
   document.getElementById(`month-name-${index}`).innerText = monthName;
