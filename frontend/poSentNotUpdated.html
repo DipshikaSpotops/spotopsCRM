@@ -530,7 +530,7 @@ sortTable(index, type);
 });
 }
 });
-
+var differenceInDays;
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
     const filteredOrders = orders.filter((item) => {
@@ -548,7 +548,7 @@ function renderTableRows(page, orders = allOrders) {
             // Parse and compare dates
             const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+            differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
             console.log("diff", poSentDate, currentDate, differenceInDays);
 
             return statusMatches && differenceInDays > 1;
