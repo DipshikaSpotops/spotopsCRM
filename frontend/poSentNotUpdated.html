@@ -601,7 +601,7 @@ function renderTableRows(page) {
     $('#infoTable').empty(); // Clear the table
 
     ordersForPage.forEach((item) => {
-        if(ite.poSentDate){
+        if(item.poSentDate){
         const poSentDate = new Date(Date.parse(item.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
              differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
