@@ -3114,6 +3114,7 @@ newOrderStatus = "In Transit";
 newOrderStatus = "Yard Processing";
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
+var escalationDate = currentDateTime;
 escCause = $("#esc").val();
 console.log("escCause",escCause,currentDateTime);
 var escTicked = "Yes";
@@ -3140,7 +3141,7 @@ trackingLink: trackingLink,
 refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
 orderStatus: newOrderStatus, 
 escalationCause: escCause,
-escalationDate :currentDateTime,
+escalationDate :escalationDate,
 escTicked: escTicked
 };
 
