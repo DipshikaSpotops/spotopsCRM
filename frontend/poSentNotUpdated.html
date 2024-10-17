@@ -555,8 +555,8 @@ function renderTableRows(page, orders = allOrders) {
     ordersForPage.forEach((item) => {
         // Extract the last entry in additionalInfo for display
          lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-         console.log("last",lastInfo);
-         if (item.additionalInfo[lastInfo].poSentDate !== ""){
+        //  console.log("last",lastInfo);
+         if (item.additionalInfo[item.additionalInfo.length - 1].poSentDate !== ""){
          const poSentDate = new Date(Date.parse(item.additionalInfo[lastInfo].poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
