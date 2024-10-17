@@ -603,6 +603,7 @@ function renderTableRows(page) {
     ordersForPage.forEach((item) => {
         const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
         const actions = generateActions(item);
+        console.log("diff in days:",differenceInDays,lastInfo.status);
 if (differenceInDays > 1 && lastInfo.status == "Yard PO sent"){
         const row = `
             <tr>
