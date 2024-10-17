@@ -570,6 +570,8 @@ function renderTableRows(page, orders = allOrders) {
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
             console.log("diff", poSentDate, currentDate, differenceInDays);
+         }else{
+            console.log("podate not present");
          }
         const actions = generateActions(item);
 
