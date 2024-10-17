@@ -601,6 +601,7 @@ function renderTableRows(page) {
     $('#infoTable').empty(); // Clear the table
 
     ordersForPage.forEach((item) => {
+        if(ite.poSentDate){
         const poSentDate = new Date(Date.parse(item.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
              differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
@@ -608,6 +609,7 @@ function renderTableRows(page) {
         const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
         const actions = generateActions(item);
         console.log("diff in days:",differenceInDays,lastInfo.status);
+        }
 if (differenceInDays > 1 && lastInfo.status == "Yard PO sent"){
         const row = `
             <tr>
