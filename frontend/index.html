@@ -346,7 +346,7 @@ aria-labelledby="userMenu"
 
   
 
-<!-- Second row: Two charts -->
+<!-- Second row: Two charts
 <div class="chart-item">
 <h4>Salesperson Performance</h4>
 <select id="salespersonFilter">
@@ -356,11 +356,11 @@ aria-labelledby="userMenu"
 <option value="Michael">Michael</option>
 </select>
 <canvas id="salespersonPerformanceChart"></canvas>
-</div>
-<div class="chart-item">
+</div> -->
+<!-- <div class="chart-item">
 <h4>Yearly Progress</h4>
 <canvas id="yearlyProgressChart"></canvas>
-</div>
+</div> -->
 </div>
 </div>
 
@@ -735,7 +735,7 @@ function updateMonthlyChart(index, monthName, orders) {
 
   // Display the rates
   document.getElementById(`rates-month-${index}`).innerHTML = `
-  <div class="rate-item total-orders">Total No of Orders: ${totalOrders}%</div>
+  <div class="rate-item total-orders">Total No of Orders: ${totalOrders}</div>
     <div class="rate-item rate-success">Success Rate: ${successRate}%</div>
     <div class="rate-item rate-escalation">Escalation Rate: ${escalationRate}%</div>
     <div class="rate-item rate-cancellation">Cancellation Rate: ${cancellationRate}%</div>
