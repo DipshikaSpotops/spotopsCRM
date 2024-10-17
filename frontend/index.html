@@ -695,33 +695,41 @@ function updateMonthlyChart(index, monthName, orders) {
   const totalOrders = orders.length;
   const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
   new Chart(ctx, {
-    type: "radar", // Set the chart type to radar
+    type: "pie", // Use "pie" chart type for the visualization
     data: {
       labels: ["Total Orders", ...statusLabels],
       datasets: [
         {
           label: `Orders in ${monthName}`,
           data: [totalOrders, ...statusCounts],
-          backgroundColor: "rgba(54, 162, 235, 0.5)",
-          borderColor: "rgba(54, 162, 235, 1)",
-          borderWidth: 1,
-          pointBackgroundColor: "rgba(54, 162, 235, 1)"
+          backgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56",
+            "#FF9F40",
+            "#4BC0C0",
+            "#9966FF",
+            "#FF6384",
+            "#C9CBCF",
+            "#FFCD56",
+          ],
+          hoverOffset: 4,
         },
       ],
     },
     options: {
       responsive: true,
-      scales: {
-        r: { // Radar chart uses 'r' scale instead of 'x' and 'y'
-          beginAtZero: true,
-          ticks: {
-            stepSize: 1,
-          },
+      plugins: {
+        legend: {
+          position: "right", // Adjust legend position to the right
+        },
+        title: {
+          display: true,
+          text: `Order Status for ${monthName}`,
         },
       },
     },
   });
-
 
   // Set the month name in the header
   document.getElementById(`month-name-${index}`).innerText = monthName;
