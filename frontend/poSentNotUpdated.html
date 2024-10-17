@@ -359,6 +359,7 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard Name <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">PO Sent Date<span class="sort-icon">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actions</th>
       <th style="cursor: pointer" scope="col">
@@ -574,7 +575,10 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
                 <td>${lastInfo.yardName}</td>
-                <td>${lastInfo.yardName || ""} | ${lastInfo.address || ""} | ${lastInfo.email || ""} | ${lastInfo.phone || ""} </td>
+                <td>${lastInfo.yardName || ""}<br>
+                    ${lastInfo.address || ""}<br>
+                    ${lastInfo.email || ""}<br>
+                    ${lastInfo.phone || ""} </td>
                 <td>${lastInfo.status}</td>
                 <td>${lastInfo.poSentDate || "N/A"}<br>
                     PO sent since ${differenceInDays || "N/A"} days</td>
