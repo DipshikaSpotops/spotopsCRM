@@ -359,7 +359,6 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard Name <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">PO Sent Date<span class="sort-icon">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actions</th>
       <th style="cursor: pointer" scope="col">
@@ -410,6 +409,10 @@ default: return "th";
 }
 };
 var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;    
+// Pagination related variables
+let allOrders = [];
+const rowsPerPage = 25;
+let currentPage = 1;
 
 // Sorting Order Object
 var team, role;
@@ -528,12 +531,33 @@ sortTable(index, type);
 }
 });
 var differenceInDays;
-
 // Function to render rows based on the page
-function renderTableRows(page) {
+function renderTableRows(page, orders = allOrders) {
+    const filteredOrders = orders.filter((item) => {
+        // Ensure additionalInfo exists and has the expected structure
+        const poInfoArray = item.additionalInfo;
+        if (!poInfoArray || poInfoArray.length === 0) return false;
+
+        // Check if any of the additionalInfo elements meet the status and date conditions
+        return poInfoArray.some((info) => {
+            const statusMatches = info.status === "Yard PO Sent";
+
+            // Ensure poSentDate exists before parsing it
+            if (!info.poSentDate) return false;
+
+            // Parse and compare dates
+            const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+            differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+            console.log("diff", poSentDate, currentDate, differenceInDays);
+
+            return statusMatches && differenceInDays > 1;
+        });
+    });
+
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end); // Use the filtered orders
+    const ordersForPage = filteredOrders.slice(start, end);
 
     $('#infoTable').empty(); // Clear the table
 
@@ -550,13 +574,9 @@ function renderTableRows(page) {
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
                 <td>${lastInfo.yardName}</td>
-                <td>${lastInfo.yardName || ""}<br>
-                    ${lastInfo.address || ""}<br>
-                    ${lastInfo.email || ""}<br>
-                    ${lastInfo.phone || ""} </td>
+                <td>${lastInfo.yardName || ""} | ${lastInfo.yardName || ""}  </td>
                 <td>${lastInfo.status}</td>
-                <td>${lastInfo.poSentDate || "N/A"}<br>
-                    PO sent since ${item.differenceInDays || "N/A"} days</td>
+                <td>${lastInfo.poSentDate || "N/A"} since ${differenceInDays || "N/A"} days</td>
                 <td class="actions">${actions}</td>
                 <td>${item.email}</td>
             </tr>
@@ -565,152 +585,53 @@ function renderTableRows(page) {
         $('#infoTable').append(row); // Add the row to the table
     });
 
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
-// Function to filter and store the orders with Yard PO Sent status and differenceInDays > 1
-let filteredOrders = [];
-let currentPage = 1;
-const rowsPerPage = 25;
-
-// Function to filter orders
-function filterOrders(orders) {
-    filteredOrders = orders.filter((item) => {
-        const poInfoArray = item.additionalInfo;
-        if (!poInfoArray || poInfoArray.length === 0) return false;
-
-        // Check if any entry in additionalInfo meets the status and date condition
-        return poInfoArray.some((info) => {
-            if (info.status !== "Yard PO Sent" || !info.poSentDate) return false;
-            // const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            // const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            //  differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            // console.log("diff", poSentDate, currentDate, differenceInDays);
-        });
-    });
-
-    renderTableRows(currentPage); // Render the first page
-}
-
-// Function to render table rows based on the page
-function renderTableRows(page) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end);
-
-    $('#infoTable').empty(); // Clear the table
-
-    ordersForPage.forEach((item) => {
-        if(item.poSentDate){
-        const poSentDate = new Date(Date.parse(item.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-             differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            console.log("diff", poSentDate, currentDate, differenceInDays);
-        const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-        const actions = generateActions(item);
-        console.log("diff in days:",differenceInDays,lastInfo.status);
-        }
-if (differenceInDays > 1 && lastInfo.status == "Yard PO sent"){
-        const row = `
-            <tr>
-                <td>${item.orderDate}</td>
-                <td>${item.orderNo}</td>
-                <td>${item.salesAgent}</td>
-                <td>${item.customerName}</td>
-                <td>${lastInfo.yardName}</td>
-                <td>${lastInfo.yardName || ""}<br>${lastInfo.address || ""}<br>${lastInfo.email || ""}<br>${lastInfo.phone || ""}</td>
-                <td>${lastInfo.status}</td>
-                <td>${lastInfo.poSentDate || "N/A"}<br>PO sent since ${differenceInDays || "N/A"} days</td>
-                <td class="actions">${actions}</td>
-                <td>${item.email}</td>
-            </tr>`;
-        $('#infoTable').append(row);
-}
-    });
-
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
-}
-
-// Function to generate action buttons
+// Helper function to generate action buttons
 function generateActions(item) {
-    return `
-        <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" 
-                style="background-color: #cae8c9; border: none; color: #61a55e;">
-            View
-        </button>`;
+    const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
+    const processButton = `<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">Process</button>`;
+    const cancelButton = `<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">Cancel</button>`;
+    const sendInvoiceButton = `<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}">Send Invoice</button>`;
+
+    return `${editButton} ${processButton} ${cancelButton} ${sendInvoiceButton}`;
 }
 
-// Function to create pagination controls
-function createPaginationControls(totalPages) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty();
 
-    if (totalPages > 1) {
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(`
-                <button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" 
-                        data-page="${i}">
-                    ${i}
-                </button>`);
-        }
-        paginationControls.append(`
-            <button class="previousNext" id="nextPage" 
-                    ${currentPage === totalPages ? 'disabled' : ''}>
-                Next
-            </button>`);
-    }
+// Function to create pagination controls based on filtered data
+function createPaginationControls(totalPages, filteredOrders = filteredOrders) {
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); 
+if (totalPages > 1) {
+for (let i = 1; i <= totalPages; i++) {
+    paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+}
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
 }
 
-// Pagination event listeners
+// Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-    currentPage = $(this).data('page');
-    renderTableRows(currentPage);
+const page = $(this).data('page');
+currentPage = page;
+renderTableRows(currentPage); // Use the filtered orders
 });
 
 $('#pagination-controls').on('click', '#prevPage', function () {
-    if (currentPage > 1) {
-        currentPage--;
-        renderTableRows(currentPage);
-    }
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage); // Use the filtered orders
+}
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-    if (currentPage < totalPages) {
-        currentPage++;
-        renderTableRows(currentPage);
-    }
+const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage); // Use the filtered orders
+}
 });
-
-// Initialize and filter orders
-function initializeOrders(orders) {
-    filterOrders(orders); // Filter and display relevant orders
-}
-
-// Fetch orders and initialize the table
-async function fetchOrders() {
-    let token = localStorage.getItem("token");
-    if (!token) {
-        await fetchToken();
-        token = localStorage.getItem("token");
-    }
-
-    try {
-        const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-            axios.get("https://www.spotops360.com/orders", { headers: { Authorization: `Bearer ${token}` } }),
-            axios.get("https://www.spotops360.com/cancelledOrders", { headers: { Authorization: `Bearer ${token}` } }),
-        ]);
-
-        const allOrders = [...ordersResponse.data, ...cancelledOrdersResponse.data];
-        initializeOrders(allOrders);
-    } catch (error) {
-        console.error("Error fetching orders:", error);
-    }
-}
-
-// Call the function to fetch and display orders
-fetchOrders();
-
 
 
 var firstname = localStorage.getItem("firstName");
