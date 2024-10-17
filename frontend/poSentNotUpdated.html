@@ -581,15 +581,13 @@ function filterOrders(orders) {
 
         // Check if any entry in additionalInfo meets the status and date condition
         return poInfoArray.some((info) => {
-            if (info.status !== "Yard PO Sent" || !info.poSentDate) return false;
-
+            if (info.status == "Yard PO Sent") return true;
             const poSentDate = new Date(Date.parse(info.poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date();
+            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
              differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+            console.log("diff", poSentDate, currentDate, differenceInDays);
+           
 
-            item.differenceInDays = differenceInDays; // Store the difference in days
-
-            return differenceInDays > 1;
         });
     });
 
