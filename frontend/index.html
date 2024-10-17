@@ -156,7 +156,34 @@ margin: 1% 0%;
   background-color: white;
   height: 400px;
 }
+.rates-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  background-color: #e0f7fa;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+}
 
+.rate-item {
+  width: 30%;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.rate-success {
+  background-color: #d0f0c0; /* Light green */
+}
+
+.rate-escalation {
+  background-color: #f0f0c0; /* Light yellow */
+}
+
+.rate-cancellation {
+  background-color: #f8d7da; /* Light red */
+}
 /* canvas {
 width: 100% !important;
 height: 100% !important;
@@ -297,22 +324,26 @@ aria-labelledby="userMenu"
 </div>
 
 <div class="chart-container">
-    <h3>Monthly Orders Overview (Last 3 Months)</h3>
-    <div class="charts-container-monthly">
-      <div class="chart-item-monthly">
-        <h4 id="month-name-1"></h4>
-        <canvas id="chart-month-1"></canvas>
-      </div>
-      <div class="chart-item-monthly">
-        <h4 id="month-name-2"></h4>
-        <canvas id="chart-month-2"></canvas>
-      </div>
-      <div class="chart-item-monthly">
-        <h4 id="month-name-3"></h4>
-        <canvas id="chart-month-3"></canvas>
-      </div>
+  <h3>Monthly Orders Overview (Last 3 Months)</h3>
+  <div class="charts-container-monthly">
+    <div class="chart-item-monthly">
+      <h4 id="month-name-1"></h4>
+      <canvas id="chart-month-1"></canvas>
+      <div id="rates-month-1" class="rates-container"></div> <!-- Rates container -->
+    </div>
+    <div class="chart-item-monthly">
+      <h4 id="month-name-2"></h4>
+      <canvas id="chart-month-2"></canvas>
+      <div id="rates-month-2" class="rates-container"></div> <!-- Rates container -->
+    </div>
+    <div class="chart-item-monthly">
+      <h4 id="month-name-3"></h4>
+      <canvas id="chart-month-3"></canvas>
+      <div id="rates-month-3" class="rates-container"></div> <!-- Rates container -->
     </div>
   </div>
+</div>
+
   
 
 <!-- Second row: Two charts -->
@@ -685,61 +716,72 @@ function updateMonthlyChart(index, monthName, orders) {
     "Order Fulfilled",
     "Order Cancelled",
     "Refunded",
-    "Dispute",
+    "Dispute"
   ];
 
-  const statusCounts = statusLabels.map((status) =>
-    orders.filter((order) => order.orderStatus === status).length
+  const statusCounts = statusLabels.map(status =>
+    orders.filter(order => order.orderStatus === status).length
   );
 
   const totalOrders = orders.length;
-  const monthNameElement = document.getElementById(`month-name-${index}`);
-  monthNameElement.innerHTML = `${monthName} - Total Orders: ${totalOrders}`;
+  const fulfilledOrders = statusCounts[5]; // Order Fulfilled
+  const escalations = statusCounts[4]; // Escalation
+  const cancellations = statusCounts[6] + statusCounts[7] + statusCounts[8]; // Cancelled + Refunded + Dispute
 
-  // Get the canvas context
+  // Calculate rates
+  const successRate = ((fulfilledOrders / totalOrders) * 100).toFixed(2);
+  const escalationRate = ((escalations / totalOrders) * 100).toFixed(2);
+  const cancellationRate = ((cancellations / totalOrders) * 100).toFixed(2);
+
+  // Display the rates
+  document.getElementById(`rates-month-${index}`).innerHTML = `
+    <div class="rate-item rate-success">Success Rate: ${successRate}%</div>
+    <div class="rate-item rate-escalation">Escalation Rate: ${escalationRate}%</div>
+    <div class="rate-item rate-cancellation">Cancellation Rate: ${cancellationRate}%</div>
+  `;
+
+  // Render the pie chart
   const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
-
-  // Create the Pie Chart for order statuses
   new Chart(ctx, {
     type: "pie",
     data: {
-      labels: statusLabels, // Only show status labels inside the pie chart
+      labels: statusLabels,
       datasets: [
         {
-          label: `Order Status Distribution`,
-          data: statusCounts, // Only status counts are shown
+          label: `Order Status Distribution for ${monthName}`,
+          data: statusCounts,
           backgroundColor: [
-            "#43ca79",
+            "#FF6384",
             "#36A2EB",
-            "#4f76b9",
+            "#FFCE56",
             "#FF9F40",
-            "#9e72c7",
-            "#b0f1af",
-            "#fe352c",
+            "#4BC0C0",
+            "#9966FF",
+            "#FF6384",
             "#C9CBCF",
-            "#FFCD56",
+            "#FFCD56"
           ],
-          hoverOffset: 4,
-        },
-      ],
+          hoverOffset: 4
+        }
+      ]
     },
     options: {
       responsive: true,
       plugins: {
         legend: {
-          position: "right", 
+          position: "right"
         },
         title: {
           display: true,
-          text: `Order Status Distribution for ${monthName}`, // Title of the pie chart
-        },
-      },
-    },
+          text: `Order Status Distribution for ${monthName}`
+        }
+      }
+    }
   });
 
-
-
-  }
+  // Set the month name in the header
+  document.getElementById(`month-name-${index}`).innerText = monthName;
+}
 
 // Helper function to get the last three months
 function getLastThreeMonths() {
