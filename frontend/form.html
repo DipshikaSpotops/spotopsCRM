@@ -1334,7 +1334,7 @@ style="margin-right: 94px;margin-top: -9px;"
 <!-- <option value="">Choose</option> -->
 <option value="Yard located">Yard Located</option>
 <option value="Yard PO Sent">PO Sent</option>
-<option value="PO confirmed">Label Created</option>
+<option value="Label created">Label Created</option>
 <option value="PO cancelled">PO Cancelled</option>
 <option value="Part shipped">Part Shipped</option>
 <option value="Part delivered">Part Delivered</option>
@@ -2103,9 +2103,14 @@ $("#escTickBox").prop("checked", false);
 var yardStatus = yard.status;
 // console.log("current yard status", yardStatus);
 // Update order status based on yard status
-if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent" || yardStatus === "PO confirmed") {
+if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent"){
 $("#orderStatus").val("Yard Processing");
-} else if (yardStatus === "Part shipped") {
+}
+else if(yardStatus === "Label created") {
+$("#orderStatus").val("Yard Processing");
+}
+
+else if (yardStatus === "Part shipped") {
 $("#orderStatus").val("In Transit");
 } else if (yardStatus === "Part delivered") {
 $("#orderStatus").val("Order Fulfilled");
@@ -3110,8 +3115,10 @@ let newOrderStatus = $("#orderStatus").val();
 // Updating the order status with shipping and refund information
 if (status === "Part shipped") {
 newOrderStatus = "In Transit";
-} else if (status === "PO confirmed") {
+} else if (status === "Label created") {
 newOrderStatus = "Yard Processing";
+var labelCreatedDate = currentDateTime;
+console.log("label created date",labelCreatedDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
 var escalationDate = currentDateTime;
@@ -3134,6 +3141,7 @@ const updatedData = {
 ...currentYardData,
 status: status,
 poSentDate: poSentDate,
+labelCreatedDate: labelCreatedDate,
 trackingNo: trackingNo,
 eta: eta,
 shipperName: shipperName,
