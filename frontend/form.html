@@ -3085,14 +3085,14 @@ $("#otherShipperInput").hide();
 }
 });
 
+
+var labelDate;
 $("#editYardInfo").on("click", async function () {
 console.log("clicking on save");
 $(".mainDiv").removeClass("blur");
 $("#editYardPopup").hide();
-
 const yardIndex = $(this).data("yard-index");
 let currentYardData = {};
-
 try {
 // Fetch the order or cancelled order data
 let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
@@ -3118,8 +3118,8 @@ if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
 newOrderStatus = "Yard Processing"; 
-var labelCreatedDate = currentDateTime;
-console.log("label created date",labelCreatedDate);
+labelDate = currentDateTime;
+console.log("label created date",labelDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
 var escalationDate = currentDateTime;
@@ -3142,7 +3142,7 @@ const updatedData = {
 ...currentYardData,
 status: status,
 poSentDate: poSentDate,
-labelDate: labelCreatedDate,
+labelDate: labelDate,
 trackingNo: trackingNo,
 eta: eta,
 shipperName: shipperName,
