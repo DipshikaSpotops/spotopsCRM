@@ -690,9 +690,9 @@ try {
             return false; // Skip if status or poSentDate is missing
         }
 
-        const poSentDate = new Date(Date.parse(lastInfo.poSentDate.replace(/(\d+)(st|nd|rd|th)/, "$1")));
+        const labelCreateDate = new Date(Date.parse(lastInfo.labelCreateDate.replace(/(\d+)(st|nd|rd|th)/, "$1")));
         const currentDate = new Date();
-        const differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
+        const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
 
         // Return true if the status is "Yard PO Sent" and the difference in days is > 1
         return differenceInDays > 1;
