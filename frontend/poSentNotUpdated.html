@@ -361,9 +361,6 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">PO Sent Date<span class="sort-icon">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actions</th>
-      <th style="cursor: pointer" scope="col">
-      Email <span class="aToZ">&#9650;</span>
-      </th>
       </tr>
   </thead>
   <tbody id="infoTable">
@@ -579,7 +576,6 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${lastInfo.poSentDate || "N/A"}<br>  
                     <b>${differenceInDays + 1 || "N/A"} days ago</b>
                 <td class="actions">${actions}</td>
-                <td>${item.email}</td>
             </tr>
         `;
 
