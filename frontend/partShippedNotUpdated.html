@@ -554,8 +554,8 @@ function renderTableRows(page, orders = allOrders) {
         // Extract the last entry in additionalInfo for display
          lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
         //  console.log("last",lastInfo);
-         if (item.additionalInfo[item.additionalInfo.length - 1].labelCreatedDate !== ""){
-         const labelCreatedDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].labelCreatedDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+         if (item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate !== ""){
+         const labelCreatedDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             differenceInDays = Math.floor((currentDate - labelCreatedDate) / (1000 * 60 * 60 * 24));
             console.log("diff", labelCreatedDate, currentDate, differenceInDays);
@@ -576,7 +576,7 @@ function renderTableRows(page, orders = allOrders) {
         ${lastInfo.phone || ""}</td>
     <td>${lastInfo.status}</td>
     <td>
-        ${lastInfo.labelCreatedDate || "N/A"}<br>  
+        ${lastInfo.labelCreateDate || "N/A"}<br>  
         <b>${differenceInDays + 1 || "N/A"} days ago</b>
     </td>
     <td class="actions">${actions}</td>
@@ -686,7 +686,7 @@ try {
     filteredOrders = allOrders.filter((item) => {
         const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; // Get the last entry
 
-        if (!lastInfo || lastInfo.status !== "Label created" || !lastInfo.labelCreatedDate) {
+        if (!lastInfo || lastInfo.status !== "Label created" || !lastInfo.labelCreateDate) {
             return false; // Skip if status or poSentDate is missing
         }
 
