@@ -3153,7 +3153,7 @@ escalationCause: escCause,
 escalationDate :escalationDate,
 escTicked: escTicked
 };
-console.log("upData".updatedData);
+console.log("upData".updatedData)
 
 // Send the updated data to the server
 fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
@@ -3173,7 +3173,7 @@ headers: {
 body: JSON.stringify(updatedData),
 });
 }
-// window.location.reload();
+window.location.reload();
 return response.json();
 })
 .then((data) => {
@@ -3638,7 +3638,7 @@ $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
-} else if (refundStatus === "PO cancelled") {
+} else if (refundStatus === "Label created") {
 $("#escalation").hide();    
 $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
