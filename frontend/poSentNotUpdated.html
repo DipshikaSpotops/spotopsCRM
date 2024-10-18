@@ -578,7 +578,7 @@ function renderTableRows(page, orders = allOrders) {
                     ${lastInfo.email || ""}<br>
                     ${lastInfo.phone || ""}</td>
                 <td>${lastInfo.status}</td>
-                <td>${lastInfo.poSentDate || "N/A"} since ${differenceInDays || "N/A"} days</td>
+                <td>${lastInfo.poSentDate || "N/A"} since ${differenceInDays + 1 || "N/A"} days</td>
                 <td class="actions">${actions}</td>
                 <td>${item.email}</td>
             </tr>
