@@ -357,7 +357,6 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Yard Name <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">PO Sent Date<span class="sort-icon">&#9650;</span></th>
@@ -572,13 +571,13 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${item.orderNo}</td>
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
-                <td>${lastInfo.yardName}</td>
                 <td>${lastInfo.yardName || ""}<br>  
                     ${lastInfo.address || ""}<br>
                     ${lastInfo.email || ""}<br>
                     ${lastInfo.phone || ""}</td>
                 <td>${lastInfo.status}</td>
-                <td>${lastInfo.poSentDate || "N/A"} since ${differenceInDays + 1 || "N/A"} days</td>
+                <td>${lastInfo.poSentDate || "N/A"}<br>  
+                    <b>${differenceInDays + 1 || "N/A"} days ago</b>
                 <td class="actions">${actions}</td>
                 <td>${item.email}</td>
             </tr>
