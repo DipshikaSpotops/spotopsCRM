@@ -3086,7 +3086,7 @@ $("#otherShipperInput").hide();
 });
 
 
-var labelDate;
+// var labelDate;
 $("#editYardInfo").on("click", async function () {
 console.log("clicking on save");
 $(".mainDiv").removeClass("blur");
@@ -3118,7 +3118,7 @@ if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
 newOrderStatus = "Yard Processing"; 
-labelDate = currentDateTime;
+var labelCreateDate = currentDateTime;
 console.log("label created date",labelDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
@@ -3142,7 +3142,7 @@ const updatedData = {
 ...currentYardData,
 status: status,
 poSentDate: poSentDate,
-labelDate: labelDate,
+labelCreateDate: labelCreateDate,
 trackingNo: trackingNo,
 eta: eta,
 shipperName: shipperName,
@@ -4179,7 +4179,7 @@ const currentPath = window.location.pathname;
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
-}
+}====
 });
 $('#crossBtnEditYard').on('click', function(e) {
 $('#editYardPopup').hide();
