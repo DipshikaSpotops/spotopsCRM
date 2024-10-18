@@ -3117,7 +3117,7 @@ let newOrderStatus = $("#orderStatus").val();
 if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
-newOrderStatus = "Yard Processing";
+newOrderStatus = "Yard Processing"; 
 var labelCreatedDate = currentDateTime;
 console.log("label created date",labelCreatedDate);
 } else if (status === "Escalation") {
@@ -3142,7 +3142,7 @@ const updatedData = {
 ...currentYardData,
 status: status,
 poSentDate: poSentDate,
-labelCreatedDate: labelCreatedDate,
+labelDate: labelCreatedDate,
 trackingNo: trackingNo,
 eta: eta,
 shipperName: shipperName,
