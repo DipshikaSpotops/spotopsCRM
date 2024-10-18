@@ -353,21 +353,21 @@ placeholder="Search..."
 <div id="pagination-controls" class="mt-3 mb-3"></div>
 <div class="table-responsive">
 <table class="table table-bordered mt-4">
-  <thead>
-    <tr>
-      <th style="cursor: pointer" scope="col">Order Date <span class="sort-icon">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Label Created Date<span class="sort-icon">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Actions</th>
-      </tr>
-  </thead>
-  <tbody id="infoTable">
-      <!-- Table data goes here -->
-  </tbody>
+<thead>
+<tr>
+<th style="cursor: pointer" scope="col">Order Date <span class="sort-icon">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Label Created Date<span class="sort-icon">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody id="infoTable">
+<!-- Table data goes here -->
+</tbody>
 </table>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
@@ -532,62 +532,54 @@ sortTable(index, type);
 var differenceInDays;
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-    const filteredOrders = orders.filter((item) => {
-        // Ensure additionalInfo exists and has the expected structure
-        const poInfoArray = item.additionalInfo;
-        if (!poInfoArray || poInfoArray.length === 0) return false;
+const filteredOrders = orders.filter((item) => {
+const poInfoArray = item.additionalInfo;
+if (!poInfoArray || poInfoArray.length === 0) return false;
+return poInfoArray.some((info) => {
+const statusMatches = info.status === "Label created";
+return statusMatches;
+});
+});
 
-        // Check if any of the additionalInfo elements meet the status and date conditions
-        return poInfoArray.some((info) => {
-            const statusMatches = info.status === "Label Created";
-            return statusMatches;
-        });
-    });
-
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end);
-
-    $('#infoTable').empty(); // Clear the table
-
-    ordersForPage.forEach((item) => {
-        // Extract the last entry in additionalInfo for display
-         lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-        //  console.log("last",lastInfo);
-         if (item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate !== ""){
-         const labelCreatedDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            differenceInDays = Math.floor((currentDate - labelCreatedDate) / (1000 * 60 * 60 * 24));
-            console.log("diff", labelCreatedDate, currentDate, differenceInDays);
-         }else{
-            console.log("podate not present");
-         }
-        const actions = generateActions(item);
-
-        const row = `
-  <tr>
-    <td>${item.orderDate}</td>
-    <td>${item.orderNo}</td>
-    <td>${item.salesAgent}</td>
-    <td>${item.customerName}</td>
-    <td>${lastInfo.yardName || ""}<br>  
-        ${lastInfo.address || ""}<br>
-        ${lastInfo.email || ""}<br>
-        ${lastInfo.phone || ""}</td>
-    <td>${lastInfo.status}</td>
-    <td>
-        ${lastInfo.labelCreateDate || "N/A"}<br>  
-        <b>${differenceInDays + 1 || "N/A"} days ago</b>
-    </td>
-    <td class="actions">${actions}</td>
-  </tr>
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = filteredOrders.slice(start, end);
+$('#infoTable').empty();
+ordersForPage.forEach((item) => {
+lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+if (item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate !== ""){
+const labelCreatedDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+differenceInDays = Math.floor((currentDate - labelCreatedDate) / (1000 * 60 * 60 * 24));
+console.log("diff", labelCreatedDate, currentDate, differenceInDays);
+}else{
+console.log("podate not present");
+}
+const actions = generateActions(item);
+const row = `
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${lastInfo.yardName || ""}<br>  
+${lastInfo.address || ""}<br>
+${lastInfo.email || ""}<br>
+${lastInfo.phone || ""}</td>
+<td>${lastInfo.status}</td>
+<td>
+${lastInfo.labelCreateDate || "N/A"}<br>  
+<b>${differenceInDays + 1 || "N/A"} days ago</b>
+</td>
+<td class="actions">${actions}</td>
+</tr>
 `;
 
 
-        $('#infoTable').append(row); // Add the row to the table
-    });
+$('#infoTable').append(row); // Add the row to the table
+});
 
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
 // Helper function to generate action buttons
@@ -676,24 +668,20 @@ try {
     if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
         throw new Error("Failed to fetch orders");
     }
-
-    // Combine orders and cancelled orders
     const orders = ordersResponse.data;
     const cancelledOrders = cancelledOrdersResponse.data;
     allOrders = [...orders, ...cancelledOrders];
-
     // Filter orders based on the required conditions
     filteredOrders = allOrders.filter((item) => {
-        const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; // Get the last entry
+        const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; 
 
         if (!lastInfo || lastInfo.status !== "Label created" || !lastInfo.labelCreateDate) {
-            return false; // Skip if status or poSentDate is missing
+            return false; 
         }
 
         const labelCreateDate = new Date(Date.parse(lastInfo.labelCreateDate.replace(/(\d+)(st|nd|rd|th)/, "$1")));
         const currentDate = new Date();
         const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
-
         // Return true if the status is "Yard PO Sent" and the difference in days is > 1
         return differenceInDays > 1;
     });
@@ -706,14 +694,6 @@ try {
     console.error("Error fetching orders:", error);
 }
 
-
-// Filtering functionality
-// $("#searchInput").on("keyup", function () {
-//   const value = $(this).val().toLowerCase();
-//   $("#infoTable tr").filter(function () {
-//     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-//   });
-// });
 
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
@@ -763,63 +743,8 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-$("#infoTable").on("click", ".cancel-btn", function () {
-const id = $(this).data("id");
-console.log(`Cancel button clicked for order ID: ${id}`); // Added log
 
-if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-// Change the order status to "Order Cancelled" in the HTML
-$(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
-
-// Optionally, disable the cancel button
-$(this).prop("disabled", true);
-
-// Send a request to update the order status in the backend
-fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
-method: "PUT",
-headers: {
-Authorization: `Bearer ${token}`,
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-firstName: firstName
-})
-})
-.then(response => {
-if (!response.ok) {
-console.error("Failed to update order status", response);
-throw new Error("Failed to update order status");
-}
-return response.json();
-})
-.then(data => {
-console.log("Order status updated successfully", data); // Added log
-alert("Order status updated to 'Order Cancelled'");
-})
-.catch(error => {
-console.error("Error updating order status:", error);
-});
-}
-});
-
-
-$("#infoTable").on("click", ".send-invoice-btn", function () {
-const id = $(this).data("id");
-fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-method: "POST",
-headers: {
-Authorization: `Bearer ${token}`
-},
-})
-.then((response) => response.json())
-.then((data) => {
-alert(data.message);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-});
-const currentPath = window.location.pathname + "?newEntry=true";
+const currentPath = window.location.pathname;
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
