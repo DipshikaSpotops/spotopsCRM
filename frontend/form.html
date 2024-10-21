@@ -2063,8 +2063,9 @@ var currentActualGp = data.actualGP || 0;
 // console.log("actualGP rn",currentActualGp);
 $("#custRefunds").val(custRefundedAmount.toFixed(2))
 console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
-if (!data.additionalInfo) {
-console.log('Yards not presesnt.');
+console.log(data.additionalInfo)
+if (!data.additionalInfo || data.additionalInfo.length === 0) {
+// console.log('Yards not presesnt.');
 if(custRefundedAmount){
 actualGP = (sp - custRefundedAmount) - tax;
 console.log("actualGp without yards",actualGP);
