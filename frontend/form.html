@@ -2108,7 +2108,7 @@ $("#orderStatus").val("Yard Processing");
 }
 else if(yardStatus === "Label created") {
 $("#orderStatus").val("Yard Processing");
-var labelCreatedDate = currentDateTime;
+var labelCreationDate = currentDateTime;
 }
 
 else if (yardStatus === "Part shipped") {
@@ -3111,8 +3111,8 @@ if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
 newOrderStatus = "Yard Processing"; 
-var labelCreatedDate = currentDateTime;
-console.log("label created date",labelCreatedDate);
+var labelCreationDate = currentDateTime;
+console.log("label created date",labelCreationDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
 var escalationDate = currentDateTime;
@@ -3135,7 +3135,7 @@ const updatedData = {
   ...currentYardData,
   status: status,
   poSentDate: poSentDate || currentYardData.poSentDate,
-  labelCreatedDate: labelCreatedDate || currentYardData.labelCreatedDate,
+  labelCreationDate: labelCreationDate || currentYardData.labelCreationDate,
   trackingNo: trackingNo || currentYardData.trackingNo,
   eta: eta || currentYardData.eta,
   shipperName: shipperName || currentYardData.shipperName,
