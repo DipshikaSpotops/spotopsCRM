@@ -2104,21 +2104,21 @@ $("#escTickBox").prop("checked", false);
 var yardStatus = yard.status;
 // console.log("current yard status", yardStatus);
 // Update order status based on yard status
-if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent"){
-$("#orderStatus").val("Yard Processing");
-}
-else if(yardStatus === "Label created") {
-$("#orderStatus").val("Yard Processing");
-var labelCreationDate = currentDateTime;
-}
+// if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent"){
+// $("#orderStatus").val("Yard Processing");
+// }
+// else if(yardStatus === "Label created") {
+// $("#orderStatus").val("Yard Processing");
+// var labelCreationDate = currentDateTime;
+// }
 
-else if (yardStatus === "Part shipped") {
-$("#orderStatus").val("In Transit");
-} else if (yardStatus === "Part delivered") {
-$("#orderStatus").val("Order Fulfilled");
-} else if (yardStatus === "Escalation") {
-$("#orderStatus").val("Escalation");
-}
+// else if (yardStatus === "Part shipped") {
+// $("#orderStatus").val("In Transit");
+// } else if (yardStatus === "Part delivered") {
+// $("#orderStatus").val("Order Fulfilled");
+// } else if (yardStatus === "Escalation") {
+// $("#orderStatus").val("Escalation");
+// }
 if(pStatus === "Card charged"){
 var yardPP = parseFloat(yard.partPrice) || 0;
 var yardOSorYS = yard.shippingDetails || '';
