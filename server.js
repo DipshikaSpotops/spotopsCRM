@@ -262,8 +262,10 @@ returnTrackingCust: String,
 custReturnDelivery: String,
 // reimburesement part
 reimbursementAmount: String,
-isReimbursedChecked: String
-});
+isReimbursedChecked: String,
+},
+{strict:false}
+);
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
 const CancelledOrderSchema = new mongoose.Schema({
