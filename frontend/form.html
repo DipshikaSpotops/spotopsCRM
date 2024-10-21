@@ -3142,6 +3142,7 @@ const updatedData = {
   ...currentYardData,
   status: status,
   poSentDate: poSentDate || currentYardData.poSentDate,
+  labelCreatedDate: labelCreatedDate || currentYardData.labelCreatedDate,
   trackingNo: trackingNo || currentYardData.trackingNo,
   eta: eta || currentYardData.eta,
   shipperName: shipperName || currentYardData.shipperName,
@@ -3152,8 +3153,7 @@ const updatedData = {
   orderStatus: newOrderStatus || currentYardData.orderStatus,
   escalationCause: escCause || currentYardData.escalationCause,
   escalationDate: escalationDate || currentYardData.escalationDate,
-  escTicked: escTicked || currentYardData.escTicked,
-  labelDate: labelDate || currentYardData.labelDate 
+  escTicked: escTicked || currentYardData.escTicked 
 };
 console.log("upData",updatedData)
 
