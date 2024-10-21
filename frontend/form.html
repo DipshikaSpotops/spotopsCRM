@@ -3139,19 +3139,21 @@ console.log("po sent date",poSentDate);
 }
 // console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
 const updatedData = {
-...currentYardData,
-status: status,
-poSentDate: poSentDate,
-trackingNo: trackingNo,
-eta: eta,
-shipperName: shipperName,
-trackingLink: trackingLink,
-refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.refundedAmount,
-orderStatus: newOrderStatus, 
-escalationCause: escCause,
-escalationDate :escalationDate,
-escTicked: escTicked,
-labelDate: labelDate
+  ...currentYardData,
+  status: status,
+  poSentDate: poSentDate || currentYardData.poSentDate,
+  trackingNo: trackingNo || currentYardData.trackingNo,
+  eta: eta || currentYardData.eta,
+  shipperName: shipperName || currentYardData.shipperName,
+  trackingLink: trackingLink || currentYardData.trackingLink,
+  refundedAmount: refundedAmount 
+    ? parseFloat(refundedAmount) 
+    : currentYardData.refundedAmount,
+  orderStatus: newOrderStatus || currentYardData.orderStatus,
+  escalationCause: escCause || currentYardData.escalationCause,
+  escalationDate: escalationDate || currentYardData.escalationDate,
+  escTicked: escTicked || currentYardData.escTicked,
+  labelDate: labelDate || currentYardData.labelDate // Ensure labelDate is sent properly
 };
 console.log("upData",updatedData)
 
