@@ -3118,7 +3118,7 @@ if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
 newOrderStatus = "Yard Processing"; 
-var labelDate = String(currentDateTime);
+var labelDate = currentDateTime;
 console.log("label created date",labelDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
@@ -3153,7 +3153,7 @@ const updatedData = {
   escalationCause: escCause || currentYardData.escalationCause,
   escalationDate: escalationDate || currentYardData.escalationDate,
   escTicked: escTicked || currentYardData.escTicked,
-  labelDate: labelDate || currentYardData.labelDate // Ensure labelDate is sent properly
+  labelDate: labelDate || currentYardData.labelDate 
 };
 console.log("upData",updatedData)
 
@@ -3166,15 +3166,6 @@ headers: {
 body: JSON.stringify(updatedData),
 })
 .then((response) => {
-if (!response.ok) {
-return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(updatedData),
-});
-}
 window.location.reload();
 return response.json();
 })
