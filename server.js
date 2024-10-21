@@ -595,6 +595,7 @@ res.status(500).json({ message: 'Server error', error });
 
 //for updating yardStatus and all
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
+console.log("update yard statuses and dates")  
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:,mnbjklkjhbv', centralTime);
 const date = new Date(centralTime);
