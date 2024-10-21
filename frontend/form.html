@@ -3118,8 +3118,8 @@ if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
 newOrderStatus = "Yard Processing"; 
-var labelDate = currentDateTime;
-console.log("label created date",labelDate);
+var labelCreatedDate = currentDateTime;
+console.log("label created date",labelCreatedDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
 var escalationDate = currentDateTime;
