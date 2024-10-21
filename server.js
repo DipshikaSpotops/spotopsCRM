@@ -633,10 +633,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
       }
 
       // Set `labelCreatedDate` if status is "Label created"
-      if (req.body.status === "Label created") {
-        yardInfo.labelCreatedDate = formattedDateTime;
-        console.log("Label created date set:", formattedDateTime);
-      }
+      
 
       // Update the specific index in the additionalInfo array
       order.additionalInfo[yardIndex] = yardInfo;
@@ -645,7 +642,10 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
       const status = req.body.status;
       const paymentStatus = req.body.paymentStatus;
       const refundStatus = req.body.refundStatus;
-
+      if (status === "Label created") {
+        yardInfo.labelCreatedDate = formattedDateTime;
+        console.log("Label created date set:", formattedDateTime);
+      }
       // Add an entry to the order history
       order.orderHistory.push(
         `Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`
