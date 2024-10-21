@@ -3094,14 +3094,8 @@ $("#editYardPopup").hide();
 const yardIndex = $(this).data("yard-index");
 let currentYardData = {};
 try {
-// Fetch the order or cancelled order data
 let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
 let orderData = await response.json();
-
-if (!orderData || !orderData.additionalInfo) {
-response = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
-orderData = await response.json();
-}
 let escCause = "";
 const currentYardData = orderData.additionalInfo[yardIndex - 1];
 const status = $("#refund").val();
@@ -3113,7 +3107,6 @@ const paymentStatus = $('.paymentStatus').val();
 const refundedAmount = $("#refundedAmount").val();
 let newOrderStatus = $("#orderStatus").val();
 // console.log("yardStatus",status);
-// Updating the order status with shipping and refund information
 if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
@@ -3155,9 +3148,7 @@ const updatedData = {
   escalationDate: escalationDate || currentYardData.escalationDate,
   escTicked: escTicked || currentYardData.escTicked 
 };
-console.log("upData",updatedData)
-
-// Send the updated data to the server
+console.log("upData",updatedData);
 fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
 method: "PUT",
 headers: {
@@ -3170,7 +3161,6 @@ window.location.reload();
 return response.json();
 })
 .then((data) => {
-// Handle the successful response here
 $("#orderStatus").val(newOrderStatus);
 updateOrderHistory(data.orderHistory);
 showYardDetails(yardIndex);
