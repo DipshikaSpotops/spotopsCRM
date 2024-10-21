@@ -3142,7 +3142,6 @@ const updatedData = {
 ...currentYardData,
 status: status,
 poSentDate: poSentDate,
-labelDate: labelDate,
 trackingNo: trackingNo,
 eta: eta,
 shipperName: shipperName,
@@ -3151,7 +3150,8 @@ refundedAmount: refundedAmount ? parseFloat(refundedAmount) : currentYardData.re
 orderStatus: newOrderStatus, 
 escalationCause: escCause,
 escalationDate :escalationDate,
-escTicked: escTicked
+escTicked: escTicked,
+labelDate: labelDate
 };
 console.log("upData".updatedData)
 
@@ -3173,7 +3173,7 @@ headers: {
 body: JSON.stringify(updatedData),
 });
 }
-window.location.reload();
+// window.location.reload();
 return response.json();
 })
 .then((data) => {
