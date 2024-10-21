@@ -3118,8 +3118,8 @@ if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
 newOrderStatus = "Yard Processing"; 
-var labelCreateDate = currentDateTime;
-console.log("label created date",labelCreateDate);
+var labelDate = currentDateTime;
+console.log("label created date",labelDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";
 var escalationDate = currentDateTime;
@@ -3142,7 +3142,7 @@ const updatedData = {
 ...currentYardData,
 status: status,
 poSentDate: poSentDate,
-labelCreateDate: labelCreateDate,
+labelDate: labelDate,
 trackingNo: trackingNo,
 eta: eta,
 shipperName: shipperName,
