@@ -3634,7 +3634,14 @@ $("#notesContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
-} else if (refundStatus === "Yard PO Sent") {
+}
+else if (refundStatus === "Collect refund") {
+$("#notesContainer").show();
+$("#escalation").hide();
+$("#divTrackingEdit").hide();
+$("#cardCharged").hide();
+}
+ else if (refundStatus === "Yard PO Sent") {
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 } else if (refundStatus === "Yard located") {
