@@ -3118,7 +3118,7 @@ if (status === "Part shipped") {
 newOrderStatus = "In Transit";
 } else if (status === "Label created") {
 newOrderStatus = "Yard Processing"; 
-var labelDate = currentDateTime;
+var labelDate = String(currentDateTime);
 console.log("label created date",labelDate);
 } else if (status === "Escalation") {
 newOrderStatus = "Escalation";

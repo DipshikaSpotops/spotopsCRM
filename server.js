@@ -612,13 +612,10 @@ const order = await Order.findOne({ orderNo: req.params.orderNo });
 const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
 console.log("Order found:", order);
 console.log("Yard index:", yardIndex);
-
 if (!order) return res.status(404).send("Order not found");
-
 if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
 const yardInfo = order.additionalInfo[yardIndex];
 console.log("Existing yard info:", yardInfo);
-
 for (const key in req.body) {
 if (req.body.hasOwnProperty(key)) {
 yardInfo[key] = req.body[key];
@@ -626,8 +623,8 @@ yardInfo[key] = req.body[key];
 }
 // Update the specific index in the additionalInfo array
 order.additionalInfo[yardIndex] = yardInfo;
-const firstName = req.query.firstName; // Get firstName from the request body
-const status = req.body.status; // Get status from the request body
+const firstName = req.query.firstName; 
+const status = req.body.status; 
 const paymentStatus = req.body.paymentStatus;
 const refundStatus = req.body.refundStatus;
 order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
