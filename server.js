@@ -624,7 +624,6 @@ if (req.body.hasOwnProperty(key)) {
 yardInfo[key] = req.body[key];
 }
 }
-
 // Update the specific index in the additionalInfo array
 order.additionalInfo[yardIndex] = yardInfo;
 const firstName = req.query.firstName; // Get firstName from the request body
@@ -1522,50 +1521,50 @@ res.status(400).json({ message: error.message });
 }
 });
 
-// api for updating PO sent date:
-app.put('/orders/:orderNo', (req, res) => {
-const { orderNo } = req.params;
-const { poSentDate } = req.body;
-Order.findOneAndUpdate({ orderNo: orderNo }, { $set: { poSentDate: poSentDate } }, { new: true })
-.then(updatedOrder => {
-res.json(updatedOrder);
-})
-.catch(err => {
-console.error('Error updating PO Sent Date:', err);
-res.status(500).send('Error updating PO Sent Date');
-});
-});
+// // api for updating PO sent date:
+// app.put('/orders/:orderNo', (req, res) => {
+// const { orderNo } = req.params;
+// const { poSentDate } = req.body;
+// Order.findOneAndUpdate({ orderNo: orderNo }, { $set: { poSentDate: poSentDate } }, { new: true })
+// .then(updatedOrder => {
+// res.json(updatedOrder);
+// })
+// .catch(err => {
+// console.error('Error updating PO Sent Date:', err);
+// res.status(500).send('Error updating PO Sent Date');
+// });
+// });
 // api for updating po sent date and delivery date:
-app.put('/orders/:orderNo/additionalInfo/:yardIndex', async (req, res) => {
-const { orderNo, yardIndex } = req.params;
-const { poSentDate, partDeliveredDate, status } = req.body;
+// app.put('/orders/:orderNo/additionalInfo/:yardIndex', async (req, res) => {
+// const { orderNo, yardIndex } = req.params;
+// const { poSentDate, partDeliveredDate, status } = req.body;
 
-try {
-const order = await Order.findOne({ orderNo });
+// try {
+// const order = await Order.findOne({ orderNo });
 
-if (!order) {
-return res.status(404).send('Order not found');
-}
+// if (!order) {
+// return res.status(404).send('Order not found');
+// }
 
-const yard = order.additionalInfo[yardIndex];
+// const yard = order.additionalInfo[yardIndex];
 
-if (!yard) {
-return res.status(404).send('Yard not found');
-}
+// if (!yard) {
+// return res.status(404).send('Yard not found');
+// }
 
-// Update the relevant fields
-if (poSentDate) yard.poSentDate = poSentDate;
-if (partDeliveredDate) yard.partDeliveredDate = partDeliveredDate;
+// // Update the relevant fields
+// if (poSentDate) yard.poSentDate = poSentDate;
+// if (partDeliveredDate) yard.partDeliveredDate = partDeliveredDate;
 
-// Save the changes
-await order.save();
+// // Save the changes
+// await order.save();
 
-res.json(order);
-} catch (err) {
-console.error('Error updating yard dates:', err);
-res.status(500).send('Internal server error');
-}
-});
+// res.json(order);
+// } catch (err) {
+// console.error('Error updating yard dates:', err);
+// res.status(500).send('Internal server error');
+// }
+// });
 
 
 // Move order from cancelledOrders to orders if orderStatus is not 'Order Cancelled'
