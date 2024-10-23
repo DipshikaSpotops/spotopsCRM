@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Static Yards</title>
+<title>In Transit Orders</title>
 <link
 href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 rel="stylesheet"
@@ -125,7 +125,7 @@ cursor: pointer;
 }
 .fixed-header {
 flex-shrink: 0;
-margin: 1% 26%;
+margin: 0% 30%;
 }
 @media (max-width: 768px) {
 .sidebar {
@@ -327,8 +327,6 @@ aria-labelledby="userMenu"
 <a class="nav-link" href="purchases.html">Purchases</a>
 <a class="nav-link" href="refundReport.html">Refund Report</a>
 <a class="nav-link" href="poReport.html">PO Report</a>
-<a class="nav-link" href="poSentNotUpdated.html">Static Yards</a>
-<a class="nav-link" href="partShippedNotUpdated.html">Pending Dispatch</a>
 <!-- <a class="nav-link" href="salesReport.html">My Sales Report</a> -->
 <a class="nav-link" href="collectRefund.html">Collect Refunds</a>
 <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
@@ -340,7 +338,7 @@ aria-labelledby="userMenu"
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Static Yards</h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">In Transit Orders </h1>
 <div>
 <input
 type="text"
@@ -355,14 +353,32 @@ placeholder="Search..."
 <table class="table table-bordered mt-4">
   <thead>
     <tr>
-      <th style="cursor: pointer" scope="col">Order Date <span class="sort-icon">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">PO Sent Date<span class="sort-icon">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">
+      Order Date <span class="sort-icon">&#9650;</span>
+      </th>
+      <th style="cursor: pointer" scope="col">
+      Order No. <span class="sort-icon onlyNumber">&#9650;</span>
+      </th>
+      <th style="cursor: pointer" scope="col">
+      Agent Name <span class="aToZ" >&#9650;</span>
+      </th>
+      <th style="cursor: pointer" scope="col">
+      Customer Name
+      <span class="aToZ">&#9650;</span>
+      </th>
+      <th style="cursor: pointer" scope="col">
+      Part Name <span class="aToZ">&#9650;</span>
+      </th>
+      <th style="cursor: pointer" scope="col">
+      Yard <span class="aToZ">&#9650;</span>
+      </th>
+      <th style="cursor: pointer" scope="col">
+      Order Status <span class="aToZ">&#9650;</span>
+      </th>
       <th style="cursor: pointer" scope="col">Actions</th>
+      <th style="cursor: pointer" scope="col">
+      Email <span class="aToZ">&#9650;</span>
+      </th>
       </tr>
   </thead>
   <tbody id="infoTable">
@@ -376,43 +392,11 @@ placeholder="Search..."
 </div>
 <script>
 $(document).ready(async function () {
-    const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-const date = new Date(formattedDate);
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const hour = date.getHours();
-const minute = date.getMinutes().toString().padStart(2, '0');
-const daySuffix = (day) => {
-if (day > 3 && day < 21) return "th"; // All days between 4th and 20th get 'th'
-switch (day % 10) {
-case 1: return "st";
-case 2: return "nd";
-case 3: return "rd";
-default: return "th";
-}
-};
-var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;    
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
-var lastInfo ;
+
 // Sorting Order Object
 var team, role;
 let sortOrder = {
@@ -433,17 +417,14 @@ Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
 Nov: "11", Dec: "12"
 };
 
-// Extract parts from the string (day, month, year, time)
 const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
 
 if (parts) {
-const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
+const day = parts[1].padStart(2, '0'); 
 const month = months[parts[2]];
 const year = parts[3];
 const hour = parts[4];
 const minute = parts[5];
-
-// Return a valid date string for comparison
 return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
 }
 
@@ -529,73 +510,66 @@ sortTable(index, type);
 });
 }
 });
-var differenceInDays;
-// Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-    const filteredOrders = orders.filter((item) => {
-        // Ensure additionalInfo exists and has the expected structure
-        const poInfoArray = item.additionalInfo;
-        if (!poInfoArray || poInfoArray.length === 0) return false;
-
-        // Check if any of the additionalInfo elements meet the status and date conditions
-        return poInfoArray.some((info) => {
-            const statusMatches = info.status === "Yard PO Sent";
-            return statusMatches;
-        });
+    // Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
+    const filteredOrders = orders.filter(item => {
+        return (item.orderStatus === "In Transit");
     });
 
+    // Pagination logic after filtering
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end);
+    const ordersForPage = filteredOrders.slice(start, end); 
 
     $('#infoTable').empty(); // Clear the table
 
     ordersForPage.forEach((item) => {
-        // Extract the last entry in additionalInfo for display
-         lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-        //  console.log("last",lastInfo);
-         if (item.additionalInfo[item.additionalInfo.length - 1].poSentDate !== ""){
-         const poSentDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            console.log("diff", poSentDate, currentDate, differenceInDays);
-         }else{
-            console.log("podate not present");
-         }
-        const actions = generateActions(item);
+        const escalationStatus = item.additionalInfo &&
+            item.additionalInfo[0] &&
+            item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
 
-        const row = `
+        let escalationStyle = '';
+        if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+            escalationStyle = 'style="background-color: lightgreen;"';
+        }
+
+        const team = localStorage.getItem('team');
+        const editButton = (team === "Team Mark" || team === "Team Sussane")
+            ? "" // Hide the edit button
+            : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+
+        const actions = `
+            ${editButton}
+            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
+
+        const sendInvoice = `
+            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+
+        const yardlength = item.additionalInfo.length;
+
+        $("#infoTable").append(`
             <tr>
                 <td>${item.orderDate}</td>
                 <td>${item.orderNo}</td>
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
-                <td>${lastInfo.yardName || ""}<br>  
-                    ${lastInfo.address || ""}<br>
-                    ${lastInfo.email || ""}<br>
-                    ${lastInfo.phone || ""}</td>
-                <td>${lastInfo.status}</td>
-                <td>${lastInfo.poSentDate || "N/A"}<br>  
-                    <b>${differenceInDays + 1 || "N/A"} days ago</b>
+                <td>${item.pReq || item.partName}</td>
+                <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+                <td>${item.orderStatus}</td>
+                <td ${escalationStyle}>${escalationStatus}</td>
                 <td class="actions">${actions}</td>
+                <td>${sendInvoice}</td>
+                <td>${item.email}</td>
             </tr>
-        `;
-
-        $('#infoTable').append(row); // Add the row to the table
+        `);
     });
 
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
-// Helper function to generate action buttons
-function generateActions(item) {
-    const processButton = `<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>`;
-    return `${processButton}`;
-}
-
-
 // Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, filteredOrders = filteredOrders) {
+function createPaginationControls(totalPages, filteredOrders = allOrders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); 
 if (totalPages > 1) {
@@ -658,49 +632,39 @@ await fetchToken();
 token = localStorage.getItem("token");
 }
 
+// Fetch orders and apply pagination
 try {
-    // Fetch orders and cancelled orders from the API
-    const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-        axios.get("https://www.spotops360.com/orders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-        axios.get("https://www.spotops360.com/cancelledOrders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-    ]);
+// Fetch orders and cancelled orders from the API
+const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+axios.get("https://www.spotops360.com/orders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}),
+axios.get("https://www.spotops360.com/cancelledOrders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}),
+]);
 
-    // Check if both fetch requests were successful
-    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-        throw new Error("Failed to fetch orders");
-    }
+// Check if both fetch requests were successful
+if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+throw new Error("Failed to fetch orders");
+}
 
-    // Combine orders and cancelled orders
-    const orders = ordersResponse.data;
-    const cancelledOrders = cancelledOrdersResponse.data;
-    allOrders = [...orders, ...cancelledOrders];
+// Combine orders and cancelled orders
+var orders = ordersResponse.data;
+var cancelledOrders = cancelledOrdersResponse.data;
+allOrders = [...orders, ...cancelledOrders];
 
-    // Filter orders based on the required conditions
-    filteredOrders = allOrders.filter((item) => {
-        const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; // Get the last entry
+// Filter out orders that have statuses "Placed", "Customer approved", or "Order Fulfilled"
+filteredOrders = allOrders.filter(item => {
+return (item.orderStatus === "Yard Processing");
+});
 
-        if (!lastInfo || lastInfo.status !== "Yard PO Sent" || !lastInfo.poSentDate) {
-            return false; // Skip if status or poSentDate is missing
-        }
-
-        const poSentDate = new Date(Date.parse(lastInfo.poSentDate.replace(/(\d+)(st|nd|rd|th)/, "$1")));
-        const currentDate = new Date();
-        const differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-
-        // Return true if the status is "Yard PO Sent" and the difference in days is > 1
-        return differenceInDays > 1;
-    });
-
-    // Sort and render the filtered orders
-    allOrders = sortOrdersByOrderNoDesc(filteredOrders); // Optional sorting
-    renderTableRows(currentPage); // Render the first page of filtered data
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+// Sort and render the filtered orders
+allOrders = sortOrdersByOrderNoDesc(filteredOrders); // You can sort filtered orders by Order No descending if needed
+renderTableRows(currentPage); // Start with the first page of filtered data
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 } catch (error) {
-    console.error("Error fetching orders:", error);
+console.error("Error fetching orders:", error);
 }
 
 
