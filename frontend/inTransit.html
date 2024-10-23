@@ -656,7 +656,7 @@ allOrders = [...orders, ...cancelledOrders];
 
 // Filter out orders that have statuses "Placed", "Customer approved", or "Order Fulfilled"
 filteredOrders = allOrders.filter(item => {
-return (item.orderStatus === "Yard Processing");
+return (item.orderStatus === "In Transit");
 });
 
 // Sort and render the filtered orders
