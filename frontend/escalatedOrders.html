@@ -538,7 +538,7 @@ else if (item.orderStatus === "Dispute" && item.additionalInfo.some(yard => yard
 escalationStyle = 'style="background-color: #d55900;color:white;"';
 }
 else if (item.orderStatus === "Refunded" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
-escalationStyle = 'style="background-color: #5a3286;color:title;"';
+escalationStyle = 'style="background-color: #5a3286;color:white;"';
 }
 const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 const actions = `
