@@ -3123,8 +3123,8 @@ console.log("escCause",escCause,currentDateTime);
 var escTicked = "Yes";
 $("#escTickBox").prop("checked", true);
 // window.location.reload();
-} else if (status === "PO cancelled") {
-newOrderStatus = "Yard Processing";
+} else if (status === "Collect redund") {
+newOrderStatus = "Escalation";
 } else if (status === "Part delivered") {
 newOrderStatus = "Order Fulfilled";
 } else if (status === "Yard PO Sent") {
