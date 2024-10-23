@@ -2119,6 +2119,8 @@ $("#orderStatus").val("In Transit");
 $("#orderStatus").val("Order Fulfilled");
 } else if (yardStatus === "Escalation") {
 $("#orderStatus").val("Escalation");
+} else if (yardStatus === "Collect refund") {
+$("#orderStatus").val("Escalation");
 }
 if(pStatus === "Card charged"){
 var yardPP = parseFloat(yard.partPrice) || 0;
