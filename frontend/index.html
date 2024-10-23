@@ -841,6 +841,7 @@ async function fetchMonthlySalesProgress() {
 
     // Group by month and sum up Actual GP for each month
     const monthlyData = {};
+    console.log("length",filteredOrders.length);
     filteredOrders.forEach(order => {
       const orderDate = parseOrderDate(order.orderDate);
       const monthYear = `${orderDate.toLocaleString('default', { month: 'short' })} ${orderDate.getFullYear()}`;

@@ -531,6 +531,15 @@ let escalationStyle = '';
 if (item.orderStatus === "Order Fulfilled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
 escalationStyle = 'style="background-color: lightgreen;"';
 }
+else if (item.orderStatus === "Order Cancelled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
+escalationStyle = 'style="background-color: red;"';
+}
+else if (item.orderStatus === "Dispute" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
+escalationStyle = 'style="background-color: orange;"';
+}
+else if (item.orderStatus === "Refunded" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
+escalationStyle = 'style="background-color: purple;"';
+}
 const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 const actions = `
 ${editButton}
