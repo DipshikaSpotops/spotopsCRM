@@ -728,7 +728,7 @@ const yardEntries = Object.values(yardLogs);
 var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
 console.log("Last DateTime:", lDateTime);
 
-currentdatetime = currentdatetime.replace(/(\d+)(st|nd|rd|th)/, '$1');
+currentDateTime = currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
 lDateTime = lDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
 var currentDate = new Date(currentdatetime);
 var lastDate = new Date(lDateTime);
