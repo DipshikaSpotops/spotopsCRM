@@ -730,7 +730,7 @@ console.log("Last DateTime:", lDateTime);
 
 currentDateTime = currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
 lDateTime = lDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
-var currentDate = new Date(currentdatetime);
+var currentDate = new Date(currentDateTime);
 var lastDate = new Date(lDateTime);
 var diffTime = Math.abs(currentDate - lastDate);
 var differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
