@@ -2028,10 +2028,11 @@ $("#cancelledRefundSubmit").on("click", function () {
   const custRefundData = {
     cancelledDate,
     cancelledRefAmount,
+    orderNo
   };
   console.log("Payload being sent:", custRefundData);
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/cancelledRefund`, custRefundData)
+  axios.put(`https://www.spotops360.com/cancelledRefund`, custRefundData)
     .then(function (response) {
       alert("Refund information for cancelled order updated successfully!");
     })

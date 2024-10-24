@@ -1727,10 +1727,10 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
 
 
 // for cancelled refunds
-app.put('/orders/:orderNo/cancelledRefund', async (req, res) => {
+app.put('/cancelledRefund', async (req, res) => {
   console.log("put request for cancelledRefund");
-  const { orderNo } = req.params;
-  const { cancelledDate, cancelledRefAmount } = req.body;
+  // const { orderNo } = req.params;
+  const { cancelledDate, cancelledRefAmount , orderNo} = req.body;
   console.log("Cancelled:", cancelledDate,cancelledRefAmount, "OrderNo:", orderNo);
   
   try {
