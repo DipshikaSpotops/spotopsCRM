@@ -1712,15 +1712,15 @@ res.status(500).json({ message: 'Server error' });
 app.put('/orders/:orderNo/cancelledRefund', async (req, res) => {
   console.log("put request for cancelledRefund");
   const { orderNo } = req.params;
-  const { custRefundDate, custRefundedAmount } = req.body;
+  const { canecelledDate, canecelledRefAmount } = req.body;
   console.log("Refunds:", canecelledDate,canecelledRefAmount, "OrderNo:", orderNo);
   
   try {
   const order = await Order.findOneAndUpdate(
   { orderNo: orderNo }, 
   { 
-  custRefundDate: custRefundDate,
-  custRefundedAmount:custRefundedAmount
+    canecelledDate: canecelledDate,
+  canecelledRefAmount:canecelledRefAmount
   },
   { new: true }  
   );
