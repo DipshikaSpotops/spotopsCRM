@@ -1939,16 +1939,16 @@ $("body").append('<div class="modal-overlay"></div>');
 $("#custRefund").fadeIn();
 $("body").addClass("modal-active");
 }
-// else if (newOrderStatus == "Order Cancelled") {
-//     console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
-//     $(".orderedDate").val(orderPlacedDate);
-//     $("#cancelledDate").val(currentDateTime);
-//     $("body").append('<div class="modal-overlay"></div>');
-//     console.log("Showing cancellation div"); // Add this line to check if it's being called
-//     $("#cancellingOrder").css("display", "block").hide().fadeIn();
-// // $("#cancellingOrder").fadeIn(); // Ensure this is called
-//     $("body").addClass("modal-active");
-// } 
+else if (newOrderStatus == "Order Cancelled") {
+    console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
+    $(".orderedDate").val(orderPlacedDate);
+    $("#cancelledDate").val(currentDateTime);
+    $("body").append('<div class="modal-overlay"></div>');
+    console.log("Showing cancellation div"); // Add this line to check if it's being called
+    $("#cancellingOrder").css("display", "block").hide().fadeIn();
+// $("#cancellingOrder").fadeIn(); // Ensure this is called
+    $("body").addClass("modal-active");
+} 
 else {
 $("#disputeDiv").fadeOut();
 $(".modal-overlay").remove();
@@ -2019,12 +2019,11 @@ $(".cancelledRefundSubmit").on("click", function () {
   const cancelledDate = $("#cancelledDate").val();
   const cancelledRefAmount = $(".cancelledRefAmount").val();
   const orderNo = urlParams.get("orderNo");
-
+console.log("cancelledDats",cancelledDate,cancelledRefAmount)
   const custRefundDataC = {
     cancelledDate,
     cancelledRefAmount,
   };
-
   axios.put(`https://www.spotops360.com/orders/${orderNo}/cancelledRefund`, custRefundDataC)
     .then(function (response) {
       alert("Refund information updated successfully!");
