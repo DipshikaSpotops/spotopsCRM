@@ -1841,7 +1841,7 @@ Save
 <input type="number" class="custRefundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
 </div>
 </div>
-<button type="button" id="custRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
+<button type="button" class="custRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
 </div>  
 <!-- customer refund - order refunding part ends here -->
  <!-- for cancelled order status -->
@@ -1867,7 +1867,7 @@ Save
   <input type="number" class="custRefundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
   </div>
   </div>
-  <button type="button" id="custRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
+  <button type="button" class="custRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
   </div>
   <!-- cancelled orderstatus ends -->
 <script>
@@ -1987,7 +1987,7 @@ alert("Failed to update dispute information.");
 });
 // for dispute till here
 //for custRefund
-$("#custRefundSubmit").on("click", function () {
+$(".custRefundSubmit").on("click", function () {
 // console.log("custRefundSubmit");
  $("#custRefund").fadeOut();
 $(".modal-overlay").remove();
