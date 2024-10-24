@@ -534,14 +534,8 @@ function renderTableRows(page, orders = allOrders) {
         }
 
         const team = localStorage.getItem('team');
-        const editButton = (team === "Team Mark" || team === "Team Sussane")
-            ? "" // Hide the edit button
-            : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-
-        const actions = `
-            ${editButton}
-            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
+         const actions = `
+            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
         const sendInvoice = `
             <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
@@ -690,7 +684,6 @@ return (
 ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
 (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-(order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value))
 );
 });
