@@ -2697,42 +2697,42 @@ console.log("Order not found");
 
 
 
-$("#orderStatus").on("change", function () {
-// if ($(this).val() === "Yard PO sent") {
-// showModal("#yardModal");
-// $("#divTrackingEdit").hide();
+// $("#orderStatus").on("change", function () {
+// // if ($(this).val() === "Yard PO sent") {
+// // showModal("#yardModal");
+// // $("#divTrackingEdit").hide();
+// // }
+// console.log("orderStatus",$(this).val());
+// if ($(this).val() === "Order Cancelled") {
+// const id = $(this).data("id");
+// // console.log(`Cancel for order ID: ${orderNo}`,id); 
+// fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+// method: "DELETE",
+// headers: {
+// Authorization: `Bearer ${token}`
+// },
+// })
+// .then((response) => {
+// if (!response.ok) {
+// // console.error("Failed to delete order", response);
+// throw new Error("Failed to delete order");
 // }
-console.log("orderStatus",$(this).val());
-if ($(this).val() === "Order Cancelled") {
-const id = $(this).data("id");
-// console.log(`Cancel for order ID: ${orderNo}`,id); 
-fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-method: "DELETE",
-headers: {
-Authorization: `Bearer ${token}`
-},
-})
-.then((response) => {
-if (!response.ok) {
-// console.error("Failed to delete order", response);
-throw new Error("Failed to delete order");
-}
-return response.json();
-})
-.then((data) => {
-console.log("Order cancelled successfully", data);
-window.location.reload();
-})
-.catch((error) => {
-console.error("Error cancelling order:", error);
-});
+// return response.json();
+// })
+// .then((data) => {
+// console.log("Order cancelled successfully", data);
+// window.location.reload();
+// })
+// .catch((error) => {
+// console.error("Error cancelling order:", error);
+// });
 
-}
-else {
-$("#divTrackingEdit").hide();
-$("#sendEmailButton").hide();
-}
-});
+// }
+// else {
+// $("#divTrackingEdit").hide();
+// $("#sendEmailButton").hide();
+// }
+// });
 
 $("#yardInfoContainer").on("click", ".yard-btn", function () {
 yardIndex = $(this).data("yard-index");
