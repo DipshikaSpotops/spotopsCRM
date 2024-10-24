@@ -235,9 +235,9 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar">
 <div class="logo">
-    <a href="index.html">
-        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-        </a>   
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a>   
 </div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
@@ -380,7 +380,7 @@ placeholder="Search..."
 </div>
 <script>
 $(document).ready(async function () {
-    const now = new Date();
+const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
 year: 'numeric',
@@ -556,19 +556,19 @@ var yardLogs = {};
 var datetime;
 var yardIndex;
 arr.forEach((log, index) => {
-    if (log.includes("Label created")) {
-        const yardRegex = /Yard (\d+)/;
-      const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+if (log.includes("Label created")) {
+const yardRegex = /Yard (\d+)/;
+const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-      const yardMatch = log.match(yardRegex);
-      const datetimeMatch = log.match(datetimeRegex);
-       yardIndex = yardMatch ? yardMatch[1] : null;
-       datetime = datetimeMatch ? datetimeMatch[0] : null;
+const yardMatch = log.match(yardRegex);
+const datetimeMatch = log.match(datetimeRegex);
+yardIndex = yardMatch ? yardMatch[1] : null;
+datetime = datetimeMatch ? datetimeMatch[0] : null;
 
-      if (yardIndex && datetime) {
-        yardLogs[yardIndex] = { log, datetime, index };
-      }
-    }
+if (yardIndex && datetime) {
+yardLogs[yardIndex] = { log, datetime, index };
+}
+}
 })
 console.log("yardlogs",yardLogs);
 // extracting labelCreatedDate til now    
@@ -608,8 +608,8 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 
 // Helper function to generate action buttons
 function generateActions(item) {
-    const processButton = `<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>`;
-    return `${processButton}`;
+const processButton = `<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>`;
+return `${processButton}`;
 }
 
 
@@ -619,7 +619,7 @@ const paginationControls = $('#pagination-controls');
 paginationControls.empty(); 
 if (totalPages > 1) {
 for (let i = 1; i <= totalPages; i++) {
-    paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
 }
 paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
 }
@@ -678,62 +678,60 @@ token = localStorage.getItem("token");
 }
 
 try {
-    // Fetch orders and cancelled orders from the API
-    const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-        axios.get("https://www.spotops360.com/orders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        })
-    ]);
-
-    // Check if both fetch requests were successful
-    if (ordersResponse.status !== 200) {
-        throw new Error("Failed to fetch orders");
-    }
-    const orders = ordersResponse.data;
-    allOrders = orders;
-    // Filter orders based on the required conditions
-    filteredOrders = allOrders.filter((item) => {
-        const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; 
-
-        if (!lastInfo || lastInfo.status !== "Label created" || !lastInfo.labelCreateDate) {
-            return false; 
-        }
-        var yardLogs = {};
+// Fetch orders and cancelled orders from the API
+const [ordersResponse] = await Promise.all([
+axios.get("https://www.spotops360.com/orders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+})
+]);
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch orders");
+}
+const orders = ordersResponse.data;
+allOrders = orders;
+// Filter orders based on the required conditions
+filteredOrders = allOrders.filter((item) => {
+const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; 
+console.log("lastInfos",lastInfo)
+if (!lastInfo || lastInfo.status !== "Label created") {
+return false; 
+}
+var yardLogs = {};
 // console.log("orderHistory",arr);
 var datetime;
 var yardIndex;
 var arr = item.orderHistory;
 arr.forEach((log, index) => {
-    if (log.includes("Label created")) {
-        const yardRegex = /Yard (\d+)/;
-      const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+if (log.includes("Label created")) {
+const yardRegex = /Yard (\d+)/;
+const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-      const yardMatch = log.match(yardRegex);
-      const datetimeMatch = log.match(datetimeRegex);
-       yardIndex = yardMatch ? yardMatch[1] : null;
-       datetime = datetimeMatch ? datetimeMatch[0] : null;
+const yardMatch = log.match(yardRegex);
+const datetimeMatch = log.match(datetimeRegex);
+yardIndex = yardMatch ? yardMatch[1] : null;
+datetime = datetimeMatch ? datetimeMatch[0] : null;
 
-      if (yardIndex && datetime) {
-        yardLogs[yardIndex] = { log, datetime, index };
-      }
-    }
+if (yardIndex && datetime) {
+yardLogs[yardIndex] = { log, datetime, index };
+}
+}
 })
 console.log("yardlogs",yardLogs);
 var lDateTime = yardLogs.datetime;
 console.log("filter",lDateTime);
-        const labelCreateDate = new Date(Date.parse(yardLogs.datetime.replace(/(\d+)(st|nd|rd|th)/, "$1")));
-        const currentDate = new Date();
-        const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
-        // Return true if the status is "Yard PO Sent" and the difference in days is > 1
-        return differenceInDays > 1;
-    });
+const labelCreateDate = new Date(Date.parse(yardLogs.datetime.replace(/(\d+)(st|nd|rd|th)/, "$1")));
+const currentDate = new Date();
+const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
+// Return true if the status is "Yard PO Sent" and the difference in days is > 1
+return differenceInDays > 1;
+});
 
-    // Sort and render the filtered orders
-    allOrders = sortOrdersByOrderNoDesc(filteredOrders); // Optional sorting
-    renderTableRows(currentPage); // Render the first page of filtered data
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+// Sort and render the filtered orders
+allOrders = sortOrdersByOrderNoDesc(filteredOrders); // Optional sorting
+renderTableRows(currentPage); // Render the first page of filtered data
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 } catch (error) {
-    console.error("Error fetching orders:", error);
+console.error("Error fetching orders:", error);
 }
 
 
