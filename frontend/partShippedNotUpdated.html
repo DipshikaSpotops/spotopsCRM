@@ -702,6 +702,7 @@ try {
 // console.log("orderHistory",arr);
 var datetime;
 var yardIndex;
+var arr = item.orderHistory;
 arr.forEach((log, index) => {
     if (log.includes("Label created")) {
         const yardRegex = /Yard (\d+)/;
