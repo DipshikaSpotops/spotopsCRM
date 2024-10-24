@@ -1685,7 +1685,7 @@ res.status(500).json({ message: 'Server error' });
 });
 // for storing custRefunds
 app.put('/orders/:orderNo/custRefund', async (req, res) => {
-  console.log("PUT request for custRefund",req.body);
+  console.log("PUT request for custRefund:", req.body);
 
   const { orderNo } = req.params;
   const {
@@ -1702,14 +1702,12 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
   );
 
   try {
-    // Prepare the update object dynamically based on the provided fields
     const updateFields = {};
     if (custRefundDate) updateFields.custRefundDate = custRefundDate;
     if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
     if (cancelledDate) updateFields.cancelledDate = cancelledDate;
     if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
 
-    // Find and update the order with only the provided fields
     const order = await Order.findOneAndUpdate(
       { orderNo: orderNo },
       { $set: updateFields },
