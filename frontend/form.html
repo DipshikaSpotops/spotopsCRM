@@ -1856,18 +1856,18 @@ Save
   <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
   </div>
   <div style="flex: 1; min-width: 300px;">
-  <label for="custRefundedDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
-  <input type="text" class="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+  <label for="cancelledDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
+  <input type="text" class="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
   </div>
   <div class="containerForScroll">
   <label for=h></label>
   </div>
   <div style="flex: 1; min-width: 300px;">
   <label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
-  <input type="number" class="custRefundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+  <input type="number" class="canecelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
   </div>
   </div>
-  <button type="button" class="custRefundSubmit save" style="align-self: flex-start;">Save</button>
+  <button type="button" class="cancelledRefundSubmit save" style="align-self: flex-start;">Save</button>
   </div>
   <!-- cancelled orderstatus ends -->
 <script>
@@ -1989,7 +1989,7 @@ alert("Failed to update dispute information.");
 //for custRefund
 $(".custRefundSubmit").on("click", function () {
 // console.log("custRefundSubmit");
- $("#custRefund,#cancellingOrder").fadeOut();
+ $("#custRefund").fadeOut();
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 const custRefundDate = $("#refundedDate").val();
@@ -2009,8 +2009,31 @@ alert("Refund information updated successfully!");
 console.error("Error updating refund:", error);
 alert("Failed to update refund information.");
 });
+}); 
+// for cancelled
+$(".cancelledRefundSubmit").on("click", function () {
+// console.log("custRefundSubmit");
+ $("#cancellingOrder").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+const canecelledDate = $("#cancelledDate").val();
+const canecelledRefAmount = $(".canecelledRefAmount").val();
+const orderNo = urlParams.get("orderNo");
+// console.log("orderId:", orderNo,"refundedAmount:",custRefundedAmount,"custRefundDate:",custRefundDate);
+const custRefundDataC = {
+  canecelledDate: canecelledDate,
+  canecelledRefAmount: canecelledRefAmount,
+};
+axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundDataC)
+.then(function (response) {
+// console.log("Refund information updated successfully:", response);
+alert("Refund information updated successfully!");
+})
+.catch(function (error) {
+console.error("Error updating refund:", error);
+alert("Failed to update refund information.");
 });
-
+});
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
 // console.log("sipp")
