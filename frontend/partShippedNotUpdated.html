@@ -719,7 +719,8 @@ arr.forEach((log, index) => {
     }
 })
 console.log("yardlogs",yardLogs);
-// var lDateTime = yardIndex.datetime
+var lDateTime = yardLogs.datetime;
+console.log("filter",lDateTime);
         const labelCreateDate = new Date(Date.parse(yardLogs.datetime.replace(/(\d+)(st|nd|rd|th)/, "$1")));
         const currentDate = new Date();
         const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
