@@ -549,7 +549,7 @@ $('#infoTable').empty();
 ordersForPage.forEach((item) => {
 // for extracting labelCreatedDate 
 var logArray = item.orderHistory;
-console.log("orderHistory",orderHistory);
+console.log("orderHistory",logArray);
 logArray.forEach((log, i) => {
     if (log.includes("Label created")) {
       const yardRegex = /Yard (\d+)/;
