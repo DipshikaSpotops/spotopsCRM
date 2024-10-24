@@ -728,12 +728,14 @@ const yardEntries = Object.values(yardLogs);
 var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
 console.log("Last DateTime:", lDateTime);
 
-const labelCreateDate = new Date(lDateTime.replace(/(\d+)(st|nd|rd|th)/, "$1"));
+currentdatetime = currentdatetime.replace(/(\d+)(st|nd|rd|th)/, '$1');
+lDateTime = lDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
+var currentDate = new Date(currentdatetime);
+var lastDate = new Date(lDateTime);
+var diffTime = Math.abs(currentDate - lastDate);
+var differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-const currentDate = new Date();
-console.log("dates",currentDate,labelCreateDate);
-const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
-// Return true if the status is "Yard PO Sent" and the difference in days is > 1
+console.log("Difference in days:", differenceInDays);
 return differenceInDays > 1;
 });
 
