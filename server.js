@@ -19,6 +19,8 @@ const { getMaxListeners } = require("events");
 
 const port = 3000;
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
 origin: 'https://spotops360.com', // Replace with your frontend's domain
