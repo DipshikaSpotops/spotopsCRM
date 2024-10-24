@@ -2024,6 +2024,7 @@ console.log("cancelledDats",cancelledDate,cancelledRefAmount)
     cancelledDate,
     cancelledRefAmount,
   };
+  console.log("cancelled",custRefundData);
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
       alert("Refund information updated successfully!");
