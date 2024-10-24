@@ -1989,7 +1989,7 @@ alert("Failed to update dispute information.");
 //for custRefund
 $(".custRefundSubmit").on("click", function () {
 // console.log("custRefundSubmit");
- $("#custRefund").fadeOut();
+ $("#custRefund,#cancellingOrder").fadeOut();
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 const custRefundDate = $("#refundedDate").val();
