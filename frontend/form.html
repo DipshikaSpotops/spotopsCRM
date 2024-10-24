@@ -1857,7 +1857,7 @@ Save
   </div>
   <div style="flex: 1; min-width: 300px;">
   <label for="cancelledDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
-  <input type="text" class="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+  <input type="text" id="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
   </div>
   <div class="containerForScroll">
   <label for=h></label>
@@ -1940,9 +1940,9 @@ $("#custRefund").fadeIn();
 $("body").addClass("modal-active");
 }
 else if (newOrderStatus == "Order Cancelled") {
-    console.log("refunded?", newOrderStatus, "orderPlaced on:", orderPlacedDate);
+    console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
     $(".orderedDate").val(orderPlacedDate);
-    $(".cancelledDate").val(currentDateTime);
+    $("#cancelledDate").val(currentDateTime);
     $("body").append('<div class="modal-overlay"></div>');
     console.log("Showing cancellation div"); // Add this line to check if it's being called
     $("#cancellingOrder").css("display", "block").hide().fadeIn();
