@@ -1938,7 +1938,7 @@ $("#custRefund").fadeIn();
 $("body").addClass("modal-active");
 }
 else if (newOrderStatus == "Order Cancelled") {
-// console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
+console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
 $(".orderedDate").val(orderPlacedDate);
 $("#refundedDate").val(currentDateTime);
 $("body").append('<div class="modal-overlay"></div>');
