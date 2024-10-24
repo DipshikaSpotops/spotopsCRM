@@ -1687,7 +1687,7 @@ res.status(500).json({ message: 'Server error' });
 app.put('/orders/:orderNo/custRefund', async (req, res) => {
 console.log("put request for custRefund");
 const { orderNo } = req.params;
-const { custRefundDate, custRefundedAmount } = req.body;
+const { custRefundDate, custRefundedAmount, canecelledDate, canecelledRefAmount } = req.body;
 console.log("Refunds:", custRefundDate, custRefundedAmount, "OrderNo:", orderNo);
 
 try {
@@ -1695,7 +1695,9 @@ const order = await Order.findOneAndUpdate(
 { orderNo: orderNo }, 
 { 
 custRefundDate: custRefundDate,
-custRefundedAmount:custRefundedAmount
+custRefundedAmount:custRefundedAmount,
+canecelledDate: canecelledDate,
+  canecelledRefAmount: canecelledRefAmount,
 },
 { new: true }  
 );
