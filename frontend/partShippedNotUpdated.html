@@ -504,7 +504,7 @@ updateSortIcons(column, sortOrder[type]);
 }
 
 function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$("th .sort-icon").html("&#9650;"); 
 $("th").each(function (index) {
 if (index === columnIndex) {
 $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
@@ -542,15 +542,29 @@ const statusMatches = info.status === "Label created";
 return statusMatches;
 });
 });
-
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty();
 ordersForPage.forEach((item) => {
+// for extracting labelCreatedDate 
+var logArray = ordersForPage.orderHistory;
+logArray.forEach((log, i) => {
+    if (log.includes("Label created")) {
+      const yardRegex = /Yard (\d+)/;
+      const yardMatch = log.match(yardRegex);
+      const yardIndex = yardMatch ? yardMatch[1] : 'Yard not found';
+      const dateTimeRegex = /on\s([\d\w\s,:]+)$/;
+      const dateTimeMatch = log.match(dateTimeRegex);
+      const dateTime = dateTimeMatch ? dateTimeMatch[1] : 'Date not found';
+    }
+})
+console.log("dateTime",dateTime,"yardIndex",yardIndex);
+// extracting labelCreatedDate til now    
 lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+console.log(item.additionalInfo.length - 1);
 if (item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate !== ""){
-const labelCreatedDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].labelCreateDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+const labelCreatedDate = new Date(Date.parse(dateTime));
 const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
 differenceInDays = Math.floor((currentDate - labelCreatedDate) / (1000 * 60 * 60 * 24));
 console.log("diff", labelCreatedDate, currentDate, differenceInDays);
