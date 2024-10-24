@@ -1864,7 +1864,7 @@ Save
   </div>
   <div style="flex: 1; min-width: 300px;">
   <label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
-  <input type="number" class="canecelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+  <input type="number" class="cancelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
   </div>
   </div>
   <button type="button" class="cancelledRefundSubmit save" style="align-self: flex-start;">Save</button>
@@ -1939,16 +1939,16 @@ $("body").append('<div class="modal-overlay"></div>');
 $("#custRefund").fadeIn();
 $("body").addClass("modal-active");
 }
-else if (newOrderStatus == "Order Cancelled") {
-    console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
-    $(".orderedDate").val(orderPlacedDate);
-    $("#cancelledDate").val(currentDateTime);
-    $("body").append('<div class="modal-overlay"></div>');
-    console.log("Showing cancellation div"); // Add this line to check if it's being called
-    $("#cancellingOrder").css("display", "block").hide().fadeIn();
-// $("#cancellingOrder").fadeIn(); // Ensure this is called
-    $("body").addClass("modal-active");
-} 
+// else if (newOrderStatus == "Order Cancelled") {
+//     console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
+//     $(".orderedDate").val(orderPlacedDate);
+//     $("#cancelledDate").val(currentDateTime);
+//     $("body").append('<div class="modal-overlay"></div>');
+//     console.log("Showing cancellation div"); // Add this line to check if it's being called
+//     $("#cancellingOrder").css("display", "block").hide().fadeIn();
+// // $("#cancellingOrder").fadeIn(); // Ensure this is called
+//     $("body").addClass("modal-active");
+// } 
 else {
 $("#disputeDiv").fadeOut();
 $(".modal-overlay").remove();
@@ -2016,13 +2016,13 @@ $(".cancelledRefundSubmit").on("click", function () {
   $(".modal-overlay").remove();
   $("body").removeClass("modal-active");
 
-  const canecelledDate = $("#cancelledDate").val();
-  const canecelledRefAmount = $(".canecelledRefAmount").val();
+  const cancelledDate = $("#cancelledDate").val();
+  const cancelledRefAmount = $(".cancelledRefAmount").val();
   const orderNo = urlParams.get("orderNo");
 
   const custRefundDataC = {
-    canecelledDate,
-    canecelledRefAmount,
+    cancelledDate,
+    cancelledRefAmount,
   };
 
   axios.put(`https://www.spotops360.com/orders/${orderNo}/cancelledRefund`, custRefundDataC)

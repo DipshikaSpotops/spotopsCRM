@@ -345,8 +345,8 @@ disputedDate: String ,
 disputeReason: String,
 custRefundDate: String,
 custRefundedAmount: Number,
-canecelledDate: String,
-canecelledRefAmount:Number
+cancelledDate: String,
+cancelledRefAmount:Number
 });
 
 const Order = mongoose.model("Order", OrderSchema);
@@ -1712,15 +1712,15 @@ res.status(500).json({ message: 'Server error' });
 app.put('/orders/:orderNo/cancelledRefund', async (req, res) => {
   console.log("put request for cancelledRefund");
   const { orderNo } = req.params;
-  const { canecelledDate, canecelledRefAmount } = req.body;
-  console.log("Refunds:", canecelledDate,canecelledRefAmount, "OrderNo:", orderNo);
+  const { cancelledDate, cancelledRefAmount } = req.body;
+  console.log("Cancelled:", cancelledDate,cancelledRefAmount, "OrderNo:", orderNo);
   
   try {
   const order = await Order.findOneAndUpdate(
   { orderNo: orderNo }, 
   { 
-    canecelledDate: canecelledDate,
-  canecelledRefAmount:canecelledRefAmount
+    cancelledDate: cancelledDate,
+  cancelledRefAmount:cancelledRefAmount
   },
   { new: true }  
   );
