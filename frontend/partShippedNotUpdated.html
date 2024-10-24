@@ -548,7 +548,7 @@ const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty();
 ordersForPage.forEach((item) => {
 // for extracting labelCreatedDate 
-var logArray = ordersForPage.orderHistory;
+var logArray = item.orderHistory;
 console.log("orderHistory",orderHistory);
 logArray.forEach((log, i) => {
     if (log.includes("Label created")) {
