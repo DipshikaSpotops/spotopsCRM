@@ -2003,7 +2003,7 @@ $(".custRefundSubmit").on("click", function () {
 
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
-      alert("Refund information for cancelled order updated successfully!");
+      alert("Refund information  updated successfully!");
     })
     .catch(function (error) {
       console.error("Error updating refund:", error);
@@ -2027,7 +2027,7 @@ console.log("cancelledDats",cancelledDate,cancelledRefAmount)
   console.log("cancelled",custRefundData);
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
-      alert("Refund information updated successfully!");
+      alert("Refund information for cancelled order updated successfully!");
     })
     .catch(function (error) {
       console.error("Error updating refund:", error);
