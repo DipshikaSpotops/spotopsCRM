@@ -550,21 +550,27 @@ const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty();
 ordersForPage.forEach((item) => {
 // for extracting labelCreatedDate 
-var logArray = item.orderHistory;
+var arr = item.orderHistory;
+const yardLogs = {};
 console.log("orderHistory",logArray);
 var datetime;
 var yardIndex;
-logArray.forEach((log, i) => {
+arr.forEach((log, i) => {
     if (log.includes("Label created")) {
-      const yardRegex = /Yard (\d+)/;
+        const yardRegex = /Yard (\d+)/;
+      const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+
       const yardMatch = log.match(yardRegex);
-       yardIndex = yardMatch ? yardMatch[1] : 'Yard not found';
-      const dateTimeRegex = /on\s([\d\w\s,:]+)$/;
-      const dateTimeMatch = log.match(dateTimeRegex);
-       dateTime = dateTimeMatch ? dateTimeMatch[1] : 'Date not found';
+      const datetimeMatch = log.match(datetimeRegex);
+       yardIndex = yardMatch ? yardMatch[1] : null;
+       datetime = datetimeMatch ? datetimeMatch[0] : null;
+
+      if (yardIndex && datetime) {
+        yardLogs[yardIndex] = { log, datetime, index };
+      }
     }
 })
-console.log("dateTime",dateTime,"yardIndex",yardIndex);
+console.log("yardlogs",yardlogs);
 // extracting labelCreatedDate til now    
 lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
 console.log(item.additionalInfo.length - 1);
