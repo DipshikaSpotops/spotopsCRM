@@ -552,7 +552,7 @@ ordersForPage.forEach((item) => {
 // for extracting labelCreatedDate 
 var arr = item.orderHistory;
 var yardLogs = {};
-console.log("orderHistory",arr);
+// console.log("orderHistory",arr);
 var datetime;
 var yardIndex;
 arr.forEach((log, index) => {
@@ -592,7 +592,7 @@ ${lastInfo.email || ""}<br>
 ${lastInfo.phone || ""}</td>
 <td>${lastInfo.status}</td>
 <td>
-${lastInfo.labelCreateDate || "N/A"}<br>  
+${labelCreatedDate || "N/A"}<br>  
 <b>${differenceInDays + 1 || "N/A"} days ago</b>
 </td>
 <td class="actions">${actions}</td>
@@ -682,19 +682,15 @@ try {
     const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
         axios.get("https://www.spotops360.com/orders", {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-        axios.get("https://www.spotops360.com/cancelledOrders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
+        })
     ]);
 
     // Check if both fetch requests were successful
-    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+    if (ordersResponse.status !== 200) {
         throw new Error("Failed to fetch orders");
     }
     const orders = ordersResponse.data;
-    const cancelledOrders = cancelledOrdersResponse.data;
-    allOrders = [...orders, ...cancelledOrders];
+    allOrders = orders;
     // Filter orders based on the required conditions
     filteredOrders = allOrders.filter((item) => {
         const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; 
@@ -702,8 +698,27 @@ try {
         if (!lastInfo || lastInfo.status !== "Label created" || !lastInfo.labelCreateDate) {
             return false; 
         }
+        var yardLogs = {};
+// console.log("orderHistory",arr);
+var datetime;
+var yardIndex;
+arr.forEach((log, index) => {
+    if (log.includes("Label created")) {
+        const yardRegex = /Yard (\d+)/;
+      const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-        const labelCreateDate = new Date(Date.parse(lastInfo.labelCreateDate.replace(/(\d+)(st|nd|rd|th)/, "$1")));
+      const yardMatch = log.match(yardRegex);
+      const datetimeMatch = log.match(datetimeRegex);
+       yardIndex = yardMatch ? yardMatch[1] : null;
+       datetime = datetimeMatch ? datetimeMatch[0] : null;
+
+      if (yardIndex && datetime) {
+        yardLogs[yardIndex] = { log, datetime, index };
+      }
+    }
+})
+console.log("yardlogs",yardLogs);
+        const labelCreateDate = new Date(Date.parse(yardLogs.dateTime.replace(/(\d+)(st|nd|rd|th)/, "$1")));
         const currentDate = new Date();
         const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
         // Return true if the status is "Yard PO Sent" and the difference in days is > 1
