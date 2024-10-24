@@ -1988,52 +1988,52 @@ alert("Failed to update dispute information.");
 // for dispute till here
 //for custRefund
 $(".custRefundSubmit").on("click", function () {
-// console.log("custRefundSubmit");
- $("#custRefund").fadeOut();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-const custRefundDate = $("#refundedDate").val();
-const custRefundedAmount = $(".custRefundedAmount").val();
-const orderNo = urlParams.get("orderNo");
-// console.log("orderId:", orderNo,"refundedAmount:",custRefundedAmount,"custRefundDate:",custRefundDate);
-const custRefundData = {
-custRefundDate: custRefundDate,
-custRefundedAmount: custRefundedAmount,
-};
-axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
-.then(function (response) {
-// console.log("Refund information updated successfully:", response);
-alert("Refund information updated successfully!");
-})
-.catch(function (error) {
-console.error("Error updating refund:", error);
-alert("Failed to update refund information.");
+  $("#custRefund").fadeOut();
+  $(".modal-overlay").remove();
+  $("body").removeClass("modal-active");
+
+  const custRefundDate = $("#refundedDate").val();
+  const custRefundedAmount = $(".custRefundedAmount").val();
+  const orderNo = urlParams.get("orderNo");
+
+  const custRefundData = {
+    custRefundDate,
+    custRefundedAmount,
+  };
+
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
+    .then(function (response) {
+      alert("Refund information updated successfully!");
+    })
+    .catch(function (error) {
+      console.error("Error updating refund:", error);
+      alert("Failed to update refund information.");
+    });
 });
-}); 
-// for cancelled
 $(".cancelledRefundSubmit").on("click", function () {
-// console.log("custRefundSubmit");
- $("#cancellingOrder").fadeOut();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-const canecelledDate = $("#cancelledDate").val();
-const canecelledRefAmount = $(".canecelledRefAmount").val();
-const orderNo = urlParams.get("orderNo");
-// console.log("orderId:", orderNo,"refundedAmount:",custRefundedAmount,"custRefundDate:",custRefundDate);
-const custRefundDataC = {
-  canecelledDate: canecelledDate,
-  canecelledRefAmount: canecelledRefAmount,
-};
-axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundDataC)
-.then(function (response) {
-// console.log("Refund information updated successfully:", response);
-alert("Refund information updated successfully!");
-})
-.catch(function (error) {
-console.error("Error updating refund:", error);
-alert("Failed to update refund information.");
+  $("#cancellingOrder").fadeOut();
+  $(".modal-overlay").remove();
+  $("body").removeClass("modal-active");
+
+  const canecelledDate = $("#cancelledDate").val();
+  const canecelledRefAmount = $(".canecelledRefAmount").val();
+  const orderNo = urlParams.get("orderNo");
+
+  const custRefundDataC = {
+    canecelledDate,
+    canecelledRefAmount,
+  };
+
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundDataC)
+    .then(function (response) {
+      alert("Refund information updated successfully!");
+    })
+    .catch(function (error) {
+      console.error("Error updating refund:", error);
+      alert("Failed to update refund information.");
+    });
 });
-});
+
 // for auto-filling state,country
 $("#zip").on("keyup", function() {
 // console.log("sipp")
