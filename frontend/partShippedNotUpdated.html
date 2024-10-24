@@ -719,7 +719,8 @@ arr.forEach((log, index) => {
     }
 })
 console.log("yardlogs",yardLogs);
-        const labelCreateDate = new Date(Date.parse(yardLogs.dateTime.replace(/(\d+)(st|nd|rd|th)/, "$1")));
+// var lDateTime = yardIndex.datetime
+        const labelCreateDate = new Date(Date.parse(yardLogs.datetime.replace(/(\d+)(st|nd|rd|th)/, "$1")));
         const currentDate = new Date();
         const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
         // Return true if the status is "Yard PO Sent" and the difference in days is > 1
