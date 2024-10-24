@@ -19,8 +19,6 @@ const { getMaxListeners } = require("events");
 
 const port = 3000;
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
 origin: 'https://spotops360.com', // Replace with your frontend's domain
@@ -1726,6 +1724,7 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // for cancelled refunds
 app.put('/orders/:orderNo/cancelledRefund', async (req, res) => {
