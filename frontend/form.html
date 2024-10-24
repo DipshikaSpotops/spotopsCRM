@@ -1942,7 +1942,7 @@ $("body").addClass("modal-active");
 else if (newOrderStatus == "Order Cancelled") {
     console.log("refunded?", newOrderStatus, "orderPlaced on:", orderPlacedDate);
     $(".orderedDate").val(orderPlacedDate);
-    $(".refundedDate").val(currentDateTime);
+    $(".cancelledDate").val(currentDateTime);
     $("body").append('<div class="modal-overlay"></div>');
     console.log("Showing cancellation div"); // Add this line to check if it's being called
     $("#cancellingOrder").css("display", "block").hide().fadeIn();
