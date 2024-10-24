@@ -1992,7 +1992,7 @@ $(".custRefundSubmit").on("click", function () {
   $(".modal-overlay").remove();
   $("body").removeClass("modal-active");
 
-  const custRefundDate = $("#refundedDate").val();
+  const custRefundDate = $(".refundedDate").val();
   const custRefundedAmount = $(".custRefundedAmount").val();
   const orderNo = urlParams.get("orderNo");
 
