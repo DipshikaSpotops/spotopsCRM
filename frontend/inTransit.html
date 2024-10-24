@@ -376,9 +376,9 @@ placeholder="Search..."
       Order Status <span class="aToZ">&#9650;</span>
       </th>
       <th style="cursor: pointer" scope="col">Actions</th>
-      <th style="cursor: pointer" scope="col">
+      <!-- <th style="cursor: pointer" scope="col">
       Email <span class="aToZ">&#9650;</span>
-      </th>
+      </th> -->
       </tr>
   </thead>
   <tbody id="infoTable">
@@ -536,10 +536,6 @@ function renderTableRows(page, orders = allOrders) {
         const team = localStorage.getItem('team');
          const actions = `
             <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-
-        const sendInvoice = `
-            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
-
         const yardlength = item.additionalInfo.length;
 
         $("#infoTable").append(`
@@ -551,10 +547,7 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${item.pReq || item.partName}</td>
                 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
                 <td>${item.orderStatus}</td>
-                <td ${escalationStyle}>${escalationStatus}</td>
                 <td class="actions">${actions}</td>
-                <td>${sendInvoice}</td>
-                <td>${item.email}</td>
             </tr>
         `);
     });
