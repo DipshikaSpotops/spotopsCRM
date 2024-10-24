@@ -1685,7 +1685,7 @@ res.status(500).json({ message: 'Server error' });
 });
 // for storing custRefunds
 app.put('/orders/:orderNo/custRefund', async (req, res) => {
-  console.log("PUT request for custRefund");
+  console.log("PUT request for custRefund",req.body);
 
   const { orderNo } = req.params;
   const {
