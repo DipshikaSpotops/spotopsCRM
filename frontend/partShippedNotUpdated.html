@@ -411,7 +411,8 @@ case 3: return "rd";
 default: return "th";
 }
 };
-var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;    
+var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`; 
+console.log("current datetime",currentDateTime)   
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
@@ -729,8 +730,8 @@ console.log("Last DateTime:", lDateTime);
 
 const labelCreateDate = new Date(lDateTime.replace(/(\d+)(st|nd|rd|th)/, "$1"));
 
-const currentDate = new Date();
-const differenceInDays = Math.floor((currentDate - labelCreateDate) / (1000 * 60 * 60 * 24));
+// const currentDate = new Date();
+const differenceInDays = Math.floor((currentDateTime - labelCreateDate) / (1000 * 60 * 60 * 24));
 // Return true if the status is "Yard PO Sent" and the difference in days is > 1
 return differenceInDays > 1;
 });
