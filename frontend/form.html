@@ -82,7 +82,9 @@ border: 1px solid grey;
 border-radius: 10px;
 margin: 18% 47%;
 }
-
+#cancellingOrder {
+    z-index: 1000;
+}
 #yardSuggestionsList .list-group-item {
 cursor: pointer;
 }
@@ -1829,7 +1831,7 @@ Save
 </div>
 <div style="flex: 1; min-width: 300px;">
 <label for="custRefundedDate" style="white-space: nowrap;margin: 4% 28%;">Date of Refund:</label>
-<input type="text" id="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+<input type="text" class="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
 </div>
 <div class="containerForScroll">
 <label for=h></label>
@@ -1855,7 +1857,7 @@ Save
   </div>
   <div style="flex: 1; min-width: 300px;">
   <label for="custRefundedDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
-  <input type="text" id="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+  <input type="text" class="refundedDate" placeholder="Refund Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
   </div>
   <div class="containerForScroll">
   <label for=h></label>
@@ -1932,18 +1934,20 @@ $("#disputeDiv").fadeIn();
 else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
 // console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
 $(".orderedDate").val(orderPlacedDate);
-$("#refundedDate").val(currentDateTime);
+$(".refundedDate").val(currentDateTime);
 $("body").append('<div class="modal-overlay"></div>');
 $("#custRefund").fadeIn();
 $("body").addClass("modal-active");
 }
 else if (newOrderStatus == "Order Cancelled") {
-console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
-$(".orderedDate").val(orderPlacedDate);
-$("#refundedDate").val(currentDateTime);
-$("body").append('<div class="modal-overlay"></div>');
-$("#cancellingOrder").fadeIn();
-$("body").addClass("modal-active");
+    console.log("refunded?", newOrderStatus, "orderPlaced on:", orderPlacedDate);
+    $(".orderedDate").val(orderPlacedDate);
+    $(".refundedDate").val(currentDateTime);
+    $("body").append('<div class="modal-overlay"></div>');
+    console.log("Showing cancellation div"); // Add this line to check if it's being called
+    $("#cancellingOrder").css("display", "block").hide().fadeIn();
+// $("#cancellingOrder").fadeIn(); // Ensure this is called
+    $("body").addClass("modal-active");
 } 
 else {
 $("#disputeDiv").fadeOut();
