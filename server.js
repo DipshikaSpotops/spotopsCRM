@@ -346,7 +346,7 @@ disputeReason: String,
 custRefundDate: String,
 custRefundedAmount: Number,
 canecelledDate: String,
-canecelledRefAmount: Number
+canecelledRefAmount:Number
 });
 
 const Order = mongoose.model("Order", OrderSchema);
@@ -1685,49 +1685,54 @@ res.status(500).json({ message: 'Server error' });
 });
 // for storing custRefunds
 app.put('/orders/:orderNo/custRefund', async (req, res) => {
-  console.log("PUT request for custRefund");
+console.log("put request for custRefund");
+const { orderNo } = req.params;
+const { custRefundDate, custRefundedAmount } = req.body;
+console.log("Refunds:", custRefundDate, custRefundedAmount, "OrderNo:", orderNo);
 
-  const { orderNo } = req.params;
-  const {
-    custRefundDate,
-    custRefundedAmount,
-    canecelledDate,
-    canecelledRefAmount,
-  } = req.body;
-
-  console.log(
-    "Refunds:", custRefundDate, custRefundedAmount,
-    "Cancellations:", canecelledDate, canecelledRefAmount,
-    "OrderNo:", orderNo
-  );
-
-  try {
-    // Prepare the update object dynamically based on the provided fields
-    const updateFields = {};
-
-    if (custRefundDate) updateFields.custRefundDate = custRefundDate;
-    if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
-    if (canecelledDate) updateFields.canecelledDate = canecelledDate;
-    if (canecelledRefAmount) updateFields.canecelledRefAmount = canecelledRefAmount;
-
-    // Update only the provided fields
-    const order = await Order.findOneAndUpdate(
-      { orderNo: orderNo },
-      { $set: updateFields },
-      { new: true }
-    );
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    res.json(order);
-  } catch (error) {
-    console.error('Error updating refund or cancellation information:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
+try {
+const order = await Order.findOneAndUpdate(
+{ orderNo: orderNo }, 
+{ 
+custRefundDate: custRefundDate,
+custRefundedAmount:custRefundedAmount
+},
+{ new: true }  
+);
+if (!order) {
+return res.status(404).json({ message: 'Order not found' });
+}
+res.json(order);
+} catch (error) {
+console.error('Error updating dispute information:', error);
+res.status(500).json({ message: 'Server error' });
+}
 });
-
+// for cancelled refunds
+app.put('/orders/:orderNo/cancelledRefund', async (req, res) => {
+  console.log("put request for cancelledRefund");
+  const { orderNo } = req.params;
+  const { custRefundDate, custRefundedAmount } = req.body;
+  console.log("Refunds:", canecelledDate,canecelledRefAmount, "OrderNo:", orderNo);
+  
+  try {
+  const order = await Order.findOneAndUpdate(
+  { orderNo: orderNo }, 
+  { 
+  custRefundDate: custRefundDate,
+  custRefundedAmount:custRefundedAmount
+  },
+  { new: true }  
+  );
+  if (!order) {
+  return res.status(404).json({ message: 'Order not found' });
+  }
+  res.json(order);
+  } catch (error) {
+  console.error('Error updating cancelledRefund information:', error);
+  res.status(500).json({ message: 'Server error' });
+  }
+  });
 const moment = require('moment-timezone');
 
 
