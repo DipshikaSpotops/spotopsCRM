@@ -2019,12 +2019,18 @@ $(".cancelledRefundSubmit").on("click", function () {
   const cancelledDate = $("#cancelledDate").val();
   const cancelledRefAmount = $(".cancelledRefAmount").val();
   const orderNo = urlParams.get("orderNo");
-console.log("cancelledDats",cancelledDate,cancelledRefAmount)
+
+  console.log("Captured Data:");
+  console.log("Cancelled Date:", cancelledDate);
+  console.log("Cancelled Refund Amount:", cancelledRefAmount);
+  console.log("Order No:", orderNo);
+
   const custRefundData = {
     cancelledDate,
     cancelledRefAmount,
   };
-  console.log("cancelled",custRefundData);
+  console.log("Payload being sent:", custRefundData);
+
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
       alert("Refund information for cancelled order updated successfully!");
