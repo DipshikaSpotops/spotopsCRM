@@ -1604,19 +1604,27 @@ Save
 <!-- card charged div ends here -->
 <!-- refund  div starts here -->
 <div id="refundCollect">
-<button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
-<label for="paymentStatusRefund">Refund Collected:</label>
-<select class="form-control paymentStatusRefund" id="paymentStatusSelect">
-<option value="">Choose</option>
-<option value="Refund collected">Yes</option>
-<option value="">No</option>
-</select>
-<div id="refundedAmountContainer">
-<label for="refundedAmount">Refunded Amount:</label>
-<input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount"/>
+  <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+  
+  <label for="paymentStatusRefund">Refund Collected:<br></label>
+  <select class="form-control paymentStatusRefund" id="paymentStatusSelect">
+    <option value="">Choose</option>
+    <option value="Refund collected">Yes</option>
+    <option value="">No</option>
+  </select>
+
+  <div id="refundedAmountContainer">
+    <label for="refundedAmount">Refunded Amount:</label>
+    <input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount"/>
+  </div>
+
+  <div id="storeCreditContainer">
+    <input type="checkbox" id="storeCreditCheckbox"/>
+    <label for="storeCreditCheckbox"> Store Credit</label>
+  </div>
+
+  <button id="refundSubmit">Submit</button>
 </div>
-<button id="refundSubmit">Submit</button>
-</div>        
 <!-- refund div ends here -->
 <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
@@ -3018,66 +3026,69 @@ window.location.reload();
 //  card charged part till here
 // refundCollect part 
 $('#refundSubmit').on('click', function() {
-$('#refundCollect').hide();
-$(".mainDiv").removeClass("blur");
-// console.log("refund collect status", selectedYardIndex, "oNo", orderNo);
-const refundStatus = $(".paymentStatusRefund")
-.map(function () {
-return $(this).val();
-})
-.get()
-.filter(function (value) {
-return value !== "";
-})
-.join();
-const refundedAmount = $("#refundedAmount").val();
-// console.log("collect", refundStatus, refundedAmount);
-if (refundStatus === "Refund collected") {
-$(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
-}
+  $('#refundCollect').hide();
+  $(".mainDiv").removeClass("blur");
 
-const data1 = {
-refundStatus: refundStatus,
-refundedAmount: refundedAmount
-};
+  const refundStatus = $(".paymentStatusRefund")
+    .map(function () {
+      return $(this).val();
+    })
+    .get()
+    .filter(function (value) {
+      return value !== "";
+    })
+    .join();
 
-const updateOrder = (url) => {
-return fetch(url, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(data1),
-});
-};
+  const refundedAmount = $("#refundedAmount").val();
+  const isStoreCredit = $("#storeCreditCheckbox").is(":checked");
 
-// Try updating in orders collection first
-updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`)
-.then((response) => {
-if (!response.ok) {
-if (response.status === 404) {
-// If order not found in orders, try cancelledOrders
-// console.log('Order not found in orders, checking in cancelledOrders...');
-return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`);
-} else {
-throw new Error("Network response was not ok");
-}
-}
-return response.json();  // Successful update in orders
-})
-.then((data) => {
-if (data) {
-// console.log("refund data",data);
-updateOrderHistory(data.orderHistory);
-showYardDetails(selectedYardIndex);
-fetchAndUpdateYardInfo();
-}
-})
-.catch((error) => {
-console.error("Error:", error);
+  if (refundStatus === "Refund collected") {
+    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
+  }
+
+  const data1 = {
+    refundStatus: refundStatus,
+    refundedAmount: refundedAmount,
+    storeCredit: isStoreCredit ? refundedAmount : null
+  };
+
+  const updateOrder = (url) => {
+    return fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data1),
+    });
+  };
+
+  // Try updating in orders collection first
+  updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`)
+    .then((response) => {
+      if (!response.ok) {
+        if (response.status === 404) {
+          // If order not found in orders, try cancelledOrders
+          return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`);
+        } else {
+          throw new Error("Network response was not ok");
+        }
+      }
+      return response.json(); // Successful update in orders
+    })
+    .then((data) => {
+      if (data) {
+        updateOrderHistory(data.orderHistory);
+        showYardDetails(selectedYardIndex);
+        fetchAndUpdateYardInfo();
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+
+  window.location.reload();
 });
-window.location.reload();
-});
+
 // refundCollect part ends here
 
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
