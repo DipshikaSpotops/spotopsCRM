@@ -538,13 +538,13 @@ sortTable(index, type);
 function renderTableRows(page, orders = allOrders) {
     const filteredOrders = orders.filter((item) => {
   const InfoArray = item.additionalInfo;
-  if (!InfoArray || InfoArray.length === 0) return false; 
+  if (!InfoArray || InfoArray.length === 0) return false;
 
   return InfoArray.some((info) => {
-    const hasStoreCredit = info.storeCredit && info.storeCredit.trim() !== "";
-    return hasStoreCredit;
+    return info.storeCredit !== null && info.storeCredit !== undefined && !isNaN(info.storeCredit);
   });
 });
+
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = filteredOrders.slice(start, end);
@@ -668,17 +668,15 @@ throw new Error("Failed to fetch orders");
 const orders = ordersResponse.data;
 allOrders = orders;
 // Filter orders based on the required conditions
-filteredOrders = allOrders.filter((item) => {
+ filteredOrders = allOrders.filter((item) => {
   const InfoArray = item.additionalInfo;
-  if (!InfoArray || InfoArray.length === 0) return false; 
+  if (!InfoArray || InfoArray.length === 0) return false;
 
   return InfoArray.some((info) => {
-    const hasStoreCredit = info.storeCredit && info.storeCredit.trim() !== "";
-    return hasStoreCredit;
+    return info.storeCredit !== null && info.storeCredit !== undefined && !isNaN(info.storeCredit);
   });
 });
 
-// Sort and render the filtered orders
 allOrders = sortOrdersByOrderNoDesc(filteredOrders); // Optional sorting
 renderTableRows(currentPage); // Render the first page of filtered data
 createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
