@@ -355,31 +355,7 @@ app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
 res.json(orders);
 });
-// for cancelled refunds
-app.put('/cancelledRefund', async (req, res) => {
-  console.log("put request for cancelledRefund");
-  // const { orderNo } = req.params;
-  const { cancelledDate, cancelledRefAmount , orderNo} = req.body;
-  console.log("Cancelled:", cancelledDate,cancelledRefAmount, "OrderNo:", orderNo);
-  
-  try {
-  const order = await Order.findOneAndUpdate(
-  { orderNo: orderNo }, 
-  { 
-    cancelledDate: cancelledDate,
-  cancelledRefAmount:cancelledRefAmount
-  },
-  { new: true }  
-  );
-  if (!order) {
-  return res.status(404).json({ message: 'Order not found' });
-  }
-  res.json(order);
-  } catch (error) {
-  console.error('Error updating cancelledRefund information:', error);
-  res.status(500).json({ message: 'Server error' });
-  }
-  });
+
 app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
 res.json(order);
@@ -431,6 +407,31 @@ res.json(updatedOrder);
 res.status(400).send(err.message);
 }
 });
+// for cancelled refunds
+app.put('/cancelledRefund', async (req, res) => {
+  console.log("put request for cancelledRefund");
+  // const { orderNo } = req.params;
+  const { cancelledDate, cancelledRefAmount , orderNo} = req.body;
+  console.log("Cancelled:", cancelledDate,cancelledRefAmount, "OrderNo:", orderNo);
+  
+  try {
+  const order = await Order.findOneAndUpdate(
+  { orderNo: orderNo }, 
+  { 
+    cancelledDate: cancelledDate,
+  cancelledRefAmount:cancelledRefAmount
+  },
+  { new: true }  
+  );
+  if (!order) {
+  return res.status(404).json({ message: 'Order not found' });
+  }
+  res.json(order);
+  } catch (error) {
+  console.error('Error updating cancelledRefund information:', error);
+  res.status(500).json({ message: 'Server error' });
+  }
+  });
 // changing the orderStatus and yrdStatus when reimbursement amount is added
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
   const { orderStatus, yardStatus, yardIndex } = req.body;
