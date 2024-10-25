@@ -549,37 +549,49 @@ const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty();
-ordersForPage.forEach((item) => {   
-lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-console.log(item.additionalInfo[0]);
-var yardPP = item.additionalInfo.partPrice || 0;
-var yardOSorYS = item.additionalInfo.shippingDetails || '';
-var shippingValueYard = 0;  
-if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
-}
-var storeCredit = item.additionalInfo.storeCredit || 0;
-console.log("yard ship", shippingValueYard,"part price",yardPP,"storeCredit",storeCredit);
-var cardCharged = yardPP + shippingValueYard;
-console.log("card charged",cardCharged);
-const actions = generateActions(item);
-const row = `
-<tr>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.customerName}</td>
-<td>${lastInfo.yardName || ""}<br>  
-${lastInfo.address || ""}<br>
-${lastInfo.email || ""}<br>
-${lastInfo.phone || ""}</td>
-<td>>${cardCharged || ""}</td>
-<td>>${storeCredit || ""}</td>
-<td class="actions">${actions}</td>
-</tr>
-`;
 
+ordersForPage.forEach((item) => {
+  let totalStoreCredit = 0; // Initialize total storeCredit for this order
 
-$('#infoTable').append(row); // Add the row to the table
+  // Iterate over all elements in additionalInfo to sum storeCredits
+  item.additionalInfo.forEach((info) => {
+    if (info.storeCredit !== undefined && !isNaN(info.storeCredit)) {
+      totalStoreCredit += info.storeCredit;
+    }
+  });
+
+  const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+  console.log(item.additionalInfo);
+
+  const yardPP = lastInfo.partPrice || 0;
+  const yardOSorYS = lastInfo.shippingDetails || '';
+  let shippingValueYard = 0;
+
+  if (yardOSorYS.includes("Yard shipping")) {
+    shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+  }
+
+  const cardCharged = yardPP + shippingValueYard;
+  console.log("yard ship", shippingValueYard, "part price", yardPP, "storeCredit", totalStoreCredit);
+  console.log("card charged", cardCharged);
+
+  const actions = generateActions(item);
+  const row = `
+    <tr>
+      <td>${item.orderDate}</td>
+      <td>${item.orderNo}</td>
+      <td>${item.customerName}</td>
+      <td>${lastInfo.yardName || ""}<br>
+          ${lastInfo.address || ""}<br>
+          ${lastInfo.email || ""}<br>
+          ${lastInfo.phone || ""}</td>
+      <td>${cardCharged || ""}</td>
+      <td>${totalStoreCredit || ""}</td>
+      <td class="actions">${actions}</td>
+    </tr>
+  `;
+
+  $('#infoTable').append(row); // Add the row to the table
 });
 
 createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
