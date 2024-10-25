@@ -2032,7 +2032,7 @@ $("#cancelledRefundSubmit").on("click", function () {
   // };
   // console.log("Payload being sent:", custRefundData);
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/cancelledRefund`, {
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, {
     cancelledDate: cancelledDate,
     cancelledRefAmount: cancelledRefAmount,
     orderNo: orderNo
