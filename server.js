@@ -1908,8 +1908,9 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   to: `dipsikha.spotopsdigital@gmail.com`,
   subject: `Order Cancellation`,
   html: `<p>Dear ${order.customerName},</p>
-  <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #${order.orderNo},dated ${orderedDate}, for a ${order.year} ${order.make}
-  ${order.model} ${order.pReq} with <br>50 Stars Auto Parts</br>. We regret any inconvenience this may caused you.</p><br>
+  <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>,dated ${orderedDate}, for a ${order.year} ${order.make}
+  ${order.model} ${order.pReq} with <b>50 Stars Auto Parts</b>.<p><br>
+  <p>We regret any inconvenience this may have caused you.</p><br>
   <p>We have canceled your order and will reimburse you $271.61  to the same source account.</p><br>
   <p>Please call us if you have any questions.</p><br>
   <p>Upon reviewing your order, Due to this unforeseen circumstance, we are unable to fulfill your order at this time.</p><br>
