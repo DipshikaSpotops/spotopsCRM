@@ -2159,27 +2159,29 @@ var currentActualGp = data.actualGP || 0;
 $("#custRefunds").val(custRefundedAmount.toFixed(2))
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
-if (!data.additionalInfo || data.additionalInfo.length === 0) {
-// console.log('Yards not presesnt.');
-if(custRefundedAmount){
-actualGP = (sp - custRefundedAmount) - tax;
-// console.log("actualGp without yards",actualGP);
-$("#actualGP").val(actualGP.toFixed(2));
+if (
+  (!data.additionalInfo || data.additionalInfo.length === 0) || 
+  (data.additionalInfo && data.additionalInfo.length >= 0 && 
+   (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded"))
+) {
+  if (custRefundedAmount) {
+    actualGP = (sp - custRefundedAmount) - tax;
+    $("#actualGP").val(actualGP.toFixed(2));
 
-if(currentActualGp !== actualGP){
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
+    if (currentActualGp !== actualGP) {
+      axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+        .then(function (response) {
+          // console.log("ActualGP information updated successfully:", response);
+        })
+        .catch(function (error) {
+          console.error("Error updating actualGP:", error);
+        });
+    } else {
+      console.log("Same actualGPS");
+    }
+  }
 }
-else{
-console.log("same actualGPS")
-}
-}
-}
+
 data.additionalInfo.forEach((yard, index) => {
 const yardIndex = index + 1;
 // console.log("yardIndex", yardIndex, yard);
