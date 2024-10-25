@@ -2137,10 +2137,10 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
-var custRefundedAmount = data.custRefundedAmount || 0;  
+var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || 0;  
 var currentActualGp = data.actualGP || 0;
 // console.log("actualGP rn",currentActualGp);
-// $("#custRefunds").val(custRefundedAmount.toFixed(2))
+$("#custRefunds").val(custRefundedAmount.toFixed(2))
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
 if (!data.additionalInfo || data.additionalInfo.length === 0) {
