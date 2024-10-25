@@ -1888,6 +1888,7 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   }
   const { trackingNo, eta, shipperName, link } = req.body;
   var orderDate = order.orderDate;
+  var cancelledRefAmount = req.params.cancelledRefAmount;
   const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
   date.setDate(date.getDate() - 1);
   const month = (date.getMonth() + 1).toString().padStart(2, '0');  
@@ -1908,16 +1909,16 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   to: `dipsikha.spotopsdigital@gmail.com`,
   subject: `Order Cancellation`,
   html: `<p>Dear ${order.customerName},</p>
-  <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>,dated ${orderedDate}, for a ${order.year} ${order.make}
-  ${order.model} ${order.pReq} with <b>50 Stars Auto Parts</b>.<p><br>
+  <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>,dated <b>${orderedDate}</b>, for a <$>${order.year} ${order.make}
+${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.<p><br>
   <p>We regret any inconvenience this may have caused you.</p><br>
-  <p>We have canceled your order and will reimburse you $271.61  to the same source account.</p><br>
+  <b>We have canceled your order and will reimburse you $${cancelledRefAmount}  to the same source account.</b><br>
   <p>Please call us if you have any questions.</p><br>
   <p>Upon reviewing your order, Due to this unforeseen circumstance, we are unable to fulfill your order at this time.</p><br>
-  <p>Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within [timeframe for refund processing, e.g., 3-5 business days].</p><br>
+  <p>Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within 3-5 business days.</p><br>
   <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.
 p><br>
-<p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [+1(888)-653-2808]. We are here to assist you in any way we can.
+<p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1(888)-653-2808</b>]. We are here to assist you in any way we can.
 </p><br>
 <p>Thank you for your understanding and continued support.  </p><br>`,
   };
