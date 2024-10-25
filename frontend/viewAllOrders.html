@@ -558,7 +558,7 @@ $("#infoTable").append(`
 <td>${item.pReq || item.partName}</td>
 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
 <td>${item.orderStatus}</td>
-<td>${item.actualGP || 0}</td>
+<td>${item.actualGP || ""}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
 <td class="actions">${actions}</td>
 <td>${sendInvoice}</td>
