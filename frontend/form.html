@@ -3133,6 +3133,7 @@ $("#escalation").hide();
 }
 if (yardData.status === "Part shipped") {
 $("#divTrackingEdit").show();
+$("#sendEmailButton").show();
 $("#trackingNoEdit").val(yardData.trackingNo || "");
 $("#etaEdit").val(yardData.eta || "");
 $("#linkInput").val(yardData.trackingLink || "");
