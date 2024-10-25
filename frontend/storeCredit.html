@@ -669,48 +669,13 @@ const orders = ordersResponse.data;
 allOrders = orders;
 // Filter orders based on the required conditions
 filteredOrders = allOrders.filter((item) => {
-const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; 
-// console.log("lastInfos",lastInfo)
-if (!lastInfo || lastInfo.status !== "Label created") {
-return false; 
-}
-var yardLogs = {};
-var datetime;
-var yardIndex;
-var arr = item.orderHistory;
+  const InfoArray = item.additionalInfo;
+  if (!InfoArray || InfoArray.length === 0) return false; 
 
-arr.forEach((log, index) => {
-    if (log.includes("Label created")) {
-        const yardRegex = /Yard (\d+)/;
-        const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
-
-        const yardMatch = log.match(yardRegex);
-        const datetimeMatch = log.match(datetimeRegex);
-        yardIndex = yardMatch ? yardMatch[1] : null;
-        datetime = datetimeMatch ? datetimeMatch[0] : null;
-
-        if (yardIndex && datetime) {
-            yardLogs[yardIndex] = { log, datetime, index };
-        }
-    }
-});
-
-console.log("yardLogs:", yardLogs);
-
-// To get the latest datetime from the last yard entry (e.g., yard 3)
-const yardEntries = Object.values(yardLogs);
-var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
-console.log("Last DateTime:", lDateTime);
-
-currentDateTime = currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
-lDateTime = lDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
-var currentDate = new Date(currentDateTime);
-var lastDate = new Date(lDateTime);
-var diffTime = Math.abs(currentDate - lastDate);
-var differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-console.log("Difference in days:", differenceInDays);
-return differenceInDays > 1;
+  return InfoArray.some((info) => {
+    const hasStoreCredit = info.storeCredit && info.storeCredit.trim() !== "";
+    return hasStoreCredit;
+  });
 });
 
 // Sort and render the filtered orders
