@@ -3089,11 +3089,10 @@ $('#refundSubmit').on('click', function() {
 });
 
 // refundCollect part ends here
-
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
 $("#editYardPopup").show();
 $("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");// for preventing bg scrolling
+$("body").addClass("modal-active");
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
 $("#yardIndexEdit").val(yardIndex);
@@ -3132,12 +3131,8 @@ $("#escalation").show();
 $("#escTickBox").prop("checked", false);
 $("#escalation").hide();
 }
-
-// Show the tracking section and prefill tracking information
-if (yardData.status === "Part shipped") {
+if (yardData.status === "Part shipped" || yarddats.status === "Label created") {
 $("#divTrackingEdit").show();
-
-// Prefill tracking information fields from yardData
 $("#trackingNoEdit").val(yardData.trackingNo || "");
 $("#etaEdit").val(yardData.eta || "");
 $("#linkInput").val(yardData.trackingLink || "");
@@ -3717,7 +3712,7 @@ $("#cardCharged").hide();
 } else if (refundStatus === "Label created") {
 $("#escalation").hide();    
 $("#divTrackingEdit").show();
-$("#sendEmailButton").show();
+$("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 } else if (refundStatus === "Part delivered") {
