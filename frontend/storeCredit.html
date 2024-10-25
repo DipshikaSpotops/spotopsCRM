@@ -552,13 +552,13 @@ $('#infoTable').empty();
 ordersForPage.forEach((item) => {   
 lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
 console.log(item.additionalInfo[0]);
-var yardPP = parseFloat(item.additionalInfo.partPrice) || 0;
+var yardPP = item.additionalInfo.partPrice || 0;
 var yardOSorYS = item.additionalInfo.shippingDetails || '';
 var shippingValueYard = 0;  
 if (yardOSorYS.includes("Yard shipping")) {
 shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
 }
-var storeCredit = parseFloat(item.additionalInfo.storeCredit) || 0;
+var storeCredit = item.additionalInfo.storeCredit || 0;
 console.log("yard ship", shippingValueYard,"part price",yardPP,"storeCredit",storeCredit);
 var cardCharged = yardPP + shippingValueYard;
 console.log("card charged",cardCharged);
