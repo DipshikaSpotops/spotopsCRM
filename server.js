@@ -1883,28 +1883,4 @@ console.log("orders found",orders);
     res.status(500).json({ message: 'Error fetching yearly progress', error });
   }
 });
-app.put('/orders/:orderNo/cancelledRefund', async (req, res) => {
-  console.log("PUT request for cancelledRefund:", req.body);
-  const { cancelledDate, cancelledRefAmount, orderNo } = req.body;
 
-  console.log("Cancelled:", cancelledDate, cancelledRefAmount, "OrderNo:", orderNo);
-
-  try {
-    const order = await Order.findOneAndUpdate(
-      { orderNo: orderNo },
-      {
-        cancelledDate: cancelledDate,
-        cancelledRefAmount: cancelledRefAmount
-      },
-      { new: true }
-    );
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-    res.json(order);
-  } catch (error) {
-    console.error('Error updating cancelledRefund information:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
