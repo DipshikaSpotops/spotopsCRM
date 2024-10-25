@@ -2854,6 +2854,9 @@ $("#paymentStatusSelect").val("Refund collected");
 $("#refundedAmountContainer").show()
 // Prefill input fields
 $("#refundedAmount").val(yardData.refundedAmount);
+if(yardData.storeCredit){
+  $("#storeCreditCheckbox").prop('checked', true);
+}
 })
 });
 // for esc part in yard
