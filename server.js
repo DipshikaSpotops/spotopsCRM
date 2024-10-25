@@ -346,7 +346,7 @@ disputeReason: String,
 custRefundDate: String,
 custRefundedAmount: Number,
 cancelledDate: String,
-cancelledRefAmount:Number
+cancelledRefAmount:String
 });
 
 const Order = mongoose.model("Order", OrderSchema);
