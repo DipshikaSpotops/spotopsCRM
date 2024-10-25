@@ -551,7 +551,7 @@ const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty();
 ordersForPage.forEach((item) => {   
 lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-console.log(item.additionalInfo.length - 1);
+console.log(item.additionalInfo[0]);
 var yardPP = parseFloat(item.additionalInfo.partPrice) || 0;
 var yardOSorYS = item.additionalInfo.shippingDetails || '';
 var shippingValueYard = 0;  
@@ -572,8 +572,8 @@ const row = `
 ${lastInfo.address || ""}<br>
 ${lastInfo.email || ""}<br>
 ${lastInfo.phone || ""}</td>
-<td>${lastInfo.status}</td>
 <td>>${cardCharged || ""}</td>
+<td>>${storeCredit || ""}</td>
 <td class="actions">${actions}</td>
 </tr>
 `;
