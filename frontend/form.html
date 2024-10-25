@@ -2027,7 +2027,7 @@ $("#cancelledRefundSubmit").on("click", function () {
 
   const custRefundData = {
     cancelledDate,
-    Number(cancelledRefAmount),
+    cancelledRefAmount,
     orderNo
   };
   console.log("Payload being sent:", custRefundData);
