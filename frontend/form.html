@@ -3131,12 +3131,11 @@ $("#escalation").show();
 $("#escTickBox").prop("checked", false);
 $("#escalation").hide();
 }
-if (yardData.status === "Part shipped" || yardData.status === "Label created") {
+if (yardData.status === "Part shipped") {
 $("#divTrackingEdit").show();
 $("#trackingNoEdit").val(yardData.trackingNo || "");
 $("#etaEdit").val(yardData.eta || "");
 $("#linkInput").val(yardData.trackingLink || "");
-
 const predefinedShippers = ["UPS", "World Wide Express", "FedEx"];
 if (predefinedShippers.includes(yardData.shipperName)) {
 // If the shipper is one of the predefined ones, set the select value
@@ -3147,7 +3146,25 @@ $("#otherShipperInput").hide();
 $("#shipperNameEdit").val("Others");
 $("#otherShipperInput").val(yardData.shipperName).show();
 }
+}else if (yardData.status === "Label created") {
+$("#divTrackingEdit").show();
+$("#sendEmailButton").hide();
+$("#trackingNoEdit").val(yardData.trackingNo || "");
+$("#etaEdit").val(yardData.eta || "");
+$("#linkInput").val(yardData.trackingLink || "");
+const predefinedShippers = ["UPS", "World Wide Express", "FedEx"];
+if (predefinedShippers.includes(yardData.shipperName)) {
+// If the shipper is one of the predefined ones, set the select value
+$("#shipperNameEdit").val(yardData.shipperName);
+$("#otherShipperInput").hide();
 } else {
+// If the shipper is not in the predefined list, set "Others" and show the input
+$("#shipperNameEdit").val("Others");
+$("#otherShipperInput").val(yardData.shipperName).show();
+}
+} 
+
+else {
 // Hide the tracking section if not "Part shipped"
 $("#divTrackingEdit").hide();
 }
