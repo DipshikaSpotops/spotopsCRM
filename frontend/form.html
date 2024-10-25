@@ -2003,7 +2003,7 @@ $(".custRefundSubmit").on("click", function () {
 
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
-      $("#custRefunds").val(custRefundedAmount.toFixed(2))
+      $("#custRefunds").val(custRefundedAmount)
       alert("Refund information  updated successfully!");
     })
     .catch(function (error) {
@@ -2039,7 +2039,7 @@ $("#cancelledRefundSubmit").on("click", function () {
     orderNo: orderNo
   })
     .then(function (response) {
-      $("#custRefunds").val(cancelledRefAmount.toFixed(2))
+      $("#custRefunds").val(cancelledRefAmount)
       alert("Refund information for cancelled order updated successfully!");
     })
     .catch(function (error) {
