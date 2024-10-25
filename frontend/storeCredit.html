@@ -570,8 +570,8 @@ ordersForPage.forEach((item) => {
   if (yardOSorYS.includes("Yard shipping")) {
     shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
   }
-
-  const cardCharged = yardPP + shippingValueYard;
+ var others = lastInfo.others || 0 ;
+  const cardCharged = yardPP + shippingValueYard + others;
   console.log("yard ship", shippingValueYard, "part price", yardPP, "storeCredit", totalStoreCredit);
   console.log("card charged", cardCharged);
 
@@ -584,7 +584,9 @@ ordersForPage.forEach((item) => {
       <td>${lastInfo.yardName || ""}<br>
           ${lastInfo.address || ""}<br>
           ${lastInfo.email || ""}<br>
-          ${lastInfo.phone || ""}</td>
+          ${lastInfo.phone || ""}<br>
+          Part price:${lastInfo.partPrice || ""} | Yard shipping:${lastInfo.partPrice || 0} | Others:${lastInfo.partPrice || 0}<br>
+          </td>
       <td>${cardCharged || ""}</td>
       <td>${totalStoreCredit || ""}</td>
       <td>${actions}</td>
