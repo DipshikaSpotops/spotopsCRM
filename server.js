@@ -1684,46 +1684,46 @@ res.status(500).json({ message: 'Server error' });
 }
 });
 // for storing custRefunds
-// app.put('/orders/:orderNo/custRefund', async (req, res) => {
-//   console.log("PUT request for custRefund:", req.body);
+app.put('/orders/:orderNo/custRefund', async (req, res) => {
+  console.log("PUT request for custRefund:", req.body);
 
-//   const { orderNo } = req.params;
-//   const {
-//     custRefundDate, 
-//     custRefundedAmount, 
-//     cancelledDate, 
-//     cancelledRefAmount 
-//   } = req.body;
+  const { orderNo } = req.params;
+  const {
+    custRefundDate, 
+    custRefundedAmount, 
+    cancelledDate, 
+    cancelledRefAmount 
+  } = req.body;
 
-//   console.log(
-//     "Refunds:", custRefundDate, custRefundedAmount, 
-//     "Cancellations:", cancelledDate, cancelledRefAmount, 
-//     "OrderNo:", orderNo
-//   );
+  console.log(
+    "Refunds:", custRefundDate, custRefundedAmount, 
+    "Cancellations:", cancelledDate, cancelledRefAmount, 
+    "OrderNo:", orderNo
+  );
 
-//   try {
-//     const updateFields = {};
-//     if (custRefundDate) updateFields.custRefundDate = custRefundDate;
-//     if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
-//     if (cancelledDate) updateFields.cancelledDate = cancelledDate;
-//     if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
+  try {
+    const updateFields = {};
+    if (custRefundDate) updateFields.custRefundDate = custRefundDate;
+    if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
+    if (cancelledDate) updateFields.cancelledDate = cancelledDate;
+    if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
 
-//     const order = await Order.findOneAndUpdate(
-//       { orderNo: orderNo },
-//       { $set: updateFields },
-//       { new: true }
-//     );
+    const order = await Order.findOneAndUpdate(
+      { orderNo: orderNo },
+      { $set: updateFields },
+      { new: true }
+    );
 
-//     if (!order) {
-//       return res.status(404).json({ message: 'Order not found' });
-//     }
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
 
-//     res.json(order);
-//   } catch (error) {
-//     console.error('Error updating refund or cancellation information:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
+    res.json(order);
+  } catch (error) {
+    console.error('Error updating refund or cancellation information:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 
