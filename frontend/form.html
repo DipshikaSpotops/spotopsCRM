@@ -2842,6 +2842,19 @@ selectedYardIndex = $(this).data('yard-index');
 console.log("refund collected part",selectedYardIndex);
 $("#refundCollect").fadeIn(); 
 $(".mainDiv").addClass("blur");
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => response.json())
+.then((data) => {
+if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+// console.log("Order data or additionalInfo not found.");
+return;
+}
+const yardData = data.additionalInfo[yardIndex - 1];
+$("#paymentStatusSelect").val("Refund collected");
+$("#refundedAmountContainer").show()
+// Prefill input fields
+$("#refundedAmount").val(yardData.refundedAmount);
+})
 });
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', async function () {
