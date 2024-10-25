@@ -897,7 +897,6 @@ console.log("invoicePath",invoicePath);
 if (!fs.existsSync(invoicePath)) {
 return res.status(404).json({ message: "Invoice not found" });
 }
-
 const transporter = nodemailer.createTransport({
 service: "gmail",
 auth: {
@@ -905,7 +904,6 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
-
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: order.email,
@@ -1159,8 +1157,6 @@ console.log("no", order);
 if (!order) {
 return res.status(400).send("Order not found");
 }
-
-// Get tracking information from the request body
 const { trackingNo, eta, shipperName, link } = req.body;
 console.log("trackingInfo", trackingNo, eta, shipperName, link);
 const transporter = nodemailer.createTransport({
@@ -1170,7 +1166,6 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
-
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: `${order.email}`,
@@ -1186,9 +1181,7 @@ html: `<p>Hi ${order.customerName},</p>
 <p><img src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png" alt="logo" style="max-width: 100%; height: auto;"></p>
 <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 };
-
 console.log("mail", mailOptions);
-
 transporter.sendMail(mailOptions, (error, info) => {
 if (error) {
 console.error("Error sending mail:", error);
@@ -1197,7 +1190,6 @@ res.status(500).json({ message: `Error sending mail: ${error.message}` });
 console.log("Email sent successfully:", info.response);
 res.json({ message: `Email sent successfully` });
 }
-
 });
 } catch (error) {
 console.error("Server error:", error);
@@ -1885,3 +1877,64 @@ console.log("orders found",orders);
   }
 });
 
+// endpoint for sending cancellation email
+app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
+  console.log("send tracking info");
+  try {
+  const order = await Order.findOne({ orderNo: req.params.orderNo });
+  console.log("no", order);
+  if (!order) {
+  return res.status(400).send("Order not found");
+  }
+  const { trackingNo, eta, shipperName, link } = req.body;
+  var orderDate = order.orderDate;
+  const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
+  date.setDate(date.getDate() - 1);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');  
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  var orderedDate =  `${month}/${day}/${year}`;
+  console.log("trackingInfo", trackingNo, eta, shipperName, link);
+  const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+  user: "service@50starsautoparts.com",
+  pass: "hweg vrnk qyxx gktv",
+  },
+  });
+  const mailOptions = {
+  from: "service@50starsautoparts.com",
+  // to: `${order.email}`,
+  to: `dipsikha.spotopsdigital@gmail.com`,
+  subject: `Order Cancellation`,
+  html: `<p>Dear ${order.customerName},</p>
+  <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #${order.orderNo},dated ${orderedDate}, for a ${order.year} ${order.make}
+  ${order.model} ${order.pReq} with <br>50 Stars Auto Parts</br>. We regret any inconvenience this may caused you.</p><br>
+  <p>We have canceled your order and will reimburse you $271.61  to the same source account.</p><br>
+  <p>Please call us if you have any questions.</p><br>
+  <p>Upon reviewing your order, Due to this unforeseen circumstance, we are unable to fulfill your order at this time.</p><br>
+  <p>Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within [timeframe for refund processing, e.g., 3-5 business days].</p><br>
+  <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.
+p><br>
+<p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [+1(888)-653-2808]. We are here to assist you in any way we can.
+</p><br>
+<p>Thank you for your understanding and continued support.  </p><br>`,
+  };
+  
+  console.log("mail", mailOptions);
+  
+  transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+  console.error("Error sending mail:", error);
+  res.status(500).json({ message: `Error sending mail: ${error.message}` });
+  } else {
+  console.log("Cancellation email sent successfully:", info.response);
+  res.json({ message: `Cancellation email sent successfully` });
+  }
+  
+  });
+  } catch (error) {
+  console.error("Server error:", error);
+  res.status(500).json({ message: "Server error", error });
+  }
+  });

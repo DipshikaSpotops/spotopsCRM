@@ -1956,6 +1956,14 @@ else if (newOrderStatus == "Order Cancelled") {
     $("#cancellingOrder").css("display", "block").hide().fadeIn();
 // $("#cancellingOrder").fadeIn(); // Ensure this is called
     $("body").addClass("modal-active");
+    const orderNo = urlParams.get("orderNo");  // Assuming orderNo is available in the URL params
+    axios.post(`/orders/sendCancelEmail/${orderNo}`)
+        .then(function (response) {
+            console.log("Cancellation email sent successfully:", response.data.message);
+        })
+        .catch(function (error) {
+            console.error("Error sending cancellation email:", error);
+        });
 } 
 else {
 $("#disputeDiv").fadeOut();
