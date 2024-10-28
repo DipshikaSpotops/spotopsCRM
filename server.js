@@ -1699,7 +1699,8 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
   console.log(
     "Refunds:", custRefundDate, custRefundedAmount, 
     "Cancellations:", cancelledDate, cancelledRefAmount, 
-    "OrderNo:", orderNo
+    "OrderNo:", orderNo,
+    "cancellationReason:",cancellationReason
   );
 
   try {
