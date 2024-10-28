@@ -1880,7 +1880,6 @@ console.log("orders found",orders);
 });
 
 // endpoint for sending cancellation email
-when i sent an emil to a customer, can i add a button called approce or Yes or no for a quick reply
 app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   console.log("send tracking info");
   try {
