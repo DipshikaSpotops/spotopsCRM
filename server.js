@@ -1201,7 +1201,7 @@ app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
   console.log("send rma(return) info");
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
-  console.log("no", order);
+  console.log("no", order,"yardIndex",yardIndex);
   if (!order) {
   return res.status(400).send("Order not found");
   }
