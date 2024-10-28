@@ -1872,7 +1872,7 @@ Save
   </div>
   <div style="flex: 1; min-width: 300px;">
     <label for="reasonCancel" style="white-space: nowrap;margin: 4% 27%;">Reason:</label>
-    <select type="text" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+    <select type="number" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
     <option value="Same Day">Same Day</option>
     <option value="Invoice Not Signed">Invoice Not Signed</option>
     <option value="Personal Reason">Personal Reason</option>
@@ -2052,7 +2052,7 @@ $("#cancelledRefundSubmit").on("click", function () {
   console.log("Cancelled Date:", cancelledDate);
   console.log("Cancelled Refund Amount:", cancelledRefAmount);
   console.log("Order No:", orderNo);
-  console.log("Reason",reason)
+
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, {
     cancelledDate: cancelledDate,
     cancelledRefAmount: cancelledRefAmount,
@@ -2185,6 +2185,7 @@ if (
   if (custRefundedAmount) {
     actualGP = (sp - custRefundedAmount) - tax;
     $("#actualGP").val(actualGP.toFixed(2));
+
     if (currentActualGp !== actualGP) {
       axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
         .then(function (response) {
@@ -2219,23 +2220,23 @@ $("#escTickBox").prop("checked", false);
 var yardStatus = yard.status;
 // console.log("current yard status", yardStatus);
 // Update order status based on yard status
-// if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent"){
-// $("#orderStatus").val("Yard Processing");
-// }
-// else if(yardStatus === "Label created") {
-// $("#orderStatus").val("Yard Processing");
-// var labelCreationDate = currentDateTime;
-// }
+if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent"){
+$("#orderStatus").val("Yard Processing");
+}
+else if(yardStatus === "Label created") {
+$("#orderStatus").val("Yard Processing");
+var labelCreationDate = currentDateTime;
+}
 
-// else if (yardStatus === "Part shipped") {
-// $("#orderStatus").val("In Transit");
-// } else if (yardStatus === "Part delivered") {
-// $("#orderStatus").val("Order Fulfilled");
-// } else if (yardStatus === "Escalation") {
-// $("#orderStatus").val("Escalation");
-// } else if (yardStatus === "Collect refund") {
-// $("#orderStatus").val("Escalation");
-// }
+else if (yardStatus === "Part shipped") {
+$("#orderStatus").val("In Transit");
+} else if (yardStatus === "Part delivered") {
+$("#orderStatus").val("Order Fulfilled");
+} else if (yardStatus === "Escalation") {
+$("#orderStatus").val("Escalation");
+} else if (yardStatus === "Collect refund") {
+$("#orderStatus").val("Escalation");
+}
 if(pStatus === "Card charged"){
 var yardPP = parseFloat(yard.partPrice) || 0;
 var yardOSorYS = yard.shippingDetails || '';
@@ -3256,15 +3257,16 @@ let shipperName = $("#shipperNameEdit").val() === "Others" ? $("#otherShipperInp
 const trackingLink = $("#linkInput").val();
 const paymentStatus = $('.paymentStatus').val();
 const refundedAmount = $("#refundedAmount").val();
-var newStatus = $("#orderStatus").val();
+let newOrderStatus = $("#orderStatus").val();
+// console.log("yardStatus",status);
 if (status === "Part shipped") {
-  newStatus = "In Transit";
+newOrderStatus = "In Transit";
 } else if (status === "Label created") {
-  newStatus = "Yard Processing"; 
+newOrderStatus = "Yard Processing"; 
 var labelCreationDate = currentDateTime;
 console.log("label created date",labelCreationDate);
 } else if (status === "Escalation") {
-  newStatus = "Escalation";
+newOrderStatus = "Escalation";
 var escalationDate = currentDateTime;
 escCause = $("#esc").val();
 console.log("escCause",escCause,currentDateTime);
@@ -3272,7 +3274,7 @@ var escTicked = "Yes";
 $("#escTickBox").prop("checked", true);
 // window.location.reload();
 } else if (status === "Collect redund") {
-newStatus = "Escalation";
+newOrderStatus = "Escalation";
 } else if (status === "Part delivered") {
 newOrderStatus = "Order Fulfilled";
 } else if (status === "Yard PO Sent") {
@@ -3280,7 +3282,6 @@ newOrderStatus = "Yard Processing";
 var poSentDate = currentDateTime;
 console.log("po sent date",poSentDate);
 }
-console.log("yardStatus",status,newOrderStatus);
 // console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
 const updatedData = {
   ...currentYardData,
