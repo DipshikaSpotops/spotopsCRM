@@ -1167,20 +1167,25 @@ pass: "hweg vrnk qyxx gktv",
 },
 });
 const mailOptions = {
-from: "service@50starsautoparts.com",
-// to: `${order.email}`,
-to: `dipsikha.spotopsdigital@gmail.com`,
-subject: `Tracking Details / Order No. ${req.params.orderNo}`,
-html: `<p>Hi ${order.customerName},</p>
-<p>This email is regarding the order you placed with 50 stars auto parts, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
-<p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website; you may check again if you do not find the ETA.</p>
-<p>Please call us if you have any questions.</p>
-<p>${shipperName} - ${trackingNo}</p>
-<p>ETA - ${eta} days</p>
-<p>Link - <a href="${link}">${link}</a></p>
-<p><img src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png" alt="logo" style="max-width: 100%; height: auto;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  from: "service@50starsautoparts.com",
+  to: `dipsikha.spotopsdigital@gmail.com`,
+  subject: `Tracking Details / Order No. ${req.params.orderNo}`,
+  html: `<p>Hi ${order.customerName},</p>
+  <p>This email is regarding the order you placed with 50 stars auto parts, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
+  <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website; you may check again if you do not find the ETA.</p>
+  <p>Please call us if you have any questions.</p>
+  <p>${shipperName} - ${trackingNo}</p>
+  <p>ETA - ${eta}</p>
+  <p>Link - <a href="${link}">${link}</a></p>
+  <p><img src="cid:logo" alt="logo" style="max-width: 100%; height: auto;"></p>
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  attachments: [{
+    filename: 'logo.png',
+    path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+    cid: 'logo' // Same as in the img src
+  }]
 };
+
 console.log("mail", mailOptions);
 transporter.sendMail(mailOptions, (error, info) => {
 if (error) {
