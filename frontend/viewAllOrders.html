@@ -368,7 +368,7 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actions</th>
-      <th style="cursor: pointer" scope="col">Send Invoice</th>
+      <!-- <th style="cursor: pointer" scope="col">Send Invoice</th> -->
       <th style="cursor: pointer" scope="col">
       Email <span class="aToZ">&#9650;</span>
       </th>
@@ -556,13 +556,12 @@ $("#infoTable").append(`
 <td>${item.actualGP || ""}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
 <td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
 <td>${item.email}</td>
 </tr>
 `);
 });
 }
-
+// <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
 $("#user-name").text(firstName);
