@@ -3265,6 +3265,7 @@ $("#editYardInfo").on("click", async function () {
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
     let orderData = await response.json();
     let escCause = "";
+    
     const currentYardData = orderData.additionalInfo[yardIndex - 1];
     const status = $("#refund").val();
     const trackingNo = $("#trackingNoEdit").val();
@@ -3276,6 +3277,7 @@ $("#editYardInfo").on("click", async function () {
     const paymentStatus = $('.paymentStatus').val();
     const refundedAmount = $("#refundedAmount").val();
     let newStatus = $("#orderStatus").val();
+
     if (status === "Part shipped") {
       newStatus = "In Transit";
     } else if (status === "Label created") {
@@ -3297,7 +3299,7 @@ $("#editYardInfo").on("click", async function () {
       newStatus = "Yard Processing";
       var poSentDate = currentDateTime;
     }
-console.log("yardStatus",status);
+
     const updatedData = {
       ...currentYardData,
       status: status,
@@ -3893,7 +3895,9 @@ alert("Please fill in all the tracking information fields.");
 // send esc Return email
 $("#sendReturnEmail").on("click", function () {
 $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
-fetch(`https://www.spotops360.com/orders/sendReturnEmail/${orderNo}`, {
+const yardIndex = $(this).data("yard-index");
+console.log("sendRetuen yIndex",yardIndex);
+fetch(`https://www.spotops360.com/orders/sendReturnEmail/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
