@@ -622,7 +622,10 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
       order.additionalInfo[yardIndex] = yardInfo;
       order.orderStatus = orderStatus;
       const firstName = req.query.firstName;
-      order.orderHistory.push(`Yard ${yardIndex + 1} ${updatedYardData.status} updated by ${firstName} on ${formattedDateTime}`);
+      const status = req.body.status; 
+const paymentStatus = req.body.paymentStatus;
+const refundStatus = req.body.refundStatus;
+order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
       order.markModified("additionalInfo");
       order.markModified("orderStatus");
       await order.save();
