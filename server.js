@@ -617,7 +617,7 @@ try {
 // console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
 const order = await Order.findOne({ orderNo: req.params.orderNo });
 const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
-console.log("Order found:", order);
+console.log("Order found:", order,"request",req,body);
 console.log("Yard index:", yardIndex);
 if (!order) return res.status(404).send("Order not found");
 if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
