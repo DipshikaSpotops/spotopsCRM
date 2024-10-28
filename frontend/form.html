@@ -1871,24 +1871,6 @@ Save
   <label for=h></label>
   </div>
   <div style="flex: 1; min-width: 300px;">
-    <label for="reasonCancel" style="white-space: nowrap;margin: 4% 27%;">Reason:</label>
-    <select type="number" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
-    <option value="Same Day">Same Day</option>
-    <option value="Invoice Not Signed">Invoice Not Signed</option>
-    <option value="Personal Reason">Personal Reason</option>
-    <option value="Reimbursement">Reimbursement</option>
-    <option value="Delay">Delay</option>
-    <option value="Defective/Damaged">Defective/Damaged</option>
-    <option value="Ugly Part">Ugly Part</option>
-    <option value="Wrong Part">Wrong Part</option>
-    <option value="Reprogram/VIN">Reprogram/VIN</option>
-    <option value="No Blind Shipping">No Blind Shipping</option>
-    <option value="Dispute">Dispute</option>
-    <option value="Part Not Available">Part Not Available</option>
-    <option value="No Refund">No Refund</option>
-    </select>
-    </div>
-  <div style="flex: 1; min-width: 300px;">
   <label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
   <input type="number" class="cancelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
   </div>
@@ -2046,7 +2028,6 @@ $("#cancelledRefundSubmit").on("click", function () {
   const cancelledDate = $("#cancelledDate").val();
   const cancelledRefAmount = $(".cancelledRefAmount").val();
   const orderNo = urlParams.get("orderNo");
-  const reason = $("#reasonCancel").val();
 
   console.log("Captured Data:");
   console.log("Cancelled Date:", cancelledDate);
@@ -2056,8 +2037,7 @@ $("#cancelledRefundSubmit").on("click", function () {
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, {
     cancelledDate: cancelledDate,
     cancelledRefAmount: cancelledRefAmount,
-    orderNo: orderNo,
-    cancellationReason:reason
+    orderNo: orderNo
   })
     .then(function (response) {
       console.log("Refund information updated successfully:", response.data);
