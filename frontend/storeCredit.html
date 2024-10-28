@@ -571,7 +571,7 @@ ordersForPage.forEach((item) => {
     shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
   }
  var others = lastInfo.others || 0 ;
-  const cardCharged = yardPP + shippingValueYard;
+  const cardCharged = yardPP + shippingValueYard + others;
   console.log("yard ship", shippingValueYard, "part price", yardPP, "storeCredit", totalStoreCredit,"others",others);
   console.log("card charged", cardCharged);
 
