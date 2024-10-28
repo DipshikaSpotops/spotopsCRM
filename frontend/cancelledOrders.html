@@ -567,7 +567,7 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
                 <td>${item.orderStatus}</td>
                 <td ${escalationStyle}>${escalationStatus}</td>
-                <td class="actions">${actions}</td>
+                <td class="actions" style="justify-content: center;">${actions}</td>
                 <td>${sendInvoice}</td>
                 <td>${item.email}</td>
             </tr>
