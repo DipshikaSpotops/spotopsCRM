@@ -2042,8 +2042,8 @@ $(".custRefundSubmit").on("click", function () {
 
 $("#cancelledRefundSubmit").on("click", function () {
   $("#cancellingOrder").fadeOut();
-  $(".modal-overlay").remove();
-  $("body").removeClass("modal-active");
+  // $(".modal-overlay").remove();
+  // $("body").removeClass("modal-active");
 
   const cancelledDate = $("#cancelledDate").val();
   const cancelledRefAmount = $(".cancelledRefAmount").val();
