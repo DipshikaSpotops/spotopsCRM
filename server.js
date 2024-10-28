@@ -1195,6 +1195,59 @@ console.error("Server error:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+// to send rma(refund) email
+app.post("/orders/sendreturnEmail/:orderNo", async (req, res) => {
+  console.log("send rma(return) info");
+  try {
+  const order = await Order.findOne({ orderNo: req.params.orderNo });
+  console.log("no", order);
+  if (!order) {
+  return res.status(400).send("Order not found");
+  }
+  const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+  user: "service@50starsautoparts.com",
+  pass: "hweg vrnk qyxx gktv",
+  },
+  });
+  const mailOptions = {
+    from: "service@50starsautoparts.com",
+    // to: `${order.email}`,
+    // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+    to: 'dipsikha.spotopsdigital@gmail.com',
+    subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
+    html: `<p>Dear ${order.customerName},</p>
+    <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
+    <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website; you may check again if you do not find the ETA.</p>
+    <p>Please call us if you have any questions.</p>
+    <p>${shipperName} - ${trackingNo}</p>
+    <p>ETA - ${eta}</p>
+    <p>Link - <a href="${link}">${link}</a></p>
+    <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+    <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+    attachments: [{
+      filename: 'logo.png',
+      path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+      cid: 'logo' 
+    }]
+  };
+  
+  console.log("mail", mailOptions);
+  transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+  console.error("Error sending mail:", error);
+  res.status(500).json({ message: `Error sending mail: ${error.message}` });
+  } else {
+  console.log("Email sent successfully:", info.response);
+  res.json({ message: `Email sent successfully` });
+  }
+  });
+  } catch (error) {
+  console.error("Server error:", error);
+  res.status(500).json({ message: "Server error", error });
+  }
+  });
 
 app.get("/ordersteamA", async (req, res) => {
 console.log("Team A orders");

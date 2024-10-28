@@ -3259,15 +3259,12 @@ $("#editYardInfo").on("click", async function () {
   console.log("clicking on save");
   $(".mainDiv").removeClass("blur");
   $("#editYardPopup").hide();
-
   const yardIndex = $(this).data("yard-index");
   let currentYardData = {};
-  
   try {
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
     let orderData = await response.json();
     let escCause = "";
-    
     const currentYardData = orderData.additionalInfo[yardIndex - 1];
     const status = $("#refund").val();
     const trackingNo = $("#trackingNoEdit").val();
@@ -3279,7 +3276,6 @@ $("#editYardInfo").on("click", async function () {
     const paymentStatus = $('.paymentStatus').val();
     const refundedAmount = $("#refundedAmount").val();
     let newStatus = $("#orderStatus").val();
-
     if (status === "Part shipped") {
       newStatus = "In Transit";
     } else if (status === "Label created") {
@@ -3301,7 +3297,7 @@ $("#editYardInfo").on("click", async function () {
       newStatus = "Yard Processing";
       var poSentDate = currentDateTime;
     }
-
+console.log("yardStatus",status);
     const updatedData = {
       ...currentYardData,
       status: status,
@@ -3894,7 +3890,28 @@ console.error("Error:", error);
 alert("Please fill in all the tracking information fields.");
 }
 });
+// send esc Return email
+$("#sendReturnEmail").on("click", function () {
+$("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
+fetch(`https://www.spotops360.com/orders/sendReturnEmail/${orderNo}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+}
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Return) email has been sent to the customer");
+$("#saveEsc")
+  .prop("disabled", false) 
+  .css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
 
+});
 $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
 console.log("edit yard details");
 // $(".mainDiv").addClass("blur");
