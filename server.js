@@ -1168,7 +1168,8 @@ pass: "hweg vrnk qyxx gktv",
 });
 const mailOptions = {
   from: "service@50starsautoparts.com",
-  to: `${order.email}`,
+  // to: `${order.email}`,
+  to:'50starsautoparts01@gmail.com',
   bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
   subject: `Tracking Details / Order No. ${req.params.orderNo}`,
   html: `<p>Hi ${order.customerName},</p>
