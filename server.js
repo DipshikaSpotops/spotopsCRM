@@ -1168,7 +1168,8 @@ pass: "hweg vrnk qyxx gktv",
 });
 const mailOptions = {
   from: "service@50starsautoparts.com",
-  to: `${order.email},dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+  to: `${order.email}`,
+  bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
   subject: `Tracking Details / Order No. ${req.params.orderNo}`,
   html: `<p>Hi ${order.customerName},</p>
   <p>This email is regarding the order you placed with 50 stars auto parts, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
@@ -1911,7 +1912,8 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   const mailOptions = {
   from: "service@50starsautoparts.com",
   // to: `${order.email}`,
-  to: `${order.email},service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+  to: `${order.email}`,
+  bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
   subject: `Order Cancellation`,
   html: `<p>Dear ${order.customerName},</p>
   <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>,dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
