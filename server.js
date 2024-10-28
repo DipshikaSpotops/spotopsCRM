@@ -1692,7 +1692,8 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
     custRefundDate, 
     custRefundedAmount, 
     cancelledDate, 
-    cancelledRefAmount 
+    cancelledRefAmount ,
+    cancellationReason
   } = req.body;
 
   console.log(
@@ -1707,6 +1708,7 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
     if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
     if (cancelledDate) updateFields.cancelledDate = cancelledDate;
     if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
+    if (cancellationReason) updateFields.cancellationReason = cancellationReason;
 
     const order = await Order.findOneAndUpdate(
       { orderNo: orderNo },
