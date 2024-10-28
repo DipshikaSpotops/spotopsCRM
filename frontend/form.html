@@ -4500,7 +4500,9 @@ window.location.reload();
 
 $('#escProcess').on('change', function () {
 const selectedValue = $(this).val();
-console.log("esc process",selectedValue);
+var yardIndex = $(this).data("yard-index");
+console.log("esc process",selectedValue, yardIndex);
+
 if (selectedValue === 'Replacement') {
 // Show both columns when 'Replacement' is selected
 $('#replacementColumns').fadeIn();
