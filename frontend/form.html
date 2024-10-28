@@ -2913,6 +2913,7 @@ $("#escRMA").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $("#saveEsc").data("yard-index", selectedYardIndex);
+$("#sendReturnEmail").data("yard-index", selectedYardIndex);
 try {
 const response = await axios.get(
 `https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`
@@ -3896,7 +3897,7 @@ alert("Please fill in all the tracking information fields.");
 $("#sendReturnEmail").on("click", function () {
 $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
 const yardIndex = $(this).data("yard-index");
-console.log("sendRetuen yIndex",yardIndex);
+console.log("RMA return",yardIndex)
 fetch(`https://www.spotops360.com/orders/sendReturnEmail/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
@@ -4500,9 +4501,7 @@ window.location.reload();
 
 $('#escProcess').on('change', function () {
 const selectedValue = $(this).val();
-var yardIndex = $(this).data("yard-index");
-console.log("esc process",selectedValue, yardIndex);
-
+console.log("esc process",selectedValue);
 if (selectedValue === 'Replacement') {
 // Show both columns when 'Replacement' is selected
 $('#replacementColumns').fadeIn();
