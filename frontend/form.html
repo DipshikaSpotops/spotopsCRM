@@ -1967,6 +1967,8 @@ $("body").addClass("modal-active");
 }
 else if (newOrderStatus == "Order Cancelled") {
     console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
+    $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
     $(".orderedDate").val(orderPlacedDate);
     $("#cancelledDate").val(currentDateTime);
     $("body").append('<div class="modal-overlay"></div>');
@@ -2070,6 +2072,9 @@ $("#cancelledRefundSubmit").on("click", function () {
     .then(function (response) {
       console.log("Cancellation email sent successfully:", response.data.message);
       alert("Cancellation email sent successfully!");
+      $(".modal-overlay").remove();
+// $(".mainDiv").removeClass("blur");
+$("body").removeClass("modal-active");
     })
     .catch(function (error) {
       console.error("Error during operation:", error);
