@@ -1168,7 +1168,7 @@ const mailOptions = {
   <p>${shipperName} - ${trackingNo}</p>
   <p>ETA - ${eta}</p>
   <p>Link - <a href="${link}">${link}</a></p>
-  <p><img src="cid:logo" alt="logo" style="max-width: 100%; height: auto;"></p>
+  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
   attachments: [{
     filename: 'logo.png',
@@ -1920,7 +1920,15 @@ ${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.<p>
 p><br>
 <p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1(888)-653-2808</b>]. We are here to assist you in any way we can.
 </p><br>
-<p>Thank you for your understanding and continued support.  </p><br>`,
+<p>Thank you for your understanding and continued support.  </p><br>
+ <p><img src="cid:logo" alt="logo" style=width: 180px; height: 100px;"></p>
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  attachments: [{
+    filename: 'logo.png',
+    path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+    cid: 'logo' 
+  }]
+
   };
   
   console.log("mail", mailOptions);
