@@ -1183,7 +1183,7 @@ const mailOptions = {
   attachments: [{
     filename: 'logo.png',
     path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-    cid: 'logo' // Same as in the img src
+    cid: 'logo' 
   }]
 };
 
