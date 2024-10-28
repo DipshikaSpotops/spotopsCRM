@@ -3312,7 +3312,7 @@ body: JSON.stringify(updatedData),
 return response.json();
 })
 .then((data) => {
-$("#orderStatus").val(newOrderStatus);
+$("#orderStatus").val(newStatus);
 updateOrderHistory(data.orderHistory);
 showYardDetails(yardIndex);
 fetchAndUpdateYardInfo();
