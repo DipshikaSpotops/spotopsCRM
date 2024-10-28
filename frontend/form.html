@@ -3239,90 +3239,92 @@ $("#otherShipperInput").hide();
 
 // var labelDate;
 $("#editYardInfo").on("click", async function () {
-  console.log("clicking on save");
-  $(".mainDiv").removeClass("blur");
-  $("#editYardPopup").hide();
-
-  const yardIndex = $(this).data("yard-index");
-  let currentYardData = {};
-  
-  try {
-    let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
-    let orderData = await response.json();
-    let escCause = "";
-    
-    const currentYardData = orderData.additionalInfo[yardIndex - 1];
-    const status = $("#refund").val();
-    const trackingNo = $("#trackingNoEdit").val();
-    const eta = $("#etaEdit").val();
-    let shipperName = $("#shipperNameEdit").val() === "Others" 
-      ? $("#otherShipperInput").val() 
-      : $("#shipperNameEdit").val();
-    const trackingLink = $("#linkInput").val();
-    const paymentStatus = $('.paymentStatus').val();
-    const refundedAmount = $("#refundedAmount").val();
-    let newStatus = $("#orderStatus").val();
-
-    if (status === "Part shipped") {
-      newStatus = "In Transit";
-    } else if (status === "Label created") {
-      newStatus = "Yard Processing"; 
-      var labelCreationDate = currentDateTime;
-    } else if (status === "Escalation") {
-      newStatus = "Escalation";
-      var escalationDate = currentDateTime;
-      escCause = $("#esc").val();
-      var escTicked = "Yes";
-      $("#escTickBox").prop("checked", true);
-    }
-    //  else if (status === "Collect refund") {
-    //   newStatus = "Escalation";
-    // } 
-    else if (status === "Part delivered") {
-      newStatus = "Order Fulfilled";
-    } else if (status === "Yard PO Sent") {
-      newStatus = "Yard Processing";
-      var poSentDate = currentDateTime;
-    }
-
-    const updatedData = {
-      ...currentYardData,
-      status: status,
-      labelCreationDate: labelCreationDate || currentYardData.labelCreationDate,
-      poSentDate: poSentDate || currentYardData.poSentDate,
-      trackingNo: trackingNo || currentYardData.trackingNo,
-      eta: eta || currentYardData.eta,
-      shipperName: shipperName || currentYardData.shipperName,
-      trackingLink: trackingLink || currentYardData.trackingLink,
-      refundedAmount: refundedAmount 
-        ? parseFloat(refundedAmount) 
-        : currentYardData.refundedAmount,
-      escalationCause: escCause || currentYardData.escalationCause,
-      escalationDate: escalationDate || currentYardData.escalationDate,
-      escTicked: escTicked || currentYardData.escTicked,
-    };
-
-    const payload = {
-      updatedYardData: updatedData,
-      orderStatus: newStatus || orderData.orderStatus
-    };
-
-    console.log("Payload:", payload);
-
-    await fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    window.location.reload();
-  } catch (error) {
-    console.error("Error fetching or updating yard data:", error);
-  }
+console.log("clicking on save");
+$(".mainDiv").removeClass("blur");
+$("#editYardPopup").hide();
+const yardIndex = $(this).data("yard-index");
+let currentYardData = {};
+try {
+let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
+let orderData = await response.json();
+let escCause = "";
+const currentYardData = orderData.additionalInfo[yardIndex - 1];
+const status = $("#refund").val();
+const trackingNo = $("#trackingNoEdit").val();
+const eta = $("#etaEdit").val();
+let shipperName = $("#shipperNameEdit").val() === "Others" ? $("#otherShipperInput").val() : $("#shipperNameEdit").val();
+const trackingLink = $("#linkInput").val();
+const paymentStatus = $('.paymentStatus').val();
+const refundedAmount = $("#refundedAmount").val();
+var newStatus = $("#orderStatus").val();
+if (status === "Part shipped") {
+  newStatus = "In Transit";
+} else if (status === "Label created") {
+  newStatus = "Yard Processing"; 
+var labelCreationDate = currentDateTime;
+console.log("label created date",labelCreationDate);
+} else if (status === "Escalation") {
+  newStatus = "Escalation";
+var escalationDate = currentDateTime;
+escCause = $("#esc").val();
+console.log("escCause",escCause,currentDateTime);
+var escTicked = "Yes";
+$("#escTickBox").prop("checked", true);
+// window.location.reload();
+} else if (status === "Collect redund") {
+newStatus = "Escalation";
+} else if (status === "Part delivered") {
+newOrderStatus = "Order Fulfilled";
+} else if (status === "Yard PO Sent") {
+newOrderStatus = "Yard Processing";
+var poSentDate = currentDateTime;
+console.log("po sent date",poSentDate);
+}
+console.log("yardStatus",status,newOrderStatus);
+// console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
+const updatedData = {
+  ...currentYardData,
+  status: status,
+  labelCreationDate: labelCreationDate || currentYardData.labelCreationDate,
+  poSentDate: poSentDate || currentYardData.poSentDate,
+  trackingNo: trackingNo || currentYardData.trackingNo,
+  eta: eta || currentYardData.eta,
+  shipperName: shipperName || currentYardData.shipperName,
+  trackingLink: trackingLink || currentYardData.trackingLink,
+  refundedAmount: refundedAmount 
+    ? parseFloat(refundedAmount) 
+    : currentYardData.refundedAmount,
+  orderStatus: newOrderStatus || currentYardData.orderStatus,
+  escalationCause: escCause || currentYardData.escalationCause,
+  escalationDate: escalationDate || currentYardData.escalationDate,
+  escTicked: escTicked || currentYardData.escTicked 
+};
+console.log("upData",updatedData);
+fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedData),
+})
+.then((response) => {
+window.location.reload();
+return response.json();
+})
+.then((data) => {
+$("#orderStatus").val(newOrderStatus);
+updateOrderHistory(data.orderHistory);
+showYardDetails(yardIndex);
+fetchAndUpdateYardInfo();
+})
+.catch((error) => {
+console.error("Error updating order status:", error);
 });
 
+} catch (error) {
+console.error("Error fetching yard data:", error);
+}
+});
 
 $("#saveEsc").on("click", async function () {
 // $(".mainDiv").removeClass("blur");
