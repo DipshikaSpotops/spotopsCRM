@@ -1250,7 +1250,112 @@ app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
   res.status(500).json({ message: "Server error", error });
   }
   });
-
+  app.post("/orders/sendReimburseEmail/:orderNo", async (req, res) => {
+    var yardIndex = req.query.yardIndex;
+    console.log("send rma(return) info");
+    try {
+    const order = await Order.findOne({ orderNo: req.params.orderNo });
+    console.log("no", order,"yardIndex",yardIndex);
+    if (!order) {
+    return res.status(400).send("Order not found");
+    }
+    const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+    user: "service@50starsautoparts.com",
+    pass: "hweg vrnk qyxx gktv",
+    },
+    });
+    const mailOptions = {
+      from: "service@50starsautoparts.com",
+      // to: `${order.email}`,
+      // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+      to: 'dipsikha.spotopsdigital@gmail.com',
+      subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
+      html: `<p>Dear ${order.customerName},</p>
+      <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
+      <pTo process your refend, please ship the part back to us at the following address:</p>
+      <p>${order.additionalInfo[yardIndex - 1].street}<br>
+      ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
+      </p>
+      <p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
+      <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+      <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+      <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+      attachments: [{
+        filename: 'logo.png',
+        path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+        cid: 'logo' 
+      }]
+    };
+    
+    console.log("mail", mailOptions);
+    transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+    console.error("Error sending mail:", error);
+    res.status(500).json({ message: `Error sending mail: ${error.message}` });
+    } else {
+    console.log("Email sent successfully:", info.response);
+    res.json({ message: `Email sent successfully` });
+    }
+    });
+    } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ message: "Server error", error });
+    }
+    });
+    
+    app.post("/orders/sendRefundEmail/:orderNo", async (req, res) => {
+      var yardIndex = req.query.yardIndex;
+      var refundedAmount = req.query.refundedAmount;
+      console.log("send rma(return) info");
+      try {
+      const order = await Order.findOne({ orderNo: req.params.orderNo });
+      console.log("no", order,"yardIndex",yardIndex);
+      if (!order) {
+      return res.status(400).send("Order not found");
+      }
+      const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+      user: "service@50starsautoparts.com",
+      pass: "hweg vrnk qyxx gktv",
+      },
+      });
+      const mailOptions = {
+        from: "service@50starsautoparts.com",
+        // to: `${order.email}`,
+        // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+        to: 'dipsikha.spotopsdigital@gmail.com',
+        subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 STars Auto Parts`,
+        html: `<p>Dear ${order.customerName},</p>
+        <p>We are reaching out to confirm that your refend of ${refundedAmount} for the ${req.params.orderNo} has been succcessfully processed. Attached to this email, you will fins a copy of the refund receipt for your records.</p>
+        <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
+        <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
+        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+        <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+        attachments: [{
+          filename: 'logo.png',
+          path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+          cid: 'logo' 
+        }]
+      };
+      
+      console.log("mail", mailOptions);
+      transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+      console.error("Error sending mail:", error);
+      res.status(500).json({ message: `Error sending mail: ${error.message}` });
+      } else {
+      console.log("Email sent successfully:", info.response);
+      res.json({ message: `Email sent successfully` });
+      }
+      });
+      } catch (error) {
+      console.error("Server error:", error);
+      res.status(500).json({ message: "Server error", error });
+      }
+      });
 app.get("/ordersteamA", async (req, res) => {
 console.log("Team A orders");
 try {
@@ -1970,12 +2075,11 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
 ${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.<p>
   <p>We regret any inconvenience this may have caused you.</p>
-  <b>We have canceled your order and will reimburse you $${cancelledRefAmount}  to the same source account.</b>
+  <p><b>We have canceled your order and will reimburse you $${cancelledRefAmount}  to the same source account.</b></p>
   <p>Please call us if you have any questions.</p>
   <p>Upon reviewing your order, Due to this unforeseen circumstance, we are unable to fulfill your order at this time.</p>
   <p>Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within 3-5 business days.</p>
-  <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.
-p><br>
+  <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.</p><br>
 <p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1(888)-653-2808</b>]. We are here to assist you in any way we can.
 </p><br>
 <p>Thank you for your understanding and continued support.  </p><br>

@@ -2044,6 +2044,15 @@ $(".custRefundSubmit").on("click", function () {
     .then(function (response) {
       $("#custRefunds").val(custRefundedAmount)
       alert("Refund information  updated successfully!");
+   // Send cancellation email after successful refund update
+   return axios.post(`/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${refundedAmount}`);
+    })
+    .then(function (response) {
+      console.log("Customer refund email sent successfully:", response.data.message);
+      alert("Customer refund email sent successfully!");
+      $(".modal-overlay").remove();
+// $(".mainDiv").removeClass("blur");
+$("body").removeClass("modal-active");
     })
     .catch(function (error) {
       console.error("Error updating refund:", error);
@@ -2912,8 +2921,8 @@ const orderNo = urlParams.get("orderNo");
 $("#escRMA").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-$("#saveEsc").data("yard-index", selectedYardIndex);
-$("#sendReturnEmail").data("yard-index", selectedYardIndex);
+$("#saveEsc,#sendReturnEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
+// $("#sendReturnEmail").data("yard-index", selectedYardIndex);
 try {
 const response = await axios.get(
 `https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`
@@ -3907,6 +3916,30 @@ headers: {
 .then((response) => response.json())
 .then((result) => {
 alert("RMA(Return) email has been sent to the customer");
+$("#saveEsc")
+  .prop("disabled", false) 
+  .css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+
+});
+// send esc reimbursement email
+$("#sendReimburseEmail").on("click", function () {
+$("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
+const yardIndex = $(this).data("yard-index");
+console.log("RMA return",yardIndex)
+fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+}
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Reimbursement) email has been sent to the customer");
 $("#saveEsc")
   .prop("disabled", false) 
   .css("filter", "none"); 
