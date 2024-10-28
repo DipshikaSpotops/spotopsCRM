@@ -1197,6 +1197,7 @@ res.status(500).json({ message: "Server error", error });
 });
 // to send rma(refund) email
 app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
+  var yardIndex = req.query.yardIndex;
   console.log("send rma(return) info");
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -1218,8 +1219,11 @@ app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
     to: 'dipsikha.spotopsdigital@gmail.com',
     subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
     html: `<p>Dear ${order.customerName},</p>
+    <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
     <pTo process your refend, please ship the part back to us at the following address:</p>
-    <p></p>
+    <p>${order.additionalInfo[yardIndex].street}<br>
+    ${order.additionalInfo[yardIndex].city} ${order.additionalInfo[yardIndex].state} ${order.additionalInfo[yardIndex].zipcode}
+    </p>
     <p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
     <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
