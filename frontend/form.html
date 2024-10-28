@@ -3256,15 +3256,15 @@ let shipperName = $("#shipperNameEdit").val() === "Others" ? $("#otherShipperInp
 const trackingLink = $("#linkInput").val();
 const paymentStatus = $('.paymentStatus').val();
 const refundedAmount = $("#refundedAmount").val();
-let newOrderStatus = $("#orderStatus").val();
+var newStatus = $("#orderStatus").val();
 if (status === "Part shipped") {
-newOrderStatus = "In Transit";
+  newStatus = "In Transit";
 } else if (status === "Label created") {
-newOrderStatus = "Yard Processing"; 
+  newStatus = "Yard Processing"; 
 var labelCreationDate = currentDateTime;
 console.log("label created date",labelCreationDate);
 } else if (status === "Escalation") {
-newOrderStatus = "Escalation";
+  newStatus = "Escalation";
 var escalationDate = currentDateTime;
 escCause = $("#esc").val();
 console.log("escCause",escCause,currentDateTime);
@@ -3272,15 +3272,15 @@ var escTicked = "Yes";
 $("#escTickBox").prop("checked", true);
 // window.location.reload();
 } else if (status === "Collect redund") {
-newOrderStatus = "Escalation";
+  newStatus = "Escalation";
 } else if (status === "Part delivered") {
-newOrderStatus = "Order Fulfilled";
+  newStatus = "Order Fulfilled";
 } else if (status === "Yard PO Sent") {
-newOrderStatus = "Yard Processing";
+  newStatus = "Yard Processing";
 var poSentDate = currentDateTime;
 console.log("po sent date",poSentDate);
 }
-console.log("yardStatus",status,newOrderStatus);
+console.log("yardStatus",status,newStatus);
 // console.log("orderStaus:",newOrderStatus,"yardStatus:",status);
 const updatedData = {
   ...currentYardData,
@@ -3294,7 +3294,7 @@ const updatedData = {
   refundedAmount: refundedAmount 
     ? parseFloat(refundedAmount) 
     : currentYardData.refundedAmount,
-  orderStatus: newOrderStatus || currentYardData.orderStatus,
+  orderStatus: newStatus || currentYardData.orderStatus,
   escalationCause: escCause || currentYardData.escalationCause,
   escalationDate: escalationDate || currentYardData.escalationDate,
   escTicked: escTicked || currentYardData.escTicked 
