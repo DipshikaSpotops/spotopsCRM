@@ -601,50 +601,39 @@ res.status(500).json({ message: 'Server error', error });
 
 //for updating yardStatus and all
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
-console.log("update yard statuses and dates")  
-const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:,mnbjklkjhbv', centralTime);
-const date = new Date(centralTime);
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const hours = date.getHours().toString().padStart(2, '0');
-const minutes = date.getMinutes().toString().padStart(2, '0');
-const formattedDate = `${day} ${month}, ${year}`;
-const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-try {
-// console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
-const order = await Order.findOne({ orderNo: req.params.orderNo });
-const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
-console.log("Order found:", order,"request",req.body);
-console.log("Yard index:", yardIndex);
-if (!order) return res.status(404).send("Order not found");
-if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
-const yardInfo = order.additionalInfo[yardIndex];
-console.log("Existing yard info:", yardInfo);
-for (const key in req.body) {
-if (req.body.hasOwnProperty(key)) {
-yardInfo[key] = req.body[key];
-}
-}
-// Update the specific index in the additionalInfo array
-order.additionalInfo[yardIndex] = yardInfo;
-const firstName = req.query.firstName; 
-const status = req.body.status; 
-const paymentStatus = req.body.paymentStatus;
-const refundStatus = req.body.refundStatus;
-order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
-order.markModified("additionalInfo");
-await order.save();
-res.json(order);
-} else {
-res.status(400).json({ message: "Invalid yard index" });
-}
-} catch (error) {
-console.error("Error in PUT request:", error);
-res.status(500).json({ message: "Server error", error });
-}
+  console.log("Updating yard statuses and dates");
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+  const date = new Date(centralTime);
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const formattedDateTime = `${day} ${month}, ${year} ${hours}:${minutes}`;
+  try {
+    const order = await Order.findOne({ orderNo: req.params.orderNo });
+    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+    if (!order) return res.status(404).send("Order not found");
+    if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
+      const yardInfo = order.additionalInfo[yardIndex];
+      const { updatedYardData, orderStatus } = req.body;
+      Object.assign(yardInfo, updatedYardData);
+      order.additionalInfo[yardIndex] = yardInfo;
+      order.orderStatus = orderStatus;
+      const firstName = req.query.firstName;
+      order.orderHistory.push(`Yard ${yardIndex + 1} ${updatedYardData.status} updated by ${firstName} on ${formattedDateTime}`);
+      order.markModified("additionalInfo");
+      order.markModified("orderStatus");
+      await order.save();
+      res.json(order);
+    } else {
+      res.status(400).json({ message: "Invalid yard index" });
+    }
+  } catch (error) {
+    console.error("Error in PUT request:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
 });
 // to update escalation in order history
 app.put("/orders/:orderNo/escalation", async (req, res) => {
