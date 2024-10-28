@@ -1906,51 +1906,35 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   },
   });
   const mailOptions = {
-    from: "service@50starsautoparts.com",
-    to: `${order.email}`,
-    bcc: `service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
-    subject: `Order Cancellation`,
-    html: `
-      <p>Dear ${order.customerName},</p>
-      <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order 
-      #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make} ${order.model} ${order.pReq}</b> 
-      with <b>50 Stars Auto Parts</b>.</p>
-      <p>We regret any inconvenience this may have caused you.</p>
-      <b>We have canceled your order and will reimburse you $${cancelledRefAmount} to the same source account.</b>
-      <p>Please call us if you have any questions.</p>
-      <p>Upon reviewing your order, due to unforeseen circumstances, we are unable to fulfill your order at this time.</p>
-      <p>Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. 
-      You can expect to see the refund reflected in your account within 3-5 business days.</p>
-      <p>We sincerely apologize for any inconvenience this cancellation may have caused. 
-      Our team is working diligently to prevent such occurrences in the future.</p>
-      <p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at 
-      <b>+1(888)-653-2808</b>. We are here to assist you in any way we can.</p>
+  from: "service@50starsautoparts.com",
+  // to: `${order.email}`,
+  to: `${order.email}`,
+  bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+  subject: `Order Cancellation`,
+  html: `<p>Dear ${order.customerName},</p>
+  <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
+${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.<p>
+  <p>We regret any inconvenience this may have caused you.</p>
+  <b>We have canceled your order and will reimburse you $${cancelledRefAmount}  to the same source account.</b>
+  <p>Please call us if you have any questions.</p>
+  <p>Upon reviewing your order, Due to this unforeseen circumstance, we are unable to fulfill your order at this time.</p>
+  <p>Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within 3-5 business days.</p>
+  <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.
+p><br>
+<p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1(888)-653-2808</b>]. We are here to assist you in any way we can.
+</p><br>
+<p>Thank you for your understanding and continued support.  </p><br>
+<b>Please reply to this email with a quick confirmation to acknowledge and approve this cancellation request.</b>
+ <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  attachments: [{
+    filename: 'logo.png',
+    path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+    cid: 'logo' 
+  }]
+
+  };
   
-      <b>Please respond with a quick confirmation to acknowledge and approve this cancellation request:</b><br><br>
-  
-      <a href="https://www.spotops360.com/orders/confirmCancellation/${order.orderNo}?response=Yes" 
-         style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
-         Approve
-      </a>
-      &nbsp;&nbsp;
-      <a href="https://www.spotops360.com/orders/confirmCancellation/${order.orderNo}?response=No" 
-         style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
-         Decline
-      </a>
-  
-      <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-  
-      <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>
-      service@50starsautoparts.com<br>www.50starsautoparts.com</p>
-    `,
-    attachments: [
-      {
-        filename: 'logo.png',
-        path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-        cid: 'logo'
-      }
-    ]
-  };  
   console.log("mail", mailOptions);
   
   transporter.sendMail(mailOptions, (error, info) => {
@@ -1968,31 +1952,3 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   res.status(500).json({ message: "Server error", error });
   }
   });
-  // to capture yes/no of the customer in cancellation
-  app.get("/orders/confirmCancellation/:orderNo", async (req, res) => {
-    try {
-      const { orderNo } = req.params;
-      const { response } = req.query;
-  
-      console.log(`Received response for order ${orderNo}: ${response}`);
-  
-      const order = await Order.findOne({ orderNo: orderNo });
-      if (!order) {
-        return res.status(404).send("Order not found");
-      }
-  
-      if (response === "Yes") {
-        order.cancellationConfirmed = true;
-        order.orderStatus = "Cancelled - Approved";
-        await order.save();
-        res.send("Thank you for confirming the cancellation. Your refund will be processed shortly.");
-      } else {
-        res.send("You have declined the cancellation. Please contact support if this was a mistake.");
-      }
-  
-    } catch (error) {
-      console.error("Error handling cancellation response:", error);
-      res.status(500).send("An error occurred while processing your response.");
-    }
-  });
-  
