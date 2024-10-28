@@ -1924,7 +1924,7 @@ p><br>
 <p>If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1(888)-653-2808</b>]. We are here to assist you in any way we can.
 </p><br>
 <p>Thank you for your understanding and continued support.  </p><br>
- <p><img src="cid:logo" alt="logo" style=width: 180px; height: 100px;"></p>
+ <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
   attachments: [{
     filename: 'logo.png',
