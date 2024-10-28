@@ -3274,9 +3274,11 @@ $("#editYardInfo").on("click", async function () {
       escCause = $("#esc").val();
       var escTicked = "Yes";
       $("#escTickBox").prop("checked", true);
-    } else if (status === "Collect refund") {
-      newStatus = "Escalation";
-    } else if (status === "Part delivered") {
+    }
+    //  else if (status === "Collect refund") {
+    //   newStatus = "Escalation";
+    // } 
+    else if (status === "Part delivered") {
       newStatus = "Order Fulfilled";
     } else if (status === "Yard PO Sent") {
       newStatus = "Yard Processing";
