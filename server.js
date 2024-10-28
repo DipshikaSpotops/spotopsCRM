@@ -1221,8 +1221,8 @@ app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
     html: `<p>Dear ${order.customerName},</p>
     <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
     <pTo process your refend, please ship the part back to us at the following address:</p>
-    <p>${order.additionalInfo[yardIndex].street}<br>
-    ${order.additionalInfo[yardIndex].city} ${order.additionalInfo[yardIndex].state} ${order.additionalInfo[yardIndex].zipcode}
+    <p>${order.additionalInfo[yardIndex - 1].street}<br>
+    ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
     </p>
     <p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
