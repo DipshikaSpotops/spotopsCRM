@@ -243,7 +243,7 @@ width: 10%;
 height: 3vh;
 border-radius: 18px;
 }
-#sendReturnEmail, #sendReimburseEmail {
+#sendReturnEmail, #sendReimburseEmail,#sendReturnEmail {
 margin: 0% 1%;
 background-color: white;
 border: none;
@@ -1797,7 +1797,7 @@ Save
   <option value="In Transit">In Transit</option>
   <option value="Delivered">Delivered</option>
   </select>
-  <button type="button" id="sendReturnEmail" disabled>Send Email</button>
+  <button type="button" id="sendReturnEmail">Send Email</button>
   </div>
 <!-- div only for reinmursements -->
 <div id="reimbursement" class="return-column" style="display: none;">
@@ -1811,6 +1811,7 @@ Save
 <button type="button" id="sendReimburseEmail">Send Email</button>
 </div>
 </div>
+<button type="button" id="attachDocument">Attach a document</button>
 <button type="button" id="saveEsc">Save</button>
 </div>
 <!-- esc part for yard button ends here  -->
@@ -3905,11 +3906,13 @@ $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"
 // send esc Return email
 $("#sendReturnEmail").on("click", function () {
 $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
+var escProcess = $("escProcess").val();
 var retShippingMethod = $("#customerShippingMethodReturn").val();
-console.log("shippingMethod")
+console.log("shippingMethod",escProcess,retShippingMethod);
 const yardIndex = $(this).data("yard-index");
-console.log("RMA return",yardIndex)
-fetch(`https://www.spotops360.com/orders/sendReturnEmail/${orderNo}?yardIndex=${yardIndex}`, {
+// console.log("RMA return",yardIndex)
+if(escProcess === "Return" && retShippingMethod === "Customer shipping"){
+fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
@@ -3917,16 +3920,68 @@ headers: {
 })
 .then((response) => response.json())
 .then((result) => {
-alert("RMA(Return) email has been sent to the customer");
-$("#saveEsc")
-  .prop("disabled", false) 
-  .css("filter", "none"); 
+alert("RMA(Return)_Customer-shipping email has been sent to the customer");
+$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
 console.log("Success:", result);
 })
 .catch((error) => {
 console.error("Error:", error);
 });
-
+}
+else if(escProcess === "Replacement" && retShippingMethod === "Customer shipping"){
+fetch(`https://www.spotops360.com/orders/sendReplaceEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+}
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Return)Own/Yard-shipping email has been sent to the customer");
+$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+}
+else if(escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
+fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+}
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Replacement)_Own/Yard-shipping email has been sent to the customer");
+$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+}
+else if(escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
+fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+}
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Replacement)_Customer-shipping email has been sent to the customer");
+$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+}
+else{
+  alert("Return email cannot be sent without tracking info");
+}
 });
 // send esc reimbursement email
 $("#sendReimburseEmail").on("click", function () {

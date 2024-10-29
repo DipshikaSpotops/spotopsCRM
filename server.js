@@ -1195,8 +1195,8 @@ console.error("Server error:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
-// to send rma(refund) email
-app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
+// to send rma(refund) email for customer shipping
+app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
   var yardIndex = req.query.yardIndex;
   console.log("send rma(return) info");
   try {
@@ -1224,7 +1224,7 @@ app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
     <p>${order.additionalInfo[yardIndex - 1].street}<br>
     ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
     </p>
-    <p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
+    <p>Please note that the shipping costs for returning the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
     <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
     <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
@@ -1250,61 +1250,222 @@ app.post("/orders/sendReturnEmail/:orderNo", async (req, res) => {
   res.status(500).json({ message: "Server error", error });
   }
   });
-  app.post("/orders/sendReimburseEmail/:orderNo", async (req, res) => {
-    var yardIndex = req.query.yardIndex;
-    console.log("send rma(return) info");
-    try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
-    console.log("no", order,"yardIndex",yardIndex);
-    if (!order) {
-    return res.status(400).send("Order not found");
-    }
-    const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-    user: "service@50starsautoparts.com",
-    pass: "hweg vrnk qyxx gktv",
-    },
-    });
-    const mailOptions = {
-      from: "service@50starsautoparts.com",
-      // to: `${order.email}`,
-      // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-      to: 'dipsikha.spotopsdigital@gmail.com',
-      subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
-      html: `<p>Dear ${order.customerName},</p>
-      <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
-      <pTo process your refend, please ship the part back to us at the following address:</p>
-      <p>${order.additionalInfo[yardIndex - 1].street}<br>
-      ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
-      </p>
-      <p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
-      <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
-      <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-      <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-      attachments: [{
-        filename: 'logo.png',
-        path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-        cid: 'logo' 
-      }]
-    };
-    
-    console.log("mail", mailOptions);
-    transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-    console.error("Error sending mail:", error);
-    res.status(500).json({ message: `Error sending mail: ${error.message}` });
-    } else {
-    console.log("Email sent successfully:", info.response);
-    res.json({ message: `Email sent successfully` });
-    }
-    });
-    } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ message: "Server error", error });
-    }
-    });
-    
+  // to send rma(replacement) email for customer shipping
+app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
+  var yardIndex = req.query.yardIndex;
+  console.log("send rma(return) info");
+  try {
+  const order = await Order.findOne({ orderNo: req.params.orderNo });
+  console.log("no", order,"yardIndex",yardIndex);
+  if (!order) {
+  return res.status(400).send("Order not found");
+  }
+  const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+  user: "service@50starsautoparts.com",
+  pass: "hweg vrnk qyxx gktv",
+  },
+  });
+  const mailOptions = {
+    from: "service@50starsautoparts.com",
+    // to: `${order.email}`,
+    // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+    to: 'dipsikha.spotopsdigital@gmail.com',
+    subject: `Return Required for Replacement of ABS Module Order / Order No. ${req.params.orderNo}`,
+    html: `<p>Dear ${order.customerName},</p>
+    <p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offwe a replacementto ensure you receive a fully functional part.</p>
+    <pPlease return the part to the following address:</p>
+    <p>${order.additionalInfo[yardIndex - 1].street}<br>
+    ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
+    </p>
+    <p>Please note that the shipping costs for the return is your responsibility. Once we receive the part, we will process and ship out the replacement within 1-3 business days. We will also notify you with tracking information once the replacement part is on its way.</p>
+  <p>If you have any questions about the process or need further assistance, please feel free to contact us.</p>
+  <p>Thank you for giving us an opportunity to make this right.</p>
+  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+    <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+    attachments: [{
+      filename: 'logo.png',
+      path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+      cid: 'logo' 
+    }]
+  };
+  
+  console.log("mail", mailOptions);
+  transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+  console.error("Error sending mail:", error);
+  res.status(500).json({ message: `Error sending mail: ${error.message}` });
+  } else {
+  console.log("Email sent successfully:", info.response);
+  res.json({ message: `Email sent successfully` });
+  }
+  });
+  } catch (error) {
+  console.error("Server error:", error);
+  res.status(500).json({ message: "Server error", error });
+  }
+  });
+app.post("/orders/sendReimburseEmail/:orderNo", async (req, res) => {
+var yardIndex = req.query.yardIndex;
+console.log("send rma(return) info");
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+console.log("no", order,"yardIndex",yardIndex);
+if (!order) {
+return res.status(400).send("Order not found");
+}
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+const mailOptions = {
+from: "service@50starsautoparts.com",
+// to: `${order.email}`,
+// bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+to: 'dipsikha.spotopsdigital@gmail.com',
+subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
+html: `<p>Dear ${order.customerName},</p>
+<p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
+<pTo process your refend, please ship the part back to us at the following address:</p>
+<p>${order.additionalInfo[yardIndex - 1].street}<br>
+${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
+</p>
+<p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
+<p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [{
+filename: 'logo.png',
+path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+cid: 'logo' 
+}]
+};
+
+console.log("mail", mailOptions);
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+res.status(500).json({ message: `Error sending mail: ${error.message}` });
+} else {
+console.log("Email sent successfully:", info.response);
+res.json({ message: `Email sent successfully` });
+}
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
+// to send email for return when shipping methos is own shipping or yard shipping
+app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", async (req, res) => {
+var yardIndex = req.query.yardIndex;
+console.log("send rma(return) info");
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+console.log("no", order,"yardIndex",yardIndex);
+if (!order) {
+return res.status(400).send("Order not found");
+}
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+const mailOptions = {
+from: "service@50starsautoparts.com",
+// to: `${order.email}`,
+// bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+to: 'dipsikha.spotopsdigital@gmail.com',
+subject: `Return Process for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
+html: `<p>Dear ${order.customerName},</p>
+<p>We are sorry to hear that the ABS module did not meet your expectations, and we want to make the return process as smooth as possible.</p>
+<p>To proceed with your refend, please use the attached prepaid shipping label to return the part to us. Package the item securely and attach the label to your package. Once we receive the part, we will process your refund within 1-3 business days. You'll receive a confirmation email as soon as the refund is completed.</p>
+<p>If you have any questions or need assistance with the return process, please don't hesitate to reach out.</p>
+<p>Thank you for your cooperation, and we apologize for any inconvenience.</p>
+<p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
+<p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [{
+filename: 'logo.png',
+path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+cid: 'logo' 
+}]
+};
+
+console.log("mail", mailOptions);
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+res.status(500).json({ message: `Error sending mail: ${error.message}` });
+} else {
+console.log("Email sent successfully:", info.response);
+res.json({ message: `Email sent successfully` });
+}
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
+// to send email for replacement when shipping methos is own shipping or yard shipping
+app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", async (req, res) => {
+  var yardIndex = req.query.yardIndex;
+  console.log("send rma(return) info");
+  try {
+  const order = await Order.findOne({ orderNo: req.params.orderNo });
+  console.log("no", order,"yardIndex",yardIndex);
+  if (!order) {
+  return res.status(400).send("Order not found");
+  }
+  const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+  user: "service@50starsautoparts.com",
+  pass: "hweg vrnk qyxx gktv",
+  },
+  });
+  const mailOptions = {
+  from: "service@50starsautoparts.com",
+  // to: `${order.email}`,
+  // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+  to: 'dipsikha.spotopsdigital@gmail.com',
+  subject: `Return Process for Replacement of ABS Module Order / Order No. ${req.params.orderNo}`,
+  html: `<p>Dear ${order.customerName},</p>
+  <p>We apologize for any issues with the ABS module you received, and we are committed to providing a replacement that meets your expectations.</p>
+  <p>To return the part, please use the prepaid shipping label attached to this email. After securely packing the item and attachind alabel, you can drop it off at any designated shipping location. Once we receive the part, we will process your replacement and ship it out within 1-3 business days. You'll receve tracking information once the replacement is on its way.</p>
+  <p>If you need assistance or have any questions, please feel free to reach out.</p>
+  <p>Thank you for allowing us the opportunity to make this right for you.</p>
+  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  attachments: [{
+  filename: 'logo.png',
+  path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+  cid: 'logo' 
+  }]
+  };
+  
+  console.log("mail", mailOptions);
+  transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+  console.error("Error sending mail:", error);
+  res.status(500).json({ message: `Error sending mail: ${error.message}` });
+  } else {
+  console.log("Email sent successfully:", info.response);
+  res.json({ message: `Email sent successfully` });
+  }
+  });
+  } catch (error) {
+  console.error("Server error:", error);
+  res.status(500).json({ message: "Server error", error });
+  }
+  });
     app.post("/orders/sendRefundEmail/:orderNo", async (req, res) => {
       var yardIndex = req.query.yardIndex;
       var refundedAmount = req.query.refundedAmount;
