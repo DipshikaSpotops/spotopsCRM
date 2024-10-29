@@ -2067,9 +2067,9 @@ app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
   });
   const mailOptions = {
   from: "service@50starsautoparts.com",
-  to: `dipsikha.spotopsdigital@gmail.com`,
-  // to: `${order.email}`,
-  // bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+  // to: `dipsikha.spotopsdigital@gmail.com`,
+  to: `${order.email}`,
+  bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
   subject: `Order Cancellation`,
   html: `<p>Dear ${order.customerName},</p>
   <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
