@@ -243,7 +243,7 @@ width: 10%;
 height: 3vh;
 border-radius: 18px;
 }
-#sendReturnEmail, #sendReimburseEmail,#sendReturnEmail {
+#sendRMAEmail, #sendReimburseEmail {
 margin: 0% 1%;
 background-color: white;
 border: none;
@@ -1807,19 +1807,17 @@ Save
 <div style="display: flex; align-items: center;margin: -3% 0%">
 <label for="reimbursed" style="margin: 1%;">Reimbursed:</label>
 <input type="checkbox" id="reimbursed" style="width: 20px; height: 20px;margin: 3% 1%;">
-<button type="button" id="sendReimburseEmail">Send Email</button>
+<!-- <button type="button" id="sendReimburseEmail">Send Email</button> -->
 </div>
 </div>
-<button type="button" id="attachDocument">Attach a Document Link</button>
-<button type="button" id="sendReturnEmail">Send Email</button>
+<button type="button" id="attachDocument" style="margin-top:4%";>Attach a Document Link</button>
 <div id="driveLinkContainer" style="display: none; margin-top: 10px;">
-  <label for="driveLink">Enter Google Drive Link or PDF Link:</label>
-  <input type="text" id="driveLink" placeholder="Paste your Drive or PDF link here" 
+  <label for="driveLink">Enter Google Drive or PDF Link:</label>
+  <input type="text" id="driveLink" 
+         placeholder="Paste your Drive or PDF link here" 
          style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; width: 70%; text-align: center;">
-  <button type="button" id="sendEmail">Send Email</button>
 </div>
-
-<div id="linkStatus" style="margin-top: 10px; color: green;"></div>
+<button type="button" id="sendRMAEmail">Send Email</button>
 <button type="button" id="saveEsc">Save</button>
 </div>
 <!-- esc part for yard button ends here  -->
@@ -2930,7 +2928,7 @@ const orderNo = urlParams.get("orderNo");
 $("#escRMA").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-$("#saveEsc,#sendReturnEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
+$("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
 // $("#sendReturnEmail").data("yard-index", selectedYardIndex);
 try {
 const response = await axios.get(
@@ -3912,12 +3910,17 @@ $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"
 }
 });
 // send esc Return email
-$("#sendReturnEmail").on("click", function () {
+$("#sendRMAEmail").on("click", function () {
 $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
 var escProcess = $("escProcess").val();
 var retShippingMethod = $("#customerShippingMethodReturn").val();
 console.log("shippingMethod",escProcess,retShippingMethod);
 const yardIndex = $(this).data("yard-index");
+const driveLink = document.getElementById('driveLink').value;
+if (!driveLink) {
+    alert('Please enter a Drive or PDF link.');
+    return;
+  }
 // console.log("RMA return",yardIndex)
 if(escProcess === "Return" && retShippingMethod === "Customer shipping"){
 fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}`, {
@@ -3945,7 +3948,7 @@ headers: {
 })
 .then((response) => response.json())
 .then((result) => {
-alert("RMA(Return)Own/Yard-shipping email has been sent to the customer");
+alert("RMA(Replacement)Own/Yard-shipping email has been sent to the customer");
 $("#saveEsc").prop("disabled", false) .css("filter", "none"); 
 console.log("Success:", result);
 })
@@ -3953,11 +3956,12 @@ console.log("Success:", result);
 console.error("Error:", error);
 });
 }
-else if(escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
+else if(escProcess === "Replacement" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
 fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
+body: JSON.stringify({ pdfLink: driveLink })
 }
 })
 .then((response) => response.json())
@@ -3975,11 +3979,29 @@ fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yard
 method: "POST",
 headers: {
 "Content-Type": "application/json",
+body: JSON.stringify({ pdfLink: driveLink })
 }
 })
 .then((response) => response.json())
 .then((result) => {
-alert("RMA(Replacement)_Customer-shipping email has been sent to the customer");
+alert("RMA(Return)_own-shipping email has been sent to the customer");
+$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+}
+else if(escProcess === "Reibursement"){
+  fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+}
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Reimbursement) email has been sent to the customer");
 $("#saveEsc").prop("disabled", false) .css("filter", "none"); 
 console.log("Success:", result);
 })
@@ -3991,30 +4013,7 @@ else{
   alert("Return email cannot be sent without tracking info");
 }
 });
-// send esc reimbursement email
-$("#sendReimburseEmail").on("click", function () {
-$("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
-const yardIndex = $(this).data("yard-index");
-console.log("RMA return",yardIndex)
-fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}`, {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-}
-})
-.then((response) => response.json())
-.then((result) => {
-alert("RMA(Reimbursement) email has been sent to the customer");
-$("#saveEsc")
-  .prop("disabled", false) 
-  .css("filter", "none"); 
-console.log("Success:", result);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
 
-});
 $("#yardInfoContainer").on("click", ".edit-yard-details", function () {
 console.log("edit yard details");
 // $(".mainDiv").addClass("blur");
@@ -4626,6 +4625,7 @@ $('#replacementColumns').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 $('#partFromCustomerReturn').fadeOut();
+$("#attachDocument,#sendRMAEmail").hide();
 }
 });
 
@@ -4679,12 +4679,10 @@ $('#yardShippingStatus').on('change', function () {
 if ($(this).val() === 'Delivered') {
 alert('Yard Status: Part Delivered');
 }
-// saveEsc(escalation) btn click
-// Show the input field for entering a Drive or PDF link
-document.getElementById("attachDocument").addEventListener("click", function () {
-    document.getElementById("driveLinkContainer").style.display = "block";
-  });
-
+// Show the Drive link input when the attach button is clicked
+document.getElementById('attachDocument').addEventListener('click', () => {
+  document.getElementById('driveLinkContainer').style.display = 'block';
+});
 });
 </script>
 </body>   
