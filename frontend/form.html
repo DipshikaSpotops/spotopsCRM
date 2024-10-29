@@ -3912,7 +3912,7 @@ $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"
 // send esc Return email
 $("#sendRMAEmail").on("click", function () {
 $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
-var escProcess = $("escProcess").val();
+var escProcess = $("#escProcess").val();
 var retShippingMethod = $("#customerShippingMethodReturn").val() || "";
 var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
