@@ -1766,17 +1766,17 @@ Save
 </div>
 </div>
 <!-- div only for Return -->
-<div id="partFromCustomerReturn" class="return-column" style="display: none;">
-  <div style="display: flex; align-items: center; margin-bottom: 10px;">    
-    <div><h4>Part from Customer:</h4></div>
+<div id="partFromCustomerReturn" class="return-column" style="display: none; max-width: 600px; margin: 0 auto;">
+  <div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <h4 style="margin: 0;">Part from Customer:</h4>
   </div>
 
   <!-- Shipping Method and Shipper in one row -->
-  <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 20px;">
     <div style="flex: 1;">
-      <label for="customerShippingMethodReturn">Shipping Method:</label>
+      <label for="customerShippingMethodReturn" style="display: inline-block; width: 120px;">Shipping Method:</label>
       <select id="customerShippingMethodReturn" 
-        style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; width: 100%;">
+        style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; width: calc(100% - 130px);">
         <option value="">Choose</option>
         <option value="Customer shipping">Customer shipping</option>
         <option value="Yard shipping">Yard shipping</option>
@@ -1784,9 +1784,9 @@ Save
       </select>
     </div>
     <div style="flex: 1;">
-      <label for="customerShipperReturn">Shipper:</label>
+      <label for="customerShipperReturn" style="display: inline-block; width: 80px;">Shipper:</label>
       <select id="customerShipperReturn" 
-        style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; width: 100%;">
+        style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; width: calc(100% - 90px);">
         <option value="">Choose</option>
         <option value="UPS">UPS</option>
         <option value="FedEx">FedEx</option>
@@ -1796,24 +1796,17 @@ Save
     </div>
   </div>
 
-  <!-- Shipping Value Field -->
-  <div id="customerShippingValueReturn" style="display: none; margin-bottom: 10px;">
-    <label for="custOwnShippingReturn">Enter Shipping Value:</label>
-    <input id="custOwnShippingReturn" type="text" placeholder="Shipping value" 
-      style="border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center; width: 50%;">
-  </div>
-
   <!-- Tracking No and Delivery Status in one row -->
-  <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 20px;">
     <div style="flex: 1;">
-      <label for="returnTrackingCust">Tracking No:</label>
+      <label for="returnTrackingCust" style="display: inline-block; width: 120px;">Tracking No:</label>
       <input type="text" id="returnTrackingCust" placeholder="Tracking Number" 
-        style="border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+        style="border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center; width: calc(100% - 130px);">
     </div>
     <div style="flex: 1;">
-      <label for="custReturnDelivery">Delivery Status:</label>
+      <label for="custReturnDelivery" style="display: inline-block; width: 110px;">Delivery Status:</label>
       <select id="custReturnDelivery" 
-        style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; width: 100%;">
+        style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; width: calc(100% - 120px);">
         <option value="">Choose</option>
         <option value="In Transit">In Transit</option>
         <option value="Delivered">Delivered</option>
@@ -1821,11 +1814,30 @@ Save
     </div>
   </div>
 
+  <!-- Shipping Value Input (Initially hidden) -->
+  <div id="customerShippingValueReturn" style="display: none; margin-bottom: 10px;">
+    <label for="custOwnShippingReturn" style="display: inline-block; width: 180px;">Enter Shipping Value:</label>
+    <input id="custOwnShippingReturn" type="text" placeholder="Shipping value" 
+      style="border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center; width: calc(100% - 190px);">
+  </div>
+
   <!-- Send Email Button -->
-  <div style="text-align: center; margin-top: 10px;">
+  <div style="text-align: center; margin-top: 15px;">
     <button type="button" id="sendReturnEmail" disabled style="padding: 10px 20px; border-radius: 16px;">Send Email</button>
   </div>
 </div>
+
+<!-- <script>
+  // JavaScript to show/hide the shipping value input based on the selected shipping method
+  document.getElementById("customerShippingMethodReturn").addEventListener("change", function () {
+    const shippingValueDiv = document.getElementById("customerShippingValueReturn");
+    if (this.value === "Own shipping") {
+      shippingValueDiv.style.display = "block";
+    } else {
+      shippingValueDiv.style.display = "none";
+    }
+  });
+</script> -->
 
 <!-- div only for reinmursements -->
 <div id="reimbursement" class="return-column" style="display: none;">
