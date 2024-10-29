@@ -3915,7 +3915,7 @@ $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
 var escProcess = $("escProcess").val();
 var retShippingMethod = $("#customerShippingMethodReturn").val() || "";
 var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
-console.log("shippingMethod",escProcess,retShippingMethod);
+console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
 const driveLink = document.getElementById('driveLink').value;
 if (!driveLink) {
@@ -3957,7 +3957,7 @@ console.log("Success:", result);
 console.error("Error:", error);
 });
 }
-else if(escProcess === "Replacement" && (repShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
+else if(escProcess === "Replacement" && (repShippingMethod === "Own shipping" || repShippingMethod === "Yard shipping")){
 fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
