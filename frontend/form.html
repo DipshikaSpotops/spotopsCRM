@@ -1766,39 +1766,92 @@ Save
 </div>
 </div>
 <!-- div only for Return -->
-<div id="partFromCustomerReturn" class="return-column" style="display: none;">
-<div style="display: flex;">    
-<div><h4>Part from Customer:</h4></div>
+<div id="partFromCustomerReturn" class="return-column" style="display: none; max-width: 600px; margin: 0 auto;">
+  <div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <h4 style="margin: 0;">Part from Customer:</h4>
+  </div>
+
+  <label for="customerShippingMethodReturn">Shipping Method:</label>
+  <select id="customerShippingMethodReturn" 
+    style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+    <option value="">Choose</option>
+    <option value="Customer shipping">Customer shipping</option>
+    <option value="Yard shipping">Yard shipping</option>
+    <option value="Own shipping">Own shipping</option>
+  </select>
+
+  <div id="customerShippingValueReturn" style="display: none;">
+    <label for="custOwnShippingReturn">Enter Shipping Value:</label>
+    <input id="custOwnShippingReturn" type="text" placeholder="Shipping value" 
+      style="border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center; width: 50%;">
+  </div>
+
+  <label for="customerShipperReturn">Shipper:</label>
+  <select id="customerShipperReturn" 
+    style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+    <option value="">Choose</option>
+    <option value="UPS">UPS</option>
+    <option value="FedEx">FedEx</option>
+    <option value="World Wide Express">World Wide Express</option>
+    <option value="Others">USPS</option>
+  </select>
+
+  <label for="returnTrackingCust">Tracking No:</label>
+  <input type="text" id="returnTrackingCust" placeholder="Tracking Number" 
+    style="border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center;">
+
+  <label for="custReturnDelivery">Delivery Status:</label>
+  <select id="custReturnDelivery" 
+    style="text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; margin: 5%;">
+    <option value="">Choose</option>
+    <option value="In Transit">In Transit</option>
+    <option value="Delivered">Delivered</option>
+  </select>
+
+  <button type="button" id="sendReturnEmail" disabled style="padding: 10px 20px; border-radius: 16px;">Send Email</button>
 </div>
-<label>Shipping Method:</label>
-<select id="customerShippingMethodReturn" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
-<option value="">Choose</option>
-<option value="Customer shipping">Customer shipping</option>
-<option value="Yard shipping">Yard shipping</option>
-<option value="Own shipping">Own shipping</option>
-</select>
-<div id="customerShippingValueReturn" style="display: none;">
-<label>Enter Shipping Value:</label>
-<input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
-</div>
-<label>Shipper:</label>
-<select id="customerShipperReturn" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
-<option value="">Choose</option>
-<option value="UPS">UPS</option>
-<option value="FedEx">FedEx</option>
-<option value="World Wide Express">World Wide Express</option>
-<option value="Others">USPS</option>
-</select>
-<label>Tracking No:</label>
-<input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;">
-<label>Delivery Status:</label>
-<select id="custReturnDelivery" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
-<option value="">Choose</option>
-<option value="In Transit">In Transit</option>
-<option value="Delivered">Delivered</option>
-</select>
-<button type="button" id="sendReturnEmail">Send Email</button>
-</div>
+
+<script>
+  // Show or hide the Shipping Value input based on the selected Shipping Method
+  document.getElementById("customerShippingMethodReturn").addEventListener("change", function () {
+    const shippingValueDiv = document.getElementById("customerShippingValueReturn");
+    if (this.value === "Own shipping") {
+      shippingValueDiv.style.display = "block";
+    } else {
+      shippingValueDiv.style.display = "none";
+    }
+    validateForm(); // Validate form when shipping method changes
+  });
+
+  // Function to validate the form and enable/disable the button
+  function validateForm() {
+    const shippingMethod = document.getElementById("customerShippingMethodReturn").value;
+    const shipper = document.getElementById("customerShipperReturn").value;
+    const trackingNo = document.getElementById("returnTrackingCust").value;
+    const deliveryStatus = document.getElementById("custReturnDelivery").value;
+    const sendEmailButton = document.getElementById("sendReturnEmail");
+
+    if (shippingMethod && shipper && trackingNo && deliveryStatus) {
+      sendEmailButton.disabled = false;
+    } else {
+      sendEmailButton.disabled = true;
+    }
+  }
+
+  // Check the form on every input change
+  document.querySelectorAll("#customerShippingMethodReturn, #customerShipperReturn, #returnTrackingCust, #custR")
+    .forEach(input => input.addEventListener("input", validateForm));
+  // Event listener for the Send Email button
+  document.getElementById("sendReturnEmail").addEventListener("click", function () {
+    const shippingMethod = document.getElementById("customerShippingMethodReturn").value;
+    if (!shippingMethod) {
+      alert("Please choose a shipping method.");
+    } else {
+      alert("Email sent successfully!");
+      // Add the actual email sending logic here
+    }
+  });
+</script>
 <!-- div only for reinmursements -->
 <div id="reimbursement" class="return-column" style="display: none;">
 <div style="display: flex;margin: 5% 1%">
@@ -3899,6 +3952,7 @@ console.error("Error:", error);
 });
 } else {
 alert("Please fill in all the tracking information fields.");
+$("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"); 
 }
 });
 // send esc Return email
