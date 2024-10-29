@@ -2041,38 +2041,38 @@ console.log("orders found",orders);
 
 // endpoint for sending cancellation email
 app.post("/orders/sendCancelEmail/:orderNo", async (req, res) => {
-  console.log("send tracking info");
-  try {
-  const order = await Order.findOne({ orderNo: req.params.orderNo });
-  console.log("no", order);
-  if (!order) {
-  return res.status(400).send("Order not found");
-  }
-  const { trackingNo, eta, shipperName, link } = req.body;
-  var orderDate = order.orderDate;
-  var cancelledRefAmount = req.query.cancelledRefAmount;
-  const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
-  date.setDate(date.getDate() - 1);
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');  
-  const day = date.getDate().toString().padStart(2, '0');
-  const year = date.getFullYear();
-  var orderedDate =  `${month}/${day}/${year}`;
-  console.log("trackingInfo", trackingNo, eta, shipperName, link);
-  const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-  user: "service@50starsautoparts.com",
-  pass: "hweg vrnk qyxx gktv",
-  },
-  });
-  const mailOptions = {
-  from: "service@50starsautoparts.com",
-  // to: `dipsikha.spotopsdigital@gmail.com`,
-  to: `${order.email}`,
-  bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
-  subject: `Order Cancellation`,
-  html: `<p>Dear ${order.customerName},</p>
-  <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
+console.log("send tracking info");
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+console.log("no", order);
+if (!order) {
+return res.status(400).send("Order not found");
+}
+const { trackingNo, eta, shipperName, link } = req.body;
+var orderDate = order.orderDate;
+var cancelledRefAmount = req.query.cancelledRefAmount;
+const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
+date.setDate(date.getDate() - 1);
+const month = (date.getMonth() + 1).toString().padStart(2, '0');  
+const day = date.getDate().toString().padStart(2, '0');
+const year = date.getFullYear();
+var orderedDate =  `${month}/${day}/${year}`;
+console.log("trackingInfo", trackingNo, eta, shipperName, link);
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+const mailOptions = {
+from: "service@50starsautoparts.com",
+// to: `dipsikha.spotopsdigital@gmail.com`,
+to: `${order.email}`,
+bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+subject: `Order Cancellation`,
+html: `<p>Dear ${order.customerName},</p>
+<p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
 ${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.
 <p>We regret any inconvenience this may have caused you.</p>
 <b>We have canceled your order and will reimburse you $${cancelledRefAmount}  to the same source account.</b>
