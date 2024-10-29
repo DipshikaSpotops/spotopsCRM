@@ -4680,7 +4680,7 @@ if ($(this).val() === 'Delivered') {
 alert('Yard Status: Part Delivered');
 }
 // Show the Drive link input when the attach button is clicked
-document.getElementById('attachDocument').addEventListener('click', () => {
+$('#attachDocument').on('click', function(){
   console.log("clicked attachDocument")
   document.getElementById('driveLinkContainer').style.display = 'block';
 });
