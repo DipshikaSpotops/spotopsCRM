@@ -1696,7 +1696,7 @@ Save
 <div style="display: flex;">    
 <div><h4>Part from Customer:</h4></div>
 <div><select id="custReason" style="color: grey;text-align: center;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin:0%  10%;width: 128%;">
-<option value="">Reason</option>
+<option value="">Choose</option>
 <option value="Junked">Junked</option>
 <option value="Return">Return</option>
 </select>
@@ -1797,7 +1797,6 @@ Save
   <option value="In Transit">In Transit</option>
   <option value="Delivered">Delivered</option>
   </select>
-  <button type="button" id="sendReturnEmail">Send Email</button>
   </div>
 <!-- div only for reinmursements -->
 <div id="reimbursement" class="return-column" style="display: none;">
@@ -1811,7 +1810,16 @@ Save
 <button type="button" id="sendReimburseEmail">Send Email</button>
 </div>
 </div>
-<button type="button" id="attachDocument">Attach a document</button>
+<button type="button" id="sendReturnEmail">Send Email</button>
+<button type="button" id="attachDocument">Attach a Document Link</button>
+<div id="driveLinkContainer" style="display: none; margin-top: 10px;">
+  <label for="driveLink">Enter Google Drive Link or PDF Link:</label>
+  <input type="text" id="driveLink" placeholder="Paste your Drive or PDF link here" 
+         style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; width: 70%; text-align: center;">
+  <button type="button" id="sendEmail">Send Email</button>
+</div>
+
+<div id="linkStatus" style="margin-top: 10px; color: green;"></div>
 <button type="button" id="saveEsc">Save</button>
 </div>
 <!-- esc part for yard button ends here  -->
@@ -4629,7 +4637,21 @@ $('#replacementColumns').fadeIn();
 $('#replacementColumns').fadeOut(); 
 }
 });
-
+// in replacement, if the reason is junked disable all other inpu=t boxes
+$('#custReason').on('change', function () {
+    if ($(this).val() === 'Junked') {
+      // Disable all inputs and selects inside #replacementColumns, except #custReason
+      $('#replacementColumns')
+        .find('input, select')
+        .not('#custReason')
+        .prop('disabled', true);
+    } else {
+      // Enable all inputs and selects inside #replacementColumns when other values are selected
+      $('#replacementColumns')
+        .find('input, select')
+        .prop('disabled', false);
+    }
+  });
 // Show or hide "Own Shipping" input for Part from Customer
 $('#customerShippingMethodReplacement').on('change', function () {
 if ($(this).val() === 'Own shipping') {
@@ -4658,6 +4680,11 @@ if ($(this).val() === 'Delivered') {
 alert('Yard Status: Part Delivered');
 }
 // saveEsc(escalation) btn click
+// Show the input field for entering a Drive or PDF link
+document.getElementById("attachDocument").addEventListener("click", function () {
+    document.getElementById("driveLinkContainer").style.display = "block";
+  });
+
 });
 </script>
 </body>   
