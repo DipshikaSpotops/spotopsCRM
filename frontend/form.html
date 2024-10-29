@@ -3913,7 +3913,8 @@ $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"
 $("#sendRMAEmail").on("click", function () {
 $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
 var escProcess = $("escProcess").val();
-var retShippingMethod = $("#customerShippingMethodReturn").val();
+var retShippingMethod = $("#customerShippingMethodReturn").val() || "";
+var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 console.log("shippingMethod",escProcess,retShippingMethod);
 const yardIndex = $(this).data("yard-index");
 const driveLink = document.getElementById('driveLink').value;
@@ -3939,7 +3940,7 @@ console.log("Success:", result);
 console.error("Error:", error);
 });
 }
-else if(escProcess === "Replacement" && retShippingMethod === "Customer shipping"){
+else if(escProcess === "Replacement" && repShippingMethod === "Customer shipping"){
 fetch(`https://www.spotops360.com/orders/sendReplaceEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
@@ -3956,7 +3957,7 @@ console.log("Success:", result);
 console.error("Error:", error);
 });
 }
-else if(escProcess === "Replacement" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
+else if(escProcess === "Replacement" && (repShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
 fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
