@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const bcrypt = require("bcrypt");   
 const nodemailer = require("nodemailer");
+const puppeteer = require('puppeteer');
 const fs = require("fs");
 const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
@@ -1415,59 +1416,77 @@ res.status(500).json({ message: "Server error", error });
 }
 });
 // to send email for replacement when shipping methos is own shipping or yard shipping
-app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", async (req, res) => {
-  var yardIndex = req.query.yardIndex;
+
+ 
+  app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", async (req, res) => {
+  const yardIndex = req.query.yardIndex;
   const { pdfLink } = req.body;
-  console.log("send rma(return) info");
+
   try {
-  const order = await Order.findOne({ orderNo: req.params.orderNo });
-  console.log("no", order,"yardIndex",yardIndex);
-  if (!order) {
-  return res.status(400).send("Order not found");
-  }
-  const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-  user: "service@50starsautoparts.com",
-  pass: "hweg vrnk qyxx gktv",
-  },
-  });
-  const mailOptions = {
-  from: "service@50starsautoparts.com",
-  // to: `${order.email}`,
-  // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-  to: 'dipsikha.spotopsdigital@gmail.com',
-  subject: `Return Process for Replacement of ABS Module Order / Order No. ${req.params.orderNo}`,
-  html: `<p>Dear ${order.customerName},</p>
-  <p>We apologize for any issues with the ABS module you received, and we are committed to providing a replacement that meets your expectations.</p>
+    const order = await Order.findOne({ orderNo: req.params.orderNo });
+    if (!order) return res.status(400).send("Order not found");
+
+    // Generate PDF from the provided link
+    const pdfPath = path.join(__dirname, 'temp', `return_document_${Date.now()}.pdf`);
+    await generatePDF(pdfLink, pdfPath);
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'service@50starsautoparts.com',
+        pass: 'hweg vrnk qyxx gktv',
+      },
+    });
+
+    const mailOptions = {
+      from: 'service@50starsautoparts.com',
+      to: 'dipsikha.spotopsdigital@gmail.com',
+      subject: `Return Process for Replacement of ABS Module / Order No. ${req.params.orderNo}`,
+      html: `
+        <p>Dear ${order.customerName},</p>
+ <p>We apologize for any issues with the ABS module you received, and we are committed to providing a replacement that meets your expectations.</p>
   <p>To return the part, please use the prepaid shipping label attached to this email. After securely packing the item and attachind alabel, you can drop it off at any designated shipping location. Once we receive the part, we will process your replacement and ship it out within 1-3 business days. You'll receve tracking information once the replacement is on its way.</p>
   <p>If you need assistance or have any questions, please feel free to reach out.</p>
   <p>Thank you for allowing us the opportunity to make this right for you.</p>
   <p>You can access the required return documents <a href="${pdfLink}" target="_blank">here</a>.</p>
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-  attachments: [{
-  filename: 'logo.png',
-  path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-  cid: 'logo' 
-  }]
-  };
-  
-  console.log("mail", mailOptions);
-  transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-  console.error("Error sending mail:", error);
-  res.status(500).json({ message: `Error sending mail: ${error.message}` });
-  } else {
-  console.log("Email sent successfully:", info.response);
-  res.json({ message: `Email sent successfully` });
-  }
-  });
+      attachments: [
+        {
+          filename: 'return_document.pdf',
+          path: pdfPath,
+        },
+        {
+          filename: 'logo.png',
+          path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+          cid: 'logo',
+        },
+      ],
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      fs.unlinkSync(pdfPath); // Clean up the temp PDF file
+      if (error) {
+        console.error("Error sending mail:", error);
+        return res.status(500).json({ message: `Error sending mail: ${error.message}` });
+      }
+      console.log("Email sent successfully:", info.response);
+      res.json({ message: `Email sent successfully` });
+    });
   } catch (error) {
-  console.error("Server error:", error);
-  res.status(500).json({ message: "Server error", error });
+    console.error("Server error:", error);
+    res.status(500).json({ message: "Server error", error });
   }
-  });
+});
+
+// Function to generate PDF using puppeteer
+async function generatePDF(url, outputPath) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: 'networkidle2' });
+  await page.pdf({ path: outputPath, format: 'A4' });
+  await browser.close();
+}
     app.post("/orders/sendRefundEmail/:orderNo", async (req, res) => {
       var yardIndex = req.query.yardIndex;
       var refundedAmount = req.query.refundedAmount;
