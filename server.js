@@ -1251,7 +1251,7 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
   }
   });
   // to send rma(replacement) email for customer shipping
-app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
+app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) => {
   var yardIndex = req.query.yardIndex;
   console.log("send rma(return) info");
   try {
@@ -1417,6 +1417,7 @@ res.status(500).json({ message: "Server error", error });
 // to send email for replacement when shipping methos is own shipping or yard shipping
 app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", async (req, res) => {
   var yardIndex = req.query.yardIndex;
+  const { pdfLink } = req.body;
   console.log("send rma(return) info");
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -1442,6 +1443,7 @@ app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", async (req, res) => {
   <p>To return the part, please use the prepaid shipping label attached to this email. After securely packing the item and attachind alabel, you can drop it off at any designated shipping location. Once we receive the part, we will process your replacement and ship it out within 1-3 business days. You'll receve tracking information once the replacement is on its way.</p>
   <p>If you need assistance or have any questions, please feel free to reach out.</p>
   <p>Thank you for allowing us the opportunity to make this right for you.</p>
+  <p>You can access the required return documents <a href="${pdfLink}" target="_blank">here</a>.</p>
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
   attachments: [{
