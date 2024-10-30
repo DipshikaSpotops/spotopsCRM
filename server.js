@@ -623,9 +623,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
       order.additionalInfo[yardIndex] = yardInfo;
       order.orderStatus = orderStatus;
       const firstName = req.query.firstName;
-      if(updatedYardData.status){
       const status = updatedYardData.status || ""; 
-      }
 const paymentStatus = req.body.paymentStatus || "";
 const refundStatus = req.body.refundStatus || "";
 order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
@@ -641,6 +639,79 @@ order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refu
     res.status(500).json({ message: "Server error", error });
   }
 });
+// to update card charged
+app.put("/orders/:orderNo/additionalInfo/:yardIndex/paymentStatus", async (req, res) => {
+  console.log("Updating payment status for yard");
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+  const formattedDateTime = new Date(centralTime).toLocaleString("en-US", {
+    timeZone: "America/Chicago",
+  });
+
+  try {
+    const order = await Order.findOne({ orderNo: req.params.orderNo });
+    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+
+    if (!order) return res.status(404).send("Order not found");
+    if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
+      return res.status(400).json({ message: "Invalid yard index" });
+    }
+
+    const paymentStatus = req.body.paymentStatus || "";
+    const firstName = req.query.firstName || "Unknown User";
+
+    order.additionalInfo[yardIndex].paymentStatus = paymentStatus;
+    order.orderHistory.push(
+      `Yard ${yardIndex + 1} payment status updated to "${paymentStatus}" by ${firstName} on ${formattedDateTime}`
+    );
+
+    order.markModified("additionalInfo");
+    await order.save();
+
+    res.json(order);
+  } catch (error) {
+    console.error("Error updating payment status:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+// to update update refunds
+app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, res) => {
+  console.log("Updating refund status for yard");
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+  const formattedDateTime = new Date(centralTime).toLocaleString("en-US", {
+    timeZone: "America/Chicago",
+  });
+
+  try {
+    const order = await Order.findOne({ orderNo: req.params.orderNo });
+    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+
+    if (!order) return res.status(404).send("Order not found");
+    if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
+      return res.status(400).json({ message: "Invalid yard index" });
+    }
+
+    const { refundStatus, refundedAmount, storeCredit } = req.body;
+    const firstName = req.query.firstName || "Unknown User";
+
+    const yardInfo = order.additionalInfo[yardIndex];
+    yardInfo.refundStatus = refundStatus;
+    yardInfo.refundedAmount = refundedAmount;
+    yardInfo.storeCredit = storeCredit || null;
+
+    order.orderHistory.push(
+      `Yard ${yardIndex + 1} refund status updated to "${refundStatus}" by ${firstName} on ${formattedDateTime}`
+    );
+
+    order.markModified("additionalInfo");
+    await order.save();
+
+    res.json(order);
+  } catch (error) {
+    console.error("Error updating refund status:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 // to update escalation in order history
 app.put("/orders/:orderNo/escalation", async (req, res) => {
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
