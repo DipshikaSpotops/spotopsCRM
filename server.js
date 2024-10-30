@@ -140,7 +140,7 @@ await newOrder.save();
 // Generate an invoice for the new order
 var orderId = newOrder.orderNo;
 // console.log("orderNo",orderId);
-await generateInvoice(orderId, newOrder);
+// await generateInvoice(orderId, newOrder);
 res.status(201).json({ newOrder, team: newOrder.team });
 } catch (error) {
 console.error("Error in invoice creation:", error);
@@ -978,170 +978,170 @@ res
 });
 
 // Function to generate invoice
-async function generateInvoice(orderNo, orderData) {
-console.log("inside generate function");
-const existingPdfBytes = fs.readFileSync(path.resolve("./388.pdf"));
-const pdfDoc = await PDFDocument.load(existingPdfBytes);
+// async function generateInvoice(orderNo, orderData) {
+// console.log("inside generate function");
+// const existingPdfBytes = fs.readFileSync(path.resolve("./388.pdf"));
+// const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
-const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+// const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+// const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-const firstPage = pdfDoc.getPage(0);
-// Part description
-var partDesc =
-"Year: " +
-orderData.year +
-"\n" +
-"Make: " +
-orderData.make +
-"\n" +
-"Model: " +
-orderData.model +
-"\n" +
-"Part required: " +
-orderData.pReq +
-"\n" +
-"Desc: " +
-orderData.desc +
-"\n" +
-"VIN: " +
-orderData.vin +
-"\n" +
-"Warranty: " +
-orderData.warranty;
-console.log("desc", partDesc);
+// const firstPage = pdfDoc.getPage(0);
+// // Part description
+// var partDesc =
+// "Year: " +
+// orderData.year +
+// "\n" +
+// "Make: " +
+// orderData.make +
+// "\n" +
+// "Model: " +
+// orderData.model +
+// "\n" +
+// "Part required: " +
+// orderData.pReq +
+// "\n" +
+// "Desc: " +
+// orderData.desc +
+// "\n" +
+// "VIN: " +
+// orderData.vin +
+// "\n" +
+// "Warranty: " +
+// orderData.warranty;
+// console.log("desc", partDesc);
 
-// Billing address
-var billingaddress =
-orderData.customerName +
-"\n" +
-orderData.bAddress +
-"\n" +
-orderData.email +
-"\n" +
-orderData.phone;
+// // Billing address
+// var billingaddress =
+// orderData.customerName +
+// "\n" +
+// orderData.bAddress +
+// "\n" +
+// orderData.email +
+// "\n" +
+// orderData.phone;
 
-var shippingaddress =
-orderData.customerName +
-"\n" +
-orderData.sAddress +
-"\n" +
-orderData.email +
-"\n" +
-orderData.phone;
-console.log("billing and shipping", billingaddress, shippingaddress);
-const replacements = [
-{
-// text: `50STARS${orderNo.toString().padStart(4, "0")}`,
-text:`${orderNo}`,
-x: 450,
-y: 728,
-size: 11,
-font: helveticaFont,
-color: rgb(0, 0, 0),
-},
-{
-text: `${new Date().toLocaleString("en-US", {
-month: "long",
-day: "2-digit",
-year: "numeric",
-})}`,
-x: 450,
-y: 714,
-size: 11,
-font: helveticaFont,
-color: rgb(0, 0, 0),
-},
-{
-text: `${billingaddress}`,
-x: 80,
-y: 650,
-size: 11,
-font: helveticaBoldFont,
-color: rgb(0, 0, 0),
-},
-{
-text: `${shippingaddress}`,
-x: 300,
-y: 650,
-size: 11,
-font: helveticaBoldFont,
-color: rgb(0, 0, 0),
-},
-{
-text: `${partDesc}`,
-x: 80,
-y: 520,
-size: 13,
-font: helveticaBoldFont,
-color: rgb(0, 0, 0),
-},
-{
-text: `$${orderData.soldP}`,
-x: 473,
-y: 460,
-size: 11,
-font: helveticaBoldFont,
-color: rgb(0, 0, 0),
-},
-{
-text: `$${orderData.soldP}`,
-x: 473,
-y: 325,
-size: 11,
-font: helveticaBoldFont,
-color: rgb(0, 0, 0),
-},
-{
-text: `$${orderData.soldP}`,
-x: 473,
-y: 284,
-size: 11,
-font: helveticaBoldFont,
-color: rgb(1, 1, 1),
-}, // White color
-];
+// var shippingaddress =
+// orderData.customerName +
+// "\n" +
+// orderData.sAddress +
+// "\n" +
+// orderData.email +
+// "\n" +
+// orderData.phone;
+// console.log("billing and shipping", billingaddress, shippingaddress);
+// const replacements = [
+// {
+// // text: `50STARS${orderNo.toString().padStart(4, "0")}`,
+// text:`${orderNo}`,
+// x: 450,
+// y: 728,
+// size: 11,
+// font: helveticaFont,
+// color: rgb(0, 0, 0),
+// },
+// {
+// text: `${new Date().toLocaleString("en-US", {
+// month: "long",
+// day: "2-digit",
+// year: "numeric",
+// })}`,
+// x: 450,
+// y: 714,
+// size: 11,
+// font: helveticaFont,
+// color: rgb(0, 0, 0),
+// },
+// {
+// text: `${billingaddress}`,
+// x: 80,
+// y: 650,
+// size: 11,
+// font: helveticaBoldFont,
+// color: rgb(0, 0, 0),
+// },
+// {
+// text: `${shippingaddress}`,
+// x: 300,
+// y: 650,
+// size: 11,
+// font: helveticaBoldFont,
+// color: rgb(0, 0, 0),
+// },
+// {
+// text: `${partDesc}`,
+// x: 80,
+// y: 520,
+// size: 13,
+// font: helveticaBoldFont,
+// color: rgb(0, 0, 0),
+// },
+// {
+// text: `$${orderData.soldP}`,
+// x: 473,
+// y: 460,
+// size: 11,
+// font: helveticaBoldFont,
+// color: rgb(0, 0, 0),
+// },
+// {
+// text: `$${orderData.soldP}`,
+// x: 473,
+// y: 325,
+// size: 11,
+// font: helveticaBoldFont,
+// color: rgb(0, 0, 0),
+// },
+// {
+// text: `$${orderData.soldP}`,
+// x: 473,
+// y: 284,
+// size: 11,
+// font: helveticaBoldFont,
+// color: rgb(1, 1, 1),
+// }, // White color
+// ];
 
-const drawMultilineText = (page, text, x, y, fontSize, font, color) => {
-const lines = text.split("\n");
-lines.forEach((line, idx) => {
-page.drawText(line, {
-x,
-y: y - idx * fontSize * 1.2,
-size: fontSize,
-font,
-color,
-});
-});
-};
+// const drawMultilineText = (page, text, x, y, fontSize, font, color) => {
+// const lines = text.split("\n");
+// lines.forEach((line, idx) => {
+// page.drawText(line, {
+// x,
+// y: y - idx * fontSize * 1.2,
+// size: fontSize,
+// font,
+// color,
+// });
+// });
+// };
 
-replacements.forEach(({ text, x, y, size, font, color }) => {
-drawMultilineText(firstPage, text, x, y, size, font, color);
-});
+// replacements.forEach(({ text, x, y, size, font, color }) => {
+// drawMultilineText(firstPage, text, x, y, size, font, color);
+// });
 
-const pdfBytes = await pdfDoc.save();
+// const pdfBytes = await pdfDoc.save();
 
-// Load the original PDF and remove the first page
-const originalPdfBytes = fs.readFileSync(path.resolve("./388.pdf"));
-const originalPdfDoc = await PDFDocument.load(originalPdfBytes);
+// // Load the original PDF and remove the first page
+// const originalPdfBytes = fs.readFileSync(path.resolve("./388.pdf"));
+// const originalPdfDoc = await PDFDocument.load(originalPdfBytes);
 
-const modifiedPdfDoc = await PDFDocument.create();
-const [invoicePage] = await modifiedPdfDoc.copyPages(pdfDoc, [0]);
-modifiedPdfDoc.addPage(invoicePage);
+// const modifiedPdfDoc = await PDFDocument.create();
+// const [invoicePage] = await modifiedPdfDoc.copyPages(pdfDoc, [0]);
+// modifiedPdfDoc.addPage(invoicePage);
 
-const totalPages = originalPdfDoc.getPageCount();
-for (let i = 1; i < totalPages; i++) {
-const [copiedPage] = await modifiedPdfDoc.copyPages(originalPdfDoc, [i]);
-modifiedPdfDoc.addPage(copiedPage);
-}
+// const totalPages = originalPdfDoc.getPageCount();
+// for (let i = 1; i < totalPages; i++) {
+// const [copiedPage] = await modifiedPdfDoc.copyPages(originalPdfDoc, [i]);
+// modifiedPdfDoc.addPage(copiedPage);
+// }
 
-const modifiedPdfBytes = await modifiedPdfDoc.save();
+// const modifiedPdfBytes = await modifiedPdfDoc.save();
 
-const outputPath = path.resolve(`./invoices/invoice_${orderNo}.pdf`);
-fs.writeFileSync(outputPath, modifiedPdfBytes);
+// const outputPath = path.resolve(`./invoices/invoice_${orderNo}.pdf`);
+// fs.writeFileSync(outputPath, modifiedPdfBytes);
 
-console.log(`Invoice generated and appended: ${outputPath}`);
-}
+// console.log(`Invoice generated and appended: ${outputPath}`);
+// }
 // to send tracking info email
 app.post("/orders/sendTrackingInfo/:orderNo", async (req, res) => {
 console.log("send tracking info");
