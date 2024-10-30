@@ -3133,9 +3133,9 @@ $('#refundSubmit').on('click', function() {
 
   // Try updating in orders collection first
   updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${firstName}`)
-    .then((response) => 
-      return response.json(); // Successful update in orders
-    })
+    // .then((response) => 
+    //   return response.json(); // Successful update in orders
+    // })
     .then((data) => {
       if (data) {
         updateOrderHistory(data.orderHistory);
