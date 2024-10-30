@@ -3072,17 +3072,8 @@ body: JSON.stringify(data1),
 };
 
 // First attempt to update in the orders collection
-updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`)
+updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/paymentStatus?firstName=${firstName}`)
 .then((response) => {
-if (!response.ok) {
-if (response.status === 404) {
-// If the order is not found in orders, try updating in cancelledOrders
-console.log('Order not found in orders, checking in cancelledOrders...');
-return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${selectedYardIndex}/paymentStatus?firstName=${firstName}`);
-} else {
-throw new Error("Network response was not ok");
-}
-}
 return response.json();  // Successful update in orders
 })
 .then((data) => {
@@ -3141,16 +3132,8 @@ $('#refundSubmit').on('click', function() {
   };
 
   // Try updating in orders collection first
-  updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}?firstName=${firstName}`)
-    .then((response) => {
-      if (!response.ok) {
-        if (response.status === 404) {
-          // If order not found in orders, try cancelledOrders
-          return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${firstName}`);
-        } else {
-          throw new Error("Network response was not ok");
-        }
-      }
+  updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${firstName}`)
+    .then((response) => 
       return response.json(); // Successful update in orders
     })
     .then((data) => {
