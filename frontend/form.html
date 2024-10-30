@@ -4156,14 +4156,6 @@ body: JSON.stringify(updatedData),
 
 updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`)
 .then((response) => {
-if (!response.ok) {
-if (response.status === 404) {
-// If order not found in orders, try cancelledOrders
-console.log('Order not found in orders, checking in cancelledOrders...');
-return updateOrder(`https://www.spotops360.com/cancelledOrders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`);
-}
-throw new Error("Network response was not ok");
-}
 return response.json();
 })
 .then((data) => {
