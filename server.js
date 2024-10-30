@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const bcrypt = require("bcrypt");   
 const nodemailer = require("nodemailer");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 const fs = require("fs");
 const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
@@ -1428,7 +1428,7 @@ res.status(500).json({ message: "Server error", error });
 
     // Generate PDF from the provided link
     const pdfPath = path.join(__dirname, 'temp', `return_document_${Date.now()}.pdf`);
-    await generatePDF(pdfLink, pdfPath);
+    // await generatePDF(pdfLink, pdfPath);
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -1480,13 +1480,13 @@ res.status(500).json({ message: "Server error", error });
 });
 
 // Function to generate PDF using puppeteer
-async function generatePDF(url, outputPath) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(url, { waitUntil: 'networkidle2' });
-  await page.pdf({ path: outputPath, format: 'A4' });
-  await browser.close();
-}
+// async function generatePDF(url, outputPath) {
+//   const browser = await puppeteer.launch();
+//   const page = await browser.newPage();
+//   await page.goto(url, { waitUntil: 'networkidle2' });
+//   await page.pdf({ path: outputPath, format: 'A4' });
+//   await browser.close();
+// }
     app.post("/orders/sendRefundEmail/:orderNo", async (req, res) => {
       var yardIndex = req.query.yardIndex;
       var refundedAmount = req.query.refundedAmount;
