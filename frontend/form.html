@@ -3900,14 +3900,15 @@ console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement"
 const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("pdfFile");
   const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Please select a PDF file before sending the email.");
+    $("#saveEsc").prop("disabled", false).css("filter", "none");
+    return;
+  }
+
   const formData = new FormData();
   formData.append("pdfFile", file);
-  console.log("pdf",formData,"pdfFile",);
-
-  // if (!driveLink) {
-//     alert('Please enter a Drive or PDF link.');
-//     return;
-//   }
 // console.log("RMA return",yardIndex)
 if(escProcess === "Return" && retShippingMethod === "Customer shipping"){
 fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}`, {
@@ -3943,42 +3944,36 @@ console.log("Success:", result);
 console.error("Error:", error);
 });
 }
-else if(escProcess === "Replacement" && (repShippingMethod === "Own shipping" || repShippingMethod === "Yard shipping")){
-fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-body: formData,
-}
-})
-.then((response) => response.json())
-.then((result) => {
-alert("RMA(Replacement)_Own/Yard-shipping email with pdf has been sent to the customer");
-$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
-console.log("Success:", result);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-}
-else if(escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")){
-fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-body: formData,
-}
-})
-.then((response) => response.json())
-.then((result) => {
-alert("RMA(Return)_own-shipping email with pdf has been sent to the customer");
-$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
-console.log("Success:", result);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-}
+else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" || repShippingMethod === "Yard shipping")) {
+    fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
+      method: "POST",
+      body: formData, // Send FormData directly
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        alert("RMA(Replacement)_Own/Yard-shipping email with PDF has been sent to the customer");
+        $("#saveEsc").prop("disabled", false).css("filter", "none");
+        console.log("Success:", result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+  else if (escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")) {
+    fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
+      method: "POST",
+      body: formData, // Send FormData directly
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        alert("RMA(Return)_Own/Yard-shipping email with PDF has been sent to the customer");
+        $("#saveEsc").prop("disabled", false).css("filter", "none");
+        console.log("Success:", result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 else if(escProcess === "Reibursement"){
   fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
