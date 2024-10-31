@@ -1506,6 +1506,7 @@ res.status(500).json({ message: "Server error", error });
     const order = await Order.findOne({ orderNo: req.params.orderNo });
     if (!order) return res.status(400).send("Order not found");
     const pdfFile = req.file;
+    console.log("pdfFile",pdfFile);
     // await generatePDF(pdfLink, pdfPath);
 
     const transporter = nodemailer.createTransport({
