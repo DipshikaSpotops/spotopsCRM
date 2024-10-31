@@ -3899,13 +3899,13 @@ var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("pdfFile");
-  const file = fileInput.files[0];
+  const file = fileInput.files[0] || "";
 
-  if (!file) {
-    alert("Please select a PDF file before sending the email.");
-    $("#saveEsc").prop("disabled", false).css("filter", "none");
-    return;
-  }
+//   if (!file) {
+//     alert("Please select a PDF file before sending the email.");
+//     $("#saveEsc").prop("disabled", false).css("filter", "none");
+//     return;
+//   }
 
   const formData = new FormData();
   formData.append("pdfFile", file);
