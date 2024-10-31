@@ -2359,7 +2359,7 @@ cid: 'logo'
   
   });
   } catch (error) {
-  console.error("Server error:", error);
+  console.error("Server  at the end:", error);
   res.status(500).json({ message: "Server error", error });
   }
   });
