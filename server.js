@@ -1411,7 +1411,7 @@ html: `<p>Dear ${order.customerName},</p>
 ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
 </p>
 <p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
-<p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+<p>If you have any questions or need further assistance with the return process, please feel free to reach out.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
 <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
