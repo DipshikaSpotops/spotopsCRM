@@ -1530,7 +1530,6 @@ res.status(500).json({ message: "Server error", error });
   <p>To return the part, please use the prepaid shipping label attached to this email. After securely packing the item and attachind alabel, you can drop it off at any designated shipping location. Once we receive the part, we will process your replacement and ship it out within 1-3 business days. You'll receve tracking information once the replacement is on its way.</p>
   <p>If you need assistance or have any questions, please feel free to reach out.</p>
   <p>Thank you for allowing us the opportunity to make this right for you.</p>
-  <p>You can access the required return documents <a href="${pdfLink}" target="_blank">here</a>.</p>
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
       attachments: [
