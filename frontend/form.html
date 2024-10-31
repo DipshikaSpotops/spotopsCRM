@@ -3974,7 +3974,7 @@ else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" |
         console.error("Error:", error);
       });
   }
-else if(escProcess === "Reibursement"){
+else if(escProcess === "Reimbursement"){
   fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}`, {
 method: "POST",
 headers: {
