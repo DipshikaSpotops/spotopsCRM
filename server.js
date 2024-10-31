@@ -1348,8 +1348,8 @@ app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) =
     to: 'dipsikha.spotopsdigital@gmail.com',
     subject: `Return Required for Replacement of ABS Module Order / Order No. ${req.params.orderNo}`,
     html: `<p>Dear ${order.customerName},</p>
-    <p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offwe a replacementto ensure you receive a fully functional part.</p>
-    <pPlease return the part to the following address:</p>
+    <p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offer a replacement to ensure you receive a fully functional part.</p>
+    <p>Please return the part to the following address:</p>
     <p>${order.additionalInfo[yardIndex - 1].street}<br>
     ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
     </p>
