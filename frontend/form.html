@@ -3900,7 +3900,9 @@ console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement"
 const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("pdfFile");
   const file = fileInput.files[0];
- 
+  const formData = new FormData();
+  formData.append("pdfFile", file);
+  console.log("pdf",formData,"pdfFile",);
 
   // if (!driveLink) {
 //     alert('Please enter a Drive or PDF link.');
@@ -3946,7 +3948,7 @@ fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yar
 method: "POST",
 headers: {
 "Content-Type": "application/json",
-body: file,
+body: formData,
 }
 })
 .then((response) => response.json())
