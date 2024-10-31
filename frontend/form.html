@@ -3902,6 +3902,7 @@ const fileInput = document.getElementById("pdfFile");
   const file = fileInput.files[0];
   const formData = new FormData();
   formData.append("pdfFile", file);
+  console.log("pdf",formData);
 
   // if (!driveLink) {
 //     alert('Please enter a Drive or PDF link.');
