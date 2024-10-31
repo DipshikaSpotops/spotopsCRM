@@ -1500,12 +1500,12 @@ res.status(500).json({ message: "Server error", error });
  
   app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", async (req, res) => {
   const yardIndex = req.query.yardIndex;
-  const { pdfLink } = req.body;
+  // const { pdfLink } = req.body;
 
   try {
     const order = await Order.findOne({ orderNo: req.params.orderNo });
     if (!order) return res.status(400).send("Order not found");
-    const pdfFile = req.file;
+    const pdfFile = req.body;
     console.log("pdfFile",pdfFile);
     const formData = new FormData();
     formData.append("pdfFile", pdfFile);
