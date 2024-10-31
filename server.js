@@ -1507,6 +1507,9 @@ res.status(500).json({ message: "Server error", error });
     if (!order) return res.status(400).send("Order not found");
     const pdfFile = req.file;
     console.log("pdfFile",pdfFile);
+    const formData = new FormData();
+    formData.append("pdfFile", pdfFile);
+    console.log("pdf",formData,"pdfFile",pdfFile);
     // await generatePDF(pdfLink, pdfPath);
 
     const transporter = nodemailer.createTransport({
@@ -1532,8 +1535,8 @@ res.status(500).json({ message: "Server error", error });
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
       attachments: [
         {
-          filename: pdfFile.originalname,
-          content: pdfFile.buffer,
+          filename: pdfFile.name,
+          content: formData.buffer,
           },
         {
           filename: 'logo.png',
