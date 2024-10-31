@@ -1500,12 +1500,12 @@ res.status(500).json({ message: "Server error", error });
  
   app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", async (req, res) => {
   const yardIndex = req.query.yardIndex;
-  // const { pdfLink } = req.body;
+  const { pdfLink } = req.body;
 
   try {
     const order = await Order.findOne({ orderNo: req.params.orderNo });
     if (!order) return res.status(400).send("Order not found");
-    const pdfFile = req.body;
+    const pdfFile = req.file;
     console.log("pdfFile",pdfFile);
     const formData = new FormData();
     formData.append("pdfFile", pdfFile);
@@ -1534,7 +1534,7 @@ res.status(500).json({ message: "Server error", error });
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
       attachments: [
         {
-          filename: pdfFile.name,
+          // filename: pdfFile.name,
           content: formData.buffer,
           },
         {
