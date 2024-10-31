@@ -1437,6 +1437,7 @@ res.status(500).json({ message: "Server error", error });
 // to send email for return when shipping methos is own shipping or yard shipping
 app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", async (req, res) => {
 var yardIndex = req.query.yardIndex;
+const pdfFile = req.file;
 console.log("send rma(return) info");
 try {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -1470,7 +1471,13 @@ attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
 cid: 'logo' 
-}]
+}
+,
+{
+filename: pdfFile.originalname,
+content: pdfFile.buffer,
+},
+]
 };
 
 console.log("mail", mailOptions);
@@ -1498,9 +1505,7 @@ res.status(500).json({ message: "Server error", error });
   try {
     const order = await Order.findOne({ orderNo: req.params.orderNo });
     if (!order) return res.status(400).send("Order not found");
-
-    // Generate PDF from the provided link
-    const pdfPath = path.join(__dirname, 'temp', `return_document_${Date.now()}.pdf`);
+    const pdfFile = req.file;
     // await generatePDF(pdfLink, pdfPath);
 
     const transporter = nodemailer.createTransport({
@@ -1526,9 +1531,9 @@ res.status(500).json({ message: "Server error", error });
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
       attachments: [
         {
-          filename: 'return_document.pdf',
-          path: pdfPath,
-        },
+          filename: pdfFile.originalname,
+          content: pdfFile.buffer,
+          },
         {
           filename: 'logo.png',
           path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',

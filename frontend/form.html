@@ -3898,9 +3898,12 @@ var retShippingMethod = $("#customerShippingMethodReturn").val() || "";
 var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
-const driveLink = document.getElementById('driveLink').value || "";
-console.log("drivelink",driveLink);
-// if (!driveLink) {
+const fileInput = document.getElementById("pdfFile");
+const file = fileInput.files[0];console.log("drivelink",driveLink);
+const formData = new FormData();
+formData.append("pdfFile", file);
+
+  // if (!driveLink) {
 //     alert('Please enter a Drive or PDF link.');
 //     return;
 //   }
@@ -3944,12 +3947,12 @@ fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yar
 method: "POST",
 headers: {
 "Content-Type": "application/json",
-body: JSON.stringify({ pdfLink: driveLink })
+body: formData,
 }
 })
 .then((response) => response.json())
 .then((result) => {
-alert("RMA(Replacement)_Own/Yard-shipping email has been sent to the customer");
+alert("RMA(Replacement)_Own/Yard-shipping email with pdf has been sent to the customer");
 $("#saveEsc").prop("disabled", false) .css("filter", "none"); 
 console.log("Success:", result);
 })
@@ -3962,12 +3965,12 @@ fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yard
 method: "POST",
 headers: {
 "Content-Type": "application/json",
-body: JSON.stringify({ pdfLink: driveLink })
+body: formData,
 }
 })
 .then((response) => response.json())
 .then((result) => {
-alert("RMA(Return)_own-shipping email has been sent to the customer");
+alert("RMA(Return)_own-shipping email with pdf has been sent to the customer");
 $("#saveEsc").prop("disabled", false) .css("filter", "none"); 
 console.log("Success:", result);
 })
