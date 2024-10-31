@@ -3899,9 +3899,9 @@ var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("pdfFile");
-const file = fileInput.files[0];console.log("drivelink",driveLink);
-const formData = new FormData();
-formData.append("pdfFile", file);
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append("pdfFile", file);
 
   // if (!driveLink) {
 //     alert('Please enter a Drive or PDF link.');
