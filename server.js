@@ -2357,6 +2357,7 @@ cid: 'logo'
   
   });
   } catch (error) {
+    console.log("Error ")
   console.error("Server error:  hhh", error);
   res.status(500).json({ message: "Server error", error });
   }
