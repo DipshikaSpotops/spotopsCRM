@@ -551,7 +551,7 @@ function renderTableRows(page, orders = allOrders) {
 
     ordersForPage.forEach((item) => {
         // Extract the last entry in additionalInfo for display
-        //  lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+         lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
         //  console.log("last",lastInfo);
          if (item.orderDate !== ""){
          const orderDate = new Date(Date.parse(item.orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
