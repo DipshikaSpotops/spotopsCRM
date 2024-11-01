@@ -715,7 +715,7 @@ arr.forEach((log, index) => {
         datetime = datetimeMatch ? datetimeMatch[0] : null;
 
         if (yardIndex && datetime) {
-            yardLogs[yardIndex] = { log, datetime, index } || "";
+            yardLogs[yardIndex] = { log, datetime, index };
         }
     }
 });
@@ -723,11 +723,11 @@ arr.forEach((log, index) => {
 console.log("yardLogs:", yardLogs);
 
 // To get the latest datetime from the last yard entry (e.g., yard 3)
-var yardEntries = Object.values(yardLogs);
-console.log("yardEntries",yardEntries);
+const yardEntries = Object.values(yardLogs);
+console.log("yardEntries",yardEntries)
 var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
 console.log("Last DateTime:", lDateTime);
-
+if(lDateTime !== null){
 currentDateTime = currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
 lDateTime = lDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1');
 var currentDate = new Date(currentDateTime);
@@ -735,7 +735,7 @@ var lastDate = new Date(lDateTime);
 var diffTime = Math.abs(currentDate - lastDate);
 var differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-console.log("Difference in days:", differenceInDays);
+console.log("Difference in days:", differenceInDays);}
 return differenceInDays > 1;
 });
 
