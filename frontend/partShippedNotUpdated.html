@@ -723,7 +723,8 @@ arr.forEach((log, index) => {
 console.log("yardLogs:", yardLogs);
 
 // To get the latest datetime from the last yard entry (e.g., yard 3)
-const yardEntries = Object.values(yardLogs);
+var yardEntries = Object.values(yardLogs);
+console.log("yardEntries",yardEntries);
 var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
 console.log("Last DateTime:", lDateTime);
 
