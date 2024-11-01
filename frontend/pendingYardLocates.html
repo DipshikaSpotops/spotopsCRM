@@ -362,6 +362,7 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Order Placed Date<span class="sort-icon">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Part Info<span class="sort-icon">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actions</th>
       </tr>
   </thead>
@@ -563,12 +564,21 @@ function renderTableRows(page, orders = allOrders) {
 
         const row = `
             <tr>
-                <td>${item.orderDate}</td>
-                <td>${item.orderNo}</td>
-                <td>${item.salesAgent}</td>
-                <td>${item.customerName}</td>
                 <td>${item.orderDate || "N/A"}<br>  
                     <b>${differenceInDays + 1 || "N/A"} days ago</b>
+                <td>${item.orderNo}</td>
+                <td>${item.salesAgent}</td>
+                <td>Name: ${item.customerName}</br>
+                Email: ${item.email}</br>
+                Ph: ${item.phone}</td>
+                <td>Year: ${item.year}</br>
+                    Make: ${item.make}</br>>
+                    Model: ${item.model}</br>
+                    Part: ${item.pReq}</br>
+                    Description: ${item.desc}</br>
+                    VIN: ${item.vin}</br>
+                    Warranty: ${item.warranty}
+                    </td>
                 <td>${actions}</td>
             </tr>
         `;
