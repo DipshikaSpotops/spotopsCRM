@@ -715,7 +715,7 @@ arr.forEach((log, index) => {
         datetime = datetimeMatch ? datetimeMatch[0] : null;
 
         if (yardIndex && datetime) {
-            yardLogs[yardIndex] = { log, datetime, index };
+            yardLogs[yardIndex] = { log, datetime, index } || "";
         }
     }
 });
