@@ -536,11 +536,11 @@ var differenceInDays;
 function renderTableRows(page, orders = allOrders) {
     const filteredOrders = orders.filter((item) => {
         // Ensure additionalInfo exists and has the expected structure
-        const InfoArray = item;
-        return InfoArray.some((info) => {
-            const statusMatches = info.orderStatus === "Placed";
+        // const InfoArray = item;
+        // return InfoArray.some((info) => {
+            const statusMatches = item.orderStatus === "Placed";
             return statusMatches;
-        });
+        // });
     });
 
     const start = (page - 1) * rowsPerPage;
