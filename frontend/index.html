@@ -841,7 +841,7 @@ async function fetchMonthlySalesProgress() {
     // Filter orders from August until now
     const filteredOrders = orders.filter(order => {
       const orderDate = parseOrderDate(order.orderDate);
-      return orderDate >= new Date(orderDate.getFullYear(), 7, 1); // August is month 7 (0-indexed)
+      return orderDate >= new Date(orderDate.getFullYear(), 8, 1); // August is month 7 (0-indexed)
     });
 
     // Group by month and sum up Actual GP for each month
