@@ -551,8 +551,8 @@ function renderTableRows(page, orders = allOrders) {
 
     ordersForPage.forEach((item) => {
         // Extract the last entry in additionalInfo for display
-         lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
-         console.log("last",lastInfo);
+        //  lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+        //  console.log("last",lastInfo);
          if (item.orderDate !== ""){
          const orderDate = new Date(Date.parse(item.orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
             const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
@@ -569,11 +569,6 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${item.orderNo}</td>
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
-                <td>${lastInfo.yardName || ""}<br>  
-                    ${lastInfo.address || ""}<br>
-                    ${lastInfo.email || ""}<br>
-                    ${lastInfo.phone || ""}</td>
-                <td>${lastInfo.status}</td>
                 <td>${item.orderDate || "N/A"}<br>  
                     <b>${differenceInDays + 1 || "N/A"} days ago</b>
                 <td class="actions">${actions}</td>
