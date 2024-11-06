@@ -746,9 +746,10 @@ const escalations = statusCounts[4]; // Escalation
 const cancellations = statusCounts[6] + statusCounts[7] + statusCounts[8]; // Cancelled + Refunded + Dispute
 
 // Calculate rates
-const successRate = ((fulfilledOrders / totalOrders - 1) * 100).toFixed(2);
-const escalationRate = ((escalations / totalOrders - 1) * 100).toFixed(2);
-const cancellationRate = ((cancellations / totalOrders - 1) * 100).toFixed(2);
+var toOrders = totalOrders - 1;
+const successRate = ((fulfilledOrders / toOrders) * 100).toFixed(2);
+const escalationRate = ((escalations / toOrders) * 100).toFixed(2);
+const cancellationRate = ((cancellations / toOrders) * 100).toFixed(2);
 
 // Display the rates
 document.getElementById(`rates-month-${index}`).innerHTML = `

@@ -2542,7 +2542,7 @@ Phone No: ${yardData.phone}<br>
 Agent Name: ${yardData.agentName}<br>
 Part Price: $${yardData.partPrice}<br>
 Stock No: ${yardData.stockNo}<br>
-Shipping Method: 
+${yardData.shippingDetails ? `Shipping Method: ${yardData.shippingDetails}<br>` : ""}
 ${yardData.others ? `Others: ${yardData.others}<br>` : ""}
 </td>
 <td style="width: 50%; vertical-align: top;">
