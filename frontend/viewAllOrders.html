@@ -696,9 +696,9 @@ $("#searchInput").on("keyup", function () {
     const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
       const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
       return (
-        yardLabel.includes(value) || // Match the label itself (e.g., "Yard 1")
-        (info.yardName && info.yardName.toLowerCase().includes(value)) || // Match yardName
-        (info.escTicked && info.escTicked.toLowerCase().includes(value)) || // Match escTicked, if needed
+        yardLabel.includes(value) || 
+        (info.yardName && info.yardName.toLowerCase().includes(value)) || 
+        (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
         (info.status && info.status.toLowerCase().includes(value))
       );
     });
