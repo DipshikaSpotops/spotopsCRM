@@ -555,14 +555,7 @@ $("#infoTable").append(`
 <td>
 ${
   item.additionalInfo && item.additionalInfo.length > 0
-    ? `<table>
-         <tr>
-           <th>Yard</th>
-           <th>Yard Name</th>
-           <th>Email</th>
-           <th>Phone</th>
-           <th>Status</th>
-         </tr>
+    ? `
          ${item.additionalInfo
            .map(
              (info, index) => `
@@ -575,7 +568,6 @@ ${
              </tr>`
            )
            .join("")}
-       </table>`
     : ""
 }
 </td>
