@@ -2613,6 +2613,7 @@ $("#bAddress").val(data.bAddress);
 $("#firstName").val(firstNameE);
 $("#lastname").val(lastNameE);
 $("#sAddress").val(data.sAddress);
+$("#attention").val(data.attention);
 $("#email").val(data.email);
 $("#phone").val(data.phone);
 $("#make").val(data.make);
@@ -2630,7 +2631,6 @@ $("#orderStatus").val(data.orderStatus);
 $("#vin").val(data.vin);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
-$("#attention").val(data.attention);
 data.additionalInfo.forEach((info, index) => {
 addYardButton(index + 1, `Yard ${index + 1}`);
 });
