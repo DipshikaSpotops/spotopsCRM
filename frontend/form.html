@@ -2592,21 +2592,14 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
 document.getElementById("estPP").textContent += data.costP;
-// console.log("Fetched order data:", data);
 var customerNameE = data.customerName;
-// console.log("cusName", customerNameE);
-// updateOrderNotes(data);
-const nameParts = customerNameE.split(" ");
+const nameParts = customerNameE.split(" ").filter(part => part.trim() !== "");
 const firstNameE = nameParts[0];
-const lastNameE = nameParts[1];
+const lastNameE = nameParts[1] || "";
 var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
-// console.log("saleNotes",onlyNotes);
-// console.log("First Name:", firstName);
-// console.log("Last Name:", lastName);
-orderNo;
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
 $("#bAddress").val(data.bAddress);
