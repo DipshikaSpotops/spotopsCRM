@@ -698,7 +698,8 @@ $("#searchInput").on("keyup", function () {
       return (
         yardLabel.includes(value) || // Match the label itself (e.g., "Yard 1")
         (info.yardName && info.yardName.toLowerCase().includes(value)) || // Match yardName
-        (info.escTicked && info.escTicked.toLowerCase().includes(value)) // Match escTicked, if needed
+        (info.escTicked && info.escTicked.toLowerCase().includes(value)) || // Match escTicked, if needed
+        (info.status && info.status.toLowerCase().includes(value))
       );
     });
 
