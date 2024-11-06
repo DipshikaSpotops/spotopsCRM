@@ -555,7 +555,7 @@ $("#infoTable").append(`
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:<br> ${info.yardName}<br>${info.email}<br>${info.phone}<br>${info.status}`)
+.map((info, index) => `<b>Yard ${index + 1}</b>: ${info.yardName}<br>${info.email}<br>${info.phone}<br>${info.status}`)
 
 .join("<br>")
 : ""
