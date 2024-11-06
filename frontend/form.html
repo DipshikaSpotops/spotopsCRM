@@ -2656,18 +2656,15 @@ showModal("#trackingModal");
 }
 // Listen for form submission
 $("#crmForm").on("submit", function (e) {
-e.preventDefault(); // Prevent the form from submitting normally
-// console.log("submitting a form");
+e.preventDefault(); 
 const firstName = localStorage.getItem("firstName");
 var cusFName = document.getElementById("firstName").value;
 var cuLName = document.getElementById("lastname").value;
 var customerName = cusFName + " " + cuLName;
-// Function to update the order
 const updateOrder = (url, existingOrderData) => {
-// Create the updatedData object, using the existing orderDate if the input is empty
 const updatedData = {
 orderNo: orderNo,
-orderDate: $("#orderDate").val() || existingOrderData.orderDate, // Use existing orderDate if input is empty
+orderDate: $("#orderDate").val() || existingOrderData.orderDate, 
 salesAgent: $("#salesAgent").val(),
 customerName: customerName,
 bAddress: $("#bAddress").val(),
@@ -2692,7 +2689,7 @@ last4digits: $("#issueOrder").val(),
 notes: $("#notes").val(),
 firstName: firstName,
 };
-// Send the updated data to the API using the PUT method
+// Sending the updated data to the API using the PUT method
 return fetch(`${url}?firstName=${firstName}`, {
 method: "PUT",
 headers: {
@@ -2701,23 +2698,8 @@ headers: {
 body: JSON.stringify(updatedData), 
 });
 };
-// First, try to fetch the existing order from the `orders` collection
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => {
-if (!response.ok) {
-if (response.status === 404) {
-
-// console.log('Order not found in orders, checking in cancelledOrders...');
-return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
-.then((response) => {
-if (!response.ok) {
-throw new Error("Order not found in both orders and cancelledOrders.");
-}
-return response.json();  
-});
-}
-throw new Error("Network response was not ok");
-}
 return response.json();
 })
 .then((existingOrderData) => {

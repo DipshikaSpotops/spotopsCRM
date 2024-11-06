@@ -552,7 +552,7 @@ $("#infoTable").append(`
   <td>${item.salesAgent}</td>
   <td>${item.customerName}</td>
   <td>${item.pReq || item.partName}</td>
-  <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map(info => info.yardName).join(", ") : ""}</td>
+  <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map(info => info.yardName).join("<br>") : ""}</td>
   <td>${item.orderStatus}</td>
   <td>${item.actualGP || ""}</td>
   <td ${escalationStyle}>${escalationStatus}</td>
