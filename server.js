@@ -621,6 +621,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
     if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
       const yardInfo = order.additionalInfo[yardIndex];
       const { updatedYardData, orderStatus } = req.body;
+      console.log("updatedYardData",updatedYardData);
       Object.assign(yardInfo, updatedYardData);
       order.additionalInfo[yardIndex] = yardInfo;
       order.orderStatus = orderStatus;
