@@ -4145,7 +4145,7 @@ headers: {
 body: JSON.stringify(updatedYardData),
 });
 };
-updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}/editYardDetails?firstName=${firstName}`)
+updateOrder(`https://www.spotops360.com/orders/${orderNo}/editYardDetails/${yardIndex}?firstName=${firstName}`)
 .then((response) => {
 return response.json();
 })
