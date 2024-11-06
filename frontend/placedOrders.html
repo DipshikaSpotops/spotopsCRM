@@ -627,7 +627,7 @@ var sAddress = item.sAddress;
 const sParts = sAddress.split(',');
 const firstLineS = `${sParts[0].trim()}, ${sParts[1].trim()}`;
 const secondLineS = `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}`;
-const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
+const formattedSAddress = `${firstLineS}<br>${secondLineS}<br><b>Attention</b>:${item.attention}`;
 
 $("#infoTable").append(
 
