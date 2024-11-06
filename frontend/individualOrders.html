@@ -243,10 +243,9 @@ window.location.href = "login_signup.html";
 <th style="cursor: pointer;">Customer Name <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Part Name <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Sale Price <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Sales Tax <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Est. Part Price <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Est. Shipping Price <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Est. GP <span class="sort-icon">&#9650;</span></th>
+<th style="cursor: pointer;">Estimated Info</th>
+<th style="cursor: pointer;">Actual Info <span class="sort-icon">&#9650;</span></th>
+<th style="cursor: pointer;">Overall Spend <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Actual GP <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Order Status <span class="sort-icon">&#9650;</span></th>
 </tr>
@@ -501,6 +500,15 @@ sortedData = sortOrdersByOrderNoDesc(filteredData);
 
     $("#infoTable").empty();  // Clear the table
     ordersForPage.forEach((item) => {
+      var yardOSorYS = item.shippingDetails || '';
+var shippingValueYard = 0;  
+if (yardOSorYS.includes("Own shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
+// console.log("own ship", shippingValueYard);
+} else if (yardOSorYS.includes("Yard shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+// console.log("yard ship", shippingValueYard);
+}
       $("#infoTable").append(`
         <tr>
           <td>${item.orderDate}</td>
@@ -508,10 +516,18 @@ sortedData = sortOrdersByOrderNoDesc(filteredData);
           <td>${item.customerName}</td>
           <td>${item.pReq || item.partName}</td>
           <td>$${item.soldP}</td>
-          <td>$${item.salestax}</td>
-          <td>$${item.costP}</td>
-          <td>$${item.shippingFee}</td>
-          <td>$${item.grossProfit}</td>
+          <td>$${item.soldP} | $${item.salestax} | $${item.costP} | $${item.shippingFee} | $${item.grossProfit}</td>
+          <td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => `<b>Yard ${index + 1}</b>: ${info.yardName}<br>${info.shippingDetails}<br>${info.others}<br>${info.redundedAmount}<br>${info.status
+
+}`)
+
+.join("<br>")
+: ""
+}</td>
+<td>${soldP + shippingValueYard + info.others}</td>
           <td>$${item.actualGP || 0}</td>
           <td>${item.orderStatus}</td>
         </tr>
