@@ -677,30 +677,43 @@ console.error("Error fetching orders:", error);
 
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
-const value = $(this).val().toLowerCase();
-// Filter the entire allOrders dataset based on the search term
-const filteredOrders = allOrders.filter(order => {
-return (
-(order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-(order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-(order.customerName && order.customerName.toLowerCase().includes(value)) ||
-((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-(order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
-(order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-(order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
-(order.email && order.email.toLowerCase().includes(value))
-);
-});
+  const value = $(this).val().toLowerCase();
+  
+  // Filter the entire allOrders dataset based on the search term
+  const filteredOrders = allOrders.filter(order => {
+    // Check basic fields
+    const basicSearch = (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
+    );
 
-// If a search is active, display the filtered results, otherwise reset to the full dataset
-if (filteredOrders.length > 0 || value === "") {
-renderTableRows(1, filteredOrders); // Render the first page of filtered results
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-} else {
-$("#infoTable").empty(); // Clear the table if no results are found
-$("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-}
+    // Check if any yard matches the search term
+    const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
+      const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
+      return (
+        yardLabel.includes(value) || // Match the label itself (e.g., "Yard 1")
+        (info.yardName && info.yardName.toLowerCase().includes(value)) || // Match yardName
+        (info.escTicked && info.escTicked.toLowerCase().includes(value)) // Match escTicked, if needed
+      );
+    });
+
+    // Return true if any of the basic fields or yard details match the search term
+    return basicSearch || yardSearch;
+  });
+
+  // If a search is active, display the filtered results, otherwise reset to the full dataset
+  if (filteredOrders.length > 0 || value === "") {
+    renderTableRows(1, filteredOrders); // Render the first page of filtered results
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  } else {
+    $("#infoTable").empty(); // Clear the table if no results are found
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+  }
 });
 
 
