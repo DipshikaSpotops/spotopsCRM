@@ -4103,16 +4103,13 @@ $("#saveYardDetails").on("click", function () {
 $('#editYardDetailsModal').hide();
 $(".mainDiv").removeClass("blur");
 yardIndex = $(this).data("yard-index");
-
 let shippingDetails = "";
-
 if ($("#editOwnShipping").val()) {
 shippingDetails = `Own shipping: ${$("#editOwnShipping").val()}`;
 } else if ($("#editYardShipping").val()) {
 shippingDetails = `Yard shipping: ${$("#editYardShipping").val()}`;
 }
-
-const updatedData = {
+const updatedData = { 
 yardName: $("#editYardName").val(),
 agentName: $("#editAgentName").val(),
 yardRating: $("#editYardRating").val(),
@@ -4138,29 +4135,26 @@ refundedAmount: $("#editrefundAmount").val(),
 escalationCause: $("#esc").val(),
 escalationProcess: $("#escProcess").val(),
 };
-// console.log("status",$("#refund").val())
+const updatedYardData = { updatedYardData: updatedData };
 const updateOrder = (url) => {
 return fetch(url, {
 method: "PUT",
 headers: {
 "Content-Type": "application/json",
 },
-body: JSON.stringify(updatedData),
+body: JSON.stringify(updatupdatedYardDataedData),
 });
 };
-
 updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}/editYardDetails?firstName=${firstName}`)
 .then((response) => {
 return response.json();
 })
 .then((data) => {
-// If data exists after successful update, show success alert and update the UI
 if (data) {
 alert("Yard details have been updated");
 window.location.reload();
 $("#editYardDetailsModal").modal("hide");
 $(".mainDiv").removeClass("blur");
-
 updateOrderHistory(data.orderHistory);
 showYardDetails(yardIndex);
 fetchAndUpdateYardInfo();
@@ -4168,7 +4162,6 @@ fetchAndUpdateYardInfo();
 })
 .catch((error) => {
 console.error("Error:", error);
-// alert("Error updating yard details. Please try again.");
 });
 });
 
