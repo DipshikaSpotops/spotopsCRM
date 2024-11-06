@@ -2123,7 +2123,7 @@ $("body").removeClass("modal-active");
 
 // for auto-filling state,country
 $("#zipYard").on("keyup", function() {
-console.log("sipp")
+// console.log("sipp")
 const zipCode = $(this).val();
 if (zipCode.length === 5) {
 if (zipCode) {
@@ -2134,9 +2134,9 @@ const city = data.places[0]['place name'];
 const stateAbbr = data.places[0]['state abbreviation'];
 const country = data['country abbreviation'];
 // console.log("country",country);
-$("#city").val(city);
-$("#state").val(stateAbbr);
-$("#country").val(country); 
+$("#cityYard").val(city);
+$("#stateYard").val(stateAbbr);
+$("#countryYard").val(country); 
 })
 .catch(error => {
 console.error("Error fetching location data:", error);
