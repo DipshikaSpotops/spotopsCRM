@@ -660,7 +660,7 @@ const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
 if (!order) return res.status(404).send("Order not found");
 if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
 const yardInfo = order.additionalInfo[yardIndex];
-const updatedYardData = req.body; // Using req.body directly
+const updatedYardData = req.body; 
 console.log("updatedYardData", updatedYardData, "index", yardIndex);
 Object.assign(yardInfo, updatedYardData);
 order.additionalInfo[yardIndex] = yardInfo;
@@ -677,6 +677,7 @@ console.error("Error in PUT request:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+
 // to update card charged
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/paymentStatus", async (req, res) => {
   console.log("Updating payment status for yard");
