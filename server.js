@@ -643,8 +643,8 @@ order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refu
   }
 });
 // edit yard details
-app.put("/orders/:orderNo/editAdditionalInfo/:yardIndex", async (req, res) => {
-  console.log("editAdditionalInfo");
+app.put("/orders/:orderNo/additionalInfo/:yardIndex/editYardDetails", async (req, res) => {
+  console.log("Updating editAdditionalInfo");
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
   const date = new Date(centralTime);
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -660,8 +660,8 @@ app.put("/orders/:orderNo/editAdditionalInfo/:yardIndex", async (req, res) => {
     if (!order) return res.status(404).send("Order not found");
     if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
       const yardInfo = order.additionalInfo[yardIndex];
-      const { updatedYardData, orderStatus } = req.body;
-      console.log("updatedYardData",updatedYardData);
+      const { updatedYardData } = req.body;
+      console.log("updatedYardData",updatedYardData,"index",yardIndex);
       Object.assign(yardInfo, updatedYardData);
       order.additionalInfo[yardIndex] = yardInfo;
       const firstName = req.query.firstName;

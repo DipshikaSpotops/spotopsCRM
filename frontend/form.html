@@ -4119,23 +4119,26 @@ yardRating: $("#editYardRating").val(),
 phone: $("#editPhone").val(),
 editAlt: $("#editAltPhone").val(),
 address: $("#editAddress").val(),
+ext: $("#editExt").val(),
 email: $("#editEmail").val(),
 country: $("#editCountry").val(),
 city: $("#editCity").val(),
 state: $("#editState").val(),
 street: $("#editAddress").val(),
+zipcode: $("#editZip").val(),
 partPrice: $("#editPartPrice").val(),
 others: $("#editOthers").val(),
 warranty: $("#editWarr").val(),
 faxNo: $("#editFax").val(),
 shippingDetails: shippingDetails,
-status: $("#refund").val(),
+// status: $("#refund").val(),
+stockNo: $("#editStockNo").val(),
 paymentStatus: $("#editPaymentStatus").val(),
 refundedAmount: $("#editrefundAmount").val(),
 escalationCause: $("#esc").val(),
 escalationProcess: $("#escProcess").val(),
 };
-
+// console.log("status",$("#refund").val())
 const updateOrder = (url) => {
 return fetch(url, {
 method: "PUT",
@@ -4146,7 +4149,7 @@ body: JSON.stringify(updatedData),
 });
 };
 
-updateOrder(`https://www.spotops360.com/orders/${orderNo}/editAdditionalInfo/${yardIndex}?firstName=${firstName}`)
+updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}/editYardDetails?firstName=${firstName}`)
 .then((response) => {
 return response.json();
 })
