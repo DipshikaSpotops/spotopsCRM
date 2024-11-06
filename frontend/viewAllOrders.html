@@ -563,7 +563,7 @@ item.additionalInfo && item.additionalInfo.length > 0
 <td>${item.orderStatus}</td>
 <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
-<td class="actions">${actions}</td>
+<td>${actions}</td>
 <td>${item.email}</td>
 </tr>
 `);
@@ -678,7 +678,6 @@ console.error("Error fetching orders:", error);
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
-
 // Filter the entire allOrders dataset based on the search term
 const filteredOrders = allOrders.filter(order => {
 return (
