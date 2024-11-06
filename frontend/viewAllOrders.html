@@ -552,31 +552,14 @@ $("#infoTable").append(`
 <td>${item.salesAgent}</td>
 <td>${item.customerName}</td>
 <td>${item.pReq || item.partName}</td>
-<td>
-${
-  item.additionalInfo && item.additionalInfo.length > 0
-    ? `<table>
-         <tr>
-           <th>Yard</th>
-           <th>Yard Name</th>
-           <th>Email</th>
-           <>Phone</
-         ${item.additionalInfo
-           .map(
-             (info, index) => `
-             <tr>
-               <td>Yard ${index + 1}</td>
-               <td>${info.yardName || ""}</td>
-               <td>${info.email || ""}</td>
-               <td>${info.phone || ""}</td>
-               <td>${info.status || ""}</td>
-             </tr>`
-           )
-           .join("")}
-       </table>`
-    : ""
-}
-</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => `<b>Yard ${index + 1}</b>:<br> ${info.yardName}<br>${info.email}<br>${info.phone}<br>${info.status}`)
+
+.join("<br>")
+: ""
+}</td>
 <td>${item.orderStatus}</td>
 <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
