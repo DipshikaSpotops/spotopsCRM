@@ -4146,7 +4146,7 @@ body: JSON.stringify(updatedData),
 });
 };
 
-updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`)
+updateOrder(`https://www.spotops360.com/orders/${orderNo}/editAdditionalInfo/${yardIndex}?firstName=${firstName}`)
 .then((response) => {
 return response.json();
 })
