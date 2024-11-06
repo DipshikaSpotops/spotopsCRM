@@ -643,7 +643,7 @@ order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refu
   }
 });
 // edit yard details
-app.put("/orders/:orderNo/additionalInfo/:yardIndex/editYardDetails", async (req, res) => {
+app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
 console.log("Updating editAdditionalInfo");
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 const date = new Date(centralTime);
