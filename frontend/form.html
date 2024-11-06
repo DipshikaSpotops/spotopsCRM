@@ -1196,7 +1196,7 @@ style="margin-right: 94px;margin-top: -9px;"
 <input type="text" class="form-control" id="phoneYard" placeholder="Phone Number" required>
 </div>
 <div class="form-group col-md-4">
-<input type="text" class="form-control" id="altPhone" placeholder="Alt. Phone Number" />
+<input type="text" class="form-control" id="altPhoneYard" placeholder="Alt. Phone Number" />
 </div>
 <div class="form-group col-md-4">
 <input type="number" class="form-control" id="ext" placeholder="Extension">
@@ -1204,24 +1204,24 @@ style="margin-right: 94px;margin-top: -9px;"
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
-<input type="email" class="form-control" id="email" placeholder="Email Id">
+<input type="email" class="form-control" id="emailYard" placeholder="Email Id">
 </div>
 <div class="form-group col-md-4">
-<input type="number" class="form-control" id="faxNo" placeholder="Enter Fax No." >
+<input type="number" class="form-control" id="faxNoYard" placeholder="Enter Fax No." >
 </div>
 </div>
 <div class="form-row" style="margin: 4% 10% 1% 10%;width: 88%;">
 <div class="form-group col-md-4">
-<input type="text" class="form-control" id="address" placeholder="Street Address" required>
+<input type="text" class="form-control" id="addressYard" placeholder="Street Address" required>
 </div>
 <div class="form-group col-md-4">
-<input type="text" class="form-control" id="city" placeholder="Enter City" required>
+<input type="text" class="form-control" id="cityYard" placeholder="Enter City" required>
 </div>
 <!-- <div class="form-group col-md-4">
 <input type="text" class="form-control" id="state" placeholder="Enter State" required>
 </div> -->
 <div class="form-group col-md-4">
-<select class="form-control" id="state" required>
+<select class="form-control" id="stateYard" required>
 <option value="">Select State/Province</option>
 <!-- United States States -->
 <option value="AL">Alabama</option>
@@ -1296,14 +1296,14 @@ style="margin-right: 94px;margin-top: -9px;"
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
-<select class="form-control" id="country">
+<select class="form-control" id="countryYard">
 <option selected>Select Country</option>
 <option value="US">US</option>
 <option value="Canada">Canada</option>
 </select>
 </div>
 <div class="form-group col-md-4">
-<input type="text" class="form-control" id="zip" placeholder="Enter Zipcode" required>
+<input type="text" class="form-control" id="zipYard" placeholder="Enter Zipcode" required>
 </div>
 </div>
 <div class="form-row addNewId">
@@ -3582,10 +3582,10 @@ $("#yardName"),
 $("#agentName"),
 $("#yardRating"),
 $("#phoneYard"),
-$("#address"),
-$("#city"),
-$("#state"),
-$("#zip"),
+$("#addressYard"),
+$("#cityYard"),
+$("#stateYard"),
+$("#zipYard"),
 $("#partPrice")
 ];
 
@@ -3645,23 +3645,24 @@ const data222 = {
 yardName: $("#yardName").val(),
 agentName: $("#agentName").val(),
 yardRating: $("#yardRating").val(),
-phone: $("#phone").val(),
-altPhone: $("#altPhone").val(),
+phone: $("#phoneYard").val(),
+altPhone: $("#altPhoneYard").val(),
 ext: $('#ext').val(),
-email: $("#email").val(),
-street: $("#address").val(),
-city: $("#city").val(),
-state: $("#state").val(),
-zipcode: $("#zip").val(),
-address: $("#address").val() + " " + $("#city").val() + " " + $("#state").val() + " " + $("#zip").val(),
-country: $("#country").val(),
+email: $("#emailYard").val(),
+street: $("#addressYard").val(),
+city: $("#cityYard").val(),
+state: $("#stateYard").val(),
+zipcode: $("#zipYard").val(),
+address: $("#addressYard").val() + " " + $("#cityYard").val() + " " + $("#stateYard").val() + " " + $("#zipYard").val(),
+country: $("#countryYard").val(),
 partPrice: $("#partPrice").val(),
 status: "Yard located",
 shippingDetails: `${$("#ownShipping").val() ? `Own shipping: ${$("#ownShipping").val()}` : ""} ${$("#yardShipping").val() ? `Yard shipping: ${$("#yardShipping").val()}` : ""}`.trim(),
 // shippingDetails: $("#ownShipping").val() ? `Own shipping: ${$("#ownShipping").val()}` : `Yard shipping: ${$("#yardShipping").val()}`,
 others: $("#others").val(),
-faxNo: $('#faxNo').val(),
-warranty: $("#warr").val()
+faxNo: $('#faxNoYard').val(),
+warranty: $("#warr").val(),
+stockNo: $("#stockNo").val(),
 };
 
 fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo?firstname=${firstName}`, {
