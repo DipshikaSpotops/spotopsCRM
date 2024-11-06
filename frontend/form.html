@@ -4622,7 +4622,7 @@ $('#custReason').on('change', function () {
       // Disable all inputs and selects inside #replacementColumns, except #custReason
       $('#replacementColumns')
         .find('input, select')
-        .not('#custReason')
+        .not('#custReaso,#yardShippingStatus,#yardShippingMethod,#yardShipper,#yardTrackingNumber')
         .prop('disabled', true);
     } else {
       // Enable all inputs and selects inside #replacementColumns when other values are selected

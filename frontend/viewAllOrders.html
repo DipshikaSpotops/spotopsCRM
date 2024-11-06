@@ -547,17 +547,17 @@ const yardlength = item.additionalInfo.length;
 
 $("#infoTable").append(`
 <tr>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
-<td>${item.pReq || item.partName}</td>
-<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-<td>${item.orderStatus}</td>
-<td>${item.actualGP || ""}</td>
-<td ${escalationStyle}>${escalationStatus}</td>
-<td class="actions">${actions}</td>
-<td>${item.email}</td>
+  <td>${item.orderDate}</td>
+  <td>${item.orderNo}</td>
+  <td>${item.salesAgent}</td>
+  <td>${item.customerName}</td>
+  <td>${item.pReq || item.partName}</td>
+  <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map(info => info.yardName).join(", ") : ""}</td>
+  <td>${item.orderStatus}</td>
+  <td>${item.actualGP || ""}</td>
+  <td ${escalationStyle}>${escalationStatus}</td>
+  <td class="actions">${actions}</td>
+  <td>${item.email}</td>
 </tr>
 `);
 });
