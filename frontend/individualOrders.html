@@ -715,6 +715,7 @@ $(this).addClass("active");
 });
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
+$("#showTotalOrders").hide();
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");    
   $("#loadingMessage").show();
