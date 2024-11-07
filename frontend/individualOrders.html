@@ -494,46 +494,44 @@ sortedData = sortOrdersByOrderNoDesc(filteredData);
   }
 
   // Function to render table rows based on page
-  function renderTableRows(page, data = sortedData) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = data.slice(start, end);
-
-    $("#infoTable").empty();  // Clear the table
-    ordersForPage.forEach((item) => {
-      var yardOSorYS = item.shippingDetails || '';
-var shippingValueYard = 0;  
-if (yardOSorYS.includes("Own shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
-// console.log("own ship", shippingValueYard);
-} else if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-// console.log("yard ship", shippingValueYard);
-}
-      $("#infoTable").append(`
-        <tr>
-          <td>${item.orderDate}</td>
-          <td>${item.orderNo}</td>
-          <td>${item.customerName}</td>
-          <td>${item.pReq || item.partName}</td>
-          <td>$${item.soldP}</td>
-          <td>$${item.soldP} | $${item.salestax} | $${item.costP} | $${item.shippingFee} | $${item.grossProfit}</td>
-          <td>${
+function renderTableRows(page, data = sortedData) {
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = data.slice(start, end);
+$("#infoTable").empty();  // Clear the table
+ordersForPage.forEach((item) => {
+$("#infoTable").append(`
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
+<td>$${item.soldP}</td>
+<td>$${item.soldP} | $${item.salestax} | $${item.costP} | $${item.shippingFee} | $${item.grossProfit}</td>
+<td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>: ${info.yardName}<br>${info.shippingDetails}<br>${info.others}<br>${info.redundedAmount}<br>${info.status
+.map((info, index) => `<b>Yard ${index + 1}</b>: ${info.partPrice}<br>| ${info.shippingDetails} <br>${info.redundedAmount}<br>${info.others
 
 }`)
-
 .join("<br>")
 : ""
 }</td>
-<td>${item.soldP + shippingValueYard + item.others}</td>
-          <td>$${item.actualGP || 0}</td>
-          <td>${item.orderStatus}</td>
-        </tr>
-      `);
-    });
+<td>${
+  item.additionalInfo && item.additionalInfo.length > 0
+    ? item.additionalInfo
+        .map((info) => {
+          const shippingCost = info.shippingDetails.match(/\d+/)?.[0] || "0"; 
+          return `${info.partPrice} + ${shippingCost} + ${info.others} + ${info.redundedAmount}`;
+        })
+        .join("<br>")
+    : ""
+}</td>
+<td>$${item.actualGP || 0}</td>
+<td>${item.orderStatus}</td>
+</tr>
+`);
+});
   }
 
   // Pagination function
