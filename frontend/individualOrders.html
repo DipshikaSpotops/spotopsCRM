@@ -511,21 +511,31 @@ $("#infoTable").append(`
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>: ${info.partPrice}<br>| ${info.shippingDetails} <br>${info.redundedAmount}<br>${info.others
+.map((info, index) => {
+const partPrice = info.partPrice ? `${info.partPrice}<br>` : "";
+const shippingCost = info.shippingDetails ? `| ${info.shippingDetails.match(/\d+/)?.[0]}<br>` : "";
+const refundedAmount = info.redundedAmount ? `${info.redundedAmount}<br>` : "";
+const others = info.others ? `${info.others}<br>` : "";
 
-}`)
+return `<b>Yard ${index + 1}</b>: PP: ${partPrice} Shipping: ${shippingCost}<br>Others: ${others} Refunded Amount${refundedAmount}<br> Status: ${info.status || ""}`;
+})
 .join("<br>")
 : ""
 }</td>
 <td>${
-  item.additionalInfo && item.additionalInfo.length > 0
-    ? item.additionalInfo
-        .map((info) => {
-          const shippingCost = info.shippingDetails.match(/\d+/)?.[0] || "0"; 
-          return `${info.partPrice} + ${shippingCost} + ${info.others} + ${info.redundedAmount}`;
-        })
-        .join("<br>")
-    : ""
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info) => {
+const shippingCost = parseFloat(info.shippingDetails.match(/[\d.]+/)?.[0] || "0");
+const partPrice = parseFloat(info.partPrice || "0");
+const others = parseFloat(info.others || "0");
+const refundedAmount = parseFloat(info.redundedAmount || "0");
+const total = (partPrice + shippingCost + others + refundedAmount).toFixed(2);
+
+return `${partPrice || ""} + ${shippingCost} + ${others} + ${refundedAmount} = <b>${total}</b>`;
+})
+.join("<br>")
+: ""
 }</td>
 <td>$${item.actualGP || 0}</td>
 <td>${item.orderStatus}</td>
