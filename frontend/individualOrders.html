@@ -703,6 +703,7 @@ $("#filterButton").click(async function () {
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");    
 $("#loadingMessage").show();
+console.log("fn",firstName);
 var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
 const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
