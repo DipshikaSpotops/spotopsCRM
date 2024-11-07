@@ -686,6 +686,13 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const day = date.getDate();
 const month = months[date.getMonth()];
 const year = date.getFullYear();
+    const monthMap = {
+        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+        May: "05", Jun: "06", Jul: "07", Aug: "08",
+        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+    };
+    console.log(monthMap[month]);
+
 $("#monthYearPicker").val(`${year}-${month}`);
 //orders for the current month
 try {
