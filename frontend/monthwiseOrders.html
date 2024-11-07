@@ -580,8 +580,10 @@ $("#infoTable").append(`
 <td>${item.customerName}<br>
     ${item.sAddress}
     </td>
-<td>Part required: ${item.pReq || item.partName}
-    Year: ${item.year} Make: ${item.make} Model: ${item.model}</td>
+<td>Part required: ${item.pReq || item.partName}<br>
+    Year: ${item.year} Make: ${item.make} Model: ${item.model}<br>
+    Stock No : ${item.stockNo}
+    </td>
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
