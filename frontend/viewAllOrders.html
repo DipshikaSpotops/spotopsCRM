@@ -641,12 +641,13 @@ token = localStorage.getItem("token");
 
 // Fetch orders and apply pagination
 try {
-  const ordersResponse = await axios.get("https://www.spotops360.com/orders", {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
+const [ordersResponse] = await Promise.all([
+axios.get("https://www.spotops360.com/orders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+})
+]);
 
-
-if (ordersResponse.status !== 200) {
+if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 
