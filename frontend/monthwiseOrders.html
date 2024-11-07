@@ -742,7 +742,7 @@ $("#searchInput").on("keyup", function () {
       (order.model && order.model.toLowerCase().includes(value)) ||
       (order.email && order.email.toLowerCase().includes(value))
     );
-
+console.log("basicS",basicSearch);
     // Check if any yard matches the search term
     const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
       const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
@@ -754,7 +754,7 @@ $("#searchInput").on("keyup", function () {
         (info.status && info.status.toLowerCase().includes(value))
       );
     });
-
+console.log("yard",yardSearch)
     // Return true if any of the basic fields or yard details match the search term
     return basicSearch || yardSearch;
   });
