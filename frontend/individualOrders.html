@@ -271,6 +271,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
+<div id="showTotalOrders"></div>
 <table class="table table-bordered">
 <thead>
 <tr>
@@ -547,6 +548,7 @@ throw new Error("Failed to fetch orders");
 
 var data = response.data;
 const filteredData = data;
+$("#showTotalOrders").val(filteredData.length);
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
