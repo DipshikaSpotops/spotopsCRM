@@ -365,6 +365,17 @@ app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
 res.json(orders);
 });
+// for only placed orders
+app.get("/orders/placed", async (req, res) => {
+  try {
+    // Query the database for orders with orderStatus "Placed"
+    const placedOrders = await Order.find({ orderStatus: "Placed" });
+    res.json(placedOrders);
+  } catch (error) {
+    console.error("Error fetching placed orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 
 app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });

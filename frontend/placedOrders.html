@@ -600,12 +600,10 @@ $(this).addClass("active");
 });
 
 try {
-const response = await axios.get(
-"https://www.spotops360.com/orders?status=Placed",
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
+    const response = await axios.get("https://www.spotops360.com/orders/placed", {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
+
 
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
