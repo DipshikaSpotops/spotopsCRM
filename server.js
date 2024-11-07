@@ -413,21 +413,24 @@ app.get("/orders/current-month", async (req, res) => {
   try {
     const dallasDate = moment().tz("America/Chicago");
     const currentYear = dallasDate.year();
-    const currentMonth = dallasDate.month(); 
-    console.log("monthly orders",currentMonth);
+    const currentMonth = dallasDate.format("MMM"); // "Jan", "Feb", etc.
+
+    // Construct a regex to match dates in the format "4th Nov, 2024 12:16" with the current month and year
+    const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${currentMonth},\\s${currentYear}\\b`, 'i');
+
+    // Find orders with `orderDate` matching the current month and year
     const monthlyOrders = await Order.find({
       orderDate: {
-        $gte: new Date(currentYear, currentMonth, 1),
-        $lt: new Date(currentYear, currentMonth + 1, 1),
+        $regex: monthYearPattern,
       },
     });
+
     res.json(monthlyOrders);
   } catch (error) {
     console.error("Error fetching current month's orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
-
 
 app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
