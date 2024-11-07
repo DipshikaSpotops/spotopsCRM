@@ -730,7 +730,7 @@ $("#searchInput").on("keyup", function () {
   
   // Filter the entire allOrders dataset based on the search term
   const filteredOrders = allOrders.filter(order => {
-    // Check basic fields
+    // Check basic fields including phone, make, year, and model
     const basicSearch = (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
       (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
@@ -738,17 +738,22 @@ $("#searchInput").on("keyup", function () {
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
       (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.email && order.email.toLowerCase().includes(value))
+      (order.email && order.email.toLowerCase().includes(value)) ||
+      (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
+      (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
+      (order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
+      (order.model && order.model.toLowerCase().includes(value))     // Added model
     );
 
-    // Check if any yard matches the search term
+    // Check if any yard detail (including stockNo) matches the search term
     const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
       const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
       return (
         yardLabel.includes(value) || 
         (info.yardName && info.yardName.toLowerCase().includes(value)) || 
         (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-        (info.status && info.status.toLowerCase().includes(value))
+        (info.status && info.status.toLowerCase().includes(value)) ||
+        (info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
       );
     });
 
@@ -765,6 +770,7 @@ $("#searchInput").on("keyup", function () {
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
   }
 });
+
 
 
 // Sort orders by Order No in descending order
