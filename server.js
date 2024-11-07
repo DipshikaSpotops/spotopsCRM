@@ -400,7 +400,6 @@ app.get("/orders/yardProcessing", async (req, res) => {
 // for in Transit
 app.get("/orders/inTransit", async (req, res) => {
   try {
-    // Query the database for orders with orderStatus "Placed"
     const placedOrders = await Order.find({ orderStatus: "In Transit" });
     res.json(placedOrders);
   } catch (error) {
@@ -411,8 +410,7 @@ app.get("/orders/inTransit", async (req, res) => {
 // for cancelled
 app.get("/orders/cancelled", async (req, res) => {
   try {
-    // Query the database for orders with orderStatus "Placed"
-    const placedOrders = await Order.find({ orderStatus: "In Transit" });
+    const placedOrders = await Order.find({ orderStatus: "Order Cancelled" });
     res.json(placedOrders);
   } catch (error) {
     console.error("Error fetching placed orders:", error);
