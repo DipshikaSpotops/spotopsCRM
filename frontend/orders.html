@@ -279,7 +279,7 @@ aria-labelledby="userMenu"
 <a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
 <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
 <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a>
-<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">Monthly Orders</a>
+<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
 <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
 <a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
 <!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
@@ -671,24 +671,25 @@ token = localStorage.getItem("token");
 
 // Fetch orders and apply pagination
 try {
-    const ordersResponse = await axios.get("https://www.spotops360.com/orders/current-month", {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
-
-  if (ordersResponse.status !== 200) {
-    throw new Error("Failed to fetch current month's orders");
-  }
-
-  allOrders = ordersResponse.data;    
+// Fetch orders and cancelled orders from the API
+const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+axios.get("https://www.spotops360.com/orders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}),
+axios.get("https://www.spotops360.com/cancelledOrders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}),
+]);
 
 // Check if both fetch requests were successful
-if (ordersResponse.status !== 200 ) {
+if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 
 // Combine orders and cancelled orders
 var orders = ordersResponse.data;
-allOrders = [...orders];
+var cancelledOrders = cancelledOrdersResponse.data;
+allOrders = [...orders, ...cancelledOrders];
 
 // Filter out orders that have statuses "Placed", "Customer approved", or "Order Fulfilled"
 filteredOrders = allOrders.filter(item => {
