@@ -654,7 +654,7 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 var orders = ordersResponse.data;
-allOrders = [...orders];
+allOrders = orders;
 filteredOrders = allOrders.filter(item => {
 return (item.orderStatus === "Order Cancelled");
 });
