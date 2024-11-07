@@ -641,7 +641,7 @@ token = localStorage.getItem("token");
 
 // Fetch orders and apply pagination
 try {
-const [ordersResponse] = await Promise.all([
+const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
 axios.get("https://www.spotops360.com/orders", {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 }),
