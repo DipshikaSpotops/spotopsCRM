@@ -548,7 +548,9 @@ throw new Error("Failed to fetch orders");
 
 var data = response.data;
 const filteredData = data;
-$("#showTotalOrders").val(filteredData.length);
+var totalOrders = filteredData.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
