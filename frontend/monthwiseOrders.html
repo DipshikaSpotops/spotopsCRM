@@ -379,7 +379,7 @@ placeholder="Search..."
         <button id="filterButton" class="btn btn-primary">Filter</button>
     </div>
 
-            <div id="loadingMessage" style="display: none;">Loading, please wait...</div>
+            <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
      
       
 <table class="table table-bordered mt-4">
@@ -686,6 +686,7 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const day = date.getDate();
 const month = months[date.getMonth()];
 const year = date.getFullYear();
+$("#monthYearPicker").val(`${year}-${month}`);
 //orders for the current month
 try {
   const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
