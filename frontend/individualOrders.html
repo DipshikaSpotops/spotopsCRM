@@ -512,12 +512,15 @@ $("#infoTable").append(`
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
 .map((info, index) => {
-const partPrice = info.partPrice ? `${info.partPrice}<br>` : "";
-const shippingCost = info.shippingDetails ? `| ${info.shippingDetails.match(/\d+/)?.[0]}<br>` : "";
-const refundedAmount = info.redundedAmount ? `${info.redundedAmount}<br>` : "";
-const others = info.others ? `${info.others}<br>` : "";
+const partPrice = info.partPrice ? `PP: ${info.partPrice}<br>` : "";
+const shippingCost = info.shippingDetails && info.shippingDetails.match(/[\d.]+/) 
+? `Shipping: ${info.shippingDetails.match(/[\d.]+/)[0]}<br>` 
+: "";
+const refundedAmount = info.redundedAmount ? `Refunded Amount: ${info.redundedAmount}<br>` : "";
+const others = info.others ? `Others: ${info.others}<br>` : "";
+const status = info.status ? `Status: ${info.status}` : "";
 
-return `<b>Yard ${index + 1}</b>: PP: ${partPrice} Shipping: ${shippingCost}<br>Others: ${others} Refunded Amount${refundedAmount}<br> Status: ${info.status || ""}`;
+return `<b>Yard ${index + 1}</b>:<br> ${partPrice}${shippingCost}${others}${refundedAmount}${status}`;
 })
 .join("<br>")
 : ""
@@ -531,8 +534,7 @@ const partPrice = parseFloat(info.partPrice || "0");
 const others = parseFloat(info.others || "0");
 const refundedAmount = parseFloat(info.redundedAmount || "0");
 const total = (partPrice + shippingCost + others + refundedAmount).toFixed(2);
-
-return `${partPrice || ""} + ${shippingCost} + ${others} + ${refundedAmount} = <b>${total}</b>`;
+return `$${total}`;
 })
 .join("<br>")
 : ""
