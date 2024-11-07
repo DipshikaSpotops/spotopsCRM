@@ -386,12 +386,35 @@ app.get("/orders/customerApproved", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+// for yardProcessing
+app.get("/orders/yardProcessing", async (req, res) => {
+  try {
+    // Query the database for orders with orderStatus "Placed"
+    const placedOrders = await Order.find({ orderStatus: "Yard Processing" });
+    res.json(placedOrders);
+  } catch (error) {
+    console.error("Error fetching placed orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+// for in Transit
+app.get("/orders/inTransit", async (req, res) => {
+  try {
+    // Query the database for orders with orderStatus "Placed"
+    const placedOrders = await Order.find({ orderStatus: "In Transit" });
+    res.json(placedOrders);
+  } catch (error) {
+    console.error("Error fetching placed orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 // monthly orders
 app.get("/orders/current-month", async (req, res) => {
   try {
     const dallasDate = moment().tz("America/Chicago");
     const currentYear = dallasDate.year();
     const currentMonth = dallasDate.month(); 
+    console.log("monthly orders",currentMonth);
     const monthlyOrders = await Order.find({
       orderDate: {
         $gte: new Date(currentYear, currentMonth, 1),
