@@ -686,7 +686,9 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const day = date.getDate();
 const month = months[date.getMonth()];
 const year = date.getFullYear();
-$("#monthYearPicker").val(`${year}-${month}`);
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const currentMonth = monthNames[month.getMonth()];
+$("#monthYearPicker").val(`${currentMonth}-${year}`);
 //orders for the current month
 try {
   const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
