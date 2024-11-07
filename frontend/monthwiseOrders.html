@@ -219,25 +219,22 @@ background-color: green;
 background-color: grey;
 color: white;
 }
-#loadingOverlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-background: rgba(255, 255, 255, 0.8); /* Light background with transparency */
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 1000; /* Ensure it's on top of all other content */
-backdrop-filter: blur(5px); /* Blur effect */
-}
-
 #loadingMessage {
 font-size: 1.5em;
 color: #333;
 }
-
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
+z-index: 999; /* Places it just below the modal div */
+}
+body.modal-active {
+overflow: hidden; /* Prevents background scrolling when modal is active */
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -865,6 +862,8 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
 $("#loadingOverlay").show();
 var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
 const [year, monthNumber] = monthYear.split("-");
@@ -885,6 +884,8 @@ console.error("Error fetching current month's orders:", error);
 } finally {
 // Hiding loading overlay regardless of success or error
 $("#loadingOverlay").hide();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 }
 });
 
