@@ -407,12 +407,22 @@ app.get("/orders/inTransit", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
+
 // for salespersonWise data
 app.get("/orders/salesPersonWise", async (req, res) => {
   var salesAgent = req.query.firstName;
+  const month = req.query.month;
+  const year = req.query.year;
   try {
-    const salesPersonOrders = await Order.find({ salesAgent: salesAgent });
-    res.json(salesPersonOrders);
+    const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+    const monthlySalesPersonOrders = await Order.find({
+      $and: [
+        { orderDate: { $regex: monthYearPattern } },
+        { salesAgent: salesAgent }
+      ]
+    });
+        res.json(monthlySalesPersonOrders);
   } catch (error) {
     console.error("Error fetching salesPersonOrders:", error);
     res.status(500).json({ message: "Server error", error });
