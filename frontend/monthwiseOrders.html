@@ -360,6 +360,9 @@ placeholder="Search..."
     <div class="filter-bar">
         <input id="monthYearPicker" type="month" class="form-control" />
         <button id="filterButton" class="btn btn-primary">Filter</button>
+        <div id="loadingSpinner" style="display: none; margin-top: 10px;">
+            Loading, please wait...
+        </div>
       </div>
       
 <table class="table table-bordered mt-4">
@@ -843,26 +846,29 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
+$("#loadingSpinner").show();
 var monthYear = $("#monthYearPicker").val(); // coming like 2024-10 
 const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
-console.log(`Year: ${year}`); 
-console.log(`Month: ${month}`); 
 try {
 const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
+
 if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
+
 allOrders = ordersResponse.data;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
+} finally {
+$("#loadingSpinner").hide();
 }
-})
+});
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
