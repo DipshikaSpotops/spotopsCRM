@@ -411,7 +411,6 @@ app.get("/orders/inTransit", async (req, res) => {
 app.get("/orders/salesPersonWise", async (req, res) => {
   var salesAgent = req.query.firstName;
   try {
-    // Query the database for orders with orderStatus "Placed"
     const salesPersonOrders = await Order.find({ salesAgent: salesAgent });
     res.json(salesPersonOrders);
   } catch (error) {
