@@ -539,7 +539,7 @@ return `$${total}`;
 .join("<br>")
 : ""
 }</td>
-<td>$${item.actualGP || 0}</td>
+<td>$${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
 <td>${item.orderStatus}</td>
 </tr>
 `);
