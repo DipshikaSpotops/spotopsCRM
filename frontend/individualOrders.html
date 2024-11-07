@@ -176,7 +176,7 @@ align-items: center;
 gap: 10px;
 margin-bottom: 10px;
 width: 8%;
-margin: 0% 4%;
+margin: 1% 4%;
 }
 .filter-bar button {
 margin-left: 10px;
@@ -708,7 +708,7 @@ const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/salesPersonWise?firstName=${firstName}&month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {
