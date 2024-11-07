@@ -737,12 +737,9 @@ $("#searchInput").on("keyup", function () {
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
       (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.year) ||
-      (order.make && order.make.toLowerCase().includes(value)) ||
-      (order.model && order.model.toLowerCase().includes(value)) ||
       (order.email && order.email.toLowerCase().includes(value))
     );
-console.log("basicS",basicSearch);
+
     // Check if any yard matches the search term
     const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
       const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
@@ -750,11 +747,10 @@ console.log("basicS",basicSearch);
         yardLabel.includes(value) || 
         (info.yardName && info.yardName.toLowerCase().includes(value)) || 
         (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-        (info.stockNo && info.stockNo.toLowerCase().includes(value)) ||
         (info.status && info.status.toLowerCase().includes(value))
       );
     });
-console.log("yard",yardSearch)
+
     // Return true if any of the basic fields or yard details match the search term
     return basicSearch || yardSearch;
   });
