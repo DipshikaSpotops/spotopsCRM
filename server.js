@@ -379,10 +379,10 @@ app.get("/orders/placed", async (req, res) => {
 app.get("/orders/customerApproved", async (req, res) => {
   try {
     // Query the database for orders with orderStatus "Placed"
-    const placedOrders = await Order.find({ orderStatus: "Customer approved" });
-    res.json(placedOrders);
+    const customerApprovedOrders = await Order.find({ orderStatus: "Customer approved" });
+    res.json(customerApprovedOrders);
   } catch (error) {
-    console.error("Error fetching placed orders:", error);
+    console.error("Error fetching customerApprovedOrders orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
@@ -390,20 +390,32 @@ app.get("/orders/customerApproved", async (req, res) => {
 app.get("/orders/yardProcessing", async (req, res) => {
   try {
     // Query the database for orders with orderStatus "Placed"
-    const placedOrders = await Order.find({ orderStatus: "Yard Processing" });
-    res.json(placedOrders);
+    const yardProcessingOrders = await Order.find({ orderStatus: "Yard Processing" });
+    res.json(yardProcessingOrders);
   } catch (error) {
-    console.error("Error fetching placed orders:", error);
+    console.error("Error fetching yardProcessingOrders orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
 // for in Transit
 app.get("/orders/inTransit", async (req, res) => {
   try {
-    const placedOrders = await Order.find({ orderStatus: "In Transit" });
-    res.json(placedOrders);
+    const inTransitOrders = await Order.find({ orderStatus: "In Transit" });
+    res.json(inTransitOrders);
   } catch (error) {
-    console.error("Error fetching placed orders:", error);
+    console.error("Error fetching inTransitOrders orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+// for salespersonWise data
+app.get("/orders/salesPersonWise", async (req, res) => {
+  var salesAgent = req.query.firstName;
+  try {
+    // Query the database for orders with orderStatus "Placed"
+    const salesPersonOrders = await Order.find({ salesAgent: salesAgent });
+    res.json(salesPersonOrders);
+  } catch (error) {
+    console.error("Error fetching salesPersonOrders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });

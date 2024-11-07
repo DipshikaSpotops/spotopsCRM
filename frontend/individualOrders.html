@@ -473,16 +473,17 @@ $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orde
 
 // Fetch orders specific to the logged-in salesperson
 try {
-const response = await axios.get("https://www.spotops360.com/orders", {
-headers: { Authorization: `Bearer ${token}` },
+  const response = await axios.get(`https://www.spotops360.com/orders/salesPersonWise?firstname=${firstName}`, {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
+
 
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 
-const data = response.data;
-const filteredData = data.filter(order => order.salesAgent === firstName);
+var data = response.data;
+const filteredData = data;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
     renderTableRows(currentPage, sortedData); 
