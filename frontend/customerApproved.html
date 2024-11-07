@@ -493,12 +493,10 @@ $('#placed-order-content').removeClass('d-none');
 });
 
 try {
-const response = await axios.get(
-"https://www.spotops360.com/orders?status=placed",
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
+    const response = await axios.get("https://www.spotops360.com/orders/customerApproved", {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
+
 
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
