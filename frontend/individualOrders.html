@@ -551,7 +551,7 @@ sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
 
-createPaginationControls(Math.ceil(sortedData.length / rowsPerPage)); // Setup pagination controls
+createPaginationControls(Math.ceil(sortedData.length / rowsPerPage)); 
 } catch (error) {
 console.error("Error fetching orders:", error);
 }
@@ -700,33 +700,41 @@ $(this).addClass("active");
 });
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
-console.log("fn",firstName);
-var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/salesPersonWise?firstName=${firstName}&month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");    
+  $("#loadingMessage").show();
+
+  const monthYear = $("#monthYearPicker").val(); // format like 2024-10 
+  const [year, monthNumber] = monthYear.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+
+  try {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/salesPersonWise?firstName=${firstName}&month=${month}&year=${year}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch orders");
+    }
+
+    // Update both allOrders and sortedData with the new filtered data
+    allOrders = ordersResponse.data;
+    sortedData = sortOrdersByOrderNoDesc(allOrders); // Sort the fetched data if needed
+
+    // Render the new filtered data
+    renderTableRows(1, sortedData);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+    
+  } catch (error) {
+    console.error("Error fetching filtered orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
+
 $('#logoutLink').on('click', function() {
 window.localStorage.clear();
 window.location.href = 'login_signup.html';
