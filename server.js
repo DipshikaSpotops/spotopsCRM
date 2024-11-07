@@ -408,6 +408,17 @@ app.get("/orders/inTransit", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+// for cancelled
+app.get("/orders/cancelled", async (req, res) => {
+  try {
+    // Query the database for orders with orderStatus "Placed"
+    const placedOrders = await Order.find({ orderStatus: "In Transit" });
+    res.json(placedOrders);
+  } catch (error) {
+    console.error("Error fetching placed orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 // monthly orders
 app.get("/orders/monthly", async (req, res) => {
   try {
