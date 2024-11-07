@@ -195,6 +195,15 @@ height: 100%;
 background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
 z-index: 999; /* Places it just below the modal div */
 }
+#showTotalOrders{
+border: 1px solid #c0c0c0;
+text-align: center;
+height: 4vh;
+width: 13%;
+border-radius: 8px;
+margin: 1% -3%;
+background-color:#3096a58f;
+}
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
 }
@@ -272,7 +281,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
-<div id="showTotalOrders">Total Orders-</div>
+<div id="showTotalOrders">Total Orders This Month-</div>
 </div>
 <table class="table table-bordered">
 <thead>
@@ -552,7 +561,7 @@ var data = response.data;
 const filteredData = data;
 var totalOrders = filteredData.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
