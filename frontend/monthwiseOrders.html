@@ -844,7 +844,7 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
 var monthYear = $("#monthYearPicker").val(); // coming like 2024-10 
-const [year, monthNumber] = dateString.split("-");
+const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 console.log(`Year: ${year}`); 
