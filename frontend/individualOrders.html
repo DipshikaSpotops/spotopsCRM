@@ -279,9 +279,9 @@ window.location.href = "login_signup.html";
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
-
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
 <div id="showTotalOrders">Total Orders This Month-</div>
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
+
 </div>
 <table class="table table-bordered">
 <thead>
@@ -715,7 +715,7 @@ $(this).addClass("active");
 });
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-$("#showTotalOrders").hide();
+// $("#showTotalOrders").hide();
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");    
   $("#loadingMessage").show();
