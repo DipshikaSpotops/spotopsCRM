@@ -736,7 +736,9 @@ $("#filterButton").click(async function () {
     // Update both allOrders and sortedData with the new filtered data
     allOrders = ordersResponse.data;
     sortedData = sortOrdersByOrderNoDesc(allOrders); // Sort the fetched data if needed
-
+    var totalOrders = allOrders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
     // Render the new filtered data
     renderTableRows(1, sortedData);
     createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
