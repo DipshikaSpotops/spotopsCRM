@@ -737,7 +737,7 @@ $("#searchInput").on("keyup", function () {
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
       (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.year && order.year.toLowerCase().includes(value)) ||
+      (order.year) ||
       (order.make && order.make.toLowerCase().includes(value)) ||
       (order.model && order.model.toLowerCase().includes(value)) ||
       (order.email && order.email.toLowerCase().includes(value))
