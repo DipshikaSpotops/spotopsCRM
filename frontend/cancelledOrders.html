@@ -645,25 +645,16 @@ token = localStorage.getItem("token");
 
 // Fetch orders and apply pagination
 try {
-// Fetch orders and cancelled orders from the API
-const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-axios.get("https://www.spotops360.com/orders", {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}),
-axios.get("https://www.spotops360.com/cancelledOrders", {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}),
-]);
+    const ordersResponse = await axios.get("https://www.spotops360.com/orders/cancelled", {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 
-// Check if both fetch requests were successful
-if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+
+if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
-
-// Combine orders and cancelled orders
 var orders = ordersResponse.data;
-var cancelledOrders = cancelledOrdersResponse.data;
-allOrders = [...orders, ...cancelledOrders];
+allOrders = [...orders];
 filteredOrders = allOrders.filter(item => {
 return (item.orderStatus === "Order Cancelled");
 });
