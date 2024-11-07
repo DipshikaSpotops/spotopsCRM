@@ -386,6 +386,25 @@ app.get("/orders/customerApproved", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+// monthly orders
+app.get("/orders/current-month", async (req, res) => {
+  try {
+    const dallasDate = moment().tz("America/Chicago");
+    const currentYear = dallasDate.year();
+    const currentMonth = dallasDate.month(); 
+    const monthlyOrders = await Order.find({
+      orderDate: {
+        $gte: new Date(currentYear, currentMonth, 1),
+        $lt: new Date(currentYear, currentMonth + 1, 1),
+      },
+    });
+    res.json(monthlyOrders);
+  } catch (error) {
+    console.error("Error fetching current month's orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 
 app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
