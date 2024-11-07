@@ -220,6 +220,7 @@ background-color: grey;
 color: white;
 }
 #loadingMessage {
+text-align: center;    
 font-size: 1.5em;
 color: #333;
 }
@@ -862,8 +863,8 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-// $("body").append('<div class="modal-overlay"></div>');
-// $("body").addClass("modal-active");    
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
 $("#loadingMessage").show();
 var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
 const [year, monthNumber] = monthYear.split("-");
@@ -883,9 +884,9 @@ createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 console.error("Error fetching current month's orders:", error);
 } finally {
 // Hiding loading overlay regardless of success or error
-// $("#loadingMessage").hide();
-// $(".modal-overlay").remove();
-// $("body").removeClass("modal-active");
+$("#loadingMessage").hide();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 }
 });
 
