@@ -642,7 +642,7 @@ token = localStorage.getItem("token");
 try {   const ordersResponse = await axios.get("https://www.spotops360.com/orders/fulfilled", {
   headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
-if (response.status !== 200) {
+if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 var orders = ordersResponse.data;
