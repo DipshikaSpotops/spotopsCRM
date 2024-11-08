@@ -611,30 +611,17 @@ token = localStorage.getItem("token");
 // Fetch orders and apply pagination
 // Fetch orders and apply pagination
 try {
-    const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-        axios.get("https://www.spotops360.com/orders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-        axios.get("https://www.spotops360.com/cancelledOrders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-    ]);
-
-    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-        throw new Error("Failed to fetch orders");
-    }
-
-    var orders = ordersResponse.data;
-    var cancelledOrders = cancelledOrdersResponse.data;
-    allOrders = [...orders, ...cancelledOrders];
-
+    const ordersResponse = await axios.get("https://www.spotops360.com/api/orders/ongoing-escalations", {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch orders");
+}
+var orders = ordersResponse.data;
+    allOrders = orders;
     // Now filter orders based on validStatuses and escalation right after fetching
     const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
-    let filteredOrders = allOrders.filter(order => {
-        const isValidOrderStatus = validStatuses.includes(order.orderStatus);
-        const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
-        return isValidOrderStatus && hasEscalation; // Only include orders meeting both conditions
-    });
+    let filteredOrders = ordersResponse;
 
     // Sort and render the filtered orders
     filteredOrders = sortOrdersByOrderNoDesc(filteredOrders); // Assuming you're sorting by order number

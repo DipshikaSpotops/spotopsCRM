@@ -433,7 +433,7 @@ app.get('/orders/escalated', async (req, res) => {
   }
 });
 // for ongoing escalation with escTicked(yes) and orderStatus to be either in Customer Aproved,Yard Processing,In Transit or Escalation
-router.get('/orders/ongoing-escalations', async (req, res) => {
+app.get('/orders/ongoing-escalations', async (req, res) => {
   try {
     const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
     const filteredOrders = await Order.find({
