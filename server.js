@@ -432,6 +432,20 @@ app.get('/orders/escalated', async (req, res) => {
     res.status(500).json({ error: "Failed to fetch escalated orders" });
   }
 });
+// for ongoing escalation with escTicked(yes) and orderStatus to be either in Customer Aproved,Yard Processing,In Transit or Escalation
+router.get('/orders/ongoing-escalations', async (req, res) => {
+  try {
+    const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
+    const filteredOrders = await Order.find({
+      orderStatus: { $in: validStatuses },
+      additionalInfo: { $elemMatch: { escTicked: "Yes" } }
+    });
+    res.status(200).json(filteredOrders);
+  } catch (error) {
+    console.error("Error fetching orders with ongoing escalations:", error);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+});
 // for salespersonWise data
 app.get("/orders/salesPersonWise", async (req, res) => {
   var salesAgent = req.query.firstName;

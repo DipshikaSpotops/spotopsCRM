@@ -467,7 +467,7 @@ let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
 
 if (type === "date") {
-valA = parseCustomDate(valA); // Use the helper function to parse the date
+valA = parseCustomDate(valA); 
 valB = parseCustomDate(valB);
 }else if (type === "number") {
 valA = parseInt(valA.replace(/\D/g, ""), 10);
@@ -484,16 +484,13 @@ return valA < valB ? 1 : -1;
 $.each(rows, function (index, row) {
 table.append(row);
 });
-
 // Toggle sort order
 sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
 // Update the sort icon
 updateSortIcons(column, sortOrder[type]);
 }
-
 function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$("th .sort-icon").html("&#9650;"); // Resetting all icons to ascending
 $("th").each(function (index) {
 if (index === columnIndex) {
 $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
@@ -541,13 +538,8 @@ let escalationStyle = '';
 if (item.orderStatus === "Order Fulfilled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
 escalationStyle = 'style="background-color: lightgreen;"';
 }
-const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 $("#infoTable").append(`
 <tr>
 <td>${item.orderDate}</td>
@@ -558,8 +550,7 @@ $("#infoTable").append(`
 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
 <td>${item.orderStatus}</td>
 <td ${escalationStyle}>${item.additionalInfo.some(yard => yard.escTicked === "Yes") ? 'Yes' : ''}</td>
-<td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
+<td>${actions}</td>
 <td>${item.email}</td>
 </tr>
 `);
@@ -620,30 +611,17 @@ token = localStorage.getItem("token");
 // Fetch orders and apply pagination
 // Fetch orders and apply pagination
 try {
-    const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-        axios.get("https://www.spotops360.com/orders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-        axios.get("https://www.spotops360.com/cancelledOrders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-    ]);
-
-    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-        throw new Error("Failed to fetch orders");
-    }
-
-    var orders = ordersResponse.data;
-    var cancelledOrders = cancelledOrdersResponse.data;
-    allOrders = [...orders, ...cancelledOrders];
-
+    const ordersResponse = await axios.get("https://www.spotops360.com/api/orders/ongoing-escalations", {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch orders");
+}
+var orders = ordersResponse.data;
+    allOrders = orders;
     // Now filter orders based on validStatuses and escalation right after fetching
     const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
-    let filteredOrders = allOrders.filter(order => {
-        const isValidOrderStatus = validStatuses.includes(order.orderStatus);
-        const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
-        return isValidOrderStatus && hasEscalation; // Only include orders meeting both conditions
-    });
+    let filteredOrders = ordersResponse,data;
 
     // Sort and render the filtered orders
     filteredOrders = sortOrdersByOrderNoDesc(filteredOrders); // Assuming you're sorting by order number
