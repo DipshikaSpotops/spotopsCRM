@@ -710,48 +710,7 @@ $("#myModal").hide();
 window.location.reload();
 });
 // function to display placed orders
-function renderOrders(item){
-    item.forEach(order => {
-    // Append data to the table with optional chaining and default values
-    $("#infoTable").append(
-      `<tr>
-        <td>
-          <button style="background-color: #cae8c9; border: none; color: #61a55e;" 
-                  class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">
-            Approve
-          </button>
-          <button style="background-color: #fcdfda; border: none; color: #72504a;" 
-                  class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
-            Cancel
-          </button>
-        </td>
-        <td>${item.orderDate || ''}</td>
-        <td>${item.orderNo || ''}</td>
-        <td>${item.salesAgent || ''}</td>
-        <td>
-          Name: ${item.customerName || ''}<br>
-          Email: ${item.email || ''}<br>
-          Phone: ${item.phone || ''}<br>
-          Alt Phone: ${item.altPhone || ''}<br>
-          Billing Address:<br> ${formattedBAddress}<br>
-        </td>
-        <td>${formattedSAddress}</td>
-        <td>${item.pReq || item.partName || ''}<br>
-            <b>Quoted Price:</b> $${item.soldP || 0}</td>
-        <td>
-          Year: ${item.year || ''}<br>
-          Make: ${item.make || ''}<br>
-          Model: ${item.model || ''}<br>
-          Part Description: ${item.desc || ''}<br>
-          VIN: ${item.vin || ''}<br>
-          Warranty: ${item.warranty || 0} days<br>
-        </td>
-        <td>${item.orderStatus || ''}</td>
-        <td>${item.email || ''}</td>
-      </tr>`
-    );
-    });
-}
+
 // $("#okButton").click(function () {
 //     // Hide the modal using Bootstrap's modal hide method
 //     $('#myModal').modal('hide');
@@ -860,7 +819,48 @@ console.error("Error updating order status:", error);
 });
 }
 });
-
+function renderOrders(item){
+    item.forEach(order => {
+    // Append data to the table with optional chaining and default values
+    $("#infoTable").append(
+      `<tr>
+        <td>
+          <button style="background-color: #cae8c9; border: none; color: #61a55e;" 
+                  class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">
+            Approve
+          </button>
+          <button style="background-color: #fcdfda; border: none; color: #72504a;" 
+                  class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
+            Cancel
+          </button>
+        </td>
+        <td>${item.orderDate || ''}</td>
+        <td>${item.orderNo || ''}</td>
+        <td>${item.salesAgent || ''}</td>
+        <td>
+          Name: ${item.customerName || ''}<br>
+          Email: ${item.email || ''}<br>
+          Phone: ${item.phone || ''}<br>
+          Alt Phone: ${item.altPhone || ''}<br>
+          Billing Address:<br> ${formattedBAddress}<br>
+        </td>
+        <td>${formattedSAddress}</td>
+        <td>${item.pReq || item.partName || ''}<br>
+            <b>Quoted Price:</b> $${item.soldP || 0}</td>
+        <td>
+          Year: ${item.year || ''}<br>
+          Make: ${item.make || ''}<br>
+          Model: ${item.model || ''}<br>
+          Part Description: ${item.desc || ''}<br>
+          VIN: ${item.vin || ''}<br>
+          Warranty: ${item.warranty || 0} days<br>
+        </td>
+        <td>${item.orderStatus || ''}</td>
+        <td>${item.email || ''}</td>
+      </tr>`
+    );
+    })
+}
 // Sorting orders by orderNo in descending order
 function sortOrdersByOrderNoDesc(orders) {
 console.log("sort in ascending order initially")  
