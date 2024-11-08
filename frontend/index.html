@@ -613,7 +613,7 @@ const response = await axios.get(`https://www.spotops360.com/orders/monthly?mont
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 const currentMonthOrders = response.data;
-console.log("Found daily orders:", orders);
+console.log("Found daily orders:", currentMonthOrders);
 
 if (!orders || !Array.isArray(orders)) {
 console.error("Invalid daily orders data.");
