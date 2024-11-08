@@ -369,7 +369,18 @@ res.json(orders);
 app.get("/orders/placed", async (req, res) => {
   try {
     // Query the database for orders with orderStatus "Placed"
-    const placedOrders = await Order.find({ orderStatus: "Placed" });
+    const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const placedOrders = await Order.find({
+  $and: [
+    { orderDate: { $regex: monthYearPattern } },
+    { orderStatus: "Placed" }
+  ]
+});
     res.json(placedOrders);
   } catch (error) {
     console.error("Error fetching placed orders:", error);
