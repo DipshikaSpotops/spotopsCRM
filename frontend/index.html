@@ -642,7 +642,7 @@ return new Date(year1, month1, day);
 const currentMonthOrders = orders.filter(order => {
 const orderDate = parseOrderDate(order.orderDate);
 return (
-orderDate.getFullYear() === currentYear &&
+orderDate.getFullYear() === year &&
 orderDate.getMonth() === currentMonth
 );
 });
