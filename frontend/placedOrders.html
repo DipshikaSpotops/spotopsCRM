@@ -691,7 +691,26 @@ data.forEach((item) => {
     const firstLineS = sParts.length > 1 ? `${sParts[0].trim()}, ${sParts[1].trim()}` : "";
     const secondLineS = sParts.length > 4 ? `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}` : "";
     const formattedSAddress = `${firstLineS}<br>${secondLineS}<br><b>Attention</b>: ${item.attention || ''}`;
+    renderOrders(item);
+//   }
+});
+} catch (error) {
+console.error("Error fetching orders:", error);
+}
 
+$("#infoTable").on("click", ".approve-btn", async function () {
+const orderNoRow = $(this).data("id");
+currentOrderNo = orderNoRow;    
+
+$("#myModal").modal("show");
+
+// On click of the OK button, reload the window
+$("#okButton").click(function () {
+$("#myModal").hide();
+window.location.reload();
+});
+// function to display placed orders
+function renderOrders(item){
     // Append data to the table with optional chaining and default values
     $("#infoTable").append(
       `<tr>
@@ -730,23 +749,7 @@ data.forEach((item) => {
         <td>${item.email || ''}</td>
       </tr>`
     );
-//   }
-});
-} catch (error) {
-console.error("Error fetching orders:", error);
 }
-
-$("#infoTable").on("click", ".approve-btn", async function () {
-const orderNoRow = $(this).data("id");
-currentOrderNo = orderNoRow;    
-
-$("#myModal").modal("show");
-
-// On click of the OK button, reload the window
-$("#okButton").click(function () {
-$("#myModal").hide();
-window.location.reload();
-});
 // $("#okButton").click(function () {
 //     // Hide the modal using Bootstrap's modal hide method
 //     $('#myModal').modal('hide');
@@ -882,6 +885,7 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
+renderOrders(allOrders);
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 } finally {
