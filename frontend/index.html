@@ -843,7 +843,7 @@ async function fetchMonthlySalesProgress() {
   try {
     console.log("Fetching monthly sales progress...");
 
-    // Set up the date to fetch orders starting from August (month 8 as 1-indexed) to the current month
+    // Set up the current date and format options
     const now = new Date();
     const options = {
       timeZone: 'America/Chicago',
@@ -860,15 +860,16 @@ async function fetchMonthlySalesProgress() {
     const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
     const date = new Date(formattedDate);
     const year = date.getFullYear();
-    
+
+    // Month mapping for string representation
     const monthMap = {
       Jan: "01", Feb: "02", Mar: "03", Apr: "04",
       May: "05", Jun: "06", Jul: "07", Aug: "08",
       Sep: "09", Oct: "10", Nov: "11", Dec: "12"
     };
 
-    // Define start month and current month as numbers
-    const startMonth = 8; // August (0-indexed as 7 in Date)
+    // Set start and end months (August to current month)
+    const startMonth = 8; // August (1-indexed as 8)
     const currentMonth = date.getMonth() + 1; // Adding 1 for 1-indexed format
 
     const monthlyData = {};
@@ -926,9 +927,6 @@ async function fetchMonthlySalesProgress() {
     console.error("Error fetching monthly sales progress:", error);
   }
 }
-
-// Call the function to render the chart
-fetchMonthlySalesProgress();
 
 // // Fetch salesperson performance
 // async function fetchSalespersonPerformance() {
