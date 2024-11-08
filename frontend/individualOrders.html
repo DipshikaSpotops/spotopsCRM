@@ -630,7 +630,7 @@ const paginationControls = $('#pagination-controls');
 paginationControls.empty();
 
 if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 }>Previous</button>`);
 
 for (let i = 1; i <= totalPages; i++) {
 paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
@@ -645,15 +645,15 @@ currentPage = $(this).data("page");
 renderTableRows(currentPage, sortedData);
 });
 
-// $('#pagination-controls').on('click', '#prevPage', function () {
-//   console.log("prev");
-// if (currentPage > 1) {
-// currentPage--;
-// renderTableRows(currentPage, sortedData);
-// }
-// });
-
 $('#pagination-controls').on('click', '#prevPage', function () {
+  console.log("prev");
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage, sortedData);
+}
+});
+
+$('#pagination-controls').on('click', '#nextPage', function () {
   console.log("next");
 if (currentPage < Math.ceil(sortedData.length / rowsPerPage)) {
 currentPage++;
