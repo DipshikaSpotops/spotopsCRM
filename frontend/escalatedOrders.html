@@ -546,13 +546,9 @@ escalationStyle = 'style="background-color: #d55900;color:white;"';
 else if (item.orderStatus === "Refunded" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
 escalationStyle = 'style="background-color: #5a3286;color:white;"';
 }
-const editButton = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 const actions = `
 ${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 $("#infoTable").append(`
 <tr>
 <td>${item.orderDate}</td>
@@ -563,8 +559,7 @@ $("#infoTable").append(`
 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
 <td>${item.orderStatus}</td>
 <td ${escalationStyle}>${item.additionalInfo.some(yard => yard.escTicked === "Yes") ? 'Yes' : ''}</td>
-<td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
+<td>${actions}</td>
 <td>${item.email}</td>
 </tr>
 `);
@@ -625,22 +620,16 @@ token = localStorage.getItem("token");
 // Fetch orders and apply pagination
 // Fetch orders and apply pagination
 try {
-    const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-        axios.get("https://www.spotops360.com/orders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-        axios.get("https://www.spotops360.com/cancelledOrders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }),
-    ]);
+     const ordersResponse = await axios.get("https://www.spotops360.com/orders", {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 
-    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-        throw new Error("Failed to fetch orders");
-    }
 
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch orders");
+}
     var orders = ordersResponse.data;
-    var cancelledOrders = cancelledOrdersResponse.data;
-    allOrders = [...orders, ...cancelledOrders];
+    allOrders = orders;
     let filteredOrders = allOrders.filter(order => {
         const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
         return hasEscalation;
@@ -691,68 +680,13 @@ const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
 return orderNoB - orderNoA;
 });
 }
-$("#infoTable").on("click", ".edit-btn", function () {
-const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}`;
-});
 
 $("#infoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-$("#infoTable").on("click", ".cancel-btn", function () {
-const id = $(this).data("id");
-console.log(`Cancel button clicked for order ID: ${id}`); 
-if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-$(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
-$(this).prop("disabled", true);
 
-// Send a request to update the order status in the backend
-fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
-method: "PUT",
-headers: {
-Authorization: `Bearer ${token}`,
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-firstName: firstName
-})
-})
-.then(response => {
-if (!response.ok) {
-console.error("Failed to update order status", response);
-throw new Error("Failed to update order status");
-}
-return response.json();
-})
-.then(data => {
-console.log("Order status updated successfully", data); // Added log
-alert("Order status updated to 'Order Cancelled'");
-})
-.catch(error => {
-console.error("Error updating order status:", error);
-});
-}
-});
-
-
-$("#infoTable").on("click", ".send-invoice-btn", function () {
-const id = $(this).data("id");
-fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-method: "POST",
-headers: {
-Authorization: `Bearer ${token}`
-},
-})
-.then((response) => response.json())
-.then((data) => {
-alert(data.message);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-});
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
