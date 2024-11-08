@@ -624,9 +624,10 @@ const dallasDate = new Date().toLocaleString("en-US", {
 timeZone: "America/Chicago"
 });
 
-console.log("current month","currentYear",year,month);
+console.log("current month","currentYear",year,month,monthNum);
+
 const daysInMonth = new Date(year, month + 1, 0).getDate();
-const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
+const labels = Array.from({ length: monthNum }, (_, i) => `${i + 1}`);
 const totalOrdersData = Array(daysInMonth).fill(0);
 const totalGPData = Array(daysInMonth).fill(0);
 function parseOrderDate(orderDate) {
