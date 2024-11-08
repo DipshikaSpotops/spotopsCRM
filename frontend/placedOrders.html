@@ -807,6 +807,7 @@ console.error("Error updating order status:", error);
 }
 });
 function renderOrders(item){
+    $("#infoTable").empty();
     console.log("rendering order",item);
     item.forEach(item => {
         var bAddress = item.bAddress || ""; // Default to an empty string if bAddress is undefined
