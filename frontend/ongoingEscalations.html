@@ -611,7 +611,7 @@ token = localStorage.getItem("token");
 // Fetch orders and apply pagination
 // Fetch orders and apply pagination
 try {
-    const ordersResponse = await axios.get("https://www.spotops360.com/api/orders/ongoing-escalations", {
+    const ordersResponse = await axios.get("https://www.spotops360.com/orders/ongoing-escalations", {
   headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {
@@ -622,9 +622,8 @@ var orders = ordersResponse.data;
     // Now filter orders based on validStatuses and escalation right after fetching
     const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
     let filteredOrders = ordersResponse.data;
-
     // Sort and render the filtered orders
-    filteredOrders = sortOrdersByOrderNoDesc(filteredOrders); // Assuming you're sorting by order number
+    filteredOrders = sortOrdersByOrderNoDesc(orders); // Assuming you're sorting by order number
     renderTableRows(currentPage, filteredOrders); // Render filtered orders on page load
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders); // Set pagination based on filtered orders
 
