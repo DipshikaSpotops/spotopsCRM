@@ -612,7 +612,7 @@ try {
 const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
-const orders = response.data;
+const currentMonthOrders = response.data;
 console.log("Found daily orders:", orders);
 
 if (!orders || !Array.isArray(orders)) {
@@ -631,21 +631,21 @@ console.log(`Days in ${month} ${year}:`, daysInMonth);
 const labels = Array.from({ length: monthNum }, (_, i) => `${i + 1}`);
 const totalOrdersData = Array(daysInMonth).fill(0);
 const totalGPData = Array(daysInMonth).fill(0);
-function parseOrderDate(orderDate) {
-const parts = orderDate.split(" ");
-const day = parseInt(parts[0]); 
-const month1 = new Date(`${parts[1]} 1`).getMonth(); 
-const year1 = parseInt(parts[2]);
-return new Date(year1, month1, day);
-}
+// function parseOrderDate(orderDate) {
+// const parts = orderDate.split(" ");
+// const day = parseInt(parts[0]); 
+// const month1 = new Date(`${parts[1]} 1`).getMonth(); 
+// const year1 = parseInt(parts[2]);
+// return new Date(year1, month1, day);
+// }
 // Filter orders for the current month and year
-const currentMonthOrders = orders.filter(order => {
-const orderDate = parseOrderDate(order.orderDate);
-return (
-orderDate.getFullYear() === year &&
-orderDate.getMonth() === month
-);
-});
+// const currentMonthOrders = orders.filter(order => {
+// const orderDate = parseOrderDate(order.orderDate);
+// return (
+// orderDate.getFullYear() === year &&
+// orderDate.getMonth() === month
+// );
+// });
 
 console.log("Current Month Orders:", currentMonthOrders);
 currentMonthOrders.forEach(order => {
