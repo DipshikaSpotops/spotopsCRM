@@ -714,7 +714,7 @@ try {
   var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(filteredData);
+sortedData = sortOrdersByOrderNoDesc(totalOrders);
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
