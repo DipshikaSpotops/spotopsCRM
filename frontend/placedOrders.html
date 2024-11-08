@@ -878,8 +878,6 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 } finally {
