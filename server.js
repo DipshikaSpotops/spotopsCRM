@@ -376,6 +376,7 @@ app.get("/orders/placed", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+// for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
   try {
     // Query the database for orders with orderStatus "Placed"
@@ -407,7 +408,18 @@ app.get("/orders/inTransit", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// for fulfilled
+// for only placed orders
+app.get("/orders/fulfilled", async (req, res) => {
+  try {
+    // Query the database for orders with orderStatus "Placed"
+    const fulfilledOrders = await Order.find({ orderStatus: "Order Fulfilled" });
+    res.json(fulfilledOrders);
+  } catch (error) {
+    console.error("Error fetching fulfilledOrders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 
 // for salespersonWise data
 app.get("/orders/salesPersonWise", async (req, res) => {

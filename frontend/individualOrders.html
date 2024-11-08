@@ -646,7 +646,7 @@ renderTableRows(currentPage, sortedData);
 });
 
 $('#pagination-controls').on('click', '#prevPage', function () {
-  console.log("prev");
+  // console.log("prev");
 if (currentPage > 1) {
 currentPage--;
 renderTableRows(currentPage, sortedData);
@@ -654,7 +654,7 @@ renderTableRows(currentPage, sortedData);
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  console.log("next");
+  // console.log("next");
 if (currentPage < Math.ceil(sortedData.length / rowsPerPage)) {
 currentPage++;
 renderTableRows(currentPage, sortedData);
