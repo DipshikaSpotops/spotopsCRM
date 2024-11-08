@@ -409,7 +409,6 @@ app.get("/orders/inTransit", async (req, res) => {
   }
 });
 // for fulfilled
-// for only placed orders
 app.get("/orders/fulfilled", async (req, res) => {
   try {
     // Query the database for orders with orderStatus "Placed"
@@ -420,7 +419,19 @@ app.get("/orders/fulfilled", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
+// for orders which were in escalation atleast once
+app.get('/orders/escalated', async (req, res) => {
+  try {
+    //  `escTicked` is "Yes" in the additionalInfo field
+    const escalatedOrders = await Order.find({
+      additionalInfo: { $elemMatch: { escTicked: "Yes" } }
+    });
+    res.status(200).json(escalatedOrders);
+  } catch (error) {
+    console.error("Error fetching escalated orders:", error);
+    res.status(500).json({ error: "Failed to fetch escalated orders" });
+  }
+});
 // for salespersonWise data
 app.get("/orders/salesPersonWise", async (req, res) => {
   var salesAgent = req.query.firstName;

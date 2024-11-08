@@ -618,23 +618,17 @@ token = localStorage.getItem("token");
 }
 
 // Fetch orders and apply pagination
-// Fetch orders and apply pagination
 try {
-     const ordersResponse = await axios.get("https://www.spotops360.com/orders", {
+    const ordersResponse = await axios.get("https://www.spotops360.com/orders/escalated", {
   headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
-
 
 if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
     var orders = ordersResponse.data;
-    allOrders = orders;
-    let filteredOrders = allOrders.filter(order => {
-        const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
-        return hasEscalation;
-    });
-    filteredOrders = sortOrdersByOrderNoDesc(filteredOrders);
+    filteredOrders = sortOrdersByOrderNoDesc(orders);
+    // filteredOrders = sortOrdersByOrderNoDesc(filteredOrders);
     renderTableRows(currentPage, filteredOrders); 
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders); 
 
