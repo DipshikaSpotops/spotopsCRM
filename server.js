@@ -447,6 +447,7 @@ if (!month || !year) {
 return res.status(400).json({ message: "Month and year are required" });
 }
 const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+
 const monthlyOrders = await Order.find({
 orderDate: {
 $regex: monthYearPattern,
@@ -790,10 +791,16 @@ res.status(500).json({ message: "Server error", error });
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/paymentStatus", async (req, res) => {
   console.log("Updating payment status for yard");
   const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-  const formattedDateTime = new Date(centralTime).toLocaleString("en-US", {
-    timeZone: "America/Chicago",
-  });
-
+  console.log('US Central Time:,mnbjklkjhbv', centralTime);
+  const date = new Date(centralTime);
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const formattedDate = `${day} ${month}, ${year}`;
+  const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
   try {
     const order = await Order.findOne({ orderNo: req.params.orderNo });
     const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
