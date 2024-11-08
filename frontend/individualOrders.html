@@ -644,13 +644,20 @@ currentPage = $(this).data("page");
 renderTableRows(currentPage, sortedData);
 });
 
+// $('#pagination-controls').on('click', '#prevPage', function () {
+// if (currentPage > 1) {
+// currentPage--;
+// renderTableRows(currentPage, sortedData);
+// }
+// });
+// "Previous" and "Next" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
 if (currentPage > 1) {
 currentPage--;
-renderTableRows(currentPage, sortedData);
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 }
 });
-
 $('#pagination-controls').on('click', '#nextPage', function () {
 if (currentPage < Math.ceil(sortedData.length / rowsPerPage)) {
 currentPage++;
