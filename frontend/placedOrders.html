@@ -873,6 +873,7 @@ var monthYear = $("#monthYearPicker").val(); // format like 2024-10
 const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
+console.log("month",month,year);
 try {
 const ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
