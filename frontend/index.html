@@ -625,8 +625,9 @@ timeZone: "America/Chicago"
 });
 
 console.log("current month","currentYear",year,month,monthNum);
-
-const daysInMonth = new Date(year, month + 1, 0).getDate();
+const date = new Date(year, monthNum, 0); 
+const daysInMonth = date.getDate();
+console.log(`Days in ${month} ${year}:`, daysInMonth); 
 const labels = Array.from({ length: monthNum }, (_, i) => `${i + 1}`);
 const totalOrdersData = Array(daysInMonth).fill(0);
 const totalGPData = Array(daysInMonth).fill(0);
