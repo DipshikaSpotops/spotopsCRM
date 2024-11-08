@@ -711,6 +711,7 @@ window.location.reload();
 });
 // function to display placed orders
 function renderOrders(item){
+    item.forEach(order => {
     // Append data to the table with optional chaining and default values
     $("#infoTable").append(
       `<tr>
@@ -749,6 +750,7 @@ function renderOrders(item){
         <td>${item.email || ''}</td>
       </tr>`
     );
+    });
 }
 // $("#okButton").click(function () {
 //     // Hide the modal using Bootstrap's modal hide method
