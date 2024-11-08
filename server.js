@@ -2426,12 +2426,12 @@ from: "service@50starsautoparts.com",
 // to: `dipsikha.spotopsdigital@gmail.com`,
 to: `${order.email}`,
 bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
-subject: `Order Cancellation`,
+subject: `Order Cancellation | ${order.orderNo}`,
 html: `<p>Dear ${order.customerName},</p>
 <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
 ${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.
 <p>We regret any inconvenience this may have caused you.</p>
-<b>We have canceled your order and will reimburse you $${cancelledRefAmount}  to the same source account.</b>
+<b>We have canceled your order and will refund you $${cancelledRefAmount}  to the same source account.</b>
 Please call us if you have any questions.Upon reviewing your order, Due to this unforeseen circumstance, we are unable to fulfill your order at this time.<br>
 Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within 3-5 business days.<br>
 <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.<br>
