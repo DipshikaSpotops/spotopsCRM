@@ -625,54 +625,41 @@ return `$${total}`;
 }
 
 // Pagination function
-// Function to create pagination controls
 function createPaginationControls(totalPages) {
-  const paginationControls = $('#pagination-controls');
-  paginationControls.empty();
+const paginationControls = $('#pagination-controls');
+paginationControls.empty();
 
-  if (totalPages > 1) {
-    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
-    }
-    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-  }
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-  // Debugging: Log to verify creation of pagination controls
-  console.log('Pagination controls created:', paginationControls.html());
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
+
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
 }
 
-// Ensure pagination event listeners are attached after controls are created
-function attachPaginationListeners() {
-  $('#pagination-controls').on('click', '#prevPage', function () {
-    console.log("prev button clicked"); // Debugging statement
-    if (currentPage > 1) {
-      currentPage--;
-      renderTableRows(currentPage, sortedData);
-      createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-    }
-  });
+// Event listeners for pagination buttons
+$("#pagination-controls").on("click", ".page-btn", function () {
+currentPage = $(this).data("page");
+renderTableRows(currentPage, sortedData);
+});
 
-  $('#pagination-controls').on('click', '#nextPage', function () {
-    console.log("next button clicked"); // Debugging statement
-    if (currentPage < Math.ceil(sortedData.length / rowsPerPage)) {
-      currentPage++;
-      renderTableRows(currentPage, sortedData);
-      createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-    }
-  });
+// $('#pagination-controls').on('click', '#prevPage', function () {
+//   console.log("prev");
+// if (currentPage > 1) {
+// currentPage--;
+// renderTableRows(currentPage, sortedData);
+// }
+// });
 
-  $('#pagination-controls').on('click', '.page-btn', function () {
-    currentPage = $(this).data('page');
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-  });
+$('#pagination-controls').on('click', '#prevPage', function () {
+  console.log("next");
+if (currentPage < Math.ceil(sortedData.length / rowsPerPage)) {
+currentPage++;
+renderTableRows(currentPage, sortedData);
 }
-
-  // createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-  // attachPaginationListeners();
-  
-
+});
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 const filteredOrders = sortedData.filter(order => {
