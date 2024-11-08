@@ -1784,7 +1784,7 @@ app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", upload.single("pdfFile"), 
         to: 'dipsikha.spotopsdigital@gmail.com',
         subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 STars Auto Parts`,
         html: `<p>Dear ${order.customerName},</p>
-        <p>We are reaching out to confirm that your refend of ${refundedAmount} for the ${req.params.orderNo} has been succcessfully processed. Attached to this email, you will fins a copy of the refund receipt for your records.</p>
+        <p>We are reaching out to confirm that your refund of ${order.query.refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will fins a copy of the refund receipt for your records.</p>
         <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
         <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
         <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
