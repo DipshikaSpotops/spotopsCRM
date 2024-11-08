@@ -305,7 +305,7 @@ aria-labelledby="userMenu"
 <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
 <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
 <a class="nav-link cancelled-orders-link"  id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
-<a class="nav-link view-ordersSheet-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a>
+<!-- <a class="nav-link view-ordersSheet-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
 <a class="nav-link view-fulfilled-link" href="fulfilledOrders.html">Fulfilled Orders</a>
 <a class="nav-link escalated-orders" href="escalatedOrders.html">Overall Escalation</a>
 <a class="nav-link ongoingEscalated-orders" href="ongoingEscalations.html">Ongoing Escalation</a>
@@ -380,7 +380,7 @@ placeholder="Search..."
         <input id="monthYearPicker" type="month" class="form-control" />
         <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
     </div>
-
+    <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
      
       
@@ -711,6 +711,10 @@ try {
   }
 
   allOrders = ordersResponse.data;
+  var totalOrders = allOrders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+sortedData = sortOrdersByOrderNoDesc(filteredData);
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
