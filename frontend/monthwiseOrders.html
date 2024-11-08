@@ -900,8 +900,9 @@ $("#filterButton").click(async function () {
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");    
 $("#loadingMessage").show();
-var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
-const [year, monthNumber] = monthYear.split("-");
+
+const monthYear = $("#monthYearPicker").val(); // format like 2024-10 
+  const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 try {
@@ -912,6 +913,8 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
+var allOrdersLength = allOrders.length;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
