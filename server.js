@@ -815,7 +815,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/paymentStatus", async (req, 
 
     order.additionalInfo[yardIndex].paymentStatus = paymentStatus;
     order.orderHistory.push(
-      `Yard ${yardIndex + 1} payment status updated to "${paymentStatus}" by ${firstName} on ${formattedDateTime}`
+      `Yard ${yardIndex + 1} payment status updated to ${paymentStatus} by ${firstName} on ${formattedDateTime}`
     );
 
     order.markModified("additionalInfo");
