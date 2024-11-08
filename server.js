@@ -440,27 +440,23 @@ app.get("/orders/cancelled", async (req, res) => {
 });
 // monthly orders
 app.get("/orders/monthly", async (req, res) => {
-  try {
-    const month = req.query.month;
-    const year = req.query.year;
-
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-
-    const monthlyOrders = await Order.find({
-      orderDate: {
-        $regex: monthYearPattern,
-      },
-    });
-
-    res.json(monthlyOrders);
-  } catch (error) {
-    console.error("Error fetching orders for specified month and year:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const monthlyOrders = await Order.find({
+orderDate: {
+$regex: monthYearPattern,
+},
+});
+res.json(monthlyOrders);
+} catch (error) {
+console.error("Error fetching orders for specified month and year:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 
 
@@ -2287,57 +2283,6 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
 
 
 // const moment = require('moment-timezone');
-
-
-app.get('/orders/monthly', async (req, res) => {
-console.log("monthly orders");
-try {
-const orders = await Order.aggregate([
-{
-// Parse orderDate from string to Date object
-$addFields: {
-orderDateParsed: {
-$dateFromString: {
-dateString: {
-$reduce: {
-  input: { $split: ["$orderDate", " "] },
-  initialValue: "",
-  in: {
-    $cond: {
-      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
-      then: "$$value",
-      else: { $concat: ["$$value", " ", "$$this"] }
-    }
-  }
-}
-},
-format: "%d %b, %Y %H:%M", // Adjust format after removing suffix
-timezone: "UTC"
-}
-}
-}
-},
-{
-$group: {
-_id: { $month: "$orderDateParsed" },
-totalOrders: { $sum: 1 },
-},
-},
-{
-$sort: { _id: 1 } 
-}
-]);
-
-const formattedOrders = orders.map(order => ({
-month: order._id,
-totalOrders: order.totalOrders,
-}));
-
-res.json(formattedOrders);
-} catch (error) {
-res.status(500).json({ message: 'Error fetching monthly orders', error });
-}
-});
 app.get('/orders/salesperson/:salesperson', async (req, res) => {
   const salesperson = req.params.salesperson;
   try {
