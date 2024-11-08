@@ -660,6 +660,7 @@ renderTableRows(currentPage, sortedData);
 // }
 // });
 $('#pagination-controls').on('click', '#nextPage', function () {
+  console.log("next");
 if (currentPage < Math.ceil(sortedData.length / rowsPerPage)) {
 currentPage++;
 renderTableRows(currentPage, sortedData);
