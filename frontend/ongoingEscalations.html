@@ -621,7 +621,7 @@ var orders = ordersResponse.data;
     allOrders = orders;
     // Now filter orders based on validStatuses and escalation right after fetching
     const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
-    let filteredOrders = ordersResponse;
+    let filteredOrders = ordersResponse.data;
 
     // Sort and render the filtered orders
     filteredOrders = sortOrdersByOrderNoDesc(filteredOrders); // Assuming you're sorting by order number
