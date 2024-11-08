@@ -659,7 +659,7 @@ const year = date.getFullYear();
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 try {
-    const response = await axios.get("https://www.spotops360.com/orders/placed?month=${month}&year=${year}", {
+    const response = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
   headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 
