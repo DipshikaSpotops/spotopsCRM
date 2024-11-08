@@ -889,7 +889,7 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
-consnsole.log("allorders at filter btn",allOrders);
+conssole.log("allorders at filter btn",allOrders);
 renderOrders(allOrders);
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
