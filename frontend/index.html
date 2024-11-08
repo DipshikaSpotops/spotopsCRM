@@ -582,9 +582,14 @@ await fetchMonthlyOrders();
 async function fetchDailyOrders() {
 console.log(token, "Fetching daily orders...");
 var orders;
+var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
+const [year, monthNumber] = monthYear.split("-");
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = months[parseInt(monthNumber, 10) - 1];
 try {
-const response = await axios.get("https://www.spotops360.com/orders");
-
+const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 const orders = response.data;
 console.log("Found daily orders:", orders);
 
@@ -596,21 +601,18 @@ return;
 const dallasDate = new Date().toLocaleString("en-US", {
 timeZone: "America/Chicago"
 });
-const now = new Date(dallasDate);
-console.log("now",now);
-const currentYear = now.getFullYear();
-const currentMonth = now.getMonth();
-console.log("current month","currentYear",currentYear);
-const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+console.log("current month","currentYear",year,month);
+const daysInMonth = new Date(year, month + 1, 0).getDate();
 const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
 const totalOrdersData = Array(daysInMonth).fill(0);
 const totalGPData = Array(daysInMonth).fill(0);
 function parseOrderDate(orderDate) {
 const parts = orderDate.split(" ");
 const day = parseInt(parts[0]); 
-const month = new Date(`${parts[1]} 1`).getMonth(); 
-const year = parseInt(parts[2]);
-return new Date(year, month, day);
+const month1 = new Date(`${parts[1]} 1`).getMonth(); 
+const year1 = parseInt(parts[2]);
+return new Date(year1, month1, day);
 }
 // Filter orders for the current month and year
 const currentMonthOrders = orders.filter(order => {
