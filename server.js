@@ -1766,57 +1766,63 @@ app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", upload.single("pdfFile"), 
 //   await page.pdf({ path: outputPath, format: 'A4' });
 //   await browser.close();
 // }
-    app.post("/orders/sendRefundEmail/:orderNo", async (req, res) => {
-      var yardIndex = req.query.yardIndex;
-      var refundedAmount = req.query.refundedAmount;
-      console.log("send rma(return) info");
-      try {
-      const order = await Order.findOne({ orderNo: req.params.orderNo });
-      console.log("no", order,"yardIndex",yardIndex);
-      if (!order) {
-      return res.status(400).send("Order not found");
-      }
-      const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-      user: "service@50starsautoparts.com",
-      pass: "hweg vrnk qyxx gktv",
-      },
-      });
-      const mailOptions = {
-        from: "service@50starsautoparts.com",
-        // to: `${order.email}`,
-        // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-        to: 'dipsikha.spotopsdigital@gmail.com',
-        subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
-        html: `<p>Dear ${order.customerName},</p>
-        <p>We are reaching out to confirm that your refund of $${refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will find a copy of the refund receipt for your records.</p>
-        <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
-        <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
-        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-        <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-        attachments: [{
-          filename: 'logo.png',
-          path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-          cid: 'logo' 
-        }]
-      };
+//  to send refundEmail to the customer
+      app.post("/orders/sendRefundEmail/:orderNo", upload.single("pdfFile"), async (req, res) => {
+        const yardIndex = req.query.yardIndex;
+        var refundedAmount = req.query.refundedAmount;
+        try {
+          const order = await Order.findOne({ orderNo: req.params.orderNo });
+          if (!order) return res.status(400).send("Order not found");
       
-      console.log("mail", mailOptions);
-      transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-      console.error("Error sending mail:", error);
-      res.status(500).json({ message: `Error sending mail: ${error.message}` });
-      } else {
-      console.log("Email sent successfully:", info.response);
-      res.json({ message: `Email sent successfully` });
-      }
+          const pdfFile = req.file; // Get the uploaded PDF file
+          if (!pdfFile) return res.status(400).send("No PDF file uploaded");
+      
+          const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: "service@50starsautoparts.com",
+              pass: "hweg vrnk qyxx gktv",
+            },
+          });
+      
+          const mailOptions = {
+            from: "service@50starsautoparts.com",
+            to: "dipsikha.spotopsdigital@gmail.com",
+            subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
+            html: `<p>Dear ${order.customerName},</p>
+            <p>We are reaching out to confirm that your refund of $${refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will find a copy of the refund receipt for your records.</p>
+            <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
+            <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
+            <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+            <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+            attachments: [
+              {
+                filename: pdfFile.originalname,
+                content: pdfFile.buffer,
+              },
+              {
+                filename: "logo.png",
+                path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+                cid: "logo",
+              },
+            ],
+          };
+      
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.error("Error sending mail:", error);
+              return res.status(500).json({ message: `Error sending mail: ${error.message}` });
+            }
+            console.log("Email sent successfully:", info.response);
+            res.json({ message: "Email sent successfully" });
+          });
+        } catch (error) {
+          console.error("Server error:", error);
+          res.status(500).json({ message: "Server error", error });
+        }
       });
-      } catch (error) {
-      console.error("Server error:", error);
-      res.status(500).json({ message: "Server error", error });
-      }
-      });
+
+
 app.get("/ordersteamA", async (req, res) => {
 console.log("Team A orders");
 try {
