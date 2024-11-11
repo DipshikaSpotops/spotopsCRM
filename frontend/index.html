@@ -774,83 +774,105 @@ async function fetchLatestThreeMonthsOrders() {
 }
 
 // Update the chart with the given month’s data
+async function fetchAndDisplayThreeMonthsData() {
+  try {
+    // Fetch data for the last three months
+    const monthlyData = await fetchLatestThreeMonthsOrders();
+
+    // Prepare the month names and display data for each of the three months
+    const monthKeys = Object.keys(monthlyData).sort((a, b) => new Date(b) - new Date(a));
+
+    // Loop through each month and populate the charts
+    monthKeys.slice(0, 3).forEach((monthName, index) => {
+      const orders = monthlyData[monthName];
+      updateMonthlyChart(index + 1, monthName, orders);
+    });
+  } catch (error) {
+    console.error("Error displaying data for the last three months:", error);
+  }
+}
+
 function updateMonthlyChart(index, monthName, orders) {
-const statusLabels = [
-"Placed",
-"Customer approved",
-"Yard Processing",
-"In Transit",
-"Escalation",
-"Order Fulfilled",
-"Order Cancelled",
-"Refunded",
-"Dispute"
-];
+  const statusLabels = [
+    "Placed",
+    "Customer approved",
+    "Yard Processing",
+    "In Transit",
+    "Escalation",
+    "Order Fulfilled",
+    "Order Cancelled",
+    "Refunded",
+    "Dispute"
+  ];
 
-const statusCounts = statusLabels.map(status =>
-orders.filter(order => order.orderStatus === status).length
-);
+  const statusCounts = statusLabels.map(status =>
+    orders.filter(order => order.orderStatus === status).length
+  );
 
-const totalOrders = orders.length;
-const fulfilledOrders = statusCounts[5]; // Order Fulfilled
-const escalations = statusCounts[4]; // Escalation
-const cancellations = statusCounts[6] + statusCounts[7] + statusCounts[8]; // Cancelled + Refunded + Dispute
-var toOrders = totalOrders -1 ;
-// Calculate rates
-const successRate = ((fulfilledOrders / totalOrders) * 100).toFixed(2);
-const escalationRate = ((escalations / totalOrders) * 100).toFixed(2);
-const cancellationRate = ((cancellations / totalOrders) * 100).toFixed(2);
+  const totalOrders = orders.length;
+  const fulfilledOrders = statusCounts[5]; // Order Fulfilled
+  const escalations = statusCounts[4]; // Escalation
+  const cancellations = statusCounts[6] + statusCounts[7] + statusCounts[8]; // Cancelled + Refunded + Dispute
 
-// Display the rates
-document.getElementById(`rates-month-${index}`).innerHTML = `
-<div class="rate-item total-orders">Total No of Orders: ${totalOrders}</div>
-<div class="rate-item rate-success">Success Rate: ${successRate}%</div>
-<div class="rate-item rate-escalation">Escalation Rate: ${escalationRate}%</div>
-<div class="rate-item rate-cancellation">Cancellation Rate: ${cancellationRate}%</div>
-`;
+  // Calculate rates
+  const successRate = ((fulfilledOrders / totalOrders) * 100).toFixed(2);
+  const escalationRate = ((escalations / totalOrders) * 100).toFixed(2);
+  const cancellationRate = ((cancellations / totalOrders) * 100).toFixed(2);
 
-// Render the pie chart
-const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
-new Chart(ctx, {
-type: "pie",
-data: {
-labels: statusLabels,
-datasets: [
-{
-label: `Order Status Distribution for ${monthName}`,
-data: statusCounts,
-backgroundColor: [
-"#fdfdfd",
-"#ffe5a0",
-"#bfe1f6",
-"#1e6693",
-"#e6cff2",
-"#4c8b0f",
-"#ff2121",
-"#5a3286",
-"#e6cff2"
-],
-hoverOffset: 4
-}
-]
-},
-options: {
-responsive: true,
-plugins: {
-legend: {
-position: "right"
-},
-title: {
-display: true,
-text: `Order Status Distribution for ${monthName}`
-}
-}
-}
-});
+  // Display the rates
+  document.getElementById(`rates-month-${index}`).innerHTML = `
+    <div class="rate-item total-orders">Total No of Orders: ${totalOrders}</div>
+    <div class="rate-item rate-success">Success Rate: ${successRate}%</div>
+    <div class="rate-item rate-escalation">Escalation Rate: ${escalationRate}%</div>
+    <div class="rate-item rate-cancellation">Cancellation Rate: ${cancellationRate}%</div>
+  `;
 
-// Set the month name in the header
-document.getElementById(`month-name-${index}`).innerText = monthName;
+  // Render the pie chart
+  const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
+  new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: statusLabels,
+      datasets: [
+        {
+          label: `Order Status Distribution for ${monthName}`,
+          data: statusCounts,
+          backgroundColor: [
+            "#fdfdfd",
+            "#ffe5a0",
+            "#bfe1f6",
+            "#1e6693",
+            "#e6cff2",
+            "#4c8b0f",
+            "#ff2121",
+            "#5a3286",
+            "#e6cff2"
+          ],
+          hoverOffset: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "right"
+        },
+        title: {
+          display: true,
+          text: `Order Status Distribution for ${monthName}`
+        }
+      }
+    }
+  });
+
+  // Set the month name in the header
+  document.getElementById(`month-name-${index}`).innerText = monthName;
 }
+
+// Fetch and display data as soon as the page loads
+fetchAndDisplayThreeMonthsData();
+
 
 // Helper function to get the last three months
 function getLastThreeMonths() {
