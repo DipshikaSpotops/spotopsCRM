@@ -361,7 +361,7 @@ placeholder="Search..."
 <th style="cursor: pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Customer Info <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Shipping Info <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer;" scope="col">Part Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer;" scope="col">Sale Info<span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Part Info <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Email <span class="sort-icon onlyNumber">&#9650;</span></th>
@@ -848,8 +848,10 @@ function renderOrders(item){
           Billing Address:<br> ${formattedBAddress}<br>
         </td>
         <td>${formattedSAddress}</td>
-        <td>${item.pReq || item.partName || ''}<br>
-            <b>Quoted Price:</b> $${item.soldP || 0}</td>
+        <td>Part Name: ${item.pReq || item.partName || ''}<br>
+            <b>Quoted Price:</b> $${item.soldP || 0}<br>
+            <b>Expedite Shipping:</b> $${item.soldP || 0}<br>
+            </td>
         <td>
           Year: ${item.year || ''}<br>
           Make: ${item.make || ''}<br>
