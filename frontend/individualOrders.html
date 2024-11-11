@@ -586,6 +586,7 @@ $("#infoTable").append(`
 <td>${item.customerName}</td>
 <td>${item.pReq || item.partName}</td>
 <td>$${item.soldP}</td>
+<td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
@@ -596,9 +597,6 @@ return `Yard${index + 1} ${trackingNo}`;
 .join("<br>")
 : ""
 }</td>
-
-
-<td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
 <td>${item.orderStatus}</td>
 </tr>
 `);
