@@ -1879,6 +1879,11 @@ Save
 <input type="number" class="custRefundedAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
 </div>
 </div>
+<button type="button" id="attachRefundReceipt" style="margin-top:4%; ">Attach a Document Link</button>
+<div id="driveLinkRefund" style="display:none;margin-top:10px;">
+  <!-- <label for="driveLink">Enter Google Drive or PDF Link:</label> -->
+  <input type="file" id="pdfFileRReceipt" accept=".pdf">
+</div>
 <button type="button" class="custRefundSubmit save" style="align-self: flex-start;">Save</button>
 </div>  
 <!-- customer refund - order refunding part ends here -->
@@ -2061,7 +2066,11 @@ $(".custRefundSubmit").on("click", function () {
 
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
-      $("#custRefunds").val(custRefundedAmount)
+      $("#custRefunds").val(custRefundedAmount);
+      const fileInput = document.getElementById("pdfFile");
+  const file = fileInput.files[0] || "";
+  const formData = new FormData();
+  formData.append("pdfFile", file);
       alert("Refund information  updated successfully!");
    // Send cancellation email after successful refund update
    return axios.post(`/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`);
@@ -3944,7 +3953,7 @@ console.error("Error:", error);
 else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" || repShippingMethod === "Yard shipping")) {
     fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
       method: "POST",
-      body: formData, // Send FormData directly
+      body: formData, 
     })
       .then((response) => response.json())
       .then((result) => {
@@ -4650,6 +4659,10 @@ alert('Yard Status: Part Delivered');
 $('#attachDocument').on('click', function()  {
   console.log("clicked attachDocument")
   document.getElementById('driveLinkContainer').style.display = 'block';
+});
+$('#attachRefundReceipt').on('click', function()  {
+  console.log("clicked attachRefundReceipt")
+  document.getElementById('driveLinkRefund').style.display = 'block';
 });
 });
 </script>
