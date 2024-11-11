@@ -2051,13 +2051,15 @@ alert("Failed to update dispute information.");
 // for dispute till here
 //for custRefund
 $(".custRefundSubmit").on("click", function () {
-  $("#custRefund").fadeOut();
-  $(".modal-overlay").remove();
-  $("body").removeClass("modal-active");
-
+  // Existing code to fade out the modal and get form values
   const custRefundDate = $(".refundedDate").val();
   const custRefundedAmount = $(".custRefundedAmount").val();
   const orderNo = urlParams.get("orderNo");
+
+  if (!custRefundedAmount || !yardIndex) {
+    alert("Refunded amount or yard index is missing.");
+    return;
+  }
 
   const custRefundData = {
     custRefundDate,
@@ -2067,38 +2069,42 @@ $(".custRefundSubmit").on("click", function () {
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
       $("#custRefunds").val(custRefundedAmount);
+
+      // Handle file upload
       const fileInput = document.getElementById("pdfFileRReceipt");
-  const file = fileInput.files[0] || "";
-  const formData = new FormData();
-  formData.append("RRefund", file);
-      alert("Refund information  updated successfully!");
-   // Send cancellation email after successful refund update
-   fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        alert("RMA(Return)_Own/Yard-shipping email with PDF has been sent to the customer");
-        $("#saveEsc").prop("disabled", false).css("filter", "none");
-        console.log("Success:", result);
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      if (file) {
+        formData.append("pdfFile", file);
+      }
+
+      // Send cancellation email with formData (including file)
+      fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`, {
+        method: "POST",
+        body: formData,
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    })
-    .then(function (response) {
-      console.log("Customer refund email sent successfully:", response.data.message);
-      alert("Customer refund email sent successfully!");
+        .then((response) => {
+          if (!response.ok) throw new Error("Network response was not ok");
+          return response.json();
+        })
+        .then((result) => {
+          alert("Email sent to customer with refund receipt.");
+          console.log("Success:", result);
       $(".modal-overlay").remove();
 // $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Failed to send email with refund receipt.");
+        });
     })
     .catch(function (error) {
       console.error("Error updating refund:", error);
       alert("Failed to update refund information.");
     });
 });
+
 
 $("#cancelledRefundSubmit").on("click", function () {
   $("#cancellingOrder").fadeOut();
