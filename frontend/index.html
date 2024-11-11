@@ -956,21 +956,44 @@ async function fetchMonthlySalesProgress() {
       }
     }
     // Prepare labels and data for the chart
-  } catch (error) {
+  
+  const ctx = document.getElementById("monthlySalesProgressChart").getContext("2d");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Monthly Sales Progress (Total Actual GP)",
+            data: data,
+            backgroundColor: "rgba(75, 192, 192, 0.5)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { title: { display: true, text: "Month" } },
+          y: { title: { display: true, text: "Actual GP" } },
+        },
+      },
+    });
+  }catch (error) {
     console.error("Error fetching monthly sales progress:", error);
   }
 }
-
-fetchAndRenderCharts();
-// for rendering charts ends here
-// Highlight active link based on current URL
-const currentPath = window.location.pathname;
+const currentPath = window.location.pathname + "?newEntry=true";
+console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
-$(this).addClass("active"); 
+$(this).addClass("active");
 }
 });
 });
 </script>
 </body>
 </html>
+
+  
