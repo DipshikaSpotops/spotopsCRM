@@ -573,7 +573,7 @@ window.location.href = "login_signup.html";
 // Fetch and render data for each chart
 async function fetchAndRenderCharts() {
 await fetchDailyOrders();
-await fetchMonthlyOrders();
+await fetchLatestThreeMonthsOrders();
 // await fetchSalespersonPerformance();
 // await fetchYearlyProgress();
 }
@@ -683,54 +683,94 @@ let chartInstances = {}; // Store chart instances by month
 let cachedOrders = {}; // Store cached orders data
 let isNavigating = false; // Prevent rapid multiple clicks
 
-function getLastThreeMonths() {
-const now = new Date();
-const months = [];
-for (let i = 2; i >= 0; i--) {
-const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-months.push({
-name: date.toLocaleString("default", { month: "long" }),
-number: date.getMonth() + 1,
-year: date.getFullYear(),
-});
-}
-return months;
-}
+// function getLastThreeMonths() {
+// const now = new Date();
+// const months = [];
+// for (let i = 2; i >= 0; i--) {
+// const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+// months.push({
+// name: date.toLocaleString("default", { month: "long" }),
+// number: date.getMonth() + 1,
+// year: date.getFullYear(),
+// });
+// }
+// return months;
+// }
 
-const lastThreeMonths = getLastThreeMonths();
-let currentMonthIndex = 0;
+// const lastThreeMonths = getLastThreeMonths();
+// let currentMonthIndex = 0;
 
-// generateCarouselContent();
-// preloadOrders(); // Fetch all orders once on load
+// // generateCarouselContent();
+// // preloadOrders(); // Fetch all orders once on load
 
-// Generate carousel content
-async function renderAllMonthlyCharts() {
-const lastThreeMonths = getLastThreeMonths();
+// // Generate carousel content
+// async function renderAllMonthlyCharts() {
+// const lastThreeMonths = getLastThreeMonths();
 
-// Loop through each month and render its chart
-for (let i = 0; i < lastThreeMonths.length; i++) {
-const month = lastThreeMonths[i];
-const orders = await fetchMonthlyOrders(month);
-updateMonthlyChart(i + 1, month.name, orders);
-}
-}
+// // Loop through each month and render its chart
+// for (let i = 0; i < lastThreeMonths.length; i++) {
+// const month = lastThreeMonths[i];
+// const orders = await fetchMonthlyOrders(month);
+// updateMonthlyChart(i + 1, month.name, orders);
+// }
+// }
 
 // Fetch orders for a specific month
-async function fetchMonthlyOrders(month) {
-try {
-const response = await axios.get("https://www.spotops360.com/orders");
-const orders = response.data;
-return orders.filter((order) => {
-const orderDate = parseOrderDate(order.orderDate);
-return (
-orderDate.getFullYear() === month.year &&
-orderDate.getMonth() + 1 === month.number
-);
-});
-} catch (error) {
-console.error(`Error fetching orders for ${month.name}:`, error);
-return [];
-}
+async function fetchLatestThreeMonthsOrders() {
+  try {
+    // Set up the current date and format options
+    const now = new Date();
+    const options = {
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(now);
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+    const date = new Date(formattedDate);
+
+    // Define the month and year format
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    // Array to store the last three months (including the current month)
+    const latestMonths = [];
+
+    // Loop through the current and last two months
+    for (let i = 0; i < 3; i++) {
+      const pastDate = new Date(date.getFullYear(), date.getMonth() - i, 1);
+      const monthStr = months[pastDate.getMonth()];
+      const year = pastDate.getFullYear();
+      latestMonths.push({ month: monthStr, year });
+    }
+
+    const monthlyData = {};
+
+    // Fetch orders for each of the last three months
+    for (const { month, year } of latestMonths) {
+      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: { month, year },
+      });
+
+      if (response.status === 200) {
+        monthlyData[`${month} ${year}`] = response.data;
+      } else {
+        console.error(`Failed to fetch orders for ${month} ${year}`);
+      }
+    }
+
+    console.log("Fetched data for the last three months:", monthlyData);
+    return monthlyData;
+
+  } catch (error) {
+    console.error("Error fetching the latest three months of orders:", error);
+    return {};
+  }
 }
 
 // Update the chart with the given month’s data
@@ -892,125 +932,12 @@ async function fetchMonthlySalesProgress() {
         console.error(`Failed to fetch orders for ${monthStr} ${year}`);
       }
     }
-
     // Prepare labels and data for the chart
-    const labels = Object.keys(monthlyData).sort(
-      (a, b) => new Date(a) - new Date(b)
-    );
-    const data = labels.map(label => monthlyData[label]);
-
-    // Render the monthly sales progress chart
-    const ctx = document.getElementById("monthlySalesProgressChart").getContext("2d");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Monthly Sales Progress (Total Actual GP)",
-            data: data,
-            backgroundColor: "rgba(75, 192, 192, 0.5)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: { title: { display: true, text: "Month" } },
-          y: { title: { display: true, text: "Actual GP" } },
-        },
-      },
-    });
   } catch (error) {
     console.error("Error fetching monthly sales progress:", error);
   }
 }
 
-// // Fetch salesperson performance
-// async function fetchSalespersonPerformance() {
-// try {
-// const salesperson = $("#salespersonFilter").val();
-// const response = await axios.get(`https://www.spotops360.com/orders/salesperson/${salesperson}`, {
-// headers: { Authorization: `Bearer ${token}` }
-// });
-// const orders = response.data;
-
-// // Ensure orders is an array
-// if (!orders || !Array.isArray(orders)) {
-// console.error("Invalid salesperson performance data.");
-// return;
-// }
-
-// const labels = orders.map(order => order.day);
-// const totalOrders = orders.map(order => order.totalOrders);
-// const totalGP = orders.map(order => order.totalGP);
-
-// new Chart(document.getElementById("salespersonPerformanceChart"), {
-// type: "line",
-// data: {
-// labels: labels,
-// datasets: [
-// {
-// label: "Orders",
-// backgroundColor: "rgba(255, 159, 64, 0.5)",
-// borderColor: "rgba(255, 159, 64, 1)",
-// data: totalOrders
-// },
-// {
-// label: "Actual GP",
-// backgroundColor: "rgba(75, 192, 192, 0.5)",
-// borderColor: "rgba(75, 192, 192, 1)",
-// data: totalGP
-// }
-// ]
-// }
-// });
-// } catch (error) {
-// console.error("Error fetching salesperson performance:", error);
-// }
-// }
-
-// // Fetch yearly progress
-// async function fetchYearlyProgress() {
-// try {
-// const response = await axios.get("https://www.spotops360.com/orders/yearly", {
-// headers: { Authorization: `Bearer ${token}` }
-// });
-// const orders = response.data;
-
-// // Ensure orders is an array
-// if (!orders || !Array.isArray(orders)) {
-// console.error("Invalid yearly progress data.");
-// return;
-// }
-
-// const labels = orders.map(order => order.month);
-// const data = orders.map(order => order.totalOrders);
-
-// new Chart(document.getElementById("yearlyProgressChart"), {
-// type: "bar",
-// data: {
-// labels: labels,
-// datasets: [{
-// label: "Yearly Orders",
-// backgroundColor: "rgba(153, 102, 255, 0.5)",
-// borderColor: "rgba(153, 102, 255, 1)",
-// data: data
-// }]
-// }
-// });
-// } catch (error) {
-// console.error("Error fetching yearly progress:", error);
-// }
-// }
-
-// // Event listeners for filters
-// $("#monthFilter").change(fetchMonthlyOrders);
-// $("#salespersonFilter").change(fetchSalespersonPerformance);
-
-// Initial chart rendering
 fetchAndRenderCharts();
 // for rendering charts ends here
 // Highlight active link based on current URL
