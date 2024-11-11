@@ -877,7 +877,8 @@ return new Date(year, month, day);
 }
 
 // Initial call to render all charts
-renderAllMonthlyCharts();
+fetchLatestThreeMonthsOrders();
+// renderAllMonthlyCharts();
 // Fetch and render monthly sales progress chart
 async function fetchMonthlySalesProgress() {
   try {
