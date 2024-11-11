@@ -291,10 +291,11 @@ window.location.href = "login_signup.html";
 <th style="cursor: pointer;">Customer Name <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Part Name <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Sale Price <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Estimated Info</th>
-<th style="cursor: pointer;">Actual Info <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Overall Spend <span class="sort-icon">&#9650;</span></th>
+<!-- <th style="cursor: pointer;">Estimated Info</th> -->
+<!-- <th style="cursor: pointer;">Actual Info <span class="sort-icon">&#9650;</span></th> -->
+<!-- <th style="cursor: pointer;">Overall Spend <span class="sort-icon">&#9650;</span></th> -->
 <th style="cursor: pointer;">Actual GP <span class="sort-icon">&#9650;</span></th>
+<th style="cursor: pointer;">Trackin No. <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Order Status <span class="sort-icon">&#9650;</span></th>
 </tr>
 </thead>
@@ -585,38 +586,19 @@ $("#infoTable").append(`
 <td>${item.customerName}</td>
 <td>${item.pReq || item.partName}</td>
 <td>$${item.soldP}</td>
-<td>Quoted Price: $${item.soldP}  Sales Tax: $${item.salestax} <br> Est Part Price: $${item.costP} Est Shipping: $${item.shippingFee}<br> Est GP: $${item.grossProfit}</td>
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => {
-const partPrice = info.partPrice ? `Part Price: ${info.partPrice}<br>` : "";
-const shippingCost = info.shippingDetails && info.shippingDetails.match(/[\d.]+/) 
-? `Shipping: ${info.shippingDetails.match(/[\d.]+/)[0]}<br>` 
-: "";
-const refundedAmount = info.redundedAmount ? `Refunded Amount: ${info.redundedAmount}<br>` : "";
-const others = info.others ? `Others: ${info.others}<br>` : "";
-const status = info.status ? `Status: ${info.status}` : "";
-
-return `<b>Yard ${index + 1}</b>:<br> ${partPrice}${shippingCost}${others}${refundedAmount}${status}`;
-})
-.join("<br>")
-: ""
-}</td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info) => {
-const shippingCost = parseFloat(info.shippingDetails.match(/[\d.]+/)?.[0] || "0");
-const partPrice = parseFloat(info.partPrice || "0");
-const others = parseFloat(info.others || "0");
-const refundedAmount = parseFloat(info.redundedAmount || "0");
+.map((info,index) => {
+const trackingNo = parseFloat(info.trackingNo || "");
 const total = (partPrice + shippingCost + others + refundedAmount).toFixed(2);
-return `$${total}`;
+return `Yard${index + 1} $${trackingNo}`;
 })
 .join("<br>")
 : ""
 }</td>
+
+
 <td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
 <td>${item.orderStatus}</td>
 </tr>
@@ -765,3 +747,36 @@ window.location.href = 'login_signup.html';
 </script>
 </body>
 </html>
+<!-- estimated info, actual info, overall spend -->
+<!-- <td>Quoted Price: $${item.soldP}  Sales Tax: $${item.salestax} <br> Est Part Price: $${item.costP} Est Shipping: $${item.shippingFee}<br> Est GP: $${item.grossProfit}</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => {
+const partPrice = info.partPrice ? `Part Price: ${info.partPrice}<br>` : "";
+const shippingCost = info.shippingDetails && info.shippingDetails.match(/[\d.]+/) 
+? `Shipping: ${info.shippingDetails.match(/[\d.]+/)[0]}<br>` 
+: "";
+const refundedAmount = info.redundedAmount ? `Refunded Amount: ${info.redundedAmount}<br>` : "";
+const others = info.others ? `Others: ${info.others}<br>` : "";
+const status = info.status ? `Status: ${info.status}` : "";
+
+return `<b>Yard ${index + 1}</b>:<br> ${partPrice}${shippingCost}${others}${refundedAmount}${status}`;
+})
+.join("<br>")
+: ""
+}</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info) => {
+const shippingCost = parseFloat(info.shippingDetails.match(/[\d.]+/)?.[0] || "0");
+const partPrice = parseFloat(info.partPrice || "0");
+const others = parseFloat(info.others || "0");
+const refundedAmount = parseFloat(info.redundedAmount || "0");
+const total = (partPrice + shippingCost + others + refundedAmount).toFixed(2);
+return `$${total}`;
+})
+.join("<br>")
+: ""
+}</td> -->
