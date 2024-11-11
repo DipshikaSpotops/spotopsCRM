@@ -572,7 +572,7 @@ Billing Address:</br> ${formattedBAddress}</br>
 <td> ${formattedSAddress}</br></td> 
 <td><b>Part Name</b>: ${item.pReq || item.partName || ''}<br>
 <b>Quoted Price:</b> $${item.soldP || 0}<br>
-${exp ? `<b>Est. Part Price:</b> ${item.costP}<br>` : ''}
+${item.costP ? `<b>Est. Part Price:</b> $${item.costP}<br>` : ''}
 ${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
 ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
 </td>               
