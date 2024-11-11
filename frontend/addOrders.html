@@ -629,16 +629,17 @@ window.location.href = "login_signup.html";
   <label for="expeditorNot" style="display: inline-block; margin-right: 10px;">Expedite Shipping</label>
   <input type="checkbox" id="expeditorNot" class="form-control" style="width: auto; display: inline-block;">
 </div>
+<div class="form-group col-md-2">
+  <div class="input-group">
+  <div class="input-group-prepend">
+  <span class="input-group-text">%</span>
+  </div>
+  <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
+  </div>
+  </div>  
 </div>
 <div class="form-row">
-<div class="form-group col-md-2">
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text">%</span>
-</div>
-<input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
-</div>
-</div>   
+ 
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
 </div>
