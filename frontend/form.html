@@ -2067,13 +2067,25 @@ $(".custRefundSubmit").on("click", function () {
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
     .then(function (response) {
       $("#custRefunds").val(custRefundedAmount);
-      const fileInput = document.getElementById("pdfFile");
+      const fileInput = document.getElementById("pdfFileRReceipt");
   const file = fileInput.files[0] || "";
   const formData = new FormData();
-  formData.append("pdfFile", file);
+  formData.append("RRefund", file);
       alert("Refund information  updated successfully!");
    // Send cancellation email after successful refund update
-   return axios.post(`/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`);
+   fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        alert("RMA(Return)_Own/Yard-shipping email with PDF has been sent to the customer");
+        $("#saveEsc").prop("disabled", false).css("filter", "none");
+        console.log("Success:", result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     })
     .then(function (response) {
       console.log("Customer refund email sent successfully:", response.data.message);
