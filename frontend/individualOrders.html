@@ -591,7 +591,6 @@ item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
 .map((info,index) => {
 const trackingNo = parseFloat(info.trackingNo || "");
-const total = (partPrice + shippingCost + others + refundedAmount).toFixed(2);
 return `Yard${index + 1} $${trackingNo}`;
 })
 .join("<br>")
