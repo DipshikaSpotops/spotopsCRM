@@ -94,6 +94,7 @@ last4digits,
 notes,
 orderHistory,
 expediteShipping,
+dsCall
 } = req.body;
 
 const newOrder = new Order({
@@ -126,6 +127,7 @@ last4digits,
 notes,
 orderHistory,
 expediteShipping,
+dsCall,
 });
 
 // Increment the order count and assign the team
@@ -360,6 +362,7 @@ cancelledDate: String,
 cancelledRefAmount: Number,
 cancellationReason:String,
 expediteShipping: String, 
+dsCall: String,
 });
 
 const Order = mongoose.model("Order", OrderSchema);
