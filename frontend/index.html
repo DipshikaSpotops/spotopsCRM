@@ -853,7 +853,7 @@ function updateMonthlyChart(index, monthName, orders) {
   document.getElementById(`month-name-${index}`).innerText = monthName;
 }
 fetchAndUpdateMonthlySalesProgress();
-
+updateMonthlyChart();
 
 
 const currentPath = window.location.pathname + "?newEntry=true";
