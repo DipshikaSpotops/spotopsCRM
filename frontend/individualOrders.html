@@ -251,7 +251,7 @@ window.location.href = "login_signup.html";
 <div class="submenu" id="submenu-dashboards">
 <a class="nav-link add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
 <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a>
-<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+<a class="nav-link view-all-orders-monthly-link" id="view-all-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
 </div>
 </div>
 <div class="nav-item" id="reports-section">
@@ -493,9 +493,9 @@ window.location.href = "login_signup.html";
 }
 if (firstName === "John") {
 console.log("first",firstName);
-$("#submenu-dashboards .view-all-orders-link").show();
+$("#submenu-dashboards .view-all-orders-monthly-link").show();
 } else{
-$("#submenu-dashboards .view-all-orders-link").hide();
+$("#submenu-dashboards .view-all-orders-monthly-link").hide();
 }
 
 // Hide specific sections based on team
