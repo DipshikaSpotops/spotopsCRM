@@ -2056,10 +2056,10 @@ $(".custRefundSubmit").on("click", function () {
   const custRefundedAmount = $(".custRefundedAmount").val();
   const orderNo = urlParams.get("orderNo");
 
-  if (!custRefundedAmount || !yardIndex) {
-    alert("Refunded amount or yard index is missing.");
-    return;
-  }
+  // if (!custRefundedAmount || !yardIndex) {
+  //   alert("Refunded amount or yard index is missing.");
+  //   return;
+  // }
 
   const custRefundData = {
     custRefundDate,
