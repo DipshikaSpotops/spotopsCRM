@@ -601,7 +601,7 @@ window.location.href = "login_signup.html";
 <div class="firstRow" id="priceRow">
 <h6 style="text-align: center; margin-top: 1%;">Price and GP Information</h6>
 <div class="form-row firstFive">
-<div class="form-group col-md-2">
+<div class="form-group col-md-6">
 <div class="input-group">
 <div class="input-group-prepend">
 <span class="input-group-text">$</span>
@@ -609,7 +609,7 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
 </div>
 </div>
-<div class="form-group col-md-2">
+<div class="form-group col-md-6">
 <div class="input-group">
 <div class="input-group-prepend">
 <span class="input-group-text">$</span>
@@ -617,7 +617,7 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
 </div>
 </div>
-<div class="form-group col-md-2">
+<div class="form-group col-md-6">
 <div class="input-group">
 <div class="input-group-prepend">
 <span class="input-group-text">$</span>
@@ -859,7 +859,7 @@ $(document).ready(function () {
       last4digits: $("#issueOrder").val(),
       notes: `${note}<br>${firstName},${orderDate}`,
       orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
-      expediteShipping: expediteShipping,
+      expediteShipping: expediteShipping
     };
 
     console.log("newOrder", newOrder);
