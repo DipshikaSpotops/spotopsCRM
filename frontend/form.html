@@ -2064,7 +2064,7 @@ $(".custRefundSubmit").on("click", function () {
       $("#custRefunds").val(custRefundedAmount)
       alert("Refund information  updated successfully!");
    // Send cancellation email after successful refund update
-   return axios.post(`/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${refundedAmount}`);
+   return axios.post(`/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`);
     })
     .then(function (response) {
       console.log("Customer refund email sent successfully:", response.data.message);
