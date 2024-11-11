@@ -824,6 +824,21 @@ function renderOrders(item){
     const firstLineS = sParts.length > 1 ? `${sParts[0].trim()}, ${sParts[1].trim()}` : "";
     const secondLineS = sParts.length > 4 ? `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}` : "";
     const formattedSAddress = `${firstLineS}<br>${secondLineS}<br><b>Attention</b>: ${item.attention || ''}`;
+    var expShip = item.expediteShipping;
+    var dsCall = item.dsCall;
+    var exp;
+    var ds;
+    if(expShip == true){
+      exp = "Expedite shipping";
+    }else{
+      exp = "";
+    }
+    if(dsCall == true){
+      ds = "DS Call";
+    }else{
+      ds = "";
+    }
+
     // Append data to the table with optional chaining and default values
     $("#infoTable").append(
       `<tr>
@@ -850,7 +865,8 @@ function renderOrders(item){
         <td>${formattedSAddress}</td>
         <td>Part Name: ${item.pReq || item.partName || ''}<br>
             <b>Quoted Price:</b> $${item.soldP || 0}<br>
-            <b>Expedite Shipping:</b> $${item.soldP || 0}<br>
+             ${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
+  ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
             </td>
         <td>
           Year: ${item.year || ''}<br>
