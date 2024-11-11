@@ -93,6 +93,7 @@ vin,
 last4digits,
 notes,
 orderHistory,
+expediteShipping,
 } = req.body;
 
 const newOrder = new Order({
@@ -124,6 +125,7 @@ vin,
 last4digits,
 notes,
 orderHistory,
+expediteShipping,
 });
 
 // Increment the order count and assign the team
@@ -356,7 +358,8 @@ custRefundDate: String,
 custRefundedAmount: Number,
 cancelledDate: String,
 cancelledRefAmount: Number,
-cancellationReason:String 
+cancellationReason:String,
+expediteShipping: String, 
 });
 
 const Order = mongoose.model("Order", OrderSchema);

@@ -626,11 +626,12 @@ window.location.href = "login_signup.html";
 </div>
 </div>  
 <div class="form-group col-md-6">
-<input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
+  <label for="expeditorNot" style="display: inline-block; margin-right: 10px;">Expedite Shipping</label>
+  <input type="checkbox" id="expeditorNot" class="form-control" style="width: auto; display: inline-block;">
 </div>
 </div>
 <div class="form-row">
-<div class="form-group col-md-2">
+<div class="form-group col-md-6">
 <div class="input-group">
 <div class="input-group-prepend">
 <span class="input-group-text">%</span>
@@ -638,13 +639,16 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
 </div>
 </div>   
-<div class="form-group col-md-2">
+<div class="form-group col-md-6">
 <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
 </div>
-<div class="form-group col-md-2">
+<div class="form-group col-md-6">
 <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
 </div>
-</div>
+
+<div class="form-group col-md-6">
+  <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
+  </div></div>
 </div>
 <!-- price and gp info till here -->
 <div id="below">
@@ -804,52 +808,6 @@ const numberPart = parseInt(lastOrderNo.slice(7), 10);
 return numberPart;
 }
 
-// axios
-// .all([
-// axios.get(`https://www.spotops360.com/orders`),
-// axios.get(`https://www.spotops360.com/cancelledOrders`),
-// ])
-// .then(
-// axios.spread((orders, cancelledOrders) => {
-// // Extract the highest order number from both collections
-// var orderarr = (orders.data);
-// var orderleng = orderarr.length - 1;
-// console.log("orders",orders.data);
-// var canOrdersArr = cancelledOrders.data;
-// console.log("orders",orders.data,orderleng);
-// const highestOrderInOrders = orderarr[orderleng].orderNo;
-// console.log("orderNos", highestOrderInOrders);
-
-// const canOrderarrlength = canOrdersArr.length - 1;
-// let highestOrderInCancelledOrders = "";
-
-// // Check if the cancelled orders array has any elements and if the orderNo exists
-// if (canOrdersArr.length > 0 && canOrdersArr[canOrderarrlength] && canOrdersArr[canOrderarrlength].orderNo) {
-// highestOrderInCancelledOrders = canOrdersArr[canOrderarrlength].orderNo;
-// console.log("cancelledorderNos", highestOrderInCancelledOrders);
-// } else {
-// console.log("No valid orderNo found in cancelled orders.");
-// }
-// // Extract the numeric part from the order numbers by removing the prefix
-// const highestOrderInOrdersInt = parseInt(highestOrderInOrders.replace('50STARS', ''), 10);
-// const highestOrderInCancelledOrdersInt = highestOrderInCancelledOrders 
-// ? parseInt(highestOrderInCancelledOrders.replace('50STARS', ''), 10) 
-// : 0;
-// const highestOrderNo = Math.max(highestOrderInOrdersInt, highestOrderInCancelledOrdersInt);
-// const incrementedNumber = highestOrderNo + 1;
-// const originalOrderNumberLength = highestOrderInOrders.replace('50STARS', '').length;
-// const incrementedNumberStr = incrementedNumber.toString().padStart(originalOrderNumberLength, "0");
-
-// // Construct the new order number
-// newOrderNo = `50STARS${incrementedNumberStr}`;
-
-// console.log("newOrderNo", newOrderNo);
-
-// })
-// )
-// .catch((error) => {
-// console.error("Error fetching latest order:", error);
-// });
 
 var spMinusTax;//variable for sale price - salesTax
 $(document).ready(function () {
@@ -870,7 +828,7 @@ $(document).ready(function () {
     const salesTax = $("#salestax").val();
     const spMinusTax = soldP - salesTax;
     const newOrderNo = $("#orderNo").val();
-
+    const expediteShipping = $("#expeditorNot").is(":checked");
     const newOrder = {
       orderNo: newOrderNo,
       orderDate: orderDate,
@@ -901,6 +859,7 @@ $(document).ready(function () {
       last4digits: $("#issueOrder").val(),
       notes: `${note}<br>${firstName},${orderDate}`,
       orderHistory: [`Order placed by ${firstName} on ${orderDate}`],
+      expediteShipping: expediteShipping,
     };
 
     console.log("newOrder", newOrder);
