@@ -592,7 +592,7 @@ item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
 .map((info,index) => {
 const trackingNo = info.trackingNo || "";
-return `Yard${index + 1} ${trackingNo}`;
+return `${trackingNo}`;
 })
 .join("<br>")
 : ""
