@@ -821,6 +821,8 @@ function updateMonthlyChart(index, monthName, orders) {
   const successRate = ((fulfilledOrders / totalOrders) * 100).toFixed(2);
   const escalationRate = ((escalations / totalOrders) * 100).toFixed(2);
   const cancellationRate = ((cancellations / totalOrders) * 100).toFixed(2);
+  var actualGPData = [];
+  var monthLabels = [];
   const totalActualGP = orders.reduce((acc, order) => acc + (order.actualGP || 0), 0);
         actualGPData.unshift(totalActualGP);
         monthLabels.unshift(`${month} ${year}`);
