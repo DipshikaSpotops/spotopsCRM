@@ -514,17 +514,34 @@ if (item.orderStatus === "Customer approved") {
 approvedOrdersCount++;  // Increment the count
 // console.log("item length", item, item.length);
 
-var bAddress = item.bAddress;
+// Safely access bAddress parts
+var bAddress = item.bAddress || ""; // Default to empty string if undefined
 const bParts = bAddress.split(',');
-const firstLineB = `${bParts[0].trim()}, ${bParts[1].trim()}`;
-const secondLineB = `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}`;
+
+// Use conditional checks to prevent errors
+const firstLineB = (bParts[0] ? bParts[0].trim() : "") + 
+                   (bParts[1] ? `, ${bParts[1].trim()}` : "");
+const secondLineB = (bParts[2] ? bParts[2].trim() : "") +
+                    (bParts[3] ? `, ${bParts[3].trim()}` : "") +
+                    (bParts[4] ? `, ${bParts[4].trim()}` : "");
+
+// Safely construct formatted B address
 const formattedBAddress = `${firstLineB}<br>${secondLineB}`;
 
-var sAddress = item.sAddress;
+// Safely access sAddress parts
+var sAddress = item.sAddress || ""; // Default to empty string if undefined
 const sParts = sAddress.split(',');
-const firstLineS = `${sParts[0].trim()}, ${sParts[1].trim()}`;
-const secondLineS = `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}`;
+
+// Use conditional checks to prevent errors
+const firstLineS = (sParts[0] ? sParts[0].trim() : "") +
+                   (sParts[1] ? `, ${sParts[1].trim()}` : "");
+const secondLineS = (sParts[2] ? sParts[2].trim() : "") +
+                    (sParts[3] ? `, ${sParts[3].trim()}` : "") +
+                    (sParts[4] ? `, ${sParts[4].trim()}` : "");
+
+// Safely construct formatted S address
 const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
+
 
 $("#infoTable").append(
 `<tr>
