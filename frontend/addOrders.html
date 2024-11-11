@@ -806,16 +806,16 @@ $("#orderDate").val(orderDateAdd);
 const token = localStorage.getItem("token");
 
 function calculateProfit() {
-const quoted = parseFloat($("#soldP").val()) || 0;
-const yardPrice = parseFloat($("#costP").val()) || 0;
-const shipping = parseFloat($("#shippingFee").val()) || 0;
-const salesTax = 0.05 * quotedPrice;
-const grossProfit = quotedPrice - yardPrice - shipping - salesTax;
-$("#salestax").val(salesTax.toFixed(2));
-$("#grossProfit").val(grossProfit.toFixed(2));
+  const quoted = parseFloat($("#soldP").val()) || 0;
+  const yardPrice = parseFloat($("#costP").val()) || 0;
+  const shipping = parseFloat($("#shippingFee").val()) || 0;
+  const salesTax = 0.05 * quoted;
+  const grossProfit = quoted - yardPrice - shipping - salesTax;
+  $("#salestax").val(salesTax.toFixed(2));
+  $("#grossProfit").val(grossProfit.toFixed(2));
 }
 
-$("#soldP, #costP, #shippingFee").on("input", calculateProfit());
+$("#soldP, #costP, #shippingFee").on("input", calculateProfit);
 
 
 // Function to extract the highest order number from a collection
