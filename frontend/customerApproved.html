@@ -299,7 +299,7 @@ aria-expanded="false"
 <th style="cursor: pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Customer Info <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Shipping Info <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer;" scope="col">Part Name <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer;" scope="col">Sale Info <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Part Info <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Email <span class="sort-icon onlyNumber">&#9650;</span></th>
@@ -541,7 +541,21 @@ const secondLineS = (sParts[2] ? sParts[2].trim() : "") +
 
 // Safely construct formatted S address
 const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
-
+var expShip = item.expediteShipping;
+    var dsCall = item.dsCall;
+    console.log("expediteShipping",expShip,"dsCall",dsCall);
+    var exp;
+    var ds;
+    if(expShip == "true"){
+      exp = "Expedite shipping";
+    }else{
+      exp = "";
+    }
+    if(dsCall == "true"){
+      ds = "DS Call";
+    }else{
+      ds = "";
+    }
 
 $("#infoTable").append(
 `<tr>
@@ -556,7 +570,12 @@ Alt Phone: ${item.altPhone}</br>
 Billing Address:</br> ${formattedBAddress}</br>
 </td>
 <td> ${formattedSAddress}</br>                
-<td>${item.pReq || item.partName}</td>
+<td>Part Name: ${item.pReq || item.partName || ''}<br>
+            <b>Quoted Price:</b> $${item.soldP || 0}<br>
+             ${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
+  ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
+            </td>
+        <td>
 <td>Year: ${item.year}</br>
 Make: ${item.make}</br>
 Model: ${item.model}</br>
