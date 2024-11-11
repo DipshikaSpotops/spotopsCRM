@@ -719,93 +719,81 @@ let isNavigating = false; // Prevent rapid multiple clicks
 // }
 
 // Fetch orders for a specific month
-async function fetchLatestThreeMonthsOrders() {
+async function fetchAndUpdateMonthlySalesProgress() {
   try {
-    // Set up the current date and format options
     const now = new Date();
     const options = {
       timeZone: 'America/Chicago',
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
     };
     const formatter = new Intl.DateTimeFormat('en-US', options);
     const parts = formatter.formatToParts(now);
-    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value}`;
     const date = new Date(formattedDate);
-
-    // Define the month and year format
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    
-    // Array to store the last three months (including the current month)
-    const latestMonths = [];
+    const lastThreeMonths = [];
 
-    // Loop through the current and last two months
+    // Get data for the last three months including the current month
     for (let i = 0; i < 3; i++) {
       const pastDate = new Date(date.getFullYear(), date.getMonth() - i, 1);
       const monthStr = months[pastDate.getMonth()];
       const year = pastDate.getFullYear();
-      latestMonths.push({ month: monthStr, year });
+      lastThreeMonths.push({ month: monthStr, year });
     }
 
-    const monthlyData = {};
+    const actualGPData = [];
+    const monthLabels = [];
 
-    // Fetch orders for each of the last three months
-    for (const { month, year } of latestMonths) {
+    for (const { month, year } of lastThreeMonths) {
       const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
         params: { month, year },
       });
 
       if (response.status === 200) {
-        monthlyData[`${month} ${year}`] = response.data;
+        const orders = response.data;
+        const totalActualGP = orders.reduce((acc, order) => acc + (order.actualGP || 0), 0);
+        actualGPData.unshift(totalActualGP); // Adding from newest to oldest
+        monthLabels.unshift(`${month} ${year}`); // Adding month/year label
       } else {
         console.error(`Failed to fetch orders for ${month} ${year}`);
       }
     }
 
-    console.log("Fetched data for the last three months:", monthlyData);
-    return monthlyData;
-
-  } catch (error) {
-    console.error("Error fetching the latest three months of orders:", error);
-    return {};
-  }
-}
-
-// Update the chart with the given month’s data
-async function fetchAndDisplayThreeMonthsData() {
-  try {
-    // Fetch data for the last three months
-    const monthlyData = await fetchLatestThreeMonthsOrders();
-
-    // Prepare the month names and display data for each of the three months
-    const monthKeys = Object.keys(monthlyData).sort((a, b) => new Date(b) - new Date(a));
-
-    // Loop through each month and populate the charts
-    monthKeys.slice(0, 3).forEach((monthName, index) => {
-      const orders = monthlyData[monthName];
-      updateMonthlyChart(index + 1, monthName, orders);
+    // Render the bar chart with monthly sales progress (Total Actual GP)
+    const ctx1 = document.getElementById("monthlySalesProgressChart").getContext("2d");
+    new Chart(ctx1, {
+      type: "bar",
+      data: {
+        labels: monthLabels,
+        datasets: [
+          {
+            label: "Monthly Sales Progress (Total Actual GP)",
+            data: actualGPData,
+            backgroundColor: "rgba(75, 192, 192, 0.5)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { title: { display: true, text: "Month" } },
+          y: { title: { display: true, text: "Actual GP" } },
+        },
+      },
     });
   } catch (error) {
-    console.error("Error displaying data for the last three months:", error);
+    console.error("Error fetching monthly sales progress:", error);
   }
 }
 
 function updateMonthlyChart(index, monthName, orders) {
   const statusLabels = [
-    "Placed",
-    "Customer approved",
-    "Yard Processing",
-    "In Transit",
-    "Escalation",
-    "Order Fulfilled",
-    "Order Cancelled",
-    "Refunded",
-    "Dispute"
+    "Placed", "Customer approved", "Yard Processing", "In Transit",
+    "Escalation", "Order Fulfilled", "Order Cancelled", "Refunded", "Dispute"
   ];
 
   const statusCounts = statusLabels.map(status =>
@@ -830,7 +818,7 @@ function updateMonthlyChart(index, monthName, orders) {
     <div class="rate-item rate-cancellation">Cancellation Rate: ${cancellationRate}%</div>
   `;
 
-  // Render the pie chart
+  // Render the pie chart for order status distribution
   const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
   new Chart(ctx, {
     type: "pie",
@@ -841,15 +829,8 @@ function updateMonthlyChart(index, monthName, orders) {
           label: `Order Status Distribution for ${monthName}`,
           data: statusCounts,
           backgroundColor: [
-            "#fdfdfd",
-            "#ffe5a0",
-            "#bfe1f6",
-            "#1e6693",
-            "#e6cff2",
-            "#4c8b0f",
-            "#ff2121",
-            "#5a3286",
-            "#e6cff2"
+            "#fdfdfd", "#ffe5a0", "#bfe1f6", "#1e6693",
+            "#e6cff2", "#4c8b0f", "#ff2121", "#5a3286", "#e6cff2"
           ],
           hoverOffset: 4
         }
@@ -869,46 +850,10 @@ function updateMonthlyChart(index, monthName, orders) {
     }
   });
 
-  const ctx1 = document.getElementById("monthlySalesProgressChart").getContext("2d");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: statusLabels,
-        datasets: [
-          {
-            label: "Monthly Sales Progress (Total Actual GP)",
-            data: data,
-            backgroundColor: "rgba(75, 192, 192, 0.5)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: { title: { display: true, text: "Month" } },
-          y: { title: { display: true, text: "Actual GP" } },
-        },
-      },
-    });
-  // Set the month name in the header
   document.getElementById(`month-name-${index}`).innerText = monthName;
 }
+fetchAndUpdateMonthlySalesProgress();
 
-fetchAndDisplayThreeMonthsData();
-
-
-
-
-// Parse the custom order date format
-function parseOrderDate(orderDate) {
-const parts = orderDate.split(" ");
-const day = parseInt(parts[0]);
-const month = new Date(`${parts[1]} 1`).getMonth();
-const year = parseInt(parts[2]);
-return new Date(year, month, day);
-}
 
 
 const currentPath = window.location.pathname + "?newEntry=true";
