@@ -641,13 +641,10 @@ try {
 const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
 axios.get("https://www.spotops360.com/orders", {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
-}),
-axios.get("https://www.spotops360.com/cancelledOrders", {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}),
+})
 ]);
 
-if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
+if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 
@@ -656,8 +653,8 @@ var cancelledOrders = cancelledOrdersResponse.data;
 allOrders = [...orders, ...cancelledOrders];
 
 // Sort and render the orders
-allOrders = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage);
+// allOrders = sortOrdersByOrderNoDesc(allOrders);
+renderTableRows(allOrders);
 createPaginationControls(Math.ceil(allOrders.length / 25));
 } catch (error) {
 console.error("Error fetching orders:", error);
