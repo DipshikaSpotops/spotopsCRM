@@ -373,28 +373,26 @@ res.json(orders);
 });
 // orders per page fpr server side pagination
 app.get("/ordersPerPage", async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 25;
-
-    // Fetch orders sorted by date in descending order
-    const orders = await Order.find()
-      .sort({ orderDate: -1 }) // -1 for descending order
-      .skip((page - 1) * limit)
-      .limit(limit);
-
-    const totalOrders = await Order.countDocuments();
-    res.json({
-      orders,
-      totalPages: Math.ceil(totalOrders / limit),
-      currentPage: page,
-    });
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).json({ message: "Server error" });
-  }
+try {
+const page = parseInt(req.query.page) || 1;
+const limit = parseInt(req.query.limit) || 25;
+const totalOrders = await Order.countDocuments();
+const skip = Math.max(totalOrders - page * limit, 0);
+console.log("totalOrders",totalOrders);
+const orders = await Order.find()
+.sort({ _id: -1 }) 
+.skip(skip)
+.limit(limit);
+res.json({
+orders,
+totalPages: Math.ceil(totalOrders / limit),
+currentPage: page,
 });
-
+} catch (error) {
+console.error("Error fetching orders:", error);
+res.status(500).json({ message: "Server error" });
+}
+});
 
 // for only placed orders
 app.get("/orders/placed", async (req, res) => {
