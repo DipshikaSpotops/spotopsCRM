@@ -294,7 +294,7 @@ aria-expanded="false"
 <thead>
 <tr>
 <th style="cursor: pointer;" scope="col">Actions</th>
-<th style="cursor: pointer;" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer;" scope="col">Order Date</th>
 <th style="cursor: pointer;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Customer Info <span class="sort-icon onlyNumber">&#9650;</span></th>
@@ -556,11 +556,12 @@ const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
     }else{
       ds = "";
     }
-
+    const datetime = item.orderDate;
+    const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
 $("#infoTable").append(
 `<tr>
 <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
-<td>${item.orderDate}</td>
+<td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
 <td>Name: ${item.customerName}</br>
