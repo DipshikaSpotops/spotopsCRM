@@ -520,14 +520,23 @@ async function fetchOrders(page = 1) {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
+    console.log("API response:", response.data); // Log the response for debugging
+
     const { orders, totalPages, currentPage } = response.data;
+
+    // Check if 'orders' is an array
+    if (!Array.isArray(orders)) {
+      console.error("Error: Expected 'orders' to be an array, but received:", orders);
+      return;
+    }
+
     renderTableRows(orders); 
     createPaginationControls(totalPages, currentPage);
-    sortOrdersByOrderNoDesc(orders);
   } catch (error) {
     console.error("Error fetching orders:", error);
   }
 }
+
 // Function to render rows based on the page
 
 // <td>${sendInvoice}</td>
@@ -540,43 +549,44 @@ window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
 function renderTableRows(orders) {
+  if (!Array.isArray(orders)) {
+    console.error("renderTableRows expected an array but received:", orders);
+    return;
+  }
+
   $("#infoTable").empty(); // Clear existing rows
 
   orders.forEach((item) => {
+    // Existing rendering logic
     const escalationStatus = item.additionalInfo && item.additionalInfo[0]?.escTicked === "Yes" ? "Yes" : "";
     const escalationStyle = item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes" ? 'style="background-color: lightgreen;"' : '';
-    
-    // Define action buttons
+    const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
+
     const actions = `
       <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1;border: none;color: #38696c;">Edit</button>
       <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>
     `;
-    const datetime = item.orderDate;
-    const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-      
-$("#infoTable").append(`
-<tr>
-<td>${dateOnly}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
-<td>${item.pReq || item.partName}</td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""}`)
-
-.join("<br>")
-: ""
-}</td>
-<td>${item.orderStatus}</td>
-<td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
-<td ${escalationStyle}>${escalationStatus}</td>
-<td>${actions}</td>
-<td>${item.email}</td>
-</tr>
-`);
-});
+    
+    $("#infoTable").append(`
+      <tr>
+        <td>${dateOnly}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
+        <td>${item.customerName}</td>
+        <td>${item.pReq || item.partName}</td>
+        <td>${
+          item.additionalInfo && item.additionalInfo.length > 0
+            ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""}`).join("<br>")
+            : ""
+        }</td>
+        <td>${item.orderStatus}</td>
+        <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
+        <td ${escalationStyle}>${escalationStatus}</td>
+        <td>${actions}</td>
+        <td>${item.email}</td>
+      </tr>
+    `);
+  });
 }
 
 function createPaginationControls(totalPages, currentPage) {
@@ -674,7 +684,7 @@ $("#searchInput").on("keyup", function () {
   
   // Filter the entire allOrders dataset based on the search term
   const filteredOrders = allOrders.filter(order => {
-    // Check basic fields
+    // Check basic fields including phone, make, year, and model
     const basicSearch = (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
       (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
@@ -682,17 +692,22 @@ $("#searchInput").on("keyup", function () {
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
       (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.email && order.email.toLowerCase().includes(value))
+      (order.email && order.email.toLowerCase().includes(value)) ||
+      (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
+      (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
+      (order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
+      (order.model && order.model.toLowerCase().includes(value))     // Added model
     );
 
-    // Check if any yard matches the search term
+    // Check if any yard detail (including stockNo) matches the search term
     const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
       const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
       return (
         yardLabel.includes(value) || 
         (info.yardName && info.yardName.toLowerCase().includes(value)) || 
         (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-        (info.status && info.status.toLowerCase().includes(value))
+        (info.status && info.status.toLowerCase().includes(value)) ||
+        (info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
       );
     });
 
@@ -702,12 +717,12 @@ $("#searchInput").on("keyup", function () {
 
   // If a search is active, display the filtered results, otherwise reset to the full dataset
   if (filteredOrders.length > 0 || value === "") {
-    renderTableRows(1, filteredOrders); // Render the first page of filtered results
-    createPaginationControls(Math.ceil(filteredOrders.length / 25), filteredOrders);
-  } else {
-    $("#infoTable").empty(); // Clear the table if no results are found
-    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-  }
+  renderTableRows(filteredOrders); // Corrected call
+  createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+} else {
+  $("#infoTable").empty(); // Clear the table if no results are found
+  $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+}
 });
 
 
