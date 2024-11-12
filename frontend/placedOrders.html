@@ -1028,7 +1028,8 @@ window.location.reload();
       cancelledDate: cancelledDate,
       cancelledRefAmount: cancelledRefAmount,
       orderNo: orderId,
-      cancellationReason:reason
+      cancellationReason:reason,
+      orderStatus: "Order cancelled"
     })
       .then(function (response) {
         console.log("Refund information updated successfully:", response.data);

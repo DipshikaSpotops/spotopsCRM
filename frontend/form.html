@@ -2064,6 +2064,7 @@ $(".custRefundSubmit").on("click", function () {
   const custRefundData = {
     custRefundDate,
     custRefundedAmount,
+    orderStatus:"Refunded"
   };
 
   axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
