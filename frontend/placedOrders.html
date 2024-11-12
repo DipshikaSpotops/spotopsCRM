@@ -633,21 +633,12 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
 orderPlacedDate = data.orderDate;
-// console.log("orderDate",orderPlacedDate)
+console.log("orderDate",orderPlacedDate)
 })
 .catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
 
-console.log("Order Status changed to:", "cancelled");
-if (newOrderStatus == "Order") {
-// console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
-$("#disputedDate").val(currentDateTime);
-// orderedDate
-$(".orderedDate").val(orderPlacedDate);
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");
-$("#disputeDiv").fadeIn();
-}
+
 
 
 async function fetchToken() {
