@@ -523,7 +523,7 @@ async function fetchOrders(page = 1) {
     const { orders, totalPages, currentPage } = response.data;
     renderTableRows(orders); 
     createPaginationControls(totalPages, currentPage);
-    // sortOrdersByOrderNoDesc(orders);
+    sortOrdersByOrderNoDesc(orders);
   } catch (error) {
     console.error("Error fetching orders:", error);
   }
@@ -652,7 +652,7 @@ var orders = ordersResponse.data;
 allOrders = orders;
 
 // Sort and render the orders
-// allOrders = sortOrdersByOrderNoDesc(allOrders);
+allOrders = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(allOrders);
 createPaginationControls(Math.ceil(allOrders.length / 25));
 } catch (error) {
