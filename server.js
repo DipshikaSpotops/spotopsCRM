@@ -19,6 +19,7 @@ const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
 const { url } = require("inspector");
 const { getMaxListeners } = require("events");
+const { Server } = require("http");
 
 const port = 3000;
 const app = express();
@@ -521,23 +522,28 @@ app.get("/orders/monthly", async (req, res) => {
 try {
 const month = req.query.month;
 const year = req.query.year;
+const page = parseInt(req.query.page) || 1;
+const limit = parseInt(req.query.limit) || 25;
 if (!month || !year) {
 return res.status(400).json({ message: "Month and year are required" });
 }
 const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-
-const monthlyOrders = await Order.find({
-orderDate: {
-$regex: monthYearPattern,
-},
+const monthlyOrders = await Order.find({ orderDate: { $regex: monthYearPattern } })
+.sort({ orderDate: -1 }) 
+.skip((page - 1) * limit)
+.limit(limit);
+const totalOrders = await Order.countDocuments({ orderDate: { $regex: monthYearPattern } });
+res.json({
+orders: monthlyOrders,
+totalPages: Math.ceil(totalOrders / limit),
+currentPage: page,
+totalOrders
 });
-res.json(monthlyOrders);
 } catch (error) {
 console.error("Error fetching orders for specified month and year:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
-
 
 app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
