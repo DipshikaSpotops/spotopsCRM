@@ -401,7 +401,7 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Order Date <span class="sort-icon">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Customer Info<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Part Info <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
@@ -591,6 +591,7 @@ $("#infoTable").append(`
 <td>${item.salesAgent}</td>
 <td>${item.customerName}<br>
     ${item.phone}<br>
+    <b>Attention</b>: ${item.attention}
     ${item.sAddress}
     </td>
     
