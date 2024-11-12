@@ -1527,7 +1527,7 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
     subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
     html: `<p>Dear ${order.customerName},</p>
     <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
-    <pTo process your refend, please ship the part back to us at the following address:</p>
+    <p>To process your refend, please ship the part back to us at the following address:</p>
     <p>${order.additionalInfo[yardIndex - 1].street}<br>
     ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
     </p>
