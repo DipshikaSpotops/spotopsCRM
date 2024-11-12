@@ -2006,7 +2006,6 @@ else if (newOrderStatus == "Order Cancelled") {
 $("body").addClass("modal-active");
     $(".orderedDate").val(orderPlacedDate);
     $("#cancelledDate").val(currentDateTime);
-    $("body").append('<div class="modal-overlay"></div>');
     console.log("Showing cancellation div"); // Add this line to check if it's being called
     $("#cancellingOrder").css("display", "block").hide().fadeIn();
 // $("#cancellingOrder").fadeIn(); // Ensure this is called

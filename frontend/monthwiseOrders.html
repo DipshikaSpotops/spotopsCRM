@@ -578,9 +578,9 @@ ${editButton}
 <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 // <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
 
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-`;
+// const sendInvoice = `
+// <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
+// `;
 
 const yardlength = item.additionalInfo.length;
 const datetime = item.orderDate;
@@ -594,7 +594,7 @@ $("#infoTable").append(`
 <td>${item.salesAgent}</td>
 <td>${item.customerName}<br>
     ${item.phone}<br>
-    <b>Attention</b>: ${item.attention}<br>
+     ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
     ${item.sAddress}
     </td>
     
