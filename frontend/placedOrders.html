@@ -356,7 +356,7 @@ placeholder="Search..."
 <thead>
 <tr>
 <th style="cursor: pointer;" scope="col">Actions</th>
-<th style="cursor: pointer;" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer;" scope="col">Order date</th>
 <th style="cursor: pointer;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Customer Info <span class="sort-icon onlyNumber">&#9650;</span></th>
@@ -839,7 +839,8 @@ function renderOrders(item){
     }else{
       ds = "";
     }
-
+    const datetime = item.orderDate;
+    const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
     // Append data to the table with optional chaining and default values
     $("#infoTable").append(
       `<tr>
@@ -853,7 +854,7 @@ function renderOrders(item){
             Cancel
           </button>
         </td>
-        <td>${item.orderDate || ''}</td>
+        <td>${dateOnly || ''}</td>
         <td>${item.orderNo || ''}</td>
         <td>${item.salesAgent || ''}</td>
         <td>
