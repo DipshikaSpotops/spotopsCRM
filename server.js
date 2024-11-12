@@ -380,7 +380,7 @@ const totalOrders = await Order.countDocuments();
 const skip = Math.max(totalOrders - page * limit, 0);
 console.log("totalOrders",totalOrders);
 const orders = await Order.find()
-.sort({ _id: -1 }) 
+.sort({ _id: 1 }) 
 .skip(skip)
 .limit(limit);
 console.log("last 25",orders);
