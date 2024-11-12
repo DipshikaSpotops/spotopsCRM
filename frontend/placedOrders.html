@@ -208,6 +208,23 @@ z-index: 999; /* Places it just below the modal div */
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
 }
+
+#cancellingOrder {
+  display: none; /* Hidden by default */
+  position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54%;
+    background-color: white;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+}
+
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -403,7 +420,49 @@ style="display: none;"
 OK
 </button>
 </div>
-
+<!-- cancel popup -->
+<div id="cancellingOrder" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
+  <div style="display: flex; justify-content: center; align-items: center; position: relative;">
+  <h1 style="margin: 0; text-align: center;">Order Cancellation</h1>
+  <button type="button" id="closeCancelled" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
+  </div>
+  <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+  <div style="flex: 1; min-width: 300px;">
+  <label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
+  <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
+  </div>
+  <div style="flex: 1; min-width: 300px;">
+  <label for="cancelledDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
+  <input type="text" id="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+  </div>
+  <div class="containerForScroll">
+  <label for=h></label>
+  </div>
+  <div style="flex: 1; min-width: 300px;">
+    <label for="reasonCancel" style="white-space: nowrap;margin: 4% 27%;">Reason:</label>
+    <select type="text" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+    <option value="Same Day">Same Day</option>
+    <option value="Invoice Not Signed">Invoice Not Signed</option>
+    <option value="Personal Reason">Personal Reason</option>
+    <option value="Reimbursement">Reimbursement</option>
+    <option value="Delay">Delay</option>
+    <option value="Defective/Damaged">Defective/Damaged</option>
+    <option value="Ugly Part">Ugly Part</option>
+    <option value="Wrong Part">Wrong Part</option>
+    <option value="Reprogram/VIN">Reprogram/VIN</option>
+    <option value="No Blind Shipping">No Blind Shipping</option>
+    <option value="Dispute">Dispute</option>
+    <option value="Part Not Available">Part Not Available</option>
+    <option value="No Refund">No Refund</option>
+    </select>
+    </div>
+  <div style="flex: 1; min-width: 300px;">
+  <label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
+  <input type="number" class="cancelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+  </div>
+  </div>
+  <button type="button" id="cancelledRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
+  </div>
 <script>
 $(document).ready(async function () {
 let sortOrder = {
@@ -533,6 +592,62 @@ $("#user-name").text(firstName);
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
+var orderNo = urlParams.get("orderNo");
+var orderPlacedDate;
+// current datetime - US Central time
+const now1 = new Date();
+const options1 = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter1 = new Intl.DateTimeFormat('en-US', options1);
+const parts1 = formatter.formatToParts(now1);
+const formattedDate1 = `${parts1[4].value}-${parts1[0].value}-${parts1[2].value} ${parts1[6].value}:${parts1[8].value}:${parts1[10].value}`;
+const date1 = new Date(formattedDate);
+// Array of month names
+const months1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day1 = date.getDate();
+const month1 = months[date.getMonth()];
+const year1 = date.getFullYear();
+const hour1 = date.getHours();
+const minute1 = date.getMinutes().toString().padStart(2, '0');
+const daySuffix = (day) => {
+if (day > 3 && day < 21) return "th";
+switch (day % 10) {
+case 1: return "st";
+case 2: return "nd";
+case 3: return "rd";
+default: return "th";
+}
+};
+var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+// common fetch of orders
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then(response => response.json())
+.then(data => {
+orderPlacedDate = data.orderDate;
+// console.log("orderDate",orderPlacedDate)
+})
+.catch(error => console.error("Error fetching yard data:", error));
+// common fetch of orders ends here
+
+console.log("Order Status changed to:", "cancelled");
+if (newOrderStatus == "Order") {
+// console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
+$("#disputedDate").val(currentDateTime);
+// orderedDate
+$(".orderedDate").val(orderPlacedDate);
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
+$("#disputeDiv").fadeIn();
+}
+
 
 async function fetchToken() {
 try {
@@ -774,37 +889,11 @@ console.error("Error updating order status:", error);
 });
 $("#infoTable").on("click", ".cancel-btn", function () {
 const id = $(this).data("id");
-
-if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-// Send a request to update the order status in the backend
-fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
-method: "PUT",
-headers: {
-Authorization: `Bearer ${token}`,
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-firstName: firstName
-})
-})
-.then(response => {
-if (!response.ok) {
-console.error("Failed to update order status", response);
-throw new Error("Failed to update order status");
-}
-return response.json();
-})
-.then(data => {
-console.log("Order status updated successfully", data);
-alert("Order status updated to 'Order Cancelled'");
-
-// Remove the entire row from the table
-$(this).closest("tr").remove();
-})
-.catch(error => {
-console.error("Error updating order status:", error);
-});
-}
+$("#cancellingOrder").fadeIn();
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
+    $(".orderedDate").val(orderPlacedDate);
+    $("#cancelledDate").val(currentDateTime);
 });
 function renderOrders(item){
     $("#infoTable").empty();
@@ -921,6 +1010,52 @@ $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 }
 });
+
+  $("#cancelledRefundSubmit").on("click", function () {
+    $("#cancellingOrder").fadeOut();
+  
+    const cancelledDate = $("#cancelledDate").val();
+    const cancelledRefAmount = $(".cancelledRefAmount").val();
+    const orderNo = urlParams.get("orderNo");
+    const reason = $("#reasonCancel").val();
+  
+    console.log("Captured Data:");
+    console.log("Cancelled Date:", cancelledDate);
+    console.log("Cancelled Refund Amount:", cancelledRefAmount);
+    console.log("Order No:", orderNo);
+  
+    axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, {
+      cancelledDate: cancelledDate,
+      cancelledRefAmount: cancelledRefAmount,
+      orderNo: orderNo,
+      cancellationReason:reason
+    })
+      .then(function (response) {
+        console.log("Refund information updated successfully:", response.data);
+        $("#custRefunds").val(cancelledRefAmount);
+        alert("Refund information for cancelled order updated successfully!");
+  
+        // Send cancellation email after successful refund update
+        return axios.post(`/orders/sendCancelEmail/${orderNo}?cancelledRefAmount=${cancelledRefAmount}`);
+      })
+      .then(function (response) {
+        console.log("Cancellation email sent successfully:", response.data.message);
+        alert("Cancellation email sent successfully!");
+        $(".modal-overlay").remove();
+  // $(".mainDiv").removeClass("blur");
+  $("body").removeClass("modal-active");
+      })
+      .catch(function (error) {
+        console.error("Error during operation:", error);
+  
+        if (error.response && error.response.status === 500) {
+          alert("Server error occurred. Please try again.");
+        } else {
+          alert("An error occurred. Please try again.");
+        }
+      });
+  });
+
 $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
