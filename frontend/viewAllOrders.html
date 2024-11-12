@@ -514,11 +514,15 @@ sortTable(index, type);
 });
 const rowsPerPage = 25;
 let currentPage = 1;
+// Pagination related variables
+let currentPage = 1;
+const rowsPerPage = 25;
+
 async function fetchOrders(page = 1) {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
-      params: { page, limit: 25 },
+    const response = await axios.get("https://www.spotops360.com/orders", {
+      params: { page, limit: rowsPerPage },
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
@@ -529,30 +533,20 @@ async function fetchOrders(page = 1) {
     console.error("Error fetching orders:", error);
   }
 }
-// Function to render rows based on the page
 
-// <td>${sendInvoice}</td>
-var firstname = localStorage.getItem("firstName");
-if (firstName) {
-$("#user-name").text(firstName);
-}
-if (!firstName) {
-window.location.href = "login_signup.html";
-}
-// Function to create pagination controls
 function renderTableRows(orders) {
   $("#infoTable").empty(); // Clear existing rows
 
   orders.forEach((item) => {
     const escalationStatus = item.additionalInfo && item.additionalInfo[0]?.escTicked === "Yes" ? "Yes" : "";
     const escalationStyle = item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes" ? 'style="background-color: lightgreen;"' : '';
-    
+
     // Define action buttons
     const actions = `
       <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
       <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
     `;
-    
+
     $("#infoTable").append(`
       <tr>
         <td>${item.orderDate}</td>
@@ -569,6 +563,16 @@ function renderTableRows(orders) {
     `);
   });
 }
+
+
+var firstname = localStorage.getItem("firstName");
+if (firstName) {
+$("#user-name").text(firstName);
+}
+if (!firstName) {
+window.location.href = "login_signup.html";
+}
+
 
 function createPaginationControls(totalPages, currentPage) {
   const paginationControls = $('#pagination-controls');
