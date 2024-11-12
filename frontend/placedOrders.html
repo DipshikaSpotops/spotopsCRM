@@ -845,6 +845,8 @@ console.log("id",id);
 $("#cancellingOrder").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
+const urlParams = new URLSearchParams(window.location.search);
+var orderNo = urlParams.get("orderNo");
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
