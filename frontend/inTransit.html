@@ -553,13 +553,13 @@ $("#infoTable").append(`
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.trackingNo}`)
+.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br<b>Tracking No.</b>: >${info.trackingNo}`)
 
 .join("<br>")
 : ""
 }</td>
 <td>${item.orderStatus}</td>
-<td class="actions">${actions}</td>
+<td>${actions}</td>
 </tr>
 `);
 });
