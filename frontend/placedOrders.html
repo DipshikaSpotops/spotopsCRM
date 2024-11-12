@@ -592,6 +592,7 @@ $("#user-name").text(firstName);
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
+const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
 var orderPlacedDate;
 // current datetime - US Central time
