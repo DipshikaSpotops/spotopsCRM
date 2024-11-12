@@ -649,8 +649,7 @@ throw new Error("Failed to fetch orders");
 }
 
 var orders = ordersResponse.data;
-var cancelledOrders = cancelledOrdersResponse.data;
-allOrders = [...orders, ...cancelledOrders];
+allOrders = orders;
 
 // Sort and render the orders
 // allOrders = sortOrdersByOrderNoDesc(allOrders);
