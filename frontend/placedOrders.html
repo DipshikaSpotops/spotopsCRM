@@ -839,8 +839,9 @@ console.log("Order status updated successfully:", data);
 console.error("Error updating order status:", error);
 }
 });
+let orderId;
 $("#infoTable").on("click", ".cancel-btn", function () {
-const id = $(this).data("id");
+  orderId = $(this).data("id");
 console.log("id",id);
 $("#cancellingOrder").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
@@ -1015,15 +1016,15 @@ window.location.reload();
   
     const cancelledDate = $("#cancelledDate").val();
     const cancelledRefAmount = $(".cancelledRefAmount").val();
-    const orderNo = urlParams.get("orderNo");
+    // const orderNo = urlParams.get("orderNo");
     const reason = $("#reasonCancel").val();
   
     console.log("Captured Data:");
     console.log("Cancelled Date:", cancelledDate);
     console.log("Cancelled Refund Amount:", cancelledRefAmount);
-    console.log("Order No:", orderNo);
+    console.log("Order No:", orderId);
   
-    axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, {
+    axios.put(`https://www.spotops360.com/orders/${orderId}/custRefund`, {
       cancelledDate: cancelledDate,
       cancelledRefAmount: cancelledRefAmount,
       orderNo: orderNo,
