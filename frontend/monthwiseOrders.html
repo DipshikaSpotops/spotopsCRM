@@ -427,6 +427,8 @@ placeholder="Search..."
 $(document).ready(async function () {
 // Pagination related variables
 let allOrders = [];
+const rowsPerPage = 25;
+let currentPage = 1;
 
 // Sorting Order Object
 var team, role;
@@ -440,34 +442,7 @@ yard: "asc",
 orderStatus: "asc",
 email: "asc",
 };
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-const date = new Date(formattedDate);
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-    const monthMap = {
-        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-        May: "05", Jun: "06", Jul: "07", Aug: "08",
-        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-    };
-    var monthNum = monthMap[month];
 
-$("#monthYearPicker").val(`${year}-${monthNum}`);
 function parseCustomDate(dateString) {
 const months = {
 Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
@@ -574,51 +549,11 @@ sortTable(index, type);
 });
 }
 });
-// Token fetching logic
-async function fetchToken() {
-try {
-const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
-if (response.status === 200) {
-localStorage.setItem("token", response.data.token);
-} else {
-throw new Error("Failed to fetch token");
-}
-} catch (error) {
-console.error("Error fetching token:", error);
-}
-}
 
-let token = localStorage.getItem("token");
-if (!token) {
-await fetchToken();
-token = localStorage.getItem("token");
-}
-// Function to fetch orders based on month, year, and page
-async function fetchMonthlyOrders(month, year, page = 1) {
-  try {
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-      params: { month, year, page, limit: 25 },
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
-    });
-
-    const { orders, totalPages, totalOrders } = response.data;
-    allOrders = orders; // Update current orders
-    currentPage = page; // Update current page
-
-    document.getElementById("showTotalOrders").textContent = `Total Orders This Month: ${totalOrders}`;
-    renderTableRows(currentPage); // Render current page's data
-    createPaginationControls(totalPages); // Update pagination controls
-
-  } catch (error) {
-    console.error("Error fetching monthly orders:", error);
-  }
-}
-
-fetchMonthlyOrders(month, year);
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * 25;
-const end = start + 25;
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
 
 $('#infoTable').empty(); // Clear the table
@@ -689,40 +624,94 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-function createPaginationControls(totalPages) {
-  const paginationControls = $('#pagination-controls');
-  paginationControls.empty();
+function createPaginationControls(totalPages, orders = allOrders) {
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); // Clear pagination controls
 
-  if (totalPages > 1) {
-    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
-    }
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
 
-    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-  }
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
 }
 
-// Event listeners for pagination buttons
+
+// Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-  const page = $(this).data('page');
-  fetchMonthlyOrders(month, year, page);
+const page = $(this).data('page');
+currentPage = page;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 });
 
+// "Previous" and "Next" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
-  if (currentPage > 1) {
-    fetchMonthlyOrders(month, year, currentPage - 1);
-  }
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+}
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  fetchMonthlyOrders(month, year, currentPage + 1);
+const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage);
+createPaginationControls(totalPages);
+}
 });
 
+// Token fetching logic
+async function fetchToken() {
+try {
+const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
+if (response.status === 200) {
+localStorage.setItem("token", response.data.token);
+} else {
+throw new Error("Failed to fetch token");
+}
+} catch (error) {
+console.error("Error fetching token:", error);
+}
+}
 
+let token = localStorage.getItem("token");
+if (!token) {
+await fetchToken();
+token = localStorage.getItem("token");
+}
+const now = new Date();
+const options = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter = new Intl.DateTimeFormat('en-US', options);
+const parts = formatter.formatToParts(now);
+const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+const date = new Date(formattedDate);
+// Array of month names
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+    const monthMap = {
+        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+        May: "05", Jun: "06", Jul: "07", Aug: "08",
+        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+    };
+    var monthNum = monthMap[month];
 
-
+$("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
   const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
@@ -739,7 +728,7 @@ console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
   renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / 25));
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
   console.error("Error fetching current month's orders:", error);
 }
@@ -791,7 +780,7 @@ $("#searchInput").on("keyup", function () {
   // If a search is active, display the filtered results, otherwise reset to the full dataset
   if (filteredOrders.length > 0 || value === "") {
     renderTableRows(1, filteredOrders); // Render the first page of filtered results
-    createPaginationControls(Math.ceil(filteredOrders.length / 25), filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
   } else {
     $("#infoTable").empty(); // Clear the table if no results are found
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
@@ -929,7 +918,7 @@ allOrders = ordersResponse.data;
 var allOrdersLength = allOrders.length;
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / 25));
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 } finally {
