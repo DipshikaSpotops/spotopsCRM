@@ -525,6 +525,7 @@ async function fetchOrders(page = 1) {
     const { orders, totalPages, currentPage } = response.data;
     renderTableRows(orders); // Pass the fetched orders directly to render
     createPaginationControls(totalPages, currentPage);
+    sortOrdersByOrderNoDesc(orders);
   } catch (error) {
     console.error("Error fetching orders:", error);
   }
