@@ -721,34 +721,21 @@ let isNavigating = false; // Prevent rapid multiple clicks
 
 
 
-
 async function fetchAndDisplayThreeMonthsData() {
-  try {
-    // Set up the current date and format options
-    const now = new Date();
-    const options = {
-      timeZone: 'America/Chicago',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    };
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    const parts = formatter.formatToParts(now);
-    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-    const date = new Date(formattedDate);
+  const monthlyGPData = []; // Store GP data for each of the last three months
+  const monthLabels = [];   // Store month names for chart labels
 
-    // Define the month and year format
+  try {
+    const now = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
     // Loop through the current and last two months
     for (let i = 0; i < 3; i++) {
-      const pastDate = new Date(date.getFullYear(), date.getMonth() - i, 1);
+      const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthStr = months[pastDate.getMonth()];
       const year = pastDate.getFullYear();
+
+      monthLabels.unshift(`${monthStr} ${year}`);
 
       // Fetch and render each month’s data
       try {
@@ -760,6 +747,10 @@ async function fetchAndDisplayThreeMonthsData() {
           const orders = response.data;
           const monthName = `${monthStr} ${year}`;
           updateMonthlyChart(i + 1, monthName, orders);
+
+          // Calculate the total GP for the month and add it to the array
+          const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
+          monthlyGPData.unshift(totalGP); // Add the GP data in reverse order for chronological display
         } else {
           console.error(`Failed to fetch orders for ${monthStr} ${year}`);
         }
@@ -767,10 +758,45 @@ async function fetchAndDisplayThreeMonthsData() {
         console.error(`Error fetching orders for ${monthStr} ${year}`, error);
       }
     }
+
+    // Now initialize the Monthly Sales Progress Chart with GP data
+    initializeMonthlySalesProgressChart(monthLabels, monthlyGPData);
+
   } catch (error) {
     console.error("Error setting up the date or fetching monthly data:", error);
   }
 }
+
+// Function to initialize the Monthly Sales Progress Chart
+function initializeMonthlySalesProgressChart(labels, data) {
+  const ctx = document.getElementById("monthlySalesProgressChart").getContext("2d");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Monthly Sales Progress (Total Actual GP)",
+          data: data,
+          backgroundColor: "rgba(75, 192, 192, 0.5)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: "Month" } },
+        y: { title: { display: true, text: "Actual GP" } },
+      },
+    },
+  });
+}
+
+// Call the main function to fetch and display data for the three months
+fetchAndDisplayThreeMonthsData();
+
 
 function updateMonthlyChart(index, monthName, orders) {
   const statusLabels = [
