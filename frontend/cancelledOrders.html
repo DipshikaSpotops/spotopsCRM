@@ -545,17 +545,10 @@ function renderTableRows(page, orders = allOrders) {
         }
 
         const team = localStorage.getItem('team');
-        const editButton = (team === "Team Mark" || team === "Team Sussane")
-            ? "" // Hide the edit button
-            : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-
+     
         const actions = `
             ${editButton}
-            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
-
-        const sendInvoice = `
-            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
         const yardlength = item.additionalInfo.length;
 
@@ -569,8 +562,7 @@ function renderTableRows(page, orders = allOrders) {
                 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
                 <td>${item.orderStatus}</td>
                 <td ${escalationStyle}>${escalationStatus}</td>
-                <td class="actions" style="justify-content: center;">${actions}</td>
-                <td>${sendInvoice}</td>
+                <td style="justify-content: center;">${actions}</td>
                 <td>${item.email}</td>
             </tr>
         `);
@@ -712,72 +704,14 @@ const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
 return orderNoB - orderNoA;
 });
 }
-$("#infoTable").on("click", ".edit-btn", function () {
-const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}`;
-});
 
 $("#infoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-$("#infoTable").on("click", ".cancel-btn", function () {
-const id = $(this).data("id");
-console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-
-if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-// Change the order status to "Order Cancelled" in the HTML
-$(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
-
-// Optionally, disable the cancel button
-$(this).prop("disabled", true);
-
-// Send a request to update the order status in the backend
-fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
-method: "PUT",
-headers: {
-Authorization: `Bearer ${token}`,
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-firstName: firstName
-})
-})
-.then(response => {
-if (!response.ok) {
-console.error("Failed to update order status", response);
-throw new Error("Failed to update order status");
-}
-return response.json();
-})
-.then(data => {
-console.log("Order status updated successfully", data); // Added log
-alert("Order status updated to 'Order Cancelled'");
-})
-.catch(error => {
-console.error("Error updating order status:", error);
-});
-}
-});
 
 
-$("#infoTable").on("click", ".send-invoice-btn", function () {
-const id = $(this).data("id");
-fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-method: "POST",
-headers: {
-Authorization: `Bearer ${token}`
-},
-})
-.then((response) => response.json())
-.then((data) => {
-alert(data.message);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-});
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
