@@ -383,6 +383,7 @@ const orders = await Order.find()
 .sort({ _id: -1 }) 
 .skip(skip)
 .limit(limit);
+console.log("last 25",orders);
 res.json({
 orders,
 totalPages: Math.ceil(totalOrders / limit),
