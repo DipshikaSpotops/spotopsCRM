@@ -2351,7 +2351,8 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
     "Refunds:", custRefundDate, custRefundedAmount, 
     "Cancellations:", cancelledDate, cancelledRefAmount, 
     "OrderNo:", orderNo,
-    "cancellationReason:",cancellationReason
+    "cancellationReason:",cancellationReason,
+    "orderStatus",orderStatus,
   );
 
   try {
