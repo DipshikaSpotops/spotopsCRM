@@ -842,11 +842,11 @@ console.error("Error updating order status:", error);
 let orderId;
 $("#infoTable").on("click", ".cancel-btn", function () {
   orderId = $(this).data("id");
-console.log("id",id);
+console.log("id",orderId);
 $("#cancellingOrder").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-fetch(`https://www.spotops360.com/orders/${id}`)
+fetch(`https://www.spotops360.com/orders/${orderId}`)
 .then(response => response.json())
 .then(data => {
 orderPlacedDate = data.orderDate;
