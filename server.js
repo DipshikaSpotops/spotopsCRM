@@ -2344,6 +2344,7 @@ app.put('/orders/:orderNo/custRefund', async (req, res) => {
     custRefundedAmount, 
     cancelledDate, 
     cancelledRefAmount ,
+    cancellationReason,
     orderStatus
   } = req.body;
 
