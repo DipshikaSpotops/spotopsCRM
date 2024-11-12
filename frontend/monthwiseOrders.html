@@ -583,10 +583,13 @@ const sendInvoice = `
 `;
 
 const yardlength = item.additionalInfo.length;
+const datetime = item.orderDate;
+const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+console.log(dateOnly);
 
 $("#infoTable").append(`
 <tr>
-<td>${item.orderDate}</td>
+<td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
 <td>${item.customerName}<br>
