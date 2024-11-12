@@ -2092,6 +2092,7 @@ $(".custRefundSubmit").on("click", function () {
           alert("Email sent to customer with refund receipt.");
           console.log("Success:", result);
   $(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
+  $("#custRefund").hide();
       $(".modal-overlay").remove();
 // $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
