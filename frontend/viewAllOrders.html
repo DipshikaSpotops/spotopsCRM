@@ -360,7 +360,7 @@ placeholder="Search..."
 <table class="table table-bordered mt-4">
   <thead>
     <tr>
-      <th style="cursor: pointer" scope="col">Order Date <span class="sort-icon">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Order Date</th>
       <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
@@ -523,9 +523,9 @@ async function fetchOrders(page = 1) {
     });
 
     const { orders, totalPages, currentPage } = response.data;
-    renderTableRows(orders); // Pass the fetched orders directly to render
+    renderTableRows(orders); 
     createPaginationControls(totalPages, currentPage);
-    sortOrdersByOrderNoDesc(orders);
+    // sortOrdersByOrderNoDesc(orders);
   } catch (error) {
     console.error("Error fetching orders:", error);
   }
@@ -553,10 +553,12 @@ function renderTableRows(orders) {
       <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1;border: none;color: #38696c;">Edit</button>
       <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>
     `;
-    
+    const datetime = item.orderDate;
+    const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+      
 $("#infoTable").append(`
 <tr>
-<td>${item.orderDate}</td>
+<td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
 <td>${item.customerName}</td>
