@@ -554,21 +554,29 @@ function renderTableRows(orders) {
       <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>
     `;
     
-    $("#infoTable").append(`
-      <tr>
-        <td>${item.orderDate}</td>
-        <td>${item.orderNo}</td>
-        <td>${item.salesAgent}</td>
-        <td>${item.customerName}</td>
-        <td>${item.pReq || item.partName}</td>
-        <td>${item.orderStatus}</td>
-        <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
-        <td ${escalationStyle}>${escalationStatus}</td>
-        <td>${actions}</td>
-        <td>${item.email}</td>
-      </tr>
-    `);
-  });
+$("#infoTable").append(`
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""}`)
+
+.join("<br>")
+: ""
+}</td>
+<td>${item.orderStatus}</td>
+<td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
+<td ${escalationStyle}>${escalationStatus}</td>
+<td>${actions}</td>
+<td>${item.email}</td>
+</tr>
+`);
+});
 }
 
 function createPaginationControls(totalPages, currentPage) {
