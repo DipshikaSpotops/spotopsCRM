@@ -608,26 +608,26 @@ second: '2-digit',
 hour12: false,
 };
 const formatter1 = new Intl.DateTimeFormat('en-US', options1);
-const parts1 = formatter.formatToParts(now1);
+const parts1 = formatter1.formatToParts(now1);
 const formattedDate1 = `${parts1[4].value}-${parts1[0].value}-${parts1[2].value} ${parts1[6].value}:${parts1[8].value}:${parts1[10].value}`;
-const date1 = new Date(formattedDate);
+const date1 = new Date(formattedDate1);
 // Array of month names
 const months1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day1 = date.getDate();
-const month1 = months[date.getMonth()];
-const year1 = date.getFullYear();
-const hour1 = date.getHours();
-const minute1 = date.getMinutes().toString().padStart(2, '0');
+const day1 = date1.getDate();
+const month1 = months1[date.getMonth()];
+const year1 = date1.getFullYear();
+const hour1 = date1.getHours();
+const minute1 = date1.getMinutes().toString().padStart(2, '0');
 const daySuffix = (day) => {
-if (day > 3 && day < 21) return "th";
-switch (day % 10) {
+if (day1 > 3 && day1 < 21) return "th";
+switch (day1 % 10) {
 case 1: return "st";
 case 2: return "nd";
 case 3: return "rd";
 default: return "th";
 }
 };
-var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+var currentDateTime= `${day1}${daySuffix(day1)} ${month1}, ${year1} ${hour1}:${minute1}`;
 // common fetch of orders
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
