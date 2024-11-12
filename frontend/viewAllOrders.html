@@ -391,8 +391,7 @@ $(document).ready(async function () {
   fetchOrders();
 // Pagination related variables
 let allOrders = [];
-const rowsPerPage = 25;
-let currentPage = 1;
+
 
 // Sorting Order Object
 var team, role;
@@ -513,6 +512,8 @@ sortTable(index, type);
 });
 }
 });
+const rowsPerPage = 25;
+let currentPage = 1;
 async function fetchOrders(page = 1) {
   try {
     const token = localStorage.getItem("token");
