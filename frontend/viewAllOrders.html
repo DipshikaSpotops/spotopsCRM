@@ -1,5 +1,3 @@
-and even for the following html page i want the data,the last 25 orders that is the latest ordersto be displayed  when initially loaded and and rest backwards
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -389,10 +387,9 @@ placeholder="Search..."
 </div>
 <script>
 $(document).ready(async function () {
-// Pagination related variables
+
 let allOrders = [];
-const rowsPerPage = 25;
-let currentPage = 1;
+
 
 // Sorting Order Object
 var team, role;
@@ -513,58 +510,57 @@ sortTable(index, type);
 });
 }
 });
+const rowsPerPage = 25;
+let currentPage = 1;
+async function fetchOrders(page = 1) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
+      params: { page, limit: 25 },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
 
-// Function to render rows based on the page
-function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = orders.slice(start, end);
-
-$('#infoTable').empty(); // Clear the table
-ordersForPage.forEach((item) => {
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
-
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
+    const { orders, totalPages, currentPage } = response.data;
+    renderTableRows(orders); 
+    createPaginationControls(totalPages, currentPage);
+    sortOrdersByOrderNoDesc(orders);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
 }
-team = localStorage.getItem('team');
-// console.log("team",team);
-const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+// Function to render rows based on the page
 
+// <td>${sendInvoice}</td>
+var firstname = localStorage.getItem("firstName");
+if (firstName) {
+$("#user-name").text(firstName);
+}
+if (!firstName) {
+window.location.href = "login_signup.html";
+}
+// Function to create pagination controls
+function renderTableRows(orders) {
+  $("#infoTable").empty(); // Clear existing rows
 
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-// <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
-
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-`;
-
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-// console.log(dateOnly);
-
+  orders.forEach((item) => {
+    const escalationStatus = item.additionalInfo && item.additionalInfo[0]?.escTicked === "Yes" ? "Yes" : "";
+    const escalationStyle = item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes" ? 'style="background-color: lightgreen;"' : '';
+    
+    // Define action buttons
+    const actions = `
+      <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1;border: none;color: #38696c;">Edit</button>
+      <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>
+    `;
+    const datetime = item.orderDate;
+    const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+      
 $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
-<td>${item.customerName}<br>
-    ${item.phone}<br>
-    <b>Attention</b>: ${item.attention}<br>
-    ${item.sAddress}
-    </td>
-    
-<td>Part required: ${item.pReq || item.partName}<br>
-    ${item.year} ${item.make} ${item.model}
-    </td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
@@ -582,55 +578,43 @@ item.additionalInfo && item.additionalInfo.length > 0
 `);
 });
 }
-// <td>${sendInvoice}</td>
-var firstname = localStorage.getItem("firstName");
-if (firstName) {
-$("#user-name").text(firstName);
-}
-if (!firstName) {
-window.location.href = "login_signup.html";
-}
-// Function to create pagination controls
-function createPaginationControls(totalPages, orders = allOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
 
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+function createPaginationControls(totalPages, currentPage) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty();
 
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
+  if (totalPages > 1) {
+    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
+    }
+
+    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+  }
 }
 
-
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+// Event listeners for pagination buttons
+$('#pagination-controls').on('click', '.pageNos', function () {
+  const page = $(this).data('page');
+  currentPage = page;
+  fetchOrders(currentPage);
 });
 
-// "Previous" and "Next" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-}
+  if (currentPage > 1) {
+    currentPage--;
+    fetchOrders(currentPage);
+  }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(allOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
-}
+  if (currentPage < totalPages) {
+    currentPage++;
+    fetchOrders(currentPage);
+  }
 });
+
 
 // Token fetching logic
 async function fetchToken() {
@@ -651,49 +635,31 @@ if (!token) {
 await fetchToken();
 token = localStorage.getItem("token");
 }
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-const date = new Date(formattedDate);
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-    const monthMap = {
-        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-        May: "05", Jun: "06", Jul: "07", Aug: "08",
-        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-    };
-    var monthNum = monthMap[month];
-//orders for the current month
+
+// Fetch orders and apply pagination
 try {
-  const ordersResponse = await axios.get(`https://www.spotops360.com/ordersPerPage`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
+const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+axios.get("https://www.spotops360.com/orders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+})
+]);
 
-  if (ordersResponse.status !== 200) {
-    throw new Error("Failed to fetch current month's orders");
-  }
-
-  allOrders = ordersResponse.data;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-  console.error("Error fetching current month's orders:", error);
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch orders");
 }
+
+var orders = ordersResponse.data;
+allOrders = orders;
+
+// Sort and render the orders
+allOrders = sortOrdersByOrderNoDesc(allOrders);
+renderTableRows(allOrders);
+createPaginationControls(Math.ceil(allOrders.length / 25));
+} catch (error) {
+console.error("Error fetching orders:", error);
+}
+
+
 // Filtering functionality
 // $("#searchInput").on("keyup", function () {
 //   const value = $(this).val().toLowerCase();
@@ -708,7 +674,7 @@ $("#searchInput").on("keyup", function () {
   
   // Filter the entire allOrders dataset based on the search term
   const filteredOrders = allOrders.filter(order => {
-    // Check basic fields including phone, make, year, and model
+    // Check basic fields
     const basicSearch = (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
       (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
@@ -716,22 +682,17 @@ $("#searchInput").on("keyup", function () {
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
       (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.email && order.email.toLowerCase().includes(value)) ||
-      (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
-      (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
-      (order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
-      (order.model && order.model.toLowerCase().includes(value))     // Added model
+      (order.email && order.email.toLowerCase().includes(value))
     );
 
-    // Check if any yard detail (including stockNo) matches the search term
+    // Check if any yard matches the search term
     const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
       const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
       return (
         yardLabel.includes(value) || 
         (info.yardName && info.yardName.toLowerCase().includes(value)) || 
         (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-        (info.status && info.status.toLowerCase().includes(value)) ||
-        (info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
+        (info.status && info.status.toLowerCase().includes(value))
       );
     });
 
@@ -742,13 +703,12 @@ $("#searchInput").on("keyup", function () {
   // If a search is active, display the filtered results, otherwise reset to the full dataset
   if (filteredOrders.length > 0 || value === "") {
     renderTableRows(1, filteredOrders); // Render the first page of filtered results
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / 25), filteredOrders);
   } else {
     $("#infoTable").empty(); // Clear the table if no results are found
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
   }
 });
-
 
 
 // Sort orders by Order No in descending order
@@ -769,7 +729,62 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
+$("#infoTable").on("click", ".cancel-btn", function () {
+const id = $(this).data("id");
+console.log(`Cancel button clicked for order ID: ${id}`); // Added log
 
+if (confirm(`Are you sure you want to cancel order ${id}?`)) {
+// Change the order status to "Order Cancelled" in the HTML
+$(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
+
+// Optionally, disable the cancel button
+$(this).prop("disabled", true);
+
+// Send a request to update the order status in the backend
+fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
+method: "PUT",
+headers: {
+Authorization: `Bearer ${token}`,
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+firstName: firstName
+})
+})
+.then(response => {
+if (!response.ok) {
+console.error("Failed to update order status", response);
+throw new Error("Failed to update order status");
+}
+return response.json();
+})
+.then(data => {
+console.log("Order status updated successfully", data); // Added log
+alert("Order status updated to 'Order Cancelled'");
+})
+.catch(error => {
+console.error("Error updating order status:", error);
+});
+}
+});
+
+
+$("#infoTable").on("click", ".send-invoice-btn", function () {
+const id = $(this).data("id");
+fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
+method: "POST",
+headers: {
+Authorization: `Bearer ${token}`
+},
+})
+.then((response) => response.json())
+.then((data) => {
+alert(data.message);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+});
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
@@ -804,7 +819,6 @@ $('#submenu-reports .nav-link:contains("Refund Report")').show();
 $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
