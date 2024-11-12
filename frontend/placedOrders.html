@@ -833,11 +833,10 @@ console.error("Error updating order status:", error);
 });
 $("#infoTable").on("click", ".cancel-btn", function () {
 const id = $(this).data("id");
+console.log("id",id);
 $("#cancellingOrder").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-    $(".orderedDate").val(orderPlacedDate);
-    $("#cancelledDate").val(currentDateTime);
 });
 function renderOrders(item){
     $("#infoTable").empty();
