@@ -2051,6 +2051,7 @@ alert("Failed to update dispute information.");
 // for dispute till here
 //for custRefund
 $(".custRefundSubmit").on("click", function () {
+  $(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
   // Existing code to fade out the modal and get form values
   const custRefundDate = $(".refundedDate").val();
   const custRefundedAmount = $(".custRefundedAmount").val();
@@ -2090,6 +2091,7 @@ $(".custRefundSubmit").on("click", function () {
         .then((result) => {
           alert("Email sent to customer with refund receipt.");
           console.log("Success:", result);
+  $(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
       $(".modal-overlay").remove();
 // $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
