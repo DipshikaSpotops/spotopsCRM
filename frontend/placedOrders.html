@@ -592,54 +592,6 @@ $("#user-name").text(firstName);
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
-const urlParams = new URLSearchParams(window.location.search);
-var orderNo = urlParams.get("orderNo");
-var orderPlacedDate;
-// current datetime - US Central time
-const now1 = new Date();
-const options1 = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter1 = new Intl.DateTimeFormat('en-US', options1);
-const parts1 = formatter1.formatToParts(now1);
-const formattedDate1 = `${parts1[4].value}-${parts1[0].value}-${parts1[2].value} ${parts1[6].value}:${parts1[8].value}:${parts1[10].value}`;
-const date1 = new Date(formattedDate1);
-// Array of month names
-const months1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day1 = date1.getDate();
-const month1 = months1[date1.getMonth()];
-const year1 = date1.getFullYear();
-const hour1 = date1.getHours();
-const minute1 = date1.getMinutes().toString().padStart(2, '0');
-const daySuffix = (day) => {
-if (day1 > 3 && day1 < 21) return "th";
-switch (day1 % 10) {
-case 1: return "st";
-case 2: return "nd";
-case 3: return "rd";
-default: return "th";
-}
-};
-var currentDateTime= `${day1}${daySuffix(day1)} ${month1}, ${year1} ${hour1}:${minute1}`;
-// common fetch of orders
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then(response => response.json())
-.then(data => {
-orderPlacedDate = data.orderDate;
-console.log("orderDate",orderPlacedDate)
-})
-.catch(error => console.error("Error fetching yard data:", error));
-// common fetch of orders ends here
-
-
-
 
 async function fetchToken() {
 try {
