@@ -288,7 +288,7 @@ window.location.href = "login_signup.html";
 <table class="table table-bordered">
 <thead>
 <tr>
-<th style="cursor: pointer;">Order Date <span class="sort-icon">&#9650;</span></th>
+<th style="cursor: pointer;">Order Date</th>
 <th style="cursor: pointer;">Order No <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Customer Name <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Part Name <span class="sort-icon">&#9650;</span></th>
@@ -581,9 +581,11 @@ const end = start + rowsPerPage;
 const ordersForPage = data.slice(start, end);
 $("#infoTable").empty();  // Clear the table
 ordersForPage.forEach((item) => {
+  const datetime = item.orderDate;
+  const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];  
 $("#infoTable").append(`
 <tr>
-<td>${item.orderDate}</td>
+<td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.customerName}</td>
 <td>${item.pReq || item.partName}</td>
