@@ -346,7 +346,7 @@ placeholder="Search..."
   <thead>
     <tr>
       <th style="cursor: pointer" scope="col">
-      Order Date <span class="sort-icon">&#9650;</span>
+      Order Date
       </th>
       <th style="cursor: pointer" scope="col">
       Order No. <span class="sort-icon onlyNumber">&#9650;</span>
@@ -541,10 +541,11 @@ function renderTableRows(page, orders = allOrders) {
 
 
         const yardlength = item.additionalInfo.length;
-
+        const datetime = item.orderDate;
+        const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
         $("#infoTable").append(`
             <tr>
-                <td>${item.orderDate}</td>
+                <td>${dateOnly}</td>
                 <td>${item.orderNo}</td>
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
