@@ -520,7 +520,7 @@ async function fetchOrders(page = 1) {
   try {
     const token = localStorage.getItem("token");
     const response = await axios.get("https://www.spotops360.com/orders", {
-      params: { page, limit: rowsPerPage },
+      params: { page, limit: 25 },
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
