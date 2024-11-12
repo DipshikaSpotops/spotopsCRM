@@ -1521,9 +1521,9 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
   });
   const mailOptions = {
     from: "service@50starsautoparts.com",
-    // to: `${order.email}`,
-    // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-    to: 'dipsikha.spotopsdigital@gmail.com',
+    to: `${order.email}`,
+    bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+    // to: 'dipsikha.spotopsdigital@gmail.com',
     subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
     html: `<p>Dear ${order.customerName},</p>
     <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
