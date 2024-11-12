@@ -574,6 +574,25 @@ sortTable(index, type);
 });
 }
 });
+// Token fetching logic
+async function fetchToken() {
+try {
+const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
+if (response.status === 200) {
+localStorage.setItem("token", response.data.token);
+} else {
+throw new Error("Failed to fetch token");
+}
+} catch (error) {
+console.error("Error fetching token:", error);
+}
+}
+
+let token = localStorage.getItem("token");
+if (!token) {
+await fetchToken();
+token = localStorage.getItem("token");
+}
 // Function to fetch orders based on month, year, and page
 async function fetchMonthlyOrders(month, year, page = 1) {
   try {
@@ -702,25 +721,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
 });
 
 
-// Token fetching logic
-async function fetchToken() {
-try {
-const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
-if (response.status === 200) {
-localStorage.setItem("token", response.data.token);
-} else {
-throw new Error("Failed to fetch token");
-}
-} catch (error) {
-console.error("Error fetching token:", error);
-}
-}
 
-let token = localStorage.getItem("token");
-if (!token) {
-await fetchToken();
-token = localStorage.getItem("token");
-}
 
 //orders for the current month
 try {
