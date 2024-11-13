@@ -3079,8 +3079,9 @@ $("body").removeClass("modal-active");
 // Saving the selected payment status
 $('#cardChargedSbmit').on('click', function() {
 $('#cardCharged').hide();
-$(".mainDiv").removeClass("blur");
-
+// $(".mainDiv").removeClass("blur");
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 const paymentStatus = $(".paymentStatus").val();
 localStorage.setItem('paymentStatus', paymentStatus);
 // console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
@@ -3126,8 +3127,9 @@ window.location.reload();
 // refundCollect part 
 $('#refundSubmit').on('click', function() {
   $('#refundCollect').hide();
-  $(".mainDiv").removeClass("blur");
-
+  // $(".mainDiv").removeClass("blur");
+  $(".modal-overlay").remove();
+  $("body").removeClass("modal-active");
   const refundStatus = $(".paymentStatusRefund")
     .map(function () {
       return $(this).val();
