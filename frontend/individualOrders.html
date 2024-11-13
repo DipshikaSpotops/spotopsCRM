@@ -588,11 +588,9 @@ $("#infoTable").empty();
 let totalGrossProfit = 0;
 let totalEstGP = 0;
 ordersForPage.forEach((item) => {
-  var estGP = item.grossProfit;
-  totalGrossProfit += estGP || 0;
-  const estGP = item.grossProfit || 0;
-        totalGrossProfit += estGP;
-        totalEstGP += estGP;
+  const estGrossP = item.grossProfit || 0;
+        totalGrossProfit += estGrossP;// for current page
+        totalEstGP += estGrossP; //for all orders
   const datetime = item.orderDate;
   const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];  
 $("#infoTable").append(`
