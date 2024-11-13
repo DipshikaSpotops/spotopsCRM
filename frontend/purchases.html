@@ -700,7 +700,7 @@ function createPaginationControls(totalPages) {
 
     if (totalPages > 1) {
       $("#pagination-controls").append(
-        `<button class="btn btn-secondary mr-1 previousNext" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
+        `<button class="previousNext btn btn-secondary mr-1" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
       );
 
       for (let i = 1; i <= totalPages; i++) {
