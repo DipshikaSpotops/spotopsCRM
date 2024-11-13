@@ -148,7 +148,7 @@ cursor: pointer;
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-const firstName = localStorage.getItem("firstName");
+var firstName = localStorage.getItem("firstName");
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
@@ -730,11 +730,10 @@ function createPaginationControls(totalPages) {
     renderTableRows(1, filteredData);
     createPaginationControls(Math.ceil(filteredData.length / 25));
   });
-});
 
-await fetchData();
 
-const firstName = localStorage.getItem("firstName");
+
+var firstName = localStorage.getItem("firstName");
 const lastName = localStorage.getItem("lastName");
 const role = localStorage.getItem("role");
 const email = localStorage.getItem("email");
