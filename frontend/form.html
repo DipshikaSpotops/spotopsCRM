@@ -2180,7 +2180,22 @@ alert("Invalid ZIP code. Please check and try again.");
 }}
 else if (zipCode.length >= 3 && zipCode.includes(" ")) {
 var canadaZip = zipCode.slice(0, 3); 
-console.log("canadaZIP",canadaZip)
+console.log("canadaZIP",canadaZip);
+axios.get(`https://api.zippopotam.us/CA/${canadaZip}`)
+.then(response => {
+const data = response.data;
+// const city = data.places[0]['place name'];
+const stateAbbr = data.places[0]['state abbreviation'];
+const country = data['country abbreviation'];
+// console.log("country",country);
+// $("#cityYard").val(city);
+$("#stateYard").val(stateAbbr);
+$("#countryYard").val(country); 
+})
+.catch(error => {
+console.error("Error fetching location data:", error);
+alert("Invalid ZIP code. Please check and try again.");
+});
 }
 });
 // for us states
