@@ -2919,14 +2919,18 @@ selectedYardIndex = $(this).data('yard-index');
 // });
 
 $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
-$(".mainDiv").addClass("blur");
+// $(".mainDiv").addClass("blur");
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
 });
 //for refubd status
 $('#yardInfoContainer').on('click', '.refundCollect', function () {
 selectedYardIndex = $(this).data('yard-index');
 console.log("refund collected part",selectedYardIndex);
 $("#refundCollect").fadeIn(); 
-$(".mainDiv").addClass("blur");
+// $(".mainDiv").addClass("blur");
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
@@ -3059,13 +3063,15 @@ alert("Error fetching yard information");
 });
 
 $("#closeCardCharged").on("click", function () {
-$("#cardCharged").fadeOut(); // Hide the popup when the close button is clicked
-$(".mainDiv").removeClass("blur");
+$("#cardCharged").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 });
 
 $("#closeRefundCollected").on("click", function () {
-$("#refundCollect").fadeOut(); // Hide the popup when the close button is clicked
-$(".mainDiv").removeClass("blur");
+$("#refundCollect").fadeOut(); 
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 });
 
 
@@ -4484,7 +4490,7 @@ $('#EYdetails') .on('click', function(e){
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 $('#editYardDetailsModal').hide();
-// window.location.reload();
+window.location.reload();
 })     
 $("#logoutLink").click(function () {
 window.localStorage.clear();
