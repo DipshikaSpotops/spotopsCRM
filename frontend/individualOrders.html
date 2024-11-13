@@ -571,7 +571,7 @@ var totalOrders = filteredData.length;
 console.log("totalOrders",totalOrders);
 let totalGrossProfit = 0; // Total gross profit for current page
     let totalEstGP = 0; // Total estGP for all orders
-    allOrders.forEach((item) => {
+    filteredData.forEach((item) => {
         const estGP = item.grossProfit || 0;
         totalGrossProfit += estGP;
         // totalEstGP += estGP;
