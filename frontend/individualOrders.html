@@ -617,7 +617,6 @@ return `${trackingNo}`;
 </tr>
 `);
 });
-$("#showTotalEstGP").text(`Total EstGP This Month- $${totalEstGP.toFixed(2)}`);
 }
 
 // Pagination function
@@ -737,9 +736,17 @@ $("#showTotalOrders").hide();
     allOrders = ordersResponse.data;
     sortedData = sortOrdersByOrderNoDesc(allOrders); // Sort the fetched data if needed
     var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
+console.log("totalOrders",totalOrders);
+let totalGrossProfit = 0; // Total gross profit for current page
+    let totalEstGP = 0; // Total estGP for all orders
+    allOrders.forEach((item) => {
+        const estGP = item.grossProfit || 0;
+        totalGrossProfit += estGP;
+        // totalEstGP += estGP;
+    })
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-    // Render the new filtered data
+document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit}`;
+// Render the new filtered data
     renderTableRows(1, sortedData);
     createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
     
