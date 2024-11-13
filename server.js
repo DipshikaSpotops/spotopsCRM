@@ -1245,27 +1245,27 @@ res.status(500).send("Server error");
 });
 
 app.get("/orders/yardInfoMonthly", async (req, res) => {
-  try {
-      const month = req.query.month;
-      const year = req.query.year;
-      if (!month || !year) {
-          return res.status(400).json({ message: "Month and year are required" });
-      }
-      const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-      const orders = await Order.find({
-          orderDate: {
-              $regex: monthYearPattern,
-          },
-      });
-      const filteredOrders = orders.filter(order =>
-          order.additionalInfo.some(info => info.paymentStatus === "Card charged")
-      );
-
-      res.json(filteredOrders);
-  } catch (error) {
-      console.error("Error fetching orders for specified month and year:", error);
-      res.status(500).json({ message: "Server error", error });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const orders = await Order.find({
+orderDate: {
+$regex: monthYearPattern,
+},
+});
+const filteredOrders = orders.filter(order =>
+order.additionalInfo.some(info => info.paymentStatus === "Card charged")
+);
+console.log("card charged orders",filteredOrders)
+res.json(filteredOrders);
+} catch (error) {
+console.error("Error fetching orders for specified month and year:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 
 // Serve static files from the frontend directory
