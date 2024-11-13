@@ -196,7 +196,7 @@ height: 100%;
 background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
 z-index: 999; /* Places it just below the modal div */
 }
-#showTotalOrders{
+#showTotalOrders, #showTotalEstGP{
   border: 1px solid #c0c0c0;
     text-align: center;
     height: 3vh;
@@ -568,8 +568,16 @@ throw new Error("Failed to fetch orders");
 var data = response.data;
 const filteredData = data;
 var totalOrders = filteredData.length;
-console.log("totalOrders",totalOrders)
+console.log("totalOrders",totalOrders);
+let totalGrossProfit = 0; // Total gross profit for current page
+    let totalEstGP = 0; // Total estGP for all orders
+    allOrders.forEach((item) => {
+        const estGP = item.grossProfit || 0;
+        totalGrossProfit += estGP;
+        // totalEstGP += estGP;
+    })
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit}`;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
