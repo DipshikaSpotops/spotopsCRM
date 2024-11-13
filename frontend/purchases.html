@@ -700,7 +700,7 @@ function createPaginationControls(totalPages) {
 
     if (totalPages > 1) {
       $("#pagination-controls").append(
-        `<button class="previousNext btn btn-secondary mr-1" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
+        `<button class="previousNext btn" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
       );
 
       for (let i = 1; i <= totalPages; i++) {
@@ -710,7 +710,7 @@ function createPaginationControls(totalPages) {
       }
 
       $("#pagination-controls").append(
-        `<button class="btn btn-secondary ml-1 previousNext" id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>`
+        `<button class="btn previousNext" id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>`
       );
     }
   }
