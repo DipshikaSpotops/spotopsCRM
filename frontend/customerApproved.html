@@ -529,17 +529,14 @@ const secondLineB = (bParts[2] ? bParts[2].trim() : "") +
 const formattedBAddress = `${firstLineB}<br>${secondLineB}`;
 
 // Safely access sAddress parts
-var sAddress = item.sAddress || ""; // Default to empty string if undefined
+var sAddress = item.sAddress || "";
 const sParts = sAddress.split(',');
-
-// Use conditional checks to prevent errors
 const firstLineS = (sParts[0] ? sParts[0].trim() : "") +
                    (sParts[1] ? `, ${sParts[1].trim()}` : "");
 const secondLineS = (sParts[2] ? sParts[2].trim() : "") +
                     (sParts[3] ? `, ${sParts[3].trim()}` : "") +
-                    (sParts[4] ? `, ${sParts[4].trim()}` : "");
-
-// Safely construct formatted S address
+                    (sParts[4] ? `, ${sParts[4].trim()}` : "") +
+                    (sParts[5] ? `, ${sParts[5].trim()}` : ""); 
 const formattedSAddress = `${firstLineS}<br>${secondLineS}`;
   var expShip = item.expediteShipping;
     var dsCall = item.dsCall;
