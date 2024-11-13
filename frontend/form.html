@@ -2297,7 +2297,7 @@ if (
 
 data.additionalInfo.forEach((yard, index) => {
 const yardIndex = index + 1;
-// console.log("yardIndex", yardIndex, yard);
+console.log("yardIndex", yard.escTicked);
 pStatus = yard.paymentStatus;
 var rStatus = yard.refundStatus;
 console.log("pStatus", pStatus, rStatus);
@@ -2310,7 +2310,7 @@ $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#c3c3c3
 else if (pStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
 }
-if (yard.escTicked === "Yes") {
+else if (yard.escTicked === "Yes") {
 $("#escTickBox").prop("checked", true);
 } else {
 $("#escTickBox").prop("checked", false);
