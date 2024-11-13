@@ -2186,9 +2186,9 @@ axios.get(`https://api.zippopotam.us/CA/${canadaZip}`)
 const data = response.data;
 // const city = data.places[0]['place name'];
 const stateAbbr = data.places[0]['state abbreviation'];
-const country = data['country abbreviation'];
+const country = data['country'];
 // console.log("country",country);
-// $("#cityYard").val(city);
+$("#cityYard").val(city);
 $("#stateYard").val(stateAbbr);
 $("#countryYard").val(country); 
 })
