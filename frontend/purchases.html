@@ -535,6 +535,7 @@ $("#monthYearPicker").val(`${year}-${monthNum}`);
       if (response.status !== 200) throw new Error("Failed to fetch data");
 
       yardOrders = response.data;
+      console.log("yardOrders",yardOrders);
       renderTableRows(currentPage, yardOrders);
       createPaginationControls(Math.ceil(yardOrders.length / 25));
     } catch (error) {
