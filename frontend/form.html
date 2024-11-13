@@ -2178,6 +2178,10 @@ console.error("Error fetching location data:", error);
 alert("Invalid ZIP code. Please check and try again.");
 });
 }}
+else if (zipCode.length >= 3 && zipCode.includes(" ")) {
+var canadaZip = zipCode.slice(0, 3); 
+console.log("canadaZIP",canadaZip)
+}
 });
 // for us states
 $('.state-select').select2({
