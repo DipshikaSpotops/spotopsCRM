@@ -577,7 +577,7 @@ let totalGrossProfit = 0; // Total gross profit for current page
         // totalEstGP += estGP;
     })
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit}`;
+document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit.toFixed(2)}`;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
