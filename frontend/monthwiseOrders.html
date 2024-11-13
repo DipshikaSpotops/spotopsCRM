@@ -897,7 +897,7 @@ const monthYear = $("#monthYearPicker").val();
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardInfoMonthly?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {
