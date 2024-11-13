@@ -2297,13 +2297,15 @@ if (
 
 data.additionalInfo.forEach((yard, index) => {
 const yardIndex = index + 1;
-var escTicked = yard.escTicked;
-console.log("yardIndex", escTicked);
-if (escTicked === "Yes") {
-$("#escTickBox").prop("checked", true);
+// Check if any entry in additionalInfo has escTicked set to "Yes"
+const isEscTicked = data.additionalInfo.some(info => info.escTicked === "Yes");
+
+if (isEscTicked) {
+  $("#escTickBox").prop("checked", true);
 } else {
-$("#escTickBox").prop("checked", false);
+  $("#escTickBox").prop("checked", false);
 }
+
 pStatus = yard.paymentStatus;
 var rStatus = yard.refundStatus;
 console.log("pStatus", pStatus, rStatus);
