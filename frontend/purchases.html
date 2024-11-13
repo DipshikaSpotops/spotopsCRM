@@ -694,7 +694,7 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-function createPaginationControls(totalPages, orders) {
+function createPaginationControls(totalPages, orders = yardOrders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); // Clear pagination controls
 
@@ -714,7 +714,7 @@ $('#pagination-controls').on('click', '.page-btn', function () {
 const page = $(this).data('page');
 currentPage = page;
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+createPaginationControls(Math.ceil(yardOrders.length / 25));
 });
 
 // "Previous" and "Next" button functionality
@@ -722,12 +722,12 @@ $('#pagination-controls').on('click', '#prevPage', function () {
 if (currentPage > 1) {
 currentPage--;
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+createPaginationControls(Math.ceil(yardOrders.length / 25));
 }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+const totalPages = Math.ceil(yardOrders.length / 25);
 if (currentPage < totalPages) {
 currentPage++;
 renderTableRows(currentPage);
