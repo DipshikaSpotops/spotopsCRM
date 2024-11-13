@@ -524,17 +524,19 @@ const year = date.getFullYear();
 $("#monthYearPicker").val(`${year}-${monthNum}`);
   await fetchYardInfo(month, year);
 
-  // Fetch yard info data for a specific month and year
+  // Fetch yard info data for a specific month and 
   async function fetchYardInfo(month, year) {
     try {
       $("#loadingMessage").show();
-      const response = await axios.get(`https://www.spotops360.com/orders/yardInfoMonthly?month=${month}&year=${year}`, {
+      const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.status !== 200) throw new Error("Failed to fetch data");
-
-      yardOrders = response.data;
+      // Filter orders to include only those with at least one 'Card charged' payment status
+      yardOrders = response.data.filter(order =>
+            order.additionalInfo.some(info => info.paymentStatus === "Card charged")
+        );
       console.log("yardOrders",yardOrders);
       renderTableRows(currentPage, yardOrders);
       createPaginationControls(Math.ceil(yardOrders.length / 25));

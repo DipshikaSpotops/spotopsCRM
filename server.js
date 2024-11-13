@@ -1244,7 +1244,7 @@ res.status(500).send("Server error");
 }
 });
 
-app.get("/orders/yardInfoMonthly", async (req, res) => {
+app.get("/yardInfoMonthly", async (req, res) => {
 try {
 const month = req.query.month;
 const year = req.query.year;
