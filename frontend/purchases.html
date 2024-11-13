@@ -174,6 +174,16 @@ padding: 10px;
 border-radius: 10px;
 text-align: center;
 }
+#showTotalOrders{
+border: 1px solid #c0c0c0;
+text-align: center;
+height: auto;
+width: auto;
+border-radius: 8px;
+margin: 1% -3%;
+background-color: #3096a58f;
+padding: 5px;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -318,7 +328,7 @@ placeholder="Search..."
   <input id="monthYearPicker" type="month" class="form-control" />
   <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
   </div>
-  <!-- <div id="showTotalOrders">Total Orders This Month-</div> -->
+  <div id="showTotalOrders">Total Spent This Month-</div>
   <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
   </div>  
 <table class="table table-bordered mt-4">
@@ -527,26 +537,46 @@ $("#monthYearPicker").val(`${year}-${monthNum}`);
   // Fetch yard info data for a specific month and 
   async function fetchYardInfo(month, year) {
     try {
-      $("#loadingMessage").show();
-      const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+        $("#loadingMessage").show();
+        const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
 
-      if (response.status !== 200) throw new Error("Failed to fetch data");
-      // Filter orders to include only those with at least one 'Card charged' payment status
-      yardOrders = response.data.filter(order =>
+        if (response.status !== 200) throw new Error("Failed to fetch data");
+        yardOrders = response.data.filter(order =>
             order.additionalInfo.some(info => info.paymentStatus === "Card charged")
         );
-      console.log("yardOrders",yardOrders);
-      renderTableRows(currentPage, yardOrders);
-      createPaginationControls(Math.ceil(yardOrders.length / 25));
+        let totalSpend = 0;  
+        yardOrders.forEach(order => {
+            let orderSpend = 0;  
+            order.additionalInfo.forEach(info => {
+                if (info.paymentStatus === "Card charged") {
+                    const shippingCost = info.shippingDetails ? 
+                        parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 : 0;
+                    const partPrice = parseFloat(info.partPrice || 0);
+                    const others = parseFloat(info.others || 0);
+                    const refundedAmount = parseFloat(info.refundedAmount || 0);
+
+                    const itemSpend = partPrice + others + shippingCost - refundedAmount;
+                    orderSpend += itemSpend;  
+                }
+            });
+            order.totalSpend = orderSpend;  
+            totalSpend += orderSpend;  
+        });
+
+        console.log("Total spend across all orders:", totalSpend);
+        console.log("yardOrders with calculated spends", yardOrders);
+        document.getElementById("showTotalOrders").innerHTML = `Total Spent This Month- ${totalSpend}`;
+        renderTableRows(currentPage, yardOrders);
+        createPaginationControls(Math.ceil(yardOrders.length / 25));
     } catch (error) {
-      console.error("Error fetching yard info:", error);
-      alert("Failed to fetch data");
+        console.error("Error fetching yard info:", error);
+        alert("Failed to fetch data");
     } finally {
-      $("#loadingMessage").hide();
+        $("#loadingMessage").hide();
     }
-  }
+}
 
 function renderTableRows(page, data = yardOrders) {
   const start = (page - 1) * 25;
@@ -601,6 +631,7 @@ let overallPurchaseCost = 0;
 let totalOveralls = 0;
 let overAllwithRefund = 0;
 let tRefunds = 0;
+let overallAppend = 0;
 
 for (let i = 0; i < maxYards; i++) {
 if (
