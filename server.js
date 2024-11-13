@@ -1243,6 +1243,23 @@ console.error("Error fetching yard info:", error);
 res.status(500).send("Server error");
 }
 });
+app.get("/yardInfoMonthly", async (req, res) => {
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const yardOrders = await Order.find({
+orderDate: { $regex: monthYearPattern }
+});
+res.json(yardOrders);
+} catch (error) {
+console.error("Error fetching yard info:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
 
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, "frontend")));
