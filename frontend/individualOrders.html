@@ -281,7 +281,10 @@ window.location.href = "login_signup.html";
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
+<div style="display: flex;">
 <div id="showTotalOrders">Total Orders This Month-</div>
+<div id="showTotalEstGP">Total EstGP This Month-</div>
+</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
 
 </div>
@@ -297,6 +300,7 @@ window.location.href = "login_signup.html";
 <!-- <th style="cursor: pointer;">Actual Info <span class="sort-icon">&#9650;</span></th> -->
 <!-- <th style="cursor: pointer;">Overall Spend <span class="sort-icon">&#9650;</span></th> -->
 <th style="cursor: pointer;">Actual GP <span class="sort-icon">&#9650;</span></th>
+<th style="cursor: pointer;">Est GP <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Trackin No. <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Order Status <span class="sort-icon">&#9650;</span></th>
 </tr>
@@ -373,6 +377,7 @@ costP: "asc",
 shippingFee: "asc",
 grossProfit: "asc",
 actualGP: "asc",
+estGP: "asc",
 orderStatus: "asc",
 };
 function parseCustomDate(dateString) {
@@ -579,8 +584,11 @@ function renderTableRows(page, data = sortedData) {
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = data.slice(start, end);
-$("#infoTable").empty();  // Clear the table
+$("#infoTable").empty(); 
+let totalGrossProfit = 0;
 ordersForPage.forEach((item) => {
+  var estGP = item.grossProfit;
+  totalGrossProfit += estGP || 0;
   const datetime = item.orderDate;
   const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];  
 $("#infoTable").append(`
@@ -591,6 +599,7 @@ $("#infoTable").append(`
 <td>${item.pReq || item.partName}</td>
 <td>$${item.soldP}</td>
 <td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
+<td>$${item.grossProfit ? item.grossProfit.toFixed(2) : 0}</td>
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
@@ -605,6 +614,7 @@ return `${trackingNo}`;
 </tr>
 `);
 });
+$("#showTotalEstGP").text(`Total EstGP This Month- $${totalEstGP.toFixed(2)}`);
 }
 
 // Pagination function
