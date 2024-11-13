@@ -528,7 +528,7 @@ $("#monthYearPicker").val(`${year}-${monthNum}`);
   async function fetchYardInfo(month, year) {
     try {
       $("#loadingMessage").show();
-      const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+      const response = await axios.get(`https://www.spotops360.com/orders/yardInfoMonthly?month=${month}&year=${year}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
