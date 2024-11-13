@@ -732,21 +732,10 @@ sortedData = sortOrdersByOrderNoDesc(allOrders);
 } catch (error) {
   console.error("Error fetching current month's orders:", error);
 }
-// Filtering functionality
-// $("#searchInput").on("keyup", function () {
-//   const value = $(this).val().toLowerCase();
-//   $("#infoTable tr").filter(function () {
-//     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-//   });
-// });
 
-// Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
-  
-  // Filter the entire allOrders dataset based on the search term
   const filteredOrders = allOrders.filter(order => {
-    // Check basic fields including phone, make, year, and model
     const basicSearch = (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
       (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||

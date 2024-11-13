@@ -528,7 +528,7 @@ $("#monthYearPicker").val(`${year}-${monthNum}`);
   async function fetchYardInfo(month, year) {
     try {
       $("#loadingMessage").show();
-      const response = await axios.get(`https://www.spotops360.com/yardInfo?month=${month}&year=${year}`, {
+      const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -565,14 +565,12 @@ if (item.additionalInfo.length > maxYards) {
 maxYards = item.additionalInfo.length;
 }
 });
-
-tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
+tableHeader.find("th:gt(1)").remove(); 
 for (let i = 1; i <= maxYards; i++) {
 tableHeader.append(
 `<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
 );
 }
-
 tableHeader.append(
 '<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
@@ -614,7 +612,6 @@ let otherC = parseFloat(item.additionalInfo[i].others || 0);
 let shippingDetails = item.additionalInfo[i].shippingDetails;
 let shippingCharge = 0;
 let shippingType = "";
-
 let refunds = parseFloat(
 item.additionalInfo[i].refundedAmount || 0
 );
@@ -636,9 +633,7 @@ overallPurchaseCost,
 overAllwithRefund
 );
 totalOveralls += overAllwithRefund;
-
 console.log("yotalOveralls", totalOveralls);
-
 yardInfoHtml += `<td>
     ${item.additionalInfo[i].yardName || ""}${
 item.additionalInfo[i].yardName ? " | " : ""
