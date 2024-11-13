@@ -428,20 +428,16 @@ currentSort.column = sortBy;
 sortTable(column, currentSort.order, isDateColumn, isYardColumn);
 
 // Update sort icon
-$(".sort-icon").html("&#9650;"); // Reset all icons to ascending
+$(".sort-icon").html("&#9650;"); 
 $(this)
 .find(".sort-icon")
-.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
 });
 // Click event for sorting Yard columns
 $(document).on("click", ".fYardName", function () {
 const column = $(this).closest("th").index();
 const sortBy = $(this).closest("th").data("sort");
-
-// Determine if the column is a Yard column
 const isYardColumn = sortBy.startsWith("yard");
-
-// Toggle the sort order
 currentSort.order =
 currentSort.column === sortBy && currentSort.order === "asc"
 ? "desc"
@@ -449,13 +445,10 @@ currentSort.column === sortBy && currentSort.order === "asc"
 currentSort.column = sortBy;
 
 sortTable(column, currentSort.order, false, isYardColumn);
-
-// Update sort icon
-$(".fYardName").html("&#9650;"); // Reset all icons to ascending
-$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+$(".fYardName").html("&#9650;");
+$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;");
 });
 
-// Click event for sorting any sortable column
 $(document).on(
 "click",
 "th[data-sort], th[data-sort] .sort-icon",
@@ -464,12 +457,8 @@ const $target = $(event.target);
 const $th = $target.closest("th");
 const column = $th.index();
 const sortBy = $th.data("sort");
-
-// Determine if the column is a date column or a yard column
 const isDateColumn = sortBy === "orderDate";
 const isYardColumn = sortBy.startsWith("yard");
-
-// Toggle the sort order
 currentSort.order =
 currentSort.column === sortBy && currentSort.order === "asc"
 ? "desc"
@@ -477,12 +466,10 @@ currentSort.column === sortBy && currentSort.order === "asc"
 currentSort.column = sortBy;
 
 sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-
-// Update sort icon
-$("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$("th[data-sort] .sort-icon").html("&#9650;"); 
 $th
 .find(".sort-icon")
-.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
+.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
 }
 );
 
@@ -532,50 +519,49 @@ const year = date.getFullYear();
     var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
-  await fetchYardInfo(month, year);
+await fetchYardInfo(month, year);
 
-  // Fetch yard info data for a specific month and 
-  async function fetchYardInfo(month, year) {
-    try {
-        $("#loadingMessage").show();
-        const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+// Fetch yard info data for a specific month and 
+async function fetchYardInfo(month, year) {
+try {
+$("#loadingMessage").show();
+const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: { Authorization: `Bearer ${token}` },
+});
 
-        if (response.status !== 200) throw new Error("Failed to fetch data");
-        yardOrders = response.data.filter(order =>
-            order.additionalInfo.some(info => info.paymentStatus === "Card charged")
-        );
-        let totalSpend = 0;  
-        yardOrders.forEach(order => {
-            let orderSpend = 0;  
-            order.additionalInfo.forEach(info => {
-                if (info.paymentStatus === "Card charged") {
-                    const shippingCost = info.shippingDetails ? 
-                        parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 : 0;
-                    const partPrice = parseFloat(info.partPrice || 0);
-                    const others = parseFloat(info.others || 0);
-                    const refundedAmount = parseFloat(info.refundedAmount || 0);
+if (response.status !== 200) throw new Error("Failed to fetch data");
+yardOrders = response.data.filter(order =>
+order.additionalInfo.some(info => info.paymentStatus === "Card charged")
+);
+let totalSpend = 0;  
+yardOrders.forEach(order => {
+let orderSpend = 0;  
+order.additionalInfo.forEach(info => {
+if (info.paymentStatus === "Card charged") {
+const shippingCost = info.shippingDetails ? 
+parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 : 0;
+const partPrice = parseFloat(info.partPrice || 0);
+const others = parseFloat(info.others || 0);
+const refundedAmount = parseFloat(info.refundedAmount || 0);
 
-                    const itemSpend = partPrice + others + shippingCost - refundedAmount;
-                    orderSpend += itemSpend;  
-                }
-            });
-            order.totalSpend = orderSpend;  
-            totalSpend += orderSpend;  
-        });
-
-        console.log("Total spend across all orders:", totalSpend);
-        console.log("yardOrders with calculated spends", yardOrders);
-        document.getElementById("showTotalOrders").innerHTML = `Total Spent This Month- $${totalSpend.toFixed(2)}`;
-        renderTableRows(currentPage, yardOrders);
-        createPaginationControls(Math.ceil(yardOrders.length / 25));
-    } catch (error) {
-        console.error("Error fetching yard info:", error);
-        alert("Failed to fetch data");
-    } finally {
-        $("#loadingMessage").hide();
-    }
+const itemSpend = partPrice + others + shippingCost - refundedAmount;
+orderSpend += itemSpend;  
+}
+});
+order.totalSpend = orderSpend;  
+totalSpend += orderSpend;  
+});
+console.log("Total spend across all orders:", totalSpend);
+console.log("yardOrders with calculated spends", yardOrders);
+document.getElementById("showTotalOrders").innerHTML = `Total Spent This Month- $${totalSpend.toFixed(2)}`;
+renderTableRows(currentPage, yardOrders);
+createPaginationControls(Math.ceil(yardOrders.length / 25));
+} catch (error) {
+console.error("Error fetching yard info:", error);
+alert("Failed to fetch data");
+} finally {
+$("#loadingMessage").hide();
+}
 }
 
 function renderTableRows(page, data = yardOrders) {
