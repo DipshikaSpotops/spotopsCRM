@@ -694,7 +694,7 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-function createPaginationControls(totalPages, orders = allOrders) {
+function createPaginationControls(totalPages, orders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); // Clear pagination controls
 
