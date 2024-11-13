@@ -756,7 +756,10 @@ createPaginationControls(totalPages);
 });
   // Filter by month and year
   $("#filterButton").click(async function () {
-    const [year, month] = $("#monthYearPicker").val().split("-");
+    const monthYear = $("#monthYearPicker").val(); 
+  const [year, monthNumber] = monthYear.split("-");
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = months[parseInt(monthNumber, 10) - 1];
     await fetchYardInfo(month, year);
     currentPage = 1;
     renderTableRows(currentPage);
