@@ -701,7 +701,22 @@ $("#bCountry").val(country);
 console.error("Error fetching location data:", error);
 alert("Invalid ZIP code. Please check and try again.");
 });
-}}
+}}else if (zipCode.length >= 3 && zipCode.includes(" ")) {
+var canadaZip = zipCode.slice(0, 3); 
+console.log("canadaZIP",canadaZip);
+axios.get(`https://api.zippopotam.us/CA/${canadaZip}`)
+.then(response => {
+const data = response.data;
+const stateAbbr = data.places[0]['state abbreviation'];
+const country = data['country'];
+$("#bState").val(stateAbbr);
+$("#bCountry").val(country);
+})
+.catch(error => {
+console.error("Error fetching location data:", error);
+alert("Invalid ZIP code. Please check and try again.");
+});
+}
 });
 $("#sZip").on("keyup", function() {
 console.log("BZIP","==");
@@ -723,7 +738,22 @@ $("#sCountry").val(scountry);
 console.error("Error fetching location data:", error);
 alert("Invalid ZIP code. Please check and try again.");
 });
-}}
+}}else if (zipCode.length >= 3 && zipCode.includes(" ")) {
+var canadaZip = zipCode.slice(0, 3); 
+console.log("canadaZIP",canadaZip);
+axios.get(`https://api.zippopotam.us/CA/${canadaZip}`)
+.then(response => {
+const data = response.data;
+const stateAbbr = data.places[0]['state abbreviation'];
+const country = data['country'];
+$("#sState").val(stateAbbr);
+$("#sCountry").val(country);
+})
+.catch(error => {
+console.error("Error fetching location data:", error);
+alert("Invalid ZIP code. Please check and try again.");
+});
+}
 });
 // Get the current time and the login timestamp
 const currentTime = Date.now();
