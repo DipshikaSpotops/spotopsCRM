@@ -1098,7 +1098,7 @@ $("#sAttention").val("");
 
 $("#orderNo").on("blur", function () {
 const orderNo = $(this).val();
-consoel.log("on click",orderNo);
+console.log("on click",orderNo);
 if (orderNo) {
 axios.get(`https://www.spotops360.com/orders/checkOrderNo/${orderNo}`)
 .then(response => {
