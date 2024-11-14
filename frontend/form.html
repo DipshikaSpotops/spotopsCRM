@@ -3979,6 +3979,7 @@ $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
 var escProcess = $("#escProcess").val();
 var retShippingMethod = $("#customerShippingMethodReturn").val() || "";
 var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
+var retAddress = $('#shipToReturnadd').val();
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("pdfFile");
@@ -4043,7 +4044,7 @@ else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" |
       });
   }
   else if (escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")) {
-    fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
+    fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
       method: "POST",
       body: formData, // Send FormData directly
     })
