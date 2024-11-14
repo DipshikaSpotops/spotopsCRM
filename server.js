@@ -1640,7 +1640,6 @@ app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) =
       cid: 'logo' 
     }]
   };
-  
   console.log("mail", mailOptions);
   transporter.sendMail(mailOptions, (error, info) => {
   if (error) {
