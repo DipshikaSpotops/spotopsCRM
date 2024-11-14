@@ -3980,6 +3980,7 @@ var escProcess = $("#escProcess").val();
 var retShippingMethod = $("#customerShippingMethodReturn").val() || "";
 var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 var retAddress = $('#shipToReturnAdd').val();
+var reimburesementValue = $("#reimAmount").val();
 console.log("add",retAddress);
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
@@ -4060,7 +4061,7 @@ else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" |
       });
   }
 else if(escProcess === "Reimbursement"){
-  fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}`, {
+  fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}&reimburesementValue=${reimburesementValue}`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
