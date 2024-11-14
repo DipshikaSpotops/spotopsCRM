@@ -2911,7 +2911,7 @@ let yardIndex = lastYardBtn.data("yard-index");
 const yardData = data.additionalInfo[yardIndex - 1];
 // console.log("yardData suggestions", yardData, orderStatus);
 
-if (yardData.status === "PO cancelled" || (yardData.status === "Escalation" && (yardData.escProcess === "Return" || yardData.escProcess === "Junk")) || yardData.status === "Collect refund"){
+if (yardData.status === "PO cancelled" || (yardData.status === "Escalation" && (yardData.escalationProcess === "Return" || yardData.escalationProcess === "Junk")) || yardData.status === "Collect refund"){
 showModal("#yardModal"); 
 } else {
 $('#yardModal').modal('hide'); 
