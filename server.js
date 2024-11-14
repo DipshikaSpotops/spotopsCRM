@@ -61,104 +61,108 @@ let orderCount = 0;
 
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
-console.log("adding new order");
-try {
-console.log("Create a new order:", req.body);
+  console.log("Adding new order");
 
-const {
-orderNo,
-orderDate,
-salesAgent,
-customerName,
-bAddress,
-sAddress,
-attention,
-email,
-phone,
-altPhone,
-make,
-model,
-year,
-pReq,
-desc,
-warranty,
-soldP,
-costP,
-shippingFee,
-salestax,
-spMinusTax,
-grossProfit,
-businessName,
-orderStatus,
-vin,
-last4digits,
-notes,
-orderHistory,
-expediteShipping,
-dsCall
-} = req.body;
+  try {
+    console.log("Create a new order:", req.body);
 
-const newOrder = new Order({
-orderNo,
-orderDate,
-salesAgent,
-customerName,
-bAddress,
-sAddress,
-attention,
-email,
-phone,
-altPhone,
-make,
-model,
-year,
-pReq,
-desc,
-warranty,
-soldP,
-costP,
-shippingFee,
-salestax,
-spMinusTax,
-grossProfit,
-businessName,
-orderStatus,
-vin,
-last4digits,
-notes,
-orderHistory,
-expediteShipping,
-dsCall,
+    const {
+      orderNo,
+      orderDate,
+      salesAgent,
+      customerName,
+      bAddress,
+      sAddress,
+      attention,
+      email,
+      phone,
+      altPhone,
+      make,
+      model,
+      year,
+      pReq,
+      desc,
+      warranty,
+      soldP,
+      costP,
+      shippingFee,
+      salestax,
+      spMinusTax,
+      grossProfit,
+      businessName,
+      orderStatus,
+      vin,
+      last4digits,
+      notes,
+      orderHistory,
+      expediteShipping,
+      dsCall,
+    } = req.body;
+
+    const newOrder = new Order({
+      orderNo,
+      orderDate,
+      salesAgent,
+      customerName,
+      bAddress,
+      sAddress,
+      attention,
+      email,
+      phone,
+      altPhone,
+      make,
+      model,
+      year,
+      pReq,
+      desc,
+      warranty,
+      soldP,
+      costP,
+      shippingFee,
+      salestax,
+      spMinusTax,
+      grossProfit,
+      businessName,
+      orderStatus,
+      vin,
+      last4digits,
+      notes,
+      orderHistory,
+      expediteShipping,
+      dsCall,
+    });
+
+    // Increment the order count and assign the team
+    orderCount += 1;
+    console.log("orderCount", orderCount);
+    if (orderCount % 2 === 1) {
+      newOrder.team = "Mark"; // Assign to Team Mark
+      newOrder.teamOrder = "Mark"; // Add teamOrder field
+      console.log("Mark's team", newOrder.team);
+    } else {
+      newOrder.team = "Sussane"; // Assign to Team Sussane
+      newOrder.teamOrder = "Sussane"; // Add teamOrder field
+      console.log("Sussane's team", newOrder.team);
+    }
+
+    // Save the new order to the database
+    await newOrder.save();
+
+    // Generate an invoice for the new order
+    var orderId = newOrder.orderNo;
+    // console.log("orderNo", orderId);
+    // await generateInvoice(orderId, newOrder);
+
+    res.status(201).json({ newOrder, team: newOrder.team });
+  } catch (error) {
+    if (error.code === 11000) { // Duplicate key error in MongoDB
+      console.error("Duplicate orderNo:", error.keyValue.orderNo);
+      return res.status(409).json({ message: "Order No. already exists. Please enter a unique Order No." });
+    }
+    console.error("Error in invoice creation:", error);
+    res.status(500).json({ message: "Error creating order", error: error.message });
+  }
 });
-
-// Increment the order count and assign the team
-orderCount += 1;
-console.log("orderCount", orderCount);
-if (orderCount % 2 === 1) {
-newOrder.team = "Mark"; // Assign to Team Mark
-newOrder.teamOrder = "Mark"; // Add teamOrder field
-console.log("Mark's team", newOrder.team);
-} else {
-newOrder.team = "Sussane"; // Assign to Team Sussane
-newOrder.teamOrder = "Sussane"; // Add teamOrder field
-console.log("Sussane's team", newOrder.team);
-}
-
-// Save the new order to the database
-await newOrder.save();
-
-
-// Generate an invoice for the new order
-var orderId = newOrder.orderNo;
-// console.log("orderNo",orderId);
-// await generateInvoice(orderId, newOrder);
-res.status(201).json({ newOrder, team: newOrder.team });
-} catch (error) {
-console.error("Error in invoice creation:", error);
-res.status(500).json({ message: "Error creating order", error: error.message });
-}
-});
-
 
 // Create User Endpoint
 app.post("/users", async (req, res) => {
