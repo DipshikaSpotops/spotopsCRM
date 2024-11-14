@@ -1728,6 +1728,8 @@ Save
 <label>Enter Shipping Value:</label>
 <input id="custOwnShipReplacement" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
 </div>
+<label>Ship To:</label>
+<input type="text" id="shipToRepAdd" placeholder="Ship To" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;">
 <label>Shipper:</label>
 <select id="customerShipperReplacement" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
 <option value="">Choose</option>
@@ -1796,6 +1798,8 @@ Save
   <label>Enter Shipping Value:</label>
   <input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 16px;text-align: center;width: 50%;">
   </div>
+  <label>Ship To:</label>
+  <input type="text" id="shipToReturnAdd" placeholder="Ship To" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;">
   <label>Shipper:</label>
   <select id="customerShipperReturn" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%">
   <option value="">Choose</option>
@@ -3056,6 +3060,12 @@ $("#yardownShipping").val(additionalInfo.yardOwnShipping).parent().show();
 if (additionalInfo.yardShipper) {
 $("#yardShipper").val(additionalInfo.yardShipper);
 }
+if (additionalInfo.custShipToRet) {
+$("#shipToReturnAdd").val(additionalInfo.custShipToRet);
+}
+if (additionalInfo.custShipToRep) {
+$("#shipToRepAdd").val(additionalInfo.custShipToRep);
+}
 if (additionalInfo.yardTrackingNumber) {
 $("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber);
 }
@@ -3414,6 +3424,8 @@ const custOwnShipReplacement = $("#custOwnShipReplacement").val();
 const customerShipperReplacement = $("#customerShipperReplacement").val();
 const customerTrackingNumberReplacement = $("#customerTrackingNumberReplacement").val();
 const custreplacementDelivery = $("#custreplacementDelivery").val();
+const custShipToRep = $("#shipToRepAdd").val();
+console.log("part from cust rep add",custShipToRep)
 //yard part for replacement
 const yardShippingStatus = $("#yardShippingStatus").val();
 const yardShippingMethod = $("#yardShippingMethod").val();
@@ -3426,6 +3438,8 @@ const customerShipperReturn = $("#customerShipperReturn").val();
 const returnTrackingCust = $("#returnTrackingCust").val();
 const custOwnShippingReturn = $("#custOwnShippingReturn").val();
 const custReturnDelivery = $("#custReturnDelivery").val();
+const custShipToRet =$("#shipToReturnAdd").val();
+console.log("part from cust ret add",custShipToRet)
 // console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
 // console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
 const token = localStorage.getItem('token');
@@ -3437,7 +3451,6 @@ if (reimbursementAmount) {
 const yardStatus = "Part delivered";  
 const newOrderStatus = "Order Fulfilled";
 const yardIndex = 0;  // Example index
-
 const newOrderStatusR = {
 orderStatus: newOrderStatus,
 yardStatus: yardStatus,
@@ -3511,6 +3524,10 @@ if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
 updatedData.custreplacementDelivery = custreplacementDelivery;
 hasChanges = true;
 }
+if (currentAdditionalInfo.custShipToRep !== custShipToRep) {
+updatedData.custShipToRep = custShipToRep;
+hasChanges = true;
+}
 // part from yard
 if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
 updatedData.yardShippingStatus = yardShippingStatus;
@@ -3553,6 +3570,11 @@ if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
 updatedData.custReturnDelivery = custReturnDelivery;
 hasChanges = true;
 }
+if (currentAdditionalInfo.custShipToRet !== custShipToRet) {
+updatedData.custShipToRet = custShipToRet;
+hasChanges = true;
+}
+
 // for reimburesement
 if (currentAdditionalInfo.reimbursementAmount !== reimbursementAmount) {
 updatedData.reimbursementAmount = reimbursementAmount;

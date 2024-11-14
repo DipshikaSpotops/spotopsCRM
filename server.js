@@ -280,6 +280,8 @@ custReturnDelivery: String,
 // reimburesement part
 reimbursementAmount: String,
 isReimbursedChecked: String,
+custShipToRet: String,
+custShipToRep: String
 },
 {strict:false}
 );
@@ -1561,15 +1563,17 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
     to: `${order.email}`,
     bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
     // to: 'dipsikha.spotopsdigital@gmail.com',
-    subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
+    subject: `Return Process for Order No. ${req.params.orderNo}`,
     html: `<p>Dear ${order.customerName},</p>
-    <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
-    <p>To process your refend, please ship the part back to us at the following address:</p>
-    <p>${order.additionalInfo[yardIndex - 1].street}<br>
-    ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
+    <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
+    <p>To facilitate the return of merchandise, please follow these steps:<br>
+    Package the item(s) securely to prevent damage during transit.<br>
+    Ship the package to the following address:<br>
+    ${order.additionalInfo.custShipToRet}
     </p>
-    <p>Please note that the shipping costs for returning the item will need to be covered by you. Once we receive the part, we will initiate the refund process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
+    <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+    <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
     <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
     <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
     attachments: [{
@@ -1620,9 +1624,7 @@ app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) =
     html: `<p>Dear ${order.customerName},</p>
     <p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offer a replacement to ensure you receive a fully functional part.</p>
     <p>Please return the part to the following address:</p>
-    <p>${order.additionalInfo[yardIndex - 1].street}<br>
-    ${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
-    </p>
+    <p>${order.additionalInfo[yardIndex - 1].custShipToRep}</p>
     <p>Please note that the shipping costs for the return is your responsibility. Once we receive the part, we will process and ship out the replacement within 1-3 business days. We will also notify you with tracking information once the replacement part is on its way.</p>
   <p>If you have any questions about the process or need further assistance, please feel free to contact us.</p>
   <p>Thank you for giving us an opportunity to make this right.</p>
@@ -1721,22 +1723,26 @@ app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", upload.single("pdfFile"), a
         pass: "hweg vrnk qyxx gktv",
       },
     });
-
     const mailOptions = {
       from: "service@50starsautoparts.com",
       to: "service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com",
       // to: `${order.email}`,
       bcc:`dipsikha.spotopsdigital@gmail.com`,
-      subject: `Return Process for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
-      html: `
-        <p>Dear ${order.customerName},</p>
-        <p>We are sorry to hear that the ABS module did not meet your expectations, and we want to make the return process as smooth as possible.</p>
-        <p>To proceed with the return process, please use the attached prepaid shipping label to return the part to us.</p>
-        <p>If you have any questions or need assistance with the return process, please don’t hesitate to reach out.</p>
-        <p>Thank you for your cooperation, and we apologize for any inconvenience.</p>
-        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-        <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-      attachments: [
+      subject:`Return Process For Order No. ${req.params.orderNo}`,
+      html: `<p>Dear ${order.customerName},</p>
+    <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
+    <p>To facilitate the return of merchandise, please follow these steps:<br>
+    Package the item(s) securely to prevent damage during transit.<br>
+    Ship the package to the following address:<br>
+    ${order.additionalInfo[yardIndex - 1].custShipToRet}
+    </p>
+    <p>Please ship the package using the shipping label below to ensure its safe arrival.</p>
+    <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
+    <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+    <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
+    <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+    <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+    attachments: [
         {
           filename: pdfFile.originalname,
           content: pdfFile.buffer,
@@ -1783,8 +1789,8 @@ app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", upload.single("pdfFile"), 
 
     const mailOptions = {
       from: "service@50starsautoparts.com",
-      // to: "dipsikha.spotopsdigital@gmail.com",
-      to: `${order.email}`,
+      to: "dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com",
+      // to: `${order.email}`,
         bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
       subject: `Return Process for Replacement of ABS Module / Order No. ${req.params.orderNo}`,
       html: `
