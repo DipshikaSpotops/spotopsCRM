@@ -1780,6 +1780,14 @@ Save
 <label>Tracking No:</label>
 <input type="text" id="yardTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
 </div>
+<div class="partsFromDropdown">
+<label>Send Email For:</label>
+<select id="partsFromDropdown" style="text-align: center;color:grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
+<option value="">Choose</option>
+<option value="Part from Customer">Part from Customer</option>
+<option value="Part from Yard">Part from Yard</option>
+</select>
+</div>
 </div>
 </div>
 <!-- div only for Return -->
@@ -3985,6 +3993,7 @@ var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 var retAddress = $('#shipToReturnAdd').val();
 var retAddressReplacement = $('#shipToRepAdd').val();
 var reimburesementValue = $("#reimAmount").val();
+var partsFromDropdown = $("#partsFromDropdown").val();
 console.log("add",retAddress);
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
@@ -3999,6 +4008,13 @@ const fileInput = document.getElementById("pdfFile");
 
   const formData = new FormData();
   formData.append("pdfFile", file);
+  // for trackingInfo
+  const data = {
+trackingNo: $("#yardTrackingNumber").val(),
+eta: "NA",
+shipperName: $("yardShipper").val(),
+link: "NA",
+};
 // console.log("RMA return",yardIndex)
 if(escProcess === "Return" && retShippingMethod === "Customer shipping"){
 fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
@@ -4017,7 +4033,7 @@ console.log("Success:", result);
 console.error("Error:", error);
 });
 }
-else if(escProcess === "Replacement" && repShippingMethod === "Customer shipping"){
+else if(escProcess === "Replacement" && repShippingMethod === "Customer shipping" && partsFromDropdown == "Part from Customer"){
 fetch(`https://www.spotops360.com/orders/sendReplaceEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}&retAddressReplacement=${retAddressReplacement}`, {
 method: "POST",
 headers: {
@@ -4034,7 +4050,7 @@ console.log("Success:", result);
 console.error("Error:", error);
 });
 }
-else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" || repShippingMethod === "Yard shipping")) {
+else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" || repShippingMethod === "Yard shipping") && partsFromDropdown == "Part from Customer") {
     fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
       method: "POST",
       body: formData, 
@@ -4048,6 +4064,26 @@ else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" |
       .catch((error) => {
         console.error("Error:", error);
       });
+  }
+  else if (escProcess === "Replacement" && partsFromDropdown == "Part from Yard") {
+    fetch(`https://www.spotops360.com/orders/sendTrackingInfo/${orderNo}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(data),
+})
+.then((response) => response.json())
+.then((result) => {
+alert("Tracking details sent to the customer");
+$("#editYardInfo")
+  .prop("disabled", false) 
+  .css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
   }
   else if (escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")) {
     fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
