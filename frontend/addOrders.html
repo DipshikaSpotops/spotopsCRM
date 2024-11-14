@@ -678,7 +678,6 @@ window.location.href = "login_signup.html";
 </form>
 </div>
 </div>
-
 <script>
 $(document).ready(function () {
 // to prefill the stae and the city 
@@ -848,14 +847,11 @@ $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
 // Function to extract the highest order number from a collection
 function getHighestOrderNo(orderArr, existingOrderNo) {
 if (orderArr.length === 0) return existingOrderNo;
-
 const lastElement = orderArr[orderArr.length - 1];
 const lastOrderNo = lastElement.orderNo;
-
 const numberPart = parseInt(lastOrderNo.slice(7), 10);
 return numberPart;
 }
-
 
 var spMinusTax;//variable for sale price - salesTax
 $(document).ready(function () {
@@ -1097,6 +1093,23 @@ $("#sState").val("");
 $("#sCountry").val("");
 $("#sZip").val("");
 $("#sAttention").val("");
+}
+});
+
+$("#orderNo").on("blur", function () {
+const orderNo = $(this).val();
+consoel.log("on click",orderNo);
+if (orderNo) {
+axios.get(`https://www.spotops360.com/orders/checkOrderNo/${orderNo}`)
+.then(response => {
+if (response.data.exists) {
+alert("Order No. already exists. Please enter a unique Order No.");
+$(this).val(""); 
+}
+})
+.catch(error => {
+console.error("Error checking Order No:", error);
+});
 }
 });
 
