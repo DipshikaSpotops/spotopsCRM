@@ -936,7 +936,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
     yardInfo.storeCredit = storeCredit || null;
 
     order.orderHistory.push(
-      `Yard ${yardIndex + 1} refund status updated to "${refundStatus}" by ${firstName} on ${formattedDateTime}`
+      `Yard ${yardIndex + 1} refund status updated to ${refundStatus} by ${firstName} on ${formattedDateTime}`
     );
 
     order.markModified("additionalInfo");
