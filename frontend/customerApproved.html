@@ -847,7 +847,10 @@ alert("An error occurred. Please try again.");
 }
 });
 });
-
+$("#infoTable").on("click", ".process-btn", function () {
+const id = $(this).data("id");
+window.location.href = `form.html?orderNo=${id}&process=true`;
+});
 $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
