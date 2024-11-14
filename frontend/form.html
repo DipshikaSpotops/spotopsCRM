@@ -2915,7 +2915,7 @@ if (yardData.status === "PO cancelled" || (yardData.status === "Escalation" && (
 showModal("#yardModal"); 
 } else {
 $('#yardModal').modal('hide'); 
-alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation'.");
+alert("You cannot add a new yard until the current yard status is either 'PO Cancelled' or 'Escalation' and escalation process should either be Return or Junked.");
 }
 } else {
 showModal("#yardModal");
