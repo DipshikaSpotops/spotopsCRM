@@ -1544,6 +1544,7 @@ res.status(500).json({ message: "Server error", error });
 // to send rma(refund) email for customer shipping
 app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
   var yardIndex = req.query.yardIndex;
+  var retAddress = req.query.retAddress;
   console.log("send rma(return) info");
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -1569,7 +1570,7 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
     <p>To facilitate the return of merchandise, please follow these steps:<br>
     Package the item(s) securely to prevent damage during transit.<br>
     Ship the package to the following address:<br>
-    ${order.additionalInfo.custShipToRet}
+    ${retAddress}
     </p>
     <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
