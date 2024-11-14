@@ -357,12 +357,14 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<div class="filter-bar">
+<div id="filterAndTotal" style="display: flex;">
+  <div class="filter-bar">
     <input id="monthYearPicker" type="month" class="form-control" />
     <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
-</div>
-<div id="showTotalOrders">Total Placed Orders This Month-</div>
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+  </div>
+  <div id="showTotalOrders">Total Placed Orders This Month-</div>
+  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+  </div>
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
