@@ -1545,6 +1545,8 @@ res.status(500).json({ message: "Server error", error });
 app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
   var yardIndex = req.query.yardIndex;
   var retAddress = req.query.retAddress;
+  const addressParts = retAddress.split(", ");
+  const formattedAddress = `${addressParts[0]},\n${addressParts[1]},\n${addressParts[2]}, ${addressParts[3]}`;
   console.log("send rma(return) info");
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -1567,10 +1569,10 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
     subject: `Return Process for Order No. ${req.params.orderNo}`,
     html: `<p>Dear ${order.customerName},</p>
     <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
-    <p>To facilitate the return of merchandise, please follow these steps:<br>
-    Package the item(s) securely to prevent damage during transit.<br>
-    Ship the package to the following address:<br>
-    ${retAddress}
+    <p>To facilitate the return of merchandise, please follow these steps:<br></p>
+    <p>Package the item(s) securely to prevent damage during transit.<br></p>
+    <p>Ship the package to the following address:<br>
+    ${formattedAddress}
     </p>
     <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
@@ -1728,17 +1730,14 @@ app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", upload.single("pdfFile"), a
     });
     const mailOptions = {
       from: "service@50starsautoparts.com",
-      to: "service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com",
-      // to: `${order.email}`,
-      bcc:`dipsikha.spotopsdigital@gmail.com`,
+      // to: "service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com",
+      to: `${order.email}`,
+      bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
       subject:`Return Process For Order No. ${req.params.orderNo}`,
       html: `<p>Dear ${order.customerName},</p>
     <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
-    <p>To facilitate the return of merchandise, please follow these steps:<br>
-    Package the item(s) securely to prevent damage during transit.<br>
-    Ship the package to the following address:<br>
-    ${retAddress}
-    </p>
+    <p>To facilitate the return of merchandise, please follow these steps:</p>
+    <p>Package the item(s) securely to prevent damage during transit.</p>
     <p>Please ship the package using the shipping label below to ensure its safe arrival.</p>
     <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
