@@ -2997,6 +2997,8 @@ throw new Error("Failed to fetch order data");
 }
 var actualyIndex = selectedYardIndex - 1;
 const additionalInfo = response.data.additionalInfo[actualyIndex];
+var yardAddress = additionalInfo.street + "<br>" + additionalInfo.city + "," + additionalInfo.state + "," + additionalInfo.zipcode;
+console.log("yardAdd",yardAddress);
 // console.log("Fetched additionalInfo", additionalInfo);
 // Populate form fields if data is present
 if (additionalInfo.escalationProcess) {
