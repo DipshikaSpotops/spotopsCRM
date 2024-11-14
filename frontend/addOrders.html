@@ -922,6 +922,7 @@ $(document).ready(function () {
   .catch((error) => {
     if (error.response && error.response.status === 409) {
       alert("Order No. already exists. Please enter a unique Order No.");
+      ("#orderNo").val("");
     } else {
       console.error("Error:", error);
       alert("An unexpected error occurred. Please try again.");
@@ -1098,22 +1099,22 @@ $("#sZip").val("");
 $("#sAttention").val("");
 }
 });
-$("#orderNo").on("blur", function () {
-const orderNo = $(this).val();
-console.log("on click",orderNo);
-if (orderNo) {
-axios.get(`https://www.spotops360.com/orders/checkOrderNo/${orderNo}`)
-.then(response => {
-if (response.data.exists) {
-alert("Order No. already exists. Please enter a unique Order No.");
-$(this).val(""); 
-}
-})
-.catch(error => {
-console.error("Error checking Order No:", error);
-});
-}
-});
+// $("#orderNo").on("blur", function () {
+// const orderNo = $(this).val();
+// console.log("on click",orderNo);
+// if (orderNo) {
+// axios.get(`https://www.spotops360.com/orders/checkOrderNo/${orderNo}`)
+// .then(response => {
+// if (response.data.exists) {
+// alert("Order No. already exists. Please enter a unique Order No.");
+// $(this).val(""); 
+// }
+// })
+// .catch(error => {
+// console.error("Error checking Order No:", error);
+// });
+// }
+// });
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
