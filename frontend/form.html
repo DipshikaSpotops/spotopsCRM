@@ -1779,6 +1779,10 @@ Save
 </select>
 <label>Tracking No:</label>
 <input type="text" id="yardTrackingNumber" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
+<label>ETA:</label>
+<input type="text" id="yardTrackingETA" placeholder="ETA" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
+<label>Tracking Link:</label>
+<input type="text" id="yardTrackingLink" placeholder="Tracking Link" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 16px;text-align: center;">
 </div>
 </div>
 <div class="partsFromDropdown">
@@ -3080,6 +3084,12 @@ $("#shipToRepAdd").val(yardAddress);
 if (additionalInfo.yardTrackingNumber) {
 $("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber);
 }
+if (additionalInfo.yardTrackingETA) {
+$("#yardTrackingETA").val(yardTrackingETA);
+}
+if (additionalInfo.yardTrackingLink) {
+$("#yardTrackingLink").val(additionalInfo.yardTrackingLink);
+}
 if (additionalInfo.customerShippingMethodReturn) {
 $("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn);
 }
@@ -3443,6 +3453,8 @@ const yardShippingMethod = $("#yardShippingMethod").val();
 const yardShipper = $("#yardShipper").val();
 const yardTrackingNumber = $("#yardTrackingNumber").val();
 const yardOwnShipping = $("#yardownShipping").val();
+const yardTrackingETA = $("#yardTrackingETA").val();
+const yardTrackingLink = $("#yardTrackingLink").val();
 // return parts
 const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
 const customerShipperReturn = $("#customerShipperReturn").val();
@@ -3583,6 +3595,14 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.custShipToRet !== custShipToRet) {
 updatedData.custShipToRet = custShipToRet;
+hasChanges = true;
+}
+if (currentAdditionalInfo.yardTrackingETA !== yardTrackingETA) {
+updatedData.yardTrackingETA = yardTrackingETA;
+hasChanges = true;
+}
+if (currentAdditionalInfo.yardTrackingLink !== yardTrackingLink) {
+updatedData.yardTrackingLink = yardTrackingLink;
 hasChanges = true;
 }
 
@@ -4011,9 +4031,9 @@ const fileInput = document.getElementById("pdfFile");
   // for trackingInfo
   const data = {
 trackingNo: $("#yardTrackingNumber").val(),
-eta: "NA",
+eta: $("#yardTrackingETA").val(),
 shipperName: $("yardShipper").val(),
-link: "NA",
+link: $("#yardTrackingLink").val(),
 };
 // console.log("RMA return",yardIndex)
 if(escProcess === "Return" && retShippingMethod === "Customer shipping"){

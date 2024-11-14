@@ -271,6 +271,8 @@ yardShippingMethod: String,
 yardShipper: String,
 yardTrackingNumber: String,
 yardOwnShipping: String,
+yardTrackingETA: String,
+yardTrackingLink:string,
 // return__part from customer
 customerShippingMethodReturn: String,
 customerShipperReturn: String,
