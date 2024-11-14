@@ -319,7 +319,7 @@ supportNotes:[String]
 const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
 
 const OrderSchema = new mongoose.Schema({
-orderNo: String,
+orderNo: { type: String, unique: true },
 orderDate: String,
 salesAgent: String,
 customerName: String,
@@ -2583,3 +2583,14 @@ cid: 'logo'
   res.status(500).json({ message: "Server error", error });
   }
   });
+// to check orderNo existence
+app.get('/orders/checkOrderNo/:orderNo', async (req, res) => {
+const { orderNo } = req.params;
+try {
+const orderExists = await Order.exists({ orderNo });
+res.json({ exists: !!orderExists });
+} catch (error) {
+console.error("Error checking Order No:", error);
+res.status(500).send("Internal Server Error");
+}
+});
