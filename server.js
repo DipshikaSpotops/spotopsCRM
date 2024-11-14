@@ -1657,6 +1657,7 @@ app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) =
   });
 app.post("/orders/sendReimburseEmail/:orderNo", async (req, res) => {
 var yardIndex = req.query.yardIndex;
+var reimburesementValue = req.query.reimburesementValue;
 console.log("send rma(return) info");
 try {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -1676,14 +1677,12 @@ from: "service@50starsautoparts.com",
 // to: `${order.email}`,
 // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
 to: 'dipsikha.spotopsdigital@gmail.com',
-subject: `Return Required for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
+subject: `Goodwill Reimbursement Confirmation || Order No. ${req.params.orderNo}`,
 html: `<p>Dear ${order.customerName},</p>
 <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
-<p>To process your refund/replacement, please ship the part back to us at the following address:</p>
-<p>${order.additionalInfo[yardIndex - 1].street}<br>
-${order.additionalInfo[yardIndex - 1].city} ${order.additionalInfo[yardIndex - 1].state} ${order.additionalInfo[yardIndex - 1].zipcode}
-</p>
-<p>Please note that the shipping costs for returnng the item will need to be covered by you. Once we receive the part, we will initiate the refund/replacement process within 1-3 business days. You will receive an email confirmation as soon the refund has been processed.</p>
+<p>As discussed, we’re glad to hear that you’ve resolved the issue! We are reimbursing you $${reimburesementValue} as a goodwill gesture, and we hope this reflects our commitment to supporting our customers. Once the refund is processed, we will share the refund receipt with you.</p>
+<p>It’s been a pleasure interacting with you, and we look forward to assisting you with more orders in the future.</p>
+<p>Thank you again, and please don’t hesitate to reach out anytime.</p>
 <p>If you have any questions or need further assistance with the return process, please feel free to reach out.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
 <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
