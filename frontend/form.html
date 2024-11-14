@@ -2770,6 +2770,7 @@ return response.json();
 .then((data) => {
 updateOrderHistory(data.orderHistory);
 const team = localStorage.getItem("team");
+alert("Details have been updated");
 window.location.reload();
 // if (team === "Team Charlie") {
 // window.location.href = "individualOrders.html";
