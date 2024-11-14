@@ -1724,14 +1724,14 @@ app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", upload.single("pdfFile"), a
 
     const mailOptions = {
       from: "service@50starsautoparts.com",
-      // to: "dipsikha.spotopsdigital@gmail.com",
-      to: `${order.email}`,
-      bcc:`dipsikha.spotopsdigital@gmail.com,service,service@50starsautoparts.com`,
+      to: "service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com",
+      // to: `${order.email}`,
+      bcc:`dipsikha.spotopsdigital@gmail.com`,
       subject: `Return Process for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
       html: `
         <p>Dear ${order.customerName},</p>
         <p>We are sorry to hear that the ABS module did not meet your expectations, and we want to make the return process as smooth as possible.</p>
-        <p>To proceed with your refund, please use the attached prepaid shipping label to return the part to us. Once we receive the part, we will process your refund within 1-3 business days. You will receive a confirmation email once the refund is completed.</p>
+        <p>To proceed with the return process, please use the attached prepaid shipping label to return the part to us.</p>
         <p>If you have any questions or need assistance with the return process, please don’t hesitate to reach out.</p>
         <p>Thank you for your cooperation, and we apologize for any inconvenience.</p>
         <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
