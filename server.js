@@ -1709,6 +1709,8 @@ res.status(500).json({ message: "Server error", error });
 // to send email for return when shipping methos is own shipping or yard shipping
 app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", upload.single("pdfFile"), async (req, res) => {
   const yardIndex = req.query.yardIndex;
+  
+  const retAddress = req.query.retAddress;
   try {
     const order = await Order.findOne({ orderNo: req.params.orderNo });
     if (!order) return res.status(400).send("Order not found");
@@ -1734,7 +1736,7 @@ app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", upload.single("pdfFile"), a
     <p>To facilitate the return of merchandise, please follow these steps:<br>
     Package the item(s) securely to prevent damage during transit.<br>
     Ship the package to the following address:<br>
-    ${order.additionalInfo[yardIndex - 1].custShipToRet}
+    ${retAddress}
     </p>
     <p>Please ship the package using the shipping label below to ensure its safe arrival.</p>
     <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
