@@ -1547,7 +1547,7 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
   var retAddress = req.query.retAddress;
   const addressParts = retAddress.split(", ");
   const formattedAddress = `${addressParts[0]},\n${addressParts[1]},\n${addressParts[2]}, ${addressParts[3]}`;
-  console.log("send rma(return) info");
+  console.log("send rma(return) info",formattedAddress);
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
   console.log("no", order,"yardIndex",yardIndex);
