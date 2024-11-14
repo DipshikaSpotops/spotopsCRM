@@ -911,20 +911,23 @@ $(document).ready(function () {
 
     console.log("newOrder", newOrder);
 
-    // Make the API request to place the order
+    //request to place the order
     axios
-      .post("https://www.spotops360.com/orders", newOrder)
-      .then(() => {
-        alert(`Order No. ${newOrderNo} has been placed successfully.`);
-        // Enable the button and remove blur effect after success
-        $("#addoBtn").prop("disabled", false).css("filter", "none");
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        // Re-enable the button if there was an error
-        $("#addoBtn").prop("disabled", false).css("filter", "none");
-      });
+  .post("https://www.spotops360.com/orders", newOrder)
+  .then(() => {
+    alert(`Order No. ${newOrderNo} has been placed successfully.`);
+    $("#addoBtn").prop("disabled", false).css("filter", "none");
+    window.location.reload();
+  })
+  .catch((error) => {
+    if (error.response && error.response.status === 409) {
+      alert("Order No. already exists. Please enter a unique Order No.");
+    } else {
+      console.error("Error:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
+    $("#addoBtn").prop("disabled", false).css("filter", "none");
+  });
   });
 
   // Helper function to format order date
@@ -1095,7 +1098,6 @@ $("#sZip").val("");
 $("#sAttention").val("");
 }
 });
-
 $("#orderNo").on("blur", function () {
 const orderNo = $(this).val();
 console.log("on click",orderNo);
