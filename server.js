@@ -1724,7 +1724,9 @@ app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", upload.single("pdfFile"), a
 
     const mailOptions = {
       from: "service@50starsautoparts.com",
-      to: "dipsikha.spotopsdigital@gmail.com",
+      // to: "dipsikha.spotopsdigital@gmail.com",
+      to: `${order.email}`,
+      bcc:`dipsikha.spotopsdigital@gmail.com,service,service@50starsautoparts.com`,
       subject: `Return Process for Refund of ABS Module Order / Order No. ${req.params.orderNo}`,
       html: `
         <p>Dear ${order.customerName},</p>
