@@ -1545,9 +1545,12 @@ res.status(500).json({ message: "Server error", error });
 app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
   var yardIndex = req.query.yardIndex;
   var retAddress = req.query.retAddress;
-  const addressParts = retAddress.split(", ");
-  const formattedAddress = `${addressParts[0]},\n${addressParts[1]},\n${addressParts[2]}, ${addressParts[3]}`;
-  console.log("send rma(return) info",formattedAddress);
+var [firstPart, remainingPart] = retAddress.split(/,(.+)/);
+firstPart = firstPart.trim(); 
+remainingPart = remainingPart.trim(); 
+// console.log("First part:", firstPart);
+// console.log("Remaining part:", remainingPart);
+//   console.log("send rma(return) info",formattedAddress);
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
   console.log("no", order,"yardIndex",yardIndex);
@@ -1572,7 +1575,8 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
     <p>To facilitate the return of merchandise, please follow these steps:<br></p>
     <p>Package the item(s) securely to prevent damage during transit.<br></p>
     <p>Ship the package to the following address:<br>
-    ${retAddress}
+    ${firstPart}<br>
+    ${remainingPart}
     </p>
     <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
     <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
@@ -1605,6 +1609,9 @@ app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) =>
 app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) => {
   var yardIndex = req.query.yardIndex;
   var retAddressReplacement = req.query.retAddressReplacement;
+  var [firstPart, remainingPart] = retAddressReplacement.split(/,(.+)/);
+firstPart = firstPart.trim() || " "; 
+remainingPart = remainingPart.trim() || " ";
   console.log("send rma(return) info");
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });
@@ -1628,7 +1635,8 @@ app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) =
     html: `<p>Dear ${order.customerName},</p>
     <p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offer a replacement to ensure you receive a fully functional part.</p>
     <p>Please return the part to the following address:</p>
-    <p>${retAddressReplacement}</p>
+    <p>${firstPart}<br>
+    ${remainingPart}</p>
     <p>Please note that the shipping costs for the return is your responsibility. Once we receive the part, we will process and ship out the replacement within 1-3 business days. We will also notify you with tracking information once the replacement part is on its way.</p>
   <p>If you have any questions about the process or need further assistance, please feel free to contact us.</p>
   <p>Thank you for giving us an opportunity to make this right.</p>
