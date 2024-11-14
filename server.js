@@ -1683,7 +1683,7 @@ html: `<p>Dear ${order.customerName},</p>
 <p>As discussed, we’re glad to hear that you’ve resolved the issue! We are reimbursing you $${reimburesementValue} as a goodwill gesture, and we hope this reflects our commitment to supporting our customers. Once the refund is processed, we will share the refund receipt with you.</p>
 <p>It’s been a pleasure interacting with you, and we look forward to assisting you with more orders in the future.</p>
 <p>Thank you again, and please don’t hesitate to reach out anytime.</p>
-<p>If you have any questions or need further assistance with the return process, please feel free to reach out.</p>
+<p>If you have any questions or need further assistance, please feel free to reach out.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
 <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
