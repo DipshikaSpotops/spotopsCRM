@@ -87,12 +87,12 @@ cursor: default;
 border: none;
 }
 .main-content {
-flex-grow: 1;
+  flex-grow: 1;
 padding: 20px;
 margin-left: 14%;
-margin-top: 30px;
-overflow-x: auto;
+margin-top: 60px;
 transition: margin-left 0.3s ease;
+overflow-y: auto;
 }
 .submenu {
 display: block; /* Show all submenus by default */
@@ -369,7 +369,7 @@ aria-labelledby="userMenu"
 </div>
 
 <div class="main-content">
-<div id="placed-order-content" style="overflow-x: auto;">
+<!-- <div id="placed-order-content"> -->
 <h1 style="text-align: center; margin-right: 125px; margin-top: 19px">
 Customer Approved Orders
 </h1>
@@ -408,7 +408,7 @@ placeholder="Search..."
 <!-- Information from the form will be appended here -->
 </tbody>
 </table>  
-</div>
+<!-- </div> -->
 
 <!-- Profile Section -->
 <div id="profile-content" class="d-none">
