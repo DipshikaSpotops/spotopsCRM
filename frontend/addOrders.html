@@ -922,7 +922,7 @@ $(document).ready(function () {
   .catch((error) => {
     if (error.response && error.response.status === 409) {
       alert("Order No. already exists. Please enter a unique Order No.");
-      ("#orderNo").val("");
+      $("#orderNo").val("");
     } else {
       console.error("Error:", error);
       alert("An unexpected error occurred. Please try again.");
