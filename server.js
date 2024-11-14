@@ -403,7 +403,6 @@ res.status(500).json({ message: "Server error" });
 // for only placed orders
 app.get("/orders/placed", async (req, res) => {
   try {
-    // Query the database for orders with orderStatus "Placed"
     const month = req.query.month;
 const year = req.query.year;
 if (!month || !year) {
@@ -425,11 +424,21 @@ const placedOrders = await Order.find({
 // for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
   try {
-    // Query the database for orders with orderStatus "Placed"
-    const customerApprovedOrders = await Order.find({ orderStatus: "Customer approved" });
+    const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const customerApprovedOrders = await Order.find({
+  $and: [
+    { orderDate: { $regex: monthYearPattern } },
+    { orderStatus: "Customer approved" }
+  ]
+});
     res.json(customerApprovedOrders);
   } catch (error) {
-    console.error("Error fetching customerApprovedOrders orders:", error);
+    console.error("Error fetching customerApproved orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
