@@ -1006,6 +1006,7 @@ window.location.href = "login_signup.html";
   <option value="ABS Pump">ABS Pump</option>
   <option value="Alternator">Alternator</option>
   <option value="Brake Booster">Brake Booster</option>
+  <option value="Engine">Engine</option>
   <option value="Exhaust Manifold">Exhaust Manifold</option>
   <option value="Fuse Box">Fuse Box</option>
   <option value="Headlight">Headlight</option>
@@ -3267,7 +3268,9 @@ return;
 }
 
 const yardData = data.additionalInfo[yardIndex - 1];
-
+if(yardData.poSentDate){
+  $("#editYardInfo").prop("disabled", true).css("filter", "blur(2px)");
+}
 // Prefill input fields
 $("#refund").val(yardData.status);
 $("#cardCharged").val(yardData.paymentStatus);
@@ -4865,6 +4868,10 @@ $("#voidLabel").on("click", function () {
                 .then((response) => {
                     if (response.ok) {
                         alert("Label voided successfully, and status updated to 'Yard PO Sent'.");
+                        $("#editYardPopup").hide();
+                        $(".modal-overlay").remove();
+// $(".mainDiv").removeClass("blur");
+$("body").removeClass("modal-active");
                         $("#divTrackingEdit input, #divTrackingEdit select").val(""); // Reset input fields
                         $("#divTrackingEdit").show();
                     } else {
