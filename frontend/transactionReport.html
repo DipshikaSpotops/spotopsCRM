@@ -553,50 +553,24 @@ function renderTableRows(page, orders = allOrders) {
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
+
 $('#infoTable').empty(); // Clear the table
-ordersForPage.forEach((order) => {
-if (order.additionalInfo && order.additionalInfo.length > 0) {
-// Iterate over additionalInfo
-order.additionalInfo.forEach((info, index) => {
-$("#infoTable").append(`
-<td>${order.orderDate.split(" ")[0]}</td>
-<td>${order.orderNo}</td>
-<td>${info.labelCreationDate}</td>
-<td>${info.shippingDetails}</td>
-<td>${info.partShippedDate}</td>
-<td>${info.eta}</td>
-<td>${info.deliveredDate}</td>
-<td>
-<button class="btn btn-primary btn-sm edit-btn" data-id="${order.orderNo}">Edit</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${order.orderNo}">Cancel</button>
-</td>
-<td>${order.email || 'N/A'}</td>
-</tr>
-`);
-});
-} else {
-// Handle orders without additionalInfo
+ordersForPage.forEach((item) => {
+team = localStorage.getItem('team');
+const yardlength = item.additionalInfo.length;
+const datetime = item.orderDate;
+const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+// console.log(dateOnly);
 $("#infoTable").append(`
 <tr>
-<td>${order.orderDate.split(" ")[0]}</td>
-<td>${order.orderNo}</td>
-<td>${order.salesAgent}</td>
-<td>${order.customerName}</td>
-<td>${order.pReq || order.partName}</td>
-<td>N/A</td>
-<td>${order.orderStatus}</td>
-<td>${order.grossProfit || 'N/A'}</td>
-<td>N/A</td>
-<td>
-<button class="btn btn-primary btn-sm edit-btn" data-id="${order.orderNo}">Edit</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${order.orderNo}">Cancel</button>
-</td>
-<td>${order.email || 'N/A'}</td>
+<td>${dateOnly}</td>
+<td>${item.orderNo}</td>
 </tr>
 `);
-}
 });
 }
+
+
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
@@ -607,26 +581,19 @@ window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
 function createPaginationControls(totalPages, orders = allOrders) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); // Clear pagination controls
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); // Clear pagination controls
 
-    if (totalPages > 1) {
-        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
-        }
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
 
-        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-    }
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
 }
 
-// Adjust total pages based on the total number of rows
-const totalRows = allOrders.reduce((sum, order) => sum + (order.additionalInfo ? order.additionalInfo.length : 1), 0);
-const totalPages = Math.ceil(totalRows / rowsPerPage);
-
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
 
 // Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
