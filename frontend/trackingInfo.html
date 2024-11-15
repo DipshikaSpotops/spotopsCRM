@@ -570,47 +570,43 @@ item.additionalInfo && item.additionalInfo.length > 0
 <td>${
   item.additionalInfo && item.additionalInfo.length > 0
     ? item.additionalInfo
-        .map((info, index) => {
-          // Create the tracking history section
-          const trackingHistory = info.trackingHistory
-            ? info.trackingHistory.map((trackingNo) => `<li>${trackingNo}</li>`).join("")
-            : "No tracking history";
+        .map((info) => {
+          const trackingHistorySection = info.trackingHistory && info.trackingHistory.length > 0 
+            ? `<b>Tracking History:</b>
+               <ul>${info.trackingHistory.map((trackingNo) => `<li>${trackingNo}</li>`).join("")}</ul>`
+            : "";
 
-          // Create the ETA history section
-          const etaHistory = info.etaHistory
-            ? info.etaHistory.map((eta) => `<li>${eta}</li>`).join("")
-            : "No ETA history";
+          const etaHistorySection = info.etaHistory && info.etaHistory.length > 0 
+            ? `<b>ETA History:</b>
+               <ul>${info.etaHistory.map((eta) => `<li>${eta}</li>`).join("")}</ul>`
+            : "";
 
-          // Create the shipper name history section
-          const shipperNameHistory = info.shipperNameHistory
-            ? info.shipperNameHistory.map((shipper) => `<li>${shipper}</li>`).join("")
-            : "No shipper history";
+          const shipperNameHistorySection = info.shipperNameHistory && info.shipperNameHistory.length > 0 
+            ? `<b>Shipper Name History:</b>
+               <ul>${info.shipperNameHistory.map((shipper) => `<li>${shipper}</li>`).join("")}</ul>`
+            : "";
 
-          // Create the tracking link history section
-          const trackingLinkHistory = info.trackingLinkHistory
-            ? info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")
-            : "No tracking link history";
-            const labelDateHistory = Array.isArray(info.labelCreationDate)
-  ? info.labelCreationDate.length > 0
-    ? info.labelCreationDate.map((date, index) => `<li>Label Created on ${date}</li>`).join("")
-    : "No label creation history"
-  : typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
-  ? `<li>Label Created on ${new Date(info.labelCreationDate).toLocaleString()}</li>`
-  : "No label creation history";
+          const trackingLinkHistorySection = info.trackingLinkHistory && info.trackingLinkHistory.length > 0 
+            ? `<b>Tracking Link History:</b>
+               <ul>${info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")}</ul>`
+            : "";
 
+          const labelDateHistorySection = Array.isArray(info.labelCreationDate)
+            ? info.labelCreationDate.length > 0
+                ? `<b>Label Date History:</b>
+                   <ul>${info.labelCreationDate.map((date) => `<li>Label Created on ${new Date(date).toLocaleString()}</li>`).join("")}</ul>`
+                : ""
+            : typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
+            ? `<b>Label Date History:</b>
+               <ul><li>Label Created on ${new Date(info.labelCreationDate).toLocaleString()}</li></ul>`
+            : "";
 
-          // Combine all the information for this yard
           return `
-            <b>Tracking History:</b>
-            <ul>${trackingHistory}</ul>
-            <b>ETA History:</b>
-            <ul>${etaHistory}</ul>
-            <b>Shipper Name History:</b>
-            <ul>${shipperNameHistory}</ul>
-            <b>Tracking Link History:</b>
-            <ul>${trackingLinkHistory}</ul>
-            <ul>${labelDateHistory}</ul>
-            <>
+            ${trackingHistorySection}
+            ${etaHistorySection}
+            ${shipperNameHistorySection}
+            ${trackingLinkHistorySection}
+            ${labelDateHistorySection}
           `;
         })
         .join("<br><br>")
