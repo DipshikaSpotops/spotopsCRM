@@ -565,6 +565,7 @@ $("#infoTable").append(`
 <td>${info.shippingDetails}</td>
 <td>${info.partShippedDate}</td>
 <td>${info.eta}</td>
+<td>${info.deliveredDate}</td>
 <td>
 <button class="btn btn-primary btn-sm edit-btn" data-id="${order.orderNo}">Edit</button>
 <button class="btn btn-danger btn-sm cancel-btn" data-id="${order.orderNo}">Cancel</button>
@@ -606,19 +607,26 @@ window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
 function createPaginationControls(totalPages, orders = allOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
+    const paginationControls = $('#pagination-controls');
+    paginationControls.empty(); // Clear pagination controls
 
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+    if (totalPages > 1) {
+        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
+        for (let i = 1; i <= totalPages; i++) {
+            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+        }
 
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    }
 }
-}
 
+// Adjust total pages based on the total number of rows
+const totalRows = allOrders.reduce((sum, order) => sum + (order.additionalInfo ? order.additionalInfo.length : 1), 0);
+const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+renderTableRows(currentPage);
+createPaginationControls(totalPages);
 
 // Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
