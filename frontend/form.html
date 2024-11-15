@@ -3890,7 +3890,6 @@ $("#ourShippingInput").hide();
 $("#refund").on("change", function () {
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
 
-.then((response) => response.json())
 .then((data) => {
 if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
 // console.log("Order data or additionalInfo not found.");
