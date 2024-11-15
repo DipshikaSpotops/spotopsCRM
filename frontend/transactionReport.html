@@ -364,6 +364,7 @@ aria-labelledby="userMenu"
 <a class="nav-link" href="storeCredit.html">Store Credits</a>
 <a class="nav-link" href="collectRefund.html">Collect Refunds</a>
 <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
+<a class="nav-link" href="transactionReport.html">Transaction Report</a>
 <!-- <a class="nav-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
 
 </div>
@@ -374,7 +375,7 @@ aria-labelledby="userMenu"
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">View Orders- Monthly</h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Transaction Report- Monthly</h1>
 <div>
 <input
 type="text"
@@ -552,74 +553,49 @@ function renderTableRows(page, orders = allOrders) {
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
-
 $('#infoTable').empty(); // Clear the table
-ordersForPage.forEach((item) => {
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
-
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
-}
-team = localStorage.getItem('team');
-// console.log("team",team);
-const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-
-
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-// <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
-
-// const sendInvoice = `
-// <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-// `;
-
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-// console.log(dateOnly);
-
+ordersForPage.forEach((order) => {
+if (order.additionalInfo && order.additionalInfo.length > 0) {
+// Iterate over additionalInfo
+order.additionalInfo.forEach((info, index) => {
 $("#infoTable").append(`
-<tr>
-<td>${dateOnly}</td>
-<td>${item.orderNo}</td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br><b>Tracking No.</b>: ${info.trackingNo}`)
-
-.join("<br>")
-: ""
-}</td>
-<td>${item.customerName}<br>
-    ${item.phone}<br>
-     ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
-    ${item.sAddress}
-    </td>
-    
-<td>Part required: ${item.pReq || item.partName}<br>
-    ${item.year} ${item.make} ${item.model}
-    </td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""}`)
-
-.join("<br>")
-: ""
-}</td>
-<td>${item.orderStatus}</td>
-<td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
-<td ${escalationStyle}>${escalationStatus}</td>
-<td>${actions}</td>
-<td>${item.email}</td>
+<td>${order.orderDate.split(" ")[0]}</td>
+<td>${order.orderNo}</td>
+<td>${info.labelCreationDate}</td>
+<td>${info.shippingDetails}</td>
+<td>Yard ${index + 1}: ${info.yardName || 'N/A'}</td>
+<td>${order.orderStatus}</td>
+<td>${order.grossProfit || 'N/A'}</td>
+<td>${escalationStatus}</td>
+<td>
+<button class="btn btn-primary btn-sm edit-btn" data-id="${order.orderNo}">Edit</button>
+<button class="btn btn-danger btn-sm cancel-btn" data-id="${order.orderNo}">Cancel</button>
+</td>
+<td>${order.email || 'N/A'}</td>
 </tr>
 `);
+});
+} else {
+// Handle orders without additionalInfo
+$("#infoTable").append(`
+<tr>
+<td>${order.orderDate.split(" ")[0]}</td>
+<td>${order.orderNo}</td>
+<td>${order.salesAgent}</td>
+<td>${order.customerName}</td>
+<td>${order.pReq || order.partName}</td>
+<td>N/A</td>
+<td>${order.orderStatus}</td>
+<td>${order.grossProfit || 'N/A'}</td>
+<td>N/A</td>
+<td>
+<button class="btn btn-primary btn-sm edit-btn" data-id="${order.orderNo}">Edit</button>
+<button class="btn btn-danger btn-sm cancel-btn" data-id="${order.orderNo}">Cancel</button>
+</td>
+<td>${order.email || 'N/A'}</td>
+</tr>
+`);
+}
 });
 }
 // <td>${sendInvoice}</td>
