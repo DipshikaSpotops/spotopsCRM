@@ -391,7 +391,7 @@ placeholder="Search..."
   <input id="monthYearPicker" type="month" class="form-control" />
   <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
-<div id="showTotalOrders">Total Orders This Month-</div>
+<!-- <div id="showTotalOrders">Total Orders This Month-</div> -->
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
       
@@ -739,7 +739,7 @@ try {
   allOrders = ordersResponse.data;
   var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+// document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -919,7 +919,7 @@ throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
+// document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
