@@ -285,7 +285,13 @@ custReturnDelivery: String,
 reimbursementAmount: String,
 isReimbursedChecked: String,
 custShipToRet: String,
-custShipToRep: String
+custShipToRep: String,
+// for voiding labels
+trackingHistory: [String],
+etaHistory:  [String],
+shipperNameHistory: [String],
+trackingLinkHistory: [String],
+
 },
 {strict:false}
 );
@@ -2626,5 +2632,40 @@ res.json({ exists: !!orderExists });
 } catch (error) {
 console.error("Error checking Order No:", error);
 res.status(500).send("Internal Server Error");
+}
+});
+// for voiding label
+app.put("/orders/updateYard/:orderNo/:yardIndex", async (req, res) => {
+const { orderNo, yardIndex } = req.params;
+const { trackingNo, eta, shipperName, trackingLink, status, updatedBy } = req.body;
+try {
+const order = await Order.findOne({ orderNo });
+if (!order) {
+return res.status(404).json({ message: "Order not found" });
+}
+if (!order.additionalInfo[yardIndex - 1]) {
+return res.status(400).json({ message: "Invalid yard index" });
+}
+const yardData = order.additionalInfo[yardIndex - 1];
+yardData.trackingHistory = yardData.trackingHistory || [];
+yardData.etaHistory = yardData.etaHistory || [];
+yardData.shipperNameHistory = yardData.shipperNameHistory || [];
+yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
+if (yardData.trackingNo) yardData.trackingHistory.push(yardData.trackingNo);
+if (yardData.eta) yardData.etaHistory.push(yardData.eta);
+if (yardData.shipperName) yardData.shipperNameHistory.push(yardData.shipperName);
+if (yardData.trackingLink) yardData.trackingLinkHistory.push(yardData.trackingLink);
+yardData.trackingNo = trackingNo || "";
+yardData.eta = eta || "";
+yardData.shipperName = shipperName || "";
+yardData.trackingLink = trackingLink || "";
+yardData.status = status || "Yard PO Sent";
+const labelVoidedEntry = `${updatedBy || "User"} voided the label for Yard #${yardIndex} on ${new Date().toLocaleString()}`;
+order.orderHistory.push(labelVoidedEntry);
+await order.save();
+res.status(200).json({ message: "Yard info updated successfully", order });
+} catch (error) {
+console.error("Error updating yard info:", error);
+res.status(500).json({ message: "Error updating yard info", error: error.message });
 }
 });
