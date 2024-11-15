@@ -1,4 +1,3 @@
-in the following html page,append only those orders which have labelCreationDate as an array and also apply pagination based on that
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -591,9 +590,14 @@ item.additionalInfo && item.additionalInfo.length > 0
           const trackingLinkHistory = info.trackingLinkHistory
             ? info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")
             : "No tracking link history";
-            const labelDateHistory = Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0
-  ? info.labelCreationDate.map((date, index) => `<li>Label Created on ${new Date(date).toLocaleString()}</li>`).join("")
+            const labelDateHistory = Array.isArray(info.labelCreationDate)
+  ? info.labelCreationDate.length > 0
+    ? info.labelCreationDate.map((date, index) => `<li>Label Created on ${new Date(date).toLocaleString()}</li>`).join("")
+    : "No label creation history"
+  : typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
+  ? `<li>Label Created on ${new Date(info.labelCreationDate).toLocaleString()}</li>`
   : "No label creation history";
+
 
           // Combine all the information for this yard
           return `
