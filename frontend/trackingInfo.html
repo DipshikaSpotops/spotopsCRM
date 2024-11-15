@@ -594,7 +594,7 @@ item.additionalInfo && item.additionalInfo.length > 0
           const labelDateHistorySection = Array.isArray(info.labelCreationDate)
             ? info.labelCreationDate.length > 0
                 ? `<b>Label Date History:</b>
-                   <ul>${info.labelCreationDate.map((date) => `<li>Label Created on ${new Date(date).toLocaleString()}</li>`).join("")}</ul>`
+                   <ul>${info.labelCreationDate.map((date) => `<li>Label Created on ${date}</li>`).join("")}</ul>`
                 : ""
             : typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
             ? `<b>Label Date History:</b>
