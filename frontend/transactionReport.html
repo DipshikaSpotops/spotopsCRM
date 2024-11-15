@@ -565,6 +565,60 @@ $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br><b>Tracking No.</b>: ${info.trackingNo}`)
+
+.join("<br>")
+: ""
+}</td>
+<td>${
+  item.additionalInfo && item.additionalInfo.length > 0
+    ? item.additionalInfo
+        .map((info, index) => {
+          // Create the tracking history section
+          const trackingHistory = info.trackingHistory
+            ? info.trackingHistory.map((trackingNo) => `<li>${trackingNo}</li>`).join("")
+            : "No tracking history";
+
+          // Create the ETA history section
+          const etaHistory = info.etaHistory
+            ? info.etaHistory.map((eta) => `<li>${eta}</li>`).join("")
+            : "No ETA history";
+
+          // Create the shipper name history section
+          const shipperNameHistory = info.shipperNameHistory
+            ? info.shipperNameHistory.map((shipper) => `<li>${shipper}</li>`).join("")
+            : "No shipper history";
+
+          // Create the tracking link history section
+          const trackingLinkHistory = info.trackingLinkHistory
+            ? info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")
+            : "No tracking link history";
+
+          // Combine all the information for this yard
+          return `
+            <b>Yard ${index + 1}</b>:<br>
+            <b>Tracking No.</b>: ${info.trackingNo || "N/A"}<br>
+            <b>ETA:</b>: ${info.eta || "N/A"}<br>
+            <b>Shipper Name:</b>: ${info.shipperName || "N/A"}<br>
+            <b>Tracking Link:</b>: ${
+              info.trackingLink ? `<a href="${info.trackingLink}" target="_blank">${info.trackingLink}</a>` : "N/A"
+            }<br>
+            <b>Tracking History:</b>
+            <ul>${trackingHistory}</ul>
+            <b>ETA History:</b>
+            <ul>${etaHistory}</ul>
+            <b>Shipper Name History:</b>
+            <ul>${shipperNameHistory}</ul>
+            <b>Tracking Link History:</b>
+            <ul>${trackingLinkHistory}</ul>
+          `;
+        })
+        .join("<br><br>")
+    : "No additional information available"
+}</td>
 </tr>
 `);
 });
