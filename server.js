@@ -2659,26 +2659,28 @@ app.put("/orders/updateYard/:orderNo/:yardIndex", async (req, res) => {
     yardData.shipperNameHistory = yardData.shipperNameHistory || [];
     yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
 
-    // Add the current values to history arrays (after cleaning up)
-    if (yardData.trackingNo) {
-      const cleanedTrackingNo = yardData.trackingNo.trim();
-      yardData.trackingHistory.push(cleanedTrackingNo);
+    // Handle trackingNo as an array
+    if (Array.isArray(yardData.trackingNo)) {
+      const cleanedTrackingNo = yardData.trackingNo.map((number) => number.trim());
+      yardData.trackingHistory.push(...cleanedTrackingNo);
     }
+
+    // Handle eta, shipperName, and trackingLink
     if (yardData.eta) {
-      const cleanedEta = yardData.eta.trim();
+      const cleanedEta = typeof yardData.eta === "string" ? yardData.eta.trim() : yardData.eta;
       yardData.etaHistory.push(cleanedEta);
     }
     if (yardData.shipperName) {
-      const cleanedShipperName = yardData.shipperName.trim();
+      const cleanedShipperName = typeof yardData.shipperName === "string" ? yardData.shipperName.trim() : yardData.shipperName;
       yardData.shipperNameHistory.push(cleanedShipperName);
     }
     if (yardData.trackingLink) {
-      const cleanedTrackingLink = yardData.trackingLink.trim();
+      const cleanedTrackingLink = typeof yardData.trackingLink === "string" ? yardData.trackingLink.trim() : yardData.trackingLink;
       yardData.trackingLinkHistory.push(cleanedTrackingLink);
     }
 
     // Update current values
-    yardData.trackingNo = trackingNo || "";
+    yardData.trackingNo = Array.isArray(trackingNo) ? trackingNo : [];
     yardData.eta = eta || "";
     yardData.shipperName = shipperName || "";
     yardData.trackingLink = trackingLink || "";
