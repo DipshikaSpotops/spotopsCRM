@@ -3377,6 +3377,8 @@ $("#editYardInfo").on("click", async function () {
     } else if (status === "Label created") {
       newStatus = "Yard Processing"; 
       var labelCreationDate = currentDateTime;
+      currentYardData.labelCreationDate = currentYardData.labelCreationDate || [];
+      currentYardData.labelCreationDate.push(currentDateTime);
     } else if (status === "Escalation") {
       newStatus = "Escalation";
       var escalationDate = currentDateTime;
@@ -3398,7 +3400,7 @@ $("#editYardInfo").on("click", async function () {
     const updatedData = {
       ...currentYardData,
       status: status,
-      labelCreationDate: labelCreationDate || currentYardData.labelCreationDate,
+      labelCreationDate: currentYardData.labelCreationDate,
       poSentDate: poSentDate || currentYardData.poSentDate,
       partShippedDate: partShippedDate || currentYardData.partShippedDate,
       deliveredDate: deliveredDate || currentYardData.deliveredDate,
