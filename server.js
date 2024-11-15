@@ -2659,27 +2659,30 @@ app.put("/orders/updateYard/:orderNo/:yardIndex", async (req, res) => {
     yardData.shipperNameHistory = yardData.shipperNameHistory || [];
     yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
 
-    // Handle trackingNo as an array
+    // Append current data to history arrays if it exists
     if (Array.isArray(yardData.trackingNo)) {
       const cleanedTrackingNo = yardData.trackingNo.map((number) => number.trim());
-      yardData.trackingHistory.push(...cleanedTrackingNo);
+      yardData.trackingHistory.push(...cleanedTrackingNo); // Append cleaned tracking numbers
+    } else if (typeof yardData.trackingNo === "string" && yardData.trackingNo.trim() !== "") {
+      yardData.trackingHistory.push(yardData.trackingNo.trim()); // Append single tracking number
     }
 
-    // Handle eta, shipperName, and trackingLink
     if (yardData.eta) {
       const cleanedEta = typeof yardData.eta === "string" ? yardData.eta.trim() : yardData.eta;
       yardData.etaHistory.push(cleanedEta);
     }
+
     if (yardData.shipperName) {
       const cleanedShipperName = typeof yardData.shipperName === "string" ? yardData.shipperName.trim() : yardData.shipperName;
       yardData.shipperNameHistory.push(cleanedShipperName);
     }
+
     if (yardData.trackingLink) {
       const cleanedTrackingLink = typeof yardData.trackingLink === "string" ? yardData.trackingLink.trim() : yardData.trackingLink;
       yardData.trackingLinkHistory.push(cleanedTrackingLink);
     }
 
-    // Update current values
+    // Update current fields with new values or clear them
     yardData.trackingNo = Array.isArray(trackingNo) ? trackingNo : [];
     yardData.eta = eta || "";
     yardData.shipperName = shipperName || "";
