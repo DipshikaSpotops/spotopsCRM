@@ -1427,6 +1427,7 @@ Save
 </tbody>
 </table>
 <button type="button" class="btn btn-primary" id="sendEmailButton">Send Email</button>
+<button type="button" class="btn btn-primary" id="voidLabel">Void Label</button>
 </div>
 <div class="comments" id="notesContainer">
 <h2>Yard Notes</h2>
@@ -3286,6 +3287,7 @@ $("#escalation").hide();
 if (yardData.status === "Part shipped") {
 $("#divTrackingEdit").show();
 $("#sendEmailButton").show();
+$("#voidLabel").hide();
 $("#trackingNoEdit").val(yardData.trackingNo || "");
 $("#etaEdit").val(yardData.eta || "");
 $("#linkInput").val(yardData.trackingLink || "");
@@ -3302,6 +3304,7 @@ $("#otherShipperInput").val(yardData.shipperName).show();
 }else if (yardData.status === "Label created") {
 $("#divTrackingEdit").show();
 $("#sendEmailButton").hide();
+$("#voidLabel").show();
 $("#trackingNoEdit").val(yardData.trackingNo || "");
 $("#etaEdit").val(yardData.eta || "");
 $("#linkInput").val(yardData.trackingLink || "");
