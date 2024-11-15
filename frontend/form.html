@@ -3386,6 +3386,7 @@ $("#editYardInfo").on("click", async function () {
     // } 
     else if (status === "Part delivered") {
       newStatus = "Order Fulfilled";
+      var deliveredDate = currentDateTime;
     } else if (status === "Yard PO Sent") {
       newStatus = "Yard Processing";
       var poSentDate = currentDateTime;
@@ -3397,6 +3398,7 @@ $("#editYardInfo").on("click", async function () {
       labelCreationDate: labelCreationDate || currentYardData.labelCreationDate,
       poSentDate: poSentDate || currentYardData.poSentDate,
       partShippedDate: partShippedDate || cuurentYardData.partShippedDate,
+      deliveredDate: deliveredDate || currentYardData.deliveredDate,
       trackingNo: trackingNo || currentYardData.trackingNo,
       eta: eta || currentYardData.eta,
       shipperName: shipperName || currentYardData.shipperName,
