@@ -402,7 +402,6 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Tracking No <span class="aToZ" >&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Tracking History<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Part Info <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Part Delivered Date <span class="aToZ">&#9650;</span></th>
       </tr>
   </thead>
@@ -568,57 +567,61 @@ item.additionalInfo && item.additionalInfo.length > 0
 : ""
 }</td>
 <td>${
-  item.additionalInfo && item.additionalInfo.length > 0
-    ? item.additionalInfo
-        .map((info) => {
-          const trackingHistorySection = info.trackingHistory && info.trackingHistory.length > 0 
-            ? `<b>Tracking History:</b>
-               <ul>${info.trackingHistory.map((trackingNo) => `<li>${trackingNo}</li>`).join("")}</ul>`
-            : "";
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info) => {
+const trackingHistorySection = info.trackingHistory && info.trackingHistory.length > 0 
+? `<b>Tracking History:</b>
+<ul>${info.trackingHistory.map((trackingNo) => `<li>${trackingNo}</li>`).join("")}</ul>`
+: "";
 
-          const etaHistorySection = info.etaHistory && info.etaHistory.length > 0 
-            ? `<b>ETA History:</b>
-               <ul>${info.etaHistory.map((eta) => `<li>${eta}</li>`).join("")}</ul>`
-            : "";
+const etaHistorySection = info.etaHistory && info.etaHistory.length > 0 
+? `<b>ETA History:</b>
+<ul>${info.etaHistory.map((eta) => `<li>${eta}</li>`).join("")}</ul>`
+: "";
 
-          const shipperNameHistorySection = info.shipperNameHistory && info.shipperNameHistory.length > 0 
-            ? `<b>Shipper Name History:</b>
-               <ul>${info.shipperNameHistory.map((shipper) => `<li>${shipper}</li>`).join("")}</ul>`
-            : "";
+const shipperNameHistorySection = info.shipperNameHistory && info.shipperNameHistory.length > 0 
+? `<b>Shipper Name History:</b>
+<ul>${info.shipperNameHistory.map((shipper) => `<li>${shipper}</li>`).join("")}</ul>`
+: "";
 
-          const trackingLinkHistorySection = info.trackingLinkHistory && info.trackingLinkHistory.length > 0 
-            ? `<b>Tracking Link History:</b>
-               <ul>${info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")}</ul>`
-            : "";
+const trackingLinkHistorySection = info.trackingLinkHistory && info.trackingLinkHistory.length > 0 
+? `<b>Tracking Link History:</b>
+<ul>${info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")}</ul>`
+: "";
 
-          const labelDateHistorySection = Array.isArray(info.labelCreationDate)
-            ? info.labelCreationDate.length > 0
-                ? `<b>Label Date History:</b>
-                   <ul>${info.labelCreationDate.map((date) => `<li>Label Created on ${date}</li>`).join("")}</ul>`
-                : ""
-            : typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
-            ? `<b>Label Date History:</b>
-               <ul><li>Label Created on ${new Date(info.labelCreationDate).toLocaleString()}</li></ul>`
-            : "";
+const labelDateHistorySection = Array.isArray(info.labelCreationDate)
+? info.labelCreationDate.length > 0
+? `<b>Label Date History:</b>
+<ul>${info.labelCreationDate.map((date) => `<li>Label Created on ${date}</li>`).join("")}</ul>`
+: ""
+: typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
+? `<b>Label Date History:</b>
+<ul><li>Label Created on ${new Date(info.labelCreationDate).toLocaleString()}</li></ul>`
+: "";
 
-          return `
-            ${trackingHistorySection}
-            ${etaHistorySection}
-            ${shipperNameHistorySection}
-            ${trackingLinkHistorySection}
-            ${labelDateHistorySection}
-          `;
-        })
-        .join("<br><br>")
-    : "No additional information available"
+return `
+${trackingHistorySection}
+${etaHistorySection}
+${shipperNameHistorySection}
+${trackingLinkHistorySection}
+${labelDateHistorySection}
+`;
+})
+.join("<br><br>")
+: "No additional information available"
 }</td>
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>: ${info.deliveredDate}`)
-
-.join("<br>")
+.map((info, index) =>
+info.deliveredDate
+? `<b>Yard ${index + 1}</b>: ${info.deliveredDate}`
 : ""
+)
+.filter((html) => html !== "") // Removes empty rows
+.join("<br>")
+: "No Delivered Dates"
 }</td>
 </tr>
 `);
