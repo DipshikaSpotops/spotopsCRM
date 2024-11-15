@@ -1,3 +1,4 @@
+in the following html page,append only those orders which have labelCreationDate as an array and also apply pagination based on that
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -537,46 +538,93 @@ sortTable(index, type);
 }
 });
 
- // Function to filter orders with `labelCreationDate` as an array
- function filterOrdersWithLabelCreationDate(orders) {
-    return orders.filter(order => 
+// Function to render rows based on the page
+function renderTableRows(page, orders = allOrders) {
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+
+filteredOrders =  orders.filter(order => 
       order.additionalInfo &&
       order.additionalInfo.some(info => Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0)
     );
-  }
+    console.log("filtered",filteredOrders);
+    const ordersForPage = filteredOrders.slice(start, end);
+$('#infoTable').empty(); // Clear the table
+ordersForPage.forEach((item) => {
+team = localStorage.getItem('team');
+const yardlength = item.additionalInfo.length;
+const datetime = item.orderDate;
+const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+// console.log(dateOnly);
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${item.orderNo}</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br><b>Tracking No.</b>: ${info.trackingNo}`)
 
-  // Function to render rows based on the page
-  function renderTableRows(page, orders = filteredOrders) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = orders.slice(start, end);
+.join("<br>")
+: ""
+}</td>
+<td>${
+  item.additionalInfo && item.additionalInfo.length > 0
+    ? item.additionalInfo
+        .map((info, index) => {
+          // Create the tracking history section
+          const trackingHistory = info.trackingHistory
+            ? info.trackingHistory.map((trackingNo) => `<li>${trackingNo}</li>`).join("")
+            : "No tracking history";
 
-    $('#infoTable').empty(); // Clear the table
-    ordersForPage.forEach((item) => {
-      const dateOnly = item.orderDate.split(" ").slice(0, 3).join(" ");
-      $("#infoTable").append(`
-        <tr>
-          <td>${dateOnly}</td>
-          <td>${item.orderNo}</td>
-          <td>${
-            item.additionalInfo && item.additionalInfo.length > 0
-              ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:<br><b>Tracking No.</b>: ${info.trackingNo || "N/A"}`).join("<br>")
-              : "No additional info"
-          }</td>
-          <td>${
-            item.additionalInfo && item.additionalInfo.length > 0
-              ? item.additionalInfo.map((info) => {
-                  const labelDateHistory = Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0
-                    ? info.labelCreationDate.map((date) => `<li>${new Date(date).toLocaleString()}</li>`).join("")
-                    : "No label creation history";
-                  return `<ul>${labelDateHistory}</ul>`;
-                }).join("<br>")
-              : "No label creation history"
-          }</td>
-        </tr>
-      `);
-    });
-  }
+          // Create the ETA history section
+          const etaHistory = info.etaHistory
+            ? info.etaHistory.map((eta) => `<li>${eta}</li>`).join("")
+            : "No ETA history";
+
+          // Create the shipper name history section
+          const shipperNameHistory = info.shipperNameHistory
+            ? info.shipperNameHistory.map((shipper) => `<li>${shipper}</li>`).join("")
+            : "No shipper history";
+
+          // Create the tracking link history section
+          const trackingLinkHistory = info.trackingLinkHistory
+            ? info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")
+            : "No tracking link history";
+            const labelDateHistory = Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0
+  ? info.labelCreationDate.map((date, index) => `<li>Label Created on ${new Date(date).toLocaleString()}</li>`).join("")
+  : "No label creation history";
+
+          // Combine all the information for this yard
+          return `
+            <b>Tracking History:</b>
+            <ul>${trackingHistory}</ul>
+            <b>ETA History:</b>
+            <ul>${etaHistory}</ul>
+            <b>Shipper Name History:</b>
+            <ul>${shipperNameHistory}</ul>
+            <b>Tracking Link History:</b>
+            <ul>${trackingLinkHistory}</ul>
+            <ul>${labelDateHistory}</ul>
+            <>
+          `;
+        })
+        .join("<br><br>")
+    : "No additional information available"
+}</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => `<b>Yard ${index + 1}</b>: ${info.deliveredDate}`)
+
+.join("<br>")
+: ""
+}</td>
+</tr>
+`);
+});
+}
+
 
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
@@ -586,66 +634,47 @@ $("#user-name").text(firstName);
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
- // Function to create pagination controls
- function createPaginationControls(totalPages) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); // Clear pagination controls
+// Function to create pagination controls
+function createPaginationControls(totalPages, orders = filteredOrders) {
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); // Clear pagination controls
 
-    if (totalPages > 1) {
-      paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-      for (let i = 1; i <= totalPages; i++) {
-        paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
-      }
-      paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-    }
-  }
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-  // Event listener for pagination buttons
-  $('#pagination-controls').on('click', '.page-btn', function () {
-    currentPage = $(this).data('page');
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
-  });
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
 
-  $('#pagination-controls').on('click', '#prevPage', function () {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTableRows(currentPage);
-      createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
-    }
-  });
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
+}
 
-  $('#pagination-controls').on('click', '#nextPage', function () {
-    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderTableRows(currentPage);
-      createPaginationControls(totalPages);
-    }
-  });
 
-  // Fetch orders for the current month
-  try {
-    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
+// Event listener for pagination buttons
+$('#pagination-controls').on('click', '.page-btn', function () {
+const page = $(this).data('page');
+currentPage = page;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+});
 
-    if (ordersResponse.status !== 200) {
-      throw new Error("Failed to fetch current month's orders");
-    }
+// "Previous" and "Next" button functionality
+$('#pagination-controls').on('click', '#prevPage', function () {
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+}
+});
 
-    allOrders = ordersResponse.data;
-    filteredOrders = filterOrdersWithLabelCreationDate(allOrders);
-
-    const totalOrders = filteredOrders.length;
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-    
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
-  } catch (error) {
-    console.error("Error fetching current month's orders:", error);
-  }
-
+$('#pagination-controls').on('click', '#nextPage', function () {
+const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage);
+createPaginationControls(totalPages);
+}
+});
 
 // Token fetching logic
 async function fetchToken() {
@@ -663,7 +692,7 @@ console.error("Error fetching token:", error);
 
 let token = localStorage.getItem("token");
 if (!token) {
-fetchToken();
+await fetchToken();
 token = localStorage.getItem("token");
 }
 const now = new Date();
@@ -717,7 +746,7 @@ sortedData = sortOrdersByOrderNoDesc(allOrders);
 
 $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
-  const filteredOrders = allOrders.filter(order => {
+  const filteredOrders1 = filteredOrders.filter(order => {
     const basicSearch = (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
       (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
@@ -749,9 +778,9 @@ $("#searchInput").on("keyup", function () {
   });
 
   // If a search is active, display the filtered results, otherwise reset to the full dataset
-  if (filteredOrders.length > 0 || value === "") {
-    renderTableRows(1, filteredOrders); // Render the first page of filtered results
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  if (filteredOrders1.length > 0 || value === "") {
+    renderTableRows(1, filteredOrders1); // Render the first page of filtered results
+    createPaginationControls(Math.ceil(filteredOrders1.length / rowsPerPage), filteredOrders1);
   } else {
     $("#infoTable").empty(); // Clear the table if no results are found
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
