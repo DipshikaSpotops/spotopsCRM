@@ -592,7 +592,7 @@ item.additionalInfo && item.additionalInfo.length > 0
             : "No tracking link history";
             const labelDateHistory = Array.isArray(info.labelCreationDate)
   ? info.labelCreationDate.length > 0
-    ? info.labelCreationDate.map((date, index) => `<li>Label Created on ${new Date(date).toLocaleString()}</li>`).join("")
+    ? info.labelCreationDate.map((date, index) => `<li>Label Created on ${date}</li>`).join("")
     : "No label creation history"
   : typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
   ? `<li>Label Created on ${new Date(info.labelCreationDate).toLocaleString()}</li>`
