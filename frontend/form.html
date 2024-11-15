@@ -3268,9 +3268,9 @@ return;
 }
 
 const yardData = data.additionalInfo[yardIndex - 1];
-if(yardData.poSentDate){
-  $("#editYardInfo").prop("disabled", true).css("filter", "blur(2px)");
-}
+// if(yardData.poSentDate){
+//   $("#editYardInfo").prop("disabled", true).css("filter", "blur(2px)");
+// }
 // Prefill input fields
 $("#refund").val(yardData.status);
 $("#cardCharged").val(yardData.paymentStatus);
@@ -3888,39 +3888,39 @@ $("#ourShippingInput").hide();
 
 
 $("#refund").on("change", function () {
-  var yardData;
-  fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
-if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-// If no data is found in orders, check in cancelledOrders
-console.log("Order not found in orders, checking in cancelledOrders...");
-return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
-if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-throw new Error("Yard data not found in cancelledOrders.");
-}
-return data;  // Return the data from cancelledOrders
-});
-} else {
-return data;  // Return the data from orders
-}
-})
-.then((data) => {
- yardData = data.additionalInfo[yardIndex - 1];
-console.log("yardData", yardData);
-})
-.catch((error) => {
-console.error("Error fetching yard data:", error);
-alert("Error fetching yard data. Please try again.");
-});
-// const yardData = data.additionalInfo[yardIndex - 1];
-if(yardData.poSentDate){
-  $("#editYardInfo").prop("disabled", true).css("filter", "blur(2px)");
-}else{
-  $("#saveEsc").prop("disabled", false) .css("filter", "none");
-}
+//   var yardData;
+//   fetch(`https://www.spotops360.com/orders/${orderNo}`)
+// .then((response) => response.json())
+// .then((data) => {
+// if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+// // If no data is found in orders, check in cancelledOrders
+// console.log("Order not found in orders, checking in cancelledOrders...");
+// return fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`)
+// .then((response) => response.json())
+// .then((data) => {
+// if (!data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+// throw new Error("Yard data not found in cancelledOrders.");
+// }
+// return data;  // Return the data from cancelledOrders
+// });
+// } else {
+// return data;  // Return the data from orders
+// }
+// })
+// .then((data) => {
+//  yardData = data.additionalInfo[yardIndex - 1];
+// console.log("yardData", yardData);
+// })
+// .catch((error) => {
+// console.error("Error fetching yard data:", error);
+// alert("Error fetching yard data. Please try again.");
+// });
+// // const yardData = data.additionalInfo[yardIndex - 1];
+// if(yardData.poSentDate){
+//   $("#editYardInfo").prop("disabled", true).css("filter", "blur(2px)");
+// }else{
+//   $("#saveEsc").prop("disabled", false) .css("filter", "none");
+// }
 const refundStatus = $(this).val();
 console.log("yardStatus",refundStatus);
 if (refundStatus === "Part shipped") {
