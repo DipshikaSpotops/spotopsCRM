@@ -646,7 +646,7 @@ window.location.href = "login_signup.html";
   } catch (error) {
     console.error("Error fetching current month's orders:", error);
   }
-});
+
 
 // Token fetching logic
 async function fetchToken() {
@@ -697,7 +697,7 @@ const year = date.getFullYear();
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-  const ordersResponse = axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+  const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
 
