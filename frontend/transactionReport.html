@@ -596,9 +596,9 @@ item.additionalInfo && item.additionalInfo.length > 0
           const trackingLinkHistory = info.trackingLinkHistory
             ? info.trackingLinkHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")
             : "No tracking link history";
-            const labelDateHistory = info.labelCreationDate
-            ? info.labelDateHistory.map((link) => `<li><a href="${link}" target="_blank">${link}</a></li>`).join("")
-            : "No labelDateHistory history";
+            const labelDateHistory = Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0
+  ? info.labelCreationDate.map((date, index) => `<li>Label Created on ${new Date(date).toLocaleString()}</li>`).join("")
+  : "No label creation history";
 
           // Combine all the information for this yard
           return `
