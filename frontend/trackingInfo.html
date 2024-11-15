@@ -569,7 +569,7 @@ item.additionalInfo && item.additionalInfo.length > 0
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info) => {
+.map((info,index) => {
 const trackingHistorySection = info.trackingHistory && info.trackingHistory.length > 0 
 ? `<b>Tracking History:</b>
 <ul>${info.trackingHistory.map((trackingNo) => `<li>${trackingNo}</li>`).join("")}</ul>`
@@ -597,14 +597,14 @@ const labelDateHistorySection = Array.isArray(info.labelCreationDate)
 : ""
 : typeof info.labelCreationDate === "string" && info.labelCreationDate.trim() !== ""
 ? `<b>Label Date History:</b>
-<ul><li>Label Created on ${new Date(info.labelCreationDate).toLocaleString()}</li></ul>`
+<ul><li>Label Created on ${date}</li></ul>`
 : "";
-
+// ${trackingLinkHistorySection}
 return `
+Yard ${index}
 ${trackingHistorySection}
 ${etaHistorySection}
 ${shipperNameHistorySection}
-${trackingLinkHistorySection}
 ${labelDateHistorySection}
 `;
 })
