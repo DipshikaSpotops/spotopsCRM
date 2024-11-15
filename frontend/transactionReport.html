@@ -563,10 +563,8 @@ $("#infoTable").append(`
 <td>${order.orderNo}</td>
 <td>${info.labelCreationDate}</td>
 <td>${info.shippingDetails}</td>
-<td>Yard ${index + 1}: ${info.yardName || 'N/A'}</td>
-<td>${order.orderStatus}</td>
-<td>${order.grossProfit || 'N/A'}</td>
-<td>${escalationStatus}</td>
+<td>${info.partShippedDate}</td>
+<td>${info.eta}</td>
 <td>
 <button class="btn btn-primary btn-sm edit-btn" data-id="${order.orderNo}">Edit</button>
 <button class="btn btn-danger btn-sm cancel-btn" data-id="${order.orderNo}">Cancel</button>
