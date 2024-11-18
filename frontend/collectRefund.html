@@ -560,9 +560,9 @@ async function fetchYardInfo(month, year) {
         // Apply filter logic based on `additionalInfo`
         yardOrders = response.data.filter(order =>
             order.additionalInfo.some(info =>
-                (info.paymentStatus === "Card charged" && info.status === "PO cancelled") ||
+                (info.paymentStatus === "Card charged" && info.status === "PO cancelled" && info.refundStatus !== "Refund collected") ||
                 (info.status === "Escalation" &&
-                    (info.escalationProcess === "Return" || info.escalationProcess === "Junked"))
+                    (info.escalationProcess === "Return" || info.escalationProcess === "Junked") && info.refundStatus !== "Refund collected"))
             )
         );
 
@@ -664,9 +664,9 @@ data.forEach((item) => {
             if (additionalInfo && additionalInfo.paymentStatus && additionalInfo.status) {
 
                 // Check if the conditions for paymentStatus and escalationProcess are met
-                if ((additionalInfo.paymentStatus === "Card charged" && additionalInfo.status === "PO cancelled") ||
+                if ((additionalInfo.paymentStatus === "Card charged" && additionalInfo.status === "PO cancelled" && info.refundStatus !== "Refund collected") ||
                     (additionalInfo.status === "Escalation" &&
-                    (additionalInfo.escalationProcess === "Return" || additionalInfo.escalationProcess === "Junked"))) {
+                    (additionalInfo.escalationProcess === "Return" || additionalInfo.escalationProcess === "Junked") && info.refundStatus !== "Refund collected")) {
 
                     appendOrder = true;
 
