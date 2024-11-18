@@ -578,6 +578,7 @@ async function fetchYardInfo(month, year) {
                     const refundedAmount = parseFloat(info.refundedAmount || 0);
 
                     const itemSpend = partPrice + others + shippingCost;
+                    console.log("iem",itemSpend);
                     orderSpend += itemSpend;
                 }
             });
