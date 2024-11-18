@@ -558,9 +558,9 @@ const orderNo = item.orderNo || "";
 
 item.additionalInfo.forEach((info, index) => {
 const trackingNo = info.trackingNo || "";
-const eta = info.eta || "N/A";
-const deliveredDate = info.deliveredDate || "N/A";
-const shippingType = info.shippingDetails || "N/A";
+const eta = info.eta || "";
+const deliveredDate = info.deliveredDate || "";
+const shippingType = info.shippingDetails || "";
 
 // Append the main row for `trackingNo`
 if (trackingNo) {
@@ -596,46 +596,46 @@ trackingLinkHistory: "Tracking Link",
 labelCreationDate: "Label Creation"
 };
 
+
 Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
-const array = info[arrayKey];
-if (Array.isArray(array) && array.length > 0) {
-array.forEach((value, idx) => {
-const displayValue =
-arrayKey === "trackingLinkHistory"
-? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
-: value;
-const labelCreations = 
-  arrayKey === "labelCreationDate" && Array.isArray(value) && value.length > 0
-    ? `<a href="${value[value.length - 1]}" target="_blank">${new Date(value[value.length - 1])
-        .toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        })}</a>` // Render only the formatted date
-    : "No Label Creation Date";
+        const array = info[arrayKey];
+        
+        // Append only if the array exists and has length > 0
+        if (Array.isArray(array) && array.length > 0) {
+            array.forEach((value, idx) => {
+                const displayValue =
+                    arrayKey === "trackingLinkHistory"
+                        ? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
+                        : value;
 
-// For ETA History, use the value from `etaHistory` for the same index
-const estimatedDelivery =
-arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
-? info.etaHistory[idx]
-: "N/A";
+                const estimatedDelivery =
+                    arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
+                        ? info.etaHistory[idx]
+                        : "N/A";
 
-// Add a new row for each item in the array
-$("#infoTable").append(`
-<tr>
-<td>${dateOnly}</td>
-<td>${orderNo}</td>
-<td>${label}: ${displayValue}</td>
-<td>${labelCreations}</td>
-<td></td> <!-- Empty for Label/History Details -->
-<td style="color: red;">VOIDED</td>
-<td>${estimatedDelivery}</td> <!-- Est Delivery column -->
-<td>${shippingType}</td> <!-- Shipping Type column -->
-</tr>
-`);
-});
-}
-});
+                $("#infoTable").append(`
+                    <tr>
+                        <td>${dateOnly}</td>
+                        <td>${orderNo}</td>
+                        <td>${label}: ${displayValue}</td>
+                        <td>${
+                          arrayKey === "labelCreationDate"
+                              ? new Date(value).toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                })
+                              : "N/A"
+                        }</td>
+                        <td>${shippingType}</td>
+                        <td></td> <!-- Empty for Label/History Details -->
+                        <td style="color: red;">VOIDED</td>
+                        <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
+                    </tr>
+                `);
+            });
+        }
+      })
 });
 });
 }
