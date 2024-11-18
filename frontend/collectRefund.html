@@ -600,7 +600,7 @@ async function fetchYardInfo(month, year) {
 
 
 
-let totalOverallSum = 0;
+
 function renderTable(page, data = yardOrders) {
 const tableHeader = $("#tableHeader");
 const tableFooter = $("#tableFooter");
@@ -608,7 +608,7 @@ $("#yardInfoTable").empty();
 let maxYards = 0;
 let totalPartPriceSum = 0;
 let totalShippingSum = 0;
-
+let totalOverallSum = 0;
 let totalRefundsSum = 0;
 let totalOthersSum = 0;
 let totalOverallRefund = 0;
