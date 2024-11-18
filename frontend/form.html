@@ -1366,7 +1366,7 @@ style="margin-right: 94px;margin-top: -9px;"
 <option value="Part shipped">Part Shipped</option>
 <option value="Part delivered">Part Delivered</option>
 <option value="Escalation">Escalation</option>
-<option value="Collect refund">Collect Refund</option>
+<!-- <option value="Collect refund">Collect Refund</option> -->
 </select>
 <div>
 <button type="button"class="btn save" id="editYardInfo" style="border-radius: 22px;align-items: center;margin: 6% 2% 8% 72%;width: 170%;height: 4vh;">
@@ -1648,6 +1648,10 @@ Save
   <div id="storeCreditContainer">
     <input type="checkbox" id="storeCreditCheckbox"/>
     <label for="storeCreditCheckbox"> Store Credit</label>
+  </div>
+  <div id="collectRefundContainer">
+    <input type="checkbox" id="collectRefundCheckbox"/>
+    <label for="collectRefundContainer"> Collect Refund</label>
   </div>
 
   <button id="refundSubmit">Submit</button>
@@ -3203,7 +3207,8 @@ $('#refundSubmit').on('click', function() {
 
   const refundedAmount = $("#refundedAmount").val();
   const isStoreCredit = $("#storeCreditCheckbox").is(":checked");
-
+  const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
+console.log("collectRefundCheckbox",collectRefundCheckbox);
   if (refundStatus === "Refund collected") {
     $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
   }
@@ -3211,7 +3216,8 @@ $('#refundSubmit').on('click', function() {
   const data1 = {
     refundStatus: refundStatus,
     refundedAmount: refundedAmount,
-    storeCredit: isStoreCredit ? refundedAmount : null
+    storeCredit: isStoreCredit ? refundedAmount : null,
+    collectRefundCheckbox: collectRefundCheckbox
   };
 
   const updateOrder = (url) => {
