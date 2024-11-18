@@ -3002,8 +3002,9 @@ if(yardData.collectRefundCheckbox){
 if(yardData.refundStatus === "Refund collected"){
   $("#paymentStatusSelect").val("Yes")
 }else{
-  $("#paymentStatusSelect").val("")
+  $("#paymentStatusSelect").val("Yes")
 }
+})
 });
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', async function () {
