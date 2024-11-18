@@ -562,7 +562,7 @@ async function fetchYardInfo(month, year) {
             order.additionalInfo.some(info =>
                 (info.paymentStatus === "Card charged" && info.status === "PO cancelled" && info.refundStatus !== "Refund collected") ||
                 (info.status === "Escalation" &&
-                    (info.escalationProcess === "Return" || info.escalationProcess === "Junked") && info.refundStatus !== "Refund collected"))
+                    (info.escalationProcess === "Return" || info.escalationProcess === "Junked") && info.refundStatus !== "Refund collected")
             )
         );
 
