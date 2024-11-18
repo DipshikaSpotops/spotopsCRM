@@ -824,7 +824,7 @@ $("#profileModal").modal("show");
 
 $("#backToOrders").click(function () {
 $("#profile-content").addClass("d-none");
-$("#purchases-content").removeClass("d-none");
+$("#main-content").removeClass("d-none");
 });
 
 $("#searchInput").on("keyup", function () {
@@ -880,7 +880,7 @@ $(".nav-link").removeClass("active selected");
 $(this).addClass("selected");
 
 const contentMap = {
-"default-link": "#purchases-content",
+"default-link": "#main-content",
 "add-order-link": "#add-order-content",
 "view-order-link": "#view-order-content",
 };
