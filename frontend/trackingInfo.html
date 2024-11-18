@@ -401,7 +401,9 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Order Date</th>
       <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Tracking No <span class="aToZ" >&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Tracking History<span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">BOL DOE<span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Shipping Type<span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Transit DOE <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Part Delivered Date <span class="aToZ">&#9650;</span></th>
       </tr>
   </thead>
@@ -549,31 +551,29 @@ filteredOrders =  orders.filter(order =>
     const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty(); // Clear the table
 ordersForPage.forEach((item) => {
-  const { additionalInfo } = item;
-  const orderDate = item.orderDate;
-  const orderNo = item.orderNo;
+const orderDate = order.orderDate || "";
+const orderNo = order.orderNo || "";
 
-if (additionalInfo && additionalInfo.length > 0) {
-additionalInfo.forEach((info, index) => {
-// Main row for the default trackingNo
-const currentTrackingNo = info.trackingNo || "N/A";
-const deliveredDate = info.deliveredDate || "";
+order.additionalInfo.forEach((info, index) => {
+const trackingNo = info.trackingNo || "";
+const eta = info.eta || "N/A";
+const deliveredDate = info.deliveredDate || "N/A";
+const shippingType = info.shippingDetails || "N/A";
 
-const labelCreationDate = Array.isArray(info.labelCreationDate)
-? info.labelCreationDate
-: [];
-const lastLabelDate = labelCreationDate[labelCreationDate.length - 1] || "N/A";
-
-// Main row for the order's tracking number and last label creation date
+// Append the main row for `trackingNo`
+if (trackingNo) {
 $("#infoTable").append(`
 <tr>
 <td>${orderDate}</td>
 <td>${orderNo}</td>
-<td>${currentTrackingNo}</td>
-<td>Label Created on: ${lastLabelDate}</td>
+<td>${trackingNo}</td>
 <td>${deliveredDate}</td>
+<td>${info.partShippedDate || "VOIDED"}</td>
+<td>${eta}</td>
+<td>${shippingType}</td>
 </tr>
 `);
+}
 
 // Rows for other arrays in additionalInfo
 const arraysToRender = {
@@ -586,52 +586,36 @@ trackingLinkHistory: "Tracking Link",
 Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
 const array = info[arrayKey];
 if (Array.isArray(array) && array.length > 0) {
-array.forEach((value) => {
+array.forEach((value, idx) => {
 const displayValue =
 arrayKey === "trackingLinkHistory"
-? `<a href="${value}" target="_blank">${value}</a>`
+? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
 : value;
+
+// For ETA History, use the value from `etaHistory` for the same index
+const estimatedDelivery =
+arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
+? info.etaHistory[idx]
+: "N/A";
+
+// Add a new row for each item in the array
 $("#infoTable").append(`
 <tr>
 <td>${orderDate}</td>
 <td>${orderNo}</td>
 <td>${label}: ${displayValue}</td>
-<td></td>
-<td>${deliveredDate}</td>
+<td></td> <!-- Empty for Label/History Details -->
+<td>VOIDED</td> <!-- Part Shipped column displays "VOIDED" -->
+<td>${estimatedDelivery}</td> <!-- Est Delivery column -->
+<td>${shippingType}</td> <!-- Shipping Type column -->
 </tr>
 `);
 });
 }
 });
-
-// Rows for all labelCreationDate except the last element
-labelCreationDate.slice(0, -1).forEach((labelDate) => {
-$("#infoTable").append(`
-<tr>
-<td>${orderDate}</td>
-<td>${orderNo}</td>
-<td>Label Created on: ${labelDate}</td>
-<td></td>
-<td>${deliveredDate}</td>
-</tr>
-`);
 });
-});
-} else {
-// Fallback for orders without additionalInfo
-$("#infoTable").append(`
-<tr>
-<td>${orderDate}</td>
-<td>${orderNo}</td>
-<td>No Additional Information Available</td>
-<td></td>
-<td>Not Delivered</td>
-</tr>
-`);
-}
 });
 }
-
 
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
