@@ -1,3 +1,5 @@
+for the below html page, i want the horizontal scroll at the viewport meaning the user should not have to scroll to the 
+bottom of the page to scroll horizontally
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +16,8 @@ rel="stylesheet"
 />
 <style>
 body {
-display: flex;
-overflow-x: hidden;
-flex-direction: column;
+  overflow-x: auto;
+  height: 100%; 
 }
 #logoImg {
 height: auto;
@@ -89,6 +90,7 @@ margin-left: 14%;
 margin-top: 20px;
 transition: margin-left 0.3s ease;
 overflow-y: auto;
+overflow-x: auto;
 }
 .submenu {
 display: block; /* Show all submenus by default */
@@ -366,6 +368,9 @@ placeholder="Search..."
 
 <script>
 $(document).ready(async function () {
+    $('body').css('overflow-x', 'auto'); // Allow horizontal scrolling
+    $('.main-content').css('overflow-x', 'auto'); // Ensure the main content scrolls horizontally
+    $('#yardInfoTable').css('overflow-x', 'auto'); 
   let yardOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;  
