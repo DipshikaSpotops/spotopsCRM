@@ -588,7 +588,7 @@ async function fetchYardInfo(month, year) {
 
         console.log("Total spend across all orders:", totalSpend);
         console.log("yardOrders with calculated spends", yardOrders);
-        document.getElementById("showTotalOrders").innerHTML = `Total Refund To Collect- $${totalSpend.toFixed(2)}`;
+        document.getElementById("showTotalOrders").innerHTML = `Total Refund To Collect- $${otalOverallSum.toFixed(2)}`;
         renderTable(currentPage, yardOrders);
         createPaginationControls(Math.ceil(yardOrders.length / 25));
     } catch (error) {
@@ -601,7 +601,7 @@ async function fetchYardInfo(month, year) {
 
 
 
-
+let totalOverallSum = 0;
 function renderTable(page, data = yardOrders) {
 const tableHeader = $("#tableHeader");
 const tableFooter = $("#tableFooter");
@@ -609,7 +609,7 @@ $("#yardInfoTable").empty();
 let maxYards = 0;
 let totalPartPriceSum = 0;
 let totalShippingSum = 0;
-let totalOverallSum = 0;
+
 let totalRefundsSum = 0;
 let totalOthersSum = 0;
 let totalOverallRefund = 0;
