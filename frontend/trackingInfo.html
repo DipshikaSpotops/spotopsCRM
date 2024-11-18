@@ -564,13 +564,9 @@ const shippingType = info.shippingDetails || "";
 let labelCreationD = "No Label Creation Date";
     if (Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0) {
         labelCreationD = info.labelCreationDate[info.labelCreationDate.length - 1];
-        console.log("labelCreationD",labelCreationD)
-        labelCreationD = new Date(labelCreationD).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        }); // Format the date as "15th Nov, 2024"
-        console.log("labelCreationD1",labelCreationD);
+        // console.log("labelCreationD",labelCreationD)
+        var labelCreationDateOnly = labelCreationD.split(" ")[0] + " " + labelCreationD.split(" ")[1] + " " + labelCreationD.split(" ")[2];
+        console.log("labelCreationDateOnly",labelCreationDateOnly);
     }
 // Append the main row for `trackingNo`
 if (trackingNo) {
@@ -579,9 +575,7 @@ $("#infoTable").append(`
 <td>${dateOnly}</td>
 <td>${orderNo}</td>
 <td>${trackingNo}</td>
-<td>${
-item.additionalInfo.labelCreationDate
-}</td>
+<td>${labelCreationDateOnly}</td>
 <td>${shippingType}</td>
 <td>${info.partShippedDate || ""}</td>
 <td>${eta}</td>
