@@ -580,7 +580,7 @@ year: "numeric",
 : "No Label Creation Date"
 }</td>
 <td>${shippingType}</td>
-<td>${info.partShippedDate || "VOIDED"}</td>
+<td>${info.partShippedDate || ""}</td>
 <td>${eta}</td>
 <td>${deliveredDate}</td>
 </tr>
@@ -628,7 +628,7 @@ $("#infoTable").append(`
 <td>${label}: ${displayValue}</td>
 <td>${labelCreations}</td>
 <td></td> <!-- Empty for Label/History Details -->
-<td>VOIDED</td> <!-- Part Shipped column displays "VOIDED" -->
+<td style="color: red;">VOIDED</td>
 <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
 <td>${shippingType}</td> <!-- Shipping Type column -->
 </tr>
