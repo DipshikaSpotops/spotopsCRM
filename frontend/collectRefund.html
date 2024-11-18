@@ -588,7 +588,6 @@ async function fetchYardInfo(month, year) {
 
         console.log("Total spend across all orders:", totalSpend);
         console.log("yardOrders with calculated spends", yardOrders);
-        document.getElementById("showTotalOrders").innerHTML = `Total Refund To Collect- $${otalOverallSum.toFixed(2)}`;
         renderTable(currentPage, yardOrders);
         createPaginationControls(Math.ceil(yardOrders.length / 25));
     } catch (error) {
@@ -728,6 +727,7 @@ data.forEach((item) => {
                 <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
             </tr>`
         );
+        document.getElementById("showTotalOrders").innerHTML = `Total Refund To Collect- $${totalOveralls.toFixed(2)}`;
     }
 });
 
