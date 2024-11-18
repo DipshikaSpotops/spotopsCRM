@@ -15,8 +15,9 @@ rel="stylesheet"
 <style>
 body {
 display: flex;
-overflow-x: hidden;
+overflow-x: auto;
 flex-direction: column;
+margin: 0;
 }
 #logoImg {
 height: auto;
@@ -88,7 +89,14 @@ padding: 20px;
 margin-left: 14%;
 margin-top: 20px;
 transition: margin-left 0.3s ease;
-/* overflow-y: auto; */
+overflow-y: auto;
+}
+.table-container {
+  width: 100%; /* Stretch to viewport width */
+  height: calc(100vh - 60px); /* Adjust for navbar height */
+  overflow-x: auto; /* Horizontal scrolling */
+  overflow-y: hidden; /* Prevent vertical scroll in the container */
+  white-space: nowrap; /* Prevent wrapping in the table */
 }
 .submenu {
 display: block; /* Show all submenus by default */
@@ -125,9 +133,6 @@ width: 70%;
 }
 .sidebar.show {
 transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
 }
 .toggle-sidebar {
 display: block;
@@ -331,6 +336,7 @@ placeholder="Search..."
   <div id="showTotalOrders">Total Spent This Month-</div>
   <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
   </div>  
+  <div class="table-container">
 <table class="table table-bordered mt-4">
 <thead>
 <tr id="tableHeader" style="background-color: #f2f2f2">
@@ -347,7 +353,7 @@ placeholder="Search..."
 </tr>
 </tfoot>
 </table>
-<!-- </div> -->
+</div>
 </div>
 
 <div id="profile-content" class="d-none">
