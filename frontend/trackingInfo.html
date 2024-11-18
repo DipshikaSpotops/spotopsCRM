@@ -571,8 +571,6 @@ $("#infoTable").append(`
 <td>${trackingNo}</td>
 <td>${
 item.additionalInfo[0].labelCreationDate && Array.isArray(item.additionalInfo[0].labelCreationDate)
-? new Date(item.additionalInfo[0].labelCreationDate[item.additionalInfo[0].labelCreationDate.length - 1])
-: "No Label Creation Date"
 }</td>
 <td>${shippingType}</td>
 <td>${info.partShippedDate || ""}</td>
