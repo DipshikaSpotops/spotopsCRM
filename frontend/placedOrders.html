@@ -913,12 +913,12 @@ function renderOrders(item){
 
     // Split and format bAddress and sAddress only if they are non-empty
     const bParts = bAddress ? bAddress.split(',') : [];
+const firstLineB = bParts.length > 1 ? `${bParts[0].trim()}, ${bParts[1].trim()}` : "";
+const secondLineB = bParts.length > 4 ? `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}` : "";
+const additionalLineB = bParts.length > 5 ? bParts.slice(5).map(part => part.trim()).join(', ') : "";
+const formattedBAddress = `${firstLineB}<br>${secondLineB}${additionalLineB ? `<br>${additionalLineB}` : ""}`;
+
     const sParts = sAddress ? sAddress.split(',') : [];
-
-    const firstLineB = bParts.length > 1 ? `${bParts[0].trim()}, ${bParts[1].trim()}` : "";
-    const secondLineB = bParts.length > 4 ? `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}` : "";
-    const formattedBAddress = `${firstLineB}<br>${secondLineB}`;
-
     const firstLineS = sParts.length > 1 ? `${sParts[0].trim()}, ${sParts[1].trim()}` : "";
     const secondLineS = sParts.length > 4 ? `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}` : "";
     const formattedSAddress = `${firstLineS}<br>${secondLineS}<br><b>Attention</b>: ${item.attention || ''}`;
