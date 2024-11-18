@@ -549,9 +549,9 @@ filteredOrders =  orders.filter(order =>
     const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty(); // Clear the table
 ordersForPage.forEach((item) => {
-const { additionalInfo } = item;
-const orderDate = item.orderDate;
-const orderNo = item.orderNo;
+  const { additionalInfo } = item;
+  const orderDate = item.orderDate;
+  const orderNo = item.orderNo;
 
 if (additionalInfo && additionalInfo.length > 0) {
 additionalInfo.forEach((info, index) => {
@@ -630,6 +630,9 @@ $("#infoTable").append(`
 `);
 }
 });
+}
+
+
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
