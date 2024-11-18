@@ -520,7 +520,7 @@ sortTable(index, type);
 function renderTableRows(page, orders = allOrders) {
 //  orders based on valid statuses and escalation
 // Check if any entry in additionalInfo has escTicked set to "Yes"
-const isEscTicked = data.additionalInfo.some(info => info.escTicked === "Yes");
+const isEscTicked = orders.additionalInfo.some(info => info.escTicked === "Yes");
 
 if (isEscTicked) {
   $("#escTickBox").prop("checked", true);
