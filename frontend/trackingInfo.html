@@ -549,117 +549,87 @@ filteredOrders =  orders.filter(order =>
     const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty(); // Clear the table
 ordersForPage.forEach((item) => {
-team = localStorage.getItem('team');
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-// console.log(dateOnly);
+const { additionalInfo } = item;
+const orderDate = item.orderDate;
+const orderNo = item.orderNo;
+
+if (additionalInfo && additionalInfo.length > 0) {
+additionalInfo.forEach((info, index) => {
+// Main row for the default trackingNo
+const currentTrackingNo = info.trackingNo || "N/A";
+const deliveredDate = info.deliveredDate || "";
+
+const labelCreationDate = Array.isArray(info.labelCreationDate)
+? info.labelCreationDate
+: [];
+const lastLabelDate = labelCreationDate[labelCreationDate.length - 1] || "N/A";
+
+// Main row for the order's tracking number and last label creation date
 $("#infoTable").append(`
 <tr>
-<td>${dateOnly}</td>
-<td>${item.orderNo}</td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br><b>Tracking No.</b>: ${info.trackingNo}`)
+<td>${orderDate}</td>
+<td>${orderNo}</td>
+<td>${currentTrackingNo}</td>
+<td>Label Created on: ${lastLabelDate}</td>
+<td>${deliveredDate}</td>
+</tr>
+`);
 
-.join("<br>")
-: ""
-}</td>
-<td>${
-  item.additionalInfo && item.additionalInfo.length > 0
-    ? item.additionalInfo
-        .map((info, index) => {
-          const trackingHistorySection =
-            info.trackingHistory && info.trackingHistory.length > 0
-              ? `<b>Tracking History:</b>
-                <ul style="list-style-type: none; padding: 0;">
-                  ${info.trackingHistory
-                    .map((trackingNo) => `<li>${trackingNo}</li>`)
-                    .join("")}
-                </ul>`
-              : "";
+// Rows for other arrays in additionalInfo
+const arraysToRender = {
+trackingHistory: "Tracking No",
+etaHistory: "ETA",
+shipperNameHistory: "Shipper Name",
+trackingLinkHistory: "Tracking Link",
+};
 
-          const etaHistorySection =
-            info.etaHistory && info.etaHistory.length > 0
-              ? `<b>ETA History:</b>
-                <ul style="list-style-type: none; padding: 0;">
-                  ${info.etaHistory
-                    .map((eta) => `<li>${eta}</li>`)
-                    .join("")}
-                </ul>`
-              : "";
-
-          const shipperNameHistorySection =
-            info.shipperNameHistory && info.shipperNameHistory.length > 0
-              ? `<b>Shipper Name History:</b>
-                <ul style="list-style-type: none; padding: 0;">
-                  ${info.shipperNameHistory
-                    .map((shipper) => `<li>${shipper}</li>`)
-                    .join("")}
-                </ul>`
-              : "";
-
-          const trackingLinkHistorySection =
-            info.trackingLinkHistory && info.trackingLinkHistory.length > 0
-              ? `<b>Tracking Link History:</b>
-                <ul style="list-style-type: none; padding: 0;">
-                  ${info.trackingLinkHistory
-                    .map(
-                      (link) =>
-                        `<li><a href="${link}" target="_blank">${link}</a></li>`
-                    )
-                    .join("")}
-                </ul>`
-              : "";
-
-          const labelDateHistorySection = Array.isArray(info.labelCreationDate)
-            ? info.labelCreationDate.length > 0
-              ? `<b>Label Date History:</b>
-                <ul style="list-style-type: none; padding: 0;">
-                  ${info.labelCreationDate
-                    .map((date) => `<li>Label Created on ${date}</li>`)
-                    .join("")}
-                </ul>`
-              : ""
-            : typeof info.labelCreationDate === "string" &&
-              info.labelCreationDate.trim() !== ""
-            ? `<b>Label Date History:</b>
-                <ul style="list-style-type: none; padding: 0;">
-                  <li>Label Created on ${info.labelCreationDate}</li>
-                </ul>`
-            : "";
-
-          return `
-            <b>Yard ${index + 1}:</b><br>
-            ${trackingHistorySection}
-            ${etaHistorySection}
-            ${shipperNameHistorySection}
-            ${trackingLinkHistorySection}
-            ${labelDateHistorySection}
-          `;
-        })
-        .join("<br><br>")
-    : "No additional information available"
-}</td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) =>
-info.deliveredDate
-? `<b>Yard ${index + 1}</b>: ${info.deliveredDate}`
-: ""
-)
-.filter((html) => html !== "") // Removes empty rows
-.join("<br>")
-: "No Delivered Dates"
-}</td>
+Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
+const array = info[arrayKey];
+if (Array.isArray(array) && array.length > 0) {
+array.forEach((value) => {
+const displayValue =
+arrayKey === "trackingLinkHistory"
+? `<a href="${value}" target="_blank">${value}</a>`
+: value;
+$("#infoTable").append(`
+<tr>
+<td>${orderDate}</td>
+<td>${orderNo}</td>
+<td>${label}: ${displayValue}</td>
+<td></td>
+<td>${deliveredDate}</td>
 </tr>
 `);
 });
 }
+});
 
-
+// Rows for all labelCreationDate except the last element
+labelCreationDate.slice(0, -1).forEach((labelDate) => {
+$("#infoTable").append(`
+<tr>
+<td>${orderDate}</td>
+<td>${orderNo}</td>
+<td>Label Created on: ${labelDate}</td>
+<td></td>
+<td>${deliveredDate}</td>
+</tr>
+`);
+});
+});
+} else {
+// Fallback for orders without additionalInfo
+$("#infoTable").append(`
+<tr>
+<td>${orderDate}</td>
+<td>${orderNo}</td>
+<td>No Additional Information Available</td>
+<td></td>
+<td>Not Delivered</td>
+</tr>
+`);
+}
+});
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
