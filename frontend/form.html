@@ -125,7 +125,7 @@ background-color: #c0c0c0;
 text-align: center;
 padding: 10px;
 }
-#cardCharged , #refundCollect{
+#cardCharged {
 display: none; /* Initially hidden */
 position: fixed; /* Fixed position relative to the viewport */
 top: 50%; /* Center vertically */
@@ -146,6 +146,92 @@ width: 100%;
 margin-bottom: 10px;
 }
 
+#refundCollect {
+  width: 80%; /* Make the container wider */
+  margin: auto; /* Center align the container */
+  background: #f9f9f9; /* Light background for better visibility */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#closeRefundCollected {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#refundCollect label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+#paymentStatusRefund,
+#paymentStatusSelect {
+  display: inline-block;
+  width: calc(50% - 10px); /* Adjust width for label and dropdown */
+  margin-right: 10px;
+}
+
+#paymentStatusRefund {
+  width: auto; /* Ensure the label's width is adjusted */
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+#paymentStatusSelect {
+  width: 60%; /* Set dropdown width */
+}
+
+#refundedAmountContainer,
+#storeCreditContainer,
+#collectRefundContainer {
+  margin-top: 15px;
+}
+
+#refundedAmountContainer label,
+#storeCreditContainer label,
+#collectRefundContainer label {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#refundSubmit {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+#refundSubmit:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #refundCollect {
+    width: 95%;
+  }
+
+  #paymentStatusRefund,
+  #paymentStatusSelect {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  #refundedAmountContainer,
+  #storeCreditContainer,
+  #collectRefundContainer {
+    margin-top: 10px;
+  }
+}
 
 #editYardPopup {
 display: block;
@@ -1631,13 +1717,14 @@ Save
 </div>
 <!-- card charged div ends here -->
 <!-- refund  div starts here -->
+ 
 <div id="refundCollect">
   <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
   <label for="paymentStatusRefund">Refund Collected:<br></label>
   <select class="form-control paymentStatusRefund" id="paymentStatusSelect">
     <option value="">Choose</option>
     <option value="Refund collected">Yes</option>
-    <option value="">No</option>
+    <option value="Refundnot collected">No</option>
   </select>
 
   <div id="refundedAmountContainer">
@@ -3000,9 +3087,12 @@ if(yardData.collectRefundCheckbox){
   $("#collectRefundCheckbox").prop('checked', true);
 }
 if(yardData.refundStatus === "Refund collected"){
-  $("#paymentStatusSelect").val("Yes")
+  $("#paymentStatusSelect").val("Refund collected")
+}else if(yardData.refundStatus === "Refund not collected"){
+  $("#paymentStatusSelect").val("Refund not collected")
+  $("#paymentStatusSelect").val("Refund not collected")
 }else{
-  $("#paymentStatusSelect").val("Yes")
+  $("#paymentStatusSelect").val("")
 }
 })
 });
