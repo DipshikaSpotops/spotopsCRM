@@ -664,9 +664,9 @@ data.forEach((item) => {
             if (additionalInfo && additionalInfo.paymentStatus && additionalInfo.status) {
 
                 // Check if the conditions for paymentStatus and escalationProcess are met
-                if ((additionalInfo.paymentStatus === "Card charged" && additionalInfo.status === "PO cancelled" && info.refundStatus !== "Refund collected") ||
+                if ((additionalInfo.paymentStatus === "Card charged" && additionalInfo.status === "PO cancelled" && additionalInfo.refundStatus !== "Refund collected") ||
                     (additionalInfo.status === "Escalation" &&
-                    (additionalInfo.escalationProcess === "Return" || additionalInfo.escalationProcess === "Junked") && info.refundStatus !== "Refund collected")) {
+                    (additionalInfo.escalationProcess === "Return" || additionalInfo.escalationProcess === "Junked") && additionalInfo.refundStatus !== "Refund collected")) {
 
                     appendOrder = true;
 
