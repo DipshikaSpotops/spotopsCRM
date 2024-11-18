@@ -570,7 +570,7 @@ let labelCreationD = "No Label Creation Date";
         console.log("labelCreationDateOnly",labelCreationDateOnly);
     }
 // Append the main row for `trackingNo`
-if (trackingNo) {
+if (trackingNo.length > 0) {
 $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
