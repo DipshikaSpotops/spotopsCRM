@@ -572,11 +572,6 @@ $("#infoTable").append(`
 <td>${
 item.additionalInfo[0].labelCreationDate && Array.isArray(item.additionalInfo[0].labelCreationDate)
 ? new Date(item.additionalInfo[0].labelCreationDate[item.additionalInfo[0].labelCreationDate.length - 1])
-.toLocaleDateString("en-GB", {
-day: "2-digit",
-month: "short",
-year: "numeric",
-})
 : "No Label Creation Date"
 }</td>
 <td>${shippingType}</td>
@@ -596,12 +591,11 @@ trackingLinkHistory: "Tracking Link",
 labelCreationDate: "Label Creation"
 };
 
-
 Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
         const array = info[arrayKey];
-        
-        // Append only if the array exists and has length > 0
-        if (Array.isArray(array) && array.length > 0) {
+
+        // Append only if `trackingHistory` array length > 0
+        if (arrayKey === "trackingHistory" && Array.isArray(array) && array.length > 0) {
             array.forEach((value, idx) => {
                 const displayValue =
                     arrayKey === "trackingLinkHistory"
@@ -635,7 +629,7 @@ Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
                 `);
             });
         }
-      })
+    });
 });
 });
 }
