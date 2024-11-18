@@ -568,6 +568,7 @@ $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${orderNo}</td>
+<td>${trackingNo}</td>
 <td>${
 item.additionalInfo[0].labelCreationDate && Array.isArray(item.additionalInfo[0].labelCreationDate)
 ? new Date(item.additionalInfo[0].labelCreationDate[item.additionalInfo[0].labelCreationDate.length - 1])
@@ -578,7 +579,6 @@ year: "numeric",
 })
 : "No Label Creation Date"
 }</td>
-<td>${trackingNo}</td>
 <td>${shippingType}</td>
 <td>${info.partShippedDate || "VOIDED"}</td>
 <td>${eta}</td>
@@ -593,7 +593,7 @@ trackingHistory: "Tracking No",
 etaHistory: "ETA",
 shipperNameHistory: "Shipper Name",
 trackingLinkHistory: "Tracking Link",
-labelCreations: "Label Creation"
+labelCreationDate: "Label Creation"
 };
 
 Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
@@ -605,7 +605,7 @@ arrayKey === "trackingLinkHistory"
 ? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
 : value;
 const labelCreations = 
-  arrayKey === "labelCreations" && Array.isArray(value) && value.length > 0
+  arrayKey === "labelCreationDate" && Array.isArray(value) && value.length > 0
     ? `<a href="${value[value.length - 1]}" target="_blank">${new Date(value[value.length - 1])
         .toLocaleDateString("en-GB", {
           day: "2-digit",
@@ -625,8 +625,8 @@ $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${orderNo}</td>
-<td>${labelCreations}</td>
 <td>${label}: ${displayValue}</td>
+<td>${labelCreations}</td>
 <td></td> <!-- Empty for Label/History Details -->
 <td>VOIDED</td> <!-- Part Shipped column displays "VOIDED" -->
 <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
