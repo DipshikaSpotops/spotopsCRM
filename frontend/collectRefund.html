@@ -556,6 +556,7 @@ headers: { Authorization: `Bearer ${token}` },
 });
 
 if (response.status !== 200) throw new Error("Failed to fetch data");
+console.log(response.data);
 yardOrders = response.data?.additionalInfo?.filter(order =>
     ((order.paymentStatus === "Card charged" && order.status === "PO cancelled") ||
      (order.status === "Escalation" &&
