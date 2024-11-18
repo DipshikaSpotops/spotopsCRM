@@ -555,55 +555,53 @@ ordersForPage.forEach((item) => {
 const orderDate = item.orderDate || "";
 const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
 const orderNo = item.orderNo || "";
-
 item.additionalInfo.forEach((info, index) => {
-const trackingNo = info.trackingNo || "";
-const eta = info.eta || "";
-const deliveredDate = info.deliveredDate || "";
-const shippingType = info.shippingDetails || "";
-let labelCreationD = "No Label Creation Date";
+    const trackingNo = info.trackingNo || "";
+    const eta = info.eta || "";
+    const deliveredDate = info.deliveredDate || "";
+    const shippingType = info.shippingDetails || "";
+    let labelCreationD = "No Label Creation Date";
+
+    // Safely get the last element of `labelCreationDate` if it's an array and has elements
     if (Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0) {
         labelCreationD = info.labelCreationDate[info.labelCreationDate.length - 1];
-        // console.log("labelCreationD",labelCreationD)
-        var labelCreationDateOnly = labelCreationD.split(" ")[0] + " " + labelCreationD.split(" ")[1] + " " + labelCreationD.split(" ")[2];
-        console.log("labelCreationDateOnly",labelCreationDateOnly);
+        labelCreationD = new Date(labelCreationD).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
     }
-// Append the main row for `trackingNo`
-if (trackingNo) {
-$("#infoTable").append(`
-<tr>
-<td>${dateOnly}</td>
-<td>${orderNo}</td>
-<td>${trackingNo}</td>
-<td>${labelCreationDateOnly || ""}</td>
-<td>${shippingType}</td>
-<td>${info.partShippedDate || ""}</td>
-<td>${eta}</td>
-<td>${deliveredDate}</td>
-</tr>
-`);
-}
 
-// Rows for other arrays in additionalInfo
-const arraysToRender = {
-trackingHistory: "Tracking No",
-etaHistory: "ETA",
-shipperNameHistory: "Shipper Name",
-trackingLinkHistory: "Tracking Link",
-labelCreationDate: "Label Creation"
-};
+    // Append the main row only if `trackingNo` is present
+    if (trackingNo) {
+        $("#infoTable").append(`
+            <tr>
+                <td>${dateOnly}</td>
+                <td>${orderNo}</td>
+                <td>${trackingNo}</td>
+                <td>${labelCreationD}</td>
+                <td>${shippingType}</td>
+                <td>${info.partShippedDate || ""}</td>
+                <td>${eta}</td>
+                <td>${deliveredDate}</td>
+            </tr>
+        `);
+    }
 
-Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
+    // Handle arrays for `trackingHistory` or other properties if needed
+    const arraysToRender = {
+        trackingHistory: "Tracking No",
+        etaHistory: "ETA",
+        shipperNameHistory: "Shipper Name",
+        trackingLinkHistory: "Tracking Link",
+    };
+
+    Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
         const array = info[arrayKey];
 
-        // Append only if `trackingHistory` array length > 0
-        if (arrayKey === "trackingHistory" && Array.isArray(array) && array.length > 0) {
+        // Only process arrays if `trackingNo` is present and array is not empty
+        if (trackingNo && Array.isArray(array) && array.length > 0) {
             array.forEach((value, idx) => {
-                const displayValue =
-                    arrayKey === "trackingLinkHistory"
-                        ? `<a href="${value}" target="_blank">${value}</a>`
-                        : value;
-
                 const estimatedDelivery =
                     arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
                         ? info.etaHistory[idx]
@@ -613,20 +611,12 @@ Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
                     <tr>
                         <td>${dateOnly}</td>
                         <td>${orderNo}</td>
-                        <td>${label}: ${displayValue}</td>
-                        <td>${
-                          arrayKey === "labelCreationDate"
-                              ? new Date(value).toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                })
-                              : "N/A"
-                        }</td>
+                        <td>${label}: ${value}</td>
+                        <td></td>
                         <td>${shippingType}</td>
-                        <td></td> <!-- Empty for Label/History Details -->
+                        <td></td>
                         <td style="color: red;">VOIDED</td>
-                        <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
+                        <td>${estimatedDelivery}</td>
                     </tr>
                 `);
             });
