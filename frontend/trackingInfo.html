@@ -570,7 +570,7 @@ $("#infoTable").append(`
 <td>${orderNo}</td>
 <td>${trackingNo}</td>
 <td>${
-item.additionalInfo[0].labelCreationDate && Array.isArray(item.additionalInfo[0].labelCreationDate)
+item.additionalInfo.labelCreationDate[-1]
 }</td>
 <td>${shippingType}</td>
 <td>${info.partShippedDate || ""}</td>
