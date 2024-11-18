@@ -556,11 +556,12 @@ headers: { Authorization: `Bearer ${token}` },
 });
 
 if (response.status !== 200) throw new Error("Failed to fetch data");
-yardOrders = response.data.additionalInfo.filter(order =>
-((additionalInfo.paymentStatus === "Card charged" && additionalInfo.status === "PO cancelled") ||
-                    (additionalInfo.status === "Escalation" &&
-                    (additionalInfo.escalationProcess === "Return" || additionalInfo.escalationProcess === "Junked")))
-);
+yardOrders = response.data?.additionalInfo?.filter(order =>
+    ((order.paymentStatus === "Card charged" && order.status === "PO cancelled") ||
+     (order.status === "Escalation" &&
+      (order.escalationProcess === "Return" || order.escalationProcess === "Junked")))
+) || []; 
+
 let totalSpend = 0;  
 yardOrders.forEach(order => {
 let orderSpend = 0;  
