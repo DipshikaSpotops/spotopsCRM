@@ -575,7 +575,7 @@ $("#infoTable").append(`
 <td>${dateOnly}</td>
 <td>${orderNo}</td>
 <td>${trackingNo}</td>
-<td>${labelCreationDateOnly}</td>
+<td>${labelCreationDateOnly || ""}</td>
 <td>${shippingType}</td>
 <td>${info.partShippedDate || ""}</td>
 <td>${eta}</td>
@@ -601,7 +601,7 @@ Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
             array.forEach((value, idx) => {
                 const displayValue =
                     arrayKey === "trackingLinkHistory"
-                        ? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
+                        ? `<a href="${value}" target="_blank">${value}</a>`
                         : value;
 
                 const estimatedDelivery =
