@@ -404,8 +404,9 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">BOL DOE<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Shipping Type<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Transit DOE <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Part Delivered Date <span class="aToZ">&#9650;</span></th>
-      </tr>
+      <th style="cursor: pointer" scope="col">Est Delivery<span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Delivered Date<span class="aToZ">&#9650;</span></th>
+    </tr>
   </thead>
   <tbody id="infoTable">
       <!-- Table data goes here -->
@@ -566,11 +567,16 @@ $("#infoTable").append(`
 <tr>
 <td>${orderDate}</td>
 <td>${orderNo}</td>
+<td>${
+  item.additionalInfo[0].labelCreationDate && Array.isArray(item.additionalInfo[0].labelCreationDate)
+    ? item.additionalInfo[0].labelCreationDate[item.additionalInfo[0].labelCreationDate.length - 1]
+    : "No Label Creation Date"
+}</td>
 <td>${trackingNo}</td>
-<td>${deliveredDate}</td>
+<td>${shippingType}</td>
 <td>${info.partShippedDate || "VOIDED"}</td>
 <td>${eta}</td>
-<td>${shippingType}</td>
+<td>${deliveredDate}</td>
 </tr>
 `);
 }
@@ -581,6 +587,7 @@ trackingHistory: "Tracking No",
 etaHistory: "ETA",
 shipperNameHistory: "Shipper Name",
 trackingLinkHistory: "Tracking Link",
+labelCreations: "Label Creation"
 };
 
 Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
@@ -589,6 +596,10 @@ if (Array.isArray(array) && array.length > 0) {
 array.forEach((value, idx) => {
 const displayValue =
 arrayKey === "trackingLinkHistory"
+? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
+: value;
+const labelCreations =
+arrayKey === "labelCreations"
 ? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
 : value;
 
@@ -603,6 +614,7 @@ $("#infoTable").append(`
 <tr>
 <td>${orderDate}</td>
 <td>${orderNo}</td>
+<td>${labelCreations}</td>
 <td>${label}: ${displayValue}</td>
 <td></td> <!-- Empty for Label/History Details -->
 <td>VOIDED</td> <!-- Part Shipped column displays "VOIDED" -->
