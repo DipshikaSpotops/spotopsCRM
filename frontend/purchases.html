@@ -16,7 +16,7 @@ rel="stylesheet"
 />
 <style>
 body {
-  overflow-x: auto;
+  /* overflow-x: auto; */
   height: 100%; 
 }
 #logoImg {
@@ -90,7 +90,6 @@ margin-left: 14%;
 margin-top: 20px;
 transition: margin-left 0.3s ease;
 overflow-y: auto;
-overflow-x: auto;
 }
 .submenu {
 display: block; /* Show all submenus by default */
@@ -183,10 +182,7 @@ background-color: #3096a58f;
 padding: 5px;
 color:#050505;
 }
-.table-responsive {
-    overflow-x: auto; /* Enable horizontal scrolling */
-    width: 100%; /* Ensure it spans the full container width */
-}
+
 
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -371,10 +367,6 @@ placeholder="Search..."
 
 <script>
 $(document).ready(async function () {
-    $('body').css('overflow-x', 'auto'); // Allow horizontal scrolling
-    $('.main-content').css('overflow-x', 'auto'); // Ensure the main content scrolls horizontally
-    $('#yardInfoTable').css('overflow-x', 'auto'); 
-  let yardOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;  
 let currentSort = {
