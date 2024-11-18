@@ -949,13 +949,14 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
       return res.status(400).json({ message: "Invalid yard index" });
     }
 
-    const { refundStatus, refundedAmount, storeCredit } = req.body;
+    const { refundStatus, refundedAmount, storeCredit, collectRefundCheckbox } = req.body;
     const firstName = req.query.firstName || "Unknown User";
 
     const yardInfo = order.additionalInfo[yardIndex];
     yardInfo.refundStatus = refundStatus;
     yardInfo.refundedAmount = refundedAmount;
     yardInfo.storeCredit = storeCredit || null;
+    yardInfo.collectRefundCheckbox = collectRefundCheckbox || "";
 
     order.orderHistory.push(
       `Yard ${yardIndex + 1} refund status updated to ${refundStatus} by ${firstName} on ${formattedDateTime}`
