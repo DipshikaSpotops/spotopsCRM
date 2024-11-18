@@ -553,6 +553,7 @@ filteredOrders =  orders.filter(order =>
 $('#infoTable').empty(); // Clear the table
 ordersForPage.forEach((item) => {
 const orderDate = item.orderDate || "";
+const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
 const orderNo = item.orderNo || "";
 
 item.additionalInfo.forEach((info, index) => {
@@ -565,12 +566,17 @@ const shippingType = info.shippingDetails || "N/A";
 if (trackingNo) {
 $("#infoTable").append(`
 <tr>
-<td>${orderDate}</td>
+<td>${dateOnly}</td>
 <td>${orderNo}</td>
 <td>${
-  item.additionalInfo[0].labelCreationDate && Array.isArray(item.additionalInfo[0].labelCreationDate)
-    ? item.additionalInfo[0].labelCreationDate[item.additionalInfo[0].labelCreationDate.length - 1]
-    : "No Label Creation Date"
+item.additionalInfo[0].labelCreationDate && Array.isArray(item.additionalInfo[0].labelCreationDate)
+? new Date(item.additionalInfo[0].labelCreationDate[item.additionalInfo[0].labelCreationDate.length - 1])
+.toLocaleDateString("en-GB", {
+day: "2-digit",
+month: "short",
+year: "numeric",
+})
+: "No Label Creation Date"
 }</td>
 <td>${trackingNo}</td>
 <td>${shippingType}</td>
@@ -598,10 +604,15 @@ const displayValue =
 arrayKey === "trackingLinkHistory"
 ? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
 : value;
-const labelCreations =
-arrayKey === "labelCreations"
-? `<a href="${value}" target="_blank">${value}</a>` // Render as clickable link for trackingLinkHistory
-: value;
+const labelCreations = 
+  arrayKey === "labelCreations" && Array.isArray(value) && value.length > 0
+    ? `<a href="${value[value.length - 1]}" target="_blank">${new Date(value[value.length - 1])
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}</a>` // Render only the formatted date
+    : "No Label Creation Date";
 
 // For ETA History, use the value from `etaHistory` for the same index
 const estimatedDelivery =
@@ -612,7 +623,7 @@ arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
 // Add a new row for each item in the array
 $("#infoTable").append(`
 <tr>
-<td>${orderDate}</td>
+<td>${dateOnly}</td>
 <td>${orderNo}</td>
 <td>${labelCreations}</td>
 <td>${label}: ${displayValue}</td>
