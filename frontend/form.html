@@ -1711,14 +1711,15 @@ Save
 <!-- refund  div starts here -->
  
 <div id="refundCollect">
-  <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+  <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>]
+  <div style="display: flex;">
   <label for="paymentStatusRefund">Refund Collected:<br></label>
   <select class="form-control paymentStatusRefund" id="paymentStatusSelect">
     <option value="">Choose</option>
     <option value="Refund collected">Yes</option>
     <option value="Refundnot collected">No</option>
   </select>
-
+</div>
   <div id="refundedAmountContainer">
     <label for="refundedAmount">Refunded Amount:</label>
     <input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount"/>
