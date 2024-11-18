@@ -551,10 +551,10 @@ filteredOrders =  orders.filter(order =>
     const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty(); // Clear the table
 ordersForPage.forEach((item) => {
-const orderDate = order.orderDate || "";
-const orderNo = order.orderNo || "";
+const orderDate = item.orderDate || "";
+const orderNo = item.orderNo || "";
 
-order.additionalInfo.forEach((info, index) => {
+item.additionalInfo.forEach((info, index) => {
 const trackingNo = info.trackingNo || "";
 const eta = info.eta || "N/A";
 const deliveredDate = info.deliveredDate || "N/A";
