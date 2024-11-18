@@ -569,7 +569,7 @@ async function fetchYardInfo(month, year) {
         yardOrders.forEach(order => {
             let orderSpend = 0;
             order.additionalInfo.forEach(info => {
-                if (info.paymentStatus === "Card charged") {
+                // if (info.paymentStatus === "Card charged") {
                     const shippingCost = info.shippingDetails
                         ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0
                         : 0;
@@ -580,7 +580,7 @@ async function fetchYardInfo(month, year) {
                     const itemSpend = partPrice + others + shippingCost;
                     console.log("iem",itemSpend);
                     orderSpend += itemSpend;
-                }
+                // }
             });
             order.totalSpend = orderSpend;
             totalSpend += orderSpend;
