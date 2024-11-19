@@ -1713,34 +1713,34 @@ Save
  
 <div id="refundCollect">
   <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
-  <div id="collectRefundContainer">
+  <div id="collectRefundContainer" style="margin: 3% 4%;">
     <input type="checkbox" id="collectRefundCheckbox"/>
-    <label for="collectRefundContainer"> Collect Refund</label>
+    <label for="collectRefundContainer" style="font-family: inherit;"> Collect Refund</label>
   </div>  
-  <div id="refundToCollect" style="display: flex;">
-    <label for="refundToCollect"> Refund To Be Collected:</label>
-    <input type="number" class="form-control" id="refundToCollect" placeholder="Refund To Be Collected"/>
+  <div id="refundToCollect" style="margin: -0.6% 5%;width:63%;border-radius: 20px;text-align: center;">
+    <label for="refundToCollect" style="font-family: inherit;"> Refund To Be Collected:</label>
+    <input type="number" class="form-control" id="refundToCollect" placeholder="Refund To Be Collected" style="width: 2%;" />
   </div> 
-  <div style="display: flex;">
-  <label for="paymentStatusRefund">Refund Collected:<br></label>
-  <select class="form-control paymentStatusRefund" id="paymentStatusSelect">
+  <div style="display:flex;margin: 4%;white-space: nowrap;">
+  <label for="paymentStatusRefund" style="font-family: inherit;">Refund Collected:<br></label>
+  <select class="form-control paymentStatusRefund" id="paymentStatusSelect" style="margin: -0.6% 10%;width: 64%;border-radius: 20px;text-align: center;">
     <option value="">Choose</option>
     <option value="Refund collected">Yes</option>
     <option value="Refundnot collected">No</option>
   </select>
 </div>
-  <div id="refundedAmountContainer" style="display: flex;">
-    <label for="refundedAmount">Refunded Amount:</label>
-    <input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount"/>
+  <div id="refundedAmountContainer" style="display:flex;margin: -0.6% 8%;width: 64%;border-radius: 20px;text-align:center;">
+    <label for="refundedAmount" style="font-family: inherit;">Refunded Amount:</label>
+    <input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount" style="margin: -0.6% 4%;" />
   </div>
 
-  <div id="storeCreditContainer">
-    <input type="checkbox" id="storeCreditCheckbox"/>
-    <label for="storeCreditCheckbox"> Store Credit</label>
+  <div id="storeCreditContainer" style="margin: 3% 4%;">
+    <input type="checkbox" id="storeCreditCheckbox" style="width: 2%;" />
+    <label for="storeCreditCheckbox" style="font-family: inherit;"> Store Credit</label>
   </div>
   
 
-  <button id="refundSubmit">Submit</button>
+  <button class="save" id="refundSubmit">Submit</button>
 </div>
 <!-- refund div ends here -->
 <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
