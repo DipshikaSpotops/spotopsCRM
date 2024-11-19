@@ -691,7 +691,7 @@ return (
 ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
 (order.additionalInfo && order.additionalInfo.some(info => 
 (info.yardName && info.yardName.toLowerCase().includes(value)) || 
-(info.trackingNo && info.trackingNo.toLowerCase().includes(value))
+(info.trackingNo && info.trackingNo.includes(value))
 )) ||
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value))
