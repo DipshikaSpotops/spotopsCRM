@@ -3153,6 +3153,7 @@ $('#partFromCustomerReturn').fadeIn();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 $('#reimbursement').fadeOut();
+$('#partsFromDropdown').hide();
 } 
 else if (additionalInfo.escalationProcess === 'Reimbursement') {
 $('#replacementColumns').fadeOut();
@@ -3160,12 +3161,14 @@ $('#partFromCustomerReturn').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 $('#reimbursement').fadeIn();
+$('#partsFromDropdown').hide();
 } else {
 // Hide both columns for other cases like 'Junk'
 $('#replacementColumns').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 $('#reimbursement').fadeOut();
+$('#partsFromDropdown').hide();
 }
 }
 // return__part from customer
