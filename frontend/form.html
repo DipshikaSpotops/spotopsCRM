@@ -1717,6 +1717,10 @@ Save
     <input type="checkbox" id="collectRefundCheckbox"/>
     <label for="collectRefundContainer"> Collect Refund</label>
   </div>  
+  <div id="refundToCollect">
+    <label for="refundToCollect"> Refund To Be Collected:</label>
+    <input type="number" class="form-control" id="refundToCollect" placeholder="Refund To Be Collected"/>
+  </div> 
   <div style="display: flex;">
   <label for="paymentStatusRefund">Refund Collected:<br></label>
   <select class="form-control paymentStatusRefund" id="paymentStatusSelect">
@@ -3285,7 +3289,6 @@ window.location.reload();
 // refundCollect part 
 $('#refundSubmit').on('click', function() {
   $('#refundCollect').hide();
-  // $(".mainDiv").removeClass("blur");
   $(".modal-overlay").remove();
   $("body").removeClass("modal-active");
   const refundStatus = $(".paymentStatusRefund")
@@ -3301,6 +3304,7 @@ $('#refundSubmit').on('click', function() {
   const refundedAmount = $("#refundedAmount").val();
   const isStoreCredit = $("#storeCreditCheckbox").is(":checked");
   const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
+  const refundToCollect = $("#refundToCollect").val();
 console.log("collectRefundCheckbox",collectRefundCheckbox);
 if (collectRefundCheckbox === true){
   var collectRefundChecked = "Ticked"
@@ -3313,7 +3317,8 @@ if (collectRefundCheckbox === true){
     refundStatus: refundStatus,
     refundedAmount: refundedAmount,
     storeCredit: isStoreCredit ? refundedAmount : null,
-    collectRefundCheckbox: collectRefundChecked
+    collectRefundCheckbox: collectRefundChecked,
+    refundToCollect:refundToCollect
   
   };
 
