@@ -3083,8 +3083,8 @@ $("#refundedAmountContainer").show()
 // Prefill input fields
 $("#refundedAmount").val(yardData.refundedAmount);
 $("#refundToCollect").val(yardData.refundToCollect);
-var shippDetails = yardData.shippDetails;
-if (shippDetails.includes("Yard shipping")) {
+var shippDetails = yardData.shippingDetails;
+if (shippDetails && shippDetails.includes("Yard shipping")) {
 var yardShippingValue = shippDetails.split(":")[1].trim();
 console.log("yard ship", yardShippingValue);
 }else{
