@@ -3148,7 +3148,7 @@ $('#partFromCustomer').fadeIn();
 $('#partFromYard').fadeIn();
 $('#partFromCustomerReturn').fadeOut();
 $('#reimbursement').fadeOut();
-$('.partsFromDropdown').show();
+
 } else if (additionalInfo.escalationProcess === 'Return') {
 $('#replacementColumns').fadeIn();
 $('#partFromCustomerReturn').fadeIn();
@@ -4901,6 +4901,7 @@ $('#partFromYard').fadeIn();
 $('#partFromCustomerReturn').fadeOut();
 $('#reimbursement').fadeOut();
 $("#attachDocument,#sendRMAEmail").show();
+$('.partsFromDropdown').show();
 } else if (selectedValue === 'Return') {
 $('#partFromCustomerReturn').fadeIn();
 $('#replacementColumns').fadeOut();
@@ -4908,6 +4909,7 @@ $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 $('#reimbursement').fadeOut();
 $("#attachDocument,#sendRMAEmail").show();
+$('.partsFromDropdown').hide();
 } else if (selectedValue === "Reimbursement"){
 $('#reimbursement').fadeIn();   
 $('#partFromCustomerReturn').fadeOut();
@@ -4915,6 +4917,7 @@ $('#replacementColumns').fadeOut();
 $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 $("#attachDocument,#sendRMAEmail").show();
+$('.partsFromDropdown').hide();
 }
 else {
 // Hide both columns for other cases like 'Junk'
@@ -4924,6 +4927,7 @@ $('#partFromCustomer').fadeOut();
 $('#partFromYard').fadeOut();
 $('#partFromCustomerReturn').fadeOut();
 $("#attachDocument,#sendRMAEmail").hide();
+$('.partsFromDropdown').hide();
 }
 });
 
