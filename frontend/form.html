@@ -3100,8 +3100,10 @@ $("#actualRefundToCollect").text(`To be collected: $${actualRefund}`);
 if(yardData.storeCredit){
   $("#storeCreditCheckbox").prop('checked', true);
 }
-if(yardData.collectRefundCheckbox){
+if(yardData.collectRefundCheckbox === "Ticked"){
   $("#collectRefundCheckbox").prop('checked', true);
+}else{
+  $("#collectRefundCheckbox").prop('checked', false);
 }
 if(yardData.refundStatus === "Refund collected"){
   $("#paymentStatusSelect").val("Refund collected")
