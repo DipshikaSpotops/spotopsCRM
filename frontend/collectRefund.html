@@ -348,7 +348,7 @@ style="text-align: center; cursor: pointer"
 scope="col"
 data-sort="orderDate"
 >
-Order Date <span class="sort-icon onlyNumber">&#x25B2;</span>
+Order Date
 </th>
 </tr>
 </thead>
@@ -609,6 +609,7 @@ let totalPartPriceSum = 0;
 let totalShippingSum = 0;
 let totalOverallSum = 0;
 let totalRefundsSum = 0;
+let totalToBeRefunded = 0;
 let totalOthersSum = 0;
 let totalOverallRefund = 0;
 
@@ -639,7 +640,10 @@ tableHeader.append(
 '<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append(
-'<th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunds($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallToBeRefunded">To Be Refunded($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+);
+tableHeader.append(
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunded($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append(
 '<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
@@ -656,6 +660,7 @@ let overallPurchaseCost = 0;
 let totalOveralls = 0;
 let overAllwithRefund = 0;
 let tRefunds = 0;
+let toBeRefunded = 0;
 
 // Ensure item.additionalInfo is an array before iterating
 if (Array.isArray(item.additionalInfo)) {
@@ -675,6 +680,7 @@ let shippingCharge = 0;
 let shippingType = "";
 
 let refunds = parseFloat(additionalInfo.refundedAmount || 0);
+let toBeRefunded = parseFloat(additionalInfo.refundToCollect || 0);
 
 if (shippingDetails) {
 const shippingArray = shippingDetails.split(":");
@@ -686,6 +692,7 @@ totalPartPrice += partPrice;
 totalShipping += shippingCharge;
 otherCharges += otherC;
 tRefunds += refunds;
+toBeRefunded += refundToCollect;
 overallPurchaseCost = partPrice + shippingCharge + otherC;
 overAllwithRefund = overallPurchaseCost - refunds;
 totalOveralls += overAllwithRefund;
@@ -709,16 +716,19 @@ totalShippingSum += totalShipping;
 totalOthersSum += otherCharges;
 totalOverallSum += overAllwithRefund;
 totalRefundsSum += tRefunds;
-
+totalToBeRefunded += toBeRefunded;
+var datetime = item.orderDate;
+const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
 $("#yardInfoTable").append(
 `<tr>
 <td>${item.orderNo}</td>
-<td>${item.orderDate}</td>
+<td>${dateOnly}</td>
 ${yardInfoHtml}
 <td>${totalPartPrice.toFixed(2)}</td>
 <td>${totalShipping.toFixed(2)}</td>
 <td>${otherCharges.toFixed(2)}</td>
 <td>${tRefunds.toFixed(2)}</td>
+<td>${toBeRefunded.toFixed(2)}</td>
 <td>${totalOveralls.toFixed(2)}</td>
 <td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
 </tr>`
@@ -739,7 +749,12 @@ footerHtml += `
 )}</td>
 <td id="others" style="text-align:center;">$${totalOthersSum.toFixed(
 2
-)}</td>
+)}
+</td>
+<td id="others" style="text-align:center;">$${totalToBeRefunded.toFixed(
+2
+)}
+</td>
 <td id="refunds" style="text-align:center;">$${totalRefundsSum.toFixed(
 2
 )}</td>
