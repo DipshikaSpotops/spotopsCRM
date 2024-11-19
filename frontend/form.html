@@ -3091,13 +3091,10 @@ console.log("yard ship", yardShippingValue);
   var yardShippingValue = "";
 }
 // Ensure all values are treated as numbers
-var actualRefund = 
-    parseFloat(yardData.partPrice || 0) + 
-    parseFloat(yardShippingValue || 0) + 
-    parseFloat(yardData.others || 0);
+var actualRefund = yardData.yardName || "" + yardData.phone || "" + yardData.email || "";
 console.log("actualRefund", actualRefund);
 // $("#actualRefundToCollect").text(`To be collected: $${actualRefund}`);
-$("#actualRefundToCollect").text(`${yardData.yardName | yardData.phone | yardData.email}`);
+$("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
   $("#storeCreditCheckbox").prop('checked', true);
 }
