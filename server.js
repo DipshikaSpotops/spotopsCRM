@@ -1533,7 +1533,7 @@ const mailOptions = {
   <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website, you may check again if you do not find the ETA.</p>
   <p>Please call us if you have any questions.</p>
   <p>${shipperName} - ${trackingNo}</p>
-  <p>ETA - ${eta}</p>
+  <p>ETA(YYYY-MM-DD) - ${eta}</p>
   <p>Link - <a href="${link}">${link}</a></p>
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
