@@ -3326,6 +3326,8 @@ $('#refundSubmit').on('click', function() {
 console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
 if (collectRefundCheckbox === true){
   var collectRefundChecked = "Ticked"
+}else if (refundedAmount){
+  var collectRefundChecked = "Unticked"
 }
   if (refundStatus === "Refund collected") {
     $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
