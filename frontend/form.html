@@ -4280,6 +4280,7 @@ body: JSON.stringify(data),
 .then((response) => response.json())
 .then((result) => {
 alert("Tracking details sent to the customer");
+$("#saveEsc").prop("disabled", false) .css("filter", "none"); 
 $("#editYardInfo")
   .prop("disabled", false) 
   .css("filter", "none"); 
