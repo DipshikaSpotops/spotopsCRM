@@ -662,11 +662,9 @@ if (Array.isArray(item.additionalInfo)) {
 for (let i = 0; i < maxYards; i++) {
 const additionalInfo = item.additionalInfo[i];
 
-// Ensure additionalInfo exists and has the expected properties before accessing them
-if (additionalInfo && additionalInfo.paymentStatus && additionalInfo.status) {
-
 // Check if the conditions for paymentStatus and escalationProcess are met
-if (additionalInfo.collectRefundCheckbox === "Ticked") {
+if ( additionalInfo && additionalInfo.collectRefundCheckbox === "Ticked"
+) {
 
 appendOrder = true;
 
@@ -701,10 +699,7 @@ ${additionalInfo.status} | Yard Spend: $${additionalInfo.partPrice + shippingCha
 } else {
 yardInfoHtml += "<td></td>";
 }
-} else {
-// If additionalInfo or its properties are undefined, add an empty cell
-yardInfoHtml += "<td></td>";
-}
+
 }
 }
 
