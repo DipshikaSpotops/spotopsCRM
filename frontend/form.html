@@ -1712,7 +1712,11 @@ Save
 <!-- refund  div starts here -->
  
 <div id="refundCollect">
-  <h1>Refunds</h1>
+  <div style="display: flex;">
+  <h1 style="text-align: center;">Refunds</h1>
+  <h1 id="actualRefundToCollect">Actual Refund To be Collected- </h1>
+
+</div>
   <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
   <div id="collectRefundContainer" style="margin: 3% 4%;">
     <input type="checkbox" id="collectRefundCheckbox"/>
@@ -3079,6 +3083,15 @@ $("#refundedAmountContainer").show()
 // Prefill input fields
 $("#refundedAmount").val(yardData.refundedAmount);
 $("#refundToCollect").val(yardData.refundToCollect);
+var shippDetails = yardData.shippDetails;
+if (shippDetails.includes("Yard shipping")) {
+const yardShippingValue = shippDetails.split(":")[1].trim();
+console.log("yard ship", yardShippingValue);
+}
+var actualRefund = yardData.partPrice + yardShippingValue + yardData.others;
+console.log("actualRefund",actualRefund);
+
+$("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
   $("#storeCreditCheckbox").prop('checked', true);
 }
