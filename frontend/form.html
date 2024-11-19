@@ -3091,7 +3091,7 @@ console.log("yard ship", yardShippingValue);
   var yardShippingValue = "";
 }
 // Ensure all values are treated as numbers
-var actualRefund = yardData.yardName || "" + yardData.phone || "" + yardData.email || "";
+var actualRefund = yardData.yardName  + yardData.phone + yardData.email;
 console.log("actualRefund", actualRefund);
 // $("#actualRefundToCollect").text(`To be collected: $${actualRefund}`);
 $("#actualRefundToCollect").text(actualRefund);
