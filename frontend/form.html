@@ -3324,11 +3324,14 @@ $('#refundSubmit').on('click', function() {
   const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
   const refundToCollect = $("#refundToCollect").val();
 console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
-if (collectRefundCheckbox === true){
-  var collectRefundChecked = "Ticked"
-}else if (refundedAmount){
-  var collectRefundChecked = "Unticked"
-}
+let collectRefundChecked;
+if (refundedAmount) {
+        collectRefundChecked = "Unticked"; 
+    } else if (collectRefundCheckbox.checked) {
+        collectRefundChecked = "Ticked"; 
+    } else {
+        collectRefundChecked = "Unticked"; 
+    }
   if (refundStatus === "Refund collected") {
     $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
   }
