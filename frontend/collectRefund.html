@@ -609,7 +609,7 @@ let totalPartPriceSum = 0;
 let totalShippingSum = 0;
 let totalOverallSum = 0;
 let totalRefundsSum = 0;
-let totalToBeRefunded = 0;
+let totalToBeRefundedSum = 0;
 let totalOthersSum = 0;
 let totalOverallRefund = 0;
 
@@ -660,7 +660,6 @@ let overallPurchaseCost = 0;
 let totalOveralls = 0;
 let overAllwithRefund = 0;
 let tRefunds = 0;
-let toBeRefunded = 0;
 let totalToBeRefunded = 0;
 
 // Ensure item.additionalInfo is an array before iterating
@@ -693,6 +692,7 @@ totalPartPrice += partPrice;
 totalShipping += shippingCharge;
 otherCharges += otherC;
 tRefunds += refunds;
+totalToBeRefunded += toBeRefunded;
 overallPurchaseCost = partPrice + shippingCharge + otherC;
 overAllwithRefund = overallPurchaseCost - refunds;
 totalOveralls += overAllwithRefund;
@@ -716,7 +716,7 @@ totalShippingSum += totalShipping;
 totalOthersSum += otherCharges;
 totalOverallSum += overAllwithRefund;
 totalRefundsSum += tRefunds;
-totalToBeRefunded += toBeRefunded;
+totalToBeRefundedSum += totalToBeRefunded;
 console.log("totalToBeRefunded",totalToBeRefunded);
 var datetime = item.orderDate;
 const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
@@ -752,7 +752,7 @@ footerHtml += `
 2
 )}
 </td>
-<td id="others" style="text-align:center;">$${totalToBeRefunded.toFixed(
+<td id="others" style="text-align:center;">$${totalToBeRefundedSum.toFixed(
 2
 )}
 </td>
