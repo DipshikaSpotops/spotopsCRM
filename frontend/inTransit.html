@@ -673,7 +673,7 @@ console.error("Error fetching orders:", error);
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
-
+console.log("search");
 // Ensure allOrders is defined
 if (!allOrders || allOrders.length === 0) {
 $("#infoTable").empty();
