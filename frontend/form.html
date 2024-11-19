@@ -995,7 +995,7 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 <div class="user-info dropdown">
-<span>Welcome <span id="user-name">Shankar</span></span>
+<span>Welcome <span id="user-name"></span></span>
 <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
 <a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user"></i> My Profile</a>
@@ -1712,7 +1712,11 @@ Save
 <!-- refund  div starts here -->
  
 <div id="refundCollect">
-  <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>]
+  <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+  <div id="collectRefundContainer">
+    <input type="checkbox" id="collectRefundCheckbox"/>
+    <label for="collectRefundContainer"> Collect Refund</label>
+  </div>  
   <div style="display: flex;">
   <label for="paymentStatusRefund">Refund Collected:<br></label>
   <select class="form-control paymentStatusRefund" id="paymentStatusSelect">
@@ -1730,10 +1734,7 @@ Save
     <input type="checkbox" id="storeCreditCheckbox"/>
     <label for="storeCreditCheckbox"> Store Credit</label>
   </div>
-  <div id="collectRefundContainer">
-    <input type="checkbox" id="collectRefundCheckbox"/>
-    <label for="collectRefundContainer"> Collect Refund</label>
-  </div>
+  
 
   <button id="refundSubmit">Submit</button>
 </div>
