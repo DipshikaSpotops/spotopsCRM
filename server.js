@@ -952,16 +952,20 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
 
     const { refundStatus, refundedAmount, storeCredit, collectRefundCheckbox, refundToCollect } = req.body;
     const firstName = req.query.firstName || "Unknown User";
- console.log("collectRefundCheckbox",collectRefundCheckbox);
+ console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
     const yardInfo = order.additionalInfo[yardIndex];
     yardInfo.refundStatus = refundStatus;
     yardInfo.refundedAmount = refundedAmount;
     yardInfo.storeCredit = storeCredit || null;
     yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
     yardInfo.refundToCollect = refundToCollect || "" ;
-
+if(refundToCollect){
+  var collectRefund = "Collect Refund"
+}else{
+  var collectRefund= "";
+}
     order.orderHistory.push(
-      `Yard ${yardIndex + 1} refund status updated to ${refundStatus} by ${firstName} on ${formattedDateTime}`
+      `Yard ${yardIndex + 1} refund status updated to ${refundStatus || collectRefund} by ${firstName} on ${formattedDateTime}`
     );
 
     order.markModified("additionalInfo");
