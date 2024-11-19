@@ -3085,8 +3085,10 @@ $("#refundedAmount").val(yardData.refundedAmount);
 $("#refundToCollect").val(yardData.refundToCollect);
 var shippDetails = yardData.shippDetails;
 if (shippDetails.includes("Yard shipping")) {
-const yardShippingValue = shippDetails.split(":")[1].trim();
+var yardShippingValue = shippDetails.split(":")[1].trim();
 console.log("yard ship", yardShippingValue);
+}else{
+  var yardShippingValue = "";
 }
 var actualRefund = yardData.partPrice + yardShippingValue + yardData.others;
 console.log("actualRefund",actualRefund);
