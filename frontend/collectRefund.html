@@ -680,8 +680,8 @@ let shippingCharge = 0;
 let shippingType = "";
 
 let refunds = parseFloat(additionalInfo.refundedAmount || 0);
-let toBeRefunded = parseFloat(additionalInfo.refundToCollect || 0);
-
+let toBeRefunded = additionalInfo.refundToCollect || 0;
+console.log("refundToCollect",toBeRefunded);
 if (shippingDetails) {
 const shippingArray = shippingDetails.split(":");
 shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
