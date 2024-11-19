@@ -1714,7 +1714,7 @@ Save
 <div id="refundCollect">
   <div style="display: flex;">
   <h1 style="text-align: center;">Refunds</h1>
-  <h1 id="actualRefundToCollect">Actual Refund To be Collected- </h1>
+  <h6 id="actualRefundToCollect"></h6>
 
 </div>
   <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
@@ -3096,7 +3096,7 @@ var actualRefund =
     parseFloat(yardShippingValue || 0) + 
     parseFloat(yardData.others || 0);
 console.log("actualRefund", actualRefund);
-$("#actualRefundToCollect").text(`Refund to be collected: ${actualRefund}`);
+$("#actualRefundToCollect").text(`To be collected: ${actualRefund}`);
 if(yardData.storeCredit){
   $("#storeCreditCheckbox").prop('checked', true);
 }
