@@ -3090,9 +3090,12 @@ console.log("yard ship", yardShippingValue);
 }else{
   var yardShippingValue = "";
 }
-var actualRefund = yardData.partPrice + yardShippingValue + yardData.others;
-console.log("actualRefund",actualRefund);
-
+// Ensure all values are treated as numbers
+var actualRefund = 
+    parseFloat(yardData.partPrice || 0) + 
+    parseFloat(yardShippingValue || 0) + 
+    parseFloat(yardData.others || 0);
+console.log("actualRefund", actualRefund);
 $("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
   $("#storeCreditCheckbox").prop('checked', true);
