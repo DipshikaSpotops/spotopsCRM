@@ -389,6 +389,7 @@ placeholder="Search..."
 />
 </div>
 <!-- pagination controls -->
+ <div class="table-responsive">
 <div id="pagination-controls" class="mt-3 mb-3"></div>
 <div id="filterAndTotal" style="display: flex;">
 <div class="filter-bar">
@@ -437,7 +438,7 @@ Email <span class="aToZ">&#9650;</span>
 </table>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
-
+</div>
 </div>
 </div>
 <script>
@@ -718,12 +719,14 @@ console.error("Error fetching current month's orders:", error);
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 console.log("search");
+
 // Ensure allOrders is defined
 if (!allOrders || allOrders.length === 0) {
 $("#infoTable").empty();
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
 return;
 }
+
 const filteredOrders = allOrders.filter(order => {
 return (
 (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
@@ -733,12 +736,13 @@ return (
 ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
 (order.additionalInfo && order.additionalInfo.some(info => 
 (info.yardName && info.yardName.toLowerCase().includes(value)) || 
-(info.trackingNo && info.trackingNo.includes(value))
+(info.trackingNo && info.trackingNo.toLowerCase().includes(value)) // Fixed here
 )) ||
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value))
 );
 });
+
 if (filteredOrders.length > 0 || value === "") {
 renderTableRows(1, filteredOrders); // Render the first page of filtered results
 createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
