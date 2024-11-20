@@ -458,35 +458,66 @@ const customerApprovedOrders = await Order.find({
 });
 // for yardProcessing
 app.get("/orders/yardProcessing", async (req, res) => {
-  try {
-    // Query the database for orders with orderStatus "Placed"
-    const yardProcessingOrders = await Order.find({ orderStatus: "Yard Processing" });
-    res.json(yardProcessingOrders);
-  } catch (error) {
-    console.error("Error fetching yardProcessingOrders orders:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const yardProcessingOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "Yard Processing" }
+]
+});
+res.json(yardProcessingOrders);
+} catch (error) {
+console.error("Error fetching yardProcessing orders:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 // for in Transit
 app.get("/orders/inTransit", async (req, res) => {
-  try {
-    const inTransitOrders = await Order.find({ orderStatus: "In Transit" });
-    res.json(inTransitOrders);
-  } catch (error) {
-    console.error("Error fetching inTransitOrders orders:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const inTransitOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "In Transit" }
+]
+});
+res.json(inTransitOrders);
+} catch (error) {
+console.error("Error fetching inTransit orders:", error);
+res.status(500).json({ message: "Server error", error });
+}  
 });
 // for fulfilled
 app.get("/orders/fulfilled", async (req, res) => {
-  try {
-    // Query the database for orders with orderStatus "Placed"
-    const fulfilledOrders = await Order.find({ orderStatus: "Order Fulfilled" });
-    res.json(fulfilledOrders);
-  } catch (error) {
-    console.error("Error fetching fulfilledOrders:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const fulfilledOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "Order Fulfilled" }
+]
+});
+res.json(fulfilledOrders);
+} catch (error) {
+console.error("Error fetching fulfilled orders:", error);
+res.status(500).json({ message: "Server error", error });
+}    
 });
 // for orders which were in escalation atleast once
 app.get('/orders/escalated', async (req, res) => {

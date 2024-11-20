@@ -210,38 +210,38 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 }
 
 #cancellingOrder {
-  display: none; /* Hidden by default */
-  position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 54%;
-    background-color: white;
-    border: 1px solid #c0c0c0;
-    border-radius: 10px;
-    padding: 20px;
-    z-index: 1000;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
+display: none; /* Hidden by default */
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 54%;
+background-color: white;
+border: 1px solid #c0c0c0;
+border-radius: 10px;
+padding: 20px;
+z-index: 1000;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+z-index: 1000;
 }
 #cancelledRefundSubmit {
-  background-color: #ff914d;
-    border: 1px solid black;
-    width: 14%;
-    font-weight: bold;
-    margin: 6% 43%;
-    border-radius: 12px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+background-color: #ff914d;
+border: 1px solid black;
+width: 14%;
+font-weight: bold;
+margin: 6% 43%;
+border-radius: 12px;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
 #showTotalOrders{
-  border: 1px solid #c0c0c0;
-    text-align: center;
-    height: auto;
-    width: auto;
-    border-radius: 8px;
-    margin: 1% -3%;
-    background-color: #3096a58f;
-    padding: 5px;
+border: 1px solid #c0c0c0;
+text-align: center;
+height: auto;
+width: auto;
+border-radius: 8px;
+margin: 1% -3%;
+background-color: #3096a58f;
+padding: 5px;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -382,13 +382,13 @@ placeholder="Search..."
 />
 </div>
 <div id="filterAndTotal" style="display: flex;">
-  <div class="filter-bar">
-    <input id="monthYearPicker" type="month" class="form-control" />
-    <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
-  </div>
-  <div id="showTotalOrders">Total Placed Orders This Month-</div>
-  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-  </div>
+<div class="filter-bar">
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
+</div>
+<div id="showTotalOrders">Total Placed Orders This Month-</div>
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+</div>
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
@@ -442,47 +442,47 @@ OK
 </div>
 <!-- cancel popup -->
 <div id="cancellingOrder" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
-  <div style="display: flex; justify-content: center; align-items: center; position: relative;">
-  <h1 style="margin: 0; text-align: center;">Order Cancellation</h1>
-  <button type="button" id="closeCancelled" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
-  </div>
-  <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-  <div style="flex: 1; min-width: 300px;">
-  <label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
-  <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
-  </div>
-  <div style="flex: 1; min-width: 300px;">
-  <label for="cancelledDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
-  <input type="text" id="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
-  </div>
-  <div class="containerForScroll">
-  <label for=h></label>
-  </div>
-  <div style="flex: 1; min-width: 300px;">
-    <label for="reasonCancel" style="white-space: nowrap;margin: 4% 27%;">Reason:</label>
-    <select type="text" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
-    <option value="Same Day">Same Day</option>
-    <option value="Invoice Not Signed">Invoice Not Signed</option>
-    <option value="Personal Reason">Personal Reason</option>
-    <option value="Reimbursement">Reimbursement</option>
-    <option value="Delay">Delay</option>
-    <option value="Defective/Damaged">Defective/Damaged</option>
-    <option value="Ugly Part">Ugly Part</option>
-    <option value="Wrong Part">Wrong Part</option>
-    <option value="Reprogram/VIN">Reprogram/VIN</option>
-    <option value="No Blind Shipping">No Blind Shipping</option>
-    <option value="Dispute">Dispute</option>
-    <option value="Part Not Available">Part Not Available</option>
-    <option value="No Refund">No Refund</option>
-    </select>
-    </div>
-  <div style="flex: 1; min-width: 300px;">
-  <label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
-  <input type="number" class="cancelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
-  </div>
-  </div>
-  <button type="button" id="cancelledRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
-  </div>
+<div style="display: flex; justify-content: center; align-items: center; position: relative;">
+<h1 style="margin: 0; text-align: center;">Order Cancellation</h1>
+<button type="button" id="closeCancelled" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+<div style="flex: 1; min-width: 300px;">
+<label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
+<input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="cancelledDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
+<input type="text" id="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+</div>
+<div class="containerForScroll">
+<label for=h></label>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="reasonCancel" style="white-space: nowrap;margin: 4% 27%;">Reason:</label>
+<select type="text" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+<option value="Same Day">Same Day</option>
+<option value="Invoice Not Signed">Invoice Not Signed</option>
+<option value="Personal Reason">Personal Reason</option>
+<option value="Reimbursement">Reimbursement</option>
+<option value="Delay">Delay</option>
+<option value="Defective/Damaged">Defective/Damaged</option>
+<option value="Ugly Part">Ugly Part</option>
+<option value="Wrong Part">Wrong Part</option>
+<option value="Reprogram/VIN">Reprogram/VIN</option>
+<option value="No Blind Shipping">No Blind Shipping</option>
+<option value="Dispute">Dispute</option>
+<option value="Part Not Available">Part Not Available</option>
+<option value="No Refund">No Refund</option>
+</select>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
+<input type="number" class="cancelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+</div>
+</div>
+<button type="button" id="cancelledRefundSubmit" class="save" style="align-self: flex-start;">Save</button>
+</div>
 <script>
 $(document).ready(async function () {
 let sortOrder = {
@@ -501,21 +501,16 @@ Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
 Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
 Nov: "11", Dec: "12"
 };
-
-// Extract parts from the string (day, month, year, time)
+// Extracting parts from the string (day, month, year, time)
 const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
-
 if (parts) {
 const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
 const month = months[parts[2]];
 const year = parts[3];
 const hour = parts[4];
 const minute = parts[5];
-
-// Return a valid date string for comparison
 return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
 }
-
 return null;
 }
 function sortTable(column, type) {
@@ -732,17 +727,17 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const day = date.getDate();
 const month = months[date.getMonth()];
 const year = date.getFullYear();
-    const monthMap = {
-        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-        May: "05", Jun: "06", Jul: "07", Aug: "08",
-        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-    };
-    var monthNum = monthMap[month];
+const monthMap = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+May: "05", Jun: "06", Jul: "07", Aug: "08",
+Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+};
+var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 try {
-    const response = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
+const response = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 
 
@@ -758,9 +753,9 @@ document.getElementById("showTotalOrders").innerHTML = `Total Placed Orders This
 data = sortOrdersByOrderNoDesc(data);
 // data.forEach((item) => {
 //   if (item.orderStatus === "Placed") {
-    // Safely access bAddress and sAddress using optional chaining
-    
-    renderOrders(data);
+// Safely access bAddress and sAddress using optional chaining
+
+renderOrders(data);
 //   }
 // });
 } catch (error) {
@@ -856,7 +851,7 @@ console.error("Error updating order status:", error);
 });
 let orderId;
 $("#infoTable").on("click", ".cancel-btn", function () {
-  orderId = $(this).data("id");
+orderId = $(this).data("id");
 console.log("id",orderId);
 $("#cancellingOrder").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
@@ -899,88 +894,88 @@ default: return "th";
 var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 console.log("dates",currentDateTime,orderPlacedDate)
 $(".orderedDate").val(orderPlacedDate);
-    $("#cancelledDate").val(currentDateTime);
+$("#cancelledDate").val(currentDateTime);
 // console.log("orderDate",orderPlacedDate)
 })
 .catch(error => console.error("Error fetching yard data:", error));
 });
 function renderOrders(item){
-    $("#infoTable").empty();
-    // console.log("rendering order",item);
-    item.forEach(item => {
-        var bAddress = item.bAddress || ""; // Default to an empty string if bAddress is undefined
-    var sAddress = item.sAddress || ""; // Default to an empty string if sAddress is undefined
+$("#infoTable").empty();
+// console.log("rendering order",item);
+item.forEach(item => {
+var bAddress = item.bAddress || ""; // Default to an empty string if bAddress is undefined
+var sAddress = item.sAddress || ""; // Default to an empty string if sAddress is undefined
 
-    // Split and format bAddress and sAddress only if they are non-empty
-    const bParts = bAddress ? bAddress.split(',') : [];
+// Split and format bAddress and sAddress only if they are non-empty
+const bParts = bAddress ? bAddress.split(',') : [];
 const firstLineB = bParts.length > 1 ? `${bParts[0].trim()}, ${bParts[1].trim()}` : "";
 const secondLineB = bParts.length > 4 ? `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}` : "";
 const additionalLineB = bParts.length > 5 ? bParts.slice(5).map(part => part.trim()).join(', ') : "";
 const formattedBAddress = `${firstLineB}<br>${secondLineB}${additionalLineB ? `<br>${additionalLineB}` : ""}`;
 
-    const sParts = sAddress ? sAddress.split(',') : [];
-    const firstLineS = sParts.length > 1 ? `${sParts[0].trim()}, ${sParts[1].trim()}` : "";
-    const secondLineS = sParts.length > 4 ? `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}` : "";
-    const formattedSAddress = `${firstLineS}<br>${secondLineS}<br><b>Attention</b>: ${item.attention || ''}`;
-    var expShip = item.expediteShipping;
-    var dsCall = item.dsCall;
-    // console.log("expediteShipping",expShip,"dsCall",dsCall);
-    var exp;
-    var ds;
-    if(expShip == "true"){
-      exp = "Expedite shipping";
-    }else{
-      exp = "";
-    }
-    if(dsCall == "true"){
-      ds = "DS Call";
-    }else{
-      ds = "";
-    }
-    const datetime = item.orderDate;
-    const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-    // Append data to the table with optional chaining and default values
-    $("#infoTable").append(
-      `<tr>
-        <td>
-          <button style="background-color: #cae8c9; border: none; color: #61a55e;" 
-                  class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">
-            Approve
-          </button>
-          <button style="background-color: #fcdfda; border: none; color: #72504a;" 
-                  class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
-            Cancel
-          </button>
-        </td>
-        <td>${dateOnly || ''}</td>
-        <td>${item.orderNo || ''}</td>
-        <td>${item.salesAgent || ''}</td>
-        <td>
-          Name: ${item.customerName || ''}<br>
-          Email: ${item.email || ''}<br>
-          Phone: ${item.phone || ''}<br>
-          Alt Phone: ${item.altPhone || ''}<br>
-          Billing Address:<br> ${formattedBAddress}<br>
-        </td>
-        <td>${formattedSAddress}</td>
-        <td>Part Name: ${item.pReq || item.partName || ''}<br>
-            <b>Quoted Price:</b> $${item.soldP || 0}<br>
-             ${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
-  ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
-            </td>
-        <td>
-          Year: ${item.year || ''}<br>
-          Make: ${item.make || ''}<br>
-          Model: ${item.model || ''}<br>
-          Part Description: ${item.desc || ''}<br>
-          VIN: ${item.vin || ''}<br>
-          Warranty: ${item.warranty || 0} days<br>
-        </td>
-        <td>${item.orderStatus || ''}</td>
-        <td>${item.email || ''}</td>
-      </tr>`
-    );
-    })
+const sParts = sAddress ? sAddress.split(',') : [];
+const firstLineS = sParts.length > 1 ? `${sParts[0].trim()}, ${sParts[1].trim()}` : "";
+const secondLineS = sParts.length > 4 ? `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}` : "";
+const formattedSAddress = `${firstLineS}<br>${secondLineS}<br><b>Attention</b>: ${item.attention || ''}`;
+var expShip = item.expediteShipping;
+var dsCall = item.dsCall;
+// console.log("expediteShipping",expShip,"dsCall",dsCall);
+var exp;
+var ds;
+if(expShip == "true"){
+exp = "Expedite shipping";
+}else{
+exp = "";
+}
+if(dsCall == "true"){
+ds = "DS Call";
+}else{
+ds = "";
+}
+const datetime = item.orderDate;
+const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+// Append data to the table with optional chaining and default values
+$("#infoTable").append(
+`<tr>
+<td>
+<button style="background-color: #cae8c9; border: none; color: #61a55e;" 
+class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">
+Approve
+</button>
+<button style="background-color: #fcdfda; border: none; color: #72504a;" 
+class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
+Cancel
+</button>
+</td>
+<td>${dateOnly || ''}</td>
+<td>${item.orderNo || ''}</td>
+<td>${item.salesAgent || ''}</td>
+<td>
+Name: ${item.customerName || ''}<br>
+Email: ${item.email || ''}<br>
+Phone: ${item.phone || ''}<br>
+Alt Phone: ${item.altPhone || ''}<br>
+Billing Address:<br> ${formattedBAddress}<br>
+</td>
+<td>${formattedSAddress}</td>
+<td>Part Name: ${item.pReq || item.partName || ''}<br>
+<b>Quoted Price:</b> $${item.soldP || 0}<br>
+${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
+${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
+</td>
+<td>
+Year: ${item.year || ''}<br>
+Make: ${item.make || ''}<br>
+Model: ${item.model || ''}<br>
+Part Description: ${item.desc || ''}<br>
+VIN: ${item.vin || ''}<br>
+Warranty: ${item.warranty || 0} days<br>
+</td>
+<td>${item.orderStatus || ''}</td>
+<td>${item.email || ''}</td>
+</tr>`
+);
+})
 }
 // Sorting orders by orderNo in descending order
 function sortOrdersByOrderNoDesc(orders) {
@@ -1028,51 +1023,51 @@ $("body").removeClass("modal-active");
 window.location.reload();
 
 });
-  $("#cancelledRefundSubmit").on("click", function () {
-    $("#cancellingOrder").fadeOut();
-  
-    const cancelledDate = $("#cancelledDate").val();
-    const cancelledRefAmount = $(".cancelledRefAmount").val();
-    // const orderNo = urlParams.get("orderNo");
-    const reason = $("#reasonCancel").val();
-  
-    console.log("Captured Data:");
-    console.log("Cancelled Date:", cancelledDate);
-    console.log("Cancelled Refund Amount:", cancelledRefAmount);
-    console.log("Order No:", orderId);
-  
-    axios.put(`https://www.spotops360.com/orders/${orderId}/custRefund`, {
-      cancelledDate: cancelledDate,
-      cancelledRefAmount: cancelledRefAmount,
-      orderNo: orderId,
-      cancellationReason:reason,
-      orderStatus: "Order Cancelled"
-    })
-      .then(function (response) {
-        console.log("Refund information updated successfully:", response.data);
-        $("#custRefunds").val(cancelledRefAmount);
-        alert("Refund information for cancelled order updated successfully!");
-  
-        // Send cancellation email after successful refund update
-        return axios.post(`/orders/sendCancelEmail/${orderId}?cancelledRefAmount=${cancelledRefAmount}`);
-      })
-      .then(function (response) {
-        console.log("Cancellation email sent successfully:", response.data.message);
-        alert("Cancellation email sent successfully!");
-        $(".modal-overlay").remove();
-  // $(".mainDiv").removeClass("blur");
-  $("body").removeClass("modal-active");
-      })
-      .catch(function (error) {
-        console.error("Error during operation:", error);
-  
-        if (error.response && error.response.status === 500) {
-          alert("Server error occurred. Please try again.");
-        } else {
-          alert("An error occurred. Please try again.");
-        }
-      });
-  });
+$("#cancelledRefundSubmit").on("click", function () {
+$("#cancellingOrder").fadeOut();
+
+const cancelledDate = $("#cancelledDate").val();
+const cancelledRefAmount = $(".cancelledRefAmount").val();
+// const orderNo = urlParams.get("orderNo");
+const reason = $("#reasonCancel").val();
+
+console.log("Captured Data:");
+console.log("Cancelled Date:", cancelledDate);
+console.log("Cancelled Refund Amount:", cancelledRefAmount);
+console.log("Order No:", orderId);
+
+axios.put(`https://www.spotops360.com/orders/${orderId}/custRefund`, {
+cancelledDate: cancelledDate,
+cancelledRefAmount: cancelledRefAmount,
+orderNo: orderId,
+cancellationReason:reason,
+orderStatus: "Order Cancelled"
+})
+.then(function (response) {
+console.log("Refund information updated successfully:", response.data);
+$("#custRefunds").val(cancelledRefAmount);
+alert("Refund information for cancelled order updated successfully!");
+
+// Send cancellation email after successful refund update
+return axios.post(`/orders/sendCancelEmail/${orderId}?cancelledRefAmount=${cancelledRefAmount}`);
+})
+.then(function (response) {
+console.log("Cancellation email sent successfully:", response.data.message);
+alert("Cancellation email sent successfully!");
+$(".modal-overlay").remove();
+// $(".mainDiv").removeClass("blur");
+$("body").removeClass("modal-active");
+})
+.catch(function (error) {
+console.error("Error during operation:", error);
+
+if (error.response && error.response.status === 500) {
+alert("Server error occurred. Please try again.");
+} else {
+alert("An error occurred. Please try again.");
+}
+});
+});
 
 $("#logoutLink").on("click", function () {
 window.localStorage.clear();
