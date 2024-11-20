@@ -601,7 +601,7 @@ item.additionalInfo && item.additionalInfo.length > 0
 </tr>
 `);
 });
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+createPaginationControls(Math.ceil(orders.length / rowsPerPage), filteredOrders);
 }
 // Function to create pagination controls based on filtered data
 function createPaginationControls(totalPages, filteredOrders = allOrders) {
@@ -630,7 +630,7 @@ renderTableRows(currentPage); // Use the filtered orders
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+const totalPages = Math.ceil(allOrders.length / rowsPerPage);
 if (currentPage < totalPages) {
 currentPage++;
 renderTableRows(currentPage); // Use the filtered orders
