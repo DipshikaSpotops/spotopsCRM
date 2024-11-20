@@ -322,7 +322,7 @@ placeholder="Search..."
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
-<div id="showTotalOrders">Total Spent This Month-</div>
+<div id="showTotalOrders">Total Shipping Cost This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>  
 <table class="table table-bordered mt-4">
@@ -539,10 +539,11 @@ const itemSpend = partPrice + others + shippingCost - refundedAmount;
 orderSpend += itemSpend;  
 });
 order.totalSpend = orderSpend;  
-totalSpend += orderSpend;  
+totalSpendShipping += shippingCost;  
 });
-console.log("Total spend across all orders:", totalSpend);
+console.log("Total spend across all orders:", totalSpendShipping);
 console.log("yardOrders with calculated spends", yardOrders);
+document.getElementById("showTotalOrders").innerHTML = `Total Shipping Cost This Month- $${totalSpendShipping.toFixed(2)}`;
 renderTableRows(currentPage, yardOrders);
 createPaginationControls(Math.ceil(yardOrders.length / 25));
 } catch (error) {
