@@ -222,7 +222,7 @@ color: white;
 #showTotalOrders{
 border: 1px solid #c0c0c0;
 text-align: center;
-height: 3vh;
+height: auto;
 width: auto;
 border-radius: 8px;
 margin: 1% -3%;
@@ -234,7 +234,7 @@ display: flex;
 justify-content: flex-end;
 align-items: center;
 gap: 10px;
-margin-bottom: 10px;
+margin-bottom: 0px;
 }
 .filter-bar button {
 margin-left: 10px;
@@ -379,7 +379,7 @@ placeholder="Search..."
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
-<div style="display: flex;margin: 2% -2%;">
+<div style="display: flex;margin: 0% 1%;">
 <div id="showTotalOrders">Total Orders This Month-</div>
 </div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
@@ -415,7 +415,6 @@ Escalation Status
 <span class="aToZ">&#9650;</span>
 </th>
 <th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">Send Invoice</th>
 <th style="cursor: pointer" scope="col">
 Email <span class="aToZ">&#9650;</span>
 </th>
@@ -579,17 +578,8 @@ escalationStyle = 'style="background-color: lightgreen;"';
 }
 
 const team = localStorage.getItem('team');
-const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-
 const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
-
-const sendInvoice = `
-<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
 const yardlength = item.additionalInfo.length;
 
@@ -603,8 +593,7 @@ $("#infoTable").append(`
 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
 <td>${item.orderStatus}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
-<td class="actions">${actions}</td>
-<td>${sendInvoice}</td>
+<td>${actions}</td>
 <td>${item.email}</td>
 </tr>
 `);
