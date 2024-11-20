@@ -608,7 +608,7 @@ renderTableRows(currentPage); // Use the filtered orders
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+const totalPages = Math.ceil(allOrders.length / rowsPerPage);
 if (currentPage < totalPages) {
 currentPage++;
 renderTableRows(currentPage); // Use the filtered orders
