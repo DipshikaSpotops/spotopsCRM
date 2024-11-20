@@ -1656,7 +1656,7 @@ ${firstPart}<br>
 ${remainingPart}
 </p>
 <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
-<p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+<p>If you have any questions or need further assistance with the return process, please feel free to reach out.</p>
 <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
 <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
