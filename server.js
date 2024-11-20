@@ -567,13 +567,24 @@ app.get("/orders/salesPersonWise", async (req, res) => {
 });
 // for cancelled
 app.get("/orders/cancelled", async (req, res) => {
-  try {
-    const placedOrders = await Order.find({ orderStatus: "Order Cancelled" });
-    res.json(placedOrders);
-  } catch (error) {
-    console.error("Error fetching placed orders:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const cancelledOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "Order Cancelled" }
+]
+});
+res.json(cancelledOrders);
+} catch (error) {
+console.error("Error fetching cancelled orders:", error);
+res.status(500).json({ message: "Server error", error });
+}  
 });
 // monthly orders
 app.get("/orders/monthly", async (req, res) => {
