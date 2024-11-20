@@ -526,6 +526,7 @@ headers: { Authorization: `Bearer ${token}` },
 if (response.status !== 200) throw new Error("Failed to fetch data");
 yardOrders = response.data;
 let totalSpend = 0;  
+let totalSpendShipping = 0;
 yardOrders.forEach(order => {
 let orderSpend = 0;  
 order.additionalInfo.forEach(info => {
