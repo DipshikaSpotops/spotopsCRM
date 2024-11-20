@@ -31,13 +31,13 @@ credentials: true
 }));
 // to handle unknown paths
 app.use((req, res, next) => {
-  try {
-    decodeURIComponent(req.path);
-    next();
-  } catch (e) {
-    console.error('Malformed URI detected:', req.path);
-    res.status(400).send('Malformed URI');
-  }
+try {
+decodeURIComponent(req.path);
+next();
+} catch (e) {
+console.error('Malformed URI detected:', req.path);
+res.status(400).send('Malformed URI');
+}
 });
 app.use(bodyParser.json());
 
@@ -61,107 +61,107 @@ let orderCount = 0;
 
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
-  console.log("Adding new order");
+console.log("Adding new order");
 
-  try {
-    console.log("Create a new order:", req.body);
+try {
+console.log("Create a new order:", req.body);
 
-    const {
-      orderNo,
-      orderDate,
-      salesAgent,
-      customerName,
-      bAddress,
-      sAddress,
-      attention,
-      email,
-      phone,
-      altPhone,
-      make,
-      model,
-      year,
-      pReq,
-      desc,
-      warranty,
-      soldP,
-      costP,
-      shippingFee,
-      salestax,
-      spMinusTax,
-      grossProfit,
-      businessName,
-      orderStatus,
-      vin,
-      last4digits,
-      notes,
-      orderHistory,
-      expediteShipping,
-      dsCall,
-    } = req.body;
+const {
+orderNo,
+orderDate,
+salesAgent,
+customerName,
+bAddress,
+sAddress,
+attention,
+email,
+phone,
+altPhone,
+make,
+model,
+year,
+pReq,
+desc,
+warranty,
+soldP,
+costP,
+shippingFee,
+salestax,
+spMinusTax,
+grossProfit,
+businessName,
+orderStatus,
+vin,
+last4digits,
+notes,
+orderHistory,
+expediteShipping,
+dsCall,
+} = req.body;
 
-    const newOrder = new Order({
-      orderNo,
-      orderDate,
-      salesAgent,
-      customerName,
-      bAddress,
-      sAddress,
-      attention,
-      email,
-      phone,
-      altPhone,
-      make,
-      model,
-      year,
-      pReq,
-      desc,
-      warranty,
-      soldP,
-      costP,
-      shippingFee,
-      salestax,
-      spMinusTax,
-      grossProfit,
-      businessName,
-      orderStatus,
-      vin,
-      last4digits,
-      notes,
-      orderHistory,
-      expediteShipping,
-      dsCall,
-    });
+const newOrder = new Order({
+orderNo,
+orderDate,
+salesAgent,
+customerName,
+bAddress,
+sAddress,
+attention,
+email,
+phone,
+altPhone,
+make,
+model,
+year,
+pReq,
+desc,
+warranty,
+soldP,
+costP,
+shippingFee,
+salestax,
+spMinusTax,
+grossProfit,
+businessName,
+orderStatus,
+vin,
+last4digits,
+notes,
+orderHistory,
+expediteShipping,
+dsCall,
+});
 
-    // Increment the order count and assign the team
-    orderCount += 1;
-    console.log("orderCount", orderCount);
-    if (orderCount % 2 === 1) {
-      newOrder.team = "Mark"; // Assign to Team Mark
-      newOrder.teamOrder = "Mark"; // Add teamOrder field
-      console.log("Mark's team", newOrder.team);
-    } else {
-      newOrder.team = "Sussane"; // Assign to Team Sussane
-      newOrder.teamOrder = "Sussane"; // Add teamOrder field
-      console.log("Sussane's team", newOrder.team);
-    }
+// Increment the order count and assign the team
+orderCount += 1;
+console.log("orderCount", orderCount);
+if (orderCount % 2 === 1) {
+newOrder.team = "Mark"; // Assign to Team Mark
+newOrder.teamOrder = "Mark"; // Add teamOrder field
+console.log("Mark's team", newOrder.team);
+} else {
+newOrder.team = "Sussane"; // Assign to Team Sussane
+newOrder.teamOrder = "Sussane"; // Add teamOrder field
+console.log("Sussane's team", newOrder.team);
+}
 
-    // Save the new order to the database
-    await newOrder.save();
+// Save the new order to the database
+await newOrder.save();
 
-    // Generate an invoice for the new order
-    var orderId = newOrder.orderNo;
-    // console.log("orderNo", orderId);
-    // await generateInvoice(orderId, newOrder);
+// Generate an invoice for the new order
+var orderId = newOrder.orderNo;
+// console.log("orderNo", orderId);
+// await generateInvoice(orderId, newOrder);
 
-    res.status(201).json({ newOrder, team: newOrder.team });
-  } catch (error) {
-    if (error.code === 11000) { // Duplicate key error in MongoDB
-      console.error("Duplicate orderNo:", error.keyValue.orderNo);
-      return res.status(409).json({ message: "Order No. already exists. Please enter a unique Order No." });
-    }
-    console.error("Error in invoice creation:", error);
-    res.status(500).json({ message: "Error creating order", error: error.message });
-  }
+res.status(201).json({ newOrder, team: newOrder.team });
+} catch (error) {
+if (error.code === 11000) { // Duplicate key error in MongoDB
+console.error("Duplicate orderNo:", error.keyValue.orderNo);
+return res.status(409).json({ message: "Order No. already exists. Please enter a unique Order No." });
+}
+console.error("Error in invoice creation:", error);
+res.status(500).json({ message: "Error creating order", error: error.message });
+}
 });
 
 // Create User Endpoint
@@ -416,45 +416,45 @@ res.status(500).json({ message: "Server error" });
 
 // for only placed orders
 app.get("/orders/placed", async (req, res) => {
-  try {
-    const month = req.query.month;
+try {
+const month = req.query.month;
 const year = req.query.year;
 if (!month || !year) {
 return res.status(400).json({ message: "Month and year are required" });
 }
 const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
 const placedOrders = await Order.find({
-  $and: [
-    { orderDate: { $regex: monthYearPattern } },
-    { orderStatus: "Placed" }
-  ]
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "Placed" }
+]
 });
-    res.json(placedOrders);
-  } catch (error) {
-    console.error("Error fetching placed orders:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+res.json(placedOrders);
+} catch (error) {
+console.error("Error fetching placed orders:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 // for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
-  try {
-    const month = req.query.month;
+try {
+const month = req.query.month;
 const year = req.query.year;
 if (!month || !year) {
 return res.status(400).json({ message: "Month and year are required" });
 }
 const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
 const customerApprovedOrders = await Order.find({
-  $and: [
-    { orderDate: { $regex: monthYearPattern } },
-    { orderStatus: "Customer approved" }
-  ]
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "Customer approved" }
+]
 });
-    res.json(customerApprovedOrders);
-  } catch (error) {
-    console.error("Error fetching customerApproved orders:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+res.json(customerApprovedOrders);
+} catch (error) {
+console.error("Error fetching customerApproved orders:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 // for yardProcessing
 app.get("/orders/yardProcessing", async (req, res) => {
@@ -542,36 +542,45 @@ res.status(500).json({ message: "Server error", error });
 });
 // for ongoing escalation with escTicked(yes) and orderStatus to be either in Customer Aproved,Yard Processing,In Transit or Escalation
 app.get('/orders/ongoing-escalations', async (req, res) => {
-  try {
-    const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
-    const filteredOrders = await Order.find({
-      orderStatus: { $in: validStatuses },
-      additionalInfo: { $elemMatch: { escTicked: "Yes" } }
-    });
-    res.status(200).json(filteredOrders);
-  } catch (error) {
-    console.error("Error fetching orders with ongoing escalations:", error);
-    res.status(500).json({ error: "Failed to fetch orders" });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const escalatedOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: { $in: validStatuses }, },
+{ additionalInfo: { $elemMatch: { escTicked: "Yes" } } }
+]
+});
+res.json(escalatedOrders);
+} catch (error) {
+console.error("Error fetching fulfilled orders:", error);
+res.status(500).json({ message: "Server error", error });
+}    
 });
 // for salespersonWise data
 app.get("/orders/salesPersonWise", async (req, res) => {
-  var salesAgent = req.query.firstName;
-  const month = req.query.month;
-  const year = req.query.year;
-  try {
-    const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-    const monthlySalesPersonOrders = await Order.find({
-      $and: [
-        { orderDate: { $regex: monthYearPattern } },
-        { salesAgent: salesAgent }
-      ]
-    });
-        res.json(monthlySalesPersonOrders);
-  } catch (error) {
-    console.error("Error fetching salesPersonOrders:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+var salesAgent = req.query.firstName;
+const month = req.query.month;
+const year = req.query.year;
+try {
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const monthlySalesPersonOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ salesAgent: salesAgent }
+]
+});
+res.json(monthlySalesPersonOrders);
+} catch (error) {
+console.error("Error fetching salesPersonOrders:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 // for cancelled
 app.get("/orders/cancelled", async (req, res) => {
@@ -651,7 +660,7 @@ if (key !== 'customerApprovedDate') {
 order[key] = req.body[key];
 }
 }
-  1 
+1 
 const firstName = req.query.firstName;
 console.log("Logged in user:", firstName);
 
@@ -670,44 +679,44 @@ res.status(400).send(err.message);
 });
 // changing the orderStatus and yrdStatus when reimbursement amount is added
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
-  const { orderStatus, yardStatus, yardIndex } = req.body;
-  const firstName = req.query.firstName;
- console.log("changing order and yardStatus",orderStatus,yardStatus,yardIndex + 1,firstName);
-  // Get the current date and time in US Central Time
-  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-  console.log('US Central Time:', centralTime);
-  const date = new Date(centralTime);
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const formattedDate = `${day} ${month}, ${year}`;
-  const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-  try {
-      const order = await Order.findOne({ orderNo: req.params.orderNo });
-      if (!order) return res.status(404).send("Order not found");
-      const oldStatus = order.orderStatus;
-      const oldYardStatus = order.additionalInfo[yardIndex + 1].status;
+const { orderStatus, yardStatus, yardIndex } = req.body;
+const firstName = req.query.firstName;
+console.log("changing order and yardStatus",orderStatus,yardStatus,yardIndex + 1,firstName);
+// Get the current date and time in US Central Time
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+if (!order) return res.status(404).send("Order not found");
+const oldStatus = order.orderStatus;
+const oldYardStatus = order.additionalInfo[yardIndex + 1].status;
 console.log("oldYarsStatus",oldYardStatus)
-      // Update the order status and yard status
-      order.orderStatus = orderStatus;
-      order.additionalInfo[yardIndex + 1].status = yardStatus;
+// Update the order status and yard status
+order.orderStatus = orderStatus;
+order.additionalInfo[yardIndex + 1].status = yardStatus;
 
-      // Add the change to the order history if the status has changed
-      if (oldStatus !== orderStatus || oldYardStatus !== yardStatus) {
-          order.orderHistory.push(
-              `Order status updated to ${orderStatus}, Yard status updated to ${yardStatus} by ${firstName} on ${formattedDateTime}`
-          );
-      }
+// Add the change to the order history if the status has changed
+if (oldStatus !== orderStatus || oldYardStatus !== yardStatus) {
+order.orderHistory.push(
+`Order status updated to ${orderStatus}, Yard status updated to ${yardStatus} by ${firstName} on ${formattedDateTime}`
+);
+}
 
-      // Save the updated order
-      const updatedOrder = await order.save();
-      res.json(updatedOrder);
-  } catch (err) {
-      res.status(400).send(err.message);
-  }
+// Save the updated order
+const updatedOrder = await order.save();
+res.json(updatedOrder);
+} catch (err) {
+res.status(400).send(err.message);
+}
 });
 
 app.put("/cancelledOrders/:orderNo", async (req, res) => {
@@ -860,43 +869,43 @@ res.status(500).json({ message: 'Server error', error });
 
 //for updating yardStatus and all
 app.put("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
-  console.log("Updating yard statuses and dates");
-  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-  const date = new Date(centralTime);
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const formattedDateTime = `${day} ${month}, ${year} ${hours}:${minutes}`;
-  try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
-    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
-    if (!order) return res.status(404).send("Order not found");
-    if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
-      const yardInfo = order.additionalInfo[yardIndex];
-      const { updatedYardData, orderStatus } = req.body;
-      console.log("updatedYardData",updatedYardData);
-      Object.assign(yardInfo, updatedYardData);
-      order.additionalInfo[yardIndex] = yardInfo;
-      order.orderStatus = orderStatus;
-      const firstName = req.query.firstName;
-      const status = updatedYardData.status || ""; 
+console.log("Updating yard statuses and dates");
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDateTime = `${day} ${month}, ${year} ${hours}:${minutes}`;
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+if (!order) return res.status(404).send("Order not found");
+if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
+const yardInfo = order.additionalInfo[yardIndex];
+const { updatedYardData, orderStatus } = req.body;
+console.log("updatedYardData",updatedYardData);
+Object.assign(yardInfo, updatedYardData);
+order.additionalInfo[yardIndex] = yardInfo;
+order.orderStatus = orderStatus;
+const firstName = req.query.firstName;
+const status = updatedYardData.status || ""; 
 const paymentStatus = req.body.paymentStatus || "";
 const refundStatus = req.body.refundStatus || "";
 order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
-      order.markModified("additionalInfo");
-      order.markModified("orderStatus");
-      await order.save();
-      res.json(order);
-    } else {
-      res.status(400).json({ message: "Invalid yard index" });
-    }
-  } catch (error) {
-    console.error("Error in PUT request:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+order.markModified("additionalInfo");
+order.markModified("orderStatus");
+await order.save();
+res.json(order);
+} else {
+res.status(400).json({ message: "Invalid yard index" });
+}
+} catch (error) {
+console.error("Error in PUT request:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 // edit yard details
 app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
@@ -919,23 +928,23 @@ const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
 if (!order) return res.status(404).send("Order not found");
 
 if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
-  const yardInfo = order.additionalInfo[yardIndex];
-  const updatedYardData = req.body; // Using req.body directly
-  
-  console.log("updatedYardData", updatedYardData, "index", yardIndex);
-  
-  // Update yard info with received data
-  Object.assign(yardInfo, updatedYardData);
-  order.additionalInfo[yardIndex] = yardInfo;
-  
-  const firstName = req.query.firstName;
-  order.orderHistory.push(`Yard ${yardIndex + 1} details updated by ${firstName} on ${formattedDateTime}`);
-  order.markModified("additionalInfo");
-  
-  await order.save(); // Save changes to database
-  res.json(order);
+const yardInfo = order.additionalInfo[yardIndex];
+const updatedYardData = req.body; // Using req.body directly
+
+console.log("updatedYardData", updatedYardData, "index", yardIndex);
+
+// Update yard info with received data
+Object.assign(yardInfo, updatedYardData);
+order.additionalInfo[yardIndex] = yardInfo;
+
+const firstName = req.query.firstName;
+order.orderHistory.push(`Yard ${yardIndex + 1} details updated by ${firstName} on ${formattedDateTime}`);
+order.markModified("additionalInfo");
+
+await order.save(); // Save changes to database
+res.json(order);
 } else {
-  res.status(400).json({ message: "Invalid yard index" });
+res.status(400).json({ message: "Invalid yard index" });
 }
 } catch (error) {
 console.error("Error in PUT request:", error);
@@ -945,250 +954,250 @@ res.status(500).json({ message: "Server error", error });
 
 // to update card charged
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/paymentStatus", async (req, res) => {
-  console.log("Updating payment status for yard");
-  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-  console.log('US Central Time:,mnbjklkjhbv', centralTime);
-  const date = new Date(centralTime);
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const formattedDate = `${day} ${month}, ${year}`;
-  const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-  try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
-    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+console.log("Updating payment status for yard");
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
 
-    if (!order) return res.status(404).send("Order not found");
-    if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
-      return res.status(400).json({ message: "Invalid yard index" });
-    }
+if (!order) return res.status(404).send("Order not found");
+if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
+return res.status(400).json({ message: "Invalid yard index" });
+}
 
-    const paymentStatus = req.body.paymentStatus || "";
-    const firstName = req.query.firstName || "Unknown User";
+const paymentStatus = req.body.paymentStatus || "";
+const firstName = req.query.firstName || "Unknown User";
 
-    order.additionalInfo[yardIndex].paymentStatus = paymentStatus;
-    order.orderHistory.push(
-      `Yard ${yardIndex + 1} payment status updated to ${paymentStatus} by ${firstName} on ${formattedDateTime}`
-    );
+order.additionalInfo[yardIndex].paymentStatus = paymentStatus;
+order.orderHistory.push(
+`Yard ${yardIndex + 1} payment status updated to ${paymentStatus} by ${firstName} on ${formattedDateTime}`
+);
 
-    order.markModified("additionalInfo");
-    await order.save();
+order.markModified("additionalInfo");
+await order.save();
 
-    res.json(order);
-  } catch (error) {
-    console.error("Error updating payment status:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+res.json(order);
+} catch (error) {
+console.error("Error updating payment status:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 // to update update refunds
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, res) => {
-  console.log("Updating refund status for yard");
-  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-  const formattedDateTime = new Date(centralTime).toLocaleString("en-US", {
-    timeZone: "America/Chicago",
-  });
+console.log("Updating refund status for yard");
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+const formattedDateTime = new Date(centralTime).toLocaleString("en-US", {
+timeZone: "America/Chicago",
+});
 
-  try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
-    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
 
-    if (!order) return res.status(404).send("Order not found");
-    if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
-      return res.status(400).json({ message: "Invalid yard index" });
-    }
-
-    const { refundStatus, refundedAmount, storeCredit, collectRefundCheckbox, refundToCollect } = req.body;
-    const firstName = req.query.firstName || "Unknown User";
- console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
-    const yardInfo = order.additionalInfo[yardIndex];
-    yardInfo.refundStatus = refundStatus;
-    yardInfo.refundedAmount = refundedAmount;
-    yardInfo.storeCredit = storeCredit || null;
-    yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
-    yardInfo.refundToCollect = refundToCollect || "" ;
-if(refundToCollect){
-  var collectRefund = "Collect Refund"
-}else{
-  var collectRefund= "";
+if (!order) return res.status(404).send("Order not found");
+if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
+return res.status(400).json({ message: "Invalid yard index" });
 }
-    order.orderHistory.push(
-      `Yard ${yardIndex + 1} refund status updated to ${refundStatus || collectRefund} by ${firstName} on ${formattedDateTime}`
-    );
 
-    order.markModified("additionalInfo");
-    await order.save();
+const { refundStatus, refundedAmount, storeCredit, collectRefundCheckbox, refundToCollect } = req.body;
+const firstName = req.query.firstName || "Unknown User";
+console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
+const yardInfo = order.additionalInfo[yardIndex];
+yardInfo.refundStatus = refundStatus;
+yardInfo.refundedAmount = refundedAmount;
+yardInfo.storeCredit = storeCredit || null;
+yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
+yardInfo.refundToCollect = refundToCollect || "" ;
+if(refundToCollect){
+var collectRefund = "Collect Refund"
+}else{
+var collectRefund= "";
+}
+order.orderHistory.push(
+`Yard ${yardIndex + 1} refund status updated to ${refundStatus || collectRefund} by ${firstName} on ${formattedDateTime}`
+);
 
-    res.json(order);
-  } catch (error) {
-    console.error("Error updating refund status:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+order.markModified("additionalInfo");
+await order.save();
+
+res.json(order);
+} catch (error) {
+console.error("Error updating refund status:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 
 // to update escalation in order history
 app.put("/orders/:orderNo/escalation", async (req, res) => {
-  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-  console.log('US Central Time:', centralTime);
-  const date = new Date(centralTime);
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const formattedDate = `${day} ${month}, ${year}`;
-  const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 
-  try {
-    const updateData = req.body; 
-    console.log("updatedData", updateData);
-    const orderNo = updateData.orderNo;  // Corrected to use orderNo as the field name
-    const order = await Order.findOne({ orderNo });  // Corrected to query by orderNo
-    const yardIndex = updateData.yardIndex;
-    const actualYardIndex = yardIndex - 1;
-    console.log("Order found:", "orderNo:", order.orderNo);
-    console.log("Yard index:", actualYardIndex);
-    if (!order) return res.status(404).send("Order not found");
-    if (actualYardIndex >= 0 && actualYardIndex < order.additionalInfo.length) {
-      const yardInfo = order.additionalInfo[actualYardIndex];
-      console.log("Existing yard info:", yardInfo);
-      for (const key in req.body) {
-        if (req.body.hasOwnProperty(key)) {
-          yardInfo[key] = req.body[key];
-        }
-      }
-      order.additionalInfo[actualYardIndex] = yardInfo;
-      const firstName = req.query.firstName;
-      const escProcess = updateData.escalationProcess || "";
-      const customerShippingMethod = updateData.customerShippingMethod || "";
-      const customerShipper = updateData.customerShipper || "";
-      const customerTrackingNumber = updateData.customerTrackingNumber || "";
-      const custOwnShipping = updateData.custOwnShipping || "";
-      const yardShippingStatus = updateData.yardShippingStatus || "";
-      const yardShippingMethod = updateData.yardShippingMethod || "";
-      const yardShipper = updateData.yardShipper || "";
-      const yardTrackingNumber = updateData.yardTrackingNumber || "";
-      order.orderHistory.push(
-        `Escalation Process  for Yard ${actualYardIndex + 1}: ${escProcess || customerShippingMethod || customerShippingMethod || customerShippingMethod  || customerShipper  || customerTrackingNumber   || custOwnShipping || yardShippingStatus || yardShippingMethod || yardShipper || yardTrackingNumber} updated by ${firstName} on ${formattedDateTime}`
-      );
-      await order.save();
-      res.json(order);
-    } else {
-      res.status(400).json({ message: "Invalid yard index" });
-    }
-  } catch (error) {
-    console.error("Error in PUT request:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+try {
+const updateData = req.body; 
+console.log("updatedData", updateData);
+const orderNo = updateData.orderNo;  // Corrected to use orderNo as the field name
+const order = await Order.findOne({ orderNo });  // Corrected to query by orderNo
+const yardIndex = updateData.yardIndex;
+const actualYardIndex = yardIndex - 1;
+console.log("Order found:", "orderNo:", order.orderNo);
+console.log("Yard index:", actualYardIndex);
+if (!order) return res.status(404).send("Order not found");
+if (actualYardIndex >= 0 && actualYardIndex < order.additionalInfo.length) {
+const yardInfo = order.additionalInfo[actualYardIndex];
+console.log("Existing yard info:", yardInfo);
+for (const key in req.body) {
+if (req.body.hasOwnProperty(key)) {
+yardInfo[key] = req.body[key];
+}
+}
+order.additionalInfo[actualYardIndex] = yardInfo;
+const firstName = req.query.firstName;
+const escProcess = updateData.escalationProcess || "";
+const customerShippingMethod = updateData.customerShippingMethod || "";
+const customerShipper = updateData.customerShipper || "";
+const customerTrackingNumber = updateData.customerTrackingNumber || "";
+const custOwnShipping = updateData.custOwnShipping || "";
+const yardShippingStatus = updateData.yardShippingStatus || "";
+const yardShippingMethod = updateData.yardShippingMethod || "";
+const yardShipper = updateData.yardShipper || "";
+const yardTrackingNumber = updateData.yardTrackingNumber || "";
+order.orderHistory.push(
+`Escalation Process  for Yard ${actualYardIndex + 1}: ${escProcess || customerShippingMethod || customerShippingMethod || customerShippingMethod  || customerShipper  || customerTrackingNumber   || custOwnShipping || yardShippingStatus || yardShippingMethod || yardShipper || yardTrackingNumber} updated by ${firstName} on ${formattedDateTime}`
+);
+await order.save();
+res.json(order);
+} else {
+res.status(400).json({ message: "Invalid yard index" });
+}
+} catch (error) {
+console.error("Error in PUT request:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 
-  // escalation in order history ends here
+// escalation in order history ends here
 app.put("/cancelledOrders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
-    const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-    console.log('US Central Time:,mnbjklkjhbv', centralTime);
-    const date = new Date(centralTime);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day} ${month}, ${year}`;
-    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-    try {
-    // console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
-    const order = await CancelledOrder.findOne({ orderNo: req.params.orderNo });
-    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
-    console.log("Order found:", order);
-    console.log("Yard index:", yardIndex);
-    
-    if (!order) return res.status(404).send("Order not found");
-    
-    if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
-    const yardInfo = order.additionalInfo[yardIndex];
-    console.log("Existing yard info:", yardInfo);
-    
-    for (const key in req.body) {
-    if (req.body.hasOwnProperty(key)) {
-    yardInfo[key] = req.body[key];
-    }
-    }
-    
-    // Update the specific index in the additionalInfo array
-    order.additionalInfo[yardIndex] = yardInfo;
-    
-    // Add timestamp to order history
-    const timestamp = new Date().toLocaleString();
-    const firstName = req.query.firstName; // Get firstName from the request body
-    const status = req.body.status; // Get status from the request body
-    const paymentStatus = req.body.paymentStatus;
-    const refundStatus = req.body.refundStatus;
-    order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
-    
-    // Mark the additionalInfo array as modified
-    order.markModified("additionalInfo");
-    
-    await order.save();
-    res.json(order);
-    } else {
-    res.status(400).json({ message: "Invalid yard index" });
-    }
-    } catch (error) {
-    console.error("Error in PUT request:", error);
-    res.status(500).json({ message: "Server error", error });
-    }
-    });
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:,mnbjklkjhbv', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+try {
+// console.log("Received PUT request:", req.params.orderNo, req.params.yardIndex);
+const order = await CancelledOrder.findOne({ orderNo: req.params.orderNo });
+const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+console.log("Order found:", order);
+console.log("Yard index:", yardIndex);
+
+if (!order) return res.status(404).send("Order not found");
+
+if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
+const yardInfo = order.additionalInfo[yardIndex];
+console.log("Existing yard info:", yardInfo);
+
+for (const key in req.body) {
+if (req.body.hasOwnProperty(key)) {
+yardInfo[key] = req.body[key];
+}
+}
+
+// Update the specific index in the additionalInfo array
+order.additionalInfo[yardIndex] = yardInfo;
+
+// Add timestamp to order history
+const timestamp = new Date().toLocaleString();
+const firstName = req.query.firstName; // Get firstName from the request body
+const status = req.body.status; // Get status from the request body
+const paymentStatus = req.body.paymentStatus;
+const refundStatus = req.body.refundStatus;
+order.orderHistory.push(`Yard ${yardIndex + 1} ${status || paymentStatus || refundStatus} updated by ${firstName} on ${formattedDateTime}`);
+
+// Mark the additionalInfo array as modified
+order.markModified("additionalInfo");
+
+await order.save();
+res.json(order);
+} else {
+res.status(400).json({ message: "Invalid yard index" });
+}
+} catch (error) {
+console.error("Error in PUT request:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
 //for esiting yard sttus and all till here
 
 app.put("/orders/:orderNo/cancel", async (req, res) => {
-    console.log("Received request to cancel order:", req.params);
-    
-    const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-    console.log('US Central Time:', centralTime);
-    const date = new Date(centralTime);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day} ${month}, ${year}`;
-    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-    const firstName = req.body.firstName;
-  
-    try {
-      const orderNo = req.params.orderNo;
-      console.log("Order No to cancel:", orderNo);
-  
-      const order = await Order.findOne({ orderNo });
-      console.log("Order found:", order);
-  
-      if (!order) {
-        console.log("Order not found with orderNo:", orderNo);
-        return res.status(404).json({ message: "Order not found" });
-      }
-  
-      // Update the order status and history
-      order.orderStatus = "Order Cancelled";
-      order.orderHistory.push(
-        `Order cancelled by ${firstName} on ${formattedDateTime}`
-      );
-  
-      // Save the updated order
-      await order.save();
-      console.log("Order status updated");
-  
-      res.json({ message: "Order cancelled successfully" });
-  
-    } catch (err) {
-      console.error("Error updating order:", err);
-      res.status(500).json({ message: "Error updating order", error: err.message });
-    }
-  });
-  
+console.log("Received request to cancel order:", req.params);
+
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+const firstName = req.body.firstName;
+
+try {
+const orderNo = req.params.orderNo;
+console.log("Order No to cancel:", orderNo);
+
+const order = await Order.findOne({ orderNo });
+console.log("Order found:", order);
+
+if (!order) {
+console.log("Order not found with orderNo:", orderNo);
+return res.status(404).json({ message: "Order not found" });
+}
+
+// Update the order status and history
+order.orderStatus = "Order Cancelled";
+order.orderHistory.push(
+`Order cancelled by ${firstName} on ${formattedDateTime}`
+);
+
+// Save the updated order
+await order.save();
+console.log("Order status updated");
+
+res.json({ message: "Order cancelled successfully" });
+
+} catch (err) {
+console.error("Error updating order:", err);
+res.status(500).json({ message: "Error updating order", error: err.message });
+}
+});
+
 // app.delete("/orders/:orderNo", async (req, res) => {
 // console.log("Received request to delete order:", req.params);
 // const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
@@ -1574,24 +1583,24 @@ pass: "hweg vrnk qyxx gktv",
 },
 });
 const mailOptions = {
-  from: "service@50starsautoparts.com",
-  to: `${order.email}`,
-  bcc:`dipsikha.spotopsdigital@gmail.com`,
-  subject: `Tracking Details / Order No. ${req.params.orderNo}`,
-  html: `<p>Hi ${order.customerName},</p>
-  <p>This email is regarding the order you placed with <b>50 Stars Auto Parts</b>, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
-  <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website, you may check again if you do not find the ETA.</p>
-  <p>Please call us if you have any questions.</p>
-  <p>${shipperName} - ${trackingNo}</p>
-  <p>ETA(YYYY-MM-DD) - ${eta}</p>
-  <p>Link - <a href="${link}">${link}</a></p>
-  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-  attachments: [{
-    filename: 'logo.png',
-    path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-    cid: 'logo' 
-  }]
+from: "service@50starsautoparts.com",
+to: `${order.email}`,
+bcc:`dipsikha.spotopsdigital@gmail.com`,
+subject: `Tracking Details / Order No. ${req.params.orderNo}`,
+html: `<p>Hi ${order.customerName},</p>
+<p>This email is regarding the order you placed with <b>50 Stars Auto Parts</b>, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
+<p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website, you may check again if you do not find the ETA.</p>
+<p>Please call us if you have any questions.</p>
+<p>${shipperName} - ${trackingNo}</p>
+<p>ETA(YYYY-MM-DD) - ${eta}</p>
+<p>Link - <a href="${link}">${link}</a></p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [{
+filename: 'logo.png',
+path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+cid: 'logo' 
+}]
 };
 
 console.log("mail", mailOptions);
@@ -1611,126 +1620,126 @@ res.status(500).json({ message: "Server error", error });
 });
 // to send rma(refund) email for customer shipping
 app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
-  var yardIndex = req.query.yardIndex;
-  var retAddress = req.query.retAddress;
+var yardIndex = req.query.yardIndex;
+var retAddress = req.query.retAddress;
 var [firstPart, remainingPart] = retAddress.split(/,(.+)/);
 firstPart = firstPart.trim(); 
 remainingPart = remainingPart.trim(); 
 // console.log("First part:", firstPart);
 // console.log("Remaining part:", remainingPart);
 //   console.log("send rma(return) info",formattedAddress);
-  try {
-  const order = await Order.findOne({ orderNo: req.params.orderNo });
-  console.log("no", order,"yardIndex",yardIndex);
-  if (!order) {
-  return res.status(400).send("Order not found");
-  }
-  const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-  user: "service@50starsautoparts.com",
-  pass: "hweg vrnk qyxx gktv",
-  },
-  });
-  const mailOptions = {
-    from: "service@50starsautoparts.com",
-    to: `${order.email}`,
-    bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-    // to: 'dipsikha.spotopsdigital@gmail.com',
-    subject: `Return Process for Order No. ${req.params.orderNo}`,
-    html: `<p>Dear ${order.customerName},</p>
-    <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
-    <p>To facilitate the return of merchandise, please follow these steps:<br></p>
-    <p>Package the item(s) securely to prevent damage during transit.<br></p>
-    <p>Ship the package to the following address:<br>
-    ${firstPart}<br>
-    ${remainingPart}
-    </p>
-    <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
-    <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
-    <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
-    <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-    <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-    attachments: [{
-      filename: 'logo.png',
-      path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-      cid: 'logo' 
-    }]
-  };
-  
-  console.log("mail", mailOptions);
-  transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-  console.error("Error sending mail:", error);
-  res.status(500).json({ message: `Error sending mail: ${error.message}` });
-  } else {
-  console.log("Email sent successfully:", info.response);
-  res.json({ message: `Email sent successfully` });
-  }
-  });
-  } catch (error) {
-  console.error("Server error:", error);
-  res.status(500).json({ message: "Server error", error });
-  }
-  });
-  // to send rma(replacement) email for customer shipping
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+console.log("no", order,"yardIndex",yardIndex);
+if (!order) {
+return res.status(400).send("Order not found");
+}
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+const mailOptions = {
+from: "service@50starsautoparts.com",
+to: `${order.email}`,
+bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+// to: 'dipsikha.spotopsdigital@gmail.com',
+subject: `Return Process for Order No. ${req.params.orderNo}`,
+html: `<p>Dear ${order.customerName},</p>
+<p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
+<p>To facilitate the return of merchandise, please follow these steps:<br></p>
+<p>Package the item(s) securely to prevent damage during transit.<br></p>
+<p>Ship the package to the following address:<br>
+${firstPart}<br>
+${remainingPart}
+</p>
+<p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
+<p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+<p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [{
+filename: 'logo.png',
+path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+cid: 'logo' 
+}]
+};
+
+console.log("mail", mailOptions);
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+res.status(500).json({ message: `Error sending mail: ${error.message}` });
+} else {
+console.log("Email sent successfully:", info.response);
+res.json({ message: `Email sent successfully` });
+}
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
+// to send rma(replacement) email for customer shipping
 app.post("/orders/sendReplaceEmailCustomerShipping/:orderNo", async (req, res) => {
-  var yardIndex = req.query.yardIndex;
-  var retAddressReplacement = req.query.retAddressReplacement;
-  var [firstPart, remainingPart] = retAddressReplacement.split(/,(.+)/);
+var yardIndex = req.query.yardIndex;
+var retAddressReplacement = req.query.retAddressReplacement;
+var [firstPart, remainingPart] = retAddressReplacement.split(/,(.+)/);
 firstPart = firstPart.trim() || " "; 
 remainingPart = remainingPart.trim() || " ";
-  console.log("send rma(return) info");
-  try {
-  const order = await Order.findOne({ orderNo: req.params.orderNo });
-  console.log("no", order,"yardIndex",yardIndex);
-  if (!order) {
-  return res.status(400).send("Order not found");
-  }
-  const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-  user: "service@50starsautoparts.com",
-  pass: "hweg vrnk qyxx gktv",
-  },
-  });
-  const mailOptions = {
-    from: "service@50starsautoparts.com",
-    // to: `${order.email}`,
-    // bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-    to: 'dipsikha.spotopsdigital@gmail.com',
-    subject: `Return Required for Replacement of ABS Module Order / Order No. ${req.params.orderNo}`,
-    html: `<p>Dear ${order.customerName},</p>
-    <p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offer a replacement to ensure you receive a fully functional part.</p>
-    <p>Please return the part to the following address:</p>
-    <p>${firstPart}<br>
-    ${remainingPart}</p>
-    <p>Please note that the shipping costs for the return is your responsibility. Once we receive the part, we will process and ship out the replacement within 1-3 business days. We will also notify you with tracking information once the replacement part is on its way.</p>
-  <p>If you have any questions about the process or need further assistance, please feel free to contact us.</p>
-  <p>Thank you for giving us an opportunity to make this right.</p>
-  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-    <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-    attachments: [{
-      filename: 'logo.png',
-      path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
-      cid: 'logo' 
-    }]
-  };
-  console.log("mail", mailOptions);
-  transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-  console.error("Error sending mail:", error);
-  res.status(500).json({ message: `Error sending mail: ${error.message}` });
-  } else {
-  console.log("Email sent successfully:", info.response);
-  res.json({ message: `Email sent successfully` });
-  }
-  });
-  } catch (error) {
-  console.error("Server error:", error);
-  res.status(500).json({ message: "Server error", error });
-  }
-  });
+console.log("send rma(return) info");
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+console.log("no", order,"yardIndex",yardIndex);
+if (!order) {
+return res.status(400).send("Order not found");
+}
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+const mailOptions = {
+from: "service@50starsautoparts.com",
+// to: `${order.email}`,
+// bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+to: 'dipsikha.spotopsdigital@gmail.com',
+subject: `Return Required for Replacement of ABS Module Order / Order No. ${req.params.orderNo}`,
+html: `<p>Dear ${order.customerName},</p>
+<p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offer a replacement to ensure you receive a fully functional part.</p>
+<p>Please return the part to the following address:</p>
+<p>${firstPart}<br>
+${remainingPart}</p>
+<p>Please note that the shipping costs for the return is your responsibility. Once we receive the part, we will process and ship out the replacement within 1-3 business days. We will also notify you with tracking information once the replacement part is on its way.</p>
+<p>If you have any questions about the process or need further assistance, please feel free to contact us.</p>
+<p>Thank you for giving us an opportunity to make this right.</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [{
+filename: 'logo.png',
+path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+cid: 'logo' 
+}]
+};
+console.log("mail", mailOptions);
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+res.status(500).json({ message: `Error sending mail: ${error.message}` });
+} else {
+console.log("Email sent successfully:", info.response);
+res.json({ message: `Email sent successfully` });
+}
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
 app.post("/orders/sendReimburseEmail/:orderNo", async (req, res) => {
 var yardIndex = req.query.yardIndex;
 var reimburesementValue = req.query.reimburesementValue;
@@ -1786,123 +1795,123 @@ res.status(500).json({ message: "Server error", error });
 });
 // to send email for return when shipping methos is own shipping or yard shipping
 app.post("/orders/sendReturnEmailOwn_Yard/:orderNo", upload.single("pdfFile"), async (req, res) => {
-  const yardIndex = req.query.yardIndex;
-  
-  const retAddress = req.query.retAddress;
-  try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
-    if (!order) return res.status(400).send("Order not found");
+const yardIndex = req.query.yardIndex;
 
-    const pdfFile = req.file; // Get the uploaded PDF file
-    if (!pdfFile) return res.status(400).send("No PDF file uploaded");
+const retAddress = req.query.retAddress;
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+if (!order) return res.status(400).send("Order not found");
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "service@50starsautoparts.com",
-        pass: "hweg vrnk qyxx gktv",
-      },
-    });
-    const mailOptions = {
-      from: "service@50starsautoparts.com",
-      // to: "service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com",
-      to: `${order.email}`,
-      bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-      subject:`Return Process For Order No. ${req.params.orderNo}`,
-      html: `<p>Dear ${order.customerName},</p>
-    <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
-    <p>To facilitate the return of merchandise, please follow these steps:</p>
-    <p>Package the item(s) securely to prevent damage during transit.</p>
-    <p>Please ship the package using the shipping label below to ensure its safe arrival.</p>
-    <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
-    <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
-    <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
-    <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-    <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-    attachments: [
-        {
-          filename: pdfFile.originalname,
-          content: pdfFile.buffer,
-        },
-        {
-          filename: "logo.png",
-          path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
-          cid: "logo",
-        },
-      ],
-    };
+const pdfFile = req.file; // Get the uploaded PDF file
+if (!pdfFile) return res.status(400).send("No PDF file uploaded");
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending mail:", error);
-        return res.status(500).json({ message: `Error sending mail: ${error.message}` });
-      }
-      console.log("Email sent successfully:", info.response);
-      res.json({ message: "Email sent successfully" });
-    });
-  } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+const mailOptions = {
+from: "service@50starsautoparts.com",
+// to: "service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com",
+to: `${order.email}`,
+bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+subject:`Return Process For Order No. ${req.params.orderNo}`,
+html: `<p>Dear ${order.customerName},</p>
+<p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
+<p>To facilitate the return of merchandise, please follow these steps:</p>
+<p>Package the item(s) securely to prevent damage during transit.</p>
+<p>Please ship the package using the shipping label below to ensure its safe arrival.</p>
+<p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
+<p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
+<p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [
+{
+filename: pdfFile.originalname,
+content: pdfFile.buffer,
+},
+{
+filename: "logo.png",
+path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+cid: "logo",
+},
+],
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+return res.status(500).json({ message: `Error sending mail: ${error.message}` });
+}
+console.log("Email sent successfully:", info.response);
+res.json({ message: "Email sent successfully" });
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 // to send email for replacement when shipping methos is own shipping or yard shipping
 
 app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", upload.single("pdfFile"), async (req, res) => {
-  const yardIndex = req.query.yardIndex;
-  try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
-    if (!order) return res.status(400).send("Order not found");
+const yardIndex = req.query.yardIndex;
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+if (!order) return res.status(400).send("Order not found");
 
-    const pdfFile = req.file; // Get the uploaded PDF file
-    if (!pdfFile) return res.status(400).send("No PDF file uploaded");
+const pdfFile = req.file; // Get the uploaded PDF file
+if (!pdfFile) return res.status(400).send("No PDF file uploaded");
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "service@50starsautoparts.com",
-        pass: "hweg vrnk qyxx gktv",
-      },
-    });
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
 
-    const mailOptions = {
-      from: "service@50starsautoparts.com",
-      to: "dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com",
-      // to: `${order.email}`,
-        bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
-      subject: `Return Process for Replacement of ABS Module / Order No. ${req.params.orderNo}`,
-      html: `
-        <p>Dear ${order.customerName},</p>
-        <p>We apologize for any issues with the ABS module you received, and we are committed to providing a replacement that meets your expectations.</p>
-        <p>To return the part, please use the prepaid shipping label attached to this email. Once we receive the part, we will process your replacement and ship it out within 1-3 business days. You will receive tracking information once the replacement is on its way.</p>
-        <p>If you need assistance or have any questions, please feel free to reach out.</p>
-        <p>Thank you for allowing us the opportunity to make this right for you.</p>
-        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-        <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-      attachments: [
-        {
-          filename: pdfFile.originalname,
-          content: pdfFile.buffer,
-        },
-        {
-          filename: "logo.png",
-          path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
-          cid: "logo",
-        },
-      ],
-    };
+const mailOptions = {
+from: "service@50starsautoparts.com",
+to: "dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com",
+// to: `${order.email}`,
+bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
+subject: `Return Process for Replacement of ABS Module / Order No. ${req.params.orderNo}`,
+html: `
+<p>Dear ${order.customerName},</p>
+<p>We apologize for any issues with the ABS module you received, and we are committed to providing a replacement that meets your expectations.</p>
+<p>To return the part, please use the prepaid shipping label attached to this email. Once we receive the part, we will process your replacement and ship it out within 1-3 business days. You will receive tracking information once the replacement is on its way.</p>
+<p>If you need assistance or have any questions, please feel free to reach out.</p>
+<p>Thank you for allowing us the opportunity to make this right for you.</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [
+{
+filename: pdfFile.originalname,
+content: pdfFile.buffer,
+},
+{
+filename: "logo.png",
+path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+cid: "logo",
+},
+],
+};
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending mail:", error);
-        return res.status(500).json({ message: `Error sending mail: ${error.message}` });
-      }
-      console.log("Email sent successfully:", info.response);
-      res.json({ message: "Email sent successfully" });
-    });
-  } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+return res.status(500).json({ message: `Error sending mail: ${error.message}` });
+}
+console.log("Email sent successfully:", info.response);
+res.json({ message: "Email sent successfully" });
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 
 // Function to generate PDF using puppeteer
@@ -1915,65 +1924,65 @@ app.post("/orders/sendReplaceEmailOwn_Yard/:orderNo", upload.single("pdfFile"), 
 // }
 //  to send refundEmail to the customer
 app.post("/orders/sendRefundEmail/:orderNo", upload.single("pdfFile"), async (req, res) => {
-  const yardIndex = req.query.yardIndex;
-  const refundedAmount = req.query.refundedAmount;
-  
-  if (!refundedAmount) {
-    return res.status(400).json({ message: "Refunded amount is missing." });
-  }
+const yardIndex = req.query.yardIndex;
+const refundedAmount = req.query.refundedAmount;
 
-  try {
-    const order = await Order.findOne({ orderNo: req.params.orderNo });
-    if (!order) return res.status(400).json({ message: "Order not found" });
+if (!refundedAmount) {
+return res.status(400).json({ message: "Refunded amount is missing." });
+}
 
-    const pdfFile = req.file; 
-    if (!pdfFile) return res.status(400).json({ message: "No PDF file uploaded" });
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+if (!order) return res.status(400).json({ message: "Order not found" });
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "service@50starsautoparts.com",
-        pass: "hweg vrnk qyxx gktv",
-      },
-    });
+const pdfFile = req.file; 
+if (!pdfFile) return res.status(400).json({ message: "No PDF file uploaded" });
 
-    const mailOptions = {
-      from: "service@50starsautoparts.com",
-      // to: "dipsikha.spotopsdigital@gmail.com",
-      to: `${order.email}`,
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+
+const mailOptions = {
+from: "service@50starsautoparts.com",
+// to: "dipsikha.spotopsdigital@gmail.com",
+to: `${order.email}`,
 bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
-      subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
-      html: `<p>Dear ${order.customerName},</p>
-       <p>We are reaching out to confirm that your refund of $${refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will find a copy of the refund receipt for your records.</p>
-            <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
-            <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
-            <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-            <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-      attachments: [
-        {
-          filename: pdfFile.originalname,
-          content: pdfFile.buffer,
-        },
-        {
-          filename: "logo.png",
-          path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
-          cid: "logo",
-        },
-      ],
-    };
+subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
+html: `<p>Dear ${order.customerName},</p>
+<p>We are reaching out to confirm that your refund of $${refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will find a copy of the refund receipt for your records.</p>
+<p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
+<p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [
+{
+filename: pdfFile.originalname,
+content: pdfFile.buffer,
+},
+{
+filename: "logo.png",
+path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+cid: "logo",
+},
+],
+};
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending mail:", error);
-        return res.status(500).json({ message: `Error sending mail: ${error.message}` });
-      }
-      console.log("Email sent successfully:", info.response);
-      res.json({ message: "Email sent successfully" });
-    });
-  } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+return res.status(500).json({ message: `Error sending mail: ${error.message}` });
+}
+console.log("Email sent successfully:", info.response);
+res.json({ message: "Email sent successfully" });
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
 });
 
 
@@ -1998,9 +2007,9 @@ res.status(500).json({ message: "Internal Server Error" });
 });
 
 app.get('/daily', async (req, res) => {
-  console.log("Fetching daily orders for Dallas timezone");
-  const orders = await Order.find({});
-  console.log("orderDates",orders)
+console.log("Fetching daily orders for Dallas timezone");
+const orders = await Order.find({});
+console.log("orderDates",orders)
 });
 
 
@@ -2217,31 +2226,31 @@ res.status(500).json({ error: 'Failed to get token' });
 // });
 // Route to update actualGP for a specific order
 app.put('/orders/:orderNo/updateActualGP', async (req, res) => {
-  console.log("PUT request for actualGP");
-  const { orderNo } = req.params;  // 'orderNo' from the URL params
-  const { actualGP } = req.body;   // 'actualGP' from the request body
-  
-  console.log("GPS:", actualGP, "OrderNo:", orderNo);
-  
-  try {
-    // Query by 'orderNo' explicitly and ensure it's treated as a string
-    const order = await Order.findOneAndUpdate(
-      { orderNo: String(orderNo) },  // Force 'orderNo' as a string
-      { 
-        actualGP: actualGP  // Update the 'actualGP' field
-      },
-      { new: true }  // Return the updated document
-    );
-    
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
+console.log("PUT request for actualGP");
+const { orderNo } = req.params;  // 'orderNo' from the URL params
+const { actualGP } = req.body;   // 'actualGP' from the request body
 
-    res.json(order);  // Respond with the updated order
-  } catch (error) {
-    console.error('Error updating gp information:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
+console.log("GPS:", actualGP, "OrderNo:", orderNo);
+
+try {
+// Query by 'orderNo' explicitly and ensure it's treated as a string
+const order = await Order.findOneAndUpdate(
+{ orderNo: String(orderNo) },  // Force 'orderNo' as a string
+{ 
+actualGP: actualGP  // Update the 'actualGP' field
+},
+{ new: true }  // Return the updated document
+);
+
+if (!order) {
+return res.status(404).json({ message: 'Order not found' });
+}
+
+res.json(order);  // Respond with the updated order
+} catch (error) {
+console.error('Error updating gp information:', error);
+res.status(500).json({ message: 'Server error' });
+}
 });
 
 
@@ -2344,92 +2353,92 @@ res.status(400).json({ message: error.message });
 
 // Move order from cancelledOrders to orders if orderStatus is not 'Order Cancelled'
 app.put('/moveOrder/:orderNo', async (req, res) => {
-    console.log("A PUT req to move orders from cancelled to orders if the status changes to Not cancelled");
-    const { orderNo } = req.params;
-    const { orderStatus } = req.body;
-    console.log("orderNo:",orderNo,"Status:",orderStatus);
-    try {
-        const cancelledOrder = await CancelledOrder.findOne({ orderNo });
-        if (!cancelledOrder) {
-            return res.status(404).json({ message: 'Order not found in cancelledOrders.' });
-        }
-        if (orderStatus === 'Order Cancelled') {
-            return res.status(400).json({ message: 'Order cannot be moved back because its status is "Order Cancelled".' });
-        }
-        const orderData = { ...cancelledOrder._doc, orderStatus: orderStatus }; 
-        const newOrder = new Order(orderData);
-        console.log("newOrder",newOrder);
-        await newOrder.save();
-        await CancelledOrder.findOneAndDelete({ orderNo });
+console.log("A PUT req to move orders from cancelled to orders if the status changes to Not cancelled");
+const { orderNo } = req.params;
+const { orderStatus } = req.body;
+console.log("orderNo:",orderNo,"Status:",orderStatus);
+try {
+const cancelledOrder = await CancelledOrder.findOne({ orderNo });
+if (!cancelledOrder) {
+return res.status(404).json({ message: 'Order not found in cancelledOrders.' });
+}
+if (orderStatus === 'Order Cancelled') {
+return res.status(400).json({ message: 'Order cannot be moved back because its status is "Order Cancelled".' });
+}
+const orderData = { ...cancelledOrder._doc, orderStatus: orderStatus }; 
+const newOrder = new Order(orderData);
+console.log("newOrder",newOrder);
+await newOrder.save();
+await CancelledOrder.findOneAndDelete({ orderNo });
 
-        res.status(200).json({ message: 'Order moved back to orders collection successfully.', newOrder });
-    } catch (error) {
-        console.error('Error moving order:', error);
-        res.status(500).json({ error: 'An error occurred while moving the order.' });
-    }
+res.status(200).json({ message: 'Order moved back to orders collection successfully.', newOrder });
+} catch (error) {
+console.error('Error moving order:', error);
+res.status(500).json({ error: 'An error occurred while moving the order.' });
+}
 });
 
 // GET route to fetch additionalInfo for a specific order and yardIndex
 app.get("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
-  const { orderNo, yardIndex } = req.params;
-  console.log("getting additional info",orderNo,yardIndex);
-  const actualYardIndex = yardIndex - 1 ;
-  try {
-    const order = await Order.findOne({ orderNo });
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-    const additionalInfo = order.additionalInfo[actualYardIndex];
+const { orderNo, yardIndex } = req.params;
+console.log("getting additional info",orderNo,yardIndex);
+const actualYardIndex = yardIndex - 1 ;
+try {
+const order = await Order.findOne({ orderNo });
+if (!order) {
+return res.status(404).json({ error: "Order not found" });
+}
+const additionalInfo = order.additionalInfo[actualYardIndex];
 
-    if (!additionalInfo) {
-      return res.status(404).json({ error: "Yard index not found" });
-    }
-    res.status(200).json(additionalInfo);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
-  }
+if (!additionalInfo) {
+return res.status(404).json({ error: "Yard index not found" });
+}
+res.status(200).json(additionalInfo);
+} catch (err) {
+console.error(err);
+res.status(500).json({ error: "Server error" });
+}
 });
 // PATCH route to update additionalInfo for a specific order and yardIndex
 app.patch("/orders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
-  const { orderNo, yardIndex } = req.params;
-  
-  // Convert yardIndex to a number for proper comparison
-  const actualYardIndex = parseInt(yardIndex) - 1;
-  console.log("actualYardIndex", actualYardIndex);
-  
-  const updateData = req.body; 
-  console.log("updatedData", updateData);
+const { orderNo, yardIndex } = req.params;
 
-  try {
-    // Find the order by orderNo
-    const order = await Order.findOne({ orderNo });
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
-    }
+// Convert yardIndex to a number for proper comparison
+const actualYardIndex = parseInt(yardIndex) - 1;
+console.log("actualYardIndex", actualYardIndex);
 
-    // Find the specific additionalInfo object by yardIndex
-    const additionalInfo = order.additionalInfo[actualYardIndex]
-    console.log("fetched additionalInfo", additionalInfo);
+const updateData = req.body; 
+console.log("updatedData", updateData);
 
-    if (!additionalInfo) {
-      return res.status(404).json({ error: "Yard index not found" });
-    }
+try {
+// Find the order by orderNo
+const order = await Order.findOne({ orderNo });
+if (!order) {
+return res.status(404).json({ error: "Order not found" });
+}
 
-    // Update only the fields that were provided in the request body
-    Object.keys(updateData).forEach((key) => {
-      additionalInfo[key] = updateData[key];
-    });
+// Find the specific additionalInfo object by yardIndex
+const additionalInfo = order.additionalInfo[actualYardIndex]
+console.log("fetched additionalInfo", additionalInfo);
 
-    // Save the updated order
-    await order.save();
+if (!additionalInfo) {
+return res.status(404).json({ error: "Yard index not found" });
+}
 
-    // Send success response
-    res.status(200).json({ message: "Order updated successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
-  }
+// Update only the fields that were provided in the request body
+Object.keys(updateData).forEach((key) => {
+additionalInfo[key] = updateData[key];
+});
+
+// Save the updated order
+await order.save();
+
+// Send success response
+res.status(200).json({ message: "Order updated successfully" });
+} catch (err) {
+console.error(err);
+res.status(500).json({ error: "Server error" });
+}
 });
 //for storing disputes
 app.put('/orders/:orderNo/dispute', async (req, res) => {
@@ -2458,158 +2467,158 @@ res.status(500).json({ message: 'Server error' });
 });
 // for storing custRefunds
 app.put('/orders/:orderNo/custRefund', async (req, res) => {
-  console.log("PUT request for custRefund:", req.body);
+console.log("PUT request for custRefund:", req.body);
 
-  const { orderNo } = req.params;
-  const {
-    custRefundDate, 
-    custRefundedAmount, 
-    cancelledDate, 
-    cancelledRefAmount ,
-    cancellationReason,
-    orderStatus
-  } = req.body;
+const { orderNo } = req.params;
+const {
+custRefundDate, 
+custRefundedAmount, 
+cancelledDate, 
+cancelledRefAmount ,
+cancellationReason,
+orderStatus
+} = req.body;
 
-  console.log(
-    "Refunds:", custRefundDate, custRefundedAmount, 
-    "Cancellations:", cancelledDate, cancelledRefAmount, 
-    "OrderNo:", orderNo,
-    "cancellationReason:",cancellationReason,
-    "orderStatus",orderStatus,
-  );
+console.log(
+"Refunds:", custRefundDate, custRefundedAmount, 
+"Cancellations:", cancelledDate, cancelledRefAmount, 
+"OrderNo:", orderNo,
+"cancellationReason:",cancellationReason,
+"orderStatus",orderStatus,
+);
 
-  try {
-    const updateFields = {};
-    if (custRefundDate) updateFields.custRefundDate = custRefundDate;
-    if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
-    if (cancelledDate) updateFields.cancelledDate = cancelledDate;
-    if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
-    if (cancellationReason) updateFields.cancellationReason = cancellationReason;
-    if (orderStatus) updateFields.orderStatus = orderStatus;
+try {
+const updateFields = {};
+if (custRefundDate) updateFields.custRefundDate = custRefundDate;
+if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
+if (cancelledDate) updateFields.cancelledDate = cancelledDate;
+if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
+if (cancellationReason) updateFields.cancellationReason = cancellationReason;
+if (orderStatus) updateFields.orderStatus = orderStatus;
 
-    const order = await Order.findOneAndUpdate(
-      { orderNo: orderNo },
-      { $set: updateFields },
-      { new: true }
-    );
+const order = await Order.findOneAndUpdate(
+{ orderNo: orderNo },
+{ $set: updateFields },
+{ new: true }
+);
 
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
+if (!order) {
+return res.status(404).json({ message: 'Order not found' });
+}
 
-    res.json(order);
-  } catch (error) {
-    console.error('Error updating refund or cancellation information:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
+res.json(order);
+} catch (error) {
+console.error('Error updating refund or cancellation information:', error);
+res.status(500).json({ message: 'Server error' });
+}
 });
 
 
 
 // const moment = require('moment-timezone');
 app.get('/orders/salesperson/:salesperson', async (req, res) => {
-  const salesperson = req.params.salesperson;
-  try {
-    const orders = await Order.aggregate([
-      {
-        $match: {
-          salesAgent: salesperson,
-        },
-      },
-      {
-        // Parse orderDate from string to Date object
-        $addFields: {
-          orderDateParsed: {
-            $dateFromString: {
-              dateString: {
-                $reduce: {
-                  input: { $split: ["$orderDate", " "] },
-                  initialValue: "",
-                  in: {
-                    $cond: {
-                      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
-                      then: "$$value",
-                      else: { $concat: ["$$value", " ", "$$this"] }
-                    }
-                  }
-                }
-              },
-              format: "%d %b, %Y %H:%M",
-              timezone: "UTC"
-            }
-          }
-        }
-      },
-      {
-        $group: {
-          _id: { $dayOfMonth: "$orderDateParsed" },
-          totalOrders: { $sum: 1 },
-          totalGP: { $sum: "$actualGP" }, // Assuming actualGP is part of the schema
-        },
-      },
-      {
-        $sort: { _id: 1 } // Sort by day in ascending order
-      }
-    ]);
+const salesperson = req.params.salesperson;
+try {
+const orders = await Order.aggregate([
+{
+$match: {
+salesAgent: salesperson,
+},
+},
+{
+// Parse orderDate from string to Date object
+$addFields: {
+orderDateParsed: {
+$dateFromString: {
+dateString: {
+$reduce: {
+input: { $split: ["$orderDate", " "] },
+initialValue: "",
+in: {
+$cond: {
+if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
+then: "$$value",
+else: { $concat: ["$$value", " ", "$$this"] }
+}
+}
+}
+},
+format: "%d %b, %Y %H:%M",
+timezone: "UTC"
+}
+}
+}
+},
+{
+$group: {
+_id: { $dayOfMonth: "$orderDateParsed" },
+totalOrders: { $sum: 1 },
+totalGP: { $sum: "$actualGP" }, // Assuming actualGP is part of the schema
+},
+},
+{
+$sort: { _id: 1 } // Sort by day in ascending order
+}
+]);
 
-    const formattedOrders = orders.map(order => ({
-      day: order._id,
-      totalOrders: order.totalOrders,
-      totalGP: order.totalGP
-    }));
+const formattedOrders = orders.map(order => ({
+day: order._id,
+totalOrders: order.totalOrders,
+totalGP: order.totalGP
+}));
 
-    res.json(formattedOrders);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching salesperson performance', error });
-  }
+res.json(formattedOrders);
+} catch (error) {
+res.status(500).json({ message: 'Error fetching salesperson performance', error });
+}
 });
 app.get('/orders/yearly', async (req, res) => {
-  console.log("yearly orders");
-  try {
-    const orders = await Order.aggregate([
-      {
-        $addFields: {
-          orderDateParsed: {
-            $dateFromString: {
-              dateString: {
-                $reduce: {
-                  input: { $split: ["$orderDate", " "] },
-                  initialValue: "",
-                  in: {
-                    $cond: {
-                      if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
-                      then: "$$value",
-                      else: { $concat: ["$$value", " ", "$$this"] }
-                    }
-                  }
-                }
-              },
-              format: "%d %b, %Y %H:%M",
-              timezone: "UTC"
-            }
-          }
-        }
-      },
-      {
-        $group: {
-          _id: { $month: "$orderDateParsed" },
-          totalOrders: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { _id: 1 } 
-      }
-    ]);
+console.log("yearly orders");
+try {
+const orders = await Order.aggregate([
+{
+$addFields: {
+orderDateParsed: {
+$dateFromString: {
+dateString: {
+$reduce: {
+input: { $split: ["$orderDate", " "] },
+initialValue: "",
+in: {
+$cond: {
+if: { $regexMatch: { input: "$$this", regex: /^(st|nd|rd|th)$/ } },
+then: "$$value",
+else: { $concat: ["$$value", " ", "$$this"] }
+}
+}
+}
+},
+format: "%d %b, %Y %H:%M",
+timezone: "UTC"
+}
+}
+}
+},
+{
+$group: {
+_id: { $month: "$orderDateParsed" },
+totalOrders: { $sum: 1 },
+},
+},
+{
+$sort: { _id: 1 } 
+}
+]);
 console.log("orders found",orders);
-    const formattedOrders = orders.map(order => ({
-      month: order._id,
-      totalOrders: order.totalOrders,
-    }));
+const formattedOrders = orders.map(order => ({
+month: order._id,
+totalOrders: order.totalOrders,
+}));
 
-    res.json(formattedOrders);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching yearly progress', error });
-  }
+res.json(formattedOrders);
+} catch (error) {
+res.status(500).json({ message: 'Error fetching yearly progress', error });
+}
 });
 
 // endpoint for sending cancellation email
@@ -2662,25 +2671,25 @@ path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
 cid: 'logo' 
 }]
 
-  };
-  
-  console.log("mail", mailOptions);
-  
-  transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-  console.error("Error sending mail:", error);
-  res.status(500).json({ message: `Error sending mail: ${error.message}` });
-  } else {
-  console.log("Cancellation email sent successfully:", info.response);
-  res.json({ message: `Cancellation email sent successfully` });
-  }
-  
-  });
-  } catch (error) {
-  console.error("Server  at the end:", error);
-  res.status(500).json({ message: "Server error", error });
-  }
-  });
+};
+
+console.log("mail", mailOptions);
+
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+res.status(500).json({ message: `Error sending mail: ${error.message}` });
+} else {
+console.log("Cancellation email sent successfully:", info.response);
+res.json({ message: `Cancellation email sent successfully` });
+}
+
+});
+} catch (error) {
+console.error("Server  at the end:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
 // to check orderNo existence
 app.get('/orders/checkOrderNo/:orderNo', async (req, res) => {
 const { orderNo } = req.params;
@@ -2694,72 +2703,72 @@ res.status(500).send("Internal Server Error");
 });
 // for voiding label
 app.put("/orders/updateYard/:orderNo/:yardIndex", async (req, res) => {
-  const { orderNo, yardIndex } = req.params;
-  const { trackingNo, eta, shipperName, trackingLink, status, updatedBy } = req.body;
+const { orderNo, yardIndex } = req.params;
+const { trackingNo, eta, shipperName, trackingLink, status, updatedBy } = req.body;
 
-  try {
-    // Fetch the order by order number
-    const order = await Order.findOne({ orderNo });
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
+try {
+// Fetch the order by order number
+const order = await Order.findOne({ orderNo });
+if (!order) {
+return res.status(404).json({ message: "Order not found" });
+}
 
-    // Check if the yard index is valid
-    if (!order.additionalInfo[yardIndex - 1]) {
-      return res.status(400).json({ message: "Invalid yard index" });
-    }
+// Check if the yard index is valid
+if (!order.additionalInfo[yardIndex - 1]) {
+return res.status(400).json({ message: "Invalid yard index" });
+}
 
-    const yardData = order.additionalInfo[yardIndex - 1];
+const yardData = order.additionalInfo[yardIndex - 1];
 
-    // Initialize history arrays if they don't exist
-    yardData.trackingHistory = yardData.trackingHistory || [];
-    yardData.etaHistory = yardData.etaHistory || [];
-    yardData.shipperNameHistory = yardData.shipperNameHistory || [];
-    yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
+// Initialize history arrays if they don't exist
+yardData.trackingHistory = yardData.trackingHistory || [];
+yardData.etaHistory = yardData.etaHistory || [];
+yardData.shipperNameHistory = yardData.shipperNameHistory || [];
+yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
 
-    // Append current data to history arrays if it exists
-    if (Array.isArray(yardData.trackingNo)) {
-      const cleanedTrackingNo = yardData.trackingNo.map((number) => number.trim());
-      yardData.trackingHistory.push(...cleanedTrackingNo); // Append cleaned tracking numbers
-    } else if (typeof yardData.trackingNo === "string" && yardData.trackingNo.trim() !== "") {
-      yardData.trackingHistory.push(yardData.trackingNo.trim()); // Append single tracking number
-    }
+// Append current data to history arrays if it exists
+if (Array.isArray(yardData.trackingNo)) {
+const cleanedTrackingNo = yardData.trackingNo.map((number) => number.trim());
+yardData.trackingHistory.push(...cleanedTrackingNo); // Append cleaned tracking numbers
+} else if (typeof yardData.trackingNo === "string" && yardData.trackingNo.trim() !== "") {
+yardData.trackingHistory.push(yardData.trackingNo.trim()); // Append single tracking number
+}
 
-    if (yardData.eta) {
-      const cleanedEta = typeof yardData.eta === "string" ? yardData.eta.trim() : yardData.eta;
-      yardData.etaHistory.push(cleanedEta);
-    }
+if (yardData.eta) {
+const cleanedEta = typeof yardData.eta === "string" ? yardData.eta.trim() : yardData.eta;
+yardData.etaHistory.push(cleanedEta);
+}
 
-    if (yardData.shipperName) {
-      const cleanedShipperName = typeof yardData.shipperName === "string" ? yardData.shipperName.trim() : yardData.shipperName;
-      yardData.shipperNameHistory.push(cleanedShipperName);
-    }
+if (yardData.shipperName) {
+const cleanedShipperName = typeof yardData.shipperName === "string" ? yardData.shipperName.trim() : yardData.shipperName;
+yardData.shipperNameHistory.push(cleanedShipperName);
+}
 
-    if (yardData.trackingLink) {
-      const cleanedTrackingLink = typeof yardData.trackingLink === "string" ? yardData.trackingLink.trim() : yardData.trackingLink;
-      yardData.trackingLinkHistory.push(cleanedTrackingLink);
-    }
+if (yardData.trackingLink) {
+const cleanedTrackingLink = typeof yardData.trackingLink === "string" ? yardData.trackingLink.trim() : yardData.trackingLink;
+yardData.trackingLinkHistory.push(cleanedTrackingLink);
+}
 
-    // Update current fields with new values or clear them
-    yardData.trackingNo = Array.isArray(trackingNo) ? trackingNo : [];
-    yardData.eta = eta || "";
-    yardData.shipperName = shipperName || "";
-    yardData.trackingLink = trackingLink || "";
+// Update current fields with new values or clear them
+yardData.trackingNo = Array.isArray(trackingNo) ? trackingNo : [];
+yardData.eta = eta || "";
+yardData.shipperName = shipperName || "";
+yardData.trackingLink = trackingLink || "";
 
-    // Update yard status
-    yardData.status = status || "Yard PO Sent";
+// Update yard status
+yardData.status = status || "Yard PO Sent";
 
-    // Add a label voided entry to the order history
-    const labelVoidedEntry = `${updatedBy || "User"} voided the label for Yard #${yardIndex} on ${new Date().toLocaleString()}`;
-    order.orderHistory.push(labelVoidedEntry);
+// Add a label voided entry to the order history
+const labelVoidedEntry = `${updatedBy || "User"} voided the label for Yard #${yardIndex} on ${new Date().toLocaleString()}`;
+order.orderHistory.push(labelVoidedEntry);
 
-    // Save the updated order
-    await order.save();
+// Save the updated order
+await order.save();
 
-    res.status(200).json({ message: "Yard info updated successfully", order });
-  } catch (error) {
-    console.error("Error updating yard info:", error);
-    res.status(500).json({ message: "Error updating yard info", error: error.message });
-  }
+res.status(200).json({ message: "Yard info updated successfully", order });
+} catch (error) {
+console.error("Error updating yard info:", error);
+res.status(500).json({ message: "Error updating yard info", error: error.message });
+}
 });
 
