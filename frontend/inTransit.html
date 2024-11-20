@@ -601,7 +601,7 @@ item.additionalInfo && item.additionalInfo.length > 0
 </tr>
 `);
 });
-createPaginationControls(Math.ceil(orders.length / rowsPerPage), filteredOrders);
+createPaginationControls(Math.ceil(orders.length / rowsPerPage), orders);
 }
 // Function to create pagination controls based on filtered data
 function createPaginationControls(totalPages, filteredOrders = allOrders) {
