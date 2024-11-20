@@ -262,9 +262,9 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar">
 <div class="logo">
-  <a href="index.html">
-    <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-    </a>   
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a>   
 </div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
@@ -388,29 +388,29 @@ placeholder="Search..."
 <div id="pagination-controls" class="mt-3 mb-3"></div>
 <div id="filterAndTotal" style="display: flex;">
 <div class="filter-bar">
-  <input id="monthYearPicker" type="month" class="form-control" />
-  <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
 <!-- <div id="showTotalOrders">Total Orders This Month-</div> -->
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
-      
+
 <table class="table table-bordered mt-4">
-  <thead>
-    <tr>
-      <th style="cursor: pointer" scope="col">Order Date</th>
-      <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Tracking No <span class="aToZ" >&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">BOL DOE<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Shipping Type<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Transit DOE <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Est Delivery<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Delivered Date<span class="aToZ">&#9650;</span></th>
-    </tr>
-  </thead>
-  <tbody id="infoTable">
-      <!-- Table data goes here -->
-  </tbody>
+<thead>
+<tr>
+<th style="cursor: pointer" scope="col">Order Date</th>
+<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Tracking No <span class="aToZ" >&#9650;</span></th>
+<th style="cursor: pointer" scope="col">BOL DOE<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Shipping Type<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Transit DOE <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Est Delivery<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Delivered Date<span class="aToZ">&#9650;</span></th>
+</tr>
+</thead>
+<tbody id="infoTable">
+<!-- Table data goes here -->
+</tbody>
 </table>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
@@ -482,7 +482,7 @@ sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
 updateSortIcons(0, sortOrder.orderDate);
 }
 $("th").eq(0).on("click", function () {
-    sortTableByDate();
+sortTableByDate();
 });
 function sortTable(column, type) {
 const table = $("#infoTable");
@@ -545,11 +545,11 @@ const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 
 filteredOrders =  orders.filter(order => 
-      order.additionalInfo &&
-      order.additionalInfo.some(info => Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0)
-    );
-    console.log("filtered",filteredOrders);
-    const ordersForPage = filteredOrders.slice(start, end);
+order.additionalInfo &&
+order.additionalInfo.some(info => Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0)
+);
+console.log("filtered",filteredOrders);
+const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty(); // Clear the table
 ordersForPage.forEach((item) => {
 const orderDate = item.orderDate || "";
@@ -563,12 +563,12 @@ const eta = info.eta || "";
 const deliveredDate = info.deliveredDate || "";
 const shippingType = info.shippingDetails || "";
 let labelCreationD = "No Label Creation Date";
-    if (Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0) {
-        labelCreationD = info.labelCreationDate[info.labelCreationDate.length - 1];
-        // console.log("labelCreationD",labelCreationD)
-        var labelCreationDateOnly = labelCreationD.split(" ")[0] + " " + labelCreationD.split(" ")[1] + " " + labelCreationD.split(" ")[2];
-        console.log("labelCreationDateOnly",labelCreationDateOnly);
-    }
+if (Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0) {
+labelCreationD = info.labelCreationDate[info.labelCreationDate.length - 1];
+// console.log("labelCreationD",labelCreationD)
+var labelCreationDateOnly = labelCreationD.split(" ")[0] + " " + labelCreationD.split(" ")[1] + " " + labelCreationD.split(" ")[2];
+console.log("labelCreationDateOnly",labelCreationDateOnly);
+}
 // Append the main row for `trackingNo`
 if (trackingNo.length > 0) {
 $("#infoTable").append(`
@@ -595,44 +595,44 @@ labelCreationDate: "Label Creation"
 };
 
 Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
-        const array = info[arrayKey];
+const array = info[arrayKey];
 
-        // Append only if `trackingHistory` array length > 0
-        if (arrayKey === "trackingHistory" && Array.isArray(array) && array.length > 0) {
-            array.forEach((value, idx) => {
-                const displayValue =
-                    arrayKey === "trackingLinkHistory"
-                        ? `<a href="${value}" target="_blank">${value}</a>`
-                        : value;
+// Append only if `trackingHistory` array length > 0
+if (arrayKey === "trackingHistory" && Array.isArray(array) && array.length > 0) {
+array.forEach((value, idx) => {
+const displayValue =
+  arrayKey === "trackingLinkHistory"
+      ? `<a href="${value}" target="_blank">${value}</a>`
+      : value;
 
-                const estimatedDelivery =
-                    arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
-                        ? info.etaHistory[idx]
-                        : "N/A";
+const estimatedDelivery =
+  arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
+      ? info.etaHistory[idx]
+      : "N/A";
 
-                $("#infoTable").append(`
-                    <tr>
-                        <td>${dateOnly}</td>
-                        <td>${orderNo}</td>
-                        <td>${label}: ${displayValue}</td>
-                        <td>${
-                          arrayKey === "labelCreationDate"
-                              ? new Date(value).toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                })
-                              : "N/A"
-                        }</td>
-                        <td>${shippingType}</td>
-                        <td></td> <!-- Empty for Label/History Details -->
-                        <td style="color: red;">VOIDED</td>
-                        <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
-                    </tr>
-                `);
-            });
-        }
-    });
+$("#infoTable").append(`
+  <tr>
+      <td>${dateOnly}</td>
+      <td>${orderNo}</td>
+      <td>${label}: ${displayValue}</td>
+      <td>${
+        arrayKey === "labelCreationDate"
+            ? new Date(value).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+              })
+            : "N/A"
+      }</td>
+      <td>${shippingType}</td>
+      <td></td> <!-- Empty for Label/History Details -->
+      <td style="color: red;">VOIDED</td>
+      <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
+  </tr>
+`);
+});
+}
+});
 });
 });
 }
@@ -726,76 +726,76 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const day = date.getDate();
 const month = months[date.getMonth()];
 const year = date.getFullYear();
-    const monthMap = {
-        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-        May: "05", Jun: "06", Jul: "07", Aug: "08",
-        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-    };
-    var monthNum = monthMap[month];
+const monthMap = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+May: "05", Jun: "06", Jul: "07", Aug: "08",
+Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+};
+var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-  const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 
-  if (ordersResponse.status !== 200) {
-    throw new Error("Failed to fetch current month's orders");
-  }
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch current month's orders");
+}
 
-  allOrders = ordersResponse.data;
-  var totalOrders = allOrders.length;
+allOrders = ordersResponse.data;
+var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
 // document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
-  console.error("Error fetching current month's orders:", error);
+console.error("Error fetching current month's orders:", error);
 }
 
 $("#searchInput").on("keyup", function () {
-  const value = $(this).val().toLowerCase();
-  const filteredOrders1 = filteredOrders.filter(order => {
-    const basicSearch = (
-      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
-      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.email && order.email.toLowerCase().includes(value)) ||
-      (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
-      (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
-      (order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
-      (order.model && order.model.toLowerCase().includes(value))     // Added model
-    );
+const value = $(this).val().toLowerCase();
+const filteredOrders1 = filteredOrders.filter(order => {
+const basicSearch = (
+(order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+(order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+(order.customerName && order.customerName.toLowerCase().includes(value)) ||
+((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+(order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+(order.email && order.email.toLowerCase().includes(value)) ||
+(order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
+(order.make && order.make.toLowerCase().includes(value)) ||    // Added make
+(order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
+(order.model && order.model.toLowerCase().includes(value))     // Added model
+);
 
-    // Check if any yard detail (including stockNo) matches the search term
-    const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
-      const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
-      return (
-        yardLabel.includes(value) || 
-        (info.yardName && info.yardName.toLowerCase().includes(value)) || 
-        (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-        (info.status && info.status.toLowerCase().includes(value)) ||
-        (info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
-      );
-    });
+// Check if any yard detail (including stockNo) matches the search term
+const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
+const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
+return (
+yardLabel.includes(value) || 
+(info.yardName && info.yardName.toLowerCase().includes(value)) || 
+(info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
+(info.status && info.status.toLowerCase().includes(value)) ||
+(info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
+);
+});
 
-    // Return true if any of the basic fields or yard details match the search term
-    return basicSearch || yardSearch;
-  });
+// Return true if any of the basic fields or yard details match the search term
+return basicSearch || yardSearch;
+});
 
-  // If a search is active, display the filtered results, otherwise reset to the full dataset
-  if (filteredOrders1.length > 0 || value === "") {
-    renderTableRows(1, filteredOrders1); // Render the first page of filtered results
-    createPaginationControls(Math.ceil(filteredOrders1.length / rowsPerPage), filteredOrders1);
-  } else {
-    $("#infoTable").empty(); // Clear the table if no results are found
-    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-  }
+// If a search is active, display the filtered results, otherwise reset to the full dataset
+if (filteredOrders1.length > 0 || value === "") {
+renderTableRows(1, filteredOrders1); // Render the first page of filtered results
+createPaginationControls(Math.ceil(filteredOrders1.length / rowsPerPage), filteredOrders1);
+} else {
+$("#infoTable").empty(); // Clear the table if no results are found
+$("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+}
 });
 
 
@@ -854,7 +854,7 @@ $("body").addClass("modal-active");
 $("#loadingMessage").show();
 
 const monthYear = $("#monthYearPicker").val(); 
-  const [year, monthNumber] = monthYear.split("-");
+const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 try {
