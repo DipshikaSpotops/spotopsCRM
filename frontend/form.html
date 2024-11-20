@@ -3493,7 +3493,7 @@ $("#otherShipperInput").hide();
 // var labelDate;
 $("#editYardInfo").on("click", async function () {
   console.log("clicking on save");
-  $(".mainDiv").removeClass("blur");
+  $(".mainDiv").removeClass("blur");   
   $("#editYardPopup").hide();
   const yardIndex = $(this).data("yard-index");
   let currentYardData = {};
@@ -3513,7 +3513,11 @@ $("#editYardInfo").on("click", async function () {
     const paymentStatus = $('.paymentStatus').val();
     const refundedAmount = $("#refundedAmount").val();
     let newStatus = $("#orderStatus").val();
-
+// Validation: Prevent proceeding if required fields are empty for "Label created"
+if (status === "Label created" && (!trackingNo || !eta || !shipperName || !trackingLink)) {
+      alert("Please fill all required fields: Tracking No, ETA, Shipper Name, and Tracking Link.");
+      return; // Exit the function early
+    }
     if (status === "Part shipped") {
       newStatus = "In Transit";
       var partShippedDate = currentDateTime;
