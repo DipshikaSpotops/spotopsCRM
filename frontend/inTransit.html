@@ -566,7 +566,7 @@ function renderTableRows(page, orders = allOrders) {
 // Pagination logic after filtering
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
-const ordersForPage = filteredOrders.slice(start, end); 
+const ordersForPage = orders.slice(start, end); 
 $('#infoTable').empty(); 
 ordersForPage.forEach((item) => {
 const escalationStatus = item.additionalInfo &&
