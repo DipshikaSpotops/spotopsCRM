@@ -540,12 +540,12 @@ const refundedAmount = parseFloat(info.refundedAmount || 0);
 const itemSpend = partPrice + others + shippingCost - refundedAmount;
 orderSpend += itemSpend;  
 });
-console.log("ship",shippingCost);
+// console.log("ship",shippingCost);
 order.totalSpend = orderSpend;  
 totalSpendShipping += shippingCost;  
 });
-console.log("Total spend across all orders:", totalSpendShipping);
-console.log("yardOrders with calculated spends", yardOrders);
+// console.log("Total spend across all orders:", totalSpendShipping);
+// console.log("yardOrders with calculated spends", yardOrders);
 document.getElementById("showTotalOrders").innerHTML = `Total Shipping Cost This Month- $${totalSpendShipping.toFixed(2)}`;
 renderTableRows(currentPage, yardOrders);
 createPaginationControls(Math.ceil(yardOrders.length / 25));
@@ -616,7 +616,7 @@ let shippingType = "";
 let refunds = parseFloat(
 item.additionalInfo[i].refundedAmount || 0
 );
-console.log("refunds", refunds);
+// console.log("refunds", refunds);
 if (shippingDetails) {
 const shippingArray = shippingDetails.split(":");
 shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
@@ -628,13 +628,9 @@ otherCharges += otherC;
 tRefunds += refunds;
 overallPurchaseCost = partPrice + shippingCharge + otherC;
 overAllwithRefund = overallPurchaseCost - refunds;
-console.log(
-overallPurchaseCost,
-"overall with refunds",
-overAllwithRefund
-);
+// console.log(overallPurchaseCost,"overall with refunds",overAllwithRefund);
 totalOveralls += overAllwithRefund;
-console.log("yotalOveralls", totalOveralls);
+// console.log("yotalOveralls", totalOveralls);
 yardInfoHtml += `<td>
 ${item.additionalInfo[i].yardName || ""}${
 item.additionalInfo[i].yardName ? "" : ""
@@ -654,7 +650,7 @@ totalShippingSum += totalShipping;
 totalOthersSum += otherCharges;
 totalOverallSum += overAllwithRefund;
 totalRefundsSum += tRefunds;
-console.log("overall after refund", totalOverallSum);
+// console.log("overall after refund", totalOverallSum);
 const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
 $("#yardInfoTable").append(
 `<tr>
