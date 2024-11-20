@@ -3516,6 +3516,9 @@ $("#editYardInfo").on("click", async function () {
 // Validation: Prevent proceeding if required fields are empty for "Label created"
 if (status === "Label created" && (!trackingNo || !eta || !shipperName || !trackingLink)) {
       alert("Please fill all required fields: Tracking No, ETA, Shipper Name, and Tracking Link.");
+      $("#editYardPopup").show();
+      $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
     }
     if (status === "Part shipped") {
       newStatus = "In Transit";
