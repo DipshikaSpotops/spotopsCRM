@@ -530,7 +530,7 @@ let totalSpendShipping = 0;
 yardOrders.forEach(order => {
 let orderSpend = 0;  
 order.additionalInfo.forEach(info => {
-const shippingCost = info.shippingDetails ? 
+var shippingCost = info.shippingDetails ? 
 parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 : 0;
 const partPrice = parseFloat(info.partPrice || 0);
 const others = parseFloat(info.others || 0);
