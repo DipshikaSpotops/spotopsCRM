@@ -466,8 +466,10 @@ return res.status(400).json({ message: "Month and year are required" });
 }
 const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
 const yardProcessingOrders = await Order.find({
-orderStatus: "Yard Processing"
-
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "Yard Processing" }
+]
 });
 res.json(yardProcessingOrders);
 } catch (error) {
