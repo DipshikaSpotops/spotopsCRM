@@ -233,9 +233,9 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar">
 <div class="logo">
-    <a href="index.html">
-        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-        </a>   
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a>   
 </div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
@@ -356,44 +356,44 @@ placeholder="Search..."
 <div id="pagination-controls" class="mt-3 mb-3"></div>
 <div class="table-responsive">
 <table class="table table-bordered mt-4">
-  <thead>
-    <tr>
-      <th style="cursor: pointer" scope="col">
-      Order Date <span class="sort-icon">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Order No. <span class="sort-icon onlyNumber">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Agent Name <span class="aToZ" >&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Customer Name
-      <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Part Name <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Yard <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Order Status <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">
-      Escalation Status
-      <span class="aToZ">&#9650;</span>
-      </th>
-      <th style="cursor: pointer" scope="col">Actions</th>
-      <th style="cursor: pointer" scope="col">Send Invoice</th>
-      <th style="cursor: pointer" scope="col">
-      Email <span class="aToZ">&#9650;</span>
-      </th>
-      </tr>
-  </thead>
-  <tbody id="infoTable">
-      <!-- Table data goes here -->
-  </tbody>
+<thead>
+<tr>
+<th style="cursor: pointer" scope="col">
+Order Date <span class="sort-icon">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Order No. <span class="sort-icon onlyNumber">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Agent Name <span class="aToZ" >&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Customer Name
+<span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Part Name <span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Yard <span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Order Status <span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">
+Escalation Status
+<span class="aToZ">&#9650;</span>
+</th>
+<th style="cursor: pointer" scope="col">Actions</th>
+<th style="cursor: pointer" scope="col">Send Invoice</th>
+<th style="cursor: pointer" scope="col">
+Email <span class="aToZ">&#9650;</span>
+</th>
+</tr>
+</thead>
+<tbody id="infoTable">
+<!-- Table data goes here -->
+</tbody>
 </table>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
@@ -526,61 +526,61 @@ sortTable(index, type);
 
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-    // Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
-    const filteredOrders = orders.filter(item => {
-        return (item.orderStatus === "Yard Processing");
-    });
+// Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
+const filteredOrders = orders.filter(item => {
+return (item.orderStatus === "Yard Processing");
+});
 
-    // Pagination logic after filtering
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
+// Pagination logic after filtering
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
 
-    $('#infoTable').empty(); // Clear the table
+$('#infoTable').empty(); // Clear the table
 
-    ordersForPage.forEach((item) => {
-        const escalationStatus = item.additionalInfo &&
-            item.additionalInfo[0] &&
-            item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+ordersForPage.forEach((item) => {
+const escalationStatus = item.additionalInfo &&
+item.additionalInfo[0] &&
+item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
 
-        let escalationStyle = '';
-        if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-            escalationStyle = 'style="background-color: lightgreen;"';
-        }
+let escalationStyle = '';
+if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+escalationStyle = 'style="background-color: lightgreen;"';
+}
 
-        const team = localStorage.getItem('team');
-        const editButton = (team === "Team Mark" || team === "Team Sussane")
-            ? "" // Hide the edit button
-            : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+const team = localStorage.getItem('team');
+const editButton = (team === "Team Mark" || team === "Team Sussane")
+? "" // Hide the edit button
+: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 
-        const actions = `
-            ${editButton}
-            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
-            <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
+const actions = `
+${editButton}
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>
+<button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>`;
 
-        const sendInvoice = `
-            <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
+const sendInvoice = `
+<button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
 
-        const yardlength = item.additionalInfo.length;
+const yardlength = item.additionalInfo.length;
 
-        $("#infoTable").append(`
-            <tr>
-                <td>${item.orderDate}</td>
-                <td>${item.orderNo}</td>
-                <td>${item.salesAgent}</td>
-                <td>${item.customerName}</td>
-                <td>${item.pReq || item.partName}</td>
-                <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-                <td>${item.orderStatus}</td>
-                <td ${escalationStyle}>${escalationStatus}</td>
-                <td class="actions">${actions}</td>
-                <td>${sendInvoice}</td>
-                <td>${item.email}</td>
-            </tr>
-        `);
-    });
+$("#infoTable").append(`
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
+<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+<td>${item.orderStatus}</td>
+<td ${escalationStyle}>${escalationStatus}</td>
+<td class="actions">${actions}</td>
+<td>${sendInvoice}</td>
+<td>${item.email}</td>
+</tr>
+`);
+});
 
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
 // Function to create pagination controls based on filtered data
@@ -589,7 +589,7 @@ const paginationControls = $('#pagination-controls');
 paginationControls.empty(); 
 if (totalPages > 1) {
 for (let i = 1; i <= totalPages; i++) {
-    paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
 }
 paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
 }
@@ -647,36 +647,52 @@ await fetchToken();
 token = localStorage.getItem("token");
 }
 
-// Fetch orders and apply pagination
+const now = new Date();
+const options = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter = new Intl.DateTimeFormat('en-US', options);
+const parts = formatter.formatToParts(now);
+const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+const date = new Date(formattedDate);
+// Array of month names
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const monthMap = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+May: "05", Jun: "06", Jul: "07", Aug: "08",
+Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+};
+var monthNum = monthMap[month];
+
+$("#monthYearPicker").val(`${year}-${monthNum}`);
+//orders for the current month
 try {
-    const ordersResponse = await axios.get("https://www.spotops360.com/orders/yardProcessing", {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
-
-
 if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch orders");
+throw new Error("Failed to fetch current month's orders");
 }
-
-
-// Combine orders and cancelled orders
-var orders = ordersResponse.data;
-allOrders = [...orders];
-
-// Filter out orders that have statuses "Placed", "Customer approved", or "Order Fulfilled"
-filteredOrders = allOrders.filter(item => {
-return (item.orderStatus === "Yard Processing");
-});
-
-// Sort and render the filtered orders
-allOrders = sortOrdersByOrderNoDesc(filteredOrders); // You can sort filtered orders by Order No descending if needed
-renderTableRows(currentPage); // Start with the first page of filtered data
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+allOrders = ordersResponse.data;
+var totalOrders = allOrders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+sortedData = sortOrdersByOrderNoDesc(allOrders);
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
-console.error("Error fetching orders:", error);
+console.error("Error fetching current month's orders:", error);
 }
-
-
 // Filtering functionality
 // $("#searchInput").on("keyup", function () {
 //   const value = $(this).val().toLowerCase();
@@ -688,8 +704,6 @@ console.error("Error fetching orders:", error);
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
-
-// Filter the entire allOrders dataset based on the search term
 const filteredOrders = allOrders.filter(order => {
 return (
 (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
@@ -714,8 +728,6 @@ $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>
 }
 });
 
-
-// Sort orders by Order No in descending order
 function sortOrdersByOrderNoDesc(orders) {
 return orders.sort((a, b) => {
 const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
@@ -733,62 +745,6 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-$("#infoTable").on("click", ".cancel-btn", function () {
-const id = $(this).data("id");
-console.log(`Cancel button clicked for order ID: ${id}`); // Added log
-
-if (confirm(`Are you sure you want to cancel order ${id}?`)) {
-// Change the order status to "Order Cancelled" in the HTML
-$(this).closest("tr").find("td:nth-child(7)").text("Order Cancelled");
-
-// Optionally, disable the cancel button
-$(this).prop("disabled", true);
-
-// Send a request to update the order status in the backend
-fetch(`https://www.spotops360.com/orders/${id}/cancel`, {
-method: "PUT",
-headers: {
-Authorization: `Bearer ${token}`,
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-firstName: firstName
-})
-})
-.then(response => {
-if (!response.ok) {
-console.error("Failed to update order status", response);
-throw new Error("Failed to update order status");
-}
-return response.json();
-})
-.then(data => {
-console.log("Order status updated successfully", data); // Added log
-alert("Order status updated to 'Order Cancelled'");
-})
-.catch(error => {
-console.error("Error updating order status:", error);
-});
-}
-});
-
-
-$("#infoTable").on("click", ".send-invoice-btn", function () {
-const id = $(this).data("id");
-fetch(`https://www.spotops360.com/orders/sendInvoice/${id}`, {
-method: "POST",
-headers: {
-Authorization: `Bearer ${token}`
-},
-})
-.then((response) => response.json())
-.then((data) => {
-alert(data.message);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-});
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
@@ -823,7 +779,36 @@ $('#submenu-reports .nav-link:contains("Refund Report")').show();
 $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
+$("#filterButton").click(async function () {
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
+$("#loadingMessage").show();
 
+const monthYear = $("#monthYearPicker").val(); 
+const [year, monthNumber] = monthYear.split("-");
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = months[parseInt(monthNumber, 10) - 1];
+try {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch current month's orders");
+}
+allOrders = ordersResponse.data;
+var allOrdersLength = allOrders.length;
+document.getElementById("showTotalOrders").innerHTML = `Total In Transit Orders This Month- ${allOrdersLength}`;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+} catch (error) {
+console.error("Error fetching current month's orders:", error);
+} finally {
+// Hiding loading overlay regardless of success or error
+$("#loadingMessage").hide();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+}
+});
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[[[[<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -268,9 +268,9 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar">
 <div class="logo">
-    <a href="index.html">
-        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-        </a>   
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a>   
 </div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
@@ -389,7 +389,7 @@ placeholder="Search..."
 />
 </div>
 <!-- pagination controls -->
- <div class="table-responsive">
+<div class="table-responsive">
 <div id="pagination-controls" class="mt-3 mb-3"></div>
 <div id="filterAndTotal" style="display: flex;">
 <div class="filter-bar">
@@ -609,7 +609,7 @@ function createPaginationControls(totalPages, filteredOrders = allOrders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); 
 if (totalPages > 1) {
-    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 for (let i = 1; i <= totalPages; i++) { 
 paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
 }
@@ -848,7 +848,7 @@ $("body").addClass("modal-active");
 $("#loadingMessage").show();
 
 const monthYear = $("#monthYearPicker").val(); 
-  const [year, monthNumber] = monthYear.split("-");
+const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 try {
@@ -881,3 +881,4 @@ window.location.href = "login_signup.html";
 
 </body>
 </html>
+]]]]
