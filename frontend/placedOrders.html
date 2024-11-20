@@ -517,11 +517,9 @@ function sortTable(column, type) {
 console.log("type",type,column);    
 const table = $("#infoTable");
 const rows = table.find("tr").toArray();
-
 rows.sort((a, b) => {
 let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
-
 if (type === "orderdate▲") {
 console.log("orderdate▲");
 valA = parseCustomDate(valA); // Use the helper function to parse the date
@@ -530,27 +528,23 @@ valB = parseCustomDate(valB);
 valA = parseInt(valA.replace(/\D/g, ""), 10);
 valB = parseInt(valB.replace(/\D/g, ""), 10);
 }
-
 if (sortOrder[type] === "asc") {
 return valA > valB ? 1 : -1;
 } else {
 return valA < valB ? 1 : -1;
 }
 });
-
 $.each(rows, function (index, row) {
 table.append(row);
 });
-
 // Toggle sort order
 sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-// Update the sort icon
+// Updating the sort icon
 updateSortIcons(column, sortOrder[type]);
 }
 
 function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
+$("th .sort-icon").html("&#9650;"); // Resetting all icons to ascending
 $("th").each(function (index) {
 if (index === columnIndex) {
 $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
@@ -562,7 +556,6 @@ $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
 $("th").each(function (index) {
 const th = $(this);
 let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-
 if (type === "orderdate") {
 th.on("click", function () {
 sortTable(index, "date");
@@ -600,14 +593,12 @@ const role = localStorage.getItem("role");
 const team = localStorage.getItem("team");
 let token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
-
 if (firstName) {
 $("#user-name").text(firstName);
 }
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
-
 async function fetchToken() {
 try {
 const response = await axios.get(
@@ -622,12 +613,10 @@ throw new Error("Failed to fetch token");
 console.error("Error fetching token:", error);
 }
 }
-
 if (!token) {
 await fetchToken();
 }
-
-// Apply team-based and role-based restrictions
+// Team-based and role-based restrictions
 if (team === "Team Charlie") {
 $("#submenu-reports .nav-link")
 .not(':contains("My Sales Report")')
@@ -667,13 +656,11 @@ const hasSubmenu = $(this).next(".submenu").length > 0;
 if (!hasSubmenu) {
 $(".nav-link").removeClass("active selected");
 $(this).addClass("selected");
-
 const contentMap = {
 "default-link": "#default-content",
 "add-order-link": "#add-order-content",
 "view-order-link": "#view-order-content",
 };
-
 $(".main-content > div").addClass("d-none");
 $(contentMap[this.id]).removeClass("d-none");
 $("#offcanvasSidebar").removeClass("show");
@@ -739,25 +726,17 @@ try {
 const response = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
-
-
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 
 var data = response.data;
-// console.log("dataL",data.length);
 var totalOrders = data.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Placed Orders This Month- ${totalOrders}`;
 data = sortOrdersByOrderNoDesc(data);
-// data.forEach((item) => {
-//   if (item.orderStatus === "Placed") {
-// Safely access bAddress and sAddress using optional chaining
 
 renderOrders(data);
-//   }
-// });
 } catch (error) {
 console.error("Error fetching orders:", error);
 }
@@ -765,44 +744,13 @@ console.error("Error fetching orders:", error);
 $("#infoTable").on("click", ".approve-btn", async function () {
 const orderNoRow = $(this).data("id");
 currentOrderNo = orderNoRow;    
-
 $("#myModal").modal("show");
-
-// On click of the OK button, reload the window
 $("#okButton").click(function () {
 $("#myModal").hide();
 window.location.reload();
 });
-// function to display placed orders
-
-// $("#okButton").click(function () {
-//     // Hide the modal using Bootstrap's modal hide method
-//     $('#myModal').modal('hide');
-
-//     // Manually remove the modal backdrop after the modal is hidden
-//     $('.modal-backdrop').remove();
-
-//     // Optionally: remove 'modal-open' class from body to stop body scrolling
-//     $('body').removeClass('modal-open');
-//     console.log("currentOrderNo",currentOrderNo);
-//     // Find the row related to the currentOrderNo and remove the entire row
-//     const orderRow = $('.approve-btn[data-id="' + currentOrderNo + '"]').closest('tr');
-//     console.log("orderRow to be removed:", orderRow);
-
-//     // Remove the entire row from the table
-//     if (orderRow.length) {
-//         orderRow.remove(); // This should remove the entire row
-//         console.log("Row removed successfully.");
-//     } else {
-//         console.error("Error: Row not found for the given order.");
-//     }
-
-//     // Stop body from being unclickable due to backdrop
-//     $('body').css('overflow', 'auto');
-// });
 
 const orderNo = $(this).data("id");
-// Get the current date and time in the 'America/Chicago' timezone
 const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
