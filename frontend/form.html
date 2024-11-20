@@ -3489,42 +3489,42 @@ $("#otherShipperInput").hide();
 }
 });
 
-
 // var labelDate;
 $("#editYardInfo").on("click", async function () {
   console.log("clicking on save");
-  $(".mainDiv").removeClass("blur");   
-  $("#editYardPopup").hide();
+  $(".mainDiv").removeClass("blur"); 
   const yardIndex = $(this).data("yard-index");
   let currentYardData = {};
+
   try {
     let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
     let orderData = await response.json();
     let escCause = "";
-    
+
     const currentYardData = orderData.additionalInfo[yardIndex - 1];
     const status = $("#refund").val();
     const trackingNo = $("#trackingNoEdit").val();
     const eta = $("#etaEdit").val();
-    let shipperName = $("#shipperNameEdit").val() === "Others" 
-      ? $("#otherShipperInput").val() 
+    let shipperName = $("#shipperNameEdit").val() === "Others"
+      ? $("#otherShipperInput").val()
       : $("#shipperNameEdit").val();
     const trackingLink = $("#linkInput").val();
-    const paymentStatus = $('.paymentStatus').val();
+    const paymentStatus = $(".paymentStatus").val();
     const refundedAmount = $("#refundedAmount").val();
     let newStatus = $("#orderStatus").val();
-// Validation: Prevent proceeding if required fields are empty for "Label created"
-if (status === "Label created" && (!trackingNo || !eta || !shipperName || !trackingLink)) {
+
+    // Validation: Prevent proceeding if required fields are empty for "Label created"
+    if (status === "Label created" && (!trackingNo || !eta || !shipperName || !trackingLink)) {
       alert("Please fill all required fields: Tracking No, ETA, Shipper Name, and Tracking Link.");
-      $("#editYardPopup").show();
-      $("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");
+      return; // Exit the function if validation fails
     }
+
+    // Proceed only if validation passes
     if (status === "Part shipped") {
       newStatus = "In Transit";
       var partShippedDate = currentDateTime;
     } else if (status === "Label created") {
-      newStatus = "Yard Processing"; 
+      newStatus = "Yard Processing";
       var labelCreationDate = currentDateTime;
       currentYardData.labelCreationDate = currentYardData.labelCreationDate || [];
       currentYardData.labelCreationDate.push(currentDateTime);
@@ -3534,11 +3534,7 @@ $("body").addClass("modal-active");
       escCause = $("#esc").val();
       var escTicked = "Yes";
       $("#escTickBox").prop("checked", true);
-    }
-    //  else if (status === "Collect refund") {
-    //   newStatus = "Escalation";
-    // } 
-    else if (status === "Part delivered") {
+    } else if (status === "Part delivered") {
       newStatus = "Order Fulfilled";
       var deliveredDate = currentDateTime;
     } else if (status === "Yard PO Sent") {
@@ -3557,8 +3553,8 @@ $("body").addClass("modal-active");
       eta: eta || currentYardData.eta,
       shipperName: shipperName || currentYardData.shipperName,
       trackingLink: trackingLink || currentYardData.trackingLink,
-      refundedAmount: refundedAmount 
-        ? parseFloat(refundedAmount) 
+      refundedAmount: refundedAmount
+        ? parseFloat(refundedAmount)
         : currentYardData.refundedAmount,
       escalationCause: escCause || currentYardData.escalationCause,
       escalationDate: escalationDate || currentYardData.escalationDate,
@@ -3567,7 +3563,7 @@ $("body").addClass("modal-active");
 
     const payload = {
       updatedYardData: updatedData,
-      orderStatus: newStatus || orderData.orderStatus
+      orderStatus: newStatus || orderData.orderStatus,
     };
 
     console.log("Payload:", payload);
@@ -3580,11 +3576,14 @@ $("body").addClass("modal-active");
       body: JSON.stringify(payload),
     });
 
+    // Only hide the popup after successful submission
+    $("#editYardPopup").hide();
     window.location.reload();
   } catch (error) {
     console.error("Error fetching or updating yard data:", error);
   }
 });
+
 
 $("#saveEsc").on("click", async function () {
 // $(".mainDiv").removeClass("blur");
