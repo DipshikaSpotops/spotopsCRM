@@ -574,11 +574,11 @@ ordersForPage.forEach((item) => {
   const cardCharged = yardPP + shippingValueYard + Number(others);
   console.log("yard ship", shippingValueYard, "part price", yardPP, "storeCredit", totalStoreCredit,"others",others);
   console.log("card charged", cardCharged);
-
+  const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
   const actions = generateActions(item);
   const row = `
     <tr>
-      <td>${item.orderDate}</td>
+      <td>${dateOnly}</td>
       <td>${item.orderNo}</td>
       <td>${item.customerName}</td>
       <td>${lastInfo.yardName || ""}<br>
