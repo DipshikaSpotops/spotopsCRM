@@ -329,7 +329,7 @@ placeholder="Search..."
 <thead>
 <tr id="tableHeader" style="background-color: #f2f2f2">
 <th style="text-align: center; cursor: pointer" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#x25B2;</span></th>
-<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#x25B2;</span></th>
+<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderDate">Order Date</th>
 </tr>
 </thead>
 <tbody id="yardInfoTable" style="text-align: center">
@@ -583,7 +583,7 @@ tableHeader.append(
 '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append('<th scope="col">Actions</th>');
-document.getElementById("showTotalOrders").innerHTML = `Total Shipping Cost This Month- $${totalShippingSum.toFixed(2)}`;
+
 pageData.forEach((item) => {
 let appendOrder = false;
 let yardInfoHtml = "";
