@@ -539,7 +539,6 @@ totalSpend += orderSpend;
 });
 console.log("Total spend across all orders:", totalSpend);
 console.log("yardOrders with calculated spends", yardOrders);
-document.getElementById("showTotalOrders").innerHTML = `Total Spent This Month- $${totalSpend.toFixed(2)}`;
 renderTableRows(currentPage, yardOrders);
 createPaginationControls(Math.ceil(yardOrders.length / 25));
 } catch (error) {
