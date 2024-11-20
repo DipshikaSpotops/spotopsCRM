@@ -362,7 +362,6 @@ placeholder="Search..."
 <tr>
 <th scope="col">Order Date</th>
 <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Charged Amount<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Refunded Amount<span class="sort-icon">&#9650;</span></th>
@@ -580,7 +579,6 @@ ordersForPage.forEach((item) => {
     <tr>
       <td>${dateOnly}</td>
       <td>${item.orderNo}</td>
-      <td>${item.customerName}</td>
       <td>${lastInfo.yardName || ""}<br>
           ${lastInfo.address || ""}<br>
           ${lastInfo.email || ""}<br>
