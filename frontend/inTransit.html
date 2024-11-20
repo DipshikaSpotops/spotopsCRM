@@ -719,14 +719,12 @@ console.error("Error fetching current month's orders:", error);
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 console.log("search");
-
 // Ensure allOrders is defined
 if (!allOrders || allOrders.length === 0) {
 $("#infoTable").empty();
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
 return;
 }
-
 const filteredOrders = allOrders.filter(order => {
 return (
 (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
@@ -736,7 +734,7 @@ return (
 ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
 (order.additionalInfo && order.additionalInfo.some(info => 
 (info.yardName && info.yardName.toLowerCase().includes(value)) || 
-(info.trackingNo && info.trackingNo.toLowerCase().includes(value)) // Fixed here
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
 )) ||
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value))
