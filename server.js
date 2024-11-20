@@ -521,16 +521,24 @@ res.status(500).json({ message: "Server error", error });
 });
 // for orders which were in escalation atleast once
 app.get('/orders/escalated', async (req, res) => {
-  try {
-    //  `escTicked` is "Yes" in the additionalInfo field
-    const escalatedOrders = await Order.find({
-      additionalInfo: { $elemMatch: { escTicked: "Yes" } }
-    });
-    res.status(200).json(escalatedOrders);
-  } catch (error) {
-    console.error("Error fetching escalated orders:", error);
-    res.status(500).json({ error: "Failed to fetch escalated orders" });
-  }
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const escalatedOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ additionalInfo: { $elemMatch: { escTicked: "Yes" } } }
+]
+});
+res.json(escalatedOrders);
+} catch (error) {
+console.error("Error fetching fulfilled orders:", error);
+res.status(500).json({ message: "Server error", error });
+}    
 });
 // for ongoing escalation with escTicked(yes) and orderStatus to be either in Customer Aproved,Yard Processing,In Transit or Escalation
 app.get('/orders/ongoing-escalations', async (req, res) => {
