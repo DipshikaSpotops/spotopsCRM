@@ -3504,9 +3504,13 @@ let escCause = "";
 const currentYardData = orderData.additionalInfo[yardIndex - 1];
 const status = $("#refund").val();
 if (
-(status === "Yard located" || status === "Yard PO Sent") &&
+(status === "Yard located") &&
 currentYardData
 ) {
+alert("Wrong status selected, please select an appropriate option");
+return; 
+}
+if (status === "Yard PO Sent" && currentYardData.poSentDate) {
 alert("Wrong status selected, please select an appropriate option");
 return; 
 }
