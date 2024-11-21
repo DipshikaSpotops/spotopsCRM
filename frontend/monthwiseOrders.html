@@ -640,7 +640,7 @@ yardOwnShippingReplacement -
 yardRefundAmount;
 });
 var spMinusTax = item.soldP - item.salestax;
-var custRefundedAmount = item.custRefundedAmount;
+var custRefundedAmount = item.custRefundedAmount || 0;
 const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
 console.log("currentGP",spMinusTax,custRefundedAmount,subtractRefund,currentGP,totalYardSpent);
