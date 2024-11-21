@@ -1105,7 +1105,6 @@ window.location.href = "login_signup.html";
   <option value="Window Regulator">Window Regulator</option>
   <option value="Wiper Linkage">Wiper Linkage</option>
   <option value="Window Regulator">Window Regulator</option>
- 
   </select>
 </div>
 </div>
@@ -4959,7 +4958,7 @@ $('#custReason').on('change', function () {
       // Disable all inputs and selects inside #replacementColumns, except #custReason
       $('#replacementColumns')
         .find('input, select')
-        .not('#custReaso,#yardShippingStatus,#yardShippingMethod,#yardShipper,#yardTrackingNumber')
+        .not('#custReaso,#yardShippingStatus,#yardShippingMethod,#yardShipper,#yardTrackingNumber,#yardOwnShipping,yardTrackingETA,#yardTrackingLink')
         .prop('disabled', true);
     } else {
       // Enable all inputs and selects inside #replacementColumns when other values are selected
