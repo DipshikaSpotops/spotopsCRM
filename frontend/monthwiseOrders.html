@@ -385,8 +385,8 @@ placeholder="Search..."
 />
 </div>
 <!--  controls -->
-<div id="pagination-controls" style="position: fixed;margin: 5% 0%;z-index: 100;"></div>
-<div id="filterAndTotal" style="display: flex;margin: 4% -2%;z-index: 100;">
+<div id="pagination-controls" style="position: fixed;margin: 5% 0%;"></div>
+<div id="filterAndTotal" style="display: flex;margin: 4% -2%;">
 <div class="filter-bar">
   <input id="monthYearPicker" type="month" class="form-control" />
   <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
@@ -395,7 +395,8 @@ placeholder="Search..."
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
       
-<table style="margin: -6% 0%;">
+<table class="table table-bordered mt-4" style=" position: fixed;
+    margin: 5% 0%;">
   <thead>
     <tr>
       <th style="cursor: pointer" scope="col">Order Date</th>
