@@ -405,6 +405,8 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Part Info <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Est GP <span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actions</th>
@@ -599,7 +601,7 @@ $("#infoTable").append(`
 <td>Part required: ${item.pReq || item.partName}<br>
     ${item.year} ${item.make} ${item.model}
     </td>
-<td>${
+<td>${  
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
 .map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""}`)
@@ -608,6 +610,8 @@ item.additionalInfo && item.additionalInfo.length > 0
 : ""
 }</td>
 <td>${item.orderStatus}</td>
+<td>${item.grossProfit}</td>
+
 <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
 <td>${actions}</td>
