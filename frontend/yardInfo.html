@@ -395,8 +395,8 @@ placeholder="Search..."
 <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Current GP<span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">Email <span class="aToZ">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="infoTable">
@@ -552,8 +552,53 @@ $("#infoTable").append(`
 <td>${item.pReq || item.partName}</td>
 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
 <td>${item.orderStatus}</td>
+<td>
+${
+item.additionalInfo && item.additionalInfo.length > 0
+? (() => {
+  let totalYardSpent = 0;
+  item.additionalInfo.forEach(info => {
+    const yardPP = parseFloat(info.partPrice) || 0;
+    const yardOSorYS = info.shippingDetails || '';
+    let shippingValueYard = 0;
+    if (yardOSorYS.includes("Own shipping")) {
+      shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+    } else if (yardOSorYS.includes("Yard shipping")) {
+      shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+    }
+    const yardOthers = parseFloat(info.others) || 0;
+    const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
+    const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
+    const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
+    const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
+
+    // Only calculate if the conditions are met
+    if (
+      info.status !== "PO cancelled" || 
+      (info.status === "PO cancelled" && info.paymentStatus === "Card charged")
+    ) {
+      totalYardSpent +=
+        yardPP +
+        shippingValueYard +
+        yardOthers +
+        escOwnShipReturn +
+        escOwnShipReplacement +
+        yardOwnShippingReplacement -
+        yardRefundAmount;
+    }
+  });
+
+  const spMinusTax = item.soldP - item.salestax;
+  const custRefundedAmount = item.custRefundedAmount || 0;
+  const subtractRefund = spMinusTax - custRefundedAmount || 0;
+  const currentGP = subtractRefund - totalYardSpent;
+  console.log("currentGP", spMinusTax, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
+  return `$${currentGP.toFixed(2)}`;
+})()
+: ""
+}
+</td>
 <td>${actions}</td>
-<td>${item.email}</td>
 </tr>
 `);
 });
