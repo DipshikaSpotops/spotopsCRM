@@ -551,7 +551,7 @@ $("#infoTable").append(`
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br> Address: ${info.address}<br> Email : ${info.email}<br> Phone: ${info.phone}<br> Agent: ${info.agentName}<br> Part price: $${info.partPrice}<br> ${info.shippingDetails}<br> Warranty: ${info.warranty} Stock No.: ${info.stockNo}` )
+.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br> Address: ${info.address}<br> Email : ${info.email}<br> Phone: ${info.phone}<br> Agent: ${info.agentName}<br> Part price: $${info.partPrice}<br> ${info.shippingDetails}<br> Warranty: ${info.warranty}days Stock No.: ${info.stockNo}` )
 
 .join("<br>")
 : ""
