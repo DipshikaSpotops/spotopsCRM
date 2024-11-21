@@ -2706,7 +2706,7 @@ res.status(500).send("Internal Server Error");
 app.put("/orders/updateYard/:orderNo/:yardIndex", async (req, res) => {
 const { orderNo, yardIndex } = req.params;
 const { trackingNo, eta, shipperName, trackingLink, status, updatedBy } = req.body;
-
+var firstname = req.query.firstName;
 try {
 // Fetch the order by order number
 const order = await Order.findOne({ orderNo });
@@ -2756,12 +2756,25 @@ yardData.eta = eta || "";
 yardData.shipperName = shipperName || "";
 yardData.trackingLink = trackingLink || "";
 
+
 // Update yard status
 yardData.status = status || "Yard PO Sent";
 
 // Add a label voided entry to the order history
-const labelVoidedEntry = `${updatedBy || "User"} voided the label for Yard #${yardIndex} on ${new Date().toLocaleString()}`;
-order.orderHistory.push(labelVoidedEntry);
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+    `Label voided for ${yardIndex -1 } by ${firstname} on ${formattedDateTime}`
+    );
+
 
 // Save the updated order
 await order.save();

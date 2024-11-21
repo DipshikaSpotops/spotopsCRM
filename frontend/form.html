@@ -5077,7 +5077,7 @@ $("#voidLabel").on("click", function () {
             };
 
             // Send the updated data to the backend
-            fetch(`https://www.spotops360.com/orders/updateYard/${orderNo}/${yardIndex}`, {
+            fetch(`https://www.spotops360.com/orders/updateYard/${orderNo}/${yardIndex}?firstName=${firstName}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
