@@ -611,7 +611,43 @@ item.additionalInfo && item.additionalInfo.length > 0
 }</td>
 <td>${item.orderStatus}</td>
 <td>${item.grossProfit}</td>
+<td>
+  ${
+    item.additionalInfo && item.additionalInfo.length > 0
+      ? (() => {
+          let totalYardSpent = 0;
+          item.additionalInfo.forEach(info => {
+            const yardPP = parseFloat(info.partPrice) || 0;
+            const yardOSorYS = info.shippingDetails || '';
+            let shippingValueYard = 0;
+            if (yardOSorYS.includes("Own shipping")) {
+              shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+            } else if (yardOSorYS.includes("Yard shipping")) {
+              shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+            }
+            const yardOthers = parseFloat(info.others) || 0;
+            const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
+            const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
+            const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
+            const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
+            totalYardSpent +=
+              yardPP +
+              shippingValueYard +
+              yardOthers +
+              escOwnShipReturn +
+              escOwnShipReplacement +
+              yardOwnShippingReplacement -
+              yardRefundAmount;
+          });
+          const subtractRefund = spMinusTax - custRefundedAmount;
+          const currentGP = subtractRefund - totalYardSpent;
 
+          // Return the aggregated actualGP
+          return `$${currentGP.toFixed(2)}`;
+        })()
+      : ""
+  }
+</td>
 <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
 <td>${actions}</td>
