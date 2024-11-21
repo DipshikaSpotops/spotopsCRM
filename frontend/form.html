@@ -3493,97 +3493,129 @@ $("#otherShipperInput").hide();
 
 // var labelDate;
 $("#editYardInfo").on("click", async function () {
-  console.log("clicking on save");
-  $(".mainDiv").removeClass("blur"); 
-  const yardIndex = $(this).data("yard-index");
-  let currentYardData = {};
+console.log("clicking on save");
+$(".mainDiv").removeClass("blur");
+const yardIndex = $(this).data("yard-index");
+let currentYardData = {};
+try {
+let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
+let orderData = await response.json();
+let escCause = "";
+const currentYardData = orderData.additionalInfo[yardIndex - 1];
+const status = $("#refund").val();
+if (
+(status === "Yard located" || status === "Yard PO Sent") &&
+currentYardData
+) {
+alert("Wrong status selected, please select an appropriate option");
+return; 
+}
+if (status === "PO cancelled" && currentYardData.poCancelledDate) {
+alert("Wrong status selected, please select an appropriate option");
+return; 
+}
+if (status === "Part shipped" && currentYardData.partShippedDate) {
+alert("Wrong status selected, please select an appropriate option");
+return;
+}
+if (status === "Part delivered" && currentYardData.deliveredDate) {
+alert("Wrong status selected, please select an appropriate option");
+return;
+}
+if (status === "Escalation" && currentYardData.escalationDate) {
+alert("Wrong status selected, please select an appropriate option");
+return; 
+}
+const trackingNo = $("#trackingNoEdit").val();
+const eta = $("#etaEdit").val();
+let shipperName =
+$("#shipperNameEdit").val() === "Others"
+? $("#otherShipperInput").val()
+: $("#shipperNameEdit").val();
+const trackingLink = $("#linkInput").val();
+const paymentStatus = $(".paymentStatus").val();
+const refundedAmount = $("#refundedAmount").val();
+let newStatus = $("#orderStatus").val();
+if (
+status === "Label created" &&
+(!trackingNo || !eta || !shipperName || !trackingLink)
+) {
+alert(
+"Please fill all required fields: Tracking No, ETA, Shipper Name, and Tracking Link."
+);
+return; // Exit the function if validation fails
+}
 
-  try {
-    let response = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
-    let orderData = await response.json();
-    let escCause = "";
+// Proceed only if validation passes
+if (status === "Part shipped") {
+newStatus = "In Transit";
+var partShippedDate = currentDateTime;
+} else if (status === "PO cancelled") {
+newStatus = "Yard Processing";
+var poCancelledDate = currentDateTime;
+} else if (status === "Label created") {
+newStatus = "Yard Processing";
+var labelCreationDate = currentDateTime;
+currentYardData.labelCreationDate = currentYardData.labelCreationDate || [];
+currentYardData.labelCreationDate.push(currentDateTime);
+} else if (status === "Escalation") {
+newStatus = "Escalation";
+var escalationDate = currentDateTime;
+escCause = $("#esc").val();
+var escTicked = "Yes";
+$("#escTickBox").prop("checked", true);
+} else if (status === "Part delivered") {
+newStatus = "Order Fulfilled";
+var deliveredDate = currentDateTime;
+} else if (status === "Yard PO Sent") {
+newStatus = "Yard Processing";
+var poSentDate = currentDateTime;
+}
 
-    const currentYardData = orderData.additionalInfo[yardIndex - 1];
-    const status = $("#refund").val();
-    const trackingNo = $("#trackingNoEdit").val();
-    const eta = $("#etaEdit").val();
-    let shipperName = $("#shipperNameEdit").val() === "Others"
-      ? $("#otherShipperInput").val()
-      : $("#shipperNameEdit").val();
-    const trackingLink = $("#linkInput").val();
-    const paymentStatus = $(".paymentStatus").val();
-    const refundedAmount = $("#refundedAmount").val();
-    let newStatus = $("#orderStatus").val();
+const updatedData = {
+...currentYardData,
+status: status,
+labelCreationDate: currentYardData.labelCreationDate,
+poSentDate: poSentDate || currentYardData.poSentDate,
+poCancelledDate: poCancelledDate || currentYardData.poCancelledDate,
+partShippedDate: partShippedDate || currentYardData.partShippedDate,
+deliveredDate: deliveredDate || currentYardData.deliveredDate,
+trackingNo: trackingNo || currentYardData.trackingNo,
+eta: eta || currentYardData.eta,
+shipperName: shipperName || currentYardData.shipperName,
+trackingLink: trackingLink || currentYardData.trackingLink,
+refundedAmount: refundedAmount
+? parseFloat(refundedAmount)
+: currentYardData.refundedAmount,
+escalationCause: escCause || currentYardData.escalationCause,
+escalationDate: escalationDate || currentYardData.escalationDate,
+escTicked: escTicked || currentYardData.escTicked,
+};
 
-    // Validation: Prevent proceeding if required fields are empty for "Label created"
-    if (status === "Label created" && (!trackingNo || !eta || !shipperName || !trackingLink)) {
-      alert("Please fill all required fields: Tracking No, ETA, Shipper Name, and Tracking Link.");
-      return; // Exit the function if validation fails
-    }
+const payload = {
+updatedYardData: updatedData,
+orderStatus: newStatus || orderData.orderStatus,
+};
 
-    // Proceed only if validation passes
-    if (status === "Part shipped") {
-      newStatus = "In Transit";
-      var partShippedDate = currentDateTime;
-    } else if (status === "Label created") {
-      newStatus = "Yard Processing";
-      var labelCreationDate = currentDateTime;
-      currentYardData.labelCreationDate = currentYardData.labelCreationDate || [];
-      currentYardData.labelCreationDate.push(currentDateTime);
-    } else if (status === "Escalation") {
-      newStatus = "Escalation";
-      var escalationDate = currentDateTime;
-      escCause = $("#esc").val();
-      var escTicked = "Yes";
-      $("#escTickBox").prop("checked", true);
-    } else if (status === "Part delivered") {
-      newStatus = "Order Fulfilled";
-      var deliveredDate = currentDateTime;
-    } else if (status === "Yard PO Sent") {
-      newStatus = "Yard Processing";
-      var poSentDate = currentDateTime;
-    }
+console.log("Payload:", payload);
 
-    const updatedData = {
-      ...currentYardData,
-      status: status,
-      labelCreationDate: currentYardData.labelCreationDate,
-      poSentDate: poSentDate || currentYardData.poSentDate,
-      partShippedDate: partShippedDate || currentYardData.partShippedDate,
-      deliveredDate: deliveredDate || currentYardData.deliveredDate,
-      trackingNo: trackingNo || currentYardData.trackingNo,
-      eta: eta || currentYardData.eta,
-      shipperName: shipperName || currentYardData.shipperName,
-      trackingLink: trackingLink || currentYardData.trackingLink,
-      refundedAmount: refundedAmount
-        ? parseFloat(refundedAmount)
-        : currentYardData.refundedAmount,
-      escalationCause: escCause || currentYardData.escalationCause,
-      escalationDate: escalationDate || currentYardData.escalationDate,
-      escTicked: escTicked || currentYardData.escTicked,
-    };
+await fetch(
+`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`,
+{
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(payload),
+}
+);
 
-    const payload = {
-      updatedYardData: updatedData,
-      orderStatus: newStatus || orderData.orderStatus,
-    };
-
-    console.log("Payload:", payload);
-
-    await fetch(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}?firstName=${firstName}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    // Only hide the popup after successful submission
-    $("#editYardPopup").hide();
-    window.location.reload();
-  } catch (error) {
-    console.error("Error fetching or updating yard data:", error);
-  }
+// Only hide the popup after successful submission
+$("#editYardPopup").hide();
+window.location.reload();
+} catch (error) {
+console.error("Error fetching or updating yard data:", error);
+}
 });
 
 
@@ -4033,8 +4065,6 @@ $("#ourShippingInput").hide();
 });
 
 
-
-$("#refund").on("change", function () {
 //   var yardData;
 //   fetch(`https://www.spotops360.com/orders/${orderNo}`)
 // .then((response) => response.json())
@@ -4068,6 +4098,7 @@ $("#refund").on("change", function () {
 // }else{
 //   $("#saveEsc").prop("disabled", false) .css("filter", "none");
 // }
+$("#refund").on("change", function () {
 const refundStatus = $(this).val();
 console.log("yardStatus",refundStatus);
 if (refundStatus === "Part shipped") {
