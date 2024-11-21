@@ -641,7 +641,7 @@ yardRefundAmount;
 });
 var spMinusTax = item.soldP - item.salestax;
 var custRefundedAmount = item.custRefundedAmount;
-const subtractRefund = spMinusTax - custRefundedAmount;
+const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
 console.log("currentGP",spMinusTax,custRefundedAmount,subtractRefund,currentGP,totalYardSpent);
 return `$${currentGP.toFixed(2)}`;
