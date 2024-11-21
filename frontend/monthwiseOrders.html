@@ -142,11 +142,27 @@ margin-left: 0;
 display: block;
 }
 }
+/* for fixed headers */ 
+.fixed-controls-container {
+position: sticky;
+top: 0;
+z-index: 10;
+background-color: #fff;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+padding: 10px 0;
+}
+
+.fixed-controls {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+gap: 15px;
+}
 #searchInput {
 width: 40%;
 border-radius: 30px;
 border: 1px solid grey;
-margin: 0% 28%;
 background: white
 url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png)
 5px center no-repeat;
@@ -154,6 +170,27 @@ background-size: 20px 20px;
 padding-left: 35px;
 height: 40px;
 }
+.filter-bar input,
+.filter-bar button {
+margin-left: 10px;
+}
+#showTotalOrders {
+border: 1px solid #c0c0c0;
+text-align: center;
+border-radius: 8px;
+background-color: #3096a58f;
+padding: 5px;
+}
+#loadingMessage {
+text-align: center;
+font-size: 1.5em;
+color: #333;
+}
+table.table {
+margin-top: 15px;
+width: 100%;
+}
+/* making headers fixed till here */
 .profile-table {
 width: 50%;
 margin: 20px auto;
@@ -221,11 +258,6 @@ background-color: green;
 background-color: grey;
 color: white;
 }
-#loadingMessage {
-text-align: center;    
-font-size: 1.5em;
-color: #333;
-}
 .modal-overlay {
 position: fixed;
 top: 0;
@@ -237,16 +269,6 @@ z-index: 999; /* Places it just below the modal div */
 }
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
-}
-#showTotalOrders{
-border: 1px solid #c0c0c0;
-text-align: center;
-height: auto;
-width: auto;
-border-radius: 8px;
-margin: 1% -3%;
-background-color: #3096a58f;
-padding: 5px;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -375,8 +397,8 @@ aria-labelledby="userMenu"
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">View Orders- Monthly</h1>
-<div>
+<h1 class="fixed-header text-center" style="text-align: center; margin-right: 34%;">View Orders- Monthly</h1>
+<div class="fixed-controls">
 <input
 type="text"
 class="form-control"
