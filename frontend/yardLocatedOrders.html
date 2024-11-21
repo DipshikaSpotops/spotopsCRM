@@ -546,12 +546,12 @@ $("#infoTable").append(`
 <td>${item.orderNo}</td>
 <td><b>Attention</b>: ${item.attention}<br>${item.sAddress}  
 </td>  
-<td>Part Name: ${item.pReq}<br> ${item.year} ${item.make} ${item.model}</td>
+<td>Part Required: ${item.pReq}<br> ${item.year} ${item.make} ${item.model}</td>
 <td>${item.desc}<br> <b>VIN</b>: ${item.vin} </td>
 <td>${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br> Address: ${info.address}<br> Email : ${info.email}<br> Phone: ${info.phone}<br> Agent: ${info.agentName}<br> Part price: $${info.partPrice}<br> ${info.shippingDetails}<br> Warranty: ${info.warranty}` )
+.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br> Address: ${info.address}<br> Email : ${info.email}<br> Phone: ${info.phone}<br> Agent: ${info.agentName}<br> Part price: $${info.partPrice}<br> ${info.shippingDetails}<br> Warranty: ${info.warranty} Stock No.: ${info.stockNo}` )
 
 .join("<br>")
 : ""
