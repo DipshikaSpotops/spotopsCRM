@@ -152,6 +152,8 @@ background-size: 20px 20px;
 padding-left: 35px;
 height: 40px;
 position: fixed;
+top: 60px; /* Adjusting for the navbar height */
+  z-index: 10;
 }
 .profile-table {
 width: 50%;
@@ -175,7 +177,6 @@ display: block;
 width: 82vw; 
 }
 
-table.table th,
 table.table td {
 white-space: nowrap;
 overflow: hidden;
@@ -185,9 +186,10 @@ text-align: center;
 border-bottom: 1px solid #ddd;
 }
 table.table th {
+  top: 200px; 
+  z-index: 5;
+  position: sticky;  
 background-color: #f2f2f2;
-position: sticky;
-z-index: 5;
 white-space: nowrap;
 }
 table.table td.actions {
@@ -266,9 +268,9 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar">
 <div class="logo">
-  <a href="index.html">
-    <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-    </a>   
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a>   
 </div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
@@ -388,38 +390,38 @@ placeholder="Search..."
 />
 </div>
 <!--  controls -->
-<div id="pagination-controls"  style="position: fixed;margin-top: 5%;"></div>
-<div id="filterAndTotal" style="display: flex;margin-top: 9%;margin-bottom: 3%;margin-left: -2%;">
+<div id="pagination-controls"  style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"></div>
+<div id="filterAndTotal" style="display: flex;margin-top: 9%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;">
 <div class="filter-bar">
-  <input id="monthYearPicker" type="month" class="form-control" />
-  <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
 <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
-      
+
 <table class="table table-bordered mt-4">
-  <thead>
-    <tr>
-      <th style="cursor: pointer" scope="col">Order Date</th>
-      <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Customer Info<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Part Info <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Est GP <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Current GP <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Actions</th>
-      <!-- <th style="cursor: pointer" scope="col">Send Invoice</th> -->
-      <th style="cursor: pointer" scope="col">Email <span class="aToZ">&#9650;</span></th>
-      </tr>
-  </thead>
-  <tbody id="infoTable">
-      <!-- Table data goes here -->
-  </tbody>
+<thead>
+<tr>
+<th style="cursor: pointer" scope="col">Order Date</th>
+<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Customer Info<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Part Info <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Est GP <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Current GP <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Actions</th>
+<!-- <th style="cursor: pointer" scope="col">Send Invoice</th> -->
+<th style="cursor: pointer" scope="col">Email <span class="aToZ">&#9650;</span></th>
+</tr>
+</thead>
+<tbody id="infoTable">
+<!-- Table data goes here -->
+</tbody>
 </table>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
@@ -491,7 +493,7 @@ sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
 updateSortIcons(0, sortOrder.orderDate);
 }
 $("th").eq(0).on("click", function () {
-    sortTableByDate();
+sortTableByDate();
 });
 function sortTable(column, type) {
 const table = $("#infoTable");
@@ -595,14 +597,14 @@ $("#infoTable").append(`
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
 <td>${item.customerName}<br>
-    ${item.phone}<br>
-     ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
-    ${item.sAddress}
-    </td>
-    
+${item.phone}<br>
+${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
+${item.sAddress}
+</td>
+
 <td>Part required: ${item.pReq || item.partName}<br>
-    ${item.year} ${item.make} ${item.model}
-    </td>
+${item.year} ${item.make} ${item.model}
+</td>
 <td>${  
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
@@ -756,23 +758,23 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const day = date.getDate();
 const month = months[date.getMonth()];
 const year = date.getFullYear();
-    const monthMap = {
-        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-        May: "05", Jun: "06", Jul: "07", Aug: "08",
-        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-    };
-    var monthNum = monthMap[month];
+const monthMap = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+May: "05", Jun: "06", Jul: "07", Aug: "08",
+Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+};
+var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-  const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 
-  if (ordersResponse.status !== 200) {
-    throw new Error("Failed to fetch current month's orders");
-  }
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch current month's orders");
+}
 
 allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
@@ -893,7 +895,7 @@ $("body").addClass("modal-active");
 $("#loadingMessage").show();
 
 const monthYear = $("#monthYearPicker").val(); 
-  const [year, monthNumber] = monthYear.split("-");
+const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 try {
