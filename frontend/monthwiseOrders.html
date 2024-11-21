@@ -630,6 +630,12 @@ const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
 const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
 const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
 const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
+
+// Only calculate if the conditions are met
+if (
+info.status !== "PO cancelled" || 
+(info.status === "PO cancelled" && info.paymentStatus === "Card charged")
+) {
 totalYardSpent +=
 yardPP +
 shippingValueYard +
@@ -638,16 +644,18 @@ escOwnShipReturn +
 escOwnShipReplacement +
 yardOwnShippingReplacement -
 yardRefundAmount;
+}
 });
-var spMinusTax = item.soldP - item.salestax;
-var custRefundedAmount = item.custRefundedAmount || 0;
+
+const spMinusTax = item.soldP - item.salestax;
+const custRefundedAmount = item.custRefundedAmount || 0;
 const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
-console.log("currentGP",spMinusTax,custRefundedAmount,subtractRefund,currentGP,totalYardSpent);
+console.log("currentGP", spMinusTax, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
 return `$${currentGP.toFixed(2)}`;
 })()
 : ""
-  }
+}
 </td>
 <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
 <td ${escalationStyle}>${escalationStatus}</td>
