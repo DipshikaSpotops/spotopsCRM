@@ -586,7 +586,7 @@ console.log("diff", poSentDateOnly, currentDateOnly, differenceInDays);
                     ${lastInfo.phone || ""}</td>
                 <td>${lastInfo.status}</td>
                 <td>${lastInfo.poSentDate || "N/A"}<br>  
-                    <b>${differenceInDays + 1 || "N/A"} days ago</b>
+                   ${differenceInDays >= 1 ? `<b>${differenceInDays} day(s) ago</b>` : ""}
                 <td>${actions}</td>
             </tr>
         `;
