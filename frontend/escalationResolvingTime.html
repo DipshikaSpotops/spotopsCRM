@@ -605,38 +605,46 @@ function renderTableRows(page, orders = allOrders) {
     // Render rows for each resolved order
     ordersForPage.forEach(item => {
         const yardLogs = {};
-
         item.orderHistory.forEach((log, index) => {
-            const yardRegex = /(Yard \d+)/;
-            const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+    console.log(`Log ${index + 1}: ${log}`);
+    const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
+    const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-            const yardMatch = log.match(yardRegex);
-            const datetimeMatch = log.match(datetimeRegex);
+    const yardMatch = log.match(yardRegex);
+    const datetimeMatch = log.match(datetimeRegex);
 
-            if (yardMatch && datetimeMatch) {
-                const yard = yardMatch[1];
-                const logDate = datetimeMatch[0];
+    if (yardMatch && datetimeMatch) {
+        const yard = yardMatch[1];
+        const logDate = datetimeMatch[0];
 
-                if (log.includes("Escalation updated")) {
-                    if (!yardLogs[yard]) {
-                        yardLogs[yard] = [];
-                    }
-                    yardLogs[yard].push({ start: logDate, end: null, resolution: null });
-                } else if (
-                    (log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
-                    yardLogs[yard] &&
-                    yardLogs[yard].length > 0
-                ) {
-                    const currentEscalation = yardLogs[yard].find((segment) => !segment.end);
-                    if (currentEscalation) {
-                        currentEscalation.end = logDate;
-                        currentEscalation.resolution = log.includes("Part delivered updated")
-                            ? "Fulfillment"
-                            : "Cancellation";
-                    }
-                }
+        // Start a new escalation if "Escalation updated" appears
+        if (log.includes("Escalation updated")) {
+            if (!yardLogs[yard]) {
+                yardLogs[yard] = [];
             }
-        });
+            yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+            console.log(`Escalation started for ${yard} at ${logDate}`);
+        } 
+        // Resolve escalation if "Part delivered updated" or "Order Cancelled" appears
+        else if (
+            (log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
+            yardLogs[yard] &&
+            yardLogs[yard].length > 0
+        ) {
+            const currentEscalation = yardLogs[yard].find((segment) => !segment.end);
+            if (currentEscalation) {
+                currentEscalation.end = logDate;
+                currentEscalation.resolution = log.includes("Part delivered updated")
+                    ? "Fulfillment"
+                    : "Cancellation";
+                console.log(
+                    `Escalation resolved for ${yard}. Resolution: ${currentEscalation.resolution}, Start: ${currentEscalation.start}, End: ${currentEscalation.end}`
+                );
+            }
+        }
+    }
+});
+
 
         Object.keys(yardLogs).forEach(yard => {
             yardLogs[yard].forEach(segment => {
