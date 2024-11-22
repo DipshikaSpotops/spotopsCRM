@@ -2486,6 +2486,7 @@ console.log(
 "orderStatus", orderStatus
 );
 var firstName = req.query.firstName;
+console.log("firstName",firstName )
 try {
 const updateFields = {};
 if (custRefundDate) updateFields.custRefundDate = custRefundDate;
