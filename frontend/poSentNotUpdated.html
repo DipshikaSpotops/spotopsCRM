@@ -560,9 +560,16 @@ function renderTableRows(page, orders = allOrders) {
         //  console.log("last",lastInfo);
          if (item.additionalInfo[item.additionalInfo.length - 1].poSentDate !== ""){
          const poSentDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-            console.log("diff", poSentDate, currentDate, differenceInDays);
+            console.log("diff", poSentDate, currentDate);
+            const poSentDateOnly = poSentDate.split(" ").slice(0, 3).join(" ");
+const currentDateOnly = currentDateTime.split(" ")[0] + " " + currentDateTime.split(" ")[1] + " " + currentDateTime.split(" ")[2];
+console.log("labelCreatedDate",labelCreatedDateOnly,currentDateOnly)
+const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+const parsedDate1 = new Date(normalizeDate(labelCreatedDateOnly));
+const parsedDate2 = new Date(normalizeDate(currentDateOnly));
+const diffTime = Math.abs(parsedDate1 - parsedDate2);
+const differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+console.log("diff", poSentDateOnly, currentDateOnly, differenceInDays);
          }else{
             console.log("podate not present");
          }
@@ -663,7 +670,6 @@ token = localStorage.getItem("token");
 }
 
 try {
-    // Fetch orders and cancelled orders from the API
     const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
         axios.get("https://www.spotops360.com/orders", {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -672,32 +678,17 @@ try {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
         }),
     ]);
-
-    // Check if both fetch requests were successful
-    if (ordersResponse.status !== 200 || cancelledOrdersResponse.status !== 200) {
-        throw new Error("Failed to fetch orders");
-    }
-
-    // Combine orders and cancelled orders
     const orders = ordersResponse.data;
-    const cancelledOrders = cancelledOrdersResponse.data;
-    allOrders = [...orders, ...cancelledOrders];
-
-    // Filter orders based on the required conditions
+    allOrders = orders;
     filteredOrders = allOrders.filter((item) => {
-        const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1]; // Get the last entry
+    const lastInfo = item.additionalInfo?.[item.additionalInfo.length - 1];
 
-        if (!lastInfo || lastInfo.status !== "Yard PO Sent" || !lastInfo.poSentDate) {
-            return false; // Skip if status or poSentDate is missing
-        }
+    if (!lastInfo || lastInfo.status !== "Yard PO Sent" || !lastInfo.poSentDate) {
+        return false; 
+    }
+    return true; // Append all orders with status "Yard PO Sent" regardless of differenceInDays
+});
 
-        const poSentDate = new Date(Date.parse(lastInfo.poSentDate.replace(/(\d+)(st|nd|rd|th)/, "$1")));
-        const currentDate = new Date();
-        const differenceInDays = Math.floor((currentDate - poSentDate) / (1000 * 60 * 60 * 24));
-
-        // Return true if the status is "Yard PO Sent" and the difference in days is > 1
-        return differenceInDays > 1;
-    });
 
     // Sort and render the filtered orders
     allOrders = sortOrdersByOrderNoDesc(filteredOrders); // Optional sorting
@@ -730,6 +721,9 @@ return (
 ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
 (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+(order.additionalInfo && order.additionalInfo.some(info => 
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
+)) ||
 (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value))
 );
