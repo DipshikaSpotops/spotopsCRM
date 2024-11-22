@@ -582,8 +582,8 @@ const datetimeMatch = log.match(datetimeRegex);
 yardIndex = yardMatch ? yardMatch[1] : null;
 escFirstEntry = datetimeMatch ? datetimeMatch[0] : null;
 
-if (yardIndex && datetime) {
-yardLogs[yardIndex] = { log, datetime, index };
+if (yardIndex && escFirstEntry) {
+yardLogs[yardIndex] = { log, escFirstEntry, index };
 }
 }
 })
