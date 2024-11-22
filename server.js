@@ -2469,25 +2469,23 @@ res.status(500).json({ message: 'Server error' });
 // for storing custRefunds
 app.put('/orders/:orderNo/custRefund', async (req, res) => {
 console.log("PUT request for custRefund:", req.body);
-
 const { orderNo } = req.params;
 const {
 custRefundDate, 
 custRefundedAmount, 
 cancelledDate, 
-cancelledRefAmount ,
+cancelledRefAmount,
 cancellationReason,
 orderStatus
 } = req.body;
-
 console.log(
 "Refunds:", custRefundDate, custRefundedAmount, 
 "Cancellations:", cancelledDate, cancelledRefAmount, 
 "OrderNo:", orderNo,
-"cancellationReason:",cancellationReason,
-"orderStatus",orderStatus,
+"cancellationReason:", cancellationReason,
+"orderStatus", orderStatus
 );
-
+var firstName = req.query.firstName;
 try {
 const updateFields = {};
 if (custRefundDate) updateFields.custRefundDate = custRefundDate;
@@ -2496,16 +2494,44 @@ if (cancelledDate) updateFields.cancelledDate = cancelledDate;
 if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
 if (cancellationReason) updateFields.cancellationReason = cancellationReason;
 if (orderStatus) updateFields.orderStatus = orderStatus;
-
-const order = await Order.findOneAndUpdate(
-{ orderNo: orderNo },
-{ $set: updateFields },
-{ new: true }
-);
-
+const order = await Order.findOne({ orderNo: orderNo });
 if (!order) {
 return res.status(404).json({ message: 'Order not found' });
 }
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+// Add to orderHistory
+let historyEntry = {
+action: '',
+};
+
+if (custRefundDate && custRefundedAmount) {
+historyEntry.action = 'Order status changed to Refunded';
+}
+else if (cancelledDate && cancelledRefAmount) {
+historyEntry.action = 'Order Cancelled';
+}
+
+if (historyEntry.action) {
+order.orderHistory = order.orderHistory || [];
+order.orderHistory.push(historyEntry);
+order.orderHistory.push(
+    `${historyEntry} by ${firstName} on ${formattedDateTime}`
+    );
+}
+
+// Update the order
+Object.assign(order, updateFields);
+await order.save();
 
 res.json(order);
 } catch (error) {
@@ -2513,7 +2539,6 @@ console.error('Error updating refund or cancellation information:', error);
 res.status(500).json({ message: 'Server error' });
 }
 });
-
 
 
 // const moment = require('moment-timezone');
