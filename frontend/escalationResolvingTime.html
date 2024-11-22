@@ -570,7 +570,7 @@ ordersForPage.forEach((item) => {
     var arr = item.orderHistory;
 var yardLogs = {};
 // console.log("orderHistory",arr);
-var datetime;
+var escFirstEntry;
 var yardIndex;
 arr.forEach((log, index) => {
 if (log.includes("Escalation")) {
@@ -580,7 +580,7 @@ const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 const yardMatch = log.match(yardRegex);
 const datetimeMatch = log.match(datetimeRegex);
 yardIndex = yardMatch ? yardMatch[1] : null;
-datetime = datetimeMatch ? datetimeMatch[0] : null;
+escFirstEntry = datetimeMatch ? datetimeMatch[0] : null;
 
 if (yardIndex && datetime) {
 yardLogs[yardIndex] = { log, datetime, index };
