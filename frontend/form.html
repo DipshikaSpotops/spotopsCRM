@@ -2249,7 +2249,7 @@ $("#cancelledRefundSubmit").on("click", function () {
   console.log("Cancelled Refund Amount:", cancelledRefAmount);
   console.log("Order No:", orderNo);
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, {
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstName}`, {
     cancelledDate: cancelledDate,
     cancelledRefAmount: cancelledRefAmount,
     orderNo: orderNo,
