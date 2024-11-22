@@ -2519,9 +2519,8 @@ else if (cancelledDate && cancelledRefAmount) {
 historyEntry = 'Order Cancelled';
 }
 
-if (historyEntry.action) {
+if (historyEntry) {
 order.orderHistory = order.orderHistory || [];
-order.orderHistory.push(historyEntry);
 order.orderHistory.push(
     `${historyEntry} by ${firstName} on ${formattedDateTime}`
     );
