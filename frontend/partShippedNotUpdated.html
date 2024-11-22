@@ -582,9 +582,11 @@ const yardEntries = Object.values(yardLogs);
 var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
 console.log("Last:", lDateTime);
 const labelCreatedDate = new Date(Date.parse(lDateTime));
+const labelCreatedDateOnly = labelCreatedDate.split(" ")[0] + " " + labelCreatedDate.split(" ")[1] + " " + labelCreatedDate.split(" ")[2];
 const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
+const currentDateOnly = currentDate.split(" ")[0] + " " + currentDate.split(" ")[1] + " " + currentDate.split(" ")[2];
 differenceInDays = Math.floor((currentDate - labelCreatedDate) / (1000 * 60 * 60 * 24));
-console.log("diff", labelCreatedDate, currentDate, differenceInDays);
+console.log("diff", labelCreatedDateOnly, currentDateOnly, differenceInDays);
 
 const actions = generateActions(item);
 const row = `
@@ -599,7 +601,7 @@ ${lastInfo.email || ""}<br>
 ${lastInfo.phone || ""}</td>
 <td>${lastInfo.status}</td>
 <td>
-${lDateTime || "N/A"}<br>  
+${labelCreatedDateOnly || "N/A"}<br>  
 <b>${differenceInDays || "N/A"} days ago</b>
 </td>
 <td>${actions}</td>
