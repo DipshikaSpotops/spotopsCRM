@@ -767,6 +767,9 @@ const basicSearch = (
 ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value)) ||
+(order.additionalInfo && order.additionalInfo.some(info => 
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
+)) ||
 (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
 (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
 (order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
