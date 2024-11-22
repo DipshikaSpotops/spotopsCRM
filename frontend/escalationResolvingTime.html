@@ -625,7 +625,7 @@ function renderTableRows(page, orders = allOrders) {
             yardLogs[yard].push({ start: logDate, end: null, resolution: null });
             console.log(`Escalation started for ${yard} at ${logDate}`);
         } else if (
-            (log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
+            (log.includes("Part delivered updated") || log.includes("Order status updated to Order Cancelled")) &&
             yardLogs[yard] &&
             yardLogs[yard].length > 0
         ) {
