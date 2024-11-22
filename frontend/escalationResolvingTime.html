@@ -403,14 +403,10 @@ placeholder="Search..."
 <tr>
 <th style="cursor: pointer" scope="col">Order Date</th>
 <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Esc Date <span class="aToZ" >&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Resolution Date<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Resolved In<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">Email <span class="aToZ">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="infoTable">
@@ -627,9 +623,8 @@ $("#infoTable").append(`
 <td>${item.orderNo}</td>
 <td>${escDateOnly}</td>
 <td>${resolutionDateOnly}</td>
+<td>${differenceInDays} days</td>
 <td>${item.orderStatus}</td>
-<td ${escalationStyle}>${item.additionalInfo.some(yard => yard.escTicked === "Yes") ? 'Yes' : ''}</td>
-<td>${differenceInDays}</td>
 </tr>
 `);
 });
