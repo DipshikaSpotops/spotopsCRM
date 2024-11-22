@@ -3524,14 +3524,14 @@ if (status === "Part shipped" && currentYardData.partShippedDate) {
 alert("Wrong status selected, please select an appropriate option");
 return;
 }
-if (status === "Part delivered" && currentYardData.deliveredDate) {
-alert("Wrong status selected, please select an appropriate option");
-return;
-}
-if (status === "Escalation" && currentYardData.escalationDate) {
-alert("Wrong status selected, please select an appropriate option");
-return; 
-}
+// if (status === "Part delivered" && currentYardData.deliveredDate) {
+// alert("Wrong status selected, please select an appropriate option");
+// return;
+// }
+// if (status === "Escalation" && currentYardData.escalationDate) {
+// alert("Wrong status selected, please select an appropriate option");
+// return; 
+// }
 const trackingNo = $("#trackingNoEdit").val();
 const eta = $("#etaEdit").val();
 let shipperName =
@@ -3572,6 +3572,7 @@ var escTicked = "Yes";
 $("#escTickBox").prop("checked", true);
 } else if (status === "Part delivered") {
 newStatus = "Order Fulfilled";
+var mainOrderDeliveredDate = currentDateTime;
 var deliveredDate = currentDateTime;
 } else if (status === "Yard PO Sent") {
 newStatus = "Yard Processing";
@@ -3601,6 +3602,7 @@ escTicked: escTicked || currentYardData.escTicked,
 const payload = {
 updatedYardData: updatedData,
 orderStatus: newStatus || orderData.orderStatus,
+mainOrderDeliveredDate : mainOrderDeliveredDate || ""
 };
 
 console.log("Payload:", payload);
