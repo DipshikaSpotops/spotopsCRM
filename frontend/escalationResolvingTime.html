@@ -633,7 +633,7 @@ function renderTableRows(page, orders = allOrders) {
             const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
             if (unresolvedEscalation) {
                 unresolvedEscalation.end = logDate;
-                unresolvedEscalation.resolution = log.includes("Part delivered updated")
+                unresolvedEscalation.resolution = log.includes("Part delivered updated" || "Order status updated to Order Cancelled")
                     ? "Fulfillment"
                     : "Cancellation";
                 console.log(
