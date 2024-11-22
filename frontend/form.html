@@ -2175,6 +2175,7 @@ alert("Failed to update dispute information.");
 // for dispute till here
 //for custRefund
 $(".custRefundSubmit").on("click", function () {
+  var firstname = localStorage.getItem("firstName");
   $(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
   // Existing code to fade out the modal and get form values
   const custRefundDate = $(".refundedDate").val();
@@ -2192,7 +2193,7 @@ $(".custRefundSubmit").on("click", function () {
     orderStatus:"Refunded"
   };
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstName}`, custRefundData)
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, custRefundData)
     .then(function (response) {
       $("#custRefunds").val(custRefundedAmount);
 
@@ -2238,7 +2239,7 @@ $("#cancelledRefundSubmit").on("click", function () {
   $("#cancellingOrder").fadeOut();
   // $(".modal-overlay").remove();
   // $("body").removeClass("modal-active");
-
+  var firstname = localStorage.getItem("firstName");
   const cancelledDate = $("#cancelledDate").val();
   const cancelledRefAmount = $(".cancelledRefAmount").val();
   const orderNo = urlParams.get("orderNo");
@@ -2249,7 +2250,7 @@ $("#cancelledRefundSubmit").on("click", function () {
   console.log("Cancelled Refund Amount:", cancelledRefAmount);
   console.log("Order No:", orderNo);
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstName}`, {
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, {
     cancelledDate: cancelledDate,
     cancelledRefAmount: cancelledRefAmount,
     orderNo: orderNo,
