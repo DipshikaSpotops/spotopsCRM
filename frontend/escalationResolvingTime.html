@@ -567,9 +567,11 @@ const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty(); 
 
 ordersForPage.forEach((item) => { 
-    var arr = item.orderHistory;
+var arr = item.orderHistory; // to extract the first entry of escalation
 var yardLogs = {};
-// console.log("orderHistory",arr);
+var cancelledDate = item.cancelledDate || "" ;
+var mainDeliveredDate = item.mainOrderDeliveredDate || "" ;
+console.log("cancelledDate",cancelledDate,"mainDeliveredDAte",mainDeliveredDate);
 var escFirstEntry;
 var yardIndex;
 arr.forEach((log, index) => {
@@ -590,7 +592,19 @@ yardLogs[yardIndex] = { log, escFirstEntry, index };
 console.log("esc logs",yardLogs);    
 const yardlength = item.additionalInfo.length;
 let escalationStyle = '';
-
+const yardEntries = Object.values(yardLogs);
+var escFirstEntryDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].escFirstEntry : null;
+console.log("esc entry datetime:", escFirstEntryDateTime);
+const escDateOnly = escFirstEntryDateTime.split(" ").slice(0, 3).join(" ");
+var resolutionDate = mainDeliveredDate || cancelledDate || "" ;
+const resolutionDateOnly = resolutionDate.split(" ").slice(0, 3).join(" ");
+console.log("labelCreatedDate",escDateOnly,resolutionDateOnly)
+const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+const parsedDate1 = new Date(normalizeDate(escDateOnly));
+const parsedDate2 = new Date(normalizeDate(resolutionDateOnly));
+const diffTime = Math.abs(parsedDate1 - parsedDate2);
+const differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+console.log("diff",differenceInDays);
 if (item.orderStatus === "Order Fulfilled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
 escalationStyle = 'style="background-color: #4c8b0f;color:white;"';
 }
@@ -611,14 +625,11 @@ $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
-<td>${item.pReq || item.partName}</td>
-<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+<td>${escDateOnly}</td>
+<td>${resolutionDateOnly}</td>
 <td>${item.orderStatus}</td>
 <td ${escalationStyle}>${item.additionalInfo.some(yard => yard.escTicked === "Yes") ? 'Yes' : ''}</td>
-<td>${actions}</td>
-<td>${item.email}</td>
+<td>${differenceInDays}</td>
 </tr>
 `);
 });
