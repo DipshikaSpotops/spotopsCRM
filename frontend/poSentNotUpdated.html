@@ -564,7 +564,7 @@ function renderTableRows(page, orders = allOrders) {
             const poSentDateOnly = poSentDate.split(" ").slice(0, 3).join(" ");
 const currentDateOnly = currentDateTime.split(" ")[0] + " " + currentDateTime.split(" ")[1] + " " + currentDateTime.split(" ")[2];
 const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
-const parsedDate1 = new Date(normalizeDate(labelCreatedDateOnly));
+const parsedDate1 = new Date(normalizeDate(poSentDateOnly));
 const parsedDate2 = new Date(normalizeDate(currentDateOnly));
 const diffTime = Math.abs(parsedDate1 - parsedDate2);
 const differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
