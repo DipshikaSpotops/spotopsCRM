@@ -542,107 +542,75 @@ sortTable(index, type);
 });
 
 function renderTableRows(page, orders = allOrders) {
-//  orders based on valid statuses and escalation
-// Check if any entry in additionalInfo has escTicked set to "Yes"
-
-const isEscTicked = orders.some(order => 
-    order.additionalInfo && order.additionalInfo.some(info => info.escTicked === "Yes")
-  );
-if (isEscTicked) {
-  $("#escTickBox").prop("checked", true);
-} else {
-  $("#escTickBox").prop("checked", false);
-}
-const filteredOrders = orders.filter(order => {
-const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
-return hasEscalation;
+// Filter orders based on the condition: `cancelledDate` or `mainDeliveredDate` should exist
+const filteredOrders = orders.filter(item => {
+return item.cancelledDate || item.mainDeliveredDate;
 });
+
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
-const ordersForPage = filteredOrders.slice(start, end);  
-$('#infoTable').empty(); 
+const ordersForPage = filteredOrders.slice(start, end); // Paginate the filtered results
 
-ordersForPage.forEach((item) => { 
-var arr = item.orderHistory; // to extract the first entry of escalation
+$('#infoTable').empty(); // Clear the table
+
+ordersForPage.forEach((item) => {
+const cancelledDate = item.cancelledDate || "N/A";
+const mainDeliveredDate = item.mainDeliveredDate || "N/A";
+
+// Determine escalation and resolution dates
+var arr = item.orderHistory; // Extract escalation history
 var yardLogs = {};
-var cancelledDate = item.cancelledDate || "" ;
-var mainDeliveredDate = item.mainOrderDeliveredDate || "" ;
-console.log("cancelledDate",cancelledDate,"mainDeliveredDAte",mainDeliveredDate);
 var escFirstEntry;
 var yardIndex;
+
 arr.forEach((log, index) => {
 if (log.includes("Escalation updated")) {
-const yardRegex = /Yard (\d+)/;
 const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
-
-const yardMatch = log.match(yardRegex);
 const datetimeMatch = log.match(datetimeRegex);
-yardIndex = yardMatch ? yardMatch[1] : null;
 escFirstEntry = datetimeMatch ? datetimeMatch[0] : null;
+}
+});
 
-if (yardIndex && escFirstEntry) {
-yardLogs[yardIndex] = { log, escFirstEntry, index };
-}
-}
-})
-console.log("esc logs",yardLogs);    
-const yardlength = item.additionalInfo.length;
-let escalationStyle = '';
-const yardEntries = Object.values(yardLogs);
-var escFirstEntryDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].escFirstEntry : null;
-console.log("esc entry datetime:", escFirstEntryDateTime);
-const escDateOnly = escFirstEntryDateTime.split(" ").slice(0, 3).join(" ");
-var resolutionDate = mainDeliveredDate || cancelledDate || "" ;
-const resolutionDateOnly = resolutionDate.split(" ").slice(0, 3).join(" ");
-console.log("labelCreatedDate",escDateOnly,resolutionDateOnly)
+const escDateOnly = escFirstEntry ? escFirstEntry.split(" ").slice(0, 3).join(" ") : "N/A";
+const resolutionDateOnly = (item.mainDeliveredDate || item.cancelledDate || "N/A").split(" ").slice(0, 3).join(" ");
+
+// Calculate difference in days
 const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
 const parsedDate1 = new Date(normalizeDate(escDateOnly));
 const parsedDate2 = new Date(normalizeDate(resolutionDateOnly));
 const diffTime = Math.abs(parsedDate1 - parsedDate2);
 const differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-console.log("diff",differenceInDays);
-if (item.orderStatus === "Order Fulfilled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
-escalationStyle = 'style="background-color: #4c8b0f;color:white;"';
-}
-else if (item.orderStatus === "Order Cancelled" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
-escalationStyle = 'style="background-color: #ff2121;color:white;"';
-}
-else if (item.orderStatus === "Dispute" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
-escalationStyle = 'style="background-color: #d55900;color:white;"';
-}
-else if (item.orderStatus === "Refunded" && item.additionalInfo.some(yard => yard.escTicked === "Yes")) {
-escalationStyle = 'style="background-color: #5a3286;color:white;"';
-}
 const actions = `
 <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+// Append the row
 $("#infoTable").append(`
 <tr>
-<td>${dateOnly}</td>
+<td>${item.orderDate}</td>
 <td>${item.orderNo}</td>
 <td>${escDateOnly}</td>
 <td>${resolutionDateOnly}</td>
 <td>${differenceInDays} days</td>
 <td>${item.orderStatus}</td>
+td>${actions}</td>
 </tr>
 `);
 });
+
 createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
-
 // Function to create pagination controls
-function createPaginationControls(totalPages, filteredOrders = allOrders) {
+function createPaginationControls(totalPages, filteredOrders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); 
 if (totalPages > 1) {
 paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 for (let i = 1; i <= totalPages; i++) {
-    paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
 }
 paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
 }
-// pagination button clicks
+
+// Handle pagination button clicks
 $('#pagination-controls').on('click', '.page-btn', function () {
 currentPage = $(this).data('page');
 renderTableRows(currentPage, filteredOrders); // Re-render the table with filtered orders
