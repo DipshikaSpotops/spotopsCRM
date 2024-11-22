@@ -542,77 +542,138 @@ sortTable(index, type);
 });
 
 function renderTableRows(page, orders = allOrders) {
-    const resolvedOrders = orders.filter(item => {
-        const escalations = [];
-        let currentEscalation = null;
+    const resolvedOrders = orders.filter((item) => {
+        const yardLogs = {};
         let hasResolution = false;
 
-        // Iterate over orderHistory to find all escalations and their resolutions
-        item.orderHistory.forEach((log, index) => {
-            const logDateMatch = log.match(/\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/);
-            const logDate = logDateMatch ? logDateMatch[0] : null;
+        item.orderHistory.forEach((log) => {
+            const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
+            const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-            if (log.includes("Escalation updated")) {
-                // Start a new escalation
-                if (currentEscalation) {
-                    // If the previous escalation hasn't been resolved, discard it
-                    currentEscalation = null;
-                }
-                currentEscalation = {
-                    start: logDate,
-                    resolution: null,
-                    yard: log.match(/Yard (\d+)/)?.[1] || "Unknown",
-                };
-                escalations.push(currentEscalation);
-            }
+            const yardMatch = log.match(yardRegex);
+            const datetimeMatch = log.match(datetimeRegex);
 
-            if (currentEscalation) {
-                // Check if the log indicates a resolution
-                if (log.includes("Part delivered updated") || log.includes("Order Cancelled")) {
-                    currentEscalation.end = logDate; // Mark the resolution date
-                    currentEscalation.resolution = log.includes("Part delivered updated")
-                        ? "Fulfillment"
-                        : "Cancellation";
-                    hasResolution = true; // Mark that at least one resolution exists for this order
+            if (yardMatch && datetimeMatch) {
+                const yard = yardMatch[1];
+                const logDate = datetimeMatch[0];
+
+                if (log.includes("Escalation updated")) {
+                    // Start a new escalation segment for this yard
+                    if (!yardLogs[yard]) {
+                        yardLogs[yard] = [];
+                    }
+                    yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+                } else if (
+                    (log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
+                    yardLogs[yard] &&
+                    yardLogs[yard].length > 0
+                ) {
+                    // Resolve the most recent unresolved escalation for this yard
+                    const currentEscalation = yardLogs[yard].find((segment) => !segment.end);
+                    if (currentEscalation) {
+                        currentEscalation.end = logDate;
+                        currentEscalation.resolution = log.includes("Part delivered updated")
+                            ? "Fulfillment"
+                            : "Cancellation";
+                        hasResolution = true; // Mark that at least one resolution exists for this order
+                    }
                 }
             }
         });
 
-        return hasResolution; // Include the order only if it has at least one resolved escalation
+        return hasResolution; // Include the order only if it has at least one valid resolution
     });
 
-    // Pagination and display logic
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const ordersForPage = resolvedOrders.slice(start, end);
 
     $('#infoTable').empty(); // Clear the table
 
-    ordersForPage.forEach(item => {
-        const escalations = item.orderHistory.filter(log => log.includes("Escalation updated"));
-        const resolution = item.orderHistory.find(
-            log => log.includes("Part delivered updated") || log.includes("Order Cancelled")
-        );
-        const resolutionType = resolution?.includes("Part delivered updated")
-            ? "Fulfillment"
-            : "Cancellation";
+    ordersForPage.forEach((item) => {
+        const yardLogs = {};
 
-        const row = `
-            <tr>
-                <td>${item.orderDate}</td>
-                <td>${item.orderNo}</td>
-                <td>${escalations[0] || "N/A"}</td>
-                <td>${resolution || "N/A"}</td>
-                <td>${resolutionType}</td>
-                <td>${item.orderStatus}</td>
-            </tr>
-        `;
-        $('#infoTable').append(row);
+        // Parse `orderHistory` for escalations and resolutions
+        item.orderHistory.forEach((log) => {
+            const yardRegex = /(Yard \d+)/;
+            const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+
+            const yardMatch = log.match(yardRegex);
+            const datetimeMatch = log.match(datetimeRegex);
+
+            if (yardMatch && datetimeMatch) {
+                const yard = yardMatch[1];
+                const logDate = datetimeMatch[0];
+
+                if (log.includes("Escalation updated")) {
+                    if (!yardLogs[yard]) {
+                        yardLogs[yard] = [];
+                    }
+                    yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+                } else if (
+                    (log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
+                    yardLogs[yard] &&
+                    yardLogs[yard].length > 0
+                ) {
+                    const currentEscalation = yardLogs[yard].find((segment) => !segment.end);
+                    if (currentEscalation) {
+                        currentEscalation.end = logDate;
+                        currentEscalation.resolution = log.includes("Part delivered updated")
+                            ? "Fulfillment"
+                            : "Cancellation";
+                    }
+                }
+            }
+        });
+
+        // Append rows for each resolved escalation
+        Object.keys(yardLogs).forEach((yard) => {
+            yardLogs[yard].forEach((segment) => {
+                if (!segment.resolution) return; // Skip unresolved segments
+
+                const escStartDate = segment.start;
+                const escEndDate = segment.end || 'N/A';
+                const resolution = segment.resolution;
+
+                // Calculate the resolution time
+                const normalizeDate = (dateStr) =>
+                    dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+                const parsedDate1 = new Date(normalizeDate(escStartDate));
+                const parsedDate2 =
+                    escEndDate !== 'N/A' ? new Date(normalizeDate(escEndDate)) : null;
+                const diffTime = parsedDate2 ? Math.abs(parsedDate2 - parsedDate1) : null;
+                const differenceInDays = diffTime
+                    ? Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+                    : 'N/A';
+
+                const actions = `
+                    <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+
+                const displayStatus =
+                    resolution === 'Fulfillment'
+                        ? 'Fulfillment'
+                        : resolution === 'Cancellation'
+                        ? 'Cancellation'
+                        : item.orderStatus;
+
+                $('#infoTable').append(`
+                    <tr>
+                        <td>${item.orderDate}</td>
+                        <td>${item.orderNo}</td>
+                        <td>${yard}</td>
+                        <td>${escStartDate}</td>
+                        <td>${escEndDate}</td>
+                        <td>${differenceInDays} days</td>
+                        <td>${displayStatus}</td>
+                        <td>${actions}</td>
+                    </tr>
+                `);
+            });
+        });
     });
 
     createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage), resolvedOrders);
 }
-
 
 // Function to create pagination controls
 function createPaginationControls(totalPages, filteredOrders) {
