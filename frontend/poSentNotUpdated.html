@@ -560,10 +560,9 @@ function renderTableRows(page, orders = allOrders) {
         //  console.log("last",lastInfo);
          if (item.additionalInfo[item.additionalInfo.length - 1].poSentDate !== ""){
          const poSentDate = new Date(Date.parse(item.additionalInfo[item.additionalInfo.length - 1].poSentDate.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-            console.log("diff", poSentDate, currentDate);
+            console.log("diff", poSentDate);
             const poSentDateOnly = poSentDate.split(" ").slice(0, 3).join(" ");
 const currentDateOnly = currentDateTime.split(" ")[0] + " " + currentDateTime.split(" ")[1] + " " + currentDateTime.split(" ")[2];
-console.log("labelCreatedDate",labelCreatedDateOnly,currentDateOnly)
 const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
 const parsedDate1 = new Date(normalizeDate(labelCreatedDateOnly));
 const parsedDate2 = new Date(normalizeDate(currentDateOnly));
