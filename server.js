@@ -379,6 +379,7 @@ disputeReason: String,
 custRefundDate: String,
 custRefundedAmount: Number,
 cancelledDate: String,
+mainOrderDeliveredDate: String,
 cancelledRefAmount: Number,
 cancellationReason:String,
 expediteShipping: String, 
@@ -886,11 +887,12 @@ const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
 if (!order) return res.status(404).send("Order not found");
 if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
 const yardInfo = order.additionalInfo[yardIndex];
-const { updatedYardData, orderStatus } = req.body;
+const { updatedYardData, orderStatus ,mainOrderDeliveredDate} = req.body;
 console.log("updatedYardData",updatedYardData);
 Object.assign(yardInfo, updatedYardData);
 order.additionalInfo[yardIndex] = yardInfo;
 order.orderStatus = orderStatus;
+order.mainOrderDeliveredDate = mainOrderDeliveredDate;
 const firstName = req.query.firstName;
 const status = updatedYardData.status || ""; 
 const paymentStatus = req.body.paymentStatus || "";
