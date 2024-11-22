@@ -582,7 +582,7 @@ const yardEntries = Object.values(yardLogs);
 var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
 console.log("Last:", lDateTime);
 const labelCreatedDateOnly = lDateTime.split(" ").slice(0, 3).join(" ");
-const currentDateOnly = currentDateTime.split(" ")[0] + " " + currentDateTime.split(" ")[1] + " " + currentDate.split(" ")[2];
+const currentDateOnly = currentDateTime.split(" ")[0] + " " + currentDateTime.split(" ")[1] + " " + currentDateTime.split(" ")[2];
 console.log("labelCreatedDate",labelCreatedDateOnly,currentDateOnly)
 const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
 const parsedDate1 = new Date(normalizeDate(labelCreatedDateOnly));
