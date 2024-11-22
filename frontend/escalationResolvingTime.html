@@ -546,58 +546,97 @@ function renderTableRows(page, orders = allOrders) {
 const filteredOrders = orders.filter(item => {
 return item.cancelledDate || item.mainDeliveredDate;
 });
-
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = filteredOrders.slice(start, end); // Paginate the filtered results
-
 $('#infoTable').empty(); // Clear the table
 
 ordersForPage.forEach((item) => {
-const cancelledDate = item.cancelledDate || "N/A";
-const mainDeliveredDate = item.mainDeliveredDate || "N/A";
+let yardEscalationSegments = {};
 
-// Determine escalation and resolution dates
-var arr = item.orderHistory; // Extract escalation history
-var yardLogs = {};
-var escFirstEntry;
-var yardIndex;
-
-arr.forEach((log, index) => {
-if (log.includes("Escalation updated")) {
+// Parse `orderHistory` to find all escalations and resolutions for each yard
+item.orderHistory.forEach((log) => {
+const yardRegex = /(Yard \d+)/; // Match yard identifiers like "Yard 1", "Yard 2"
 const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+
+const yardMatch = log.match(yardRegex);
 const datetimeMatch = log.match(datetimeRegex);
-escFirstEntry = datetimeMatch ? datetimeMatch[0] : null;
+
+if (yardMatch && datetimeMatch) {
+const yard = yardMatch[1]; // Extract "Yard X"
+const logDate = datetimeMatch[0]; // Extract date and time
+
+if (log.includes("Escalation updated")) {
+// Start a new escalation segment for this yard
+if (!yardEscalationSegments[yard]) {
+yardEscalationSegments[yard] = [];
+}
+yardEscalationSegments[yard].push({ start: logDate, end: null, resolution: null });
+} else if (log.includes("Part delivered updated")) {
+// Resolve the most recent escalation for this yard with "Fulfillment"
+if (yardEscalationSegments[yard] && yardEscalationSegments[yard].length > 0) {
+const currentEscalation = yardEscalationSegments[yard].find(segment => !segment.end);
+if (currentEscalation) {
+currentEscalation.end = logDate;
+currentEscalation.resolution = "Fulfillment";
+}
+}
+} else if (log.includes("Order Cancelled")) {
+// Resolve the most recent escalation for this yard with "Cancellation"
+if (yardEscalationSegments[yard] && yardEscalationSegments[yard].length > 0) {
+const currentEscalation = yardEscalationSegments[yard].find(segment => !segment.end);
+if (currentEscalation) {
+currentEscalation.end = logDate;
+currentEscalation.resolution = "Cancellation";
+}
+}
+}
 }
 });
 
-const escDateOnly = escFirstEntry ? escFirstEntry.split(" ").slice(0, 3).join(" ") : "N/A";
-const resolutionDateOnly = (item.mainDeliveredDate || item.cancelledDate || "N/A").split(" ").slice(0, 3).join(" ");
+// Append each yard escalation segment to the table
+Object.keys(yardEscalationSegments).forEach((yard) => {
+yardEscalationSegments[yard].forEach((segment) => {
+const escStartDate = segment.start;
+const escEndDate = segment.end || "N/A";
+const resolution = segment.resolution || "N/A";
+
+// Replace order status based on resolution type
+const displayStatus = resolution === "Fulfillment"
+? "Fulfillment"
+: resolution === "Cancellation"
+? "Cancellation"
+: item.orderStatus;
 
 // Calculate difference in days
 const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
-const parsedDate1 = new Date(normalizeDate(escDateOnly));
-const parsedDate2 = new Date(normalizeDate(resolutionDateOnly));
-const diffTime = Math.abs(parsedDate1 - parsedDate2);
-const differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+const parsedDate1 = new Date(normalizeDate(escStartDate));
+const parsedDate2 = escEndDate !== "N/A" ? new Date(normalizeDate(escEndDate)) : null;
+const diffTime = parsedDate2 ? Math.abs(parsedDate2 - parsedDate1) : null;
+const differenceInDays = diffTime ? Math.ceil(diffTime / (1000 * 60 * 60 * 24)) : "N/A";
+
 const actions = `
 <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-// Append the row
+
 $("#infoTable").append(`
 <tr>
 <td>${item.orderDate}</td>
 <td>${item.orderNo}</td>
-<td>${escDateOnly}</td>
-<td>${resolutionDateOnly}</td>
+<td>${yard}</td>
+<td>${escStartDate}</td>
+<td>${escEndDate}</td>
 <td>${differenceInDays} days</td>
-<td>${item.orderStatus}</td>
-td>${actions}</td>
+<td>${displayStatus}</td>
+<td>${actions}</td>
 </tr>
 `);
+});
+});
 });
 
 createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
+
 // Function to create pagination controls
 function createPaginationControls(totalPages, filteredOrders) {
 const paginationControls = $('#pagination-controls');
@@ -816,3 +855,7 @@ window.location.href = "login_signup.html";
 
 </body>
 </html>
+in the above html, in var arr = item.orderHistory;
+i might have multiple Yard 1 Escalation updated,
+so from the first entry of Yard 1 Escalation updated till the item.orderHistory has value Yard 1 Part delivered updated or Order Cancelled again after that for example, Yard 1 Escalation updated is present inside item.orderHistory, so again the same procedure has to be followed we check till we find the value Yard 1 Part delivered updated or Order Cancelled
+so for all these scenarios i need to append in the table and again if the item.orderHistory has Yard 1 Escalation updated after that so for that also we have to follow the same procedure and check for the values after that which has Part delivered updated or Order Cancelled, how can i do in in the above code
