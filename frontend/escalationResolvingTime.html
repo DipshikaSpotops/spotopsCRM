@@ -548,7 +548,26 @@ sortTable(index, type);
 function renderTableRows(page, orders = allOrders) {
 //  orders based on valid statuses and escalation
 // Check if any entry in additionalInfo has escTicked set to "Yes"
-var arr = item.orderHistory;
+
+const isEscTicked = orders.some(order => 
+    order.additionalInfo && order.additionalInfo.some(info => info.escTicked === "Yes")
+  );
+if (isEscTicked) {
+  $("#escTickBox").prop("checked", true);
+} else {
+  $("#escTickBox").prop("checked", false);
+}
+const filteredOrders = orders.filter(order => {
+const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
+return hasEscalation;
+});
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = filteredOrders.slice(start, end);  
+$('#infoTable').empty(); 
+
+ordersForPage.forEach((item) => { 
+    var arr = item.orderHistory;
 var yardLogs = {};
 // console.log("orderHistory",arr);
 var datetime;
@@ -568,26 +587,7 @@ yardLogs[yardIndex] = { log, datetime, index };
 }
 }
 })
-console.log("esc logs",yardLogs);
-const isEscTicked = orders.some(order => 
-    order.additionalInfo && order.additionalInfo.some(info => info.escTicked === "Yes")
-  );
-if (isEscTicked) {
-  $("#escTickBox").prop("checked", true);
-} else {
-  $("#escTickBox").prop("checked", false);
-}
-
-const filteredOrders = orders.filter(order => {
-const hasEscalation = order.additionalInfo && order.additionalInfo.some(yard => yard.escTicked === "Yes");
-return hasEscalation;
-});
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = filteredOrders.slice(start, end);  
-$('#infoTable').empty(); 
-
-ordersForPage.forEach((item) => { 
+console.log("esc logs",yardLogs);    
 const yardlength = item.additionalInfo.length;
 let escalationStyle = '';
 
