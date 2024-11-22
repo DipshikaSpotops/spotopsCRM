@@ -581,11 +581,9 @@ console.log(item.additionalInfo.length - 1);
 const yardEntries = Object.values(yardLogs);
 var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
 console.log("Last:", lDateTime);
-const labelCreatedDate = new Date(Date.parse(lDateTime));
-console.log("labelCreatedDate",labelCreatedDate)
-const labelCreatedDateOnly = labelCreatedDate.split(" ")[0] + " " + labelCreatedDate.split(" ")[1] + " " + labelCreatedDate.split(" ")[2];
-const currentDate = new Date(Date.parse(currentDateTime.replace(/(\d+)(st|nd|rd|th)/, '$1')));
-const currentDateOnly = currentDate.split(" ")[0] + " " + currentDate.split(" ")[1] + " " + currentDate.split(" ")[2];
+const labelCreatedDateOnly = lDateTime.split(" ").slice(0, 3).join(" ");
+console.log("labelCreatedDate",labelCreatedDateOnly,currentDateTime)
+const currentDateOnly = currentDateTime.split(" ")[0] + " " + currentDateTime.split(" ")[1] + " " + currentDate.split(" ")[2];
 differenceInDays = Math.floor((currentDate - labelCreatedDate) / (1000 * 60 * 60 * 24));
 console.log("diff", labelCreatedDateOnly, currentDateOnly, differenceInDays);
 
