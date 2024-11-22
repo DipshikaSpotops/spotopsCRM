@@ -2192,7 +2192,7 @@ $(".custRefundSubmit").on("click", function () {
     orderStatus:"Refunded"
   };
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund`, custRefundData)
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstName}`, custRefundData)
     .then(function (response) {
       $("#custRefunds").val(custRefundedAmount);
 
