@@ -2510,15 +2510,13 @@ const minutes = date.getMinutes().toString().padStart(2, '0');
 const formattedDate = `${day} ${month}, ${year}`;
 const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 // Add to orderHistory
-let historyEntry = {
-action: '',
-};
+let historyEntry = "";
 
 if (custRefundDate && custRefundedAmount) {
-historyEntry.action = 'Order status changed to Refunded';
+historyEntry = 'Order status changed to Refunded';
 }
 else if (cancelledDate && cancelledRefAmount) {
-historyEntry.action = 'Order Cancelled';
+historyEntry = 'Order Cancelled';
 }
 
 if (historyEntry.action) {
