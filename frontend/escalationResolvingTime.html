@@ -445,19 +445,20 @@ function parseCustomDate(dateString) {
         Nov: "11", Dec: "12"
     };
 
-    // Extract the parts of the date using regex
+    // Match dates with or without "st", "nd", "rd", "th"
     const parts = dateString.match(/(\d+)(?:st|nd|rd|th)?\s(\w+),\s(\d{4})/);
+
     if (parts) {
         const day = parts[1].padStart(2, "0"); // Zero-padded day
         const month = months[parts[2]];       // Month as a number
         const year = parts[3];               // Year
 
-        return new Date(`${year}-${month}-${day}`); // Create a Date object
+        return new Date(`${year}-${month}-${day}`); // Return a Date object
     }
+
     return null; // Return null if parsing fails
 }
 
-// Sort the table by the Order Date column
 function sortTableByDate(dateType) {
     const table = $("#infoTable");
     const rows = table.find("tr").toArray();
@@ -469,47 +470,32 @@ function sortTableByDate(dateType) {
     else if (dateType === "resolutionDate") columnIndex = 4; // Fifth column
 
     rows.sort((a, b) => {
-        // Parse the dates from the specified column
         const dateA = parseCustomDate($(a).find("td").eq(columnIndex).text().trim());
         const dateB = parseCustomDate($(b).find("td").eq(columnIndex).text().trim());
 
         if (!dateA) return 1; // Push invalid dates to the bottom
         if (!dateB) return -1;
 
-        // Sort based on the current sort order for the date type
         return sortOrder[dateType] === "asc" ? dateA - dateB : dateB - dateA;
     });
 
-    // Append the sorted rows back to the table
     $.each(rows, function (index, row) {
-        table.append(row);
+        table.append(row); // Append sorted rows back to the table
     });
 
-    // Toggle the sort order for the selected date type
+    // Toggle sort order for the selected date type
     sortOrder[dateType] = sortOrder[dateType] === "asc" ? "desc" : "asc";
 
     // Update sort icons for the selected column
     updateSortIcons(columnIndex, sortOrder[dateType]);
 }
-
-// $("th").each(function (index) {
-//     $(this).on("click", function () {
-//         switch (index) {
-//             case 0: // First column: Order Date
-//                 sortTableByDate("orderDate");
-//                 break;
-//             case 3: // Fourth column: Esc Date
-//                 sortTableByDate("escDate");
-//                 break;
-//             case 4: // Fifth column: Resolution Date
-//                 sortTableByDate("resolutionDate");
-//                 break;
-//             default:
-//                 // Ignore other columns
-//                 break;
-//         }
-//     });
-// });
+$("th").each(function (index) {
+    $(this).on("click", function () {
+        if (index === 0) sortTableByDate("orderDate"); // First column for orderDate
+        if (index === 3) sortTableByDate("escDate");  // Fourth column for escDate
+        if (index === 4) sortTableByDate("resolutionDate"); // Fifth column for resolutionDate
+    });
+});
 
 function sortTable(column, type) {
 const table = $("#infoTable");
