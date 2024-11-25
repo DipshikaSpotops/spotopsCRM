@@ -574,7 +574,7 @@ function renderTableRows(page, orders = allOrders) {
 
         // Handle resolution updates
         else if (log.includes("Part delivered updated") || log.includes("Order Cancelled")) {
-            console.log("log")
+            console.log("log",log)
             const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
 
             if (unresolvedEscalation) {
