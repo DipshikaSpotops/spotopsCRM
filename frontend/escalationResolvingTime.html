@@ -708,10 +708,10 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
                     : resolution === "Cancellation"
                     ? "Cancellation"
                     : item.orderStatus;
-
+                    const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
                 $("#infoTable").append(`
                     <tr>
-                        <td>${item.orderDate}</td>
+                        <td>${dateOnly}</td>
                         <td>${item.orderNo}</td>
                         <td>${yard}</td>
                         <td>${escStartDate}</td>
