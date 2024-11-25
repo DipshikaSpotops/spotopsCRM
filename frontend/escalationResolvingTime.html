@@ -709,13 +709,16 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
                     ? "Cancellation"
                     : item.orderStatus;
                     const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
-                $("#infoTable").append(`
+                    const escStartDateOnly = escStartDate.split(" ")[0] + " " + escStartDate.split(" ")[1] + " " + escStartDate.split(" ")[2];
+                    const resolutionDateOnly = escEndDate.split(" ")[0] + " " + escEndDate.split(" ")[1] + " " + escEndDate.split(" ")[2];
+
+                    $("#infoTable").append(`
                     <tr>
                         <td>${dateOnly}</td>
                         <td>${item.orderNo}</td>
                         <td>${yard}</td>
-                        <td>${escStartDate}</td>
-                        <td>${escEndDate}</td>
+                        <td>${escStartDateOnly}</td>
+                        <td>${resolutionDateOnly}</td>
                         <td>${differenceInDays || 0} day(s)</td>
                         <td>${displayStatus}</td>
                         <td>${actions}</td>
