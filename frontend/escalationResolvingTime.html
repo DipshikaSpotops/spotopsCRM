@@ -716,7 +716,7 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
                         <td>${yard}</td>
                         <td>${escStartDate}</td>
                         <td>${escEndDate}</td>
-                        <td>${differenceInDays} days</td>
+                        <td>${differenceInDays || 0} day(s)</td>
                         <td>${displayStatus}</td>
                         <td>${actions}</td>
                     </tr>
