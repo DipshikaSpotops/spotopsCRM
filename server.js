@@ -605,6 +605,27 @@ console.error("Error fetching cancelled orders:", error);
 res.status(500).json({ message: "Server error", error });
 }  
 });
+// for refunded
+app.get("/orders/cancelled", async (req, res) => {
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+const refundedOrders = await Order.find({
+$and: [
+{ orderDate: { $regex: monthYearPattern } },
+{ orderStatus: "Refunded" }
+]
+});
+res.json(refundedOrders);
+} catch (error) {
+console.error("Error fetching cancelled orders:", error);
+res.status(500).json({ message: "Server error", error });
+}  
+});
 // monthly orders
 app.get("/orders/monthly", async (req, res) => {
 try {
