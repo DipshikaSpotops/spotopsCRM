@@ -892,7 +892,17 @@ $(document).ready(function () {
       salesAgent: $("#salesAgent").val(),
       spMinusTax: spMinusTax,
       customerName: customerName,
-      bAddress: `${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()},\n<b>Billing Name</b>: ${$("#bAttention").val()}`,
+      // bAddressStreet : 
+      // bAddressCity: 
+      // bAddressState
+      // bAddressZip
+      // bAddressAcountry
+      // sAddressStreet
+      // sAddressCity
+      // sAddressState
+      // sAddressZip
+      // sAddressAcountry
+      bAddress: `Billing Name: ${$("#bAttention").val()},\n${$("#bAddress").val()},\n${$("#bCity").val()},\n${$("#bState").val()},\n${$("#bZip").val()},\n${$("#bCountry").val()}`,
       sAddress: `${$("#sAddress").val()},\n${$("#sCity").val()},\n${$("#sState").val()},\n${$("#sZip").val()},\n${$("#sCountry").val()}`,
       attention:$("#sAttention").val(),
       email: $("#email").val(),
