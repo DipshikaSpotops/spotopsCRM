@@ -422,6 +422,7 @@ placeholder="Search..."
 $(document).ready(async function () {
 // Pagination related variables
 let allOrders = [];
+let resolvedOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
 // Sorting Order Object
@@ -541,224 +542,6 @@ sortTable(index, type);
 }
 });
 
-function renderTableRows(page, orders = allOrders) {
-    console.log("Rendering table rows...");
-    // Filter orders that have valid resolutions after escalations
-    const resolvedOrders = orders.filter(item => {
-        const yardLogs = {};
-        let hasResolution = false;
-
-        console.log(`Processing orderNo: ${item.orderNo}`);
-        item.orderHistory.forEach((log, index) => {
-    const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
-    const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
-
-    const yardMatch = log.match(yardRegex);
-    const datetimeMatch = log.match(datetimeRegex);
-
-    const logDate = datetimeMatch ? datetimeMatch[0] : null;
-
-    // For logs containing yard information
-    if (yardMatch && logDate) {
-        const yard = yardMatch[1];
-
-        if (!yardLogs[yard]) {
-            yardLogs[yard] = [];
-        }
-
-        if (log.includes("Escalation updated")) {
-            // Start a new escalation
-            yardLogs[yard].push({ start: logDate, end: null, resolution: null });
-            console.log(`Escalation started for ${yard} at ${logDate}`);
-        } else if (/Part delivered updated|Order Cancelled/.test(log)) {
-            // Resolve escalations with Fulfillment or Cancellation
-            const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
-
-            if (unresolvedEscalation) {
-                unresolvedEscalation.end = logDate;
-                unresolvedEscalation.resolution = log.includes("Part delivered updated")
-                    ? "Fulfillment"
-                    : "Cancellation";
-                hasResolution = true;
-                console.log(
-                    `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
-                );
-            }
-        }
-    }
-
-    // For logs without yard information but with "Order Cancelled"
-    if (!yardMatch && log.includes("Order Cancelled") && logDate) {
-        // Find any unresolved escalation across all yards
-        Object.keys(yardLogs).forEach(yard => {
-            const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
-
-            if (unresolvedEscalation) {
-                unresolvedEscalation.end = logDate;
-                unresolvedEscalation.resolution = "Cancellation";
-                hasResolution = true;
-                console.log(
-                    `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
-                );
-            }
-        });
-    }
-});
-
-
-// Log final yardLogs for debugging
-console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
-
-        return hasResolution; // Include the order only if it has at least one valid resolution
-    });
-
-    // Apply pagination to resolved orders
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = resolvedOrders.slice(start, end);
-
-    $('#infoTable').empty(); // Clear the table
-    console.log(`Total resolved orders: ${resolvedOrders.length}`);
-
-    // Render rows for each resolved order
-    ordersForPage.forEach(item => {
-        const yardLogs = {};
-        item.orderHistory.forEach((log, index) => {
-    const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
-    const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
-
-    const yardMatch = log.match(yardRegex);
-    const datetimeMatch = log.match(datetimeRegex);
-
-    const logDate = datetimeMatch ? datetimeMatch[0] : null;
-
-    // For logs containing yard information
-    if (yardMatch && logDate) {
-        const yard = yardMatch[1];
-
-        if (!yardLogs[yard]) {
-            yardLogs[yard] = [];
-        }
-
-        if (log.includes("Escalation updated")) {
-            // Start a new escalation
-            yardLogs[yard].push({ start: logDate, end: null, resolution: null });
-            console.log(`Escalation started for ${yard} at ${logDate}`);
-        } else if (/Part delivered updated|Order Cancelled/.test(log)) {
-            // Resolve escalations with Fulfillment or Cancellation
-            const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
-
-            if (unresolvedEscalation) {
-                unresolvedEscalation.end = logDate;
-                unresolvedEscalation.resolution = log.includes("Part delivered updated")
-                    ? "Fulfillment"
-                    : "Cancellation";
-                hasResolution = true;
-                console.log(
-                    `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
-                );
-            }
-        }
-    }
-
-    // For logs without yard information but with "Order Cancelled"
-    if (!yardMatch && log.includes("Order Cancelled") && logDate) {
-        // Find any unresolved escalation across all yards
-        Object.keys(yardLogs).forEach(yard => {
-            const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
-
-            if (unresolvedEscalation) {
-                unresolvedEscalation.end = logDate;
-                unresolvedEscalation.resolution = "Cancellation";
-                hasResolution = true;
-                console.log(
-                    `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
-                );
-            }
-        });
-    }
-});
-
-
-// Debugging: Final yardLogs
-console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
-
-
-        Object.keys(yardLogs).forEach(yard => {
-            yardLogs[yard].forEach(segment => {
-                if (!segment.resolution) return; // Skip unresolved segments
-
-                const escStartDate = segment.start;
-                const escEndDate = segment.end || "N/A";
-                const resolution = segment.resolution;
-
-                const normalizeDate = dateStr => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
-                const parsedDate1 = new Date(normalizeDate(escStartDate));
-                const parsedDate2 = escEndDate !== "N/A" ? new Date(normalizeDate(escEndDate)) : null;
-                const diffTime = parsedDate2 ? Math.abs(parsedDate2 - parsedDate1) : null;
-                const differenceInDays = diffTime ? Math.ceil(diffTime / (1000 * 60 * 60 * 24)) : "N/A";
-
-                const actions = `
-                    <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-
-                const displayStatus = resolution === "Fulfillment"
-                    ? "Fulfillment"
-                    : resolution === "Cancellation"
-                    ? "Cancellation"
-                    : item.orderStatus;
-
-                $("#infoTable").append(`
-                    <tr>
-                        <td>${item.orderDate}</td>
-                        <td>${item.orderNo}</td>
-                        <td>${yard}</td>
-                        <td>${escStartDate}</td>
-                        <td>${escEndDate}</td>
-                        <td>${differenceInDays} days</td>
-                        <td>${displayStatus}</td>
-                        <td>${actions}</td>
-                    </tr>
-                `);
-            });
-        });
-    });
-
-    createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage), resolvedOrders);
-}
-
-// Create Pagination Controls
-function createPaginationControls(totalPages, filteredOrders= resolvedOrders) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); 
-    if (totalPages > 1) {
-        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
-        }
-        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-    }
-}
-
-    $('#pagination-controls').on('click', '.page-btn', function () {
-        currentPage = $(this).data('page');
-        renderTableRows(currentPage, filteredOrders); // Render only filtered orders
-    });
-
-    $('#pagination-controls').on('click', '#prevPage', function () {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTableRows(currentPage, filteredOrders);
-        }
-    });
-
-    $('#pagination-controls').on('click', '#nextPage', function () {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTableRows(currentPage, filteredOrders);
-        }
-    });
-
-
 // Token fetching logic
 async function fetchToken() {
 try {
@@ -808,23 +591,9 @@ var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/escalated?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
 
-sortedData = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-}
+
+
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 
@@ -865,6 +634,163 @@ const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
 return orderNoB - orderNoA;
 });
 }
+
+async function fetchOrders(month, year) {
+        try {
+            const response = await axios.get(`https://www.spotops360.com/orders/escalated?month=${month}&year=${year}`, {
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
+            });
+
+            if (response.status !== 200) {
+                throw new Error("Failed to fetch orders");
+            }
+
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+            return [];
+        }
+    }
+
+    function filterResolvedOrders(orders) {
+        return orders.filter(order => {
+            const yardLogs = {};
+            let hasResolution = false;
+
+            order.orderHistory.forEach(log => {
+                const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
+                const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+
+                const yardMatch = log.match(yardRegex);
+                const datetimeMatch = log.match(datetimeRegex);
+
+                const logDate = datetimeMatch ? datetimeMatch[0] : null;
+
+                if (yardMatch && logDate) {
+                    const yard = yardMatch[1];
+
+                    if (!yardLogs[yard]) {
+                        yardLogs[yard] = [];
+                    }
+
+                    if (log.includes("Escalation updated")) {
+                        yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+                    } else if (/Part delivered updated|Order Cancelled/.test(log)) {
+                        const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
+
+                        if (unresolvedEscalation) {
+                            unresolvedEscalation.end = logDate;
+                            unresolvedEscalation.resolution = log.includes("Part delivered updated")
+                                ? "Fulfillment"
+                                : "Cancellation";
+                            hasResolution = true;
+                        }
+                    }
+                }
+
+                if (!yardMatch && log.includes("Order Cancelled") && logDate) {
+                    Object.keys(yardLogs).forEach(yard => {
+                        const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
+
+                        if (unresolvedEscalation) {
+                            unresolvedEscalation.end = logDate;
+                            unresolvedEscalation.resolution = "Cancellation";
+                            hasResolution = true;
+                        }
+                    });
+                }
+            });
+
+            return hasResolution;
+        });
+    }
+
+    function renderTableRows(page, orders) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const ordersForPage = orders.slice(start, end);
+
+        $('#infoTable').empty();
+
+        ordersForPage.forEach(order => {
+            const yardLogs = {};
+            order.orderHistory.forEach(log => {
+                const yardRegex = /(Yard \d+)/;
+                const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+
+                const yardMatch = log.match(yardRegex);
+                const datetimeMatch = log.match(datetimeRegex);
+
+                const logDate = datetimeMatch ? datetimeMatch[0] : null;
+
+                if (yardMatch && logDate) {
+                    const yard = yardMatch[1];
+
+                    if (!yardLogs[yard]) {
+                        yardLogs[yard] = [];
+                    }
+
+                    if (log.includes("Escalation updated")) {
+                        yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+                    } else if (/Part delivered updated|Order Cancelled/.test(log)) {
+                        const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
+
+                        if (unresolvedEscalation) {
+                            unresolvedEscalation.end = logDate;
+                            unresolvedEscalation.resolution = log.includes("Part delivered updated")
+                                ? "Fulfillment"
+                                : "Cancellation";
+                        }
+                    }
+                }
+            });
+
+            Object.keys(yardLogs).forEach(yard => {
+                yardLogs[yard].forEach(segment => {
+                    if (!segment.resolution) return;
+
+                    const actions = `
+                        <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}" 
+                            style="background-color: #cae8c9; border: none; color: #61a55e;">View</button>`;
+
+                    const displayStatus = segment.resolution === "Fulfillment"
+                        ? "Fulfillment"
+                        : "Cancellation";
+
+                    $("#infoTable").append(`
+                        <tr>
+                            <td>${order.orderDate}</td>
+                            <td>${order.orderNo}</td>
+                            <td>${yard}</td>
+                            <td>${segment.start}</td>
+                            <td>${segment.end || "N/A"}</td>
+                            <td>${displayStatus}</td>
+                            <td>${actions}</td>
+                        </tr>
+                    `);
+                });
+            });
+        });
+
+        createPaginationControls(Math.ceil(orders.length / rowsPerPage), orders);
+    }
+
+    async function loadOrders(month, year) {
+        const orders = await fetchOrders(month, year);
+        allOrders = orders;
+        resolvedOrders = filterResolvedOrders(allOrders);
+
+        renderTableRows(currentPage, resolvedOrders);
+    }
+
+    await loadOrders(month, year);
+
+    $("#filterButton").click(async function () {
+        const [selectedYear, selectedMonthNum] = $("#monthYearPicker").val().split("-");
+        const selectedMonth = Object.keys(monthMap).find(key => monthMap[key] === selectedMonthNum);
+
+        await loadOrders(selectedMonth, selectedYear);
+    });
 
 $("#infoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
@@ -907,36 +833,6 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 
-$("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
-
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/escalated?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Escalated Orders This Month- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
