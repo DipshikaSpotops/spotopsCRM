@@ -575,7 +575,7 @@ function renderTableRows(page, orders = allOrders) {
     yardLogs[yard]?.length
 ) {
     const currentEscalation = yardLogs[yard].find(segment => !segment.end);
-
+console.log("log",log);
     if (currentEscalation) {
         currentEscalation.end = logDate;
         currentEscalation.resolution = log.includes("Order status updated to Order Cancelled") ? "Cancellation" : "Fulfillment";
