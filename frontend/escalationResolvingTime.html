@@ -566,27 +566,29 @@ function renderTableRows(page, orders = allOrders) {
             yardLogs[yard] = [];
         }
 
-        // Start a new escalation
+        // Handle escalation updates
         if (log.includes("Escalation updated")) {
             yardLogs[yard].push({ start: logDate, end: null, resolution: null });
             console.log(`Escalation started for ${yard} at ${logDate}`);
         }
 
-        // Resolve the escalation
-        else if (log.includes("Part delivered updated") || log.includes("Order status updated to Order Cancelled")) {
-            const unresolvedEscalations = yardLogs[yard].filter(segment => !segment.end);
+        // Handle resolution updates
+        else if (/Part delivered updated|Order status updated to Order Cancelled/.test(log)) {
+            const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
 
-            if (unresolvedEscalations.length > 0) {
-                const currentEscalation = unresolvedEscalations[0]; // Always resolve the earliest unresolved escalation
-                currentEscalation.end = logDate;
-                currentEscalation.resolution = log.includes("Order status updated to Order Cancelled")
-                    ? "Cancellation"
-                    : "Fulfillment";
+            if (unresolvedEscalation) {
+                unresolvedEscalation.end = logDate;
 
-                hasResolution = true;
+                // Determine resolution based on the log entry
+                if (log.includes("Part delivered updated")) {
+                    unresolvedEscalation.resolution = "Fulfillment";
+                } else if (log.includes("Order status updated to Order Cancelled")) {
+                    unresolvedEscalation.resolution = "Cancellation";
+                }
 
+                hasResolution = true; // At least one resolution found
                 console.log(
-                    `Escalation resolved for ${yard}. Resolution: ${currentEscalation.resolution}, Start: ${currentEscalation.start}, End: ${currentEscalation.end}`
+                    `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
                 );
             } else {
                 console.warn(`No unresolved escalation found for ${yard} to resolve.`);
@@ -595,7 +597,9 @@ function renderTableRows(page, orders = allOrders) {
     }
 });
 
-        console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
+// Log final yardLogs for debugging
+console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
+
         return hasResolution; // Include the order only if it has at least one valid resolution
     });
 
@@ -919,3 +923,4 @@ window.location.href = "login_signup.html";
 
 </body>
 </html>
+
