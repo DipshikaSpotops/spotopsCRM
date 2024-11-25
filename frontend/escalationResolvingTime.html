@@ -581,6 +581,7 @@ function renderTableRows(page, orders = allOrders) {
                         currentEscalation.resolution = log.includes("Part delivered updated")
                             ? "Fulfillment"
                             : "Cancellation";
+                            console.log(" currentEscalation.resolution", currentEscalation.resolution)
                         hasResolution = true;
                         console.log(
                             `Escalation resolved for ${yard}. Resolution: ${currentEscalation.resolution}, Start: ${currentEscalation.start}, End: ${currentEscalation.end}`
