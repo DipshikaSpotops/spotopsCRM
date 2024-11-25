@@ -400,16 +400,17 @@ placeholder="Search..."
 <div class="table-responsive">
 <table class="table table-bordered mt-4">
 <thead>
-<tr>
-<th style="cursor: pointer" scope="col">Order Date</th>
-<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Yard<span class="aToZ" >&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Esc Date <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Resolution Date<span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Resolved In<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Resolved By<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Actions</th>
-</tr>
+    <tr>
+        <th style="cursor: pointer" scope="col" onclick="sortTableByDate('orderDate')">Order Date <span class="sort-icon">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col">Yard<span class="sort-icon">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col" onclick="sortTableByDate('escDate')">Esc Date <span class="sort-icon">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col" onclick="sortTableByDate('resolutionDate')">Resolution Date <span class="sort-icon">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col">Resolved In<span class="sort-icon">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col">Resolved By<span class="sort-icon">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col">Actions</th>
+    </tr>
+    
 </thead>
 <tbody id="infoTable">
 <!-- Table data goes here -->
@@ -438,28 +439,24 @@ resolvedIn: "asc",
 resolvedBy: "asc",
 };
 function parseCustomDate(dateString) {
-const months = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-Nov: "11", Dec: "12"
-};
+    const months = {
+        Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+        Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+        Nov: "11", Dec: "12"
+    };
 
-// Extract parts from the string (day, month, year, time)
-const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+    // Extract the parts of the date using regex
+    const parts = dateString.match(/(\d+)(?:st|nd|rd|th)?\s(\w+),\s(\d{4})/);
+    if (parts) {
+        const day = parts[1].padStart(2, "0"); // Zero-padded day
+        const month = months[parts[2]];       // Month as a number
+        const year = parts[3];               // Year
 
-if (parts) {
-const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
-const month = months[parts[2]];
-const year = parts[3];
-const hour = parts[4];
-const minute = parts[5];
-
-// Return a valid date string for comparison
-return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+        return new Date(`${year}-${month}-${day}`); // Create a Date object
+    }
+    return null; // Return null if parsing fails
 }
 
-return null;
-}
 // Sort the table by the Order Date column
 function sortTableByDate(dateType) {
 const table = $("#infoTable");
