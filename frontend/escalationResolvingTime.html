@@ -560,7 +560,6 @@ function renderTableRows(page, orders = allOrders) {
             if (yardMatch && datetimeMatch) {
                 const yard = yardMatch[1];
                 const logDate = datetimeMatch[0];
-
                 // Handle escalation updates
                 if (log.includes("Escalation updated")) {
                     if (!yardLogs[yard]) {
@@ -575,7 +574,7 @@ function renderTableRows(page, orders = allOrders) {
     yardLogs[yard]?.length
 ) {
     const currentEscalation = yardLogs[yard].find(segment => !segment.end);
-console.log("log",log);
+console.log("log",currentEscalation);
     if (currentEscalation) {
         currentEscalation.end = logDate;
         currentEscalation.resolution = log.includes("Order status updated to Order Cancelled") ? "Cancellation" : "Fulfillment";
