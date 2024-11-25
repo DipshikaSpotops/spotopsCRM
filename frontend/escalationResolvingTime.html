@@ -578,11 +578,11 @@ function renderTableRows(page, orders = allOrders) {
 
             if (unresolvedEscalation) {
                 unresolvedEscalation.end = logDate;
-
+console.log("log",log,unresolvedEscalation);
                 // Determine resolution based on the log entry
                 if (log.includes("Part delivered updated")) {
                     unresolvedEscalation.resolution = "Fulfillment";
-                } else if (log.includes("Order status updated to Order Cancelled")) {
+                } else if (log.includes("Order Cancelled")) {
                     unresolvedEscalation.resolution = "Cancellation";
                 }
 
