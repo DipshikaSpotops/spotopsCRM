@@ -492,24 +492,24 @@ function sortTableByDate(dateType) {
     updateSortIcons(columnIndex, sortOrder[dateType]);
 }
 
-$("th").each(function (index) {
-    $(this).on("click", function () {
-        switch (index) {
-            case 0: // First column: Order Date
-                sortTableByDate("orderDate");
-                break;
-            case 3: // Fourth column: Esc Date
-                sortTableByDate("escDate");
-                break;
-            case 4: // Fifth column: Resolution Date
-                sortTableByDate("resolutionDate");
-                break;
-            default:
-                // Ignore other columns
-                break;
-        }
-    });
-});
+// $("th").each(function (index) {
+//     $(this).on("click", function () {
+//         switch (index) {
+//             case 0: // First column: Order Date
+//                 sortTableByDate("orderDate");
+//                 break;
+//             case 3: // Fourth column: Esc Date
+//                 sortTableByDate("escDate");
+//                 break;
+//             case 4: // Fifth column: Resolution Date
+//                 sortTableByDate("resolutionDate");
+//                 break;
+//             default:
+//                 // Ignore other columns
+//                 break;
+//         }
+//     });
+// });
 
 function sortTable(column, type) {
 const table = $("#infoTable");
