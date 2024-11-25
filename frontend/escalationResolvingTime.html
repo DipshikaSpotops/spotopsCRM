@@ -645,6 +645,7 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
             yardLogs[yard] &&
             yardLogs[yard].length > 0
         ) {
+            console.log("log",log);
             // Resolve the most recent unresolved escalation for this yard
             const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
             if (unresolvedEscalation) {
