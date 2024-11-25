@@ -266,9 +266,9 @@ window.location.href = "login_signup.html";
 <div class="navbar">
 <div class="logo">
 <a href="viewAllOrders.html">
-    <a href="index.html">
-        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-        </a>   
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a>   
 </div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
@@ -489,7 +489,7 @@ rows.sort((a, b) => {
 let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
 
- if (type === "number") {
+if (type === "number") {
 valA = parseInt(valA.replace(/\D/g, ""), 10);
 valB = parseInt(valB.replace(/\D/g, ""), 10);
 }
@@ -542,199 +542,215 @@ sortTable(index, type);
 });
 
 function renderTableRows(page, orders = allOrders) {
-    console.log("Rendering table rows...");
-    // Filter orders that have valid resolutions after escalations
-    const resolvedOrders = orders.filter(item => {
-        const yardLogs = {};
-        let hasResolution = false;
+console.log("Rendering table rows...");
+// Filter orders that have valid resolutions after escalations
+const resolvedOrders = orders.filter(item => {
+const yardLogs = {};
+let hasResolution = false;
 
-        console.log(`Processing orderNo: ${item.orderNo}`);
-        item.orderHistory.forEach((log, index) => {
-    // console.log(`Log ${index + 1}: ${log}`);
-    const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
-    const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+console.log(`Processing orderNo: ${item.orderNo}`);
+item.orderHistory.forEach((log, index) => {
+// console.log(`Log ${index + 1}: ${log}`);
+const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
+const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-    const yardMatch = log.match(yardRegex);
-    const datetimeMatch = log.match(datetimeRegex);
+const yardMatch = log.match(yardRegex);
+const datetimeMatch = log.match(datetimeRegex);
 
-    if (yardMatch && datetimeMatch) {
-        const yard = yardMatch[1];
-        const logDate = datetimeMatch[0];
+if (yardMatch && datetimeMatch) {
+const yard = yardMatch[1];
+const logDate = datetimeMatch[0];
 
-        // Ensure yardLogs for the current yard exists
-        if (!yardLogs[yard]) {
-            yardLogs[yard] = [];
-        }
+// Ensure yardLogs for the current yard exists
+if (!yardLogs[yard]) {
+yardLogs[yard] = [];
+}
 
-        // Handle escalation updates
-        if (log.includes("Escalation updated")) {
-            yardLogs[yard].push({ start: logDate, end: null, resolution: null });
-            console.log(`Escalation started for ${yard} at ${logDate}`);
-        }
+// Handle escalation updates
+if (log.includes("Escalation updated")) {
+yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+console.log(`Escalation started for ${yard} at ${logDate}`);
+}
 
-        // Handle resolution updates
-        else if (log.includes("Part delivered updated") || log.includes("Order Cancelled")) {
-            console.log("log",log)
-            const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
+// Handle resolution updates
+else if (log.includes("Part delivered updated")) {
+console.log("log",log)
+const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
 
-            if (unresolvedEscalation) {
-                unresolvedEscalation.end = logDate;
+if (unresolvedEscalation) {
+unresolvedEscalation.end = logDate;
 console.log("log",log,unresolvedEscalation);
-                // Determine resolution based on the log entry
-                if (log.includes("Part delivered updated")) {
-                    unresolvedEscalation.resolution = "Fulfillment";
-                } else if (log.includes("Order Cancelled")) {
-                    unresolvedEscalation.resolution = "Cancellation";
-                }
+// Determine resolution based on the log entry
+if (log.includes("Part delivered updated")) {
+unresolvedEscalation.resolution = "Fulfillment";
+} 
+hasResolution = true; // At least one resolution found
+console.log(
+`Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
+);
+} else {
+console.warn(`No unresolved escalation found for ${yard} to resolve.`);
+}
+}else if (log.includes("Order Cancelled")) {
+console.log("log",log)
+const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
 
-                hasResolution = true; // At least one resolution found
-                console.log(
-                    `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
-                );
-            } else {
-                console.warn(`No unresolved escalation found for ${yard} to resolve.`);
-            }
-        }
-    }
+if (unresolvedEscalation) {
+unresolvedEscalation.end = logDate;
+console.log("log",log,unresolvedEscalation);
+// Determine resolution based on the log entry
+if (log.includes("Order Cancelled")) {
+unresolvedEscalation.resolution = "Cancellation";
+}
+
+hasResolution = true; // At least one resolution found
+console.log(
+`Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
+);
+} else {
+console.warn(`No unresolved escalation found for ${yard} to resolve.`);
+}
+}
+}
 });
 
 // Log final yardLogs for debugging
 console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
 
-        return hasResolution; // Include the order only if it has at least one valid resolution
-    });
+return hasResolution; // Include the order only if it has at least one valid resolution
+});
 
-    // Apply pagination to resolved orders
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = resolvedOrders.slice(start, end);
+// Apply pagination to resolved orders
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = resolvedOrders.slice(start, end);
 
-    $('#infoTable').empty(); // Clear the table
-    console.log(`Total resolved orders: ${resolvedOrders.length}`);
+$('#infoTable').empty(); // Clear the table
+console.log(`Total resolved orders: ${resolvedOrders.length}`);
 
-    // Render rows for each resolved order
-    ordersForPage.forEach(item => {
-        const yardLogs = {};
-        item.orderHistory.forEach((log, index) => {
-    console.log(`Log ${index + 1}: ${log}`);
-    const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
-    const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+// Render rows for each resolved order
+ordersForPage.forEach(item => {
+const yardLogs = {};
+item.orderHistory.forEach((log, index) => {
+console.log(`Log ${index + 1}: ${log}`);
+const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
+const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-    const yardMatch = log.match(yardRegex);
-    const datetimeMatch = log.match(datetimeRegex);
+const yardMatch = log.match(yardRegex);
+const datetimeMatch = log.match(datetimeRegex);
 
-    if (yardMatch && datetimeMatch) {
-        const yard = yardMatch[1];
-        const logDate = datetimeMatch[0];
+if (yardMatch && datetimeMatch) {
+const yard = yardMatch[1];
+const logDate = datetimeMatch[0];
 
-        if (log.includes("Escalation updated")) {
-            // Start a new escalation for this yard
-            if (!yardLogs[yard]) {
-                yardLogs[yard] = [];
-            }
-            yardLogs[yard].push({ start: logDate, end: null, resolution: null });
-            console.log(`Escalation started for ${yard} at ${logDate}`);
-        } else if (
-            (log.includes("Part delivered updated") || log.includes("Order status updated to Order Cancelled")) &&
-            yardLogs[yard] &&
-            yardLogs[yard].length > 0
-        ) {
-            // Resolve the most recent unresolved escalation for this yard
-            const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
-            if (unresolvedEscalation) {
-    unresolvedEscalation.end = logDate;
+if (log.includes("Escalation updated")) {
+// Start a new escalation for this yard
+if (!yardLogs[yard]) {
+yardLogs[yard] = [];
+}
+yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+console.log(`Escalation started for ${yard} at ${logDate}`);
+} else if (
+(log.includes("Part delivered updated") || log.includes("Order status updated to Order Cancelled")) &&
+yardLogs[yard] &&
+yardLogs[yard].length > 0
+) {
+// Resolve the most recent unresolved escalation for this yard
+const unresolvedEscalation = yardLogs[yard].find(segment => !segment.end);
+if (unresolvedEscalation) {
+unresolvedEscalation.end = logDate;
 
-    if (log.includes("Part delivered updated")) {
-        unresolvedEscalation.resolution = "Fulfillment";
-    } else if (log.includes("Order Cancelled")) {
-        unresolvedEscalation.resolution = "Cancellation";
-    }
-
-    console.log(
-        `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
-    );
+if (log.includes("Part delivered updated")) {
+unresolvedEscalation.resolution = "Fulfillment";
+} else if (log.includes("Order Cancelled")) {
+unresolvedEscalation.resolution = "Cancellation";
 }
 
-        }
-    }
+console.log(
+`Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
+);
+}
+
+}
+}
 });
 
 // Debugging: Final yardLogs
 console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
 
 
-        Object.keys(yardLogs).forEach(yard => {
-            yardLogs[yard].forEach(segment => {
-                if (!segment.resolution) return; // Skip unresolved segments
+Object.keys(yardLogs).forEach(yard => {
+yardLogs[yard].forEach(segment => {
+if (!segment.resolution) return; // Skip unresolved segments
 
-                const escStartDate = segment.start;
-                const escEndDate = segment.end || "N/A";
-                const resolution = segment.resolution;
+const escStartDate = segment.start;
+const escEndDate = segment.end || "N/A";
+const resolution = segment.resolution;
 
-                const normalizeDate = dateStr => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
-                const parsedDate1 = new Date(normalizeDate(escStartDate));
-                const parsedDate2 = escEndDate !== "N/A" ? new Date(normalizeDate(escEndDate)) : null;
-                const diffTime = parsedDate2 ? Math.abs(parsedDate2 - parsedDate1) : null;
-                const differenceInDays = diffTime ? Math.ceil(diffTime / (1000 * 60 * 60 * 24)) : "N/A";
+const normalizeDate = dateStr => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+const parsedDate1 = new Date(normalizeDate(escStartDate));
+const parsedDate2 = escEndDate !== "N/A" ? new Date(normalizeDate(escEndDate)) : null;
+const diffTime = parsedDate2 ? Math.abs(parsedDate2 - parsedDate1) : null;
+const differenceInDays = diffTime ? Math.ceil(diffTime / (1000 * 60 * 60 * 24)) : "N/A";
 
-                const actions = `
-                    <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+const actions = `
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
-                const displayStatus = resolution === "Fulfillment"
-                    ? "Fulfillment"
-                    : resolution === "Cancellation"
-                    ? "Cancellation"
-                    : item.orderStatus;
+const displayStatus = resolution === "Fulfillment"
+? "Fulfillment"
+: resolution === "Cancellation"
+? "Cancellation"
+: item.orderStatus;
 
-                $("#infoTable").append(`
-                    <tr>
-                        <td>${item.orderDate}</td>
-                        <td>${item.orderNo}</td>
-                        <td>${yard}</td>
-                        <td>${escStartDate}</td>
-                        <td>${escEndDate}</td>
-                        <td>${differenceInDays} days</td>
-                        <td>${displayStatus}</td>
-                        <td>${actions}</td>
-                    </tr>
-                `);
-            });
-        });
-    });
+$("#infoTable").append(`
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${yard}</td>
+<td>${escStartDate}</td>
+<td>${escEndDate}</td>
+<td>${differenceInDays} days</td>
+<td>${displayStatus}</td>
+<td>${actions}</td>
+</tr>
+`);
+});
+});
+});
 
-    createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage), resolvedOrders);
+createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage), resolvedOrders);
 }
 
 // Create Pagination Controls
 function createPaginationControls(totalPages, filteredOrders) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); 
-    if (totalPages > 1) {
-        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
-        }
-        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-    }
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); 
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
+}
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
 
-    $('#pagination-controls').on('click', '.page-btn', function () {
-        currentPage = $(this).data('page');
-        renderTableRows(currentPage, filteredOrders); // Render only filtered orders
-    });
+$('#pagination-controls').on('click', '.page-btn', function () {
+currentPage = $(this).data('page');
+renderTableRows(currentPage, filteredOrders); // Render only filtered orders
+});
 
-    $('#pagination-controls').on('click', '#prevPage', function () {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTableRows(currentPage, filteredOrders);
-        }
-    });
+$('#pagination-controls').on('click', '#prevPage', function () {
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage, filteredOrders);
+}
+});
 
-    $('#pagination-controls').on('click', '#nextPage', function () {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTableRows(currentPage, filteredOrders);
-        }
-    });
+$('#pagination-controls').on('click', '#nextPage', function () {
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage, filteredOrders);
+}
+});
 }
 
 // Token fetching logic
