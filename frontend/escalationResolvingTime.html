@@ -608,7 +608,7 @@ function renderTableRows(page, orders = allOrders) {
 
 // Log final yardLogs for debugging
 console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
-document.getElementById("showTotalOrders").innerHTML = `Total Resolved Orders This Month- ${resolvedOrders.length}`;
+
         return hasResolution; // Include the order only if it has at least one valid resolution
     });
 
@@ -616,7 +616,7 @@ document.getElementById("showTotalOrders").innerHTML = `Total Resolved Orders Th
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const ordersForPage = resolvedOrders.slice(start, end);
-
+    document.getElementById("showTotalOrders").innerHTML = `Total Resolved Orders This Month- ${resolvedOrders.length}`;
     $('#infoTable').empty(); // Clear the table
     console.log(`Total resolved orders: ${resolvedOrders.length}`);
 
