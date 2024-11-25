@@ -2109,7 +2109,7 @@ orderPlacedDate = data.orderDate;
 $("#orderStatus").on("change", function () {
 const newOrderStatus = $(this).val();
 console.log("Order Status changed to:", newOrderStatus);
-if (newOrderStatus == "Dispute") {
+if (newOrderStatus == "Dispute") { 
 // console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
 $("#disputedDate").val(currentDateTime);
 // orderedDate

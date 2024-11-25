@@ -638,6 +638,17 @@ let shippingType = "";
 let refunds = parseFloat(
 item.additionalInfo[i].refundedAmount || 0
 );
+let custOwnShipReplacement = parseFloat(
+item.additionalInfo[i].custOwnShipReplacement || 0
+);
+let yardOwnShipping = parseFloat(
+item.additionalInfo[i].yardOwnShipping || 0
+);
+
+let custOwnShippingReturn = parseFloat(
+item.additionalInfo[i].custOwnShippingReturn || 0
+);
+
 console.log("refunds", refunds);
 if (shippingDetails) {
 const shippingArray = shippingDetails.split(":");
@@ -649,7 +660,7 @@ totalShipping += shippingCharge;
 otherCharges += otherC;
 tRefunds += refunds;
 overallPurchaseCost = partPrice + shippingCharge + otherC;
-overAllwithRefund = overallPurchaseCost - refunds;
+overAllwithRefund = overallPurchaseCost - refunds - custOwnShipReplacement - yardOwnShipping -custOwnShippingReturn;
 console.log(
 overallPurchaseCost,
 "overall with refunds",
@@ -658,21 +669,24 @@ overAllwithRefund
 totalOveralls += overAllwithRefund;
 console.log("yotalOveralls", totalOveralls);
 yardInfoHtml += `<td>
-${item.additionalInfo[i].yardName || ""}${
-item.additionalInfo[i].yardName ? " | " : ""
-}Part Price: ${item.additionalInfo[i].partPrice || ""}${
-item.additionalInfo[i].partPrice ? " | " : ""
-}<br>
-${item.additionalInfo[i].shippingMethod || ""}${
-item.additionalInfo[i].shippingMethod ? " | " : ""
-}${shippingType} | (${
-shippingCharge || "0"
-}) | Others: ${otherC}<br>
-${
-item.additionalInfo[i].status
-}   | Yard Spend: ${
-item.additionalInfo[i].partPrice + shippingCharge + otherC
-} |  Refunds: ${refunds} <br>
+    ${item.additionalInfo[i].yardName || ""}${item.additionalInfo[i].yardName ? " | " : ""}
+    Part Price: ${item.additionalInfo[i].partPrice || ""}${item.additionalInfo[i].partPrice ? " | " : ""}
+    <br>
+    ${item.additionalInfo[i].shippingMethod || ""}${item.additionalInfo[i].shippingMethod ? " | " : ""}
+    ${shippingType} | (${shippingCharge || "0"}) | Others: ${otherC}
+    <br>
+    ${item.additionalInfo[i].status} | Yard Spend: ${
+        item.additionalInfo[i].partPrice + shippingCharge + otherC
+    } | Refunds: ${refunds}
+    <br>
+    ${custOwnShipReplacement || yardOwnShipping || custOwnShippingReturn ? `
+        Esc own shipping if any:<br>
+        ${custOwnShipReplacement ? `Replacement(Part from customer): $${custOwnShipReplacement}` : ""}
+        ${custOwnShipReplacement && (yardOwnShipping || custOwnShippingReturn) ? " | " : ""}
+        ${yardOwnShipping ? `Replacement(Part from yard): $${yardOwnShipping}` : ""}
+        ${(custOwnShipReplacement || yardOwnShipping) && custOwnShippingReturn ? " | " : ""}
+        ${custOwnShippingReturn ? `Return(Part from customer): $${custOwnShippingReturn}` : ""}
+    ` : ""}
 </td>`;
 } else {
 yardInfoHtml += "<td></td>";
