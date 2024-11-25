@@ -571,24 +571,22 @@ function renderTableRows(page, orders = allOrders) {
                 } 
                 // Handle resolutions
                 else if (
-                    (log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
-                    yardLogs[yard] &&
-                    yardLogs[yard].length > 0
-                ) {
-                    const currentEscalation = yardLogs[yard].find((segment) => !segment.end);
-                    console.log(" currentEscalation.resolution", currentEscalation);
-                    if (currentEscalation) {
-                        currentEscalation.end = logDate;
-                        currentEscalation.resolution = log.includes("Part delivered updated")
-                            ? "Fulfillment"
-                            : "Cancellation";
-                            console.log(" currentEscalation.resolution", currentEscalation.resolution)
-                        hasResolution = true;
-                        console.log(
-                            `Escalation resolved for ${yard}. Resolution: ${currentEscalation.resolution}, Start: ${currentEscalation.start}, End: ${currentEscalation.end}`
-                        );
-                    }
-                }
+    /Part delivered updated|Order status updated to Order Cancelled/.test(log) &&
+    yardLogs[yard]?.length
+) {
+    const currentEscalation = yardLogs[yard].find(segment => !segment.end);
+
+    if (currentEscalation) {
+        currentEscalation.end = logDate;
+        currentEscalation.resolution = log.includes("Part delivered updated") ? "Fulfillment" : "Cancellation";
+        hasResolution = true;
+
+        console.log(
+            `Escalation resolved for ${yard}. Resolution: ${currentEscalation.resolution}, Start: ${currentEscalation.start}, End: ${currentEscalation.end}`
+        );
+    }
+}
+
             }
         });
 
