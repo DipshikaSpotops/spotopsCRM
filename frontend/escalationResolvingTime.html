@@ -576,6 +576,7 @@ function renderTableRows(page, orders = allOrders) {
                     yardLogs[yard].length > 0
                 ) {
                     const currentEscalation = yardLogs[yard].find((segment) => !segment.end);
+                    console.log(" currentEscalation.resolution", currentEscalation);
                     if (currentEscalation) {
                         currentEscalation.end = logDate;
                         currentEscalation.resolution = log.includes("Part delivered updated")
