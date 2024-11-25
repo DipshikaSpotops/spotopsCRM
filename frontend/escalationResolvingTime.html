@@ -727,7 +727,7 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
 }
 
 // Create Pagination Controls
-function createPaginationControls(totalPages, filteredOrders) {
+function createPaginationControls(totalPages, filteredOrders= resolvedOrders) {
     const paginationControls = $('#pagination-controls');
     paginationControls.empty(); 
     if (totalPages > 1) {
@@ -737,6 +737,7 @@ function createPaginationControls(totalPages, filteredOrders) {
         }
         paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
     }
+}
 
     $('#pagination-controls').on('click', '.page-btn', function () {
         currentPage = $(this).data('page');
@@ -756,7 +757,7 @@ function createPaginationControls(totalPages, filteredOrders) {
             renderTableRows(currentPage, filteredOrders);
         }
     });
-}
+
 
 // Token fetching logic
 async function fetchToken() {
@@ -820,7 +821,7 @@ console.log("totalOrders",totalOrders)
 
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 }
@@ -926,7 +927,7 @@ allOrders = ordersResponse.data;
 var allOrdersLength = allOrders.length;
 document.getElementById("showTotalOrders").innerHTML = `Total Escalated Orders This Month- ${allOrdersLength}`;
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+createPaginationControls(Math.ceil(resolvedOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 } finally {
