@@ -606,7 +606,7 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // for refunded
-app.get("/orders/cancelled", async (req, res) => {
+app.get("/orders/refunded", async (req, res) => {
 try {
 const month = req.query.month;
 const year = req.query.year;
