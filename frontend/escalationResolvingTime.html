@@ -491,13 +491,21 @@ function sortTableByDate(dateType) {
     updateSortIcons(columnIndex, sortOrder[dateType]);
 }
 $("th").each(function (index) {
-    $(this).on("click", function () {
-        if (index === 0) sortTableByDate("orderDate"); // First column for orderDate
-        if (index === 3) sortTableByDate("escDate");  // Fourth column for escDate
-        if (index === 4) sortTableByDate("resolutionDate"); // Fifth column for resolutionDate
-    });
+const th = $(this);
+let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+if (index === 0) sortTableByDate("orderDate"); // First column for orderDate
+else if (index === 3) sortTableByDate("escDate");  // Fourth column for escDate
+else if (index === 4) sortTableByDate("resolutionDate"); // Fifth column for resolutionDate
+else if (type === "orderno") {
+th.on("click", function () {
+sortTable(index, "number");
 });
-
+} else {
+th.on("click", function () {
+sortTable(index, type);
+});
+}
+});
 function sortTable(column, type) {
 const table = $("#infoTable");
 const rows = table.find("tr").toArray();
