@@ -550,49 +550,54 @@ let hasResolution = false;
 
 console.log(`Processing orderNo: ${item.orderNo}`);
 item.orderHistory.forEach((log, index) => {
-    console.log(`Log ${index + 1}: ${log}`);
-    const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
-    const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
+console.log(`Log ${index + 1}: ${log}`);
+const yardRegex = /(Yard \d+)/; // Match "Yard 1", "Yard 2", etc.
+const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-    const yardMatch = log.match(yardRegex);
-    const datetimeMatch = log.match(datetimeRegex);
+const yardMatch = log.match(yardRegex);
+const datetimeMatch = log.match(datetimeRegex);
 
-    if (yardMatch && datetimeMatch) {
-        const yard = yardMatch[1];
-        const logDate = datetimeMatch[0];
+if (yardMatch && datetimeMatch) {
+const yard = yardMatch[1];
+const logDate = datetimeMatch[0];
 
-        // Handle escalation updates
-        if (log.includes("Escalation updated")) {
-            if (!yardLogs[yard]) {
-                yardLogs[yard] = [];
-            }
-            yardLogs[yard].push({ start: logDate, end: null, resolution: null });
-            console.log(`Escalation started for ${yard} at ${logDate}`);
-        } 
-        // Handle resolutions
-        else if (
-            (log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
-            yardLogs[yard] &&
-            yardLogs[yard].length > 0
-        ) {
-            const unresolvedEscalation = yardLogs[yard].find((segment) => !segment.end);
-            if (unresolvedEscalation) {
-                unresolvedEscalation.end = logDate;
+// Handle escalation updates
+if (log.includes("Escalation updated")) {
+if (!yardLogs[yard]) {
+yardLogs[yard] = [];
+}
+yardLogs[yard].push({ start: logDate, end: null, resolution: null });
+console.log(`Escalation started for ${yard} at ${logDate}`);
+} 
+// Handle resolutions
+else if (
+(log.includes("Part delivered updated") || log.includes("Order Cancelled")) &&
+yardLogs[yard] &&
+yardLogs[yard].length > 0
+) {
+const unresolvedEscalation = yardLogs[yard].find((segment) => !segment.end);
+if (unresolvedEscalation) {
+unresolvedEscalation.end = logDate;
 
-                if (log.includes("Part delivered updated")) {
-                    unresolvedEscalation.resolution = "Fulfillment";
-                    console.log(`Resolution set to Fulfillment for ${yard}`);
-                } else if (log.includes("Order Cancelled")) {
-                    unresolvedEscalation.resolution = "Cancellation";
-                    console.log(`Resolution set to Cancellation for ${yard}`);
-                }
+if (log.includes("Part delivered updated")) {
+unresolvedEscalation.resolution = "Fulfillment";
+console.log(`Resolution set to Fulfillment for ${yard}`);
+} else if (log.includes("Order Cancelled")) {
+unresolvedEscalation.resolution = "Cancellation";
+console.log(`Resolution set to Cancellation for ${yard}`);
+}
 
-                console.log(
-                    `Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
-                );
-            }
-        }
-    }
+console.log(
+`Escalation resolved for ${yard}. Resolution: ${unresolvedEscalation.resolution}, Start: ${unresolvedEscalation.start}, End: ${unresolvedEscalation.end}`
+);
+}
+}
+}
+});
+
+
+console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
+return hasResolution; // Include the order only if it has at least one valid resolution
 });
 
 // Apply pagination to resolved orders
