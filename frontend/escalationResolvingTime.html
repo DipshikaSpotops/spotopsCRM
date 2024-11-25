@@ -784,7 +784,39 @@ async function fetchOrders(month, year) {
     }
 
     await loadOrders(month, year);
+// Function to create pagination controls based on filtered data
+function createPaginationControls(totalPages, filteredOrders) {
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); 
+if (totalPages > 1) {
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+}
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
+}
 
+// Event listener for pagination buttons
+$('#pagination-controls').on('click', '.page-btn', function () {
+const page = $(this).data('page');
+currentPage = page;
+renderTableRows(currentPage); // Use the filtered orders
+});
+
+$('#pagination-controls').on('click', '#prevPage', function () {
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage); // Use the filtered orders
+}
+});
+
+$('#pagination-controls').on('click', '#nextPage', function () {
+const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage); // Use the filtered orders
+}
+});
     $("#filterButton").click(async function () {
         const [selectedYear, selectedMonthNum] = $("#monthYearPicker").val().split("-");
         const selectedMonth = Object.keys(monthMap).find(key => monthMap[key] === selectedMonthNum);
