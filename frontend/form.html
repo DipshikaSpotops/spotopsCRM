@@ -2776,8 +2776,7 @@ orderHistoryList.append(listItem);
 var vinNo = document.getElementById("vin").value;
 // console.log("vin");
 const formattedsAddress = `${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`;
-const formattedbAddress = `${item.bAddress || ""} ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br> ${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}`;
-
+const formattedbAddress = `${item.bAddress || ""} ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br> ${item.bAddressZip || ""}, ${item.AddressAcountry || ""}`;
 // Option 1: Add to an input field (removes HTML tags)
 $("#bAddress").val(formattedAddress.replace(/<br>/g, "\n"));
 
@@ -2805,10 +2804,10 @@ var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
-$("#bAddress").val(formattedbAddress);
+$("#bAddress").val(data.bAddress || "" );
 $("#firstName").val(firstNameE);
 $("#lastname").val(lastNameE);
-$("#sAddress").val(formattedsAddress);
+$("#sAddress").val(data.sAddress);
 $("#attention").val(data.attention);
 $("#email").val(data.email);
 $("#phone").val(data.phone);
