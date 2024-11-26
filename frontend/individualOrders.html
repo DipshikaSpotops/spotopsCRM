@@ -314,9 +314,6 @@ window.location.href = "login_signup.html";
 <th style="cursor: pointer;">Trackin No. <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Order Status <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer;">Actions <span class="sort-icon">&#9650;</span></th>
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 </tr>
 </thead>
 <tbody id="infoTable">
@@ -616,6 +613,7 @@ ordersForPage.forEach((item) => {
         console.log("gps",totalGrossProfit,totalEstGP);
   const datetime = item.orderDate;
   const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];  
+  const actions = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
@@ -636,6 +634,7 @@ return `${trackingNo}`;
 : ""
 }</td>
 <td>${item.orderStatus}</td>
+<td>${actions}</td>
 </tr>
 `);
 });
@@ -783,7 +782,10 @@ document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- 
     $("body").removeClass("modal-active");
   }
 });
-
+$("#infoTable").on("click", ".edit-btn", function () {
+const id = $(this).data("id");
+window.location.href = `addOrders.html?orderNo=${id}`;
+});
 $('#logoutLink').on('click', function() {
 window.localStorage.clear();
 window.location.href = 'login_signup.html';
