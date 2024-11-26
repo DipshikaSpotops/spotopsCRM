@@ -907,14 +907,14 @@ $("#bAddress").val(data.bAddressStreet);
 $("#bCity").val(data.bAddressCity);
 $("#bState").val(data.bAddressState);
 $("#bZip").val(data.bAddressZip);
-$("#country").val(data.bAddressAcountry);
+$("#bCountry").val(data.bAddressAcountry);
 // $("#bAddress").val(data.bAddressStreet);
 $("#bAttention").val(data.bName);
 $("#sAddress").val(data.sAddressStreet);
 $("#sCity").val(data.sAddressCity);
 $("#sState").val(data.sAddressState);
 $("#sZip").val(data.sAddressZip);
-$("#scountry").val(data.sAddressAcountry);
+$("#sCountry").val(data.sAddressAcountry);
 // $("#bAddress").val(data.bAddress);
 // $("#firstName").val(firstNameE);
 // $("#lastname").val(lastNameE);
@@ -937,12 +937,12 @@ $("#orderStatus").val(data.orderStatus);
 $("#vin").val(data.vin);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
-data.additionalInfo.forEach((info, index) => {
-addYardButton(index + 1, `Yard ${index + 1}`);
-});
-if (data.trackingInfo) {
-$("#trackingInfoContainer").html(data.trackingInfo);
-}
+// data.additionalInfo.forEach((info, index) => {
+// addYardButton(index + 1, `Yard ${index + 1}`);
+// });
+// if (data.trackingInfo) {
+// $("#trackingInfoContainer").html(data.trackingInfo);
+// }
 updateOrderHistory(data.orderHistory);
 partDesc = `
 Year: ${data.year}
