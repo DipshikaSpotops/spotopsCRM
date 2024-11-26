@@ -847,6 +847,7 @@ function calculateProfit() {
   const yardPrice = parseFloat($("#costP").val()) || 0;
   const shipping = parseFloat($("#shippingFee").val()) || 0;
   const salesTax = 0.05 * quoted;
+  console.log("quoted",quoted,yardPrice,shipping,salesTax)
   const grossProfit = quoted - yardPrice - shipping - salesTax;
   $("#salestax").val(salesTax.toFixed(2));
   $("#grossProfit").val(grossProfit.toFixed(2));
