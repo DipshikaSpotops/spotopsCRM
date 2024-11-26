@@ -179,7 +179,7 @@ var orderId = newOrder.orderNo;
 // console.log("orderNo", orderId);
 // await generateInvoice(orderId, newOrder);
 
-order.orderHistory.push(
+newOrder.orderHistory.push(
     `Order placed  by ${firstName} on ${formattedDateTime}`
     );
 res.status(201).json({ newOrder, team: newOrder.team });
