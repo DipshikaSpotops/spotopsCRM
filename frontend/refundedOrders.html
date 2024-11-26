@@ -436,14 +436,16 @@ placeholder="Search..."
 <tr>
 <th style="cursor: pointer" scope="col">Order Date</th>
 <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Sale Price <span class="aToZ" >&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Yard Info<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Refunded By<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Refunded Date<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Refunded Amount <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Order Status<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">Email <span class="aToZ">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="infoTable">
@@ -606,20 +608,82 @@ function renderTableRows(page, orders = allOrders) {
         const yardlength = item.additionalInfo.length;
         const datetime = item.orderDate;
         const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-        $("#infoTable").append(`
-            <tr>
-                <td>${dateOnly}</td>
-                <td>${item.orderNo}</td>
-                <td>${item.salesAgent}</td>
-                <td>${item.customerName}</td>
-                <td>${item.pReq || item.partName}</td>
-                <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-                <td>${item.orderStatus}</td>
-                <td ${escalationStyle}>${escalationStatus}</td>
-                <td style="justify-content: center;">${actions}</td>
-                <td>${item.email}</td>
-            </tr>
-        `);
+        const custRefundDatedateOnly = item.custRefundDate.split(" ")[0] + " " + item.custRefundDate.split(" ")[1] + " " + item.custRefundDate.split(" ")[2];
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${item.orderNo}</td>
+<td>${item.soldP}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
+<td>${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => {
+const yardName = info.yardName || "Unknown Yard";
+const shippingDetails = info.shippingDetails || "Unknown Shipping Details";
+const partPrice = info.partPrice || 0;
+const others = info.others || 0;
+const refundedAmount = info.refundedAmount || 0;
+const custOwnShipReplacement = info.custOwnShipReplacement || 0;
+const yardOwnShipping = info.yardOwnShipping || 0;
+const custOwnShippingReturn = info.custOwnShippingReturn || 0;
+
+const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
+
+return `
+<b>Yard ${index + 1}</b>: ${yardName}<br> 
+Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
+Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
+Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
+${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}<br>
+Yard refund: ${refundedAmount}
+`;
+})
+.join("<br>")
+: "No Yard Info"
+}</td>
+<td>
+${
+item.orderHistory
+.filter(entry => entry.includes("Order status changed to Refunded"))
+.map(entry => {
+const parts = entry.split(" by ");
+return parts[1]?.split(" on ")[0] || "Unknown";
+})
+.join(", ") || ""
+}
+</td>
+<td>${custRefundDatedateOnly}</td>
+<td>${item.custRefundedAmount}</td>
+<td>${item.orderStatus}</td>
+<td>
+${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info) => {
+const shippingCost = info.shippingDetails
+? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
+: 0;
+const partPrice = info.partPrice || 0;
+const others = info.others || 0;
+const refundedAmount = info.refundedAmount || 0;
+const yardOwnShipping = info.yardOwnShipping || 0;
+const custOwnShippingReturn = info.custOwnShippingReturn || 0;
+const custOwnShipReplacement = info.custOwnShipReplacement || 0;
+
+// Calculate and return the Yard Spend
+return `Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
+${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}`;
+})
+.join("<br>")
+: ""
+}
+</td>
+<td style="justify-content: center;">${actions}</td>
+</tr>
+`);
     });
 
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
