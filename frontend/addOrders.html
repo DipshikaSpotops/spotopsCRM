@@ -891,7 +891,7 @@ if (orderNo) {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
-document.getElementById("estPP").textContent += data.costP;
+// document.getElementById("estPP").textContent += data.costP;
 var customerNameE = data.customerName;
 const nameParts = customerNameE.split(" ").filter(part => part.trim() !== "");
 const firstNameE = nameParts[0];
