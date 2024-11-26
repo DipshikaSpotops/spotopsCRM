@@ -980,7 +980,7 @@ $("#newOrderForm").on("submit", function (e) {
         const cusLName = $("#lastName").val();
         const customerName = `${cusFName} ${cusLName}`;
         const orderNoInput = $("#orderNo").val();
-
+const newEntry = urlParams.get("newEntry");
         if (newEntry || !orderNo) {
             // Create a new order
             const newOrderData = {
