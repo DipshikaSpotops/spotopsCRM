@@ -973,10 +973,8 @@ console.log("Order not found");
 
   $("#newOrderForm").on("submit", function (e) {
     e.preventDefault();
-
     // Disable the button to prevent multiple submissions
     $("#addoBtn").prop("disabled", true).css("filter", "blur(2px)");
-
     const firstName = localStorage.getItem("firstName");
     const cusFName = $("#firstName").val();
     const cusLName = $("#lastName").val();
