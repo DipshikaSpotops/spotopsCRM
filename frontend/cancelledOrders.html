@@ -444,6 +444,7 @@ placeholder="Search..."
 <th style="cursor: pointer" scope="col">Order Cancelled by <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Cx Refund Amount <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Cancellation Reason<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">order Status<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Overall Spending<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Actions</th>
 </tr>
@@ -645,7 +646,7 @@ function renderTableRows(page, orders = allOrders) {
 }</td>
 <td>
   ${
-    order.orderHistory
+    item.orderHistory
       .filter(entry => entry.includes("Order status updated to Order Cancelled"))
       .map(entry => {
         const parts = entry.split(" by ");
@@ -657,9 +658,30 @@ function renderTableRows(page, orders = allOrders) {
 <td>${order.cancelledRefAmount}</td>
 <td>${order.cancellationReason}</td>
                 <td>${item.orderStatus}</td>
-                <td ${escalationStyle}>${escalationStatus}</td>
+<td>
+  ${
+    item.additionalInfo && item.additionalInfo.length > 0
+      ? item.additionalInfo
+          .map((info) => {
+            const shippingCost = info.shippingDetails
+              ? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
+              : 0;
+            const partPrice = info.partPrice || 0;
+            const others = info.others || 0;
+            const refundedAmount = info.refundedAmount || 0;
+            const yardOwnShipping = info.yardOwnShipping || 0;
+            const custOwnShippingReturn = info.custOwnShippingReturn || 0;
+            const custOwnShipReplacement = info.custOwnShipReplacement || 0;
+
+            // Calculate and return the Yard Spend
+            return `Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
+            ${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}`;
+          })
+          .join("<br>")
+      : ""
+  }
+</td>
                 <td style="justify-content: center;">${actions}</td>
-                <td>${item.email}</td>
             </tr>
         `);
     });
