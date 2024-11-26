@@ -1055,9 +1055,9 @@ $("#newOrderForm").on("submit", function (e) {
             }
         })
         .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to save the order.");
-            }
+            // if (!response.ok) {
+            //     throw new Error("Failed to save the order.");
+            // }
             return response.json();
         })
         .then((data) => {
