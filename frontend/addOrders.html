@@ -973,97 +973,134 @@ console.log("Order not found");
 }
 
 $("#newOrderForm").on("submit", function (e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    const orderNo = $("#orderNo").val();
-    if (!orderNo) {
-        alert("Please enter an Order No.");
-        return;
-    }
+        const firstName = localStorage.getItem("firstName");
+        const cusFName = $("#firstName").val();
+        const cusLName = $("#lastName").val();
+        const customerName = `${cusFName} ${cusLName}`;
+        const orderNoInput = $("#orderNo").val();
 
-    const firstName = localStorage.getItem("firstName");
-    const cusFName = $("#firstName").val();
-    const cusLName = $("#lastName").val();
-    const customerName = `${cusFName} ${cusLName}`;
+        if (newEntry || !orderNo) {
+            // Create a new order
+            const newOrderData = {
+                orderNo: orderNoInput,
+                orderDate: $("#orderDate").val(),
+                salesAgent: $("#salesAgent").val(),
+                customerName: customerName,
+                bAddressStreet: $("#bAddress").val(),
+                bAddressCity: $("#bCity").val(),
+                bAddressState: $("#bState").val(),
+                bAddressZip: $("#bZip").val(),
+                bAddressAcountry: $("#bCountry").val(),
+                bName: $("#bAttention").val(),
+                sAddressStreet: $("#sAddress").val(),
+                sAddressCity: $("#sCity").val(),
+                sAddressState: $("#sState").val(),
+                sAddressZip: $("#sZip").val(),
+                sAddressAcountry: $("#sCountry").val(),
+                attention: $("#sAttention").val(),
+                email: $("#email").val(),
+                phone: $("#phone").val(),
+                make: $("#make").val(),
+                model: $("#model").val(),
+                year: $("#year").val(),
+                pReq: $("#pReq").val(),
+                desc: $("#desc").val(),
+                warranty: $("#warranty").val(),
+                soldP: $("#soldP").val(),
+                costP: $("#costP").val(),
+                shippingFee: $("#shippingFee").val(),
+                salestax: $("#salestax").val(),
+                grossProfit: $("#grossProfit").val(),
+                orderStatus: $("#orderStatus").val(),
+                vin: $("#vin").val(),
+                last4digits: $("#issueOrder").val(),
+                notes: $("#notes").val(),
+            };
 
-    // Prepare order data
-    const prepareOrderData = () => {
-        return {
-            orderNo: orderNo,
-            orderDate: $("#orderDate").val(),
-            salesAgent: $("#salesAgent").val(),
-            customerName: customerName,
-            bAddressStreet: $("#bAddress").val(),
-            bAddressCity: $("#bCity").val(),
-            bAddressState: $("#bState").val(),
-            bAddressZip: $("#bZip").val(),
-            bAddressAcountry: $("#bCountry").val(),
-            bName: $("#bAttention").val(),
-            sAddressStreet: $("#sAddress").val(),
-            sAddressCity: $("#sCity").val(),
-            sAddressState: $("#sState").val(),
-            sAddressZip: $("#sZip").val(),
-            sAddressAcountry: $("#sCountry").val(),
-            attention: $("#sAttention").val(),
-            email: $("#email").val(),
-            phone: $("#phone").val(),
-            make: $("#make").val(),
-            model: $("#model").val(),
-            year: $("#year").val(),
-            pReq: $("#pReq").val(),
-            desc: $("#desc").val(),
-            warranty: $("#warranty").val(),
-            soldP: $("#soldP").val(),
-            costP: $("#costP").val(),
-            shippingFee: $("#shippingFee").val(),
-            salestax: $("#salestax").val(),
-            grossProfit: $("#grossProfit").val(),
-            orderStatus: $("#orderStatus").val(),
-            vin: $("#vin").val(),
-            last4digits: $("#issueOrder").val(),
-            notes: $("#notes").val(),
-        };
-    };
-
-    // Check if the order already exists
-    fetch(`https://www.spotops360.com/orders/${orderNo}`)
-        .then((response) => {
-            if (!response.ok) {
-                // If the order does not exist, create a new order
-                const newOrderData = prepareOrderData();
-                return fetch(`https://www.spotops360.com/orders`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(newOrderData),
+            fetch(`https://www.spotops360.com/orders`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newOrderData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to save the new order.");
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    alert(`Order ${orderNoInput} has been successfully created.`);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error saving new order:", error);
+                    alert("An error occurred while saving the order. Please try again.");
                 });
-            }
-            // If the order exists, update it
-            return response.json();
-        })
-        .then((existingOrderData) => {
-            if (existingOrderData) {
-                const updatedOrderData = prepareOrderData();
-                return fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(updatedOrderData),
-                });
-            }
-        })
-        .then((data) => {
-            alert(`Order ${orderNo} has been successfully saved.`);
-            window.location.reload();
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-            alert("An error occurred while saving the order. Please try again.");
-        });
-});
+        } else {
+            // Update an existing order
+            const updatedOrderData = {
+                orderNo: orderNoInput,
+                orderDate: $("#orderDate").val(),
+                salesAgent: $("#salesAgent").val(),
+                customerName: customerName,
+                bAddressStreet: $("#bAddress").val(),
+                bAddressCity: $("#bCity").val(),
+                bAddressState: $("#bState").val(),
+                bAddressZip: $("#bZip").val(),
+                bAddressAcountry: $("#bCountry").val(),
+                bName: $("#bAttention").val(),
+                sAddressStreet: $("#sAddress").val(),
+                sAddressCity: $("#sCity").val(),
+                sAddressState: $("#sState").val(),
+                sAddressZip: $("#sZip").val(),
+                sAddressAcountry: $("#sCountry").val(),
+                attention: $("#sAttention").val(),
+                email: $("#email").val(),
+                phone: $("#phone").val(),
+                make: $("#make").val(),
+                model: $("#model").val(),
+                year: $("#year").val(),
+                pReq: $("#pReq").val(),
+                desc: $("#desc").val(),
+                warranty: $("#warranty").val(),
+                soldP: $("#soldP").val(),
+                costP: $("#costP").val(),
+                shippingFee: $("#shippingFee").val(),
+                salestax: $("#salestax").val(),
+                grossProfit: $("#grossProfit").val(),
+                orderStatus: $("#orderStatus").val(),
+                vin: $("#vin").val(),
+                last4digits: $("#issueOrder").val(),
+                notes: $("#notes").val(),
+            };
 
+            fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedOrderData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to update the order.");
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    alert(`Order ${orderNoInput} has been successfully updated.`);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error updating order:", error);
+                    alert("An error occurred while updating the order. Please try again.");
+                });
+        }
+    });
 
   // Helper function to format order date
   function getFormattedOrderDate() {
