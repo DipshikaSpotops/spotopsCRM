@@ -2788,6 +2788,8 @@ var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
+$("#firstName").val(data.fName);
+$("#lastName").val(data.lName);
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
 $("#bAddress").val(data.bAddress || `${item.bAddressStreet || ""},${item.bAddressCity || ""}, ${item.bAddressState || ""},${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}`);

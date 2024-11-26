@@ -172,6 +172,10 @@ console.log("Sussane's team", newOrder.team);
 }
 
 // Save the new order to the database
+
+newOrder.orderHistory.push(
+    `Order placed  by ${firstName} on ${formattedDateTime}`
+    );
 await newOrder.save();
 
 // Generate an invoice for the new order
@@ -179,9 +183,6 @@ var orderId = newOrder.orderNo;
 // console.log("orderNo", orderId);
 // await generateInvoice(orderId, newOrder);
 
-newOrder.orderHistory.push(
-    `Order placed  by ${firstName} on ${formattedDateTime}`
-    );
 res.status(201).json({ newOrder, team: newOrder.team });
 } catch (error) {
 if (error.code === 11000) { // Duplicate key error in MongoDB
