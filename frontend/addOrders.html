@@ -986,26 +986,24 @@ $("#newOrderForm").on("submit", function (e) {
     const cusLName = $("#lastName").val();
     const customerName = `${cusFName} ${cusLName}`;
 
-    const updateOrder = (url, data) => {
-        const updatedData = {
-            orderNo: $("#orderNo").val(data.orderNo),
-           fName: $("#firstName").val(data.fName),
-           lName: $("#lastName").val(data.lName),
-           bAddressStreet: $("#bAddress").val(data.bAddressStreet),
-           bAddressCity: $("#bCity").val(data.bAddressCity),
-           bAddressState: $("#bState").val(data.bAddressState),
-           bAddressZip: $("#bZip").val(data.bAddressZip),
-           bAddressAcountry: $("#bCountry").val(data.bAddressAcountry),
-// $("#bAddress").val(data.bAddressStreet);
-          bName: $("#bAttention").val(data.bName),
-          sAddressStreet: $("#sAddress").val(data.sAddressStreet),
-          sAddressCity: $("#sCity").val(data.sAddressCity),
-          sAddressState: $("#sState").val(data.sAddressState),
-          sAddressZip: $("#sZip").val(data.sAddressZip),
-          sAddressAcountry:$("#scountry").val(data.sAddressAcountry),
-            orderDate: $("#orderDate").val() || existingOrderData.orderDate,
+    // Prepare order data
+    const prepareOrderData = () => {
+        return {
+            orderNo: orderNo,
+            orderDate: $("#orderDate").val(),
             salesAgent: $("#salesAgent").val(),
             customerName: customerName,
+            bAddressStreet: $("#bAddress").val(),
+            bAddressCity: $("#bCity").val(),
+            bAddressState: $("#bState").val(),
+            bAddressZip: $("#bZip").val(),
+            bAddressAcountry: $("#bCountry").val(),
+            bName: $("#bAttention").val(),
+            sAddressStreet: $("#sAddress").val(),
+            sAddressCity: $("#sCity").val(),
+            sAddressState: $("#sState").val(),
+            sAddressZip: $("#sZip").val(),
+            sAddressAcountry: $("#sCountry").val(),
             attention: $("#sAttention").val(),
             email: $("#email").val(),
             phone: $("#phone").val(),
@@ -1024,50 +1022,51 @@ $("#newOrderForm").on("submit", function (e) {
             vin: $("#vin").val(),
             last4digits: $("#issueOrder").val(),
             notes: $("#notes").val(),
-            firstName: firstName,
         };
-
-        return fetch(`${url}?firstName=${firstName}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedData),
-        });
     };
 
-    // Fetch existing order details
+    // Check if the order already exists
     fetch(`https://www.spotops360.com/orders/${orderNo}`)
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Failed to fetch existing order details.");
+                // If the order does not exist, create a new order
+                const newOrderData = prepareOrderData();
+                return fetch(`https://www.spotops360.com/orders`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newOrderData),
+                });
             }
+            // If the order exists, update it
             return response.json();
         })
         .then((existingOrderData) => {
-            const isCancelledOrder = existingOrderData.isCancelled || false;
-            const updateUrl = isCancelledOrder
-                ? `https://www.spotops360.com/cancelledOrders/${orderNo}`
-                : `https://www.spotops360.com/orders/${orderNo}`;
-
-            // Call updateOrder function with the appropriate URL
-            return updateOrder(updateUrl, existingOrderData);
+            if (existingOrderData) {
+                const updatedOrderData = prepareOrderData();
+                return fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedOrderData),
+                });
+            }
         })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Failed to update the order.");
+                throw new Error("Failed to save the order.");
             }
             return response.json();
         })
         .then((data) => {
-            // Update the UI with the updated order history
-            updateOrderHistory(data.orderHistory);
-            alert("Details have been updated successfully.");
+            alert(`Order ${orderNo} has been successfully saved.`);
             window.location.reload();
         })
         .catch((error) => {
             console.error("Error:", error);
-            alert("An error occurred while updating the order. Please try again.");
+            alert("An error occurred while saving the order. Please try again.");
         });
 });
 
