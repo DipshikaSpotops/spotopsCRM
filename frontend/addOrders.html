@@ -986,7 +986,7 @@ $("#newOrderForm").on("submit", function (e) {
     const cusLName = $("#lastName").val();
     const customerName = `${cusFName} ${cusLName}`;
 
-    const updateOrder = (url, existingOrderData) => {
+    const updateOrder = (url, data) => {
         const updatedData = {
             orderNo: $("#orderNo").val(data.orderNo),
            fName: $("#firstName").val(data.fName),
