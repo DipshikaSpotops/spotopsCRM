@@ -295,9 +295,9 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar">
 <div class="logo">
-    <a href="index.html">
-        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-        </a>  
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a>  
 </div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
@@ -579,114 +579,114 @@ sortTable(index, type);
 
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-    // Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
-    const filteredOrders = orders.filter(item => {
-        return (item.orderStatus === "Order Cancelled");
-    });
+// Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
+const filteredOrders = orders.filter(item => {
+return (item.orderStatus === "Order Cancelled");
+});
 
-    // Pagination logic after filtering
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
+// Pagination logic after filtering
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
 
-    $('#infoTable').empty(); // Clear the table
+$('#infoTable').empty(); // Clear the table
 
-    ordersForPage.forEach((item) => {
-        const escalationStatus = item.additionalInfo &&
-            item.additionalInfo[0] &&
-            item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+ordersForPage.forEach((item) => {
+const escalationStatus = item.additionalInfo &&
+item.additionalInfo[0] &&
+item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
 
-        let escalationStyle = '';
-        if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-            escalationStyle = 'style="background-color: lightgreen;"';
-        }
+let escalationStyle = '';
+if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+escalationStyle = 'style="background-color: lightgreen;"';
+}
 
-        const team = localStorage.getItem('team');
-     
-        const actions = `
-            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+const team = localStorage.getItem('team');
 
-        const yardlength = item.additionalInfo.length;
-        const datetime = item.orderDate;
-        const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-        $("#infoTable").append(`
-            <tr>
-                <td>${dateOnly}</td>
-                <td>${item.orderNo}</td>
-                <td>${item.soldP}</td>
-                <td>${item.salesAgent}</td>
-                <td>${item.customerName}</td>
-                <td>${item.pReq || item.partName}</td>
+const actions = `
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+
+const yardlength = item.additionalInfo.length;
+const datetime = item.orderDate;
+const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${item.orderNo}</td>
+<td>${item.soldP}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${item.pReq || item.partName}</td>
 <td>${
-  item.additionalInfo && item.additionalInfo.length > 0
-    ? item.additionalInfo
-        .map((info, index) => {
-          const yardName = info.yardName || "Unknown Yard";
-          const shippingDetails = info.shippingDetails || "Unknown Shipping Details";
-          const partPrice = info.partPrice || 0;
-          const others = info.others || 0;
-          const refundedAmount = info.refundedAmount || 0;
-          const custOwnShipReplacement = info.custOwnShipReplacement || 0;
-          const yardOwnShipping = info.yardOwnShipping || 0;
-          const custOwnShippingReturn = info.custOwnShippingReturn || 0;
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info, index) => {
+const yardName = info.yardName || "Unknown Yard";
+const shippingDetails = info.shippingDetails || "Unknown Shipping Details";
+const partPrice = info.partPrice || 0;
+const others = info.others || 0;
+const refundedAmount = info.refundedAmount || 0;
+const custOwnShipReplacement = info.custOwnShipReplacement || 0;
+const yardOwnShipping = info.yardOwnShipping || 0;
+const custOwnShippingReturn = info.custOwnShippingReturn || 0;
 
-          const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
+const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
 
-          return `
-          <b>Yard ${index + 1}</b>: ${yardName}<br> 
-          Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
-          Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
-          Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
-          ${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}<br>
-          Yard refund: ${refundedAmount}
-          `;
-        })
-        .join("<br>")
-    : "No Yard Info"
+return `
+<b>Yard ${index + 1}</b>: ${yardName}<br> 
+Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
+Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
+Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
+${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}<br>
+Yard refund: ${refundedAmount}
+`;
+})
+.join("<br>")
+: "No Yard Info"
 }</td>
 <td>
-  ${
-    item.orderHistory
-      .filter(entry => entry.includes("Order status updated to Order Cancelled"))
-      .map(entry => {
-        const parts = entry.split(" by ");
-        return parts[1]?.split(" on ")[0] || "Unknown";
-      })
-      .join(", ") || ""
-  }
+${
+item.orderHistory
+.filter(entry => entry.includes("Order status updated to Order Cancelled"))
+.map(entry => {
+const parts = entry.split(" by ");
+return parts[1]?.split(" on ")[0] || "Unknown";
+})
+.join(", ") || ""
+}
 </td>
 <td>${item.cancelledRefAmount}</td>
 <td>${item.cancellationReason}</td>
-                <td>${item.orderStatus}</td>
+<td>${item.orderStatus}</td>
 <td>
-  ${
-    item.additionalInfo && item.additionalInfo.length > 0
-      ? item.additionalInfo
-          .map((info) => {
-            const shippingCost = info.shippingDetails
-              ? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
-              : 0;
-            const partPrice = info.partPrice || 0;
-            const others = info.others || 0;
-            const refundedAmount = info.refundedAmount || 0;
-            const yardOwnShipping = info.yardOwnShipping || 0;
-            const custOwnShippingReturn = info.custOwnShippingReturn || 0;
-            const custOwnShipReplacement = info.custOwnShipReplacement || 0;
+${
+item.additionalInfo && item.additionalInfo.length > 0
+? item.additionalInfo
+.map((info) => {
+const shippingCost = info.shippingDetails
+? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
+: 0;
+const partPrice = info.partPrice || 0;
+const others = info.others || 0;
+const refundedAmount = info.refundedAmount || 0;
+const yardOwnShipping = info.yardOwnShipping || 0;
+const custOwnShippingReturn = info.custOwnShippingReturn || 0;
+const custOwnShipReplacement = info.custOwnShipReplacement || 0;
 
-            // Calculate and return the Yard Spend
-            return `Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
-            ${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}`;
-          })
-          .join("<br>")
-      : ""
-  }
+// Calculate and return the Yard Spend
+return `Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
+${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}`;
+})
+.join("<br>")
+: ""
+}
 </td>
-                <td style="justify-content: center;">${actions}</td>
-            </tr>
-        `);
-    });
+<td style="justify-content: center;">${actions}</td>
+</tr>
+`);
+});
 
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
 // Function to create pagination controls based on filtered data
