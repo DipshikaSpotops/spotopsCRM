@@ -889,6 +889,8 @@ $(document).ready(function () {
     const newOrder = {
       orderNo: newOrderNo,
       orderDate: orderDate,
+      fName: $("#firstName").val(),
+      lName: $("#lastName").val(),
       salesAgent: $("#salesAgent").val(),
       spMinusTax: spMinusTax,
       customerName: customerName,
@@ -897,6 +899,7 @@ $(document).ready(function () {
       bAddressState: $("#bState").val(),
       bAddressZip: $("#bZip").val(),
       bAddressAcountry: $("#bCountry").val(),
+      bName: $("#bAttention").val(),
       sAddressStreet: $("#sAddress").val(),
       sAddressCity: $("#sCity").val(),
       sAddressState: $("#sState").val(),
