@@ -436,14 +436,16 @@ placeholder="Search..."
 <tr>
 <th style="cursor: pointer" scope="col">Order Date</th>
 <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Sale Price <span class="aToZ" >&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Yard Info<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Order Cancelled by <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Cx Refund Amount <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Cancellation Reason<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Overall Spending<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">Email <span class="aToZ">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="infoTable">
@@ -610,10 +612,31 @@ function renderTableRows(page, orders = allOrders) {
             <tr>
                 <td>${dateOnly}</td>
                 <td>${item.orderNo}</td>
+                <td>${item.soldP}</td>
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
                 <td>${item.pReq || item.partName}</td>
-                <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+<td>${
+  item.additionalInfo && item.additionalInfo.length > 0
+    ? item.additionalInfo
+        .map((info, index) => {
+          // Extract numeric value from shippingDetails
+          const shippingCost = info.shippingDetails
+            ? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
+            : 0;
+
+          return `
+          <b>Yard ${index + 1}</b>: ${info.yardName}<br> 
+          Part price: $${info.partPrice} | ${info.shippingDetails} | Others: $${info.others}<br>
+          Esc spending: ${info.custOwnShipReplacement || 0} + ${info.yardOwnShipping || 0} + ${info.custOwnShippingReturn}<br>
+          Yard Spend: ${info.partPrice || 0} + ${shippingCost} + ${info.others || 0} - ${info.refundedAmount || 0} + 
+          ${info.yardOwnShipping || 0} + ${info.custOwnShippingReturn || 0} - ${info.custOwnShipReplacement || 0}<br>
+          Yard refund: ${info.refundedAmount}
+          `;
+        })
+        .join("<br>")
+    : ""
+}</td>
                 <td>${item.orderStatus}</td>
                 <td ${escalationStyle}>${escalationStatus}</td>
                 <td style="justify-content: center;">${actions}</td>

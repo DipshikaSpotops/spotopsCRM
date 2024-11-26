@@ -660,7 +660,7 @@ totalShipping += shippingCharge;
 otherCharges += otherC;
 tRefunds += refunds;
 overallPurchaseCost = partPrice + shippingCharge + otherC;
-overAllwithRefund = overallPurchaseCost - refunds - custOwnShipReplacement - yardOwnShipping -custOwnShippingReturn;
+overAllwithRefund = overallPurchaseCost - refunds + custOwnShipReplacement + yardOwnShipping + custOwnShippingReturn;
 console.log(
 overallPurchaseCost,
 "overall with refunds",
@@ -676,7 +676,7 @@ yardInfoHtml += `<td>
     ${shippingType} | (${shippingCharge || "0"}) | Others: ${otherC}
     <br>
     ${item.additionalInfo[i].status} | Yard Spend: ${
-        item.additionalInfo[i].partPrice + shippingCharge + otherC
+        item.additionalInfo[i].partPrice + shippingCharge + otherC - refunds - custOwnShipReplacement - yardOwnShipping -custOwnShippingReturn
     } | Refunds: ${refunds}
     <br>
     ${custOwnShipReplacement || yardOwnShipping || custOwnShippingReturn ? `
