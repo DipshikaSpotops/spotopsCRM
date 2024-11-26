@@ -907,7 +907,7 @@ Phone: ${item.phone || ''}<br>
 Alt Phone: ${item.altPhone || ''}<br>
 Billing Address:<br> ${formattedBAddress || ""}  ${item.bAddressStreet || ""},${item.bAddressCity || ""}, ${item.bAddressState || ""},${item.bAddressZip || ""}, ${item.bAddressAcountry || ""};<br>
 </td>
-<td>${formattedSAddress || ""} ${item.sAddressStreet || ""},${item.sAddressCity || ""}, ${item.sAddressState || ""},${item.sAddressZip || ""}, ${item.sAddressAcountry || ""};</td>
+<td>${formattedSAddress || ""} ${item.attention} ,${item.sAddressStreet || ""},${item.sAddressCity || ""}, ${item.sAddressState || ""},${item.sAddressZip || ""}, ${item.sAddressAcountry || ""};</td>
 <td>Part Name: ${item.pReq || item.partName || ''}<br>
 <b>Quoted Price:</b> $${item.soldP || 0}<br>
 ${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
