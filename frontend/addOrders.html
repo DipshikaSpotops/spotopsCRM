@@ -1020,7 +1020,7 @@ const newEntry = urlParams.get("newEntry");
                 notes: $("#notes").val(),
             };
 
-            fetch(`https://www.spotops360.com/orders`, {
+            fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
