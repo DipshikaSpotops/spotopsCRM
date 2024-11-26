@@ -1054,12 +1054,6 @@ $("#newOrderForm").on("submit", function (e) {
                 });
             }
         })
-        .then((response) => {
-            // if (!response.ok) {
-            //     throw new Error("Failed to save the order.");
-            // }
-            return response.json();
-        })
         .then((data) => {
             alert(`Order ${orderNo} has been successfully saved.`);
             window.location.reload();
