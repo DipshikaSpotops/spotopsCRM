@@ -500,6 +500,69 @@ const lastName = localStorage.getItem("lastName");
 const email = localStorage.getItem("email");
 const role = localStorage.getItem("role");
 const token = localStorage.getItem("token");
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderNo = urlParams.get("orderNo");
+
+    if (orderNo) {
+        // Fetch order details using orderNo
+        axios
+            .get(`https://www.spotops360.com/orders/${orderNo}`)
+            .then(response => {
+                if (response.status === 200) {
+                    const orderData = response.data;
+
+                    // Prefill the form fields
+                    $("#orderNo").val(orderData.orderNo);
+                    $("#salesAgent").val(orderData.salesAgent);
+                    $("#firstName").val(orderData.customerName.split(" ")[0]);
+                    $("#lastName").val(orderData.customerName.split(" ")[1]);
+                    $("#bAddress").val(orderData.bAddressStreet);
+                    $("#bCity").val(orderData.bAddressCity);
+                    $("#bState").val(orderData.bAddressState);
+                    $("#bZip").val(orderData.bAddressZip);
+                    $("#bCountry").val(orderData.bAddressAcountry);
+                    $("#sAddress").val(orderData.sAddressStreet);
+                    $("#sCity").val(orderData.sAddressCity);
+                    $("#sState").val(orderData.sAddressState);
+                    $("#sZip").val(orderData.sAddressZip);
+                    $("#sCountry").val(orderData.sAddressAcountry);
+                    $("#pReq").val(orderData.pReq);
+                    $("#year").val(orderData.year);
+                    $("#make").val(orderData.make);
+                    $("#model").val(orderData.model);
+                    $("#warranty").val(orderData.warranty);
+                    $("#soldP").val(orderData.soldP);
+                    $("#costP").val(orderData.costP);
+                    $("#shippingFee").val(orderData.shippingFee);
+                    $("#notes").val(orderData.notes);
+                    $("#vin").val(orderData.vin);
+                    $("#partNo").val(orderData.partNo);
+                    $("#issueOrder").val(orderData.last4digits);
+
+                    // Calculate profit
+                    calculateProfit();
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching order details:", error);
+                alert("Failed to fetch order details. Please try again.");
+            });
+    }
+
+    // Function to calculate profit
+    function calculateProfit() {
+        const soldP = parseFloat($("#soldP").val()) || 0;
+        const costP = parseFloat($("#costP").val()) || 0;
+        const shippingFee = parseFloat($("#shippingFee").val()) || 0;
+        const salesTax = 0.05 * soldP;
+        const grossProfit = soldP - costP - shippingFee - salesTax;
+
+        $("#salestax").val(salesTax.toFixed(2));
+        $("#grossProfit").val(grossProfit.toFixed(2));
+    }
+
+    // Attach the profit calculation to relevant input fields
+    $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
 
 if (firstName) {
 $("#user-name").text(firstName);
@@ -795,6 +858,7 @@ window.location.href = 'login_signup.html';
 </script>
 </body>
 </html>
+
 <!-- estimated info, actual info, overall spend -->
 <!-- <td>Quoted Price: $${item.soldP}  Sales Tax: $${item.salestax} <br> Est Part Price: $${item.costP} Est Shipping: $${item.shippingFee}<br> Est GP: $${item.grossProfit}</td>
 <td>${
