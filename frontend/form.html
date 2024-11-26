@@ -2775,8 +2775,9 @@ orderHistoryList.append(listItem);
 }
 var vinNo = document.getElementById("vin").value;
 // console.log("vin");
-const formattedsAddress = `${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`;
-const formattedbAddress = `${item.bAddress || ""} ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br> ${item.bAddressZip || ""}, ${item.AddressAcountry || ""}`;
+// const formattedsAddress = `${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`;
+// const formattedbAddress = `${item.bAddress || ""} ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br> ${item.bAddressZip || ""}, ${item.sAddressAcountry || ""}`;
+
 // Option 1: Add to an input field (removes HTML tags)
 $("#bAddress").val(formattedAddress.replace(/<br>/g, "\n"));
 
