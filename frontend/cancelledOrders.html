@@ -620,23 +620,42 @@ function renderTableRows(page, orders = allOrders) {
   item.additionalInfo && item.additionalInfo.length > 0
     ? item.additionalInfo
         .map((info, index) => {
-          // Extract numeric value from shippingDetails
-          const shippingCost = info.shippingDetails
-            ? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
-            : 0;
+          const yardName = info.yardName || "Unknown Yard";
+          const shippingDetails = info.shippingDetails || "Unknown Shipping Details";
+          const partPrice = info.partPrice || 0;
+          const others = info.others || 0;
+          const refundedAmount = info.refundedAmount || 0;
+          const custOwnShipReplacement = info.custOwnShipReplacement || 0;
+          const yardOwnShipping = info.yardOwnShipping || 0;
+          const custOwnShippingReturn = info.custOwnShippingReturn || 0;
+
+          const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
 
           return `
-          <b>Yard ${index + 1}</b>: ${info.yardName}<br> 
-          Part price: $${info.partPrice} | ${info.shippingDetails} | Others: $${info.others}<br>
-          Esc spending: ${info.custOwnShipReplacement || 0} + ${info.yardOwnShipping || 0} + ${info.custOwnShippingReturn}<br>
-          Yard Spend: ${info.partPrice || 0} + ${shippingCost} + ${info.others || 0} - ${info.refundedAmount || 0} + 
-          ${info.yardOwnShipping || 0} + ${info.custOwnShippingReturn || 0} - ${info.custOwnShipReplacement || 0}<br>
-          Yard refund: ${info.refundedAmount}
+          <b>Yard ${index + 1}</b>: ${yardName}<br> 
+          Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
+          Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
+          Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
+          ${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}<br>
+          Yard refund: ${refundedAmount}
           `;
         })
         .join("<br>")
-    : ""
+    : "No Yard Info"
 }</td>
+<td>
+  ${
+    order.orderHistory
+      .filter(entry => entry.includes("Order status updated to Order Cancelled"))
+      .map(entry => {
+        const parts = entry.split(" by ");
+        return parts[1]?.split(" on ")[0] || "Unknown";
+      })
+      .join(", ") || ""
+  }
+</td>
+<td>${order.cancelledRefAmount}</td>
+<td>${order.cancellationReason}</td>
                 <td>${item.orderStatus}</td>
                 <td ${escalationStyle}>${escalationStatus}</td>
                 <td style="justify-content: center;">${actions}</td>
