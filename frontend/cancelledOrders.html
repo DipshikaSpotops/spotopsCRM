@@ -442,6 +442,7 @@ placeholder="Search..."
 <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Yard Info<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Order Cancelled by <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Cancelled Date<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Cx Refund Amount <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Cancellation Reason<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">order Status<span class="aToZ">&#9650;</span></th>
@@ -609,6 +610,7 @@ const actions = `
 const yardlength = item.additionalInfo.length;
 const datetime = item.orderDate;
 const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+const cancelleddateOnly = item.cancelledDate.split(" ")[0] + " " + item.cancelledDate.split(" ")[1] + " " + item.cancelledDate.split(" ")[2];
 $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
@@ -655,6 +657,7 @@ return parts[1]?.split(" on ")[0] || "Unknown";
 .join(", ") || ""
 }
 </td>
+<td>${cancelleddateOnly}</td>
 <td>${item.cancelledRefAmount}</td>
 <td>${item.cancellationReason}</td>
 <td>${item.orderStatus}</td>
