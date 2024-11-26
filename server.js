@@ -62,7 +62,7 @@ let orderCount = 0;
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
 console.log("Adding new order");
-
+var firstName = req.query.firstName;
 try {
 console.log("Create a new order:", req.body);
 
