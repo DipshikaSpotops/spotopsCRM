@@ -179,6 +179,9 @@ var orderId = newOrder.orderNo;
 // console.log("orderNo", orderId);
 // await generateInvoice(orderId, newOrder);
 
+order.orderHistory.push(
+    `Order placed  by ${firstName} on ${formattedDateTime}`
+    );
 res.status(201).json({ newOrder, team: newOrder.team });
 } catch (error) {
 if (error.code === 11000) { // Duplicate key error in MongoDB
