@@ -1,7 +1,3 @@
-THE NEW ORDER IS GETTING SAVED BUT I AM GETTING THE FOLLOWING alert   .catch((error) => {
-  console.error("Error saving new order:", error);
-  alert("An error occurred while saving the order. Please try again.");
-});
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1025,31 +1021,20 @@ const newEntry = urlParams.get("newEntry");
             };
 
             fetch(`https://www.spotops360.com/orders`, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newOrderData),
-})
-    .then((response) => {
-        if (!response.ok && response.status !== 201) {
-            throw new Error("Failed to save the new order.");
-        }
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-            return response.json();
-        }
-        return {}; // Handle empty or non-JSON responses
-    })
-    .then(() => {
-        alert(`Order ${orderNoInput} has been successfully created.`);
-        window.location.reload();
-    })
-    .catch((error) => {
-        console.error("Error saving new order:", error);
-        alert("An error occurred while saving the order. Please try again.");
-    });
-
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newOrderData),
+            })
+                .then((response) => {
+                    alert(`Order ${orderNoInput} has been successfully created.`);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error saving new order:", error);
+                    alert("An error occurred while saving the order. Please try again.");
+                });
         } else {
             // Update an existing order
             const updatedOrderData = {
