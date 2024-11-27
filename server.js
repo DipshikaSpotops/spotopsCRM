@@ -310,6 +310,7 @@ custReason: String,
 customerShippingMethodReplacement: String,
 customerShipperReplacement: String,
 customerTrackingNumberReplacement: String,
+customerETAReplacement: String,
 custOwnShipReplacement: String,
 // part from yard
 yardShippingStatus: String,

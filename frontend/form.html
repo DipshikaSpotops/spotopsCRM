@@ -1845,6 +1845,8 @@ Save
 </select>
 <label>Tracking No:</label>
 <input type="text" id="customerTrackingNumberReplacement" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 18px;text-align: center;width: 71%;margin-left: 7%;margin-top: 3%;">
+<label>ETA:</label>
+<input type="date" id="customerETAReplacement" placeholder="ETA" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 18px;text-align: center;width: 71%;margin-left: 7%;margin-top: 3%;">
 <label>Delivery Status:</label>
 <select id="custreplacementDelivery" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;width: 71%;margin-left: 2%;margin-top: 3%;" >
 <option value="">Choose</option>
@@ -3218,9 +3220,7 @@ $("#customerShippingMethodReplacement").val(additionalInfo.customerShippingMetho
 if (additionalInfo.customerShipperReplacement) {
 $("#customerShipperReplacement").val(additionalInfo.customerShipperReplacement);
 }
-if (additionalInfo.customerTrackingNumberReplacement) {
-$("#customerTrackingNumberReplacement").val(additionalInfo.customerTrackingNumberReplacement).parent().show();
-}
+
 if (additionalInfo.custOwnShipReplacement) {
 $('#replacementOwnShip').fadeIn();
 $("#custOwnShipReplacement").val(additionalInfo.custOwnShipReplacement);
@@ -3673,6 +3673,7 @@ const customerShippingMethodReplacement= $("#customerShippingMethodReplacement")
 const custOwnShipReplacement = $("#custOwnShipReplacement").val();
 const customerShipperReplacement = $("#customerShipperReplacement").val();
 const customerTrackingNumberReplacement = $("#customerTrackingNumberReplacement").val();
+const customerETAReplacement = $("#customerETAReplacement").val();
 const custreplacementDelivery = $("#custreplacementDelivery").val();
 const custShipToRep = $("#shipToRepAdd").val();
 console.log("part from cust rep add",custShipToRep)
@@ -3771,6 +3772,10 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
 updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
+hasChanges = true;
+}
+if (currentAdditionalInfo.customerETAReplacement !== customerETAReplacement) {
+updatedData.customerETAReplacement = customerETAReplacement;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
