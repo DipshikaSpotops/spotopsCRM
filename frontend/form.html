@@ -2793,13 +2793,13 @@ $("#salesAgent").val(data.salesAgent);
 // $("#bAddress").val(data.bAddress);
 $("#bAddress").val(
   data.bAddress ||
-  `${item.bAddressStreet || ""}, ${item.bAddressCity || ""}, ${item.bAddressState || ""}, ${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}`
+  `${data.bAddressStreet || ""}, ${data.bAddressCity || ""}, ${data.bAddressState || ""}, ${data.bAddressZip || ""}, ${data.bAddressAcountry || ""}`
 );
 $("#firstName").val(firstNameE);
 $("#lastname").val(lastNameE);
 $("#sAddress").val(
   data.sAddress ||
-  `${item.sAddressStreet || ""}, ${item.sAddressCity || ""}, ${item.sAddressState || ""}, ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`
+  `${data.sAddressStreet || ""}, ${data.sAddressCity || ""}, ${data.sAddressState || ""}, ${data.sAddressZip || ""}, ${data.sAddressAcountry || ""}`
 );
 $("#attention").val(data.attention);
 $("#email").val(data.email);
