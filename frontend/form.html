@@ -2790,10 +2790,17 @@ var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
-$("#bAddress").val(data.bAddress);
+// $("#bAddress").val(data.bAddress);
+$("#bAddress").val(
+  data.bAddress ||
+  `${item.bAddressStreet || ""}, ${item.bAddressCity || ""}, ${item.bAddressState || ""}, ${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}`
+);
 $("#firstName").val(firstNameE);
 $("#lastname").val(lastNameE);
-$("#sAddress").val(data.sAddress);
+$("#sAddress").val(
+  data.sAddress ||
+  `${item.sAddressStreet || ""}, ${item.sAddressCity || ""}, ${item.sAddressState || ""}, ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`
+);
 $("#attention").val(data.attention);
 $("#email").val(data.email);
 $("#phone").val(data.phone);
