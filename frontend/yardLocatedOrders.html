@@ -545,8 +545,15 @@ $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
-<td><b>Customer Name</b>: ${item.customerName || ""}  ${item.fName || "" } ${item.lName || ""}<br> <b>Attention</b>: ${item.attention || ""}<br>${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}  
-</td>  
+<td>
+<b>Customer Name</b>: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}<br> 
+<b>Attention</b>: ${item.attention || ""}<br>
+${
+(item.sAddressStreet || item.sAddressCity || item.sAddressState || item.sAddressZip || item.sAddressAcountry) 
+? `${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`
+: `${item.sAddress || ""}`
+}
+</td>
 <td>Part Required: ${item.pReq}<br> ${item.year} ${item.make} ${item.model}</td>
 <td>${item.desc}<br> <b>VIN</b>: ${item.vin} </td>
 <td>${
