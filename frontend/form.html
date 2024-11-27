@@ -4306,7 +4306,7 @@ link: $("#yardTrackingLink").val(),
 };
 // console.log("RMA return",yardIndex)
 if(escProcess === "Return" && retShippingMethod === "Customer shipping"){
-fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}&`, {
+fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
