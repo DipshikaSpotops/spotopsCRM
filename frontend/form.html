@@ -3772,7 +3772,6 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
 updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
-updatedData.escRepCustTrackingDate = currentDateTime;
 hasChanges = true;
 }
 if (currentAdditionalInfo.customerETAReplacement !== customerETAReplacement) {
@@ -3802,7 +3801,6 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
 updatedData.yardTrackingNumber = yardTrackingNumber;
-updatedData.escRepYardTrackingdate = currentDateTime;
 hasChanges = true;
 }
 if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
@@ -3828,7 +3826,6 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.returnTrackingCust !== returnTrackingCust) {
 updatedData.returnTrackingCust = returnTrackingCust;
-updatedData.escRetTrackingDate = currentDateTime;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
@@ -5165,5 +5162,9 @@ $("body").removeClass("modal-active");
 customerTrackingNumberReplacement, yardTrackingNumber, returnTrackingCust
 so if we have customerTrackingNumberReplacement, eta should be customerETAReplacement
 if we have yardTrackingNumber, eta should be yardTrackingETA
-if we have returnTrackingCust, eta should be custretPartETA -->
+if we have returnTrackingCust, eta should be 
 
+
+// return__part from customer
+customerShippingMethodReturn: String,
+custretPartETA: String, -->
