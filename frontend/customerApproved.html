@@ -754,9 +754,17 @@ $("#infoTable").append(
 Email: ${item.email}</br>
 Phone: ${item.phone}</br>
 Alt Phone: ${item.altPhone}</br>
-Billing Address:</br> ${formattedBAddress}</br>
+Billing Address:</br>  ${
+(item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry) 
+? `<b>Billing Name</b>:${item.bName}<br> ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.sAddressAcountry || ""} `
+: `${formattedBAddress || ""}`
+}</br>
 </td>
-<td> ${formattedSAddress}</br></td> 
+<td>  ${
+(item.sAddressStreet || item.sAddressCity || item.sAddressState || item.sAddressZip || item.sAddressAcountry) 
+? `<b>Attention</b>:${item.attention}<br> ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>${item.sAddressZip || ""}, ${item.sAddressAcountry || ""} `
+: `${formattedSAddress || ""}`
+}</td> 
 <td><b>Part Name</b>: ${item.pReq || item.partName || ''}<br>
 <b>Quoted Price:</b> $${item.soldP || 0}<br>
 ${item.costP ? `<b>Est. Part Price:</b> $${item.costP}<br>` : ''}
