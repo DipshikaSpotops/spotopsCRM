@@ -321,6 +321,7 @@ yardTrackingETA: String,
 yardTrackingLink: String,
 // return__part from customer
 customerShippingMethodReturn: String,
+custretPartETA: String,
 customerShipperReturn: String,
 custOwnShippingReturn: String,
 returnTrackingCust: String,
