@@ -604,7 +604,7 @@ $("#infoTable").append(`
 <td>${item.customerName}<br>
 ${item.phone}<br>
 ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
-${item.sAddress}
+${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}
 </td>
 
 <td>Part required: ${item.pReq || item.partName}<br>
