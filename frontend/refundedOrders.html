@@ -623,15 +623,14 @@ item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
 .map((info, index) => {
 const yardName = info.yardName || "Unknown Yard";
-const shippingDetails = info.shippingDetails || "Unknown Shipping Details";
-const partPrice = info.partPrice || 0;
-const others = info.others || 0;
-const refundedAmount = info.refundedAmount || 0;
-const custOwnShipReplacement = info.custOwnShipReplacement || 0;
-const yardOwnShipping = info.yardOwnShipping || 0;
-const custOwnShippingReturn = info.custOwnShippingReturn || 0;
-
-const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
+const shippingCost = info.shippingDetails ? 
+parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 : 0;
+const partPrice = parseFloat(info.partPrice || 0);
+const others = parseFloat(info.others || 0);
+const refundedAmount = parseFloat(info.refundedAmount || 0);
+const custOwnShipReplacement = parseFloat(info.custOwnShipReplacement || 0);
+const yardOwnShipping = parseFloat(info.yardOwnShipping || 0);
+const custOwnShippingReturn = parseFloat(info.custOwnShippingReturn || 0);
 
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
