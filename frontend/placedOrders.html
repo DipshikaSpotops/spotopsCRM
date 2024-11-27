@@ -915,7 +915,7 @@ ${
 <td>
     ${
 (item.sAddressStreet || item.sAddressCity || item.sAddressState || item.sAddressZip || item.sAddressAcountry) 
-? `${item.attention} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>${item.sAddressZip || ""}, ${item.sAddressAcountry || ""} `
+? `<b>Attention</b>:${item.attention}<br> ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>${item.sAddressZip || ""}, ${item.sAddressAcountry || ""} `
 : `${formattedSAddress || ""}`
 }
 <td>Part Name: ${item.pReq || item.partName || ''}<br>
