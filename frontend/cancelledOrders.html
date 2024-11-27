@@ -649,7 +649,7 @@ Yard refund: ${refundedAmount}
 <td>
 ${
 item.orderHistory
-.filter(entry => entry.includes("Order status updated to Order Cancelled"))
+.filter(entry => entry.includes("Order status updated to Order Cancelled") || entry.includes("Order Cancelled"))
 .map(entry => {
 const parts = entry.split(" by ");
 return parts[1]?.split(" on ")[0] || "Unknown";
