@@ -1938,13 +1938,13 @@ Save
 
   <!-- Tracking Number -->
   <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-    <label for="returnTrackingCust" style="flex: 1; text-align: right;">Tracking No:</label>
+    <label for="returnTrackingCust" style="flex: 1; text-align: right;white-space: nowrap;">Tracking No:</label>
     <input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="flex: 2; border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 18px; text-align: center;">
   </div>
 
   <!-- Delivery Status -->
   <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-    <label for="custReturnDelivery" style="flex: 1; text-align: right;">Delivery Status:</label>
+    <label for="custReturnDelivery" style="flex: 1; text-align: right;white-space: nowrap;">Delivery Status:</label>
     <select id="custReturnDelivery" style="flex: 2; text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh;">
       <option value="">Choose</option>
       <option value="In Transit">In Transit</option>
@@ -3258,6 +3258,10 @@ $("#yardTrackingLink").val(additionalInfo.yardTrackingLink);
 if (additionalInfo.customerShippingMethodReturn) {
 $("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn);
 }
+
+if (additionalInfo.custretPartETA) {
+$("#custretPartETA").val(additionalInfo.custretPartETA);
+}
 if (additionalInfo.customerShipperReturn) {
 $("#customerShipperReturn").val(additionalInfo.customerShipperReturn);
 }
@@ -3682,6 +3686,7 @@ const yardTrackingETA = $("#yardTrackingETA").val();
 const yardTrackingLink = $("#yardTrackingLink").val();
 // return parts
 const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
+const custretPartETA = $("#custretPartETA").val();
 const customerShipperReturn = $("#customerShipperReturn").val();
 const returnTrackingCust = $("#returnTrackingCust").val();
 const custOwnShippingReturn = $("#custOwnShippingReturn").val();
@@ -3800,6 +3805,10 @@ hasChanges = true;
 // part from yard
 if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMethodReturn) {
 updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
+hasChanges = true;
+}
+if (currentAdditionalInfo.custretPartETA !== custretPartETA) {
+updatedData.custretPartETA = custretPartETA;
 hasChanges = true;
 }
 if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
@@ -4268,6 +4277,7 @@ $("#sendRMAEmail").on("click", function () {
 $("#saveEsc").prop("disabled", true).css("filter", "blur(2px)");
 var escProcess = $("#escProcess").val();
 var retShippingMethod = $("#customerShippingMethodReturn").val() || "";
+var retETA = $("#custretPartETA").val() || "";
 var repShippingMethod = $("#customerShippingMethodReplacement").val() || "";
 var retAddress = $('#shipToReturnAdd').val();
 var retAddressReplacement = $('#shipToRepAdd').val();
@@ -4296,7 +4306,7 @@ link: $("#yardTrackingLink").val(),
 };
 // console.log("RMA return",yardIndex)
 if(escProcess === "Return" && retShippingMethod === "Customer shipping"){
-fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
+fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}&`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
