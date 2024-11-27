@@ -866,7 +866,7 @@ const formattedBAddress = `${firstLineB}<br>${secondLineB}${additionalLineB ? `<
 const sParts = sAddress ? sAddress.split(',') : [];
 const firstLineS = sParts.length > 1 ? `${sParts[0].trim()}, ${sParts[1].trim()}` : "";
 const secondLineS = sParts.length > 4 ? `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}` : "";
-const formattedSAddress = `${firstLineS}<br>${secondLineS}<br><b>Attention</b>: ${item.attention || ''}`;
+const formattedSAddress = `${firstLineS}<br>${secondLineS}<br>`;
 var expShip = item.expediteShipping;
 var dsCall = item.dsCall;
 // console.log("expediteShipping",expShip,"dsCall",dsCall);
@@ -905,7 +905,7 @@ Name: ${item.customerName || ''}<br>
 Email: ${item.email || ''}<br>
 Phone: ${item.phone || ''}<br>
 Alt Phone: ${item.altPhone || ''}<br>
-Billing Address:<br> ${formattedBAddress || ""}  ${item.bAddressStreet || ""},${item.bAddressCity || ""}, ${item.bAddressState || ""},${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}<br>
+Billing Address:${formattedBAddress || ""}  ${item.bAddressStreet || ""},${item.bAddressCity || ""}, ${item.bAddressState || ""},${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}<br>
 </td>
 <td>${formattedSAddress || ""} ${item.attention} <br>${item.sAddressStreet || ""},${item.sAddressCity || ""}, ${item.sAddressState || ""},${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}</td>
 <td>Part Name: ${item.pReq || item.partName || ''}<br>
