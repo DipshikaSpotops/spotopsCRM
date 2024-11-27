@@ -673,7 +673,7 @@ return parts[1]?.split(" on ")[0] || "Unknown";
 ${
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info) => {
+.map((info,index) => {
 const shippingCost = info.shippingDetails
 ? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
 : 0;
@@ -683,8 +683,6 @@ const refundedAmount = parseFloat(info.refundedAmount || 0);
 const yardOwnShipping = parseFloat(info.yardOwnShipping || 0);
 const custOwnShippingReturn = parseFloat(info.custOwnShippingReturn || 0);
 const custOwnShipReplacement = parseFloat(info.custOwnShipReplacement || 0);
-
-// Calculate the total Yard Spend
 const yardSpendTotal =
 partPrice + 
 shippingCost + 
@@ -695,7 +693,7 @@ custOwnShippingReturn -
 custOwnShipReplacement;
 
 // Return the calculated total for display
-return `Yard Spend: $${yardSpendTotal.toFixed(2)}`;
+return `Yard ${index} Spend: $${yardSpendTotal.toFixed(2)}`;
 })
 .join("<br>")
 : ""
