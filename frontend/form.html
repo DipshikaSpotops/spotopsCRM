@@ -1899,38 +1899,32 @@ Save
   </select>
   </div>
 </div>
-<!-- div only for Return -->
-<div id="partFromCustomerReturn" class="return-column" style="display: none;">
-<div style="display: flex;">    
-<div><h4>Part from Customer:</h4></div>
-</div>
-<label>Ship To:</label>
-<input type="text" id="shipToReturnAdd" placeholder="Ship To" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;width: 90%;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3%; gap: 10px;">
-<!-- Shipping Method -->
-<div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-<label for="customerShippingMethodReturn" style="margin-bottom: 5px;">Shipping Method:</label>
-<select id="customerShippingMethodReturn" style="width: 100%; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; text-align: center;">
-<option value="">Choose</option>
-<option value="Customer shipping">Customer shipping</option>
-<option value="Yard shipping">Yard shipping</option>
-<option value="Own shipping">Own shipping</option>
-</select>
-</div>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3%; gap: 20px;">
 
-<!-- Shipping Value -->
-<div id="customerShippingValueReturn" style="flex: 1; display: flex; flex-direction: column; align-items: center; display: none;">
-<label for="custOwnShippingReturn" style="margin-bottom: 5px;">Enter Shipping Value:</label>
-<input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="width: 100%; border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center;">
-</div>
+  <!-- Shipping Method -->
+  <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
+    <label for="customerShippingMethodReturn" style="flex: 1; text-align: right;">Shipping Method:</label>
+    <select id="customerShippingMethodReturn" style="flex: 2; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh; text-align: center;">
+      <option value="">Choose</option>
+      <option value="Customer shipping">Customer shipping</option>
+      <option value="Yard shipping">Yard shipping</option>
+      <option value="Own shipping">Own shipping</option>
+    </select>
+  </div>
 
-<!-- ETA -->
-<div id="retPartETA" style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-<label for="custretPartETA" style="margin-bottom: 5px;">ETA:</label>
-<input id="custretPartETA" type="date" placeholder="ETA" style="width: 100%; border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center;">
-</div>
+  <!-- Shipping Value -->
+  <div id="customerShippingValueReturn" style="flex: 1; display: flex; align-items: center; gap: 10px; display: none;">
+    <label for="custOwnShippingReturn" style="flex: 1; text-align: right;">Enter Shipping Value:</label>
+    <input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="flex: 2; border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center;">
+  </div>
 
-</div>  
+  <!-- ETA -->
+  <div id="retPartETA" style="flex: 1; display: flex; align-items: center; gap: 10px;">
+    <label for="custretPartETA" style="flex: 1; text-align: right;">ETA:</label>
+    <input id="custretPartETA" type="date" placeholder="ETA" style="flex: 2; border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 16px; text-align: center;">
+  </div>
+
+</div>
   <label>Shipper:</label>
   <select id="customerShipperReturn" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin-left: 6%;margin-top: 3%;">
   <option value="">Choose</option>
