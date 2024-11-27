@@ -2882,7 +2882,7 @@ const minutes = date.getMinutes().toString().padStart(2, '0');
 const formattedDate = `${day} ${month}, ${year}`;
 const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 order.orderHistory.push(
-    `Label voided for ${yardIndex} by ${firstname} on ${formattedDateTime}`
+    `Label voided for Yard ${yardIndex} by ${firstname} on ${formattedDateTime}`
     );
 
 
