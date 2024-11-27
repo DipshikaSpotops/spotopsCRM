@@ -631,7 +631,7 @@ const refundedAmount = parseFloat(info.refundedAmount || 0);
 const custOwnShipReplacement = parseFloat(info.custOwnShipReplacement || 0);
 const yardOwnShipping = parseFloat(info.yardOwnShipping || 0);
 const custOwnShippingReturn = parseFloat(info.custOwnShippingReturn || 0);
-
+const shippingDetails = info.shippingDetails || "";
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
 Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
