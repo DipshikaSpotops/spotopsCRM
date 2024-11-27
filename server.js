@@ -337,7 +337,21 @@ trackingHistory: [String],
 etaHistory:  [String],
 shipperNameHistory: [String],
 trackingLinkHistory: [String],
-
+// saving dates for bol in escalation
+escRetTrackingDate: String,
+escRepCustTrackingDate: String,
+escRepYardTrackingdate: String,
+// for voiding labels in esc popup
+escReturnTrackingHistory: [String],
+escReturnETAHistory: [String],
+escReturnShipperNameHistory: [String],
+escReturnTrackingLink: [String],
+escReturnBOLhistory: [String],
+escRepTrackingHistory: [String],
+escRepETAHistory: [String],
+escRepShipperNameHistory: [String],
+escRepTrackinhLink: [String],
+escrepBOLhistory: [String]
 },
 {strict:false}
 );
