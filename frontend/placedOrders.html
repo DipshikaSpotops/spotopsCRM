@@ -907,8 +907,8 @@ Phone: ${item.phone || ''}<br>
 Alt Phone: ${item.altPhone || ''}<br>
 Billing Address:
 ${
-(item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry) 
-? `${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}<br> ${item.bName || ""}`
+(item.bName ||  item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry) 
+? `<b>Billing Name</b>: ${item.bName || ""} <br>${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}<br> `
 : `${formattedBAddress || ""}`
 }
 </td>
