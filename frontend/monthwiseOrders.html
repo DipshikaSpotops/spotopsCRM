@@ -415,8 +415,8 @@ placeholder="Search..."
 <th style="cursor: pointer" scope="col">Part Info <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Sale Price <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Est GP <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Sale Price <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Current GP <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Escalation Status<span class="aToZ">&#9650;</span></th>
@@ -619,7 +619,7 @@ item.additionalInfo && item.additionalInfo.length > 0
 : ""
 }</td>
 <td>${item.orderStatus}</td>
-<td>${item.grossProfit}</td>
+<td>$${item.grossProfit}</td>
 <td>$${item.soldP}</td>
 <td>
 ${
@@ -797,7 +797,7 @@ $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 const filteredOrders = allOrders.filter(order => {
 const basicSearch = (
-(order.soldP && order.soldP.toLowerCase().includes(value)) ||
+(order.soldP && order.String(soldP).toLowerCase().includes(value)) ||
 (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
 (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
 (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
