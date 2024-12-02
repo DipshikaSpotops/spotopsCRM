@@ -2956,18 +2956,15 @@ if (yardData.customerShipperReplacement) {
 const cleanedShipperName = typeof yardData.customerShipperReplacement === "string" ? yardData.customerShipperReplacement.trim() : yardData.customerShipperReplacement;
 yardData.escRepShipperNameHistoryCust.push(cleanedShipperName);
 }
-
 if (yardData.escRepCustTrackingDate) {
 const cleanedescRepCustTrackingDate = typeof yardData.escRepCustTrackingDate === "string" ? yardData.escRepCustTrackingDate.trim() : yardData.escRepCustTrackingDate;
 yardData.escrepBOLhistoryCust.push(cleanedescRepCustTrackingDate);
 }
-
 // Update current fields with new values or clear them
 yardData.customerTrackingNumberReplacement = customerTrackingNumberReplacement || "";
 yardData.customerETAReplacement = customerETAReplacement || "";
 yardData.customerShipperReplacement = customerShipperReplacement || "";
 yardData.escRepCustTrackingDate = "";
-
 // Add a label voided entry to the order history
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:', centralTime);
