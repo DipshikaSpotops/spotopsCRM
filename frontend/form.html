@@ -3779,6 +3779,10 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
 updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
+var escRepCustTrackingDate = currentDateTime;
+console.log("escRepCustTrackingDate",escRepCustTrackingDate)
+updatedData.escRepCustTrackingDate = escRepCustTrackingDate;
+console.log(updatedData);
 hasChanges = true;
 }
 if (currentAdditionalInfo.customerETAReplacement !== customerETAReplacement) {
@@ -5196,7 +5200,7 @@ customerShippingMethodReplacement: "", // Clear tracking link
 };
 console.log("updated yard data",updatedInfo);
 // Send the updated data to the backend
-fetch(`https://www.spotops360.com/orders/updateYard/${orderNo}/${yardIndex}?firstName=${firstName}`, {
+fetch(`https://www.spotops360.com/orders/voidLabelRepCust/${orderNo}/${yardIndex}?firstName=${firstName}`, {
 method: "PUT",
 headers: {
 "Content-Type": "application/json",
