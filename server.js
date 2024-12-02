@@ -2934,10 +2934,10 @@ return res.status(400).json({ message: "Invalid yard index" });
 const yardData = order.additionalInfo[yardIndex - 1];
 
 // Initialize history arrays if they don't exist
-yardData.customerTrackingNumberReplacement = yardData.escRepTrackingHistoryCust || [];
-yardData.customerETAReplacement = yardData.escRepETAHistoryCust || [];
-yardData.customerShipperReplacement = yardData.escRepShipperNameHistoryCust || [];
-yardData.escRepCustTrackingDate = yardData.escrepBOLhistoryCust || [];
+yardData.escRepTrackingHistoryCust = yardData.escRepTrackingHistoryCust || [];
+yardData.escRepETAHistoryCust = yardData.escRepETAHistoryCust || [];
+yardData.escRepShipperNameHistoryCust = yardData.escRepShipperNameHistoryCust || [];
+yardData.escrepBOLhistoryCust = yardData.escrepBOLhistoryCust || [];
 
 // Append current data to history arrays if it exists
 if (Array.isArray(yardData.customerTrackingNumberReplacement)) {
