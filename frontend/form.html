@@ -3814,6 +3814,9 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
 updatedData.yardTrackingNumber = yardTrackingNumber;
+var escRepYardTrackingDate = currentDateTime;
+console.log("escRepCustTrackingDate",escRepYardTrackingDate)
+updatedData.escRepYardTrackingDate = escRepYardTrackingDate;
 hasChanges = true;
 }
 if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
