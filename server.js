@@ -3062,4 +3062,77 @@ console.error("Error updating yard info:", error);
 res.status(500).json({ message: "Error updating yard info", error: error.message });
 }
 });
+
+// for voiding label in part from yard in replacement(esc)
+app.put("/orders/voidLabelReturn/:orderNo/:yardIndex", async (req, res) => {
+const { orderNo, yardIndex } = req.params;
+const {returnTrackingCust, custretPartETA, escRetTrackingDate, customerShipperReturn, customerShippingMethodReturn } = req.body;
+var firstname = req.query.firstName;
+try {
+// Fetch the order by order number
+const order = await Order.findOne({ orderNo });
+if (!order) {
+return res.status(404).json({ message: "Order not found" });
+}
+if (!order.additionalInfo[yardIndex - 1]) {
+return res.status(400).json({ message: "Invalid yard index" });
+}
+const yardData = order.additionalInfo[yardIndex - 1];
+// Initialize history arrays if they don't exist
+yardData.escReturnTrackingHistory = yardData.escReturnTrackingHistory || [];
+yardData.escReturnETAHistory = yardData.escReturnETAHistory || [];
+yardData.escReturnShipperNameHistory = yardData.escReturnShipperNameHistory || [];
+yardData.escReturnBOLhistory = yardData.escReturnBOLhistory || [];
+// Append current data to history arrays if it exists
+if (Array.isArray(yardData.returnTrackingCust)) {
+const cleanedTrackingNo = yardData.returnTrackingCust.map((number) => number.trim());
+yardData.escReturnTrackingHistory.push(...cleanedTrackingNo); 
+} else if (typeof yardData.returnTrackingCust === "string" && yardData.returnTrackingCust.trim() !== "") {
+yardData.escReturnTrackingHistory.push(yardData.returnTrackingCust.trim()); 
+}
+if (yardData.custretPartETA) {
+const cleanedEta = typeof yardData.custretPartETA === "string" ? yardData.custretPartETA.trim() : yardData.custretPartETA;
+yardData.escReturnETAHistory.push(cleanedEta);
+}
+if (yardData.customerShipperReturn) {
+const cleanedShipperName = typeof yardData.customerShipperReturn === "string" ? yardData.customerShipperReturn.trim() : yardData.customerShipperReturn;
+yardData.escReturnShipperNameHistory.push(cleanedShipperName);
+}
+if (yardData.escRetTrackingDate) {
+const cleanedescRetTrackingDate = typeof yardData.escRetTrackingDate === "string" ? yardData.escRetTrackingDate.trim() : yardData.escRetTrackingDate;
+yardData.escrepBOLhistoryYard.push(cleanedescRetTrackingDate);
+}
+// Update current fields with new values or clear them
+yardData.yardTrackingNumber = yardTrackingNumber || "";
+yardData.yardTrackingETA = yardTrackingETA || "";
+yardData.yardShipper = yardShipper || "";
+yardData.escRetTrackingDate = escRetTrackingDate || "";
+yardData.customerShippingMethodReturn = customerShippingMethodReturn || "";
+
+// Add a label voided entry to the order history
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+order.orderHistory.push(
+`Label voided for Part from customer part in return process(escalation) Yard ${yardIndex} by ${firstname} on ${formattedDateTime}`
+);
+
+
+// Save the updated order
+await order.save();
+
+res.status(200).json({ message: "Yard info updated successfully", order });
+} catch (error) {
+console.error("Error updating yard info:", error);
+res.status(500).json({ message: "Error updating yard info", error: error.message });
+}
+});
     

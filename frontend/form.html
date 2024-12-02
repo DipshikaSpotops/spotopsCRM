@@ -1956,6 +1956,7 @@ Save
     </select>
   </div>
 </div>
+<button type="button" class="btn btn-primary" id="voidLabelReturnPartfrCust">Void Label</button>
   </div>
 <!-- div only for reinmursements -->
 <div id="reimbursement" class="return-column" style="display: none;">
@@ -5168,7 +5169,7 @@ console.error("Error fetching yard data:", error);
 alert("Error fetching yard data. Please try again.");
 });
 });
-// to void rep part from customer label in escalation
+// to void rep part from yard label in escalation
 $("#voidLabelRepPartfrYard").on("click", function () {
 console.log("inside voidLabelRepPartfrYard label",yardIndex);
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
@@ -5228,73 +5229,6 @@ alert("An unexpected error occurred. Please try again.");
 });
 });
 });
-// void label part from yard replacement(esc)
-$("#voidLabel").on("click", function () {
-console.log("inside void label",yardIndex);
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
-if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
-console.error("Yard data not found.");
-return;
-}
-const yardData = data.additionalInfo[yardIndex - 1];
-yardData.status = "Yard PO Sent";
-
-// Ensure history arrays exist or initialize them
-yardData.trackingHistory = yardData.trackingHistory || [];
-yardData.etaHistory = yardData.etaHistory || [];
-yardData.shipperNameHistory = yardData.shipperNameHistory || [];
-yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
-
-// Push current data to the respective history arrays
-if (yardData.trackingNo) yardData.trackingHistory.push(yardData.trackingNo);
-if (yardData.eta) yardData.etaHistory.push(yardData.eta);
-if (yardData.shipperName) yardData.shipperNameHistory.push(yardData.shipperName);
-if (yardData.trackingLink) yardData.trackingLinkHistory.push(yardData.trackingLink);
-
-// Prepare updated data for backend with cleared fields
-const updatedInfo = {
-...yardData,
-trackingNo: "", // Clear tracking info
-eta: "", // Clear ETA
-shipperName: "", // Clear shipper info
-trackingLink: "", // Clear tracking link
-};
-
-// Send the updated data to the backend
-fetch(`https://www.spotops360.com/orders/updateYard/${orderNo}/${yardIndex}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-Authorization: `Bearer ${localStorage.getItem("token")}`,
-},
-body: JSON.stringify(updatedInfo),
-})
-.then((response) => {
-if (response.ok) {
-alert("Label voided successfully, and status updated to 'Yard PO Sent'.");
-$("#editYardPopup").hide();
-$(".modal-overlay").remove();
-// $(".mainDiv").removeClass("blur");
-$("body").removeClass("modal-active");
-$("#divTrackingEdit input, #divTrackingEdit select").val(""); // Reset input fields
-$("#divTrackingEdit").show();
-} else {
-console.error("Failed to update yard info.");
-alert("Error updating yard info. Please try again.");
-}
-})
-.catch((error) => {
-console.error("Error updating yard info:", error);
-alert("An unexpected error occurred. Please try again.");
-});
-})
-.catch((error) => {
-console.error("Error fetching yard data:", error);
-alert("Error fetching yard data. Please try again.");
-});
-});
 // to void rep part from customer label in escalation
 $("#voidLabelRepPartfrCust").on("click", function () {
 console.log("inside voidLabelRepPartfrCust label",yardIndex);
@@ -5339,7 +5273,7 @@ body: JSON.stringify(updatedInfo),
 if (response.ok) {
 alert("Label voided successfully for part from customer part in replacement.");
 $("#editYardPopup").hide();
-$(".modal-overlay").remove();
+// $(".modal-overlay").remove();
 // $(".mainDiv").removeClass("blur");
 // $("body").removeClass("modal-active");
 $("#partFromCustomer input, #partFromCustomer select").val(""); // Reset input fields
@@ -5351,6 +5285,66 @@ alert("Error voiding the label. Please try again.");
 })
 .catch((error) => {
 console.error("Error voiding in replacement(part from customer):", error);
+alert("An unexpected error occurred. Please try again.");
+});
+})
+});
+// to void return part from customer label in escalation
+$("#voidLabelReturnPartfrCust").on("click", function () {
+console.log("inside voidLabelReturnPartfrCust label",yardIndex);
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => response.json())
+.then((data) => {
+if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+console.error("Yard data not found.");
+return;
+}
+const yardData = data.additionalInfo[yardIndex - 1];
+console.log("yardData",yardData);
+yardData.escReturnTrackingHistory = yardData.escReturnTrackingHistory || [];
+yardData.escReturnETAHistory = yardData.escReturnETAHistory || [];
+yardData.escReturnShipperNameHistory = yardData.escReturnShipperNameHistory || [];
+yardData.escReturnBOLhistory = yardData.escReturnBOLhistory || [];
+// Push current data to the respective history arrays
+if (yardData.returnTrackingCust) yardData.escReturnTrackingHistory.push(yardData.returnTrackingCust);
+if (yardData.custretPartETA) yardData.escReturnETAHistory.push(yardData.custretPartETA);
+if (yardData.customerShipperReturn) yardData.escReturnShipperNameHistory.push(yardData.customerShipperReturn);
+if (yardData.escRetTrackingDate) yardData.escReturnBOLhistory.push(yardData.escRetTrackingDate);
+// Prepare updated data for backend with cleared fields
+const updatedInfo = {
+...yardData,
+returnTrackingCust: "", // Clear tracking info
+custretPartETA: "", // Clear ETA
+escRetTrackingDate:"",
+customerShipperReturn:"",
+customerShippingMethodReturn: "", // Clear tracking link
+};
+console.log("updated yard data",updatedInfo);
+// Send the updated data to the backend
+fetch(`https://www.spotops360.com/orders/voidLabelReturn/${orderNo}/${yardIndex}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${localStorage.getItem("token")}`,
+},
+body: JSON.stringify(updatedInfo),
+})
+.then((response) => {
+if (response.ok) {
+alert("Label voided successfully for part from customer part in replacement.");
+$("#editYardPopup").hide();
+// $(".modal-overlay").remove();
+// $(".mainDiv").removeClass("blur");
+// $("body").removeClass("modal-active");
+$("#partFromCustomerReturn input, #partFromCustomerReturn select").val(""); // Reset input fields
+// $("#divTrackingEdit").show();
+} else {
+console.error("Failed to update void.");
+alert("Error voiding the label. Please try again.");
+}
+})
+.catch((error) => {
+console.error("Error voiding in return(part from customer):", error);
 alert("An unexpected error occurred. Please try again.");
 });
 })
