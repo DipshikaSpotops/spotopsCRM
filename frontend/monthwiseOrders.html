@@ -797,6 +797,7 @@ $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 const filteredOrders = allOrders.filter(order => {
 const basicSearch = (
+(order.soldP && order.soldP.toLowerCase().includes(value)) ||
 (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
 (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
 (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
