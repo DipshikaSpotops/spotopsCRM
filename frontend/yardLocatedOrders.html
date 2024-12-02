@@ -795,7 +795,8 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
-allOrders = orders.filter((item) => {
+// var allOrdersLength = allOrders.length;
+const orders = allOrders.filter((item) => {
 const poInfoArray = item.additionalInfo;
 if (!poInfoArray || poInfoArray.length === 0) return false;
 return poInfoArray.some((info) => {
@@ -803,11 +804,9 @@ const statusMatches = info.status === "Yard located";
 return statusMatches;
 });
 });
-var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Yard Located Orders This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Yard Located Orders This Month- ${orders.length}`;
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(totalOrders.length / rowsPerPage));
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 } finally {
