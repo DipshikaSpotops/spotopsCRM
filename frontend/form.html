@@ -3813,11 +3813,11 @@ if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMetho
 updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
 hasChanges = true;
 }
-// if (currentAdditionalInfo.custretPartETA !== custretPartETA) {
-// console.log("custretPartETA");  
-// updatedData.custretPartETA = custretPartETA;
-// hasChanges = true;
-// }
+if (currentAdditionalInfo.custretPartETA !== custretPartETA) {
+console.log("custretPartETA");  
+updatedData.custretPartETA = custretPartETA;
+hasChanges = true;
+}
 if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
 updatedData.customerShipperReturn = customerShipperReturn;
 hasChanges = true;
