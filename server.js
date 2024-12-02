@@ -2965,6 +2965,7 @@ yardData.customerTrackingNumberReplacement = customerTrackingNumberReplacement |
 yardData.customerETAReplacement = customerETAReplacement || "";
 yardData.customerShipperReplacement = customerShipperReplacement || "";
 yardData.escRepCustTrackingDate = "";
+yardData.customerShippingMethodReplacement = customerShippingMethodReplacement || "";
 // Add a label voided entry to the order history
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:', centralTime);
@@ -2995,7 +2996,7 @@ res.status(500).json({ message: "Error updating yard info", error: error.message
 // for voiding label in part from yard in replacement(esc)
 app.put("/orders/voidLabelRepYard/:orderNo/:yardIndex", async (req, res) => {
 const { orderNo, yardIndex } = req.params;
-const { yardTrackingNumber, yardTrackingETA, yardShipper, escRepYardTrackingdate} = req.body;
+const { yardTrackingNumber, yardTrackingETA, yardShipper, escRepYardTrackingdate, yardShippingMethod} = req.body;
 var firstname = req.query.firstName;
 try {
 // Fetch the order by order number
@@ -3036,6 +3037,7 @@ yardData.yardTrackingNumber = yardTrackingNumber || "";
 yardData.yardTrackingETA = yardTrackingETA || "";
 yardData.yardShipper = yardShipper || "";
 yardData.escRepYardTrackingdate = "";
+yardData.yardShippingMethod = "";
 // Add a label voided entry to the order history
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:', centralTime);
