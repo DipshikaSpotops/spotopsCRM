@@ -5189,7 +5189,7 @@ customerETAReplacement: "", // Clear ETA
 customerShipperReplacement: "", // Clear shipper info
 customerShippingMethodReplacement: "", // Clear tracking link
 };
-
+console.log("updated yard data",updatedInfo);
 // Send the updated data to the backend
 fetch(`https://www.spotops360.com/orders/updateYard/${orderNo}/${yardIndex}?firstName=${firstName}`, {
 method: "PUT",
