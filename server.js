@@ -2966,7 +2966,7 @@ yardData.escrepBOLhistoryCust.push(cleanedescRepCustTrackingDate);
 yardData.customerTrackingNumberReplacement = Array.isArray(customerTrackingNumberReplacement) ? customerTrackingNumberReplacement : [];
 yardData.customerETAReplacement = customerETAReplacement || "";
 yardData.customerShipperReplacement = customerShipperReplacement || "";
-yardData.trackingLink = trackingLink || "";
+yardData.escRepCustTrackingDate = escRepCustTrackingDate || "";
 
 // Add a label voided entry to the order history
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
