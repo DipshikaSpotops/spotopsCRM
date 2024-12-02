@@ -3103,9 +3103,9 @@ const cleanedescRetTrackingDate = typeof yardData.escRetTrackingDate === "string
 yardData.escrepBOLhistoryYard.push(cleanedescRetTrackingDate);
 }
 // Update current fields with new values or clear them
-yardData.yardTrackingNumber = yardTrackingNumber || "";
-yardData.yardTrackingETA = yardTrackingETA || "";
-yardData.yardShipper = yardShipper || "";
+yardData.returnTrackingCust = returnTrackingCust || "";
+yardData.custretPartETA = custretPartETA || "";
+yardData.customerShipperReturn = customerShipperReturn || "";
 yardData.escRetTrackingDate = escRetTrackingDate || "";
 yardData.customerShippingMethodReturn = customerShippingMethodReturn || "";
 
