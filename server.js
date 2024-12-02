@@ -340,7 +340,7 @@ trackingLinkHistory: [String],
 // saving dates for bol in escalation
 escRetTrackingDate: String,
 escRepCustTrackingDate: String,
-escRepYardTrackingdate: String,
+escRepYardTrackingDate: String,
 // for voiding labels in esc popup
 escReturnTrackingHistory: [String],
 escReturnETAHistory: [String],
