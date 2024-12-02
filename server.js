@@ -2914,4 +2914,88 @@ console.error("Error updating yard info:", error);
 res.status(500).json({ message: "Error updating yard info", error: error.message });
 }
 });
+// for voiding label in part from customer in replacement(esc)
+app.put("/orders/voidLabelRepCust/:orderNo/:yardIndex", async (req, res) => {
+const { orderNo, yardIndex } = req.params;
+const { customerTrackingNumberReplacement, customerETAReplacement, customerShipperReplacement, escRepCustTrackingDate} = req.body;
+var firstname = req.query.firstName;
+try {
+// Fetch the order by order number
+const order = await Order.findOne({ orderNo });
+if (!order) {
+return res.status(404).json({ message: "Order not found" });
+}
+
+// Check if the yard index is valid
+if (!order.additionalInfo[yardIndex - 1]) {
+return res.status(400).json({ message: "Invalid yard index" });
+}
+
+const yardData = order.additionalInfo[yardIndex - 1];
+
+// Initialize history arrays if they don't exist
+yardData.trackingHistory = yardData.trackingHistory || [];
+yardData.etaHistory = yardData.etaHistory || [];
+yardData.shipperNameHistory = yardData.shipperNameHistory || [];
+yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
+
+// Append current data to history arrays if it exists
+if (Array.isArray(yardData.trackingNo)) {
+const cleanedTrackingNo = yardData.trackingNo.map((number) => number.trim());
+yardData.trackingHistory.push(...cleanedTrackingNo); // Append cleaned tracking numbers
+} else if (typeof yardData.trackingNo === "string" && yardData.trackingNo.trim() !== "") {
+yardData.trackingHistory.push(yardData.trackingNo.trim()); // Append single tracking number
+}
+
+if (yardData.eta) {
+const cleanedEta = typeof yardData.eta === "string" ? yardData.eta.trim() : yardData.eta;
+yardData.etaHistory.push(cleanedEta);
+}
+
+if (yardData.shipperName) {
+const cleanedShipperName = typeof yardData.shipperName === "string" ? yardData.shipperName.trim() : yardData.shipperName;
+yardData.shipperNameHistory.push(cleanedShipperName);
+}
+
+if (yardData.trackingLink) {
+const cleanedTrackingLink = typeof yardData.trackingLink === "string" ? yardData.trackingLink.trim() : yardData.trackingLink;
+yardData.trackingLinkHistory.push(cleanedTrackingLink);
+}
+
+// Update current fields with new values or clear them
+yardData.trackingNo = Array.isArray(trackingNo) ? trackingNo : [];
+yardData.eta = eta || "";
+yardData.shipperName = shipperName || "";
+yardData.trackingLink = trackingLink || "";
+
+
+// Update yard status
+yardData.status = status || "Yard PO Sent";
+
+// Add a label voided entry to the order history
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+order.orderHistory.push(
+`Label voided for Yard ${yardIndex} by ${firstname} on ${formattedDateTime}`
+);
+
+
+// Save the updated order
+await order.save();
+
+res.status(200).json({ message: "Yard info updated successfully", order });
+} catch (error) {
+console.error("Error updating yard info:", error);
+res.status(500).json({ message: "Error updating yard info", error: error.message });
+}
+});
 
