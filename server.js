@@ -345,13 +345,16 @@ escRepYardTrackingdate: String,
 escReturnTrackingHistory: [String],
 escReturnETAHistory: [String],
 escReturnShipperNameHistory: [String],
-escReturnTrackingLink: [String],
 escReturnBOLhistory: [String],
-escRepTrackingHistory: [String],
-escRepETAHistory: [String],
-escRepShipperNameHistory: [String],
-escRepTrackinhLink: [String],
-escrepBOLhistory: [String]
+// rep in esc
+escRepTrackingHistoryCust: [String],
+escRepETAHistoryCust: [String],
+escRepShipperNameHistoryCust: [String],
+escrepBOLhistoryCust: [String],
+escRepTrackingHistoryYard: [String],
+escRepETAHistoryYard: [String],
+escRepShipperNameHistoryYard: [String],
+escrepBOLhistoryYard: [String]
 },
 {strict:false}
 );

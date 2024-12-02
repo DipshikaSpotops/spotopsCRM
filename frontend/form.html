@@ -5155,18 +5155,72 @@ console.error("Error fetching yard data:", error);
 alert("Error fetching yard data. Please try again.");
 });
 });
+// to void rep part from customer label in escalation
+$("#voidLabelRepPartfrCust").on("click", function () {
+console.log("inside voidLabelRepPartfrCust label",yardIndex);
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => response.json())
+.then((data) => {
+if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+console.error("Yard data not found.");
+return;
+}
+const yardData = data.additionalInfo[yardIndex - 1];
+// yardData.status = "Yard PO Sent";
+
+// Ensure history arrays exist or initialize them
+yardData.escRepTrackingHistoryCust = yardData.escRepTrackingHistoryCust || [];
+yardData.escRepETAHistoryCust = yardData.escRepETAHistoryCust || [];
+yardData.escRepShipperNameHistoryCust = yardData.escRepShipperNameHistoryCust || [];
+yardData.escrepBOLhistoryCust = yardData.escrepBOLhistoryCust || [];
+
+// Push current data to the respective history arrays
+if (yardData.customerTrackingNumberReplacement) yardData.escRepTrackingHistoryCust.push(yardData.customerTrackingNumberReplacement);
+if (yardData.customerETAReplacement) yardData.escRepETAHistoryCust.push(yardData.customerETAReplacement);
+if (yardData.customerShipperReplacement) yardData.escRepShipperNameHistoryCust.push(yardData.customerShipperReplacement);
+if (yardData.customerETAReplacement) yardData.escrepBOLhistoryCust.push(yardData.customerETAReplacement);
+
+// Prepare updated data for backend with cleared fields
+const updatedInfo = {
+...yardData,
+customerTrackingNumberReplacement: "", // Clear tracking info
+customerETAReplacement: "", // Clear ETA
+customerShipperReplacement: "", // Clear shipper info
+customerShippingMethodReplacement: "", // Clear tracking link
+};
+
+// Send the updated data to the backend
+fetch(`https://www.spotops360.com/orders/updateYard/${orderNo}/${yardIndex}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${localStorage.getItem("token")}`,
+},
+body: JSON.stringify(updatedInfo),
+})
+.then((response) => {
+if (response.ok) {
+alert("Label voided successfully for part from customer part in replacement.");
+$("#editYardPopup").hide();
+$(".modal-overlay").remove();
+// $(".mainDiv").removeClass("blur");
+$("body").removeClass("modal-active");
+// $("#divTrackingEdit input, #divTrackingEdit select").val(""); // Reset input fields
+// $("#divTrackingEdit").show();
+} else {
+console.error("Failed to update void.");
+alert("Error voiding the label. Please try again.");
+}
+})
+.catch((error) => {
+console.error("Error voiding in replacement(part from customer):", error);
+alert("An unexpected error occurred. Please try again.");
+});
+})
+
+});
+
 });
 </script>
 </body>   
 </html>
-<!-- $("#custRefund").hide() -->
-<!-- see i might have inside additionalInfo
-customerTrackingNumberReplacement, yardTrackingNumber, returnTrackingCust
-so if we have customerTrackingNumberReplacement, eta should be customerETAReplacement
-if we have yardTrackingNumber, eta should be yardTrackingETA
-if we have returnTrackingCust, eta should be 
-
-
-// return__part from customer
-customerShippingMethodReturn: String,
-custretPartETA: String, -->
