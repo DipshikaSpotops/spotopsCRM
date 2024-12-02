@@ -1846,7 +1846,7 @@ Save
 <label>Tracking No:</label>
 <input type="text" id="customerTrackingNumberReplacement" placeholder="Tracking Number" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 18px;text-align: center;width: 71%;margin-left: 7%;margin-top: 3%;">
 <label>ETA:</label>
-<input type="date" id="customerETAReplacement" placeholder="ETA" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 18px;text-align: center;width: 71%;margin-left: 8%;margin-top: 3%;">
+<input type="date" id="customerETAReplacement" placeholder="ETA" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 18px;text-align: center;width: 71%;margin-left: 19%;margin-top: 3%;">
 <label>Delivery Status:</label>
 <select id="custreplacementDelivery" style="text-align: center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;width: 71%;margin-left: 2%;margin-top: 3%;" >
 <option value="">Choose</option>
@@ -3775,6 +3775,7 @@ updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacemen
 hasChanges = true;
 }
 if (currentAdditionalInfo.customerETAReplacement !== customerETAReplacement) {
+console.log("customerETAReplacement");  
 updatedData.customerETAReplacement = customerETAReplacement;
 hasChanges = true;
 }
@@ -3813,6 +3814,7 @@ updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custretPartETA !== custretPartETA) {
+console.log("custretPartETA");  
 updatedData.custretPartETA = custretPartETA;
 hasChanges = true;
 }
