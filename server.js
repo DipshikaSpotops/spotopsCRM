@@ -2917,9 +2917,7 @@ res.status(500).json({ message: "Error updating yard info", error: error.message
 // for voiding label in part from customer in replacement(esc)
 app.put("/orders/voidLabelRepCust/:orderNo/:yardIndex", async (req, res) => {
 const { orderNo, yardIndex } = req.params;
-
-
-const { customerTrackingNumberReplacement, customerETAReplacement, customerShipperReplacement, escRepCustTrackingDate} = req.body;
+const { customerTrackingNumberReplacement, customerETAReplacement, customerShipperReplacement, customerShippingMethodReplacement, escRepCustTrackingDate} = req.body;
 var firstname = req.query.firstName;
 try {
 // Fetch the order by order number
@@ -2936,43 +2934,39 @@ return res.status(400).json({ message: "Invalid yard index" });
 const yardData = order.additionalInfo[yardIndex - 1];
 
 // Initialize history arrays if they don't exist
-yardData.trackingHistory = yardData.trackingHistory || [];
-yardData.etaHistory = yardData.etaHistory || [];
-yardData.shipperNameHistory = yardData.shipperNameHistory || [];
-yardData.trackingLinkHistory = yardData.trackingLinkHistory || [];
+yardData.customerTrackingNumberReplacement = yardData.escRepTrackingHistoryCust || [];
+yardData.customerETAReplacement = yardData.escRepETAHistoryCust || [];
+yardData.customerShipperReplacement = yardData.escRepShipperNameHistoryCust || [];
+yardData.escRepCustTrackingDate = yardData.escrepBOLhistoryCust || [];
 
 // Append current data to history arrays if it exists
-if (Array.isArray(yardData.trackingNo)) {
-const cleanedTrackingNo = yardData.trackingNo.map((number) => number.trim());
-yardData.trackingHistory.push(...cleanedTrackingNo); // Append cleaned tracking numbers
-} else if (typeof yardData.trackingNo === "string" && yardData.trackingNo.trim() !== "") {
-yardData.trackingHistory.push(yardData.trackingNo.trim()); // Append single tracking number
+if (Array.isArray(yardData.customerTrackingNumberReplacement)) {
+const cleanedTrackingNo = yardData.customerTrackingNumberReplacement.map((number) => number.trim());
+yardData.escRepTrackingHistoryCust.push(...cleanedTrackingNo); // Append cleaned tracking numbers
+} else if (typeof yardData.customerTrackingNumberReplacement === "string" && yardData.customerTrackingNumberReplacement.trim() !== "") {
+yardData.escRepTrackingHistoryCust.push(yardData.customerTrackingNumberReplacement.trim()); // Append single tracking number
 }
 
-if (yardData.eta) {
-const cleanedEta = typeof yardData.eta === "string" ? yardData.eta.trim() : yardData.eta;
-yardData.etaHistory.push(cleanedEta);
+if (yardData.customerETAReplacement) {
+const cleanedEta = typeof yardData.customerETAReplacement === "string" ? yardData.customerETAReplacement.trim() : yardData.customerETAReplacement;
+yardData.escRepETAHistoryCust.push(cleanedEta);
 }
 
-if (yardData.shipperName) {
-const cleanedShipperName = typeof yardData.shipperName === "string" ? yardData.shipperName.trim() : yardData.shipperName;
-yardData.shipperNameHistory.push(cleanedShipperName);
+if (yardData.customerShipperReplacement) {
+const cleanedShipperName = typeof yardData.customerShipperReplacement === "string" ? yardData.customerShipperReplacement.trim() : yardData.customerShipperReplacement;
+yardData.escRepShipperNameHistoryCust.push(cleanedShipperName);
 }
 
-if (yardData.trackingLink) {
-const cleanedTrackingLink = typeof yardData.trackingLink === "string" ? yardData.trackingLink.trim() : yardData.trackingLink;
-yardData.trackingLinkHistory.push(cleanedTrackingLink);
+if (yardData.escRepCustTrackingDate) {
+const cleanedescRepCustTrackingDate = typeof yardData.escRepCustTrackingDate === "string" ? yardData.escRepCustTrackingDate.trim() : yardData.escRepCustTrackingDate;
+yardData.escrepBOLhistoryCust.push(cleanedescRepCustTrackingDate);
 }
 
 // Update current fields with new values or clear them
-yardData.trackingNo = Array.isArray(trackingNo) ? trackingNo : [];
-yardData.eta = eta || "";
-yardData.shipperName = shipperName || "";
+yardData.customerTrackingNumberReplacement = Array.isArray(customerTrackingNumberReplacement) ? customerTrackingNumberReplacement : [];
+yardData.customerETAReplacement = customerETAReplacement || "";
+yardData.customerShipperReplacement = customerShipperReplacement || "";
 yardData.trackingLink = trackingLink || "";
-
-
-// Update yard status
-yardData.status = status || "Yard PO Sent";
 
 // Add a label voided entry to the order history
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
@@ -2987,7 +2981,7 @@ const minutes = date.getMinutes().toString().padStart(2, '0');
 const formattedDate = `${day} ${month}, ${year}`;
 const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 order.orderHistory.push(
-`Label voided for Yard ${yardIndex} by ${firstname} on ${formattedDateTime}`
+`Label voided for Part from customer part in replacement process(escalation) for Yard ${yardIndex} by ${firstname} on ${formattedDateTime}`
 );
 
 
