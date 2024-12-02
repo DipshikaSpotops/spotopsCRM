@@ -2963,10 +2963,10 @@ yardData.escrepBOLhistoryCust.push(cleanedescRepCustTrackingDate);
 }
 
 // Update current fields with new values or clear them
-yardData.customerTrackingNumberReplacement = Array.isArray(customerTrackingNumberReplacement) ? customerTrackingNumberReplacement : [];
+yardData.customerTrackingNumberReplacement = customerTrackingNumberReplacement || "";
 yardData.customerETAReplacement = customerETAReplacement || "";
 yardData.customerShipperReplacement = customerShipperReplacement || "";
-yardData.escRepCustTrackingDate = escRepCustTrackingDate || "";
+yardData.escRepCustTrackingDate = "";
 
 // Add a label voided entry to the order history
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
