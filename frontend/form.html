@@ -3696,7 +3696,7 @@ const yardTrackingLink = $("#yardTrackingLink").val();
 // return parts
 const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
 const custretPartETA = $("#custretPartETA").val();
-const escRetTrackingDate = currentDateTime;
+// const escRetTrackingDate = currentDateTime;
 const customerShipperReturn = $("#customerShipperReturn").val();
 const returnTrackingCust = $("#returnTrackingCust").val();
 const custOwnShippingReturn = $("#custOwnShippingReturn").val();
@@ -3830,9 +3830,7 @@ updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custretPartETA !== custretPartETA) {
-console.log("custretPartETA");  
 updatedData.custretPartETA = custretPartETA;
-updatedData.escRetTrackingDate = escRetTrackingDate;
 hasChanges = true;
 }
 if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
