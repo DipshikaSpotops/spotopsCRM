@@ -3845,6 +3845,9 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.returnTrackingCust !== returnTrackingCust) {
 updatedData.returnTrackingCust = returnTrackingCust;
+let escRetTrackingDate = currentDateTime;
+console.log("escRepCustTrackingDate",escRetTrackingDate)
+updatedData.escRetTrackingDate = escRetTrackingDate;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
