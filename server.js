@@ -341,7 +341,7 @@ trackingLinkHistory: [String],
 escRetTrackingDate: String,
 escRepCustTrackingDate: String,
 escRepYardTrackingDate: String,
-// for voiding labels in esc popup
+// for voiding labels in esc popup(return)
 escReturnTrackingHistory: [String],
 escReturnETAHistory: [String],
 escReturnShipperNameHistory: [String],
