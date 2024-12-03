@@ -650,7 +650,7 @@ const array = info[arrayKey];
 if (arrayKey === "escRepTrackingHistoryYard" && Array.isArray(array) && array.length > 0) {
 array.forEach((value, idx) => {
   const displayValueYard =
-  arrayKey === "trackingLiescRepTrackingHistoryYardnkHistory"
+  arrayKey === "escRepTrackingHistoryYard"
       ? `<a href="${value}" target="_blank">${value}</a>`
       : value;
 const estimatedDeliveryYard =
@@ -671,6 +671,51 @@ $("#infoTable").append(`
 <td>${orderNo}</td>
 <td>${label}: ${displayValueYard}</td>
 <td>${bolDoeYard}</td>
+<td></td>
+<td></td>
+<td style="color: red;">VOIDED</td>
+<td></td> 
+</tr>
+`);
+});
+}
+});
+// for esc rep yard
+const arraysToRenderRepCust = {
+      escRepTrackingHistoryCust: "Rep Tracking No Cust",
+      escRepETAHistoryCust: "Rep Cust ETA",
+      escRepShipperNameHistoryCust: "Rep Shipper Name Cust",
+      escrepBOLhistoryCust: "Label Creation Rep Cust",
+    };
+
+Object.entries(arraysToRenderRepCust).forEach(([arrayKey, label]) => {
+const array = info[arrayKey];
+
+// Append only if `trackingHistory` array length > 0
+if (arrayKey === "escRepTrackingHistoryYard" && Array.isArray(array) && array.length > 0) {
+array.forEach((value, idx) => {
+  const displayValueCust =
+  arrayKey === "escRepTrackingHistoryCust"
+      ? `<a href="${value}" target="_blank">${value}</a>`
+      : value;
+const estimatedDeliveryCust =
+arrayKey === "escRepTrackingHistoryCust" && info.escRepETAHistoryCust && info.escRepETAHistoryCust[idx]
+? info.escRepETAHistoryCust[idx]
+: "N/A";
+const bolDoeCust =
+arrayKey === "escrepBOLhistoryYard" && info.escrepBOLhistoryCust && info.escrepBOLhistoryCust[idx]
+? info.escrepBOLhistoryCust[idx]
+: "N/A";
+const etaCust =
+arrayKey === "escRepETAHistoryCust" && info.escRepETAHistoryCust && info.escRepETAHistoryCust[idx]
+? info.escRepETAHistoryCust[idx]
+: "N/A";
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${orderNo}</td>
+<td>${label}: ${displayValueCust}</td>
+<td>${bolDoeCust}</td>
 <td></td>
 <td></td>
 <td style="color: red;">VOIDED</td>
