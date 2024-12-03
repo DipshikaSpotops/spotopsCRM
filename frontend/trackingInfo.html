@@ -566,7 +566,7 @@ const deliveredDate = info.deliveredDate || "";
 const shippingType = info.shippingDetails || "";
 let labelCreationD = "No Label Creation Date";
 if (Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0) {
-labelCreationD = info.labelCreationDate[info.labelCreationDate.length - 1];
+labelCreationD = info.labelCreationDate[0];
 // console.log("labelCreationD",labelCreationD)
 var labelCreationDateOnly = labelCreationD.split(" ")[0] + " " + labelCreationD.split(" ")[1] + " " + labelCreationD.split(" ")[2];
 console.log("labelCreationDateOnly",labelCreationDateOnly);
@@ -610,21 +610,19 @@ const estimatedDelivery =
   arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
       ? info.etaHistory[idx]
       : "N/A";
+      const labelCreationDateVoids =
+          arrayKey === "trackingHistory" &&
+          info.labelCreationDate &&
+          info.labelCreationDate[idx]
+            ? info.labelCreationDate[idx]
+            : "N/A";     
 
 $("#infoTable").append(`
   <tr>
       <td>${dateOnly}</td>
       <td>${orderNo}</td>
       <td>${label}: ${displayValue}</td>
-      <td>${
-        arrayKey === "labelCreationDate"
-            ? new Date(value).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-              })
-            : "N/A"
-      }</td>
+      <td>${labelCreationDateVoids}</td>
       <td></td>
       <td></td> <!-- Empty for Label/History Details -->
       <td style="color: red;">VOIDED</td>
