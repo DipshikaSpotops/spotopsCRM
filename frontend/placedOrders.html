@@ -746,13 +746,16 @@ console.error("Error fetching orders:", error);
 $("#infoTable").on("click", ".approve-btn", async function () {
   const orderNoRow = $(this).data("id");
   currentOrderNo = orderNoRow;
-  
+
   // Show modal
   $("#myModal").modal("show");
 
   // Add a one-time event handler for the OK button click
   $("#okButton").off("click").on("click", async function () {
-    $("#myModal").modal("hide"); // Hide modal
+    // Hide modal and remove blur
+    $("#myModal").modal("hide");
+
+    // Update order status
     const orderNo = orderNoRow; // Use the correct order number
     const now = new Date();
     const options = {
@@ -773,7 +776,6 @@ $("#infoTable").on("click", ".approve-btn", async function () {
       firstName: firstName,
       customerApprovedDate: formattedDate,
     };
-    console.log("in placed data", updatedData);
 
     try {
       const response = await fetch(
@@ -795,7 +797,7 @@ $("#infoTable").on("click", ".approve-btn", async function () {
       const data = await response.json();
 
       // Update UI
-      $(this).closest("tr").remove(); // Remove the row
+      $(`#infoTable tr[data-id="${orderNo}"]`).remove(); // Remove the row based on orderNo
       console.log("Order status updated successfully:", data);
     } catch (error) {
       console.error("Error updating order status:", error);
