@@ -744,7 +744,10 @@ console.error("Error fetching orders:", error);
 }
 
 $("#infoTable").on("click", ".approve-btn", async function () {
-
+    const orderNoRow = $(this).data("id");
+    currentOrderNo = orderNoRow;
+    console.log("orderNo",currentOrderNo);
+    $("#okButton").data("orderNo", currentOrderNo);
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");
   // Show modal
@@ -753,14 +756,13 @@ $("#infoTable").on("click", ".approve-btn", async function () {
   // Add a one-time event handler for the OK button click
   $("#okButton").on("click", async function () {
     // Hide modal and remove blur
-    const orderNoRow = $(this).data("id");
-    currentOrderNo = orderNoRow;
-    console.log("orderNo",currentOrderNo);
+    
     $("#myModal").hide()
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active")
     // Update order status
-    const orderNo = orderNoRow; // Use the correct order number
+    const orderNo = $(this).data("orderNo");
+  console.log("Approve Order No:", orderNo);
     const now = new Date();
     const options = {
       timeZone: "America/Chicago",
