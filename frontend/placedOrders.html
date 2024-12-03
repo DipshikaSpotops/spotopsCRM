@@ -751,7 +751,7 @@ $("#infoTable").on("click", ".approve-btn", async function () {
   $("#myModal").modal("show");
 
   // Add a one-time event handler for the OK button click
-  $("#okButton").off("click").on("click", async function () {
+  $("#okButton").on("click", async function () {
     // Hide modal and remove blur
     $("#myModal").modal("hide");
 
