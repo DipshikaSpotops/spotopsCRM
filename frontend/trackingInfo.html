@@ -614,7 +614,7 @@ const estimatedDelivery =
   info.labelCreationDate && info.labelCreationDate.length > 1
     ? info.labelCreationDate.slice(1) // New array excluding the first element
     : [];
-
+console.log("===",labelCreationDateWithoutFirst)
 const labelCreationDateVoids =
   arrayKey === "trackingHistory" &&
   labelCreationDateWithoutFirst[idx - 1] // Adjust index to match the new array
