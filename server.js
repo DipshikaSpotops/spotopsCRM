@@ -282,6 +282,7 @@ shippingDetails: String,
 others: String,
 status: String,
 paymentStatus: String,
+cardChargedDate: String,
 refundStatus:String,
 refundedAmount: Number,
 storeCredit: Number,
@@ -1080,11 +1081,11 @@ if (!order) return res.status(404).send("Order not found");
 if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
 return res.status(400).json({ message: "Invalid yard index" });
 }
-
-const paymentStatus = req.body.paymentStatus || "";
+const { paymentStatus, cardChargedDate } = req.body;
 const firstName = req.query.firstName || "Unknown User";
 
 order.additionalInfo[yardIndex].paymentStatus = paymentStatus;
+order.additionalInfo[yardIndex].cardChargedDate = cardChargedDate;
 order.orderHistory.push(
 `Yard ${yardIndex + 1} payment status updated to ${paymentStatus} by ${firstName} on ${formattedDateTime}`
 );
