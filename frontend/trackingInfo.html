@@ -559,118 +559,126 @@ const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[
 const orderNo = item.orderNo || "";
 
 item.additionalInfo.forEach((info, index) => {
-  const trackingNo = info.trackingNo || "";
-      const eta = info.eta || "";
-      const deliveredDate = info.deliveredDate || "";
-      const shippingType = info.shippingDetails || "";
-      let labelCreationDateOnly = "";
+const trackingNo = info.trackingNo || "";
+console.log("tracking",trackingNo,trackingNo.length)
+const eta = info.eta || "";
+const deliveredDate = info.deliveredDate || "";
+const shippingType = info.shippingDetails || "";
+let labelCreationD = "No Label Creation Date";
+if (Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0) {
+labelCreationD = info.labelCreationDate[info.labelCreationDate.length - 1];
+// console.log("labelCreationD",labelCreationD)
+var labelCreationDateOnly = labelCreationD.split(" ")[0] + " " + labelCreationD.split(" ")[1] + " " + labelCreationD.split(" ")[2];
+console.log("labelCreationDateOnly",labelCreationDateOnly);
+}
+// Append the main row for `trackingNo`
+if (trackingNo.length > 0) {
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${orderNo}</td>
+<td>${trackingNo}</td>
+<td>${labelCreationDateOnly || ""}</td>
+<td>${shippingType}</td>
+<td>${info.partShippedDate || ""}</td>
+<td>${eta}</td>
+<td>${deliveredDate}</td>
+</tr>
+`);
+}
 
-      if (Array.isArray(info.labelCreationDate) && info.labelCreationDate.length > 0) {
-        const labelCreationD =
-          info.labelCreationDate[info.labelCreationDate.length - 1];
-        labelCreationDateOnly =
-          labelCreationD.split(" ")[0] +
-          " " +
-          labelCreationD.split(" ")[1] +
-          " " +
-          labelCreationD.split(" ")[2];
-      }
+// Rows for other arrays in additionalInfo
+const arraysToRender = {
+trackingHistory: "Tracking No",
+etaHistory: "ETA",
+shipperNameHistory: "Shipper Name",
+trackingLinkHistory: "Tracking Link",
+labelCreationDate: "Label Creation"
+};
+Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
+const array = info[arrayKey];
 
-      // Append the main row for `trackingNo`
-      if (trackingNo.length > 0) {
-        $("#infoTable").append(`
-          <tr>
-            <td>${dateOnly}</td>
-            <td>${orderNo}</td>
-            <td>${trackingNo}</td>
-            <td>${labelCreationDateOnly || ""}</td>
-            <td>${shippingType}</td>
-            <td>${info.partShippedDate || ""}</td>
-            <td>${eta}</td>
-            <td>${deliveredDate}</td>
-          </tr>
-        `);
-      }
+// Append only if `trackingHistory` array length > 0
+if (arrayKey === "trackingHistory" && Array.isArray(array) && array.length > 0) {
+array.forEach((value, idx) => {
+const displayValue =
+  arrayKey === "trackingLinkHistory"
+      ? `<a href="${value}" target="_blank">${value}</a>`
+      : value;
 
-      // Arrays for each additional condition
-      const arraysToRender = {
-        trackingHistory: "Tracking No",
-        etaHistory: "ETA",
-        shipperNameHistory: "Shipper Name",
-        trackingLinkHistory: "Tracking Link",
-        labelCreationDate: "Label Creation",
-      };
+const estimatedDelivery =
+  arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
+      ? info.etaHistory[idx]
+      : "N/A";
 
-      const arraysToRenderReturn = {
-        escReturnTrackingHistory: "Return Tracking No",
-        escReturnETAHistory: "Return ETA",
-        escReturnShipperNameHistory: "Return Shipper Name",
-        escReturnBOLhistory: "Label Creation Return",
-      };
+$("#infoTable").append(`
+  <tr>
+      <td>${dateOnly}</td>
+      <td>${orderNo}</td>
+      <td>${label}: ${displayValue}</td>
+      <td>${
+        arrayKey === "labelCreationDate"
+            ? new Date(value).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+              })
+            : "N/A"
+      }</td>
+      <td></td>
+      <td></td> <!-- Empty for Label/History Details -->
+      <td style="color: red;">VOIDED</td>
+      <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
+  </tr>
+`);
+});
+}
+});
+});
+// for esc rep yard
+const arraysToRenderRepYard = {
+escRepTrackingHistoryYard: "Replacement Tracking No(Yard)",
+escRepETAHistoryYard: "Replacement ETA(Yard)",
+escRepShipperNameHistoryYard: "Replacement Shipper Name(Yard)",
+escrepBOLhistoryYard: "Label Creation Rep(Yard)"
+}
 
-      const arraysToRenderRepCust = {
-        escRepTrackingHistoryCust: "Rep Tracking No Cust",
-        escRepETAHistoryCust: "Rep Cust ETA",
-        escRepShipperNameHistoryCust: "Rep Shipper Name Cust",
-        escrepBOLhistoryCust: "Label Creation Rep Cust",
-      };
+Object.entries(arraysToRender).forEach(([arrayKey, label]) => {
+const array = info[arrayKey];
 
-      const arraysToRenderRepYard = {
-        escRepTrackingHistoryYard: "Rep Tracking No Yard",
-        escRepETAHistoryYard: "Rep Yard ETA",
-        escRepShipperNameHistoryYard: "Rep Shipper Name Yard",
-        escrepBOLhistoryYard: "Label Creation Rep Yard",
-      };
-
-      // Helper function to append rows for a specific condition
-      const appendRowsForCondition = (conditionArrays, info) => {
-        Object.entries(conditionArrays).forEach(([arrayKey, label]) => {
-          const array = info[arrayKey];
-
-          if (Array.isArray(array) && array.length > 0) {
-            array.forEach((value, idx) => {
-              const displayValue =
-                arrayKey.includes("Link")
-                  ? `<a href="${value}" target="_blank">${value}</a>`
-                  : value;
-
-              const bolValue =
-                arrayKey.includes("BOLhistory") &&
-                !isNaN(new Date(value).getTime())
-                  ? new Date(value).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })
-                  : value;
-
-              const etaValue =
-                arrayKey.includes("ETAHistory") && info.etaHistory
-                  ? info.etaHistory[idx] || "N/A"
-                  : "N/A";
-
-              $("#infoTable").append(`
-                <tr>
-                  <td>${dateOnly}</td>
-                  <td>${orderNo}</td>
-                  <td>${label}: ${displayValue}</td>
-                  <td>${bolValue || "N/A"}</td>
-                  <td>${shippingType || ""}</td>
-                  <td></td> <!-- Empty for Label/History Details -->
-                  <td style="color: red;">VOIDED</td>
-                  <td>${etaValue}</td>
-                </tr>
-              `);
-            });
-          }
-        });
-      };
-
-      // Render rows for each condition
-      appendRowsForCondition(arraysToRender, info);
-      appendRowsForCondition(arraysToRenderReturn, info);
-      appendRowsForCondition(arraysToRenderRepCust, info);
-      appendRowsForCondition(arraysToRenderRepYard, info);
+// Append only if `trackingHistory` array length > 0
+if (arrayKey === "escRepTrackingHistoryYard" && Array.isArray(array) && array.length > 0) {
+array.forEach((value, idx) => {
+  const displayValueYard =
+  arrayKey === "trackingLiescRepTrackingHistoryYardnkHistory"
+      ? `<a href="${value}" target="_blank">${value}</a>`
+      : value;
+const estimatedDeliveryYard =
+arrayKey === "escRepTrackingHistoryYard" && info.escRepETAHistoryYard && info.escRepETAHistoryYard[idx]
+? info.escRepETAHistoryYard[idx]
+: "N/A";
+const bolDoeYard =
+arrayKey === "escrepBOLhistoryYard" && info.escrepBOLhistoryYard && info.escrepBOLhistoryYard[idx]
+? info.escrepBOLhistoryYard[idx]
+: "N/A";
+const etaYard =
+arrayKey === "escRepETAHistoryYard" && info.escRepETAHistoryYard && info.escRepETAHistoryYard[idx]
+? info.escRepETAHistoryYard[idx]
+: "N/A";
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${orderNo}</td>
+<td>${label}: ${displayValueYard}</td>
+<td>${bolDoeYard}</td>
+<td></td>
+<td></td>
+<td style="color: red;">VOIDED</td>
+<td></td> 
+</tr>
+`);
+});
+}
 });
 });
 }
@@ -919,6 +927,7 @@ $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 }
 });
+
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
