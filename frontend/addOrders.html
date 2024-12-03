@@ -924,6 +924,7 @@ $("#sCountry").val(data.sAddressAcountry);
 $("#sAttention").val(data.attention);
 $("#email").val(data.email);
 $("#phone").val(data.phone);
+$("#altPhone").val(data.phone);
 $("#make").val(data.make);
 $("#model").val(data.model);
 $("#year").val(data.year);
@@ -1004,6 +1005,7 @@ const newEntry = urlParams.get("newEntry");
                 attention: $("#sAttention").val(),
                 email: $("#email").val(),
                 phone: $("#phone").val(),
+                altPhone: $("#altPhone").val(),
                 make: $("#make").val(),
                 model: $("#model").val(),
                 year: $("#year").val(),
@@ -1057,6 +1059,7 @@ const newEntry = urlParams.get("newEntry");
                 attention: $("#sAttention").val(),
                 email: $("#email").val(),
                 phone: $("#phone").val(),
+               altPhone: $("#altPhone").val(),
                 make: $("#make").val(),
                 model: $("#model").val(),
                 year: $("#year").val(),
