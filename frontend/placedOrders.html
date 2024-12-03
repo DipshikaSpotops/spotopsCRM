@@ -756,10 +756,10 @@ $("#infoTable").on("click", ".approve-btn", async function () {
   // Add a one-time event handler for the OK button click
   $("#okButton").on("click", async function () {
     // Hide modal and remove blur
-
+    $("#myModal").removeClass("fade");
     $("#myModal").hide()
-    // $(".modal-overlay").remove();
-    $("#myModal").removeClass("modal fade modalPopup")
+    $(".modal-overlay").remove();
+    $("#myModal").removeClass("modal fade modalPopup");
     // Update order status
     const orderNo = $(this).data("orderNo");
   console.log("Approve Order No:", orderNo);
