@@ -1716,6 +1716,8 @@ Save
 <option value="Card charged">Charged</option>
 <option value="Card not charged">Not charged</option>
 </select>
+<label>Card charged date:</label>
+<input type="date" id="cardChargedDate" placeholder="Card charged date" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 18px;text-align: center;width: 71%;margin-left: 19%;margin-top: 3%;">
 <button id="cardChargedSbmit">Submit</button>
 </div>
 <!-- card charged div ends here -->
@@ -3318,6 +3320,8 @@ $('#cardCharged').hide();
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 const paymentStatus = $(".paymentStatus").val();
+
+const cardChargedDate = $("#cardChargedDate").val();
 localStorage.setItem('paymentStatus', paymentStatus);
 // console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
 
@@ -3325,7 +3329,10 @@ if (paymentStatus === "Card charged") {
 $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#353d3f');
 }
 
-const data1 = { paymentStatus };
+const data1 = {
+  paymentStatus: paymentStatus,
+  cardChargedDate: cardChargedDate };
+
 
 const updateOrder = (url) => {
 return fetch(url, {
