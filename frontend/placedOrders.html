@@ -437,9 +437,9 @@ aria-labelledby="myModalLabel"
 aria-hidden="true"
 style="display: none;"
 >
-<p>The order has been approved</p>
+<p>Areyou sure you want to approve an order?</p>
 <button type="button" class="btn btn-primary" id="okButton">
-OK
+Yes
 </button>
 </div>
 <!-- cancel popup -->
@@ -746,14 +746,15 @@ console.error("Error fetching orders:", error);
 $("#infoTable").on("click", ".approve-btn", async function () {
   const orderNoRow = $(this).data("id");
   currentOrderNo = orderNoRow;
-
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
   // Show modal
   $("#myModal").modal("show");
 });
   // Add a one-time event handler for the OK button click
   $("#okButton").on("click", async function () {
     // Hide modal and remove blur
-    $("#myModal").modal("hide");
+    $("#myModal").hide()
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active")
     // Update order status
