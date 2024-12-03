@@ -651,7 +651,7 @@ if (arrayKey === "escRepTrackingHistoryYard" && Array.isArray(array) && array.le
 array.forEach((value, idx) => {
   const displayValueYard =
   arrayKey === "escRepTrackingHistoryYard"
-      ? `<p >${value}</p>`
+      ? `${value}`
       : value;
 const estimatedDeliveryYard =
 arrayKey === "escRepTrackingHistoryYard" && info.escRepETAHistoryYard && info.escRepETAHistoryYard[idx]
@@ -696,7 +696,7 @@ if (arrayKey === "escRepTrackingHistoryCust" && Array.isArray(array) && array.le
 array.forEach((value, idx) => {
   const displayValueCust =
   arrayKey === "escRepTrackingHistoryCust"
-      ? `<p>${value}</p>`
+      ? `${value}`
       : value;
 const estimatedDeliveryCust =
 arrayKey === "escRepTrackingHistoryCust" && info.escRepETAHistoryCust && info.escRepETAHistoryCust[idx]
