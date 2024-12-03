@@ -617,8 +617,8 @@ const estimatedDelivery =
 console.log("===",labelCreationDateWithoutFirst)
 const labelCreationDateVoids =
   arrayKey === "trackingHistory" &&
-  labelCreationDateWithoutFirst[idx - 1] // Adjust index to match the new array
-    ? labelCreationDateWithoutFirst[idx - 1]
+  labelCreationDateWithoutFirst[idx] // Adjust index to match the new array
+    ? labelCreationDateWithoutFirst[idx]
     : "N/A";
 
 $("#infoTable").append(`
