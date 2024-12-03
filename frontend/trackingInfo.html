@@ -611,11 +611,12 @@ const estimatedDelivery =
       ? info.etaHistory[idx]
       : "N/A";
       const labelCreationDateVoids =
-          arrayKey === "trackingHistory" &&
-          info.labelCreationDate &&
-          info.labelCreationDate[idx]
-            ? info.labelCreationDate[idx]
-            : "N/A";     
+  arrayKey === "trackingHistory" &&
+  info.labelCreationDate &&
+  idx > 0 && // Skip the first iteration
+  info.labelCreationDate[idx]
+    ? info.labelCreationDate[idx]
+    : "N/A";    
 
 $("#infoTable").append(`
   <tr>
