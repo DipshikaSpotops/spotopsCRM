@@ -429,7 +429,6 @@ placeholder="Search..."
 
 <!-- Approve Modal popup -->
 <div
-class="modal fade modalPopup"
 id="myModal"
 tabindex="-1"
 role="dialog"
@@ -437,7 +436,7 @@ aria-labelledby="myModalLabel"
 aria-hidden="true"
 style="display: none;"
 >
-<p>Areyou sure you want to approve an order?</p>
+<p>Do you want to approve this order?</p>
 <button type="button" class="btn btn-primary" id="okButton">
 Yes
 </button>
@@ -756,7 +755,6 @@ $("#infoTable").on("click", ".approve-btn", async function () {
   // Add a one-time event handler for the OK button click
   $("#okButton").on("click", async function () {
     // Hide modal and remove blur
-    
     $("#myModal").hide()
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active")
