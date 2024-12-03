@@ -754,7 +754,8 @@ $("#infoTable").on("click", ".approve-btn", async function () {
   $("#okButton").on("click", async function () {
     // Hide modal and remove blur
     $("#myModal").modal("hide");
-
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active")
     // Update order status
     const orderNo = orderNoRow; // Use the correct order number
     const now = new Date();
