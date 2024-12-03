@@ -429,10 +429,15 @@ placeholder="Search..."
 
 <!-- Approve Modal popup -->
 <div
+class="modal fade modalPopup"
 id="myModal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="myModalLabel"
+aria-hidden="true"
 style="display: none;"
 >
-<p>Do you want to approve this order?</p>
+<p>Do you want to approve an order?</p>
 <button type="button" class="btn btn-primary" id="okButton">
 Yes
 </button>
@@ -743,17 +748,18 @@ $("#infoTable").on("click", ".approve-btn", async function () {
     currentOrderNo = orderNoRow;
     console.log("orderNo",currentOrderNo);
     $("#okButton").data("orderNo", currentOrderNo);
-  $("body").append('<div class="modal-overlay"></div>');
-  $("body").addClass("modal-active");
+//   $("body").append('<div class="modal-overlay"></div>');
+//   $("body").addClass("modal-active");
   // Show modal
   $("#myModal").modal("show");
 });
   // Add a one-time event handler for the OK button click
   $("#okButton").on("click", async function () {
     // Hide modal and remove blur
+
     $("#myModal").hide()
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active")
+    // $(".modal-overlay").remove();
+    $("#myModal").removeClass("modal fade modalPopup")
     // Update order status
     const orderNo = $(this).data("orderNo");
   console.log("Approve Order No:", orderNo);
