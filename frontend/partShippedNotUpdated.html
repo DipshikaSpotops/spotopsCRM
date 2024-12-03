@@ -124,8 +124,9 @@ font-size: 24px;
 cursor: pointer;
 }
 .fixed-header {
-flex-shrink: 0;
-margin: 0% 30%;
+/* flex-shrink: 0;
+margin: 0% 30%; */
+margin: 1% 29%
 }
 @media (max-width: 768px) {
 .sidebar {
@@ -173,7 +174,7 @@ border-radius: 4px;
 .table-responsive {
 /* overflow-x: auto; */
 display: block;
-width: 100vw; 
+width: 81vw; 
 }
 
 table.table th,
@@ -192,12 +193,26 @@ table.table td.actions {
 display: flex;
 gap: 5px;
 }
+
 .btn {
 padding: 0.375rem 0.75rem;
 }
 .disabled {
 pointer-events: none;
 opacity: 0.6;
+}
+.filter-bar {
+display: flex;
+justify-content: flex-end;
+align-items: center;
+gap: 10px;
+margin-bottom: 10px;
+}
+.filter-bar button {
+margin-left: 10px;
+}
+.sort-icon {
+cursor: pointer;
 }
 .filter-bar {
 display: flex;
@@ -301,8 +316,8 @@ aria-labelledby="userMenu"
 <!-- <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a> -->
 <a class="nav-link view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
 <a class="nav-link view-all-orders-link"id="view-all-orders-link"href="viewAllOrders.html">View All Orders</a>
+<a class="nav-link yard-located-orders" id="yard-located-orders-linl" href="yardLocatedOrders.html">Yard Located Orders</a>
 <!-- <a class="nav-link view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
-<a class="nav-link yard-located-orders" id="yard-located-orders-link" href="yardLocatedOrders.html">Yard Located Orders</a>
 <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
 <a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
 <a class="nav-link cancelled-orders-link" id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
@@ -357,6 +372,7 @@ aria-labelledby="userMenu"
 <a class="nav-link" href="storeCredit.html">Store Credits</a>
 <a class="nav-link" href="collectRefund.html">Collect Refunds</a>
 <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
+<a class="nav-link" href="trackingInfo.html">Tracking Report</a>
 </div>
 </div>
 </nav>
@@ -365,7 +381,7 @@ aria-labelledby="userMenu"
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Pending Shipouts </h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Pending Dispatch</h1>
 <div>
 <input
 type="text"
@@ -374,9 +390,9 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
- <!-- pagination controls -->
- <div id="pagination-controls" class="mt-3 mb-3"></div>
- <div id="filterAndTotal" style="display: flex;">
+<!-- pagination controls -->
+<div id="pagination-controls" class="mt-3 mb-3"></div>
+<div id="filterAndTotal" style="display: flex;">
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
@@ -390,13 +406,13 @@ placeholder="Search..."
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
-<th style="cursor: pointer" scope="col">Order Date</th>
+<th style="cursor: pointer" scope="col">Order Date <span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Shipping Address<span class="aToZ" >&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Part Info<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Description<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Yard  Info<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Yard  Status<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Label Created Date<span class="sort-icon">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Actions</th>
 </tr>
 </thead>
@@ -410,12 +426,12 @@ placeholder="Search..."
 </div>
 </div>
 <script>
-$(document).ready(async function () {
+$(document).ready(async function () { 
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
-
+var lastInfo ;
 // Sorting Order Object
 var team, role;
 let sortOrder = {
@@ -435,21 +451,27 @@ Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
 Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
 Nov: "11", Dec: "12"
 };
-// regex to extract parts from the string (day, month, year, time)
+
+// Extract parts from the string (day, month, year, time)
 const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+
 if (parts) {
-const day = parts[1].padStart(2, '0'); 
+const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
 const month = months[parts[2]];
 const year = parts[3];
 const hour = parts[4];
 const minute = parts[5];
+
+// Return a valid date string for comparison
 return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
 }
+
 return null;
 }
 function sortTableByDate() {
 const table = $("#infoTable");
 const rows = table.find("tr").toArray(); 
+
 rows.sort((a, b) => {
 let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
 let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
@@ -470,30 +492,36 @@ updateSortIcons(0, sortOrder.orderDate);
 function sortTable(column, type) {
 const table = $("#infoTable");
 const rows = table.find("tr").toArray();
+
 rows.sort((a, b) => {
 let valA = $(a).find("td").eq(column).text().trim();
 let valB = $(b).find("td").eq(column).text().trim();
+
 if (type === "number") {
 valA = parseInt(valA.replace(/\D/g, ""), 10);
 valB = parseInt(valB.replace(/\D/g, ""), 10);
 }
+
 if (sortOrder[type] === "asc") {
 return valA > valB ? 1 : -1;
 } else {
 return valA < valB ? 1 : -1;
 }
 });
+
 $.each(rows, function (index, row) {
 table.append(row);
 });
+
 // Toggle sort order
 sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+
 // Update the sort icon
 updateSortIcons(column, sortOrder[type]);
 }
 
 function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;");
+$("th .sort-icon").html("&#9650;"); 
 $("th").each(function (index) {
 if (index === columnIndex) {
 $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
@@ -520,11 +548,10 @@ sortTable(index, type);
 });
 }
 });
-function renderTableRows(page, filteredOrders = allOrders) {
-// Pagination logic after filtering
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const orders = filteredOrders.filter((item) => {
+var differenceInDays;
+// Function to render rows based on the page
+function renderTableRows(page, orders = allOrders) {
+const filteredOrders = orders.filter((item) => {
 const poInfoArray = item.additionalInfo;
 if (!poInfoArray || poInfoArray.length === 0) return false;
 return poInfoArray.some((info) => {
@@ -532,52 +559,89 @@ const statusMatches = info.status === "Label created";
 return statusMatches;
 });
 });
-const ordersForPage = orders.slice(start, end); 
-$('#infoTable').empty(); 
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = filteredOrders.slice(start, end);
+$('#infoTable').empty();
 ordersForPage.forEach((item) => {
-const team = localStorage.getItem('team');
-const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-$("#infoTable").append(`
-<tr>
-<td>${dateOnly}</td>
-<td>${item.orderNo}</td>
-<td>
-<b>Customer Name</b>: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}<br> 
-<b>Attention</b>: ${item.attention || ""}<br>
-${
-(item.sAddressStreet || item.sAddressCity || item.sAddressState || item.sAddressZip || item.sAddressAcountry) 
-? `${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`
-: `${item.sAddress || ""}`
-}
-</td>
-<td>Part Required: ${item.pReq}<br> ${item.year} ${item.make} ${item.model}</td>
-<td>${item.desc}<br> <b>VIN</b>: ${item.vin} </td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br> Address: ${info.address}<br> Email : ${info.email}<br> Phone: ${info.phone}<br> Agent: ${info.agentName}<br> Part price: $${info.partPrice}<br> ${info.shippingDetails}<br> Warranty: ${info.warranty}days Stock No.: ${info.stockNo}` )
+// for extracting labelCreatedDate 
+var arr = item.orderHistory;
+var yardLogs = {};
+// console.log("orderHistory",arr);
+var datetime;
+var yardIndex;
+arr.forEach((log, index) => {
+if (log.includes("Label created")) {
+const yardRegex = /Yard (\d+)/;
+const datetimeRegex = /\d{1,2} [A-Za-z]+, \d{4} \d{2}:\d{2}/;
 
-.join("<br>")
-: ""
-}</td>
-<td>${item.orderStatus}</td>
+const yardMatch = log.match(yardRegex);
+const datetimeMatch = log.match(datetimeRegex);
+yardIndex = yardMatch ? yardMatch[1] : null;
+datetime = datetimeMatch ? datetimeMatch[0] : null;
+
+if (yardIndex && datetime) {
+yardLogs[yardIndex] = { log, datetime, index };
+}
+}
+})
+console.log("yardlogs",yardLogs);
+// extracting labelCreatedDate til now    
+lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+console.log(item.additionalInfo.length - 1);
+const yardEntries = Object.values(yardLogs);
+var lDateTime = yardEntries.length > 0 ? yardEntries[yardEntries.length - 1].datetime : null;
+console.log("Last:", lDateTime);
+const labelCreatedDateOnly = lDateTime.split(" ").slice(0, 3).join(" ");
+const currentDateOnly = currentDateTime.split(" ")[0] + " " + currentDateTime.split(" ")[1] + " " + currentDateTime.split(" ")[2];
+console.log("labelCreatedDate",labelCreatedDateOnly,currentDateOnly)
+const normalizeDate = (dateStr) => dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+const parsedDate1 = new Date(normalizeDate(labelCreatedDateOnly));
+const parsedDate2 = new Date(normalizeDate(currentDateOnly));
+const diffTime = Math.abs(parsedDate1 - parsedDate2);
+const differenceInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+console.log("diff", labelCreatedDateOnly, currentDateOnly, differenceInDays);
+const actions = generateActions(item);
+const row = `
+<tr>
+<td>${item.orderDate}</td>
+<td>${item.orderNo}</td>
+<td>${item.salesAgent}</td>
+<td>${item.customerName}</td>
+<td>${lastInfo.yardName || ""}<br>  
+${lastInfo.address || ""}<br>
+${lastInfo.email || ""}<br>
+${lastInfo.phone || ""}</td>
+
+<td>${lastInfo.status}</td>
+<td>
+${labelCreatedDateOnly || "N/A"}<br>  
+${differenceInDays >= 1 ? `<b>${differenceInDays} day(s) ago</b>` : ""}
+</td>
 <td>${actions}</td>
 </tr>
-`);
+`;
+
+
+$('#infoTable').append(row); // Add the row to the table
 });
-createPaginationControls(Math.ceil(orders.length / rowsPerPage), orders);
+
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
+
+// Helper function to generate action buttons
+function generateActions(item) {
+const processButton = `<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9;border: none;color: #61a55e;">View</button>`;
+return `${processButton}`;
+}
+
+
 // Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, filteredOrders = allOrders) {
+function createPaginationControls(totalPages, filteredOrders = filteredOrders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); 
 if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-for (let i = 1; i <= totalPages; i++) { 
+for (let i = 1; i <= totalPages; i++) {
 paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
 }
 paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
@@ -599,12 +663,13 @@ renderTableRows(currentPage); // Use the filtered orders
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
 if (currentPage < totalPages) {
 currentPage++;
 renderTableRows(currentPage); // Use the filtered orders
 }
 });
+
 
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
@@ -682,24 +747,19 @@ return statusMatches;
 });
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders With Pending Shipouts- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders To Get Dispatched- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 }
-// Filtering functionality
-// $("#searchInput").on("keyup", function () {
-//   const value = $(this).val().toLowerCase();
-//   $("#infoTable tr").filter(function () {
-//     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-//   });
-// });
 
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
+
+// Filter the entire allOrders dataset based on the search term
 const filteredOrders = allOrders.filter(order => {
 return (
 (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
@@ -727,6 +787,8 @@ $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>
 }
 });
 
+
+// Sort orders by Order No in descending order
 function sortOrdersByOrderNoDesc(orders) {
 return orders.sort((a, b) => {
 const orderNoA = parseInt(a.orderNo.replace(/\D/g, ""), 10);
@@ -744,7 +806,8 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-const currentPath = window.location.pathname + "?newEntry=true";
+
+const currentPath = window.location.pathname;
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
@@ -758,7 +821,7 @@ $("#submenu-reports .nav-link")
 .not(':contains("My Sales Report")')
 .hide();
 $(
-"#submenu-dashboards .view-orders-link,#submenu-dashboards .customer-approved-link,#submenu-dashboards .view-all-ordersSheetMode-link ,#submenu-dashboards .fulfilled-orders , #submenu-dashboards .escalated-orders,#submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .in-transit-link"
+"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-orders-link,#submenu-dashboards .customer-approved-link,#submenu-dashboards .view-all-ordersSheetMode-link ,#submenu-dashboards .fulfilled-orders ,#submenu-dashboards .escalated-orders,#submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
 ).hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
@@ -804,7 +867,7 @@ const statusMatches = info.status === "Label created";
 return statusMatches;
 });
 });
-document.getElementById("showTotalOrders").innerHTML = `Total Orders With Pending Shipouts- ${orders.length}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders To Get Dispatched- ${orders.length}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
@@ -825,3 +888,5 @@ window.location.href = "login_signup.html";
 
 </body>
 </html>
+
+
