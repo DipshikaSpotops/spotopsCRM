@@ -799,6 +799,7 @@ const filteredOrders = allOrders.filter(order => {
 const basicSearch = (
 (order.soldP && String(order.soldP).toLowerCase().includes(value)) || // Converting soldP to string
 (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
 (order.bAddressStreet && order.bAddressStreet.toLowerCase().includes(value)) ||
 (order.bAddressCity && order.bAddressCity.toLowerCase().includes(value)) ||
 (order.bAddressState && order.bAddressState.toLowerCase().includes(value)) ||
