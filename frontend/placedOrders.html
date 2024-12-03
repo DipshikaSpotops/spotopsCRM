@@ -438,6 +438,8 @@ role="dialog"
 aria-labelledby="myModalLabel"
 style="display: none;white-space: nowrap;"
 >
+<h1 style="margin: 0; text-align: center;">Order Approval</h1>
+<button type="button" id="closeApproved" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
 <p>Do you want to approve this order?</p>
 <button type="button" class="btn btn-primary" id="okButton">
 Yes
@@ -1000,7 +1002,11 @@ $("#cancellingOrder").fadeOut();
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 window.location.reload();
-
+});
+$('#closeApproved').on('click', function(e) {
+$("#myModal").fadeOut();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 });
 $("#cancelledRefundSubmit").on("click", function () {
 $("#cancellingOrder").fadeOut();
