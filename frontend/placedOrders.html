@@ -749,7 +749,7 @@ $("#infoTable").on("click", ".approve-btn", async function () {
 
   // Show modal
   $("#myModal").modal("show");
-
+});
   // Add a one-time event handler for the OK button click
   $("#okButton").on("click", async function () {
     // Hide modal and remove blur
@@ -804,7 +804,6 @@ $("#infoTable").on("click", ".approve-btn", async function () {
       console.error("Error updating order status:", error);
     }
   });
-});
 
 let orderId;
 $("#infoTable").on("click", ".cancel-btn", function () {
