@@ -610,13 +610,16 @@ const estimatedDelivery =
   arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
       ? info.etaHistory[idx]
       : "N/A";
-      const labelCreationDateVoids =
+      const labelCreationDateWithoutFirst =
+  info.labelCreationDate && info.labelCreationDate.length > 1
+    ? info.labelCreationDate.slice(1) // New array excluding the first element
+    : [];
+
+const labelCreationDateVoids =
   arrayKey === "trackingHistory" &&
-  info.labelCreationDate &&
-  idx > 0 && // Skip the first iteration
-  info.labelCreationDate[idx]
-    ? info.labelCreationDate[idx]
-    : "N/A";    
+  labelCreationDateWithoutFirst[idx - 1] // Adjust index to match the new array
+    ? labelCreationDateWithoutFirst[idx - 1]
+    : "N/A";
 
 $("#infoTable").append(`
   <tr>
