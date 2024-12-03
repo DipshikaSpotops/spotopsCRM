@@ -1728,9 +1728,15 @@ res.status(500).json({ message: "Server error", error });
 app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
 var yardIndex = req.query.yardIndex;
 var retAddress = req.query.retAddress;
-var [firstPart, remainingPart] = retAddress.split(/,(.+)/);
+if (retAddress && typeof retAddress === 'string') {
+var [firstPart = '', remainingPart = ''] = retAddress.split(/,(.+)/);
 firstPart = firstPart.trim(); 
-remainingPart = remainingPart.trim(); 
+remainingPart = remainingPart.trim();
+console.log("First Part:", firstPart);
+console.log("Remaining Part:", remainingPart);
+} else {
+console.error("Invalid retAddress: Ensure it's a non-empty string.");
+}
 // console.log("First part:", firstPart);
 // console.log("Remaining part:", remainingPart);
 //   console.log("send rma(return) info",formattedAddress);
