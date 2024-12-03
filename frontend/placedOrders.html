@@ -761,7 +761,7 @@ $("#infoTable").on("click", ".approve-btn", async function () {
     // $("#myModal").removeClass("fade");
     $("#myModal").hide()
     $(".modal-overlay").remove();
-    $("#myModal").removeClass("modal-active");
+    $("body").removeClass("modal-active");
     // Update order status
     const orderNo = $(this).data("orderNo");
   console.log("Approve Order No:", orderNo);
