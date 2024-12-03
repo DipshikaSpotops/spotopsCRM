@@ -692,7 +692,7 @@ Object.entries(arraysToRenderRepCust).forEach(([arrayKey, label]) => {
 const array = info[arrayKey];
 
 // Append only if `trackingHistory` array length > 0
-if (arrayKey === "escRepTrackingHistoryYard" && Array.isArray(array) && array.length > 0) {
+if (arrayKey === "escRepTrackingHistoryCust" && Array.isArray(array) && array.length > 0) {
 array.forEach((value, idx) => {
   const displayValueCust =
   arrayKey === "escRepTrackingHistoryCust"
