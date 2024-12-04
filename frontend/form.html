@@ -1007,6 +1007,8 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 </div>
+<button id="backButton" class="btn btn-secondary">Back</button>
+
 <div class="close-btn">
 <span>&times;</span>
 </div>
@@ -5319,6 +5321,13 @@ console.error("Error voiding in return(part from customer):", error);
 alert("An unexpected error occurred. Please try again.");
 });
 })
+});
+
+// for backbutton
+document.getElementById("backButton").addEventListener("click", function () {
+    // Navigate back to the previous page in the history stack
+    console.log("back",window.history.back())
+    window.history.back();
 });
 
 });
