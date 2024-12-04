@@ -3165,143 +3165,99 @@ if(yardData.refundStatus === "Refund collected"){
 });
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', async function () {
-const selectedYardIndex = $(this).data('yard-index');
-const orderNo = urlParams.get("orderNo");  
-// console.log("escalationPart", selectedYardIndex);
-$("#escRMA").fadeIn();
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");
-$("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
-// $("#sendReturnEmail").data("yard-index", selectedYardIndex);
-try {
-const response = await axios.get(
-`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`
-);
-if (response.status !== 200) {
-throw new Error("Failed to fetch order data");
-}
-var actualyIndex = selectedYardIndex - 1;
-const additionalInfo = response.data.additionalInfo[actualyIndex];
-var yardAddress = additionalInfo.street + ", " 
-  + additionalInfo.city + ", " + additionalInfo.state + ", " + additionalInfo.zipcode;
-console.log("yardAdd",yardAddress);
-// console.log("Fetched additionalInfo", additionalInfo);
-// Populate form fields if data is present
-if (additionalInfo.escalationProcess) {
-$("#escProcess").val(additionalInfo.escalationProcess);
-if (additionalInfo.escalationProcess === 'Replacement') {
-$('#replacementColumns').fadeIn();
-$('#partFromCustomer').fadeIn();
-$('#partFromYard').fadeIn();
-$('#partFromCustomerReturn').fadeOut();
-$('#reimbursement').fadeOut();
+    const selectedYardIndex = $(this).data('yard-index');
+    const orderNo = urlParams.get("orderNo");
+    
+    $("#escRMA").fadeIn();
+    $("body").append('<div class="modal-overlay"></div>');
+    $("body").addClass("modal-active");
+    $("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
 
-} else if (additionalInfo.escalationProcess === 'Return') {
-$('#replacementColumns').fadeIn();
-$('#partFromCustomerReturn').fadeIn();
-$('#partFromCustomer').fadeOut();
-$('#partFromYard').fadeOut();
-$('#reimbursement').fadeOut();
-$('.partsFromDropdown').hide();
-} 
-else if (additionalInfo.escalationProcess === 'Reimbursement') {
-$('#replacementColumns').fadeOut();
-$('#partFromCustomerReturn').fadeOut();
-$('#partFromCustomer').fadeOut();
-$('#partFromYard').fadeOut();
-$('#reimbursement').fadeIn();
-$('.partsFromDropdown').hide();
-} else {
-// Hide both columns for other cases like 'Junk'
-$('#replacementColumns').fadeOut();
-$('#partFromCustomer').fadeOut();
-$('#partFromYard').fadeOut();
-$('#reimbursement').fadeOut();
-$('.partsFromDropdown').hide();
-}
-}
-// return__part from customer
-if (additionalInfo.custReason) {
-$("#custReason").val(additionalInfo.custReason);
-}
-if (additionalInfo.customerShippingMethodReplacement) {
-$("#customerShippingMethodReplacement").val(additionalInfo.customerShippingMethodReplacement);
-}
-if (additionalInfo.customerTrackingNumberReplacement) {
-$("#customerTrackingNumberReplacement").val(additionalInfo.customerTrackingNumberReplacement);
-}
-if (additionalInfo.customerShipperReplacement) {
-$("#customerShipperReplacement").val(additionalInfo.customerShipperReplacement);
-}
-if (additionalInfo.customerETAReplacement) {
-$("#customerETAReplacement").val(additionalInfo.customerETAReplacement);
-}
-if (additionalInfo.custOwnShipReplacement) {
-$('#replacementOwnShip').fadeIn();
-$("#custOwnShipReplacement").val(additionalInfo.custOwnShipReplacement);
-}
-if (additionalInfo.custreplacementDelivery) {
-$("#custreplacementDelivery").val(additionalInfo.custreplacementDelivery);
-}
-if (additionalInfo.yardShippingStatus) {
-$("#yardShippingStatus").val(additionalInfo.yardShippingStatus);
-}
-if (additionalInfo.yardShippingMethod) {
-$("#yardShippingMethod").val(additionalInfo.yardShippingMethod);
-}
-if (additionalInfo.yardOwnShipping) {
-$("#yardownShipping").val(additionalInfo.yardOwnShipping).parent().show();
-}
-if (additionalInfo.yardShipper) {
-$("#yardShipper").val(additionalInfo.yardShipper);
-}
-if (additionalInfo.address) {
-$("#shipToReturnAdd").val(yardAddress);
-}
-if (additionalInfo.address) {
-$("#shipToRepAdd").val(yardAddress);
-}
-if (additionalInfo.yardTrackingNumber) {
-$("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber);
-}
-if (additionalInfo.yardTrackingETA) {
-$("#yardTrackingETA").val(additionalInfo.yardTrackingETA);
-}
-if (additionalInfo.yardTrackingLink) {
-$("#yardTrackingLink").val(additionalInfo.yardTrackingLink);
-}
-if (additionalInfo.customerShippingMethodReturn) {
-$("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn);
-}
+    try {
+        const response = await axios.get(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`);
+        if (response.status !== 200) {
+            throw new Error("Failed to fetch order data");
+        }
 
-if (additionalInfo.custretPartETA) {
-$("#custretPartETA").val(additionalInfo.custretPartETA);
-}
-if (additionalInfo.customerShipperReturn) {
-$("#customerShipperReturn").val(additionalInfo.customerShipperReturn);
-}
-if (additionalInfo.custOwnShippingReturn) {
-$('#customerShippingValueReturn').fadeIn();
-$("#custOwnShippingReturn").val(additionalInfo.custOwnShippingReturn);
-}
-if (additionalInfo.returnTrackingCust) {
-$("#returnTrackingCust").val(additionalInfo.returnTrackingCust);
-}
-if (additionalInfo.custReturnDelivery) {
-$("#custOwnShippingReturm").val(additionalInfo.custReturnDelivery);
-}
-if (additionalInfo.reimbursementAmount) {
-$("#reimAmount").val(additionalInfo.reimbursementAmount);
-}
-if (additionalInfo.isReimbursedChecked === "true") {
-  $('#reimbursed').prop('checked', true);
-}
-// window.location.reload();
-} catch (error) {
-console.error("Error fetching data:", error);
-alert("Error fetching yard information");
-}
+        // Validate the data for the selectedYardIndex
+        const additionalInfo = response.data.additionalInfo.find(
+            (info, index) => index + 1 === selectedYardIndex
+        );
+
+        if (!additionalInfo) {
+            console.error("No matching additionalInfo found for the selected yard index.");
+            alert("No matching yard information found.");
+            return;
+        }
+
+        // Construct the yard address
+        var yardAddress = `${additionalInfo.street || ''}, ${additionalInfo.city || ''}, ${additionalInfo.state || ''}, ${additionalInfo.zipcode || ''}`;
+        console.log("yardAdd", yardAddress);
+
+        // Populate form fields only with the matching data
+        if (additionalInfo.escalationProcess) {
+            $("#escProcess").val(additionalInfo.escalationProcess);
+            if (additionalInfo.escalationProcess === 'Replacement') {
+                $('#replacementColumns').fadeIn();
+                $('#partFromCustomer').fadeIn();
+                $('#partFromYard').fadeIn();
+                $('#partFromCustomerReturn').fadeOut();
+                $('#reimbursement').fadeOut();
+            } else if (additionalInfo.escalationProcess === 'Return') {
+                $('#replacementColumns').fadeIn();
+                $('#partFromCustomerReturn').fadeIn();
+                $('#partFromCustomer').fadeOut();
+                $('#partFromYard').fadeOut();
+                $('#reimbursement').fadeOut();
+                $('.partsFromDropdown').hide();
+            } else if (additionalInfo.escalationProcess === 'Reimbursement') {
+                $('#replacementColumns').fadeOut();
+                $('#partFromCustomerReturn').fadeOut();
+                $('#partFromCustomer').fadeOut();
+                $('#partFromYard').fadeOut();
+                $('#reimbursement').fadeIn();
+                $('.partsFromDropdown').hide();
+            } else {
+                $('#replacementColumns').fadeOut();
+                $('#partFromCustomer').fadeOut();
+                $('#partFromYard').fadeOut();
+                $('#reimbursement').fadeOut();
+                $('.partsFromDropdown').hide();
+            }
+        }
+
+        // Populate other fields if available
+        $("#custReason").val(additionalInfo.custReason || "");
+        $("#customerShippingMethodReplacement").val(additionalInfo.customerShippingMethodReplacement || "");
+        $("#customerTrackingNumberReplacement").val(additionalInfo.customerTrackingNumberReplacement || "");
+        $("#customerShipperReplacement").val(additionalInfo.customerShipperReplacement || "");
+        $("#customerETAReplacement").val(additionalInfo.customerETAReplacement || "");
+        $("#custOwnShipReplacement").val(additionalInfo.custOwnShipReplacement || "");
+        $("#custreplacementDelivery").val(additionalInfo.custreplacementDelivery || "");
+        $("#yardShippingStatus").val(additionalInfo.yardShippingStatus || "");
+        $("#yardShippingMethod").val(additionalInfo.yardShippingMethod || "");
+        $("#yardownShipping").val(additionalInfo.yardOwnShipping || "").parent().show();
+        $("#yardShipper").val(additionalInfo.yardShipper || "");
+        $("#shipToReturnAdd").val(yardAddress || "");
+        $("#shipToRepAdd").val(yardAddress || "");
+        $("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber || "");
+        $("#yardTrackingETA").val(additionalInfo.yardTrackingETA || "");
+        $("#yardTrackingLink").val(additionalInfo.yardTrackingLink || "");
+        $("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn || "");
+        $("#custretPartETA").val(additionalInfo.custretPartETA || "");
+        $("#customerShipperReturn").val(additionalInfo.customerShipperReturn || "");
+        $("#custOwnShippingReturn").val(additionalInfo.custOwnShippingReturn || "");
+        $("#returnTrackingCust").val(additionalInfo.returnTrackingCust || "");
+        $("#custOwnShippingReturm").val(additionalInfo.custReturnDelivery || "");
+        $("#reimAmount").val(additionalInfo.reimbursementAmount || "");
+        $('#reimbursed').prop('checked', additionalInfo.isReimbursedChecked === "true");
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        alert("Error fetching yard information");
+    }
 });
+
 
 $("#closeCardCharged").on("click", function () {
 $("#cardCharged").fadeOut();
