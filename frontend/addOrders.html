@@ -940,6 +940,8 @@ $("#orderStatus").val(data.orderStatus);
 $("#vin").val(data.vin);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
+$("#dsCall").val(data.dsCall);
+$("#expediteShipping").val(data.expediteShipping);
 // data.additionalInfo.forEach((info, index) => {
 // addYardButton(index + 1, `Yard ${index + 1}`);
 // });
@@ -1021,6 +1023,8 @@ const newEntry = urlParams.get("newEntry");
                 vin: $("#vin").val(),
                 last4digits: $("#issueOrder").val(),
                 notes: $("#notes").val(),
+                dsCall: $("#dsCall").prop("checked") ? true : false,
+                expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
             };
 
             fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
@@ -1075,6 +1079,8 @@ const newEntry = urlParams.get("newEntry");
                 vin: $("#vin").val(),
                 last4digits: $("#issueOrder").val(),
                 notes: $("#notes").val(),
+                dsCall: $("#dsCall").prop("checked") ? true : false,
+                expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
             };
 
             fetch(`https://www.spotops360.com/orders/${orderNo}`, {
