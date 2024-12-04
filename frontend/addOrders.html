@@ -940,8 +940,8 @@ $("#orderStatus").val(data.orderStatus);
 $("#vin").val(data.vin);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
-$("#dsCall").prop("checked", data.dsCall === true);
-$("#expediteShipping").prop("checked", data.expediteShipping === true);
+$("#dsCall").prop("checked", data.dsCall === "true");
+$("#expeditorNot").prop("checked", data.expediteShipping === "true");
 // data.additionalInfo.forEach((info, index) => {
 // addYardButton(index + 1, `Yard ${index + 1}`);
 // });
