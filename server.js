@@ -1240,6 +1240,16 @@ const yardShippingStatus = updateData.yardShippingStatus || "";
 const yardShippingMethod = updateData.yardShippingMethod || "";
 const yardShipper = updateData.yardShipper || "";
 const yardTrackingNumber = updateData.yardTrackingNumber || "";
+ // Normalize function to convert values to string for comparison
+ const normalizeValue = (value) => {
+    if (typeof value === 'number') {
+      return value.toString();
+    } else if (typeof value === 'boolean') {
+      return value ? 'true' : 'false';
+    } else {
+      return value || ''; // For null, undefined, or empty values
+    }
+  };
 for (const key in updateData) {
     if (updateData.hasOwnProperty(key)) {
       const oldValue = normalizeValue(yardInfo[key]);
