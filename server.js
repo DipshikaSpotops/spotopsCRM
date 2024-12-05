@@ -1223,7 +1223,7 @@ console.log("Yard index:", actualYardIndex);
 if (!order) return res.status(404).send("Order not found");
 if (actualYardIndex >= 0 && actualYardIndex < order.additionalInfo.length) {
 const yardInfo = order.additionalInfo[actualYardIndex];
-console.log("Existing yard info:", yardInfo);
+console.log("Existing yard info:", yardInfo,"updatedData",updateData);
 for (const key in req.body) {
 if (req.body.hasOwnProperty(key)) {
 yardInfo[key] = req.body[key];
