@@ -1199,92 +1199,88 @@ res.status(500).json({ message: "Server error", error });
 
 // to update escalation in order history
 app.put("/orders/:orderNo/escalation", async (req, res) => {
-const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:', centralTime);
-const date = new Date(centralTime);
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const hours = date.getHours().toString().padStart(2, '0');
-const minutes = date.getMinutes().toString().padStart(2, '0');
-const formattedDate = `${day} ${month}, ${year}`;
-const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-
-try {
-const updateData = req.body; 
-console.log("updatedData", updateData);
-const orderNo = updateData.orderNo;  // Corrected to use orderNo as the field name
-const order = await Order.findOne({ orderNo });  // Corrected to query by orderNo
-const yardIndex = updateData.yardIndex;
-const actualYardIndex = yardIndex - 1;
-console.log("Order found:", "orderNo:", order.orderNo);
-console.log("Yard index:", actualYardIndex);
-if (!order) return res.status(404).send("Order not found");
-if (actualYardIndex >= 0 && actualYardIndex < order.additionalInfo.length) {
-const yardInfo = order.additionalInfo[actualYardIndex];
-console.log("Existing yard info:", yardInfo,"updatedData",updateData);
-for (const key in req.body) {
-if (req.body.hasOwnProperty(key)) {
-yardInfo[key] = req.body[key];
-}
-}
-order.additionalInfo[actualYardIndex] = yardInfo;
-const firstName = req.query.firstName;
-const escProcess = updateData.escalationProcess || "";
-const customerShippingMethod = updateData.customerShippingMethod || "";
-const customerShipper = updateData.customerShipper || "";
-const customerTrackingNumber = updateData.customerTrackingNumber || "";
-const custOwnShipping = updateData.custOwnShipping || "";
-const yardShippingStatus = updateData.yardShippingStatus || "";
-const yardShippingMethod = updateData.yardShippingMethod || "";
-const yardShipper = updateData.yardShipper || "";
-const yardTrackingNumber = updateData.yardTrackingNumber || "";
- // Normalize function to convert values to string for comparison
- let changes = [];
- const normalizeValue = (value) => {
-    if (typeof value === 'number') {
-      return value.toString();
-    } else if (typeof value === 'boolean') {
-      return value ? 'true' : 'false';
-    } else {
-      return value || ''; // For null, undefined, or empty values
-    }
-  };
-for (const key in updateData) {
-    if (updateData.hasOwnProperty(key)) {
-      const oldValue = normalizeValue(yardInfo[key]);
-      const newValue = normalizeValue(updateData[key]);
-
-      // Only log the field if it has changed and is not empty (undefined or null)
-      if (oldValue !== newValue) {
-        if (oldValue === '' && newValue !== '') {
-          // Case where old value was empty (undefined or null) and new value is set
-          changes.push(`${key}: (was not set) -> ${newValue}`);
-        } else if (newValue === '' && oldValue !== '') {
-          // Case where old value was set and new value is removed
-          changes.push(`${key}: ${oldValue} -> (removed)`);
-        } else {
-          // General case where both values are set
-          changes.push(`${key}: ${oldValue} -> ${newValue}`);
+    const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+    console.log('US Central Time:', centralTime);
+    const date = new Date(centralTime);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day} ${month}, ${year}`;
+    const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+  
+    try {
+      const updateData = req.body;
+      console.log("updatedData", updateData);
+      const orderNo = updateData.orderNo;
+      const order = await Order.findOne({ orderNo });
+      const yardIndex = updateData.yardIndex;
+      const actualYardIndex = yardIndex - 1;
+  
+      if (!order) return res.status(404).send("Order not found");
+      if (actualYardIndex >= 0 && actualYardIndex < order.additionalInfo.length) {
+        const yardInfo = order.additionalInfo[actualYardIndex];
+        console.log("Existing yard info:", yardInfo, "updatedData", updateData);
+  
+        // Normalize function to convert values to string for comparison
+        let changes = [];
+        const normalizeValue = (value) => {
+          if (value === null || value === undefined) return ''; // Normalize null/undefined to empty string
+          if (typeof value === 'boolean') return value ? 'true' : 'false'; // Convert boolean to string
+          if (typeof value === 'number') return value.toString(); // Convert number to string
+          return value.toString() || ''; // Ensure empty string if undefined or null
+        };
+  
+        for (const key in updateData) {
+          if (updateData.hasOwnProperty(key)) {
+            const oldValue = normalizeValue(yardInfo[key]);
+            const newValue = normalizeValue(updateData[key]);
+  
+            // Log for debugging
+            console.log(`Comparing key: ${key}, oldValue: ${oldValue}, newValue: ${newValue}`);
+  
+            // Only log the field if it has changed and is not empty (undefined or null)
+            if (oldValue !== newValue) {
+              if (oldValue === '' && newValue !== '') {
+                // Case where old value was empty (undefined or null) and new value is set
+                changes.push(`${key}: (was not set) -> ${newValue}`);
+              } else if (newValue === '' && oldValue !== '') {
+                // Case where old value was set and new value is removed
+                changes.push(`${key}: ${oldValue} -> (removed)`);
+              } else {
+                // General case where both values are set
+                changes.push(`${key}: ${oldValue} -> ${newValue}`);
+              }
+            }
+          }
         }
+  
+        console.log("changes", changes);
+  
+        // If there are changes, log the escalation process
+        if (changes.length > 0) {
+          const firstName = req.query.firstName;
+          const escProcess = updateData.escalationProcess || "";
+  
+          order.orderHistory.push(
+            `Escalation Process for Yard ${actualYardIndex + 1}: Process-${escProcess} ${changes.join(', ')} updated by ${firstName} on ${formattedDateTime}`
+          );
+  
+          await order.save();
+          res.json(order);
+        } else {
+          res.status(400).json({ message: "No changes detected" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid yard index" });
       }
+    } catch (error) {
+      console.error("Error in PUT request:", error);
+      res.status(500).json({ message: "Server error", error });
     }
-  }
-  console.log("changes",changes);
-  order.orderHistory.push(
-`Escalation Process  for Yard ${actualYardIndex + 1}: Process-${escProcess} ${changes || "" } updated by ${firstName} on ${formattedDateTime}`
-);
-await order.save();
-res.json(order);
-} else {
-res.status(400).json({ message: "Invalid yard index" });
-}
-} catch (error) {
-console.error("Error in PUT request:", error);
-res.status(500).json({ message: "Server error", error });
-}
-});
+  });  
 
 // escalation in order history ends here
 app.put("/cancelledOrders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
