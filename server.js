@@ -1220,6 +1220,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       'firstName',
       'custShipToRep',
       'custShipToRet',
+      'escProcess',
     ];
   
     try {
