@@ -1274,8 +1274,11 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
           );
   
           console.log("orderHistory after push:", order.orderHistory);
-  
-          await order.save(); // Save the order
+          Object.assign(yardInfo, updateData);
+          order.additionalInfo[actualYardIndex] = yardInfo;
+          order.markModified("additionalInfo");
+    
+          await order.save(); 
           console.log("Order saved successfully:", order);
           res.json(order);
         } else {
