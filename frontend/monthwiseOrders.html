@@ -176,6 +176,18 @@ border-radius: 4px;
 display: block;
 width: 82vw; 
 }
+.table-wrapper {
+  max-height: 400px; /* Set a height for the scrollable body */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  display: block;    /* Make the table body scrollable */
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Set background color for header */
+  z-index: 1; /* Ensure the header stays on top of the table body */
+}
 table.table td {
 white-space: nowrap;
 overflow: auto;
