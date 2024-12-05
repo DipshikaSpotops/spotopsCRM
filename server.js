@@ -286,6 +286,7 @@ cardChargedDate: String,
 refundStatus:String,
 refundedAmount: Number,
 storeCredit: Number,
+refundedDate:String,
 collectRefundCheckbox: String,
 refundToCollect: Number,
 trackingNo: [String],
@@ -1122,13 +1123,14 @@ if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
 return res.status(400).json({ message: "Invalid yard index" });
 }
 
-const { refundStatus, refundedAmount, storeCredit, collectRefundCheckbox, refundToCollect } = req.body;
+const { refundStatus, refundedAmount, storeCredit, refundedDate, collectRefundCheckbox, refundToCollect } = req.body;
 const firstName = req.query.firstName || "Unknown User";
 console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
 const yardInfo = order.additionalInfo[yardIndex];
 yardInfo.refundStatus = refundStatus;
 yardInfo.refundedAmount = refundedAmount;
 yardInfo.storeCredit = storeCredit || null;
+yardInfo.refundedDate = refundedDate || "" ;
 yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
 yardInfo.refundToCollect = refundToCollect || "" ;
 if(refundToCollect){
