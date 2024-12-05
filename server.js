@@ -1217,7 +1217,9 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       'escRetTrackingDate',
       'yardIndex',
       'orderNo',
-      'firstName'
+      'firstName',
+      'custShipToRep',
+      'custShipToRet',
     ];
   
     try {
