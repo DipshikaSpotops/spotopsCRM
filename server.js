@@ -1051,7 +1051,7 @@ app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
         const updatedYardData = req.body; // Using req.body directly
   
         // To log which fields were updated
-        let updateMessage = `Yard ${yardIndex + 1} details updated by ${req.query.firstName} on ${formattedDateTime}: `;
+        let updateMessage = ``;
         const changes = [];
   
         // Loop through each field in updatedYardData and compare with the original yardInfo
@@ -1078,7 +1078,7 @@ app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
   
         // Only add to history if there were changes
         if (changes.length > 0) {
-          updateMessage += changes.join(", ");
+          updateMessage = `Yard ${yardIndex + 1} ${changes} updated by ${req.query.firstName} on ${formattedDateTime}`;
         } else {
           updateMessage += "No changes made.";
         }
