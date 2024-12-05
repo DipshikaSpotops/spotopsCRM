@@ -1033,19 +1033,36 @@ const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
 if (!order) return res.status(404).send("Order not found");
 if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
 const yardInfo = order.additionalInfo[yardIndex];
-const updatedYardData = req.body; // Using req.body directly
-// To log which fields were updated
+const updatedYardData = req.body; 
 let updateMessage = `Yard ${yardIndex + 1} details updated by ${req.query.firstName} on ${formattedDateTime}: `;
 const changes = [];
 // Loop through each field in updatedYardData and compare with the original yardInfo
 for (const key in updatedYardData) {
 if (updatedYardData.hasOwnProperty(key)) {
-// Only log the field if it has changed
-if (yardInfo[key] !== updatedYardData[key]) {
-changes.push(`${key}: ${yardInfo[key]} -> ${updatedYardData[key]}`);
+const oldValue = yardInfo[key];
+const newValue = updatedYardData[key];
+
+// Only log the field if it has changed and is not empty (undefined or null)
+if (oldValue !== newValue) {
+if (oldValue === undefined || oldValue === null) {
+// Ignore changes when old value is undefined or null and new value is empty
+if (newValue !== "" && newValue !== null) {
+changes.push(`${key}: (was not set) -> ${newValue}`);
+}
+} else if (newValue === undefined || newValue === null) {
+// Ignore changes when new value is undefined or null and old value was set
+if (oldValue !== "") {
+changes.push(`${key}: ${oldValue} -> (removed)`);
+}
+} else {
+// Handle general case where both old and new values are not undefined or null
+changes.push(`${key}: ${oldValue} -> ${newValue}`);
 }
 }
 }
+}
+
+// Only add to history if there were changes
 if (changes.length > 0) {
 updateMessage += changes.join(", ");
 } else {
@@ -1071,7 +1088,7 @@ res.status(400).json({ message: "Invalid yard index" });
 console.error("Error in PUT request:", error);
 res.status(500).json({ message: "Server error", error });
 }
-});
+});  
   
 // to update card charged
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/paymentStatus", async (req, res) => {
