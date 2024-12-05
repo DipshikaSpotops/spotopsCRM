@@ -1222,6 +1222,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       'custShipToRet',
       'escProcess',
       'escalationProcess',
+      'isReimbursedChecked',
     ];
   
     try {
