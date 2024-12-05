@@ -1018,6 +1018,7 @@ res.status(500).json({ message: "Server error", error });
 // edit yard details
 app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
     console.log("Updating editAdditionalInfo");
+  
     const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
     const date = new Date(centralTime);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -1028,6 +1029,17 @@ app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const formattedDateTime = `${day} ${month}, ${year} ${hours}:${minutes}`;
   
+    // Normalize function to convert values to string for comparison
+    const normalizeValue = (value) => {
+      if (typeof value === 'number') {
+        return value.toString();
+      } else if (typeof value === 'boolean') {
+        return value ? 'true' : 'false';
+      } else {
+        return value || ''; // For null, undefined, or empty values
+      }
+    };
+  
     try {
       const order = await Order.findOne({ orderNo: req.params.orderNo });
       const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
@@ -1037,7 +1049,7 @@ app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
       if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
         const yardInfo = order.additionalInfo[yardIndex];
         const updatedYardData = req.body; // Using req.body directly
-  console.log("changess",yardInfo,updatedYardData);
+  
         // To log which fields were updated
         let updateMessage = `Yard ${yardIndex + 1} details updated by ${req.query.firstName} on ${formattedDateTime}: `;
         const changes = [];
@@ -1045,16 +1057,21 @@ app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
         // Loop through each field in updatedYardData and compare with the original yardInfo
         for (const key in updatedYardData) {
           if (updatedYardData.hasOwnProperty(key)) {
-            const oldValue = yardInfo[key];
-            const newValue = updatedYardData[key];
+            const oldValue = normalizeValue(yardInfo[key]);
+            const newValue = normalizeValue(updatedYardData[key]);
   
-            // Normalize values to ensure a fair comparison, e.g., treat "" and null the same
-            const normalizedOldValue = oldValue === undefined || oldValue === null ? "" : oldValue;
-            const normalizedNewValue = newValue === undefined || newValue === null ? "" : newValue;
-  
-            // Only log the field if it has actually changed
-            if (normalizedOldValue !== normalizedNewValue) {
-              changes.push(`${key}: ${oldValue} -> ${newValue}`);
+            // Only log the field if it has changed and is not empty (undefined or null)
+            if (oldValue !== newValue) {
+              if (oldValue === '' && newValue !== '') {
+                // Case where old value was empty (undefined or null) and new value is set
+                changes.push(`${key}: (was not set) -> ${newValue}`);
+              } else if (newValue === '' && oldValue !== '') {
+                // Case where old value was set and new value is removed
+                changes.push(`${key}: ${oldValue} -> (removed)`);
+              } else {
+                // General case where both values are set
+                changes.push(`${key}: ${oldValue} -> ${newValue}`);
+              }
             }
           }
         }
@@ -1078,6 +1095,7 @@ app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
   
         await order.save(); // Save changes to the database
         res.json(order);
+  
       } else {
         res.status(400).json({ message: "Invalid yard index" });
       }
