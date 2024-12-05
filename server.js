@@ -1241,6 +1241,7 @@ const yardShippingMethod = updateData.yardShippingMethod || "";
 const yardShipper = updateData.yardShipper || "";
 const yardTrackingNumber = updateData.yardTrackingNumber || "";
  // Normalize function to convert values to string for comparison
+ let changes = [];
  const normalizeValue = (value) => {
     if (typeof value === 'number') {
       return value.toString();
@@ -1271,7 +1272,7 @@ for (const key in updateData) {
     }
   }
 order.orderHistory.push(
-`Escalation Process  for Yard ${actualYardIndex + 1}: ${escProcess} ${updateData || "" } updated by ${firstName} on ${formattedDateTime}`
+`Escalation Process  for Yard ${actualYardIndex + 1}: Process-${escProcess} ${changes || "" } updated by ${firstName} on ${formattedDateTime}`
 );
 await order.save();
 res.json(order);
