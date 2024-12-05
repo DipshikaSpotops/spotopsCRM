@@ -1211,6 +1211,15 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
     const formattedDate = `${day} ${month}, ${year}`;
     const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
   
+    // List of fields to exclude from the changes log
+    const excludedFields = [
+      'escRepCustTrackingDate',
+      'escRepYardTrackingDate',
+      'escRetTrackingDate',
+      'yardIndex',
+      'orderNo'
+    ];
+  
     try {
       const updateData = req.body;
       console.log("updatedData", updateData);
@@ -1234,7 +1243,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
         };
   
         for (const key in updateData) {
-          if (updateData.hasOwnProperty(key)) {
+          if (updateData.hasOwnProperty(key) && !excludedFields.includes(key)) {  // Exclude the specified fields
             const oldValue = normalizeValue(yardInfo[key]);
             const newValue = normalizeValue(updateData[key]);
   
