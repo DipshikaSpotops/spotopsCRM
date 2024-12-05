@@ -1268,7 +1268,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
         if (changes.length > 0) {
           const firstName = req.query.firstName;
           const escProcess = updateData.escalationProcess || "";
-  
+ 
           order.orderHistory.push(
             `Escalation Process for Yard ${actualYardIndex + 1}: Process-${escProcess} ${changes.join(', ')} updated by ${firstName} on ${formattedDateTime}`
           );
@@ -1277,7 +1277,9 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
           Object.assign(yardInfo, updateData);
           order.additionalInfo[actualYardIndex] = yardInfo;
           order.markModified("additionalInfo");
-    
+          if(updateData.yardShippingStatus == "Delivered"){
+            order.orderStatus = "Order Fulfilled"
+          }
           await order.save(); 
           console.log("Order saved successfully:", order);
           res.json(order);
