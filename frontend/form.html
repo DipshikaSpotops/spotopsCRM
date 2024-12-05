@@ -3105,17 +3105,20 @@ let selectedYardIndex;
 // }
 $('#yardInfoContainer').on('click', '.cardcharged', function () {
 selectedYardIndex = $(this).data('yard-index');
-
-// fetchPaymentStatus(orderNo, selectedYardIndex).then(paymentStatus => {
-// if (paymentStatus) {
-// $('.paymentStatus').val(paymentStatus);
-// }
-// });
-
 $("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
 // $(".mainDiv").addClass("blur");
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => response.json())
+.then((data) => {
+if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
+return;
+}
+const yardData = data.additionalInfo[yardIndex - 1];
+$(".paymentStatus").val(yardData.paymentStatus);
+$("#cardChargedDate").val(yardData.cardChargedDate);
+})
 });
 //for refubd status
 $('#yardInfoContainer').on('click', '.refundCollect', function () {
