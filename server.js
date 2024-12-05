@@ -1271,7 +1271,8 @@ for (const key in updateData) {
       }
     }
   }
-order.orderHistory.push(
+  console.log("changes",changes);
+  order.orderHistory.push(
 `Escalation Process  for Yard ${actualYardIndex + 1}: Process-${escProcess} ${changes || "" } updated by ${firstName} on ${formattedDateTime}`
 );
 await order.save();
