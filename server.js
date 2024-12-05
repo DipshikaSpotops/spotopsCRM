@@ -1211,7 +1211,6 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
     const formattedDate = `${day} ${month}, ${year}`;
     const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
   
-    // List of fields to exclude from the changes log
     const excludedFields = [
       'escRepCustTrackingDate',
       'escRepYardTrackingDate',
@@ -1226,50 +1225,46 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       console.log("updatedData", updateData);
       const orderNo = updateData.orderNo;
       const order = await Order.findOne({ orderNo });
+  
+      if (!order) {
+        console.log("Order not found with orderNo:", orderNo); // Debug log
+        return res.status(404).send("Order not found");
+      }
+  
       const yardIndex = updateData.yardIndex;
       const actualYardIndex = yardIndex - 1;
   
-      if (!order) return res.status(404).send("Order not found");
       if (actualYardIndex >= 0 && actualYardIndex < order.additionalInfo.length) {
         const yardInfo = order.additionalInfo[actualYardIndex];
         console.log("Existing yard info:", yardInfo, "updatedData", updateData);
   
-        // Normalize function to convert values to string for comparison
         let changes = [];
         const normalizeValue = (value) => {
-          if (value === null || value === undefined) return ''; // Normalize null/undefined to empty string
-          if (typeof value === 'boolean') return value ? 'true' : 'false'; // Convert boolean to string
-          if (typeof value === 'number') return value.toString(); // Convert number to string
-          return value.toString() || ''; // Ensure empty string if undefined or null
+          if (value === null || value === undefined) return ''; 
+          if (typeof value === 'boolean') return value ? 'true' : 'false';
+          if (typeof value === 'number') return value.toString();
+          return value.toString() || '';
         };
   
         for (const key in updateData) {
-          if (updateData.hasOwnProperty(key) && !excludedFields.includes(key)) {  // Exclude the specified fields
+          if (updateData.hasOwnProperty(key) && !excludedFields.includes(key)) {
             const oldValue = normalizeValue(yardInfo[key]);
             const newValue = normalizeValue(updateData[key]);
   
-            // Log for debugging
-            console.log(`Comparing key: ${key}, oldValue: ${oldValue}, newValue: ${newValue}`);
-  
-            // Only log the field if it has changed and is not empty (undefined or null)
             if (oldValue !== newValue) {
               if (oldValue === '' && newValue !== '') {
-                // Case where old value was empty (undefined or null) and new value is set
                 changes.push(`${key}: (was not set) -> ${newValue}`);
               } else if (newValue === '' && oldValue !== '') {
-                // Case where old value was set and new value is removed
                 changes.push(`${key}: ${oldValue} -> (removed)`);
               } else {
-                // General case where both values are set
                 changes.push(`${key}: ${oldValue} -> ${newValue}`);
               }
             }
           }
         }
   
-        console.log("changes", changes);
+        console.log("changes array:", changes);
   
-        // If there are changes, log the escalation process
         if (changes.length > 0) {
           const firstName = req.query.firstName;
           const escProcess = updateData.escalationProcess || "";
@@ -1278,7 +1273,10 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
             `Escalation Process for Yard ${actualYardIndex + 1}: Process-${escProcess} ${changes.join(', ')} updated by ${firstName} on ${formattedDateTime}`
           );
   
-          await order.save();
+          console.log("orderHistory after push:", order.orderHistory);
+  
+          await order.save(); // Save the order
+          console.log("Order saved successfully:", order);
           res.json(order);
         } else {
           res.status(400).json({ message: "No changes detected" });
@@ -1290,7 +1288,8 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       console.error("Error in PUT request:", error);
       res.status(500).json({ message: "Server error", error });
     }
-  });  
+  });
+  
 
 // escalation in order history ends here
 app.put("/cancelledOrders/:orderNo/additionalInfo/:yardIndex", async (req, res) => {
