@@ -1220,9 +1220,9 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
       'firstName',
       'custShipToRep',
       'custShipToRet',
-      'escProcess',
-      'escalationProcess',
-      'isReimbursedChecked',
+    //   'escProcess',
+    //   'escalationProcess',
+      'isReimbursedChecked'
     ];
   
     try {
@@ -1275,7 +1275,7 @@ app.put("/orders/:orderNo/escalation", async (req, res) => {
           const escProcess = updateData.escalationProcess || "";
  
           order.orderHistory.push(
-            `Escalation Process for Yard ${actualYardIndex + 1}: Process-${escProcess} ${changes.join(', ') || ""} updated by ${firstName} on ${formattedDateTime}`
+            `Escalation Process for Yard ${actualYardIndex + 1}: Process- ${changes.join(', ')} updated by ${firstName} on ${formattedDateTime}`
           );
   
           console.log("orderHistory after push:", order.orderHistory);
