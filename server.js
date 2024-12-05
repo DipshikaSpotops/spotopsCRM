@@ -1037,7 +1037,7 @@ app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
       if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
         const yardInfo = order.additionalInfo[yardIndex];
         const updatedYardData = req.body; // Using req.body directly
-  
+  console.log("changes",yardInfo,updatedYardData);
         // To log which fields were updated
         let updateMessage = `Yard ${yardIndex + 1} details updated by ${req.query.firstName} on ${formattedDateTime}: `;
         const changes = [];
