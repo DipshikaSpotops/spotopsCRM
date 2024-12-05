@@ -1240,8 +1240,28 @@ const yardShippingStatus = updateData.yardShippingStatus || "";
 const yardShippingMethod = updateData.yardShippingMethod || "";
 const yardShipper = updateData.yardShipper || "";
 const yardTrackingNumber = updateData.yardTrackingNumber || "";
+for (const key in updateData) {
+    if (updateData.hasOwnProperty(key)) {
+      const oldValue = normalizeValue(yardInfo[key]);
+      const newValue = normalizeValue(updateData[key]);
+
+      // Only log the field if it has changed and is not empty (undefined or null)
+      if (oldValue !== newValue) {
+        if (oldValue === '' && newValue !== '') {
+          // Case where old value was empty (undefined or null) and new value is set
+          changes.push(`${key}: (was not set) -> ${newValue}`);
+        } else if (newValue === '' && oldValue !== '') {
+          // Case where old value was set and new value is removed
+          changes.push(`${key}: ${oldValue} -> (removed)`);
+        } else {
+          // General case where both values are set
+          changes.push(`${key}: ${oldValue} -> ${newValue}`);
+        }
+      }
+    }
+  }
 order.orderHistory.push(
-`Escalation Process  for Yard ${actualYardIndex + 1}: ${escProcess || customerShippingMethod || customerShippingMethod || customerShippingMethod  || customerShipper  || customerTrackingNumber   || custOwnShipping || yardShippingStatus || yardShippingMethod || yardShipper || yardTrackingNumber} updated by ${firstName} on ${formattedDateTime}`
+`Escalation Process  for Yard ${actualYardIndex + 1}: ${escProcess} ${updateData || "" } updated by ${firstName} on ${formattedDateTime}`
 );
 await order.save();
 res.json(order);
