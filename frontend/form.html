@@ -4512,67 +4512,62 @@ alert("Error fetching yard data. Please try again.");
 });
 
 $("#saveYardDetails").on("click", function () {
-  $('#editYardDetailsModal').hide();
-  $(".mainDiv").removeClass("blur");
-
-  yardIndex = $(this).data("yard-index");
-
-  let shippingDetails = "";
-  if ($("#editOwnShipping").val()) {
-    shippingDetails = `Own shipping: ${$("#editOwnShipping").val()}`;
-  } else if ($("#editYardShipping").val()) {
-    shippingDetails = `Yard shipping: ${$("#editYardShipping").val()}`;
-  }
-
-  const updatedData = { 
-    yardName: $("#editYardName").val(),
-    agentName: $("#editAgentName").val(),
-    yardRating: $("#editYardRating").val(),
-    phone: $("#editPhone").val(),
-    editAlt: $("#editAltPhone").val(),
-    address: $("#editAddress").val(),
-    ext: $("#editExt").val(),
-    email: $("#editEmail").val(),
-    country: $("#editCountry").val(),
-    city: $("#editCity").val(),
-    state: $("#editState").val(),
-    street: $("#editAddress").val(),
-    zipcode: $("#editZip").val(),
-    partPrice: $("#editPartPrice").val(),
-    others: $("#editOthers").val(),
-    warranty: $("#editWarr").val(),
-    faxNo: $("#editFax").val(),
-    shippingDetails: shippingDetails,
-    stockNo: $("#editStockNo").val(),
-    paymentStatus: $("#editPaymentStatus").val(),
-    refundedAmount: $("#editrefundAmount").val(),
-    escalationCause: $("#esc").val(),
-    escalationProcess: $("#escProcess").val(),
-  };
-
-  // Direct API call with fetch
-  fetch(`https://www.spotops360.com/orders/${orderNo}/editYardDetails/${yardIndex}?firstName=${firstName}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedData),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data) {
-        alert("Yard details have been updated");
-        window.location.reload();
-        $("#editYardDetailsModal").modal("hide");
-        $(".mainDiv").removeClass("blur");
-        updateOrderHistory(data.orderHistory);
-        showYardDetails(yardIndex);
-        fetchAndUpdateYardInfo();
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+$('#editYardDetailsModal').hide();
+$(".mainDiv").removeClass("blur");
+yardIndex = $(this).data("yard-index");
+let shippingDetails = "";
+if ($("#editOwnShipping").val()) {
+shippingDetails = `Own shipping: ${$("#editOwnShipping").val()}`;
+} else if ($("#editYardShipping").val()) {
+shippingDetails = `Yard shipping: ${$("#editYardShipping").val()}`;
+}
+const updatedData = { 
+yardName: $("#editYardName").val(),
+agentName: $("#editAgentName").val(),
+yardRating: $("#editYardRating").val(),
+phone: $("#editPhone").val(),
+editAlt: $("#editAltPhone").val(),
+address: $("#editAddress").val(),
+ext: $("#editExt").val(),
+email: $("#editEmail").val(),
+country: $("#editCountry").val(),
+city: $("#editCity").val(),
+state: $("#editState").val(),
+street: $("#editAddress").val(),
+zipcode: $("#editZip").val(),
+partPrice: $("#editPartPrice").val(),
+others: $("#editOthers").val(),
+warranty: $("#editWarr").val(),
+faxNo: $("#editFax").val(),
+shippingDetails: shippingDetails,
+stockNo: $("#editStockNo").val(),
+paymentStatus: $("#editPaymentStatus").val(),
+refundedAmount: $("#editrefundAmount").val(),
+escalationCause: $("#esc").val(),
+escalationProcess: $("#escProcess").val(),
+};
+fetch(`https://www.spotops360.com/orders/${orderNo}/editYardDetails/${yardIndex}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedData),
+})
+.then((response) => response.json())
+.then((data) => {
+if (data) {
+alert("Yard details have been updated");
+window.location.reload();
+$("#editYardDetailsModal").modal("hide");
+$(".mainDiv").removeClass("blur");
+updateOrderHistory(data.orderHistory);
+showYardDetails(yardIndex);
+fetchAndUpdateYardInfo();
+}
+})
+.catch((error) => {
+console.error("Error:", error);
+});
 });
 
 
