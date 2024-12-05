@@ -1029,17 +1029,21 @@ const minutes = date.getMinutes().toString().padStart(2, '0');
 const formattedDateTime = `${day} ${month}, ${year} ${hours}:${minutes}`;
 try {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
-const yardIndex = parseInt(req.params.yardIndex, 10) - 1;  
-if (!order) return res.status(404).send("Order not found");  
+const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+if (!order) return res.status(404).send("Order not found");
 if (yardIndex >= 0 && yardIndex < order.additionalInfo.length) {
 const yardInfo = order.additionalInfo[yardIndex];
-const updatedYardData = req.body;
+const updatedYardData = req.body; // Using req.body directly
+// To log which fields were updated
 let updateMessage = `Yard ${yardIndex + 1} details updated by ${req.query.firstName} on ${formattedDateTime}: `;
 const changes = [];
-// Looping through each field in updatedYardData and compare with the original yardInfo
+// Loop through each field in updatedYardData and compare with the original yardInfo
 for (const key in updatedYardData) {
-if (updatedYardData.hasOwnProperty(key) && yardInfo[key] !== updatedYardData[key]) {
+if (updatedYardData.hasOwnProperty(key)) {
+// Only log the field if it has changed
+if (yardInfo[key] !== updatedYardData[key]) {
 changes.push(`${key}: ${yardInfo[key]} -> ${updatedYardData[key]}`);
+}
 }
 }
 if (changes.length > 0) {
@@ -1047,11 +1051,17 @@ updateMessage += changes.join(", ");
 } else {
 updateMessage += "No changes made.";
 }
+
+// Push the changes to the order history
 order.orderHistory.push(updateMessage);
+
+// Update yard info with the new data
 Object.assign(yardInfo, updatedYardData);
 order.additionalInfo[yardIndex] = yardInfo;
+
 const firstName = req.query.firstName;
 order.markModified("additionalInfo");
+
 await order.save(); // Save changes to the database
 res.json(order);
 } else {
@@ -1061,8 +1071,8 @@ res.status(400).json({ message: "Invalid yard index" });
 console.error("Error in PUT request:", error);
 res.status(500).json({ message: "Server error", error });
 }
-});  
-
+});
+  
 // to update card charged
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/paymentStatus", async (req, res) => {
 console.log("Updating payment status for yard");
