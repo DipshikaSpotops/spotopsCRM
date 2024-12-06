@@ -4671,20 +4671,22 @@ $("#editYardPopup").hide();
 
 // support comment atsrts here
 const commentSupport = document.getElementById("comment-boxSupport");
-const maxCharacters = 160; // Maximum allowed characters
-
-  // Function to handle the submit logic
-  function handleSubmit(event) {
+function handleSubmit(event) {
     const content1 = $("#commentInput").val();
+    const wordCount = content1.trim().split(/\s+/).length; // Count words
+    const maxWords = 160;
+    const maxLength = 50;
+        const currentValue = $(this).val();
 
-    if (content1.length > maxCharacters) {
-      alert(`Your comment exceeds the maximum character limit of ${maxCharacters} characters.`);
-      event.preventDefault(); // Prevent the event from proceeding
-      return false; // Explicitly return false to stop the event
+    if (currentValue > maxWords) {
+      alert(`Your comment exceeds the maximum word limit of ${maxWords} characters.`);
+      event.preventDefault(); // Prevent the event from succeeding
+      return;
     }
 
-    console.log("orderNo for submitting comments", orderNo);
-    event.preventDefault(); // Ensure default action is stopped
+    console.log("orderNo for submitting s comments", orderNo);
+    window.location.reload();
+    event.preventDefault();
 
     const yardIndex1 = $("#submit").data("yard-index") - 1;
     const firstName1 = localStorage.getItem("firstName");
@@ -4706,24 +4708,30 @@ const maxCharacters = 160; // Maximum allowed characters
         .catch((error) => {
           // If order is not found in orders, search in cancelledOrders
           if (error.response && error.response.status === 404) {
-            console.log("Order not found in orders, checking in cancelledOrders...");
+            console.log(
+              "Order not found in orders, checking in cancelledOrders..."
+            );
             axios
               .put(
                 `https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`,
                 {
                   note: content1,
                   author: firstName1,
-                  timestamp: currentDateTime,
+                  timestamp: commentNteDate,
                 }
               )
               .then((response) => {
-                alert("Support comments updated successfully in cancelledOrders.");
+                alert(
+                  "Support comments updated successfully in cancelledOrders."
+                );
                 $("#commentInput").val("");
                 fetchSupportComment(yardIndex1);
               })
               .catch((error) => {
                 console.error("Error:", error);
-                alert(`Failed to update notes in cancelledOrders: ${error.message}`);
+                alert(
+                  `Failed to update notes in cancelledOrders: ${error.message}`
+                );
               });
           } else {
             console.error("Error:", error);
@@ -4742,16 +4750,6 @@ const maxCharacters = 160; // Maximum allowed characters
   $("#commentInput").on("keypress", function (event) {
     if (event.key === "Enter") {
       handleSubmit(event);
-      event.preventDefault(); // Prevent form submission on Enter key
-    }
-  });
-
-  // Display alert if user types more than the character limit
-  $("#commentInput").on("input", function () {
-    const content1 = $(this).val();
-    if (content1.length > maxCharacters) {
-      alert(`Your comment exceeds the maximum character limit of ${maxCharacters} characters.`);
-      $(this).val(content1.substring(0, maxCharacters)); // Truncate to maxCharacters
     }
   });
 
