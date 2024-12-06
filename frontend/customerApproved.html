@@ -750,13 +750,14 @@ $("#infoTable").append(
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
-<td>Name: ${item.customerName}</br>
+<td>Name: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}</br>
 Email: ${item.email}</br>
 Phone: ${item.phone}</br>
 Alt Phone: ${item.altPhone}</br>
+<b>Billing Name</b>:${item.bName}<br>
 Billing Address:</br>  ${
 (item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry) 
-? `<b>Billing Name</b>:${item.bName}<br> ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.sAddressAcountry || ""} `
+? ` ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.sAddressAcountry || ""} `
 : `${formattedBAddress || ""}`
 }</br>
 </td>
@@ -779,7 +780,6 @@ VIN: ${item.vin}</br>
 Warranty: ${item.warranty} days</br>
 </td>
 <td>${item.orderStatus}</td>
-<td>${item.email}</td>
 </tr>`
 );
 })
