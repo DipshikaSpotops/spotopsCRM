@@ -893,9 +893,9 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((data) => {
 // document.getElementById("estPP").textContent += data.costP;
 var customerNameE = data.customerName;
-const nameParts = customerNameE.split(" ").filter(part => part.trim() !== "");
-const firstNameE = nameParts[0];
-const lastNameE = nameParts[1] || "";
+const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
+const firstNameE = nameParts[0] || ""; // Default to empty string if no first name
+const lastNameE = nameParts[1] || "";  // Default to empty string if no last name
 var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
