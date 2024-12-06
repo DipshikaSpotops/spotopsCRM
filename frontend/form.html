@@ -4679,13 +4679,12 @@ const maxCharacters = 160; // Maximum allowed characters
 
     if (content1.length > maxCharacters) {
       alert(`Your comment exceeds the maximum character limit of ${maxCharacters} characters.`);
-      event.preventDefault(); // Prevent the event from succeeding
-      return;
+      event.preventDefault(); // Prevent the event from proceeding
+      return false; // Explicitly return false to stop the event
     }
 
     console.log("orderNo for submitting comments", orderNo);
-    window.location.reload();
-    event.preventDefault();
+    event.preventDefault(); // Ensure default action is stopped
 
     const yardIndex1 = $("#submit").data("yard-index") - 1;
     const firstName1 = localStorage.getItem("firstName");
@@ -4714,7 +4713,7 @@ const maxCharacters = 160; // Maximum allowed characters
                 {
                   note: content1,
                   author: firstName1,
-                  timestamp: commentNteDate,
+                  timestamp: currentDateTime,
                 }
               )
               .then((response) => {
@@ -4743,6 +4742,7 @@ const maxCharacters = 160; // Maximum allowed characters
   $("#commentInput").on("keypress", function (event) {
     if (event.key === "Enter") {
       handleSubmit(event);
+      event.preventDefault(); // Prevent form submission on Enter key
     }
   });
 
