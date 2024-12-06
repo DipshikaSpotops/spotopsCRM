@@ -2830,8 +2830,8 @@ $("#bAddress").val(
   data.bAddress ||
   `${data.bAddressStreet || ""}, ${data.bAddressCity || ""}, ${data.bAddressState || ""}, ${data.bAddressZip || ""}, ${data.bAddressAcountry || ""}`
 );
-$("#firstName").val(firstNameE);
-$("#lastname").val(lastNameE);
+$("#firstName").val(firstNameE || firstNameE);
+$("#lastname").val(lastNameE || lastNameE);
 $("#sAddress").val(
   data.sAddress ||
   `${data.sAddressStreet || ""}, ${data.sAddressCity || ""}, ${data.sAddressState || ""}, ${data.sAddressZip || ""}, ${data.sAddressAcountry || ""}`
