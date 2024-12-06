@@ -900,8 +900,8 @@ var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
-$("#firstName").val(data.fName || firstNameE);
-$("#lastName").val(data.lName || lastNameE);
+$("#firstName").val(data.fName);
+$("#lastName").val(data.lName);
 $("#orderNo").val(data.orderNo);
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
@@ -940,6 +940,7 @@ $("#orderStatus").val(data.orderStatus);
 $("#vin").val(data.vin);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
+$("#sBusinessName").val(data.businessName);
 $("#dsCall").prop("checked", data.dsCall === "true");
 $("#expeditorNot").prop("checked", data.expediteShipping === "true");
 // data.additionalInfo.forEach((info, index) => {
