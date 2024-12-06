@@ -4671,18 +4671,19 @@ $("#editYardPopup").hide();
 
 // support comment atsrts here
 const commentSupport = document.getElementById("comment-boxSupport");
-function handleSubmit(event) {
-    const content1 = $("#commentInput").val();
-    const wordCount = content1.trim().split(/\s+/).length; // Count words
-    const maxWords = 50;
+const maxCharacters = 160; // Maximum allowed characters
 
-    if (wordCount > maxWords) {
-      alert(`Your comment exceeds the maximum word limit of ${maxWords} words.`);
+  // Function to handle the submit logic
+  function handleSubmit(event) {
+    const content1 = $("#commentInput").val();
+
+    if (content1.length > maxCharacters) {
+      alert(`Your comment exceeds the maximum character limit of ${maxCharacters} characters.`);
       event.preventDefault(); // Prevent the event from succeeding
       return;
     }
 
-    console.log("orderNo for submitting s comments", orderNo);
+    console.log("orderNo for submitting comments", orderNo);
     window.location.reload();
     event.preventDefault();
 
@@ -4706,9 +4707,7 @@ function handleSubmit(event) {
         .catch((error) => {
           // If order is not found in orders, search in cancelledOrders
           if (error.response && error.response.status === 404) {
-            console.log(
-              "Order not found in orders, checking in cancelledOrders..."
-            );
+            console.log("Order not found in orders, checking in cancelledOrders...");
             axios
               .put(
                 `https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`,
@@ -4719,17 +4718,13 @@ function handleSubmit(event) {
                 }
               )
               .then((response) => {
-                alert(
-                  "Support comments updated successfully in cancelledOrders."
-                );
+                alert("Support comments updated successfully in cancelledOrders.");
                 $("#commentInput").val("");
                 fetchSupportComment(yardIndex1);
               })
               .catch((error) => {
                 console.error("Error:", error);
-                alert(
-                  `Failed to update notes in cancelledOrders: ${error.message}`
-                );
+                alert(`Failed to update notes in cancelledOrders: ${error.message}`);
               });
           } else {
             console.error("Error:", error);
@@ -4748,6 +4743,15 @@ function handleSubmit(event) {
   $("#commentInput").on("keypress", function (event) {
     if (event.key === "Enter") {
       handleSubmit(event);
+    }
+  });
+
+  // Display alert if user types more than the character limit
+  $("#commentInput").on("input", function () {
+    const content1 = $(this).val();
+    if (content1.length > maxCharacters) {
+      alert(`Your comment exceeds the maximum character limit of ${maxCharacters} characters.`);
+      $(this).val(content1.substring(0, maxCharacters)); // Truncate to maxCharacters
     }
   });
 
