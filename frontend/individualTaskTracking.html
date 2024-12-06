@@ -439,7 +439,7 @@ placeholder="Search..."
       <tr>
         <th style="cursor: pointer" scope="col">Order Date</th>
         <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Order History\</th>
+        <th style="cursor: pointer" scope="col">Order History</th>
       </tr>
     </thead>
     <tbody id="infoTable">
@@ -619,7 +619,11 @@ $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
-<td>${item.orderHistory}</td>
+<td>
+<ul>
+${item.orderHistory.map(historyItem => `<li>${historyItem}</li>`).join("")}
+</ul>
+</td>
 </tr>
 `);
 });
