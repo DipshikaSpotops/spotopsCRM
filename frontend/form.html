@@ -4671,15 +4671,13 @@ $("#editYardPopup").hide();
 
 // support comment atsrts here
 const commentSupport = document.getElementById("comment-boxSupport");
-function handleSubmit(event) {
+ function handleSubmit(event) {
     const content1 = $("#commentInput").val();
     const wordCount = content1.trim().split(/\s+/).length; // Count words
-    const maxWords = 160;
-    const maxLength = 50;
-        const currentValue = $(this).val();
+    const maxWords = 50;
 
-    if (currentValue > maxWords) {
-      alert(`Your comment exceeds the maximum word limit of ${maxWords} characters.`);
+    if (wordCount > maxWords) {
+      alert(`Your comment exceeds the maximum word limit of ${maxWords} words.`);
       event.preventDefault(); // Prevent the event from succeeding
       return;
     }
