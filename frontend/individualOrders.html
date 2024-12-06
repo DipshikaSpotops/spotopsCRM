@@ -623,7 +623,7 @@ $("#infoTable").append(`
 <tr>
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
-<td>${item.customerName}</td>
+<td>${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}</td>
 <td>${item.pReq || item.partName}</td>
 <td>$${item.soldP}</td>
 <td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
