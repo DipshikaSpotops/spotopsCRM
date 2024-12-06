@@ -172,7 +172,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 .table-wrapper {
 max-height: 93vh; 
 display: block;  
-margin-top: 8%;
+margin-top: 3%;
 }
 
 thead th {
@@ -334,9 +334,9 @@ aria-labelledby="userMenu"
     <table class="table table-bordered mt-4">
       <thead style="text-align: center;">
         <tr>
-          <th style="cursor: pointer" scope="col">Order Date</th>
-          <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer" scope="col">Order History</th>
+          <th style="cursor: pointer;border: 1px solid #dcd4d4;" scope="col">Order Date</th>
+          <th style="cursor: pointer;border: 1px solid #dcd4d4;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+          <th style="cursor: pointer;border: 1px solid #dcd4d4;" scope="col">Order History</th>
           <!-- <th style="cursor: pointer" scope="col">Actions</th> -->
         </tr>
       </thead>
@@ -479,7 +479,7 @@ const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + d
 
 $("#infoTable").append(`
 <tr>
-<td>${dateOnly}</td>
+<td style="white-space: nowrap;">${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.orderHistory}</td>
 </tr>
