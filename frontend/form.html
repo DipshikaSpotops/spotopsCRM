@@ -4671,70 +4671,33 @@ $("#editYardPopup").hide();
 
 // support comment atsrts here
 const commentSupport = document.getElementById("comment-boxSupport");
-$("#commentInput").on("input", function () {
-        const maxLength = 50;
-        const currentValue = $(this).val();
-
-        if (currentValue.length > maxLength) {
-          alert(`You cannot enter more than ${maxLength} characters.`);
-          $(this).val(currentValue.substring(0, maxLength)); // Trim the input to the maxLength
-        }
-      });
 $("#submitComments").on("click", function (event) {
-console.log("orderNo for submitting s comments",orderNo);  
+const content1 = $("#commentInput").val();
+const wordCount = content1.trim().split(/\s+/).length; // Count words
+const maxWords = 50;
+
+if (wordCount > maxWords) {
+alert(`Your comment exceeds the maximum word limit of ${maxWords} words.`);
+event.preventDefault(); // Prevent the event from succeeding
+return;
+}
+
+console.log("orderNo for submitting s comments", orderNo);
 window.location.reload();
 event.preventDefault();
 
-const content1 = $("#commentInput").val();
 const yardIndex1 = $("#submit").data("yard-index") - 1;
 const firstName1 = localStorage.getItem("firstName");
+console.log("commentDate", currentDateTime);
 
-// const now = new Date();
-// const options = {
-// timeZone: 'America/Chicago',
-// year: 'numeric',
-// month: '2-digit',
-// day: '2-digit',
-// hour: '2-digit',
-// minute: '2-digit',
-// second: '2-digit',
-// hour12: false,
-// };
-
-// const formatter = new Intl.DateTimeFormat('en-US', options);
-// const parts = formatter.formatToParts(now);
-// const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-// const date = new Date(formattedDate);
-
-// const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-// const day = date.getDate();
-// const month = months[date.getMonth()];
-// const year = date.getFullYear();
-// const hour = date.getHours();
-// const minute = date.getMinutes().toString().padStart(2, '0');
-
-// const daySuffix = (day) => {
-// if (day > 3 && day < 21) return "th";
-// switch (day % 10) {
-// case 1: return "st";
-// case 2: return "nd";
-// case 3: return "rd";
-// default: return "th";
-// }
-// };
-
-// var commentNteDate = `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
-console.log("commentDate",currentDateTime);
 if (content1.length > 0) {
 // First try to update in the orders collection
-axios.put(
-`https://www.spotops360.com/orders/${orderNo}/supportNotes`, 
-{
+axios
+.put(`https://www.spotops360.com/orders/${orderNo}/supportNotes`, {
 note: content1,
 author: firstName1,
 timestamp: currentDateTime,
-}
-)
+})
 .then((response) => {
 alert("Support comments updated successfully.");
 $("#commentInput").val("");
@@ -4743,9 +4706,12 @@ fetchSupportComment(yardIndex1);
 .catch((error) => {
 // If order is not found in orders, search in cancelledOrders
 if (error.response && error.response.status === 404) {
-console.log('Order not found in orders, checking in cancelledOrders...');
-axios.put(
-`https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`, 
+console.log(
+"Order not found in orders, checking in cancelledOrders..."
+);
+axios
+.put(
+`https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`,
 {
 note: content1,
 author: firstName1,
@@ -4753,13 +4719,17 @@ timestamp: commentNteDate,
 }
 )
 .then((response) => {
-alert("Support comments updated successfully in cancelledOrders.");
+alert(
+"Support comments updated successfully in cancelledOrders."
+);
 $("#commentInput").val("");
 fetchSupportComment(yardIndex1);
 })
 .catch((error) => {
 console.error("Error:", error);
-alert(`Failed to update notes in cancelledOrders: ${error.message}`);
+alert(
+`Failed to update notes in cancelledOrders: ${error.message}`
+);
 });
 } else {
 console.error("Error:", error);
@@ -4768,7 +4738,6 @@ alert(`Failed to update notes: ${error.message}`);
 });
 }
 });
-
 
 async function fetchSupportComment(orderNo) {
 console.log("Fetching and displaying support comments...",orderNo);
