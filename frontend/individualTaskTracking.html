@@ -172,6 +172,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 .table-wrapper {
 max-height: 93vh; 
 display: block;  
+margin-top: 8%;
 }
 
 thead th {
@@ -322,8 +323,7 @@ aria-labelledby="userMenu"
 <div id="pagination-controls" style="margin-top: 5%;">
     <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
-<div id="filterAndTotal" style="margin-top: 1%;margin-left: -1.5%;">
- <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
+<div id="filterAndTotal" style="margin-top: 0%;margin-left: -1.8%;">
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
@@ -458,8 +458,8 @@ const team = localStorage.getItem("team");
 const token = localStorage.getItem("token");
 
 function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
+let start = (page - 1) * rowsPerPage;
+let end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
 $('#infoTable').empty(); 
 ordersForPage.forEach((item) => {
