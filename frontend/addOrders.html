@@ -900,8 +900,8 @@ var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
-$("#firstName").val(data.fName);
-$("#lastName").val(data.lName);
+$("#firstName").val(data.fName || firstNameE);
+$("#lastName").val(data.lName || lastNameE);
 $("#orderNo").val(data.orderNo);
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
@@ -993,7 +993,9 @@ const newEntry = urlParams.get("newEntry");
                 orderNo: orderNoInput,
                 orderDate: $("#orderDate").val(),
                 salesAgent: $("#salesAgent").val(),
-                customerName: customerName,
+                // customerName: customerName,
+                fName: $("#firstName").val(),
+                lName: $("#lastName").val(),
                 bAddressStreet: $("#bAddress").val(),
                 bAddressCity: $("#bCity").val(),
                 bAddressState: $("#bState").val(),
@@ -1026,6 +1028,7 @@ const newEntry = urlParams.get("newEntry");
                 notes: $("#notes").val(),
                 dsCall: $("#dsCall").prop("checked") ? true : false,
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
+                businessName: $("#sBusinessName").val(),
             };
 
             fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
@@ -1082,6 +1085,7 @@ const newEntry = urlParams.get("newEntry");
                 notes: $("#notes").val(),
                 dsCall: $("#dsCall").prop("checked") ? true : false,
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
+                businessName: $("#sBusinessName").val(),
             };
 
             fetch(`https://www.spotops360.com/orders/${orderNo}`, {
