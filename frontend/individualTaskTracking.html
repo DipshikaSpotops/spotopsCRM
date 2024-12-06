@@ -325,8 +325,8 @@ aria-labelledby="userMenu"
         <tr>
           <th style="cursor: pointer" scope="col">Order Date</th>
           <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer" scope="col">Order History<span class="aToZ">&#9650;</span></th>
-          <th style="cursor: pointer" scope="col">Actions</th>
+          <th style="cursor: pointer" scope="col">Order History</th>
+          <!-- <th style="cursor: pointer" scope="col">Actions</th> -->
         </tr>
       </thead>
       <tbody id="infoTable">
@@ -477,7 +477,6 @@ $("#infoTable").append(`
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.orderHistory}</td>
-<td>${actions}</td>
 </tr>
 `);
 });
