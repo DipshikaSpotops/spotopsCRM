@@ -4671,73 +4671,85 @@ $("#editYardPopup").hide();
 
 // support comment atsrts here
 const commentSupport = document.getElementById("comment-boxSupport");
-$("#submitComments").on("click", function (event) {
-const content1 = $("#commentInput").val();
-const wordCount = content1.trim().split(/\s+/).length; // Count words
-const maxWords = 50;
+function handleSubmit(event) {
+    const content1 = $("#commentInput").val();
+    const wordCount = content1.trim().split(/\s+/).length; // Count words
+    const maxWords = 50;
 
-if (wordCount > maxWords) {
-alert(`Your comment exceeds the maximum word limit of ${maxWords} words.`);
-event.preventDefault(); // Prevent the event from succeeding
-return;
-}
+    if (wordCount > maxWords) {
+      alert(`Your comment exceeds the maximum word limit of ${maxWords} words.`);
+      event.preventDefault(); // Prevent the event from succeeding
+      return;
+    }
 
-console.log("orderNo for submitting s comments", orderNo);
-window.location.reload();
-event.preventDefault();
+    console.log("orderNo for submitting s comments", orderNo);
+    window.location.reload();
+    event.preventDefault();
 
-const yardIndex1 = $("#submit").data("yard-index") - 1;
-const firstName1 = localStorage.getItem("firstName");
-console.log("commentDate", currentDateTime);
+    const yardIndex1 = $("#submit").data("yard-index") - 1;
+    const firstName1 = localStorage.getItem("firstName");
+    console.log("commentDate", currentDateTime);
 
-if (content1.length > 0) {
-// First try to update in the orders collection
-axios
-.put(`https://www.spotops360.com/orders/${orderNo}/supportNotes`, {
-note: content1,
-author: firstName1,
-timestamp: currentDateTime,
-})
-.then((response) => {
-alert("Support comments updated successfully.");
-$("#commentInput").val("");
-fetchSupportComment(yardIndex1);
-})
-.catch((error) => {
-// If order is not found in orders, search in cancelledOrders
-if (error.response && error.response.status === 404) {
-console.log(
-"Order not found in orders, checking in cancelledOrders..."
-);
-axios
-.put(
-`https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`,
-{
-note: content1,
-author: firstName1,
-timestamp: commentNteDate,
-}
-)
-.then((response) => {
-alert(
-"Support comments updated successfully in cancelledOrders."
-);
-$("#commentInput").val("");
-fetchSupportComment(yardIndex1);
-})
-.catch((error) => {
-console.error("Error:", error);
-alert(
-`Failed to update notes in cancelledOrders: ${error.message}`
-);
-});
-} else {
-console.error("Error:", error);
-alert(`Failed to update notes: ${error.message}`);
-}
-});
-}
-});
+    if (content1.length > 0) {
+      // First try to update in the orders collection
+      axios
+        .put(`https://www.spotops360.com/orders/${orderNo}/supportNotes`, {
+          note: content1,
+          author: firstName1,
+          timestamp: currentDateTime,
+        })
+        .then((response) => {
+          alert("Support comments updated successfully.");
+          $("#commentInput").val("");
+          fetchSupportComment(yardIndex1);
+        })
+        .catch((error) => {
+          // If order is not found in orders, search in cancelledOrders
+          if (error.response && error.response.status === 404) {
+            console.log(
+              "Order not found in orders, checking in cancelledOrders..."
+            );
+            axios
+              .put(
+                `https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`,
+                {
+                  note: content1,
+                  author: firstName1,
+                  timestamp: commentNteDate,
+                }
+              )
+              .then((response) => {
+                alert(
+                  "Support comments updated successfully in cancelledOrders."
+                );
+                $("#commentInput").val("");
+                fetchSupportComment(yardIndex1);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert(
+                  `Failed to update notes in cancelledOrders: ${error.message}`
+                );
+              });
+          } else {
+            console.error("Error:", error);
+            alert(`Failed to update notes: ${error.message}`);
+          }
+        });
+    }
+  }
+
+  // Attach click event to the submit button
+  $("#submitComments").on("click", function (event) {
+    handleSubmit(event);
+  });
+
+  // Trigger the event when Enter is pressed
+  $("#commentInput").on("keypress", function (event) {
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
+  });
 
 async function fetchSupportComment(orderNo) {
 console.log("Fetching and displaying support comments...",orderNo);
