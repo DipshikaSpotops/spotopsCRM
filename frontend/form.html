@@ -4671,6 +4671,15 @@ $("#editYardPopup").hide();
 
 // support comment atsrts here
 const commentSupport = document.getElementById("comment-boxSupport");
+$("#commentInput").on("input", function () {
+        const maxLength = 50;
+        const currentValue = $(this).val();
+
+        if (currentValue.length > maxLength) {
+          alert(`You cannot enter more than ${maxLength} characters.`);
+          $(this).val(currentValue.substring(0, maxLength)); // Trim the input to the maxLength
+        }
+      });
 $("#submitComments").on("click", function (event) {
 console.log("orderNo for submitting s comments",orderNo);  
 window.location.reload();
