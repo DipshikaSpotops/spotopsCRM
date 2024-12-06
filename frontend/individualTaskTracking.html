@@ -586,7 +586,6 @@ function renderFilteredOrders(agentName) {
     renderTableRows(1, filteredOrders);
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
   }
-
   // Attach change event to the dropdown
   $("#userDropdown").on("change", function () {
     const selectedAgent = $(this).val();
@@ -921,5 +920,3 @@ window.location.href = "login_signup.html";
 
 </body>
 </html>
-now in the above html, i have id=userDropdown where i hav ename of agents so i want to diaplay the orderHistory only of the agents which is being chosen from the dropdown
-example: orderHistory array element example is Order status updated to Customer approved by April on 6 Dec, 2024 14:10
