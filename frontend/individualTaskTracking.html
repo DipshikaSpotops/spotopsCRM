@@ -462,26 +462,20 @@ let start = (page - 1) * rowsPerPage;
 let end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
 $('#infoTable').empty(); 
+
 ordersForPage.forEach((item) => {
 const escalationStatus = item.additionalInfo &&
 item.additionalInfo[0] &&
 item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
-let escalationStyle = '';
-team = localStorage.getItem('team');
 
+let escalationStyle = '';
+let team = localStorage.getItem('team'); // Declare with `let`
 
 const actions = `
 <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-// <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
 
-// const sendInvoice = `
-// <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-// `;
-
-const yardlength = item.additionalInfo.length;
 const datetime = item.orderDate;
 const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-// console.log(dateOnly);
 
 $("#infoTable").append(`
 <tr>
@@ -492,6 +486,7 @@ $("#infoTable").append(`
 `);
 });
 }
+
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
