@@ -586,7 +586,54 @@ $("#infoTable").append(`
 </tr>
 `);
 }
+ // Additional rows for yardTrackingNumber
+ if (info.yardTrackingNumber) {
+                $("#infoTable").append(`
+                    <tr>
+                        <td>${dateOnly}</td>
+                        <td>${orderNo}</td>
+                        <td>Yard Tracking: ${info.yardTrackingNumber}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="color: blue;">YARD</td>
+                        <td></td>
+                    </tr>
+                `);
+            }
 
+            // Additional rows for customerTrackingNumberReplacement
+            if (info.customerTrackingNumberReplacement) {
+                $("#infoTable").append(`
+                    <tr>
+                        <td>${dateOnly}</td>
+                        <td>${orderNo}</td>
+                        <td>Customer Replacement Tracking: ${info.customerTrackingNumberReplacement}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="color: orange;">REPLACEMENT</td>
+                        <td></td>
+                    </tr>
+                `);
+            }
+
+            // Additional rows for returnTrackingCust
+            if (info.returnTrackingCust) {
+                $("#infoTable").append(`
+                    <tr>
+                        <td>${dateOnly}</td>
+                        <td>${orderNo}</td>
+                        <td>Return Tracking: ${info.returnTrackingCust}</td>
+                        <td>${info.escRetTrackingDate}</td>
+                        <td>${info.customerShippingMethodReturn || ""} ${info.custOwnShippingReturn || ""}</td>
+                        <td>${info.inTransitReturnDate}</td>
+                        <td>${info.custretPartETA}</td>
+                        <td>${info.deliveredDate}</td>
+                    </tr>
+                `);
+            }
+ 
 // Rows for other arrays in additionalInfo
 const arraysToRender = {
 trackingHistory: "Tracking No",
