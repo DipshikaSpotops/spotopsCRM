@@ -3775,7 +3775,7 @@ if (currentAdditionalInfo.custOwnShipReplacement !== custOwnShipReplacement) {
 updatedData.custOwnShipReplacement = custOwnShipReplacement;
 hasChanges = true;
 }
-if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
+if (String(currentAdditionalInfo.customerTrackingNumberReplacement) !== String(customerTrackingNumberReplacement)) {
 updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
 var escRepCustTrackingDate = currentDateTime;
 console.log("escRepCustTrackingDate",escRepCustTrackingDate)
@@ -3784,8 +3784,6 @@ updatedData.escRepCustTrackingDate = escRepCustTrackingDate;
 }
 console.log(updatedData);
 hasChanges = true;
-}else{
-  hasChanges = false;
 }
 if (currentAdditionalInfo.customerETAReplacement !== customerETAReplacement) {
 console.log("customerETAReplacement");  
