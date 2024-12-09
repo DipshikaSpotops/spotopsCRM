@@ -627,7 +627,7 @@ $("#infoTable").append(`
                         <td>Return Tracking: ${info.returnTrackingCust}</td>
                         <td>${info.escRetTrackingDate}</td>
                         <td>${info.customerShippingMethodReturn || ""} ${info.custOwnShippingReturn || ""}</td>
-                        <td>${info.inTransitReturnDate}</td>
+                        <td>${info.inTransitReturnDate || ""}</td>
                         <td>${info.custretPartETA}</td>
                         <td>${info.deliveredDate}</td>
                     </tr>
