@@ -2819,6 +2819,8 @@ var customerNameE = data.customerName;
 const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
 const firstNameE = nameParts[0] || ""; // Default to empty string if no first name
 const lastNameE = nameParts[1] || "";  // Default to empty string if no last name
+var fName = firstNameE || data.fName;
+var lName = lastNameE || data.lName;
 var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
@@ -2830,8 +2832,8 @@ $("#bAddress").val(
   data.bAddress ||
   `${data.bAddressStreet || ""}, ${data.bAddressCity || ""}, ${data.bAddressState || ""}, ${data.bAddressZip || ""}, ${data.bAddressAcountry || ""}`
 );
-$("#firstName").val(firstNameE || fName);
-$("#lastname").val(lastNameE || lName);
+$("#firstName").val(fName);
+$("#lastname").val(lName);
 $("#sAddress").val(
   data.sAddress ||
   `${data.sAddressStreet || ""}, ${data.sAddressCity || ""}, ${data.sAddressState || ""}, ${data.sAddressZip || ""}, ${data.sAddressAcountry || ""}`
