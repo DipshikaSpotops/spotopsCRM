@@ -3752,6 +3752,7 @@ if (response.status !== 200) {
 throw new Error("Failed to fetch order data");
 }
 const currentAdditionalInfo = response.data;
+console.log("currentAdditionalInfo",currentAdditionalInfo);
 const updatedData = {};
 let hasChanges = false;
 if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
@@ -3775,7 +3776,7 @@ if (currentAdditionalInfo.custOwnShipReplacement !== custOwnShipReplacement) {
 updatedData.custOwnShipReplacement = custOwnShipReplacement;
 hasChanges = true;
 }
-if (String(currentAdditionalInfo.customerTrackingNumberReplacement) !== String(customerTrackingNumberReplacement)) {
+if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
 updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
 var escRepCustTrackingDate = currentDateTime;
 console.log("escRepCustTrackingDate",escRepCustTrackingDate)
