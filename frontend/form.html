@@ -3660,7 +3660,6 @@ $("#saveEsc").on("click", async function () {
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 $("#escRMA").hide();
-$("#orderStatus").val("Escalation");
 const yardIndex = $(this).data("yard-index");
 const orderNo = urlParams.get("orderNo");  
 const firstName = localStorage.getItem('firstName'); 
@@ -3685,6 +3684,11 @@ const yardOwnShipping = $("#yardownShipping").val();
 const yardTrackingETA = $("#yardTrackingETA").val();
 const yardTrackingLink = $("#yardTrackingLink").val();
 const yardDeliveryStatus = $('#yardShippingStatus').val();
+if (yardDeliveryStatus === "Delivered"){
+  $("#orderStatus").val("Order Fulfilled");
+}else{
+  $("#orderStatus").val("Escalation");
+}
 // return parts
 const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
 const custretPartETA = $("#custretPartETA").val();
