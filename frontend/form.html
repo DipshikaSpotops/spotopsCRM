@@ -3787,21 +3787,21 @@ updatedData.customerETAReplacement = customerETAReplacement;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
-    updatedData.custreplacementDelivery = custreplacementDelivery;
+updatedData.custreplacementDelivery = custreplacementDelivery;
 
-    if (custreplacementDelivery === "In Transit") {
-        updatedData.inTransitpartCustDate = currentDateTime;
-        // Explicitly ensure repPartCustDeliveredDate is not updated
-        if ('repPartCustDeliveredDate' in updatedData) {
-            delete updatedData.repPartCustDeliveredDate;
-        }
-    } else if (custreplacementDelivery === "Delivered") {
-        updatedData.repPartCustDeliveredDate = currentDateTime;
-        // Explicitly ensure inTransitpartCustDate is not updated
-        if ('inTransitpartCustDate' in updatedData) {
-            delete updatedData.inTransitpartCustDate;
-        }
-    }
+if (custreplacementDelivery === "In Transit") {
+updatedData.inTransitpartCustDate = currentDateTime;
+// Explicitly ensuring repPartCustDeliveredDate is not updated
+if ('repPartCustDeliveredDate' in updatedData) {
+delete updatedData.repPartCustDeliveredDate;
+}
+} else if (custreplacementDelivery === "Delivered") {
+updatedData.repPartCustDeliveredDate = currentDateTime;
+// Explicitly ensure inTransitpartCustDate is not updated
+if ('inTransitpartCustDate' in updatedData) {
+delete updatedData.inTransitpartCustDate;
+}
+}
 hasChanges = true;
 }
 if (currentAdditionalInfo.custShipToRep !== custShipToRep) {
@@ -3811,10 +3811,18 @@ hasChanges = true;
 // part from yard
 if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
 updatedData.yardShippingStatus = yardShippingStatus;
-if (yardShippingStatus == "In Transit"){
+if (yardShippingStatus === "In Transit") {
 updatedData.inTransitpartYardDate = currentDateTime;
-}else if (yardShippingStatus == "Delivered"){
+// Explicitly ensure yardDeliveredDate is not updated
+if ('yardDeliveredDate' in updatedData) {
+delete updatedData.yardDeliveredDate;
+}
+} else if (yardShippingStatus === "Delivered") {
 updatedData.yardDeliveredDate = currentDateTime;
+// Explicitly ensure inTransitpartYardDate is not updated
+if ('inTransitpartYardDate' in updatedData) {
+delete updatedData.inTransitpartYardDate;
+}
 }
 hasChanges = true;
 }
@@ -3868,11 +3876,20 @@ hasChanges = true;
 }
 if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
 updatedData.custReturnDelivery = custReturnDelivery;
-if (custReturnDelivery == "In Transit"){
+if (custReturnDelivery === "In Transit") {
 updatedData.inTransitReturnDate = currentDateTime;
-}else if (custReturnDelivery == "Delivered"){
-updatedData.returnDeliveredDate = currentDateTime;
+// Explicitly ensure returnDeliveredDate is not updated
+if ('returnDeliveredDate' in updatedData) {
+delete updatedData.returnDeliveredDate;
 }
+} else if (custReturnDelivery === "Delivered") {
+updatedData.returnDeliveredDate = currentDateTime;
+// Explicitly ensure inTransitReturnDate is not updated
+if ('inTransitReturnDate' in updatedData) {
+delete updatedData.inTransitReturnDate;
+}
+}
+
 hasChanges = true;
 }
 if (currentAdditionalInfo.custShipToRet !== custShipToRet) {
