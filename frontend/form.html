@@ -3664,9 +3664,6 @@ $("#saveEsc").on("click", async function () {
     const orderNo = urlParams.get("orderNo");
     const firstName = localStorage.getItem("firstName");
     const token = localStorage.getItem("token");
-
-    const currentDateTime = moment().tz("America/Chicago").format("YYYY-MM-DD HH:mm:ss");
-
     // Collect all input values
     const updatedFields = {
         escalationProcess: $("#escProcess").val(),
