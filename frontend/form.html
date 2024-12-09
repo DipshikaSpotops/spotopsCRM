@@ -3787,12 +3787,21 @@ updatedData.customerETAReplacement = customerETAReplacement;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
-updatedData.custreplacementDelivery = custreplacementDelivery;
-if (custreplacementDelivery == "In Transit"){
-updatedData.inTransitpartCustDate = currentDateTime;
-}else if (custreplacementDelivery == "Delivered"){
-updatedData.repPartCustDeliveredDate = currentDateTime;
-}
+    updatedData.custreplacementDelivery = custreplacementDelivery;
+
+    if (custreplacementDelivery === "In Transit") {
+        updatedData.inTransitpartCustDate = currentDateTime;
+        // Explicitly ensure repPartCustDeliveredDate is not updated
+        if ('repPartCustDeliveredDate' in updatedData) {
+            delete updatedData.repPartCustDeliveredDate;
+        }
+    } else if (custreplacementDelivery === "Delivered") {
+        updatedData.repPartCustDeliveredDate = currentDateTime;
+        // Explicitly ensure inTransitpartCustDate is not updated
+        if ('inTransitpartCustDate' in updatedData) {
+            delete updatedData.inTransitpartCustDate;
+        }
+    }
 hasChanges = true;
 }
 if (currentAdditionalInfo.custShipToRep !== custShipToRep) {
