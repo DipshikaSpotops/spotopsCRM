@@ -4676,7 +4676,7 @@ const commentSupport = document.getElementById("comment-boxSupport");
  function handleSubmit(event) {
     const content1 = $("#commentInput").val();
     const wordCount = content1.trim().split(/\s+/).length; // Count words
-    const maxWords = 160;
+    const maxWords = 200;
 
     if (content1.length > maxWords) {
       alert(`Your comment exceeds the maximum word limit of ${maxWords} characters.`);
