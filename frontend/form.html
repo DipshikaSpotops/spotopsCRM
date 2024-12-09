@@ -3791,18 +3791,22 @@ updatedData.customerETAReplacement = customerETAReplacement;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
-    updatedData.custreplacementDelivery = custreplacementDelivery;
+updatedData.custreplacementDelivery = custreplacementDelivery;
 
-    if (custreplacementDelivery === "In Transit") {
-        updatedData.inTransitpartCustDate = currentDateTime;
-        // Explicitly ensure `repPartCustDeliveredDate` is removed
-        delete updatedData.repPartCustDeliveredDate;
-    } else if (custreplacementDelivery === "Delivered") {
-        updatedData.repPartCustDeliveredDate = currentDateTime;
-        // Explicitly ensure `inTransitpartCustDate` is removed
-        delete updatedData.inTransitpartCustDate;
-    }
-    hasChanges = true;
+if (custreplacementDelivery === "In Transit") {
+updatedData.inTransitpartCustDate = currentDateTime;
+// Explicitly ensuring repPartCustDeliveredDate is not updated
+if ('repPartCustDeliveredDate' in updatedData) {
+delete updatedData.repPartCustDeliveredDate;
+}
+} else if (custreplacementDelivery === "Delivered") {
+updatedData.repPartCustDeliveredDate = currentDateTime;
+// Explicitly ensure inTransitpartCustDate is not updated
+if ('inTransitpartCustDate' in updatedData) {
+delete updatedData.inTransitpartCustDate;
+}
+}
+hasChanges = true;
 }
 if (currentAdditionalInfo.custShipToRep !== custShipToRep) {
 updatedData.custShipToRep = custShipToRep;
@@ -3810,18 +3814,21 @@ hasChanges = true;
 }
 // part from yard
 if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
-    updatedData.yardShippingStatus = yardShippingStatus;
-
-    if (yardShippingStatus === "In Transit") {
-        updatedData.inTransitpartYardDate = currentDateTime;
-        // Explicitly ensure `yardDeliveredDate` is removed
-        delete updatedData.yardDeliveredDate;
-    } else if (yardShippingStatus === "Delivered") {
-        updatedData.yardDeliveredDate = currentDateTime;
-        // Explicitly ensure `inTransitpartYardDate` is removed
-        delete updatedData.inTransitpartYardDate;
-    }
-    hasChanges = true;
+updatedData.yardShippingStatus = yardShippingStatus;
+if (yardShippingStatus === "In Transit") {
+updatedData.inTransitpartYardDate = currentDateTime;
+// Explicitly ensure yardDeliveredDate is not updated
+if ('yardDeliveredDate' in updatedData) {
+delete updatedData.yardDeliveredDate;
+}
+} else if (yardShippingStatus === "Delivered") {
+updatedData.yardDeliveredDate = currentDateTime;
+// Explicitly ensure inTransitpartYardDate is not updated
+if ('inTransitpartYardDate' in updatedData) {
+delete updatedData.inTransitpartYardDate;
+}
+}
+hasChanges = true;
 }
 
 if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
@@ -3872,18 +3879,22 @@ updatedData.escRetTrackingDate = escRetTrackingDate;
 hasChanges = true;
 }
 if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
-    updatedData.custReturnDelivery = custReturnDelivery;
+updatedData.custReturnDelivery = custReturnDelivery;
+if (custReturnDelivery === "In Transit") {
+updatedData.inTransitReturnDate = currentDateTime;
+// Explicitly ensure returnDeliveredDate is not updated
+if ('returnDeliveredDate' in updatedData) {
+delete updatedData.returnDeliveredDate;
+}
+} else if (custReturnDelivery === "Delivered") {
+updatedData.returnDeliveredDate = currentDateTime;
+// Explicitly ensure inTransitReturnDate is not updated
+if ('inTransitReturnDate' in updatedData) {
+delete updatedData.inTransitReturnDate;
+}
+}
 
-    if (custReturnDelivery === "In Transit") {
-        updatedData.inTransitReturnDate = currentDateTime;
-        // Explicitly ensure `returnDeliveredDate` is removed
-        delete updatedData.returnDeliveredDate;
-    } else if (custReturnDelivery === "Delivered") {
-        updatedData.returnDeliveredDate = currentDateTime;
-        // Explicitly ensure `inTransitReturnDate` is removed
-        delete updatedData.inTransitReturnDate;
-    }
-    hasChanges = true;
+hasChanges = true;
 }
 if (currentAdditionalInfo.custShipToRet !== custShipToRet) {
 updatedData.custShipToRet = custShipToRet;
