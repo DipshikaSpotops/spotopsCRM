@@ -592,12 +592,12 @@ $("#infoTable").append(`
                     <tr>
                         <td>${dateOnly}</td>
                         <td>${orderNo}</td>
-                        <td>Yard Tracking: ${info.yardTrackingNumber}</td>
+                        <td>Yard Tracking: ${info.yardTrackingNumber || ""}</td>
                         <td>${info.escRepYardTrackingDate || ""}</td>
                         <td>${info.yardShippingMethod || ""} ${info.yardOwnShipping}</td>
                         <td>${info.inTransitpartYardDate || ""}</td>
                         <td>${info.yardTrackingETA || ""}</td>
-                        <td>${info.yardDeliveredDate}</td>
+                        <td>${info.yardDeliveredDate || ""}</td>
                     </tr>
                 `);
             }
@@ -611,9 +611,9 @@ $("#infoTable").append(`
                         <td>Customer Replacement Tracking: ${info.customerTrackingNumberReplacement}</td>
                         <td>${info.escRepCustTrackingDate || ""}</td>
                         <td>${info.customerShippingMethodReplacement || ""} ${info.custOwnShipReplacement || ""}</td>
-                        <td>${info.inTransitpartCustDate}</td>
-                        <td>${info.customerETAReplacement}</td>
-                        <td>${info.repPartCustDeliveredDate}</td>
+                        <td>${info.inTransitpartCustDate || ""}</td>
+                        <td>${info.customerETAReplacement || ""}</td>
+                        <td>${info.repPartCustDeliveredDate || ""}</td>
                     </tr>
                 `);
             }
@@ -624,8 +624,8 @@ $("#infoTable").append(`
                     <tr>
                         <td>${dateOnly}</td>
                         <td>${orderNo}</td>
-                        <td>Return Tracking: ${info.returnTrackingCust}</td>
-                        <td>${info.escRetTrackingDate}</td>
+                        <td>Return Tracking: ${info.returnTrackingCust || ""}</td>
+                        <td>${info.escRetTrackingDate || ""}</td>
                         <td>${info.customerShippingMethodReturn || ""} ${info.custOwnShippingReturn || ""}</td>
                         <td>${info.inTransitReturnDate || ""}</td>
                         <td>${info.custretPartETA || ""}</td>
