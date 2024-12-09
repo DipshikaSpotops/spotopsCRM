@@ -325,7 +325,7 @@ yardOwnShipping: String,
 yardTrackingETA: String,
 yardTrackingLink: String,
 inTransitpartYardDate: String,
-yardDeliveryStatus: String,
+// yardDeliveryStatus: String,
 // return__part from customer
 customerShippingMethodReturn: String,
 custretPartETA: String,

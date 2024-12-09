@@ -3794,8 +3794,13 @@ hasChanges = true;
 // part from yard
 if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
 updatedData.yardShippingStatus = yardShippingStatus;
+if (yardShippingStatus !== "In Transit"){
+updatedData.yardShippingStatus = currentDateTime;
+}
 hasChanges = true;
 }
+
+
 if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
 updatedData.yardShippingMethod = yardShippingMethod;
 hasChanges = true;
@@ -3812,12 +3817,6 @@ if (yardTrackingNumber !== "NA" || yardTrackingNumber.length > 4 ){
 updatedData.escRepYardTrackingDate = escRepYardTrackingDate;
 }
 hasChanges = true;
-}
-if (currentAdditionalInfo.yardDeliveryStatus !== yardDeliveryStatus) {
-updatedData.yardDeliveryStatus = yardDeliveryStatus;
-if (yardDeliveryStatus !== "In Transit"){
-updatedData.inTransitpartYardDate = currentDateTime;
-}
 }
 if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
 updatedData.yardOwnShipping = yardOwnShipping;
