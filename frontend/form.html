@@ -3784,6 +3784,8 @@ if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
 updatedData.custreplacementDelivery = custreplacementDelivery;
 if (custreplacementDelivery == "In Transit"){
 updatedData.inTransitpartCustDate = currentDateTime;
+}else if (custreplacementDelivery == "Delivered"){
+updatedData.repPartCustDeliveredDate = currentDateTime;
 }
 hasChanges = true;
 }
@@ -3796,6 +3798,8 @@ if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
 updatedData.yardShippingStatus = yardShippingStatus;
 if (yardShippingStatus == "In Transit"){
 updatedData.inTransitpartYardDate = currentDateTime;
+}else if (yardShippingStatus == "Delivered"){
+updatedData.yardDeliveredDate = currentDateTime;
 }
 hasChanges = true;
 }
@@ -3851,6 +3855,8 @@ if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
 updatedData.custReturnDelivery = custReturnDelivery;
 if (custReturnDelivery == "In Transit"){
 updatedData.inTransitReturnDate = currentDateTime;
+}else if (custReturnDelivery == "Delivered"){
+updatedData.returnDeliveredDate = currentDateTime;
 }
 hasChanges = true;
 }

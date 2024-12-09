@@ -593,11 +593,11 @@ $("#infoTable").append(`
                         <td>${dateOnly}</td>
                         <td>${orderNo}</td>
                         <td>Yard Tracking: ${info.yardTrackingNumber}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td style="color: blue;">YARD</td>
-                        <td></td>
+                        <td>${info.escRepYardTrackingDate || ""}</td>
+                        <td>${info.yardShippingMethod || ""} ${info.yardOwnShipping}</td>
+                        <td>${info.inTransitpartYardDate || ""}</td>
+                        <td>${info.yardTrackingETA || ""}</td>
+                        <td>${info.yardDeliveredDate}</td>
                     </tr>
                 `);
             }
@@ -609,11 +609,11 @@ $("#infoTable").append(`
                         <td>${dateOnly}</td>
                         <td>${orderNo}</td>
                         <td>Customer Replacement Tracking: ${info.customerTrackingNumberReplacement}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td style="color: orange;">REPLACEMENT</td>
-                        <td></td>
+                        <td>${info.escRepCustTrackingDate || ""}</td>
+                        <td>${info.customerShippingMethodReplacement || ""} ${info.custOwnShipReplacement || ""}</td>
+                        <td>${info.inTransitpartCustDate}</td>
+                        <td>${info.customerETAReplacement}</td>
+                        <td>${info.repPartCustDeliveredDate}</td>
                     </tr>
                 `);
             }
@@ -628,8 +628,8 @@ $("#infoTable").append(`
                         <td>${info.escRetTrackingDate}</td>
                         <td>${info.customerShippingMethodReturn || ""} ${info.custOwnShippingReturn || ""}</td>
                         <td>${info.inTransitReturnDate || ""}</td>
-                        <td>${info.custretPartETA}</td>
-                        <td>${info.deliveredDate}</td>
+                        <td>${info.custretPartETA || ""}</td>
+                        <td>${info.returnDeliveredDate || ""}</td>
                     </tr>
                 `);
             }
