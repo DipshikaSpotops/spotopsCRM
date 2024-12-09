@@ -800,15 +800,13 @@ const basicSearch = (
 (info && String(info).toLowerCase().includes(value)) 
 )) || 
 (order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) 
 )) ||
-(order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
-(order.make && order.make.toLowerCase().includes(value)) ||    // Added make
-(order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
-(order.model && order.model.toLowerCase().includes(value))     // Added model
+(order.phone && order.phone.toLowerCase().includes(value)) ||  
+(order.make && order.make.toLowerCase().includes(value)) ||    
+(order.year && order.year.toString().toLowerCase().includes(value)) || 
+(order.model && order.model.toLowerCase().includes(value))     
 );
-
-// Check if any yard detail (including stockNo) matches the search term
 const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
 const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
 return (
