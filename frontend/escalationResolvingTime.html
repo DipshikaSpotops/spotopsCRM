@@ -645,7 +645,7 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const ordersForPage = resolvedOrders.slice(start, end);
-    document.getElementById("showTotalOrders").innerHTML = `Total Resolved Orders This Month- ${resolvedOrders.length}`;
+    document.getElementById("showTotalOrders").innerHTML = `Total Resolved Orders This Month- ${resolvedOrders.length + 1}`;
     $('#infoTable').empty(); // Clear the table
     console.log(`Total resolved orders: ${resolvedOrders.length}`);
 
