@@ -1509,12 +1509,13 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: order.email,
 to: "dipsikha.spotopsdigital@gmail.com",
 subject: "Your Order Invoice",
-text: `Dear ${order.customerName},\n\nPlease find attached the invoice for your order #${order.orderNo}.\n\nThank you for your business!\n\nBest regards,\nYour Company Name`,
+text: `Dear ${customerName},\n\nPlease find attached the invoice for your order #${order.orderNo}.\n\nThank you for your business!\n\nBest regards,\nYour Company Name`,
 attachments: [
 {
 filename: `invoice_${order.orderNo}.pdf`,
@@ -1795,7 +1796,7 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
-var customerName = order.customerName || order.fName
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 to: `${order.email}`,
@@ -1861,13 +1862,14 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 to: `${order.email}`,
 bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
 // to: 'dipsikha.spotopsdigital@gmail.com',
 subject: `Return Process for Order No. ${req.params.orderNo}`,
-html: `<p>Dear ${order.customerName},</p>
+html: `<p>Dear ${customerName},</p>
 <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
 <p>To facilitate the return of merchandise, please follow these steps:<br></p>
 <p>Package the item(s) securely to prevent damage during transit.<br></p>
@@ -1923,13 +1925,14 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: `${order.email}`,
 bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
 // to: 'dipsikha.spotopsdigital@gmail.com',
 subject: `Return Required for Replacement of ABS Module Order / Order No. ${req.params.orderNo}`,
-html: `<p>Dear ${order.customerName},</p>
+html: `<p>Dear ${customerName},</p>
 <p>We are sorry to hear that there was an issue with the ABS module you received. We are happy to offer a replacement to ensure you receive a fully functional part.</p>
 <p>Please return the part to the following address:</p>
 <p>${firstPart}<br>
@@ -1977,13 +1980,14 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 to: `${order.email}`,
 bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
 // to: 'dipsikha.spotopsdigital@gmail.com',
 subject: `Goodwill Reimbursement Confirmation || Order No. ${req.params.orderNo}`,
-html: `<p>Dear ${order.customerName},</p>
+html: `<p>Dear ${customerName},</p>
 <p>We are sorry to hear that the ABS module did not meet your expectations, and we are committed to providing a satisfactory resolution.</p>
 <p>As discussed, we’re glad to hear that you’ve resolved the issue! We are reimbursing you $${reimburesementValue} as a goodwill gesture, and we hope this reflects our commitment to supporting our customers. Once the refund is processed, we will share the refund receipt with you.</p>
 <p>It’s been a pleasure interacting with you, and we look forward to assisting you with more orders in the future.</p>
@@ -2032,13 +2036,14 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: "service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com",
 to: `${order.email}`,
 bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
 subject:`Return Process For Order No. ${req.params.orderNo}`,
-html: `<p>Dear ${order.customerName},</p>
+html: `<p>Dear ${customerName},</p>
 <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
 <p>To facilitate the return of merchandise, please follow these steps:</p>
 <p>Package the item(s) securely to prevent damage during transit.</p>
@@ -2092,7 +2097,7 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
-
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 to: "dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com",
@@ -2100,7 +2105,7 @@ to: "dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com",
 bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
 subject: `Return Process for Replacement of ABS Module / Order No. ${req.params.orderNo}`,
 html: `
-<p>Dear ${order.customerName},</p>
+<p>Dear ${customerName},</p>
 <p>We apologize for any issues with the ABS module you received, and we are committed to providing a replacement that meets your expectations.</p>
 <p>To return the part, please use the prepaid shipping label attached to this email. Once we receive the part, we will process your replacement and ship it out within 1-3 business days. You will receive tracking information once the replacement is on its way.</p>
 <p>If you need assistance or have any questions, please feel free to reach out.</p>
@@ -2165,14 +2170,14 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
-
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: "dipsikha.spotopsdigital@gmail.com",
 to: `${order.email}`,
 bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
 subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
-html: `<p>Dear ${order.customerName},</p>
+html: `<p>Dear ${customerName},</p>
 <p>We are reaching out to confirm that your refund of $${refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will find a copy of the refund receipt for your record.</p>
 <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
 <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
@@ -2890,13 +2895,14 @@ user: "service@50starsautoparts.com",
 pass: "hweg vrnk qyxx gktv",
 },
 });
+var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: `dipsikha.spotopsdigital@gmail.com`,
 to: `${order.email}`,
 bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
 subject: `Order Cancellation | ${order.orderNo}`,
-html: `<p>Dear ${order.customerName},</p>
+html: `<p>Dear ${customerName},</p>
 <p>I hope this email finds you well. I am writing to inform you about the cancellation of your recent order #<b>${order.orderNo}</b>, dated <b>${orderedDate}</b>, for a <b>${order.year} ${order.make}
 ${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.
 <p>We regret any inconvenience this may have caused you.</p>
