@@ -3777,14 +3777,23 @@ updatedData.custOwnShipReplacement = custOwnShipReplacement;
 hasChanges = true;
 }
 if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
-updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
-var escRepCustTrackingDate = currentDateTime;
-console.log("escRepCustTrackingDate",escRepCustTrackingDate)
-if (customerTrackingNumberReplacement !== "NA" || customerTrackingNumberReplacement.length > 4 ){
-updatedData.escRepCustTrackingDate = escRepCustTrackingDate;
-}
-console.log(updatedData);
-hasChanges = true;
+    updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
+
+    // Check if `escRepCustTrackingDate` is already set
+    if (!currentAdditionalInfo.escRepCustTrackingDate) {
+        var escRepCustTrackingDate = currentDateTime;
+        console.log("escRepCustTrackingDate", escRepCustTrackingDate);
+
+        // Set `escRepCustTrackingDate` only if certain conditions are met
+        if (customerTrackingNumberReplacement !== "NA" && customerTrackingNumberReplacement.length > 4) {
+            updatedData.escRepCustTrackingDate = escRepCustTrackingDate;
+        }
+    } else {
+        console.log("escRepCustTrackingDate is already set. Skipping update.");
+    }
+
+    console.log(updatedData);
+    hasChanges = true;
 }
 if (currentAdditionalInfo.customerETAReplacement !== customerETAReplacement) {
 console.log("customerETAReplacement");  
@@ -5379,11 +5388,11 @@ alert("An unexpected error occurred. Please try again.");
 });
 
 // for backbutton
-document.getElementById("backButton").addEventListener("click", function () {
-    // Navigate back to the previous page in the history stack
-    console.log("back",window.history.back())
-    window.history.back();
-});
+// document.getElementById("backButton").addEventListener("click", function () {
+//     // Navigate back to the previous page in the history stack
+//     console.log("back",window.history.back())
+//     window.history.back();
+// });
 
 });
 </script>
