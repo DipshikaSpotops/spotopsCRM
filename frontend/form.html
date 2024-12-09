@@ -3656,314 +3656,192 @@ console.error("Error fetching or updating yard data:", error);
 
 
 $("#saveEsc").on("click", async function () {
-// $(".mainDiv").removeClass("blur");
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-$("#escRMA").hide();
-const yardIndex = $(this).data("yard-index");
-const orderNo = urlParams.get("orderNo");  
-const firstName = localStorage.getItem('firstName'); 
-// console.log("saveEsc", "yardIndex:", yardIndex, "orderNo:", orderNo);
-// repplacementPart
-const escalationProcess = $("#escProcess").val();
-const custReason = $("#custReason").val();
-const customerShippingMethodReplacement= $("#customerShippingMethodReplacement").val();
-const custOwnShipReplacement = $("#custOwnShipReplacement").val();
-const customerShipperReplacement = $("#customerShipperReplacement").val();
-const customerTrackingNumberReplacement = $("#customerTrackingNumberReplacement").val();
-const customerETAReplacement = $("#customerETAReplacement").val();
-const custreplacementDelivery = $("#custreplacementDelivery").val();
-const custShipToRep = $("#shipToRepAdd").val();
-console.log("part from cust rep add",custShipToRep)
-//yard part for replacement
-const yardShippingStatus = $("#yardShippingStatus").val();
-const yardShippingMethod = $("#yardShippingMethod").val();
-const yardShipper = $("#yardShipper").val();
-const yardTrackingNumber = $("#yardTrackingNumber").val();
-const yardOwnShipping = $("#yardownShipping").val();
-const yardTrackingETA = $("#yardTrackingETA").val();
-const yardTrackingLink = $("#yardTrackingLink").val();
-const yardDeliveryStatus = $('#yardShippingStatus').val();
-if (yardDeliveryStatus === "Delivered"){
-  $("#orderStatus").val("Order Fulfilled");
-}else{
-  $("#orderStatus").val("Escalation");
-}
-// return parts
-const customerShippingMethodReturn = $("#customerShippingMethodReturn").val();
-const custretPartETA = $("#custretPartETA").val();
-// const escRetTrackingDate = currentDateTime;
-const customerShipperReturn = $("#customerShipperReturn").val();
-const returnTrackingCust = $("#returnTrackingCust").val();
-const custOwnShippingReturn = $("#custOwnShippingReturn").val();
-const custReturnDelivery = $("#custReturnDelivery").val();
-const custShipToRet =$("#shipToReturnAdd").val();
-console.log("part from cust ret add",custShipToRet)
-// console.log("replacements", escalationProcess, custReason, customerShippingMethodReplacement, customerShipperReplacement, customerTrackingNumberReplacement, "custOwnShipping",custOwnShipReplacement,custreplacementDelivery,yardShippingStatus, yardShippingMethod, yardShipper, yardTrackingNumber, yardOwnShipping);
-// console.log("returns",escalationProcess,customerShippingMethodReturn,customerShipperReturn,custOwnShippingReturn,returnTrackingCust,custReturnDelivery);
-const token = localStorage.getItem('token');
-// reimbursement parts
-const reimbursementAmount = $("#reimAmount").val();
-const isReimbursedChecked = $('#reimbursed').prop('checked');
-if (reimbursementAmount) {
-          // console.log("reimbursedAmount",reimbursementAmount);
-const yardStatus = "Part delivered";  
-const newOrderStatus = "Order Fulfilled";
-const yardIndex = 0;  // Example index
-const newOrderStatusR = {
-orderStatus: newOrderStatus,
-yardStatus: yardStatus,
-yardIndex: yardIndex  
-};
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    $("#escRMA").hide();
 
-console.log("Sending data:", newOrderStatusR);
-fetch(`https://www.spotops360.com/orderAndYardStatus/${orderNo}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(newOrderStatusR),
-})
-.then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json();
-})
-.then((data) => {
-console.log("Order and Yard status updated successfully:", data);
-updateOrderHistory(data.orderHistory);  
-})
-.catch((error) => {
-console.error("Error updating order and yard status:", error);
-});
-}
-console.log('Reimbursement Amount:', reimbursementAmount);
-console.log('Is Reimbursed Checked:', isReimbursedChecked);
-try {
-// Fetching the current data for comparison
-const response = await axios.get(
-`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
-if (response.status !== 200) {
-throw new Error("Failed to fetch order data");
-}
-const currentAdditionalInfo = response.data;
-console.log("currentAdditionalInfo",currentAdditionalInfo);
-const updatedData = {};
-let hasChanges = false;
-if (currentAdditionalInfo.escalationProcess !== escalationProcess) {
-updatedData.escalationProcess = escalationProcess;
-hasChanges = true;
-}
-// for replacement__ part from customer
-if (currentAdditionalInfo.custReason !== custReason) {
-updatedData.custReason = custReason;
-hasChanges = true;
-}
-if (currentAdditionalInfo.customerShippingMethodReplacement !== customerShippingMethodReplacement) {
-updatedData.customerShippingMethodReplacement = customerShippingMethodReplacement;
-hasChanges = true;
-}
-if (currentAdditionalInfo.customerShipperReplacement !== customerShipperReplacement) {
-updatedData.customerShipperReplacement = customerShipperReplacement;
-hasChanges = true;
-}
-if (currentAdditionalInfo.custOwnShipReplacement !== custOwnShipReplacement) {
-updatedData.custOwnShipReplacement = custOwnShipReplacement;
-hasChanges = true;
-}
-if (currentAdditionalInfo.customerTrackingNumberReplacement !== customerTrackingNumberReplacement) {
-    updatedData.customerTrackingNumberReplacement = customerTrackingNumberReplacement;
+    const yardIndex = $(this).data("yard-index");
+    const orderNo = urlParams.get("orderNo");
+    const firstName = localStorage.getItem("firstName");
+    const token = localStorage.getItem("token");
 
-    // Check if `escRepCustTrackingDate` is already set
-    if (!currentAdditionalInfo.escRepCustTrackingDate) {
-        var escRepCustTrackingDate = currentDateTime;
-        console.log("escRepCustTrackingDate", escRepCustTrackingDate);
+    const currentDateTime = moment().tz("America/Chicago").format("YYYY-MM-DD HH:mm:ss");
 
-        // Set `escRepCustTrackingDate` only if certain conditions are met
-        if (customerTrackingNumberReplacement !== "NA" && customerTrackingNumberReplacement.length > 4) {
-            updatedData.escRepCustTrackingDate = escRepCustTrackingDate;
+    // Collect all input values
+    const updatedFields = {
+        escalationProcess: $("#escProcess").val(),
+        custReason: $("#custReason").val(),
+        customerShippingMethodReplacement: $("#customerShippingMethodReplacement").val(),
+        custOwnShipReplacement: $("#custOwnShipReplacement").val(),
+        customerShipperReplacement: $("#customerShipperReplacement").val(),
+        customerTrackingNumberReplacement: $("#customerTrackingNumberReplacement").val(),
+        customerETAReplacement: $("#customerETAReplacement").val(),
+        custreplacementDelivery: $("#custreplacementDelivery").val(),
+        yardShippingStatus: $("#yardShippingStatus").val(),
+        yardShippingMethod: $("#yardShippingMethod").val(),
+        yardShipper: $("#yardShipper").val(),
+        yardTrackingNumber: $("#yardTrackingNumber").val(),
+        yardOwnShipping: $("#yardownShipping").val(),
+        yardTrackingETA: $("#yardTrackingETA").val(),
+        yardTrackingLink: $("#yardTrackingLink").val(),
+        customerShippingMethodReturn: $("#customerShippingMethodReturn").val(),
+        custretPartETA: $("#custretPartETA").val(),
+        customerShipperReturn: $("#customerShipperReturn").val(),
+        returnTrackingCust: $("#returnTrackingCust").val(),
+        custReturnDelivery: $("#custReturnDelivery").val(),
+        reimbursementAmount: $("#reimAmount").val(),
+        isReimbursedChecked: $("#reimbursed").prop("checked"),
+    };
+
+    try {
+        // Fetch current data from backend for comparison
+        const response = await axios.get(
+            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+            {
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
+            }
+        );
+
+        if (response.status !== 200) {
+            alert("Failed to fetch current order data.");
+            return;
         }
-    } else {
-        console.log("escRepCustTrackingDate is already set. Skipping update.");
+
+        const currentAdditionalInfo = response.data;
+        const updatedData = {};
+        let hasChanges = false;
+
+        // Helper function to normalize values for comparison
+        const normalizeValue = (value) => {
+            if (value === null || value === undefined) return "";
+            if (typeof value === "boolean") return value ? "true" : "false";
+            if (typeof value === "number") return value.toString();
+            return value.toString().trim();
+        };
+
+        // Helper function to check if values have changed
+        const hasValueChanged = (oldValue, newValue) => normalizeValue(oldValue) !== normalizeValue(newValue);
+
+        // Iterate over updated fields and compare
+        for (const [key, newValue] of Object.entries(updatedFields)) {
+            const oldValue = currentAdditionalInfo[key];
+
+            if (hasValueChanged(oldValue, newValue)) {
+                updatedData[key] = newValue;
+
+                // Handle special cases
+                if (key === "customerTrackingNumberReplacement" && !currentAdditionalInfo.escRepCustTrackingDate) {
+                    updatedData.escRepCustTrackingDate = currentDateTime;
+                }
+
+                if (key === "yardTrackingNumber" && !currentAdditionalInfo.escRepYardTrackingDate) {
+                    updatedData.escRepYardTrackingDate = currentDateTime;
+                }
+
+                if (key === "returnTrackingCust" && !currentAdditionalInfo.escRetTrackingDate) {
+                    updatedData.escRetTrackingDate = currentDateTime;
+                }
+
+                if (key === "custreplacementDelivery") {
+                    if (newValue === "In Transit") {
+                        updatedData.inTransitpartCustDate = currentDateTime;
+                        delete updatedData.repPartCustDeliveredDate;
+                    } else if (newValue === "Delivered") {
+                        updatedData.repPartCustDeliveredDate = currentDateTime;
+                        delete updatedData.inTransitpartCustDate;
+                    }
+                }
+
+                if (key === "yardShippingStatus") {
+                    if (newValue === "In Transit") {
+                        updatedData.inTransitpartYardDate = currentDateTime;
+                        delete updatedData.yardDeliveredDate;
+                    } else if (newValue === "Delivered") {
+                        updatedData.yardDeliveredDate = currentDateTime;
+                        delete updatedData.inTransitpartYardDate;
+                    }
+                }
+
+                if (key === "custReturnDelivery") {
+                    if (newValue === "In Transit") {
+                        updatedData.inTransitReturnDate = currentDateTime;
+                        delete updatedData.returnDeliveredDate;
+                    } else if (newValue === "Delivered") {
+                        updatedData.returnDeliveredDate = currentDateTime;
+                        delete updatedData.inTransitReturnDate;
+                    }
+                }
+
+                hasChanges = true;
+            }
+        }
+
+        // Handle reimbursement separately
+        const reimbursementAmount = $("#reimAmount").val();
+        const isReimbursedChecked = $("#reimbursed").prop("checked");
+
+        if (reimbursementAmount) {
+            const yardStatus = "Part delivered";
+            const newOrderStatus = "Order Fulfilled";
+            const reimbursementUpdate = {
+                orderStatus: newOrderStatus,
+                yardStatus: yardStatus,
+                yardIndex: 0, // Example index
+            };
+
+            console.log("Sending data for reimbursement:", reimbursementUpdate);
+
+            try {
+                const reimbursementResponse = await fetch(
+                    `https://www.spotops360.com/orderAndYardStatus/${orderNo}?firstName=${firstName}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(reimbursementUpdate),
+                    }
+                );
+
+                if (!reimbursementResponse.ok) {
+                    throw new Error("Failed to update order and yard status.");
+                }
+
+                const reimbursementData = await reimbursementResponse.json();
+                console.log("Order and Yard status updated successfully:", reimbursementData);
+
+                if (reimbursementData.orderHistory) {
+                    updateOrderHistory(reimbursementData.orderHistory);
+                }
+            } catch (error) {
+                console.error("Error updating reimbursement details:", error);
+                alert("Error updating reimbursement details.");
+            }
+        }
+
+        // Send updated data to backend
+        if (hasChanges) {
+            console.log("Changes detected. Sending updated data:", updatedData);
+
+            const patchResponse = await axios.put(
+                `https://www.spotops360.com/orders/${orderNo}/escalation?firstName=${firstName}`,
+                { ...updatedData, yardIndex, firstName, orderNo },
+                { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+            );
+
+            if (patchResponse.status === 200) {
+                alert("Yard Index information and orderHistory updated successfully!");
+            } else {
+                alert("Failed to update Yard Index information and orderHistory.");
+            }
+        } else {
+            console.log("No changes detected, no update required.");
+        }
+    } catch (error) {
+        console.error("Error saving Yard Index information", error);
+        alert("Error saving Yard Index information.");
     }
-
-    console.log(updatedData);
-    hasChanges = true;
-}
-if (currentAdditionalInfo.customerETAReplacement !== customerETAReplacement) {
-console.log("customerETAReplacement");  
-updatedData.customerETAReplacement = customerETAReplacement;
-hasChanges = true;
-}
-if (currentAdditionalInfo.custreplacementDelivery !== custreplacementDelivery) {
-updatedData.custreplacementDelivery = custreplacementDelivery;
-
-if (custreplacementDelivery === "In Transit") {
-updatedData.inTransitpartCustDate = currentDateTime;
-// Explicitly ensuring repPartCustDeliveredDate is not updated
-if ('repPartCustDeliveredDate' in updatedData) {
-delete updatedData.repPartCustDeliveredDate;
-}
-} else if (custreplacementDelivery === "Delivered") {
-updatedData.repPartCustDeliveredDate = currentDateTime;
-// Explicitly ensure inTransitpartCustDate is not updated
-if ('inTransitpartCustDate' in updatedData) {
-delete updatedData.inTransitpartCustDate;
-}
-}
-hasChanges = true;
-}
-if (currentAdditionalInfo.custShipToRep !== custShipToRep) {
-updatedData.custShipToRep = custShipToRep;
-hasChanges = true;
-}
-// part from yard
-if (currentAdditionalInfo.yardShippingStatus !== yardShippingStatus) {
-updatedData.yardShippingStatus = yardShippingStatus;
-if (yardShippingStatus === "In Transit") {
-updatedData.inTransitpartYardDate = currentDateTime;
-// Explicitly ensure yardDeliveredDate is not updated
-if ('yardDeliveredDate' in updatedData) {
-delete updatedData.yardDeliveredDate;
-}
-} else if (yardShippingStatus === "Delivered") {
-updatedData.yardDeliveredDate = currentDateTime;
-// Explicitly ensure inTransitpartYardDate is not updated
-if ('inTransitpartYardDate' in updatedData) {
-delete updatedData.inTransitpartYardDate;
-}
-}
-hasChanges = true;
-}
-
-if (currentAdditionalInfo.yardShippingMethod !== yardShippingMethod) {
-updatedData.yardShippingMethod = yardShippingMethod;
-hasChanges = true;
-}
-if (currentAdditionalInfo.yardShipper !== yardShipper) {
-updatedData.yardShipper = yardShipper;
-hasChanges = true;
-}
-if (currentAdditionalInfo.yardTrackingNumber !== yardTrackingNumber) {
-updatedData.yardTrackingNumber = yardTrackingNumber;
-var escRepYardTrackingDate = currentDateTime;
-console.log("escRepCustTrackingDate",escRepYardTrackingDate)
-if (yardTrackingNumber !== "NA" || yardTrackingNumber.length > 4 ){
-updatedData.escRepYardTrackingDate = escRepYardTrackingDate;
-}
-hasChanges = true;
-}
-if (currentAdditionalInfo.yardOwnShipping !== yardOwnShipping) {
-updatedData.yardOwnShipping = yardOwnShipping;
-hasChanges = true;
-}
-// part from yard
-if (currentAdditionalInfo.customerShippingMethodReturn !== customerShippingMethodReturn) {
-updatedData.customerShippingMethodReturn = customerShippingMethodReturn;
-hasChanges = true;
-}
-if (currentAdditionalInfo.custretPartETA !== custretPartETA) {
-updatedData.custretPartETA = custretPartETA;
-hasChanges = true;
-}
-if (currentAdditionalInfo.customerShipperReturn !== customerShipperReturn) {
-updatedData.customerShipperReturn = customerShipperReturn;
-hasChanges = true;
-}
-if (currentAdditionalInfo.custOwnShippingReturn !== custOwnShippingReturn) {
-updatedData.custOwnShippingReturn = custOwnShippingReturn;
-hasChanges = true;
-}
-if (currentAdditionalInfo.returnTrackingCust !== returnTrackingCust) {
-updatedData.returnTrackingCust = returnTrackingCust;
-let escRetTrackingDate = currentDateTime;
-console.log("escRepCustTrackingDate",escRetTrackingDate)
-if (returnTrackingCust !== "NA" || returnTrackingCust.length > 4 ){
-updatedData.escRetTrackingDate = escRetTrackingDate;
-}
-hasChanges = true;
-}
-if (currentAdditionalInfo.custReturnDelivery !== custReturnDelivery) {
-updatedData.custReturnDelivery = custReturnDelivery;
-if (custReturnDelivery === "In Transit") {
-updatedData.inTransitReturnDate = currentDateTime;
-// Explicitly ensure returnDeliveredDate is not updated
-if ('returnDeliveredDate' in updatedData) {
-delete updatedData.returnDeliveredDate;
-}
-} else if (custReturnDelivery === "Delivered") {
-updatedData.returnDeliveredDate = currentDateTime;
-// Explicitly ensure inTransitReturnDate is not updated
-if ('inTransitReturnDate' in updatedData) {
-delete updatedData.inTransitReturnDate;
-}
-}
-
-hasChanges = true;
-}
-if (currentAdditionalInfo.custShipToRet !== custShipToRet) {
-updatedData.custShipToRet = custShipToRet;
-hasChanges = true;
-}
-if (currentAdditionalInfo.yardTrackingETA !== yardTrackingETA) {
-updatedData.yardTrackingETA = yardTrackingETA;
-hasChanges = true;
-}
-if (currentAdditionalInfo.yardTrackingLink !== yardTrackingLink) {
-updatedData.yardTrackingLink = yardTrackingLink;
-hasChanges = true;
-}
-
-// for reimburesement
-if (currentAdditionalInfo.reimbursementAmount !== reimbursementAmount) {
-updatedData.reimbursementAmount = reimbursementAmount;
-hasChanges = true;
-}
-if (currentAdditionalInfo.isReimbursedChecked !== isReimbursedChecked) {
-updatedData.isReimbursedChecked = isReimbursedChecked;
-hasChanges = true;
-}   
-
-// If there are changes, update the Yard Info and Order History
-if (hasChanges) {
-const patchResponse = await axios.put(
-`https://www.spotops360.com/orders/${orderNo}/escalation?firstName=${firstName}`,
-{
-...updatedData,
-yardIndex: yardIndex,
-firstName: firstName,
-orderNo: orderNo   
-},
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
-);
-
-if (patchResponse.status === 200) {
-$("#orderStatus").val("Escalation");
-alert("Yard Index information and orderHistory updated successfully!");
-
-} else {
-throw new Error("Failed to update Yard Index information and orderHistory");
-}
-// window.location.reload();
-$("#orderStatus").val("Escalation");
-} else {
-console.log("No changes detected, no update required.");
-}
-// window.location.reload();
-} catch (error) {
-console.error("Error saving Yard Index information", error);
-alert("Error saving Yard Index information");
-}
 });
-
-
 
 
 async function fetchAndDisplayNotes(yardIndex) {
