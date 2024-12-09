@@ -3838,6 +3838,7 @@ $("#saveEsc").on("click", async function () {
             console.log("No changes detected, no update required.");
         }
     } catch (error) {
+      alert("No changes have been made")
         console.error("Error saving Yard Index information", error);
         alert("Error saving Yard Index information.");
     }
