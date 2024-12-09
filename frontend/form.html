@@ -3664,6 +3664,9 @@ $("#saveEsc").on("click", async function () {
     const orderNo = urlParams.get("orderNo");
     const firstName = localStorage.getItem("firstName");
     const token = localStorage.getItem("token");
+
+    const currentDateTime = moment().tz("America/Chicago").format("YYYY-MM-DD HH:mm:ss");
+
     // Collect all input values
     const updatedFields = {
         escalationProcess: $("#escProcess").val(),
@@ -3738,18 +3741,37 @@ $("#saveEsc").on("click", async function () {
                 if (key === "returnTrackingCust" && !currentAdditionalInfo.escRetTrackingDate) {
                     updatedData.escRetTrackingDate = currentDateTime;
                 }
-
                 if (key === "custreplacementDelivery") {
-                    if (newValue === "In Transit") {
-                        updatedData.inTransitpartCustDate = currentDateTime;
-                        delete updatedData.repPartCustDeliveredDate;
-                    } else if (newValue === "Delivered") {
-                        updatedData.repPartCustDeliveredDate = currentDateTime;
-                        delete updatedData.inTransitpartCustDate;
-                    }
-                }
+    if (newValue === "In Transit") {
+        // Update `inTransitpartCustDate` only if it's not already set
+        if (!currentAdditionalInfo.inTransitpartCustDate) {
+            updatedData.inTransitpartCustDate = currentDateTime;
+            console.log("Setting inTransitpartCustDate for the first time:", currentDateTime);
+        } else {
+            console.log("inTransitpartCustDate is already set, skipping update.");
+        }
 
-                if (key === "yardShippingStatus") {
+        // Ensure `repPartCustDeliveredDate` is not updated
+        if ("repPartCustDeliveredDate" in updatedData) {
+            delete updatedData.repPartCustDeliveredDate;
+        }
+    } else if (newValue === "Delivered") {
+        // Update `repPartCustDeliveredDate` only if it's not already set
+        if (!currentAdditionalInfo.repPartCustDeliveredDate) {
+            updatedData.repPartCustDeliveredDate = currentDateTime;
+            console.log("Setting repPartCustDeliveredDate for the first time:", currentDateTime);
+        } else {
+            console.log("repPartCustDeliveredDate is already set, skipping update.");
+        }
+
+        // Ensure `inTransitpartCustDate` is not updated
+        if ("inTransitpartCustDate" in updatedData) {
+            delete updatedData.inTransitpartCustDate;
+        }
+    }
+}
+
+           if (key === "yardShippingStatus") {
                     if (newValue === "In Transit") {
                         updatedData.inTransitpartYardDate = currentDateTime;
                         delete updatedData.yardDeliveredDate;
@@ -3835,7 +3857,6 @@ $("#saveEsc").on("click", async function () {
             console.log("No changes detected, no update required.");
         }
     } catch (error) {
-      alert("No changes have been made")
         console.error("Error saving Yard Index information", error);
         alert("Error saving Yard Index information.");
     }
