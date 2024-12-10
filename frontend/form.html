@@ -3691,6 +3691,7 @@ $("#saveEsc").on("click", async function () {
     };
 
     try {
+      console.log("orderNo",orderno,yardIndex);
         const response = await axios.get(
             `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
             { headers: token ? { Authorization: `Bearer ${token}` } : {} }
