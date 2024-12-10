@@ -3719,12 +3719,16 @@ $("#saveEsc").on("click", async function () {
             const oldValue = currentAdditionalInfo[key];
 
             if (hasValueChanged(oldValue, newValue)) {
-                if (key === "customerTrackingNumberReplacement" && currentAdditionalInfo.escRepCustTrackingDate == "") {
-                    if (normalizeValue(newValue).length) {
-                        updatedData.escRepCustTrackingDate = currentDateTime;
-                    }
-                }
-
+              if (key === "customerTrackingNumberReplacement") {
+    if (!currentAdditionalInfo.escRepCustTrackingDate || currentAdditionalInfo.escRepCustTrackingDate.trim() === "") {
+        // Only update if escRepCustTrackingDate is not set
+        if (newValue.length > 4) {
+            updatedData.escRepCustTrackingDate = currentDateTime;
+        }
+    } else {
+        console.log("escRepCustTrackingDate is already set, skipping update.");
+    }
+}
                 if (key === "yardTrackingNumber" && currentAdditionalInfo.escRepYardTrackingDate == "")  {
                     if (normalizeValue(newValue).length > 4) {
                         updatedData.escRepYardTrackingDate = currentDateTime;
