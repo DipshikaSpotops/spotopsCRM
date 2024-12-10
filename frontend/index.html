@@ -256,6 +256,7 @@ aria-labelledby="userMenu"
 <a class="nav-link yard-located-orders" id="yard-located-orders-linl" href="yardLocatedOrders.html">Yard Located Orders</a>
 <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
 <a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
+<a class="nav-link sales-data-link" id="sales-data-link" href="salesData.html">Sales Data</a>
 <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a>
 <!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
 <!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
@@ -492,7 +493,7 @@ $("#submenu-reports .nav-link")
 .hide();
 // Hide specific dashboards links for Team Charlie
 $(
-"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-fulfilled-link,.escalation,.view-ordersSheet-link,.view-orders-link,.view-all-orders-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .refunded-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .escalated-orders, #submenu-dashboards .ongoingEscalated-orders, #submenu-dashboards .view-orders-monthly-link,#submenu-dashboards .yard-located-orders"
+"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-fulfilled-link,.escalation,.view-ordersSheet-link,.view-orders-link,.view-all-orders-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .refunded-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .escalated-orders, #submenu-dashboards .ongoingEscalated-orders, #submenu-dashboards .view-orders-monthly-link,#submenu-dashboards .yard-located-orders, #submenu-dashboards .sales-data-link"
 ).hide();
 // Hide teams and users sections for Team Charlie
 $(".nav-item:has(#submenu-teams)").hide();
@@ -502,7 +503,7 @@ $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 $(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link"
 ).hide();
 } else if (team === "Team Sussane") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
@@ -511,7 +512,7 @@ $(".nav-item:has(#submenu-users)").hide();
 $('#submenu-reports .nav-link:contains("Escalation Resolutions")').hide();
 // escalationResolvingTime
 $(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
 ).hide();
 } else if (role === "Admin") {
 // Hide specific reports links for Admin
