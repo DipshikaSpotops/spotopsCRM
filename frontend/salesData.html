@@ -407,6 +407,12 @@ aria-labelledby="userMenu"
   placeholder="Search..."
   />
   </div>
+  <div id="gpTotals" style="border: 1px solid #c0c0c0; text-align: center; height: auto; width: auto; border-radius: 8px; margin: 0% 1%; background-color: #f0f0f0; padding: 5px; position: fixed; top: 60px; left: 50%; transform: translateX(-50%);">
+    <div id="totalEstGP">Total Est GP: $0</div>
+    <div id="totalCurrentGP">Total Current GP: $0</div>
+    <div id="totalActualGP">Total Actual GP: $0</div>
+  </div>
+  
   </div>
   <div id="headerWrap" style="position: fixed;margin-top: 0%;padding: 0%;background-color: white;width: 84.7%;height: 17vh;margin-left: -0.3%;">
 <!--  controls -->
@@ -574,24 +580,57 @@ sortTable(index, type);
 });
 }
 });
+function calculateAndUpdateTotals(orders) {
+  let totalEstGP = 0;
+  let totalCurrentGP = 0;
+  let totalActualGP = 0;
+
+  orders.forEach(order => {
+    totalEstGP += order.grossProfit || 0; // Assuming `grossProfit` is the Est GP
+    totalCurrentGP += order.currentGP || 0; // Assuming `currentGP` is pre-calculated
+    totalActualGP += order.actualGP || 0;
+  });
+
+  // Update the totals in the UI
+  document.getElementById("totalEstGP").innerHTML = `Total Est GP: $${totalEstGP.toFixed(2)}`;
+  document.getElementById("totalCurrentGP").innerHTML = `Total Current GP: $${totalCurrentGP.toFixed(2)}`;
+  document.getElementById("totalActualGP").innerHTML = `Total Actual GP: $${totalActualGP.toFixed(2)}`;
+}
+
 function renderFilteredOrders(agentName) {
   // Filter orders based on the salesAgent field
-  const filteredOrders = allOrders.filter(order => 
+  const filteredOrders = allOrders.filter(order =>
     order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
   );
+
+  // Update totals dynamically
+  calculateAndUpdateTotals(filteredOrders);
+
+  // Update the total orders dynamically
+  document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
 
   // Render the filtered orders in the table
   renderTableRows(1, filteredOrders);
   createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
-  // Attach change event to the dropdown
-  $("#userDropdown").on("change", function () {
-    const selectedAgent = $(this).val();
-    if (selectedAgent) {
-      renderFilteredOrders(selectedAgent);
-    }
-  });
+// Attach change event to the dropdown
+$("#userDropdown").on("change", function () {
+  const selectedAgent = $(this).val();
+  if (selectedAgent) {
+    renderFilteredOrders(selectedAgent);
+  } else {
+    // Reset to all orders if no agent is selected
+    calculateAndUpdateTotals(allOrders);
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+    renderTableRows(1, allOrders);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+  }
+});
+
+// Calculate totals at initial load
+calculateAndUpdateTotals(allOrders);
+
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
 const start = (page - 1) * rowsPerPage;
