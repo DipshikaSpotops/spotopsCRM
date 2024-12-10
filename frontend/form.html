@@ -3720,7 +3720,6 @@ $("#saveEsc").on("click", async function () {
 
             if (hasValueChanged(oldValue, newValue)) {
               if (key === "customerTrackingNumberReplacement") {
-    if (!currentAdditionalInfo.escRepCustTrackingDate || currentAdditionalInfo.escRepCustTrackingDate.trim() === "") {
         // Only update if escRepCustTrackingDate is not set
         if (newValue.length > 4) {
             updatedData.escRepCustTrackingDate = currentDateTime;
@@ -3728,18 +3727,24 @@ $("#saveEsc").on("click", async function () {
     } else {
         console.log("escRepCustTrackingDate is already set, skipping update.");
     }
-}
+}    if (!currentAdditionalInfo.escRepCustTrackingDate || currentAdditionalInfo.escRepCustTrackingDate.trim() === "") {
+
                 if (key === "yardTrackingNumber" && currentAdditionalInfo.escRepYardTrackingDate == "")  {
                     if (normalizeValue(newValue).length > 4) {
                         updatedData.escRepYardTrackingDate = currentDateTime;
                     }
                 }
+                if (hasValueChanged(oldValue, newValue)) {
+              if (key === "returnTrackingCust") {
+        // Only update if escRetTrackingDate is not set
+        if (newValue.length > 4) {
+            updatedData.escRetTrackingDate = currentDateTime;
+        }
+    } else {
+        console.log("escRetTrackingDate is already set, skipping update.");
+    }
+}  
 
-                if (key === "returnTrackingCust" && currentAdditionalInfo.escRetTrackingDate == "") {
-                    if (normalizeValue(newValue).length > 4) {
-                        updatedData.escRetTrackingDate = currentDateTime;
-                    }
-                }
 
                 if (key === "custreplacementDelivery") {
                     if (newValue === "In Transit" && !currentAdditionalInfo.inTransitpartCustDate) {
