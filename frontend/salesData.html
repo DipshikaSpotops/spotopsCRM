@@ -770,6 +770,7 @@ $('#pagination-controls').on('click', '.page-btn', function () {
 const page = $(this).data('page');
 currentPage = page;
 renderTableRows(currentPage);
+
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 });
 
@@ -852,6 +853,7 @@ allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+calculateAndUpdateTotals(allOrders);
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
