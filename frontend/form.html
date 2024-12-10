@@ -3720,7 +3720,7 @@ $("#saveEsc").on("click", async function () {
 
             if (hasValueChanged(oldValue, newValue)) {
                 if (key === "customerTrackingNumberReplacement" && !currentAdditionalInfo.escRepCustTrackingDate) {
-                    if (normalizeValue(newValue).length > 4) {
+                    if (normalizeValue(newValue).length > 4 && oldValue !== newValue) {
                         updatedData.escRepCustTrackingDate = currentDateTime;
                     }
                 }
