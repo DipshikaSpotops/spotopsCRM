@@ -36,31 +36,31 @@ height: auto;
 border-radius: 10px; 
 }
 #disputeDiv, #custRefund, #cancellingOrder {
-  display: none; /* Hidden by default */
-  position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 54%;
-    background-color: white;
-    border: 1px solid #c0c0c0;
-    border-radius: 10px;
-    padding: 20px;
-    z-index: 1000;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+display: none; /* Hidden by default */
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 54%;
+background-color: white;
+border: 1px solid #c0c0c0;
+border-radius: 10px;
+padding: 20px;
+z-index: 1000;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 body.modal-active {
-  overflow: hidden; /* Prevents background scrolling when modal is active */
+overflow: hidden; /* Prevents background scrolling when modal is active */
 }
 
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
-  z-index: 999; /* Places it just below the modal div */
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
+z-index: 999; /* Places it just below the modal div */
 }
 
 #yardSuggestionsList {
@@ -83,7 +83,7 @@ border-radius: 10px;
 margin: 18% 47%;
 }
 #cancellingOrder {
-    z-index: 1000;
+z-index: 1000;
 }
 #yardSuggestionsList .list-group-item {
 cursor: pointer;
@@ -149,81 +149,81 @@ border-radius: 18px;
 
 
 #closeRefundCollected {
-  float: right;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
+float: right;
+background: none;
+border: none;
+font-size: 20px;
+cursor: pointer;
 }
 
 #refundCollect label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
+font-weight: bold;
+margin-bottom: 5px;
+display: block;
 }
 
 #paymentStatusRefund,
 #paymentStatusSelect {
-  display: inline-block;
-  width: calc(50% - 10px); /* Adjust width for label and dropdown */
-  margin-right: 10px;
+display: inline-block;
+width: calc(50% - 10px); /* Adjust width for label and dropdown */
+margin-right: 10px;
 }
 
 #paymentStatusRefund {
-  width: auto; /* Ensure the label's width is adjusted */
-  margin-right: 10px;
-  vertical-align: middle;
+width: auto; /* Ensure the label's width is adjusted */
+margin-right: 10px;
+vertical-align: middle;
 }
 
 #paymentStatusSelect {
-  width: 60%; /* Set dropdown width */
+width: 60%; /* Set dropdown width */
 }
 
 #refundedAmountContainer,
 #storeCreditContainer,
 #collectRefundContainer {
-  margin-top: 15px;
+margin-top: 15px;
 }
 
 #refundedAmountContainer label,
 #storeCreditContainer label,
 #collectRefundContainer label {
-  display: inline-block;
-  margin-right: 10px;
+display: inline-block;
+margin-right: 10px;
 }
 
 #refundSubmit {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 15px;
+background-color: #007bff;
+color: white;
+border: none;
+padding: 10px 15px;
+border-radius: 4px;
+cursor: pointer;
+margin-top: 15px;
 }
 
 #refundSubmit:hover {
-  background-color: #0056b3;
+background-color: #0056b3;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  #refundCollect {
-    width: 95%;
-  }
+#refundCollect {
+width: 95%;
+}
 
-  #paymentStatusRefund,
-  #paymentStatusSelect {
-    width: 100%;
-    display: block;
-    margin-bottom: 10px;
-  }
+#paymentStatusRefund,
+#paymentStatusSelect {
+width: 100%;
+display: block;
+margin-bottom: 10px;
+}
 
-  #refundedAmountContainer,
-  #storeCreditContainer,
-  #collectRefundContainer {
-    margin-top: 10px;
-  }
+#refundedAmountContainer,
+#storeCreditContainer,
+#collectRefundContainer {
+margin-top: 10px;
+}
 }
 
 #editYardPopup {
@@ -1014,7 +1014,7 @@ window.location.href = "login_signup.html";
 </div>
 <div style="display: flex" class="mainDiv">
 <div class="sidebarOrder">
-    <!-- <button id="backButton" class="btn btn-secondary">Back</button> -->
+<!-- <button id="backButton" class="btn btn-secondary">Back</button> -->
 <h2 id="orderHistory">Order History - </h2>
 <ul id="orderHistoryList" class="timeline"></ul>
 </div>
@@ -1087,32 +1087,32 @@ window.location.href = "login_signup.html";
 <div class="form-group col-md-6">
 <label for="pReq">Part Required</label>
 <select class="form-control" id="pReq" required>
-  <option value="ABS Module">ABS Module</option>
-  <option value="ABS Pump">ABS Pump</option>
-  <option value="Alternator">Alternator</option>
-  <option value="Brake Booster">Brake Booster</option>
-  <option value="Door Glass">Door Glass</option>
-  <option value="Engine">Engine</option>
-  <option value="Exhaust Manifold">Exhaust Manifold</option>
-  <option value="Fuse Box">Fuse Box</option>
-  <option value="GPS Screen">GPS Screen</option>
-  <option value="Headlight">Headlight</option>
-  <option value="Master Cylinder">Master Cylinder</option>
-  <option value="Mirror">Mirror</option>
-  <option value="Modules">Modules</option>
-  <option value="Radio/CD">Radio/CD</option>
-  <option value="Rear Axle Assembly">Rear Axle Assembly</option>
-  <option value="Seat Belt, Front">Seat Belt, Front</option>
-  <option value="Speedometer">Speedometer</option>
-  <option value="Spindle">Spindle</option>
-  <option value="Starter">Starter</option>
-  <option value="Steering Rack/Box/Gear">Steering Rack/Box/Gear</option>
-  <option value="Transmission">Transmission</option>
-  <option value="Transmission Computer">Transmission Computer</option>
-  <option value="Window Regulator">Window Regulator</option>
-  <option value="Wiper Linkage">Wiper Linkage</option>
-  <option value="Window Regulator">Window Regulator</option>
-  </select>
+<option value="ABS Module">ABS Module</option>
+<option value="ABS Pump">ABS Pump</option>
+<option value="Alternator">Alternator</option>
+<option value="Brake Booster">Brake Booster</option>
+<option value="Door Glass">Door Glass</option>
+<option value="Engine">Engine</option>
+<option value="Exhaust Manifold">Exhaust Manifold</option>
+<option value="Fuse Box">Fuse Box</option>
+<option value="GPS Screen">GPS Screen</option>
+<option value="Headlight">Headlight</option>
+<option value="Master Cylinder">Master Cylinder</option>
+<option value="Mirror">Mirror</option>
+<option value="Modules">Modules</option>
+<option value="Radio/CD">Radio/CD</option>
+<option value="Rear Axle Assembly">Rear Axle Assembly</option>
+<option value="Seat Belt, Front">Seat Belt, Front</option>
+<option value="Speedometer">Speedometer</option>
+<option value="Spindle">Spindle</option>
+<option value="Starter">Starter</option>
+<option value="Steering Rack/Box/Gear">Steering Rack/Box/Gear</option>
+<option value="Transmission">Transmission</option>
+<option value="Transmission Computer">Transmission Computer</option>
+<option value="Window Regulator">Window Regulator</option>
+<option value="Wiper Linkage">Wiper Linkage</option>
+<option value="Window Regulator">Window Regulator</option>
+</select>
 </div>
 </div>
 <div class="form-row">
@@ -1238,9 +1238,9 @@ style="margin-right: 94px;margin-top: -9px;"
 <input type="text" class="form-control" id="custRefunds"/>
 </div>
 <div class="form-group col-md-6">
-  <label for="attention">Attention</label>
-  <input type="text" class="form-control" id="attention"/>
-  </div>
+<label for="attention">Attention</label>
+<input type="text" class="form-control" id="attention"/>
+</div>
 </div>
 <div id="yardButtonsContainer" class="d-flex flex-column align-items-center">
 <div id="yardInfoContainer" class="d-flex flex-row mb-3"></div>
@@ -1693,16 +1693,16 @@ Save
 </div>
 
 <div class="form-group col-md-4">
-  <input type="number" class="form-control" id="editWarr" placeholder="Warranty" />
-  </div>
+<input type="number" class="form-control" id="editWarr" placeholder="Warranty" />
+</div>
 </div>
 <div class="form-row addNewId">
-  <div class="form-group col-md-4">
-    <input type="number" class="form-control" id="editrefundAmount" placeholder="Refund Amount" readonly/>
-    </div>
-    <div class="form-group col-md-4">
-      <input type="text" class="form-control" id="editPaymentStatus" placeholder="Payment Status" readonly />
-      </div>
+<div class="form-group col-md-4">
+<input type="number" class="form-control" id="editrefundAmount" placeholder="Refund Amount" readonly/>
+</div>
+<div class="form-group col-md-4">
+<input type="text" class="form-control" id="editPaymentStatus" placeholder="Payment Status" readonly />
+</div>
 </div>
 </div>
 <div >
@@ -1729,43 +1729,43 @@ Save
 </div>
 <!-- card charged div ends here -->
 <!-- refund  div starts here -->
- 
-<div id="refundCollect">
-  <button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
-  <h1 style="text-align: center;">Refunds</h1>
-  
-  <h6 id="actualRefundToCollect" style="text-align: center;"></h6>
 
- 
-  <div id="collectRefundContainer" style="margin: 3% 4%;">
-    <input type="checkbox" id="collectRefundCheckbox"/>
-    <label for="collectRefundContainer" style="font-family: inherit;"> Collect Refund</label>
-  </div>  
-  <div id="refundToCollectContainer" style="display:flex;margin: 4%;white-space: nowrap;">
-    <label for="refundToCollect" style="font-family: inherit;"> Refund To Be Collected:</label>
-    <input type="number" class="form-control" id="refundToCollect" placeholder="Refund To Be Collected" style="margin: -0.6% 5%;width:63%;border-radius: 20px;text-align: center;" />
-  </div> 
-  <div style="display:flex;margin: 4%;white-space: nowrap;">
-  <label for="paymentStatusRefund" style="font-family: inherit;">Refund Collected:<br></label>
-  <select class="form-control paymentStatusRefund" id="paymentStatusSelect" style="margin: -0.6% 10%;width: 64%;border-radius: 20px;text-align: center;">
-    <option value="">Choose</option>
-    <option value="Refund collected">Yes</option>
-    <option value="Refund not collected">No</option>
-  </select>
+<div id="refundCollect">
+<button id="closeRefundCollected" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
+<h1 style="text-align: center;">Refunds</h1>
+
+<h6 id="actualRefundToCollect" style="text-align: center;"></h6>
+
+
+<div id="collectRefundContainer" style="margin: 3% 4%;">
+<input type="checkbox" id="collectRefundCheckbox"/>
+<label for="collectRefundContainer" style="font-family: inherit;"> Collect Refund</label>
+</div>  
+<div id="refundToCollectContainer" style="display:flex;margin: 4%;white-space: nowrap;">
+<label for="refundToCollect" style="font-family: inherit;"> Refund To Be Collected:</label>
+<input type="number" class="form-control" id="refundToCollect" placeholder="Refund To Be Collected" style="margin: -0.6% 5%;width:63%;border-radius: 20px;text-align: center;" />
+</div> 
+<div style="display:flex;margin: 4%;white-space: nowrap;">
+<label for="paymentStatusRefund" style="font-family: inherit;">Refund Collected:<br></label>
+<select class="form-control paymentStatusRefund" id="paymentStatusSelect" style="margin: -0.6% 10%;width: 64%;border-radius: 20px;text-align: center;">
+<option value="">Choose</option>
+<option value="Refund collected">Yes</option>
+<option value="Refund not collected">No</option>
+</select>
 </div>
-  <div id="refundedAmountContainer" style="display:flex;margin: 4%;white-space: nowrap;">
-    <label for="refundedAmount" style="font-family: inherit;">Refunded Amount:</label>
-    <input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount" style="margin: -0.6% 8%;width: 64%;border-radius: 20px;text-align:center;" />
-  </div>
-  <div id="refundDateContainer" style="display:flex;margin: 4%;white-space: nowrap;">
-    <label for="refundedDateLbel" style="font-family: inherit;">Refunded Date:</label>
-    <input type="date" class="form-control" id="refundedDate" placeholder="Enter refunded date" style="width:64%;border-radius: 20px;text-align: center;margin-top: -1%;margin-left: 12%;" />
-  </div>
-  <div id="storeCreditContainer" style="margin: 3% 4%;">
-    <input type="checkbox" id="storeCreditCheckbox" style="width: 2%;" />
-    <label for="storeCreditCheckbox" style="font-family: inherit;"> Store Credit</label>
-  </div>
-  <button class="save" id="refundSubmit" style="background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;">Save</button>
+<div id="refundedAmountContainer" style="display:flex;margin: 4%;white-space: nowrap;">
+<label for="refundedAmount" style="font-family: inherit;">Refunded Amount:</label>
+<input type="number" class="form-control" id="refundedAmount" placeholder="Enter refunded amount" style="margin: -0.6% 8%;width: 64%;border-radius: 20px;text-align:center;" />
+</div>
+<div id="refundDateContainer" style="display:flex;margin: 4%;white-space: nowrap;">
+<label for="refundedDateLbel" style="font-family: inherit;">Refunded Date:</label>
+<input type="date" class="form-control" id="refundedDate" placeholder="Enter refunded date" style="width:64%;border-radius: 20px;text-align: center;margin-top: -1%;margin-left: 12%;" />
+</div>
+<div id="storeCreditContainer" style="margin: 3% 4%;">
+<input type="checkbox" id="storeCreditCheckbox" style="width: 2%;" />
+<label for="storeCreditCheckbox" style="font-family: inherit;"> Store Credit</label>
+</div>
+<button class="save" id="refundSubmit" style="background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;">Save</button>
 </div>
 <!-- refund div ends here -->
 <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
@@ -1908,69 +1908,69 @@ Save
 </div>
 </div>
 <div class="partsFromDropdown">
-  <label>Send Email For:</label>
-  <select id="partsFromDropdown" style="text-align: center;color:grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
-  <option value="">Choose</option>
-  <option value="Part from Customer">Part from Customer</option>
-  <option value="Part from Yard">Part from Yard</option>
-  </select>
-  </div>
+<label>Send Email For:</label>
+<select id="partsFromDropdown" style="text-align: center;color:grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin: 5%;">
+<option value="">Choose</option>
+<option value="Part from Customer">Part from Customer</option>
+<option value="Part from Yard">Part from Yard</option>
+</select>
+</div>
 </div>
 <!-- div only for Return -->
 <div id="partFromCustomerReturn" class="return-column" style="display: none;">
-  <div style="display: flex;">    
-  <div><h4>Part from Customer:</h4></div>
-  </div>
-  <label>Ship To:</label>
-  <input type="text" id="shipToReturnAdd" placeholder="Ship To" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;width: 90%;">
-  <div style="display: flex;margin-top: 3%;gap: 10px;">
-  <label style="margin: 2%;">Shipping Method:</label>
-  <select id="customerShippingMethodReturn" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin-top: 1%;margin-left: -2%;">
-  <option value="">Choose</option>
-  <option value="Customer shipping">Customer shipping</option>
-  <option value="Yard shipping">Yard shipping</option>
-  <option value="Own shipping">Own shipping</option>
-  </select>
-  <div id="customerShippingValueReturn" style="display: none;">
-  <label>Enter Shipping Value:</label>
-  <input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 18px;text-align: center;width: 50%;margin-top: 3%;margin-left: 1%;">
-  </div>
-  <div id="retPartETA">
-    <label>ETA:</label>
-    <input id="custretPartETA" type="date" placeholder="ETA" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 16px;text-align: center;width: 78%;margin-top: 4%;">
-    </div>
+<div style="display: flex;">    
+<div><h4>Part from Customer:</h4></div>
+</div>
+<label>Ship To:</label>
+<input type="text" id="shipToReturnAdd" placeholder="Ship To" style="border: 1px solid #c0c0c0;color:grey;height: 3vh;border-radius: 16px;text-align: center;width: 90%;">
+<div style="display: flex;margin-top: 3%;gap: 10px;">
+<label style="margin: 2%;">Shipping Method:</label>
+<select id="customerShippingMethodReturn" style="text-align:center;color: grey;border: 1px solid #c0c0c0;border-radius: 18px;height: 3vh;margin-top: 1%;margin-left: -2%;">
+<option value="">Choose</option>
+<option value="Customer shipping">Customer shipping</option>
+<option value="Yard shipping">Yard shipping</option>
+<option value="Own shipping">Own shipping</option>
+</select>
+<div id="customerShippingValueReturn" style="display: none;">
+<label>Enter Shipping Value:</label>
+<input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 18px;text-align: center;width: 50%;margin-top: 3%;margin-left: 1%;">
+</div>
+<div id="retPartETA">
+<label>ETA:</label>
+<input id="custretPartETA" type="date" placeholder="ETA" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 16px;text-align: center;width: 78%;margin-top: 4%;">
+</div>
 </div>
 <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 3%;">
-  <!-- Shipper -->
-  <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-    <label for="customerShipperReturn" style="flex: 1; text-align: right;">Shipper:</label>
-    <select id="customerShipperReturn" style="flex: 2; text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh;">
-      <option value="">Choose</option>
-      <option value="UPS">UPS</option>
-      <option value="FedEx">FedEx</option>
-      <option value="World Wide Express">World Wide Express</option>
-      <option value="Others">USPS</option>
-    </select>
-  </div>
+<!-- Shipper -->
+<div style="flex: 1; display: flex; align-items: center; gap: 10px;">
+<label for="customerShipperReturn" style="flex: 1; text-align: right;">Shipper:</label>
+<select id="customerShipperReturn" style="flex: 2; text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh;">
+<option value="">Choose</option>
+<option value="UPS">UPS</option>
+<option value="FedEx">FedEx</option>
+<option value="World Wide Express">World Wide Express</option>
+<option value="Others">USPS</option>
+</select>
+</div>
 
-  <!-- Tracking Number -->
-  <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-    <label for="returnTrackingCust" style="flex: 1; text-align: right;white-space: nowrap;">Tracking No:</label>
-    <input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="flex: 2; border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 18px; text-align: center;">
-  </div>
+<!-- Tracking Number -->
+<div style="flex: 1; display: flex; align-items: center; gap: 10px;">
+<label for="returnTrackingCust" style="flex: 1; text-align: right;white-space: nowrap;">Tracking No:</label>
+<input type="text" id="returnTrackingCust" placeholder="Tracking Number" style="flex: 2; border: 1px solid #c0c0c0; color: grey; height: 3vh; border-radius: 18px; text-align: center;">
+</div>
 
-  <!-- Delivery Status -->
-  <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-    <label for="custReturnDelivery" style="flex: 1; text-align: right;white-space: nowrap;">Delivery Status:</label>
-    <select id="custReturnDelivery" style="flex: 2; text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh;">
-      <option value="">Choose</option>
-      <option value="In Transit">In Transit</option>
-      <option value="Delivered">Delivered</option>
-    </select>
-  </div>
+<!-- Delivery Status -->
+<div style="flex: 1; display: flex; align-items: center; gap: 10px;">
+<label for="custReturnDelivery" style="flex: 1; text-align: right;white-space: nowrap;">Delivery Status:</label>
+<select id="custReturnDelivery" style="flex: 2; text-align: center; color: grey; border: 1px solid #c0c0c0; border-radius: 18px; height: 3vh;">
+<option value="">Choose</option>
+<option value="In Transit">In Transit</option>
+<option value="Delivered">Delivered</option>
+</select>
+</div>
 </div>
 <button type="button" class="btn btn-primary" id="voidLabelReturnPartfrCust">Void Label</button>
-  </div>
+</div>
 <!-- div only for reinmursements -->
 <div id="reimbursement" class="return-column" style="display: none;">
 <div style="display: flex;margin: 5% 1%">
@@ -1987,14 +1987,14 @@ Save
 <!-- <button type="button" class="btn add-escalation-btn">+</button> -->
 <button type="button" id="attachDocument" style="margin-top:4%";>Attach a Document Link</button>
 <div id="driveLinkContainer" style="display: none; margin-top: 10px;">
-  <!-- <label for="driveLink">Enter Google Drive or PDF Link:</label> -->
-  <input type="file" id="pdfFile" accept=".pdf">
+<!-- <label for="driveLink">Enter Google Drive or PDF Link:</label> -->
+<input type="file" id="pdfFile" accept=".pdf">
 </div>
 <button type="button" id="sendRMAEmail">Send Email</button>
 <button type="button" id="saveEsc">Save</button>
 </div>
 <!-- esc part for yard button ends here  -->
- <!-- div for dispute popup -->
+<!-- div for dispute popup -->
 <div id="disputeDiv" class="dispute" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
 <div style="display: flex; justify-content: center; align-items: center; position: relative;">
 <h1 style="margin: 0; text-align: center;">Mark Dispute</h1>
@@ -2016,7 +2016,7 @@ Save
 </div>
 <button type="button" id="disputeSubmit" class="save" style="align-self: flex-start;">Save</button>
 </div>
-  <!-- div for dispute popup ends here -->
+<!-- div for dispute popup ends here -->
 <!-- customer refund - order refunding part -->
 <div id="custRefund" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
 <div style="display: flex; justify-content: center; align-items: center; position: relative;">
@@ -2042,56 +2042,56 @@ Save
 </div>
 <button type="button" id="attachRefundReceipt" style="margin-top:4%; ">Attach a Document Link</button>
 <div id="driveLinkRefund" style="display:none;margin-top:10px;">
-  <!-- <label for="driveLink">Enter Google Drive or PDF Link:</label> -->
-  <input type="file" id="pdfFileRReceipt" accept=".pdf">
+<!-- <label for="driveLink">Enter Google Drive or PDF Link:</label> -->
+<input type="file" id="pdfFileRReceipt" accept=".pdf">
 </div>
 <button type="button" class="custRefundSubmit save" style="align-self: flex-start;">Save and Send Email</button>
 </div>  
 <!-- customer refund - order refunding part ends here -->
- <!-- for cancelled order status -->
- <div id="cancellingOrder" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
-  <div style="display: flex; justify-content: center; align-items: center; position: relative;">
-  <h1 style="margin: 0; text-align: center;">Order Cancellation</h1>
-  <button type="button" id="closeCancelled" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
-  </div>
-  <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-  <div style="flex: 1; min-width: 300px;">
-  <label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
-  <input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
-  </div>
-  <div style="flex: 1; min-width: 300px;">
-  <label for="cancelledDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
-  <input type="text" id="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
-  </div>
-  <div class="containerForScroll">
-  <label for=h></label>
-  </div>
-  <div style="flex: 1; min-width: 300px;">
-    <label for="reasonCancel" style="white-space: nowrap;margin: 4% 27%;">Reason:</label>
-    <select type="text" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
-    <option value="Same Day">Same Day</option>
-    <option value="Invoice Not Signed">Invoice Not Signed</option>
-    <option value="Personal Reason">Personal Reason</option>
-    <option value="Reimbursement">Reimbursement</option>
-    <option value="Delay">Delay</option>
-    <option value="Defective/Damaged">Defective/Damaged</option>
-    <option value="Ugly Part">Ugly Part</option>
-    <option value="Wrong Part">Wrong Part</option>
-    <option value="Reprogram/VIN">Reprogram/VIN</option>
-    <option value="No Blind Shipping">No Blind Shipping</option>
-    <option value="Dispute">Dispute</option>
-    <option value="Part Not Available">Part Not Available</option>
-    <option value="No Refund">No Refund</option>
-    </select>
-    </div>
-  <div style="flex: 1; min-width: 300px;">
-  <label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
-  <input type="number" class="cancelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
-  </div>
-  </div>
-  <button type="button" id="cancelledRefundSubmit" class="save" style="align-self: flex-start;">Save and Send Email</button>
-  </div>
-  <!-- cancelled orderstatus ends -->
+<!-- for cancelled order status -->
+<div id="cancellingOrder" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
+<div style="display: flex; justify-content: center; align-items: center; position: relative;">
+<h1 style="margin: 0; text-align: center;">Order Cancellation</h1>
+<button type="button" id="closeCancelled" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+<div style="flex: 1; min-width: 300px;">
+<label for="orderedDate" style="white-space: nowrap;margin: 4% 30%;">Date of Order:</label>
+<input type="text" class="orderedDate" placeholder="Order Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" readonly>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="cancelledDate" style="white-space: nowrap;margin: 4% 28%;">Date of Cancellation:</label>
+<input type="text" id="cancelledDate" placeholder="Cancelled Date" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;" >
+</div>
+<div class="containerForScroll">
+<label for=h></label>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="reasonCancel" style="white-space: nowrap;margin: 4% 27%;">Reason:</label>
+<select type="text" id="reasonCancel" placeholder="Reason" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+<option value="Same Day">Same Day</option>
+<option value="Invoice Not Signed">Invoice Not Signed</option>
+<option value="Personal Reason">Personal Reason</option>
+<option value="Reimbursement">Reimbursement</option>
+<option value="Delay">Delay</option>
+<option value="Defective/Damaged">Defective/Damaged</option>
+<option value="Ugly Part">Ugly Part</option>
+<option value="Wrong Part">Wrong Part</option>
+<option value="Reprogram/VIN">Reprogram/VIN</option>
+<option value="No Blind Shipping">No Blind Shipping</option>
+<option value="Dispute">Dispute</option>
+<option value="Part Not Available">Part Not Available</option>
+<option value="No Refund">No Refund</option>
+</select>
+</div>
+<div style="flex: 1; min-width: 300px;">
+<label for="refundAmount" style="white-space: nowrap;margin: 4% 27%;">Refunded Amount:</label>
+<input type="number" class="cancelledRefAmount" placeholder="Refunded Amount" style="border: 1px solid #c0c0c0; height: 3vh; border-radius: 16px; text-align: center; width: 100%;">
+</div>
+</div>
+<button type="button" id="cancelledRefundSubmit" class="save" style="align-self: flex-start;">Save and Send Email</button>
+</div>
+<!-- cancelled orderstatus ends -->
 <script>
 $(document).ready(async function () {
 const queryString = window.location.search.substring(1);
@@ -2162,15 +2162,15 @@ $("#custRefund").fadeIn();
 $("body").addClass("modal-active");
 }
 else if (newOrderStatus == "Order Cancelled") {
-    console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
-    $("body").append('<div class="modal-overlay"></div>');
+console.log("refunded?", newOrderStatus, "orderPlaced on:","today" ,currentDateTime);
+$("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-    $(".orderedDate").val(orderPlacedDate);
-    $("#cancelledDate").val(currentDateTime);
-    console.log("Showing cancellation div"); // Add this line to check if it's being called
-    $("#cancellingOrder").css("display", "block").hide().fadeIn();
+$(".orderedDate").val(orderPlacedDate);
+$("#cancelledDate").val(currentDateTime);
+console.log("Showing cancellation div"); // Add this line to check if it's being called
+$("#cancellingOrder").css("display", "block").hide().fadeIn();
 // $("#cancellingOrder").fadeIn(); // Ensure this is called
-   
+
 } 
 else {
 $("#disputeDiv").fadeOut();
@@ -2211,111 +2211,111 @@ alert("Failed to update dispute information.");
 // for dispute till here
 //for custRefund
 $(".custRefundSubmit").on("click", function () {
-  var firstname = localStorage.getItem("firstName");
-  $(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
-  // Existing code to fade out the modal and get form values
-  const custRefundDate = $(".refundedDate").val();
-  const custRefundedAmount = $(".custRefundedAmount").val();
-  const orderNo = urlParams.get("orderNo");
+var firstname = localStorage.getItem("firstName");
+$(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
+// Existing code to fade out the modal and get form values
+const custRefundDate = $(".refundedDate").val();
+const custRefundedAmount = $(".custRefundedAmount").val();
+const orderNo = urlParams.get("orderNo");
 
-  // if (!custRefundedAmount || !yardIndex) {
-  //   alert("Refunded amount or yard index is missing.");
-  //   return;
-  // }
+// if (!custRefundedAmount || !yardIndex) {
+//   alert("Refunded amount or yard index is missing.");
+//   return;
+// }
 
-  const custRefundData = {
-    custRefundDate,
-    custRefundedAmount,
-    orderStatus:"Refunded"
-  };
+const custRefundData = {
+custRefundDate,
+custRefundedAmount,
+orderStatus:"Refunded"
+};
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, custRefundData)
-    .then(function (response) {
-      $("#custRefunds").val(custRefundedAmount);
+axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, custRefundData)
+.then(function (response) {
+$("#custRefunds").val(custRefundedAmount);
 
-      // Handle file upload
-      const fileInput = document.getElementById("pdfFileRReceipt");
-      const file = fileInput.files[0];
-      const formData = new FormData();
-      if (file) {
-        formData.append("pdfFile", file);
-      }
+// Handle file upload
+const fileInput = document.getElementById("pdfFileRReceipt");
+const file = fileInput.files[0];
+const formData = new FormData();
+if (file) {
+formData.append("pdfFile", file);
+}
 
-      // Send cancellation email with formData (including file)
-      fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error("Network response was not ok");
-          return response.json();
-        })
-        .then((result) => {
-          alert("Email sent to customer with refund receipt.");
-          console.log("Success:", result);
-  $(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
-  $("#custRefund").hide();
-      $(".modal-overlay").remove();
+// Send cancellation email with formData (including file)
+fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&refundedAmount=${custRefundedAmount}`, {
+method: "POST",
+body: formData,
+})
+.then((response) => {
+if (!response.ok) throw new Error("Network response was not ok");
+return response.json();
+})
+.then((result) => {
+alert("Email sent to customer with refund receipt.");
+console.log("Success:", result);
+$(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
+$("#custRefund").hide();
+$(".modal-overlay").remove();
 // $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          alert("Failed to send email with refund receipt.");
-        });
-    })
-    .catch(function (error) {
-      console.error("Error updating refund:", error);
-      alert("Failed to update refund information.");
-    });
+})
+.catch((error) => {
+console.error("Error:", error);
+alert("Failed to send email with refund receipt.");
+});
+})
+.catch(function (error) {
+console.error("Error updating refund:", error);
+alert("Failed to update refund information.");
+});
 });
 
 
 $("#cancelledRefundSubmit").on("click", function () {
-  $("#cancellingOrder").fadeOut();
-  // $(".modal-overlay").remove();
-  // $("body").removeClass("modal-active");
-  var firstname = localStorage.getItem("firstName");
-  const cancelledDate = $("#cancelledDate").val();
-  const cancelledRefAmount = $(".cancelledRefAmount").val();
-  const orderNo = urlParams.get("orderNo");
-  const reason = $("#reasonCancel").val();
+$("#cancellingOrder").fadeOut();
+// $(".modal-overlay").remove();
+// $("body").removeClass("modal-active");
+var firstname = localStorage.getItem("firstName");
+const cancelledDate = $("#cancelledDate").val();
+const cancelledRefAmount = $(".cancelledRefAmount").val();
+const orderNo = urlParams.get("orderNo");
+const reason = $("#reasonCancel").val();
 
-  console.log("Captured Data:");
-  console.log("Cancelled Date:", cancelledDate);
-  console.log("Cancelled Refund Amount:", cancelledRefAmount);
-  console.log("Order No:", orderNo);
+console.log("Captured Data:");
+console.log("Cancelled Date:", cancelledDate);
+console.log("Cancelled Refund Amount:", cancelledRefAmount);
+console.log("Order No:", orderNo);
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, {
-    cancelledDate: cancelledDate,
-    cancelledRefAmount: cancelledRefAmount,
-    orderNo: orderNo,
-    cancellationReason:reason
-  })
-    .then(function (response) {
-      console.log("Refund information updated successfully:", response.data);
-      $("#custRefunds").val(cancelledRefAmount);
-      alert("Refund information for cancelled order updated successfully!");
+axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, {
+cancelledDate: cancelledDate,
+cancelledRefAmount: cancelledRefAmount,
+orderNo: orderNo,
+cancellationReason:reason
+})
+.then(function (response) {
+console.log("Refund information updated successfully:", response.data);
+$("#custRefunds").val(cancelledRefAmount);
+alert("Refund information for cancelled order updated successfully!");
 
-      // Send cancellation email after successful refund update
-      return axios.post(`/orders/sendCancelEmail/${orderNo}?cancelledRefAmount=${cancelledRefAmount}`);
-    })
-    .then(function (response) {
-      console.log("Cancellation email sent successfully:", response.data.message);
-      alert("Cancellation email sent successfully!");
-      $(".modal-overlay").remove();
+// Send cancellation email after successful refund update
+return axios.post(`/orders/sendCancelEmail/${orderNo}?cancelledRefAmount=${cancelledRefAmount}`);
+})
+.then(function (response) {
+console.log("Cancellation email sent successfully:", response.data.message);
+alert("Cancellation email sent successfully!");
+$(".modal-overlay").remove();
 // $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
-    })
-    .catch(function (error) {
-      console.error("Error during operation:", error);
+})
+.catch(function (error) {
+console.error("Error during operation:", error);
 
-      if (error.response && error.response.status === 500) {
-        alert("Server error occurred. Please try again.");
-      } else {
-        alert("An error occurred. Please try again.");
-      }
-    });
+if (error.response && error.response.status === 500) {
+alert("Server error occurred. Please try again.");
+} else {
+alert("An error occurred. Please try again.");
+}
+});
 });
 
 // for auto-filling state,country
@@ -2433,26 +2433,26 @@ $("#custRefunds").val(custRefundedAmount.toFixed(2))
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
 if (
-  (!data.additionalInfo || data.additionalInfo.length === 0) || 
-  (data.additionalInfo && data.additionalInfo.length >= 0 && 
-   (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded"))
+(!data.additionalInfo || data.additionalInfo.length === 0) || 
+(data.additionalInfo && data.additionalInfo.length >= 0 && 
+(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded"))
 ) {
-  if (custRefundedAmount) {
-    actualGP = (sp - custRefundedAmount) - tax;
-    $("#actualGP").val(actualGP.toFixed(2));
+if (custRefundedAmount) {
+actualGP = (sp - custRefundedAmount) - tax;
+$("#actualGP").val(actualGP.toFixed(2));
 
-    if (currentActualGp !== actualGP) {
-      axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-        .then(function (response) {
-          // console.log("ActualGP information updated successfully:", response);
-        })
-        .catch(function (error) {
-          console.error("Error updating actualGP:", error);
-        });
-    } else {
-      console.log("Same actualGPS");
-    }
-  }
+if (currentActualGp !== actualGP) {
+axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+.then(function (response) {
+// console.log("ActualGP information updated successfully:", response);
+})
+.catch(function (error) {
+console.error("Error updating actualGP:", error);
+});
+} else {
+console.log("Same actualGPS");
+}
+}
 }
 
 
@@ -2462,9 +2462,9 @@ const yardIndex = index + 1;
 const isEscTicked = data.additionalInfo.some(info => info.escTicked === "Yes");
 
 if (isEscTicked) {
-  $("#escTickBox").prop("checked", true);
+$("#escTickBox").prop("checked", true);
 } else {
-  $("#escTickBox").prop("checked", false);
+$("#escTickBox").prop("checked", false);
 }
 
 pStatus = yard.paymentStatus;
@@ -2829,14 +2829,14 @@ $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
 // $("#bAddress").val(data.bAddress);
 $("#bAddress").val(
-  data.bAddress ||
-  `${data.bAddressStreet || ""}, ${data.bAddressCity || ""}, ${data.bAddressState || ""}, ${data.bAddressZip || ""}, ${data.bAddressAcountry || ""}`
+data.bAddress ||
+`${data.bAddressStreet || ""}, ${data.bAddressCity || ""}, ${data.bAddressState || ""}, ${data.bAddressZip || ""}, ${data.bAddressAcountry || ""}`
 );
 $("#firstName").val(fName);
 $("#lastname").val(lName);
 $("#sAddress").val(
-  data.sAddress ||
-  `${data.sAddressStreet || ""}, ${data.sAddressCity || ""}, ${data.sAddressState || ""}, ${data.sAddressZip || ""}, ${data.sAddressAcountry || ""}`
+data.sAddress ||
+`${data.sAddressStreet || ""}, ${data.sAddressCity || ""}, ${data.sAddressState || ""}, ${data.sAddressZip || ""}, ${data.sAddressAcountry || ""}`
 );
 $("#attention").val(data.attention);
 $("#email").val(data.email);
@@ -3151,7 +3151,7 @@ if (shippDetails && shippDetails.includes("Yard shipping")) {
 var yardShippingValue = shippDetails.split(":")[1].trim();
 console.log("yard ship", yardShippingValue);
 }else{
-  var yardShippingValue = "";
+var yardShippingValue = "";
 }
 // Ensure all values are treated as numbers
 var actualRefund = yardData.yardName  + "" + "|" + yardData.phone + "" + "|" + yardData.email;
@@ -3159,124 +3159,124 @@ console.log("actualRefund", actualRefund);
 // $("#actualRefundToCollect").text(`To be collected: $${actualRefund}`);
 $("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
-  $("#storeCreditCheckbox").prop('checked', true);
+$("#storeCreditCheckbox").prop('checked', true);
 }
 if(yardData.collectRefundCheckbox){
-  $("#collectRefundCheckbox").prop('checked', true);
+$("#collectRefundCheckbox").prop('checked', true);
 }
 if(yardData.refundedDate){
-  $("#refundedDate").val(yardData.refundedDate);
+$("#refundedDate").val(yardData.refundedDate);
 }
 if(yardData.refundStatus === "Refund collected"){
-  $("#paymentStatusSelect").val("Refund collected")
+$("#paymentStatusSelect").val("Refund collected")
 }else if(yardData.refundStatus === "Refund not collected"){
-  $("#paymentStatusSelect").val("Refund not collected")
-  $("#paymentStatusSelect").val("Refund not collected")
+$("#paymentStatusSelect").val("Refund not collected")
+$("#paymentStatusSelect").val("Refund not collected")
 }else{
-  $("#paymentStatusSelect").val("")
+$("#paymentStatusSelect").val("")
 }
 })
 });
 // for esc part in yard
 $('#yardInfoContainer').on('click', '.escalation', async function () {
-    const selectedYardIndex = $(this).data('yard-index');
-    const orderNo = urlParams.get("orderNo");
-    
-    $("#escRMA").fadeIn();
-    $("body").append('<div class="modal-overlay"></div>');
-    $("body").addClass("modal-active");
-    $("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
+const selectedYardIndex = $(this).data('yard-index');
+const orderNo = urlParams.get("orderNo");
 
-    try {
-        const response = await axios.get(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`);
-        if (response.status !== 200) {
-            throw new Error("Failed to fetch order data");
-        }
+$("#escRMA").fadeIn();
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
+$("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
 
-        // Validate the data for the selectedYardIndex
-        const additionalInfo = response.data.additionalInfo.find(
-            (info, index) => index + 1 === selectedYardIndex
-        );
+try {
+const response = await axios.get(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`);
+if (response.status !== 200) {
+throw new Error("Failed to fetch order data");
+}
 
-        if (!additionalInfo) {
-            console.error("No matching additionalInfo found for the selected yard index.");
-            alert("No matching yard information found.");
-            return;
-        }
+// Validate the data for the selectedYardIndex
+const additionalInfo = response.data.additionalInfo.find(
+(info, index) => index + 1 === selectedYardIndex
+);
 
-        // Construct the yard address
-        var yardAddress = `${additionalInfo.street || ''}, ${additionalInfo.city || ''}, ${additionalInfo.state || ''}, ${additionalInfo.zipcode || ''}`;
-        console.log("yardAdd", yardAddress);
+if (!additionalInfo) {
+console.error("No matching additionalInfo found for the selected yard index.");
+alert("No matching yard information found.");
+return;
+}
 
-        // Populate form fields only with the matching data
-        if (additionalInfo.escalationProcess) {
-            $("#escProcess").val(additionalInfo.escalationProcess);
-            if (additionalInfo.escalationProcess === 'Replacement') {
-                $('#replacementColumns').fadeIn();
-                $('#partFromCustomer').fadeIn();
-                $('#partFromYard').fadeIn();
-                $('#partFromCustomerReturn').fadeOut();
-                $('#reimbursement').fadeOut();
-            } else if (additionalInfo.escalationProcess === 'Return') {
-                $('#replacementColumns').fadeIn();
-                $('#partFromCustomerReturn').fadeIn();
-                $('#partFromCustomer').fadeOut();
-                $('#partFromYard').fadeOut();
-                $('#reimbursement').fadeOut();
-                $('.partsFromDropdown').hide();
-                 if (additionalInfo.customerShippingMethodReturn == "Own shipping"){
+// Construct the yard address
+var yardAddress = `${additionalInfo.street || ''}, ${additionalInfo.city || ''}, ${additionalInfo.state || ''}, ${additionalInfo.zipcode || ''}`;
+console.log("yardAdd", yardAddress);
+
+// Populate form fields only with the matching data
+if (additionalInfo.escalationProcess) {
+$("#escProcess").val(additionalInfo.escalationProcess);
+if (additionalInfo.escalationProcess === 'Replacement') {
+$('#replacementColumns').fadeIn();
+$('#partFromCustomer').fadeIn();
+$('#partFromYard').fadeIn();
+$('#partFromCustomerReturn').fadeOut();
+$('#reimbursement').fadeOut();
+} else if (additionalInfo.escalationProcess === 'Return') {
+$('#replacementColumns').fadeIn();
+$('#partFromCustomerReturn').fadeIn();
+$('#partFromCustomer').fadeOut();
+$('#partFromYard').fadeOut();
+$('#reimbursement').fadeOut();
+$('.partsFromDropdown').hide();
+if (additionalInfo.customerShippingMethodReturn == "Own shipping"){
 $('#customerShippingValueReturn').fadeIn();
 } else {
 $('#customerShippingValueReturn').fadeOut();
 }
-            } else if (additionalInfo.escalationProcess === 'Reimbursement') {
-                $('#replacementColumns').fadeOut();
-                $('#partFromCustomerReturn').fadeOut();
-                $('#partFromCustomer').fadeOut();
-                $('#partFromYard').fadeOut();
-                $('#reimbursement').fadeIn();
-                $('.partsFromDropdown').hide();
-            } else {
-                $('#replacementColumns').fadeOut();
-                $('#partFromCustomer').fadeOut();
-                $('#partFromYard').fadeOut();
-                $('#reimbursement').fadeOut();
-                $('.partsFromDropdown').hide();
-            }
-        }
+} else if (additionalInfo.escalationProcess === 'Reimbursement') {
+$('#replacementColumns').fadeOut();
+$('#partFromCustomerReturn').fadeOut();
+$('#partFromCustomer').fadeOut();
+$('#partFromYard').fadeOut();
+$('#reimbursement').fadeIn();
+$('.partsFromDropdown').hide();
+} else {
+$('#replacementColumns').fadeOut();
+$('#partFromCustomer').fadeOut();
+$('#partFromYard').fadeOut();
+$('#reimbursement').fadeOut();
+$('.partsFromDropdown').hide();
+}
+}
 
-        // Populate other fields if available
-        $("#custReason").val(additionalInfo.custReason || "");
-        $("#customerShippingMethodReplacement").val(additionalInfo.customerShippingMethodReplacement || "");
-        $("#customerTrackingNumberReplacement").val(additionalInfo.customerTrackingNumberReplacement || "");
-        $("#customerShipperReplacement").val(additionalInfo.customerShipperReplacement || "");
-        $("#customerETAReplacement").val(additionalInfo.customerETAReplacement || "");
-        $("#custOwnShipReplacement").val(additionalInfo.custOwnShipReplacement || "");
-        $("#custreplacementDelivery").val(additionalInfo.custreplacementDelivery || "");
-        $("#yardShippingStatus").val(additionalInfo.yardShippingStatus || "");
-        $("#yardShippingMethod").val(additionalInfo.yardShippingMethod || "");
-        $("#yardownShipping").val(additionalInfo.yardOwnShipping || "").parent().show();
-        $("#yardShipper").val(additionalInfo.yardShipper || "");
-        $("#shipToReturnAdd").val(yardAddress || "");
-        $("#shipToRepAdd").val(yardAddress || "");
-        $("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber || "");
-        $("#yardTrackingETA").val(additionalInfo.yardTrackingETA || "");
-        $("#yardTrackingLink").val(additionalInfo.yardTrackingLink || "");
-        $("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn || "");
-        $("#custretPartETA").val(additionalInfo.custretPartETA || "");
-        $("#customerShipperReturn").val(additionalInfo.customerShipperReturn || "");
-        $("#custOwnShippingReturn").val(additionalInfo.custOwnShippingReturn || "");
-        $("#returnTrackingCust").val(additionalInfo.returnTrackingCust || "");
-        $("#custOwnShippingReturm").val(additionalInfo.custReturnDelivery || "");
-        $("#custReturnDelivery").val(additionalInfo.custReturnDelivery || "");
-        $("#reimAmount").val(additionalInfo.reimbursementAmount || "");
-        $('#reimbursed').prop('checked', additionalInfo.isReimbursedChecked === "true");
-        $('#custOwnShippingReturn').val(additionalInfo.custOwnShippingReturn);
+// Populate other fields if available
+$("#custReason").val(additionalInfo.custReason || "");
+$("#customerShippingMethodReplacement").val(additionalInfo.customerShippingMethodReplacement || "");
+$("#customerTrackingNumberReplacement").val(additionalInfo.customerTrackingNumberReplacement || "");
+$("#customerShipperReplacement").val(additionalInfo.customerShipperReplacement || "");
+$("#customerETAReplacement").val(additionalInfo.customerETAReplacement || "");
+$("#custOwnShipReplacement").val(additionalInfo.custOwnShipReplacement || "");
+$("#custreplacementDelivery").val(additionalInfo.custreplacementDelivery || "");
+$("#yardShippingStatus").val(additionalInfo.yardShippingStatus || "");
+$("#yardShippingMethod").val(additionalInfo.yardShippingMethod || "");
+$("#yardownShipping").val(additionalInfo.yardOwnShipping || "").parent().show();
+$("#yardShipper").val(additionalInfo.yardShipper || "");
+$("#shipToReturnAdd").val(yardAddress || "");
+$("#shipToRepAdd").val(yardAddress || "");
+$("#yardTrackingNumber").val(additionalInfo.yardTrackingNumber || "");
+$("#yardTrackingETA").val(additionalInfo.yardTrackingETA || "");
+$("#yardTrackingLink").val(additionalInfo.yardTrackingLink || "");
+$("#customerShippingMethodReturn").val(additionalInfo.customerShippingMethodReturn || "");
+$("#custretPartETA").val(additionalInfo.custretPartETA || "");
+$("#customerShipperReturn").val(additionalInfo.customerShipperReturn || "");
+$("#custOwnShippingReturn").val(additionalInfo.custOwnShippingReturn || "");
+$("#returnTrackingCust").val(additionalInfo.returnTrackingCust || "");
+$("#custOwnShippingReturm").val(additionalInfo.custReturnDelivery || "");
+$("#custReturnDelivery").val(additionalInfo.custReturnDelivery || "");
+$("#reimAmount").val(additionalInfo.reimbursementAmount || "");
+$('#reimbursed').prop('checked', additionalInfo.isReimbursedChecked === "true");
+$('#custOwnShippingReturn').val(additionalInfo.custOwnShippingReturn);
 
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        alert("Error fetching yard information");
-    }
+} catch (error) {
+console.error("Error fetching data:", error);
+alert("Error fetching yard information");
+}
 });
 
 
@@ -3311,8 +3311,8 @@ $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '
 }
 
 const data1 = {
-  paymentStatus: paymentStatus,
-  cardChargedDate: cardChargedDate };
+paymentStatus: paymentStatus,
+cardChargedDate: cardChargedDate };
 
 
 const updateOrder = (url) => {
@@ -3349,69 +3349,69 @@ window.location.reload();
 //  card charged part till here
 // refundCollect part 
 $('#refundSubmit').on('click', function() {
-  $('#refundCollect').hide();
-  $(".modal-overlay").remove();
-  $("body").removeClass("modal-active");
-  const refundStatus = $(".paymentStatusRefund")
-    .map(function () {
-      return $(this).val();
-    })
-    .get()
-    .filter(function (value) {
-      return value !== "";
-    })
-    .join();
+$('#refundCollect').hide();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+const refundStatus = $(".paymentStatusRefund")
+.map(function () {
+return $(this).val();
+})
+.get()
+.filter(function (value) {
+return value !== "";
+})
+.join();
 
-  const refundedAmount = $("#refundedAmount").val();
-  const isStoreCredit = $("#storeCreditCheckbox").is(":checked");
-  const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
-  const refundToCollect = $("#refundToCollect").val();
-  const refundedDate = $("#refundedDate").val();
+const refundedAmount = $("#refundedAmount").val();
+const isStoreCredit = $("#storeCreditCheckbox").is(":checked");
+const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
+const refundToCollect = $("#refundToCollect").val();
+const refundedDate = $("#refundedDate").val();
 console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
 if (collectRefundCheckbox === true){
-  var collectRefundChecked = "Ticked"
+var collectRefundChecked = "Ticked"
 }
-  if (refundStatus === "Refund collected") {
-    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
-  }
+if (refundStatus === "Refund collected") {
+$(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
+}
 
-  const data1 = {
-    refundStatus: refundStatus,
-    refundedAmount: refundedAmount,
-    storeCredit: isStoreCredit ? refundedAmount : null,
-    refundedDate: refundedDate || "",
-    collectRefundCheckbox: collectRefundChecked,
-    refundToCollect:refundToCollect
-  
-  };
+const data1 = {
+refundStatus: refundStatus,
+refundedAmount: refundedAmount,
+storeCredit: isStoreCredit ? refundedAmount : null,
+refundedDate: refundedDate || "",
+collectRefundCheckbox: collectRefundChecked,
+refundToCollect:refundToCollect
 
-  const updateOrder = (url) => {
-    return fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data1),
-    });
-  };
+};
 
-  // Try updating in orders collection first
-  updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${firstName}`)
-    // .then((response) => 
-    //   return response.json(); // Successful update in orders
-    // })
-    .then((data) => {
-      if (data) {
-        updateOrderHistory(data.orderHistory);
-        showYardDetails(selectedYardIndex);
-        fetchAndUpdateYardInfo();
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+const updateOrder = (url) => {
+return fetch(url, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(data1),
+});
+};
 
-  window.location.reload();
+// Try updating in orders collection first
+updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${firstName}`)
+// .then((response) => 
+//   return response.json(); // Successful update in orders
+// })
+.then((data) => {
+if (data) {
+updateOrderHistory(data.orderHistory);
+showYardDetails(selectedYardIndex);
+fetchAndUpdateYardInfo();
+}
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+
+window.location.reload();
 });
 
 // refundCollect part ends here
@@ -3664,8 +3664,8 @@ $("#saveEsc").on("click", async function () {
     const orderNo = urlParams.get("orderNo");
     const firstName = localStorage.getItem("firstName");
     const token = localStorage.getItem("token");
+    const currentDateTime = moment().tz("America/Chicago").format("YYYY-MM-DD HH:mm:ss");
 
-    // Collect all input values
     const updatedFields = {
         escalationProcess: $("#escProcess").val(),
         custReason: $("#custReason").val(),
@@ -3692,12 +3692,9 @@ $("#saveEsc").on("click", async function () {
     };
 
     try {
-        // Fetch current data from backend for comparison
         const response = await axios.get(
             `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
-            {
-                headers: token ? { Authorization: `Bearer ${token}` } : {},
-            }
+            { headers: token ? { Authorization: `Bearer ${token}` } : {} }
         );
 
         if (response.status !== 200) {
@@ -3709,86 +3706,55 @@ $("#saveEsc").on("click", async function () {
         const updatedData = {};
         let hasChanges = false;
 
-        // Helper function to normalize values for comparison
-        const normalizeValue = (value) => {
-            if (value === null || value === undefined) return "";
-            if (typeof value === "boolean") return value ? "true" : "false";
-            if (typeof value === "number") return value.toString();
-            return value.toString().trim();
-        };
+        const hasValueChanged = (oldValue, newValue) => oldValue !== newValue;
 
-        // Helper function to check if values have changed
-        const hasValueChanged = (oldValue, newValue) => normalizeValue(oldValue) !== normalizeValue(newValue);
-
-        // Iterate over updated fields and compare
         for (const [key, newValue] of Object.entries(updatedFields)) {
             const oldValue = currentAdditionalInfo[key];
 
             if (hasValueChanged(oldValue, newValue)) {
-                updatedData[key] = newValue;
-
-                // Handle special cases
                 if (key === "customerTrackingNumberReplacement" && !currentAdditionalInfo.escRepCustTrackingDate) {
-                    updatedData.escRepCustTrackingDate = currentDateTime;
+                    if (newValue.length > 4) {
+                        updatedData.escRepCustTrackingDate = currentDateTime;
+                    }
                 }
 
                 if (key === "yardTrackingNumber" && !currentAdditionalInfo.escRepYardTrackingDate) {
-                    updatedData.escRepYardTrackingDate = currentDateTime;
+                    if (newValue.length > 4) {
+                        updatedData.escRepYardTrackingDate = currentDateTime;
+                    }
                 }
 
                 if (key === "returnTrackingCust" && !currentAdditionalInfo.escRetTrackingDate) {
-                    updatedData.escRetTrackingDate = currentDateTime;
+                    if (newValue.length > 4) {
+                        updatedData.escRetTrackingDate = currentDateTime;
+                    }
                 }
+
                 if (key === "custreplacementDelivery") {
-    if (newValue === "In Transit") {
-        // Update `inTransitpartCustDate` only if it's not already set
-        if (!currentAdditionalInfo.inTransitpartCustDate) {
-            updatedData.inTransitpartCustDate = currentDateTime;
-            console.log("Setting inTransitpartCustDate for the first time:", currentDateTime);
-        } else {
-            console.log("inTransitpartCustDate is already set, skipping update.");
-        }
+                    if (newValue === "In Transit" && !currentAdditionalInfo.inTransitpartCustDate) {
+                        updatedData.inTransitpartCustDate = currentDateTime;
+                    } else if (newValue === "Delivered" && !currentAdditionalInfo.repPartCustDeliveredDate) {
+                        updatedData.repPartCustDeliveredDate = currentDateTime;
+                    }
+                }
 
-        // Ensure `repPartCustDeliveredDate` is not updated
-        if ("repPartCustDeliveredDate" in updatedData) {
-            delete updatedData.repPartCustDeliveredDate;
-        }
-    } else if (newValue === "Delivered") {
-        // Update `repPartCustDeliveredDate` only if it's not already set
-        if (!currentAdditionalInfo.repPartCustDeliveredDate) {
-            updatedData.repPartCustDeliveredDate = currentDateTime;
-            console.log("Setting repPartCustDeliveredDate for the first time:", currentDateTime);
-        } else {
-            console.log("repPartCustDeliveredDate is already set, skipping update.");
-        }
-
-        // Ensure `inTransitpartCustDate` is not updated
-        if ("inTransitpartCustDate" in updatedData) {
-            delete updatedData.inTransitpartCustDate;
-        }
-    }
-}
-
-           if (key === "yardShippingStatus") {
-                    if (newValue === "In Transit") {
+                if (key === "yardShippingStatus") {
+                    if (newValue === "In Transit" && !currentAdditionalInfo.inTransitpartYardDate) {
                         updatedData.inTransitpartYardDate = currentDateTime;
-                        delete updatedData.yardDeliveredDate;
-                    } else if (newValue === "Delivered") {
+                    } else if (newValue === "Delivered" && !currentAdditionalInfo.yardDeliveredDate) {
                         updatedData.yardDeliveredDate = currentDateTime;
-                        delete updatedData.inTransitpartYardDate;
                     }
                 }
 
                 if (key === "custReturnDelivery") {
-                    if (newValue === "In Transit") {
+                    if (newValue === "In Transit" && !currentAdditionalInfo.inTransitReturnDate) {
                         updatedData.inTransitReturnDate = currentDateTime;
-                        delete updatedData.returnDeliveredDate;
-                    } else if (newValue === "Delivered") {
+                    } else if (newValue === "Delivered" && !currentAdditionalInfo.returnDeliveredDate) {
                         updatedData.returnDeliveredDate = currentDateTime;
-                        delete updatedData.inTransitReturnDate;
                     }
                 }
 
+                updatedData[key] = newValue;
                 hasChanges = true;
             }
         }
@@ -4156,7 +4122,7 @@ $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
 }
- else if (refundStatus === "Yard PO Sent") {
+else if (refundStatus === "Yard PO Sent") {
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 } else if (refundStatus === "Yard located") {
@@ -4234,8 +4200,8 @@ body: JSON.stringify(data),
 .then((result) => {
 alert("Tracking details sent to the customer");
 $("#editYardInfo")
-  .prop("disabled", false) 
-  .css("filter", "none"); 
+.prop("disabled", false) 
+.css("filter", "none"); 
 console.log("Success:", result);
 })
 .catch((error) => {
@@ -4261,7 +4227,7 @@ console.log("add",retAddress);
 console.log("shippingMethod",escProcess,"return",retShippingMethod,"replacement",repShippingMethod);
 const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("pdfFile");
-  const file = fileInput.files[0] || "";
+const file = fileInput.files[0] || "";
 
 //   if (!file) {
 //     alert("Please select a PDF file before sending the email.");
@@ -4269,10 +4235,10 @@ const fileInput = document.getElementById("pdfFile");
 //     return;
 //   }
 
-  const formData = new FormData();
-  formData.append("pdfFile", file);
-  // for trackingInfo
-  const data = {
+const formData = new FormData();
+formData.append("pdfFile", file);
+// for trackingInfo
+const data = {
 trackingNo: $("#yardTrackingNumber").val(),
 yardTrackingETA: $("#yardTrackingETA").val(),
 shipperName: $("#yardShipper").val(),
@@ -4314,22 +4280,22 @@ console.error("Error:", error);
 });
 }
 else if (escProcess === "Replacement" && (repShippingMethod === "Own shipping" || repShippingMethod === "Yard shipping") && partsFromDropdown == "Part from Customer") {
-    fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
-      method: "POST",
-      body: formData, 
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        alert("RMA(Replacement)_Own/Yard-shipping email with PDF has been sent to the customer");
-        $("#saveEsc").prop("disabled", false).css("filter", "none");
-        console.log("Success:", result);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
-  else if (escProcess === "Replacement" && partsFromDropdown == "Part from Yard") {
-    fetch(`https://www.spotops360.com/orders/sendTrackingInfo/${orderNo}`, {
+fetch(`https://www.spotops360.com/orders/sendReplaceEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}`, {
+method: "POST",
+body: formData, 
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Replacement)_Own/Yard-shipping email with PDF has been sent to the customer");
+$("#saveEsc").prop("disabled", false).css("filter", "none");
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+}
+else if (escProcess === "Replacement" && partsFromDropdown == "Part from Yard") {
+fetch(`https://www.spotops360.com/orders/sendTrackingInfo/${orderNo}`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
@@ -4341,31 +4307,31 @@ body: JSON.stringify(data),
 alert("Tracking details sent to the customer");
 $("#saveEsc").prop("disabled", false) .css("filter", "none"); 
 $("#editYardInfo")
-  .prop("disabled", false) 
-  .css("filter", "none"); 
+.prop("disabled", false) 
+.css("filter", "none"); 
 console.log("Success:", result);
 })
 .catch((error) => {
 console.error("Error:", error);
 });
-  }
-  else if (escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")) {
-    fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
-      method: "POST",
-      body: formData, // Send FormData directly
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        alert("RMA(Return)_Own/Yard-shipping email with PDF has been sent to the customer");
-        $("#saveEsc").prop("disabled", false).css("filter", "none");
-        console.log("Success:", result);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
+}
+else if (escProcess === "Return" && (retShippingMethod === "Own shipping" || retShippingMethod === "Yard shipping")) {
+fetch(`https://www.spotops360.com/orders/sendReturnEmailOwn_Yard/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
+method: "POST",
+body: formData, // Send FormData directly
+})
+.then((response) => response.json())
+.then((result) => {
+alert("RMA(Return)_Own/Yard-shipping email with PDF has been sent to the customer");
+$("#saveEsc").prop("disabled", false).css("filter", "none");
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+}
 else if(escProcess === "Reimbursement"){
-  fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}&reimburesementValue=${reimburesementValue}`, {
+fetch(`https://www.spotops360.com/orders/sendReimburseEmail/${orderNo}?yardIndex=${yardIndex}&reimburesementValue=${reimburesementValue}`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
@@ -4382,7 +4348,7 @@ console.error("Error:", error);
 });
 }
 else{
-  alert("Return email cannot be sent without tracking info");
+alert("Return email cannot be sent without tracking info");
 }
 });
 
@@ -4637,85 +4603,85 @@ $("#editYardPopup").hide();
 
 // support comment atsrts here
 const commentSupport = document.getElementById("comment-boxSupport");
- function handleSubmit(event) {
-    const content1 = $("#commentInput").val();
-    const wordCount = content1.trim().split(/\s+/).length; // Count words
-    const maxWords = 200;
+function handleSubmit(event) {
+const content1 = $("#commentInput").val();
+const wordCount = content1.trim().split(/\s+/).length; // Count words
+const maxWords = 200;
 
-    if (content1.length > maxWords) {
-      alert(`Your comment exceeds the maximum limit of ${maxWords} characters.`);
-      event.preventDefault(); // Prevent the event from succeeding
-      return;
-    }
+if (content1.length > maxWords) {
+alert(`Your comment exceeds the maximum limit of ${maxWords} characters.`);
+event.preventDefault(); // Prevent the event from succeeding
+return;
+}
 
-    console.log("orderNo for submitting s comments", orderNo);
-    window.location.reload();
-    event.preventDefault();
+console.log("orderNo for submitting s comments", orderNo);
+window.location.reload();
+event.preventDefault();
 
-    const yardIndex1 = $("#submit").data("yard-index") - 1;
-    const firstName1 = localStorage.getItem("firstName");
-    console.log("commentDate", currentDateTime);
+const yardIndex1 = $("#submit").data("yard-index") - 1;
+const firstName1 = localStorage.getItem("firstName");
+console.log("commentDate", currentDateTime);
 
-    if (content1.length > 0) {
-      // First try to update in the orders collection
-      axios
-        .put(`https://www.spotops360.com/orders/${orderNo}/supportNotes`, {
-          note: content1,
-          author: firstName1,
-          timestamp: currentDateTime,
-        })
-        .then((response) => {
-          alert("Support comments updated successfully.");
-          $("#commentInput").val("");
-          fetchSupportComment(yardIndex1);
-        })
-        .catch((error) => {
-          // If order is not found in orders, search in cancelledOrders
-          if (error.response && error.response.status === 404) {
-            console.log(
-              "Order not found in orders, checking in cancelledOrders..."
-            );
-            axios
-              .put(
-                `https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`,
-                {
-                  note: content1,
-                  author: firstName1,
-                  timestamp: commentNteDate,
-                }
-              )
-              .then((response) => {
-                alert(
-                  "Support comments updated successfully in cancelledOrders."
-                );
-                $("#commentInput").val("");
-                fetchSupportComment(yardIndex1);
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                alert(
-                  `Failed to update notes in cancelledOrders: ${error.message}`
-                );
-              });
-          } else {
-            console.error("Error:", error);
-            alert(`Failed to update notes: ${error.message}`);
-          }
-        });
-    }
-  }
+if (content1.length > 0) {
+// First try to update in the orders collection
+axios
+.put(`https://www.spotops360.com/orders/${orderNo}/supportNotes`, {
+note: content1,
+author: firstName1,
+timestamp: currentDateTime,
+})
+.then((response) => {
+alert("Support comments updated successfully.");
+$("#commentInput").val("");
+fetchSupportComment(yardIndex1);
+})
+.catch((error) => {
+// If order is not found in orders, search in cancelledOrders
+if (error.response && error.response.status === 404) {
+console.log(
+"Order not found in orders, checking in cancelledOrders..."
+);
+axios
+.put(
+`https://www.spotops360.com/cancelledOrders/${orderNo}/supportNotes`,
+{
+note: content1,
+author: firstName1,
+timestamp: commentNteDate,
+}
+)
+.then((response) => {
+alert(
+"Support comments updated successfully in cancelledOrders."
+);
+$("#commentInput").val("");
+fetchSupportComment(yardIndex1);
+})
+.catch((error) => {
+console.error("Error:", error);
+alert(
+`Failed to update notes in cancelledOrders: ${error.message}`
+);
+});
+} else {
+console.error("Error:", error);
+alert(`Failed to update notes: ${error.message}`);
+}
+});
+}
+}
 
-  // Attach click event to the submit button
-  $("#submitComments").on("click", function (event) {
-    handleSubmit(event);
-  });
+// Attach click event to the submit button
+$("#submitComments").on("click", function (event) {
+handleSubmit(event);
+});
 
-  // Trigger the event when Enter is pressed
-  $("#commentInput").on("keypress", function (event) {
-    if (event.key === "Enter") {
-      handleSubmit(event);
-    }
-  });
+// Trigger the event when Enter is pressed
+$("#commentInput").on("keypress", function (event) {
+if (event.key === "Enter") {
+handleSubmit(event);
+}
+});
 
 async function fetchSupportComment(orderNo) {
 console.log("Fetching and displaying support comments...",orderNo);
@@ -4987,19 +4953,19 @@ $('#replacementColumns').fadeOut();
 }
 // in replacement, if the reason is junked disable all other inpu=t boxes
 $('#custReason').on('change', function () {
-    if ($(this).val() === 'Junked') {
-      // Disable all inputs and selects inside #replacementColumns, except #custReason
-      $('#replacementColumns')
-        .find('input, select')
-        .not('#custReaso,#yardShippingStatus,#yardShippingMethod,#yardShipper,#yardTrackingNumber,#yardownShipping,#yardTrackingETA,#yardTrackingLink')
-        .prop('disabled', true);
-    } else {
-      // Enable all inputs and selects inside #replacementColumns when other values are selected
-      $('#replacementColumns')
-        .find('input, select')
-        .prop('disabled', false);
-    }
-  });
+if ($(this).val() === 'Junked') {
+// Disable all inputs and selects inside #replacementColumns, except #custReason
+$('#replacementColumns')
+.find('input, select')
+.not('#custReaso,#yardShippingStatus,#yardShippingMethod,#yardShipper,#yardTrackingNumber,#yardownShipping,#yardTrackingETA,#yardTrackingLink')
+.prop('disabled', true);
+} else {
+// Enable all inputs and selects inside #replacementColumns when other values are selected
+$('#replacementColumns')
+.find('input, select')
+.prop('disabled', false);
+}
+});
 // Show or hide "Own Shipping" input for Part from Customer
 $('#customerShippingMethodReplacement').on('change', function () {
 if ($(this).val() === 'Own shipping') {
@@ -5025,12 +4991,12 @@ $('#yardShippingValue').fadeOut();
 });
 // Show the Drive link input when the attach button is clicked
 $('#attachDocument').on('click', function()  {
-  console.log("clicked attachDocument")
-  document.getElementById('driveLinkContainer').style.display = 'block';
+console.log("clicked attachDocument")
+document.getElementById('driveLinkContainer').style.display = 'block';
 });
 $('#attachRefundReceipt').on('click', function()  {
-  console.log("clicked attachRefundReceipt")
-  document.getElementById('driveLinkRefund').style.display = 'block';
+console.log("clicked attachRefundReceipt")
+document.getElementById('driveLinkRefund').style.display = 'block';
 });
 // to void label
 $("#voidLabel").on("click", function () {
@@ -5060,10 +5026,10 @@ if (yardData.trackingLink) yardData.trackingLinkHistory.push(yardData.trackingLi
 // Prepare updated data for backend with cleared fields
 const updatedInfo = {
 ...yardData,
-trackingNo: "", // Clear tracking info
-eta: "", // Clear ETA
-shipperName: "", // Clear shipper info
-trackingLink: "", // Clear tracking link
+trackingNo: "", 
+eta: "", 
+shipperName: "", 
+trackingLink: "", 
 };
 
 // Send the updated data to the backend
@@ -5124,10 +5090,10 @@ if (yardData.escRepYardTrackingdate) yardData.escrepBOLhistoryYard.push(yardData
 // Prepare updated data for backend with cleared fields
 const updatedInfo = {
 ...yardData,
-yardTrackingNumber: "", // Clear tracking info
-yardTrackingETA: "", // Clear ETA
-yardShipper: "", // Clear shipper info
-yardShippingMethod: "", // Clear tracking link
+yardTrackingNumber: "", 
+yardTrackingETA: "",
+yardShipper: "", 
+yardShippingMethod: "",
 yardShippingMethod: ""
 
 };
@@ -5186,10 +5152,10 @@ if (yardData.escRepCustTrackingDate) yardData.escrepBOLhistoryCust.push(yardData
 // Prepare updated data for backend with cleared fields
 const updatedInfo = {
 ...yardData,
-customerTrackingNumberReplacement: "", // Clear tracking info
-customerETAReplacement: "", // Clear ETA
-customerShipperReplacement: "", // Clear shipper info
-customerShippingMethodReplacement: "", // Clear tracking link
+customerTrackingNumberReplacement: "", 
+customerETAReplacement: "", 
+customerShipperReplacement: "",
+customerShippingMethodReplacement: "", 
 };
 console.log("updated yard data",updatedInfo);
 // Send the updated data to the backend
