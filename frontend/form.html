@@ -3719,19 +3719,19 @@ $("#saveEsc").on("click", async function () {
             const oldValue = currentAdditionalInfo[key];
 
             if (hasValueChanged(oldValue, newValue)) {
-                if (key === "customerTrackingNumberReplacement" && !currentAdditionalInfo.escRepCustTrackingDate) {
-                    if (normalizeValue(newValue).length > 4 && oldValue !== newValue) {
+                if (key === "customerTrackingNumberReplacement" && currentAdditionalInfo.escRepCustTrackingDate == "") {
+                    if (normalizeValue(newValue).length) {
                         updatedData.escRepCustTrackingDate = currentDateTime;
                     }
                 }
 
-                if (key === "yardTrackingNumber" && !currentAdditionalInfo.escRepYardTrackingDate) {
+                if (key === "yardTrackingNumber" && currentAdditionalInfo.escRepYardTrackingDate == "")  {
                     if (normalizeValue(newValue).length > 4) {
                         updatedData.escRepYardTrackingDate = currentDateTime;
                     }
                 }
 
-                if (key === "returnTrackingCust" && !currentAdditionalInfo.escRetTrackingDate) {
+                if (key === "returnTrackingCust" && currentAdditionalInfo.escRetTrackingDate == "") {
                     if (normalizeValue(newValue).length > 4) {
                         updatedData.escRetTrackingDate = currentDateTime;
                     }
@@ -3765,8 +3765,6 @@ $("#saveEsc").on("click", async function () {
                 hasChanges = true;
             }
         }
-
-        // Handle reimbursement separately
         const reimbursementAmount = $("#reimAmount").val();
         const isReimbursedChecked = $("#reimbursed").prop("checked");
 
@@ -3776,7 +3774,7 @@ $("#saveEsc").on("click", async function () {
             const reimbursementUpdate = {
                 orderStatus: newOrderStatus,
                 yardStatus: yardStatus,
-                yardIndex: 0, // Example index
+                yardIndex:  yardIndex, 
             };
 
             console.log("Sending data for reimbursement:", reimbursementUpdate);
@@ -3812,13 +3810,11 @@ $("#saveEsc").on("click", async function () {
         // Send updated data to backend
         if (hasChanges) {
             console.log("Changes detected. Sending updated data:", updatedData);
-
             const patchResponse = await axios.put(
                 `https://www.spotops360.com/orders/${orderNo}/escalation?firstName=${firstName}`,
                 { ...updatedData, yardIndex, firstName, orderNo },
                 { headers: token ? { Authorization: `Bearer ${token}` } : {} }
             );
-
             if (patchResponse.status === 200) {
                 alert("Yard Index information and orderHistory updated successfully!");
             } else {
