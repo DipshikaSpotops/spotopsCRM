@@ -2612,6 +2612,8 @@ try {
 const order = await Order.findOne({ orderNo });
 if (!order) {
 return res.status(404).json({ error: "Order not found" });
+
+
 }
 const additionalInfo = order.additionalInfo[actualYardIndex];
 
