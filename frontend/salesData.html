@@ -430,13 +430,13 @@ aria-labelledby="userMenu"
         <th style="cursor: pointer" scope="col">Order Date</th>
         <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
         <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ">&#9650;</span></th>
+        <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
         <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
         <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
         <th style="cursor: pointer" scope="col">Sale Price <span class="aToZ">&#9650;</span></th>
         <th style="cursor: pointer" scope="col">Est GP <span class="aToZ">&#9650;</span></th>
         <th style="cursor: pointer" scope="col">Current GP <span class="aToZ">&#9650;</span></th>
         <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Actions</th>
       </tr>
     </thead>
     <tbody id="infoTable">
@@ -628,6 +628,11 @@ $("#infoTable").append(`
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
+<td>${
+(item.fName && item.lName)
+? `${item.fName} ${item.lName}`
+: (item.customerName || "")
+}</td>
 <td>${item.pReq || item.partName}</td>
 
 <td>${item.orderStatus}</td>
@@ -680,7 +685,7 @@ return `$${currentGP.toFixed(2)}`;
 }
 </td>
 <td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
-<td>${actions}</td>
+
 </tr>
 `);
 });
