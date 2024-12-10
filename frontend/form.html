@@ -3664,6 +3664,7 @@ $("#saveEsc").on("click", async function () {
     const orderNo = urlParams.get("orderNo");
     const firstName = localStorage.getItem("firstName");
     const token = localStorage.getItem("token");
+    const currentDateTime = moment().tz("America/Chicago").format("YYYY-MM-DD HH:mm:ss");
 
     const updatedFields = {
         escalationProcess: $("#escProcess").val(),
@@ -3719,34 +3720,26 @@ $("#saveEsc").on("click", async function () {
             const oldValue = currentAdditionalInfo[key];
 
             if (hasValueChanged(oldValue, newValue)) {
-              if (key === "customerTrackingNumberReplacement") {
-        // Only update if escRepCustTrackingDate is not set
-        if (newValue.length > 4) {
-            updatedData.escRepCustTrackingDate = currentDateTime;
-        }
-    } else {
-        console.log("escRepCustTrackingDate is already set, skipping update.");
-    }
-}    if (!currentAdditionalInfo.escRepCustTrackingDate || currentAdditionalInfo.escRepCustTrackingDate.trim() === "") {
-
-                if (key === "yardTrackingNumber" && currentAdditionalInfo.escRepYardTrackingDate == "")  {
-                    if (normalizeValue(newValue).length > 4) {
-                        updatedData.escRepYardTrackingDate = currentDateTime;
+                if (key === "customerTrackingNumberReplacement") {
+                    if (!currentAdditionalInfo.escRepCustTrackingDate && normalizeValue(newValue).length > 4) {
+                        updatedData.escRepCustTrackingDate = currentDateTime;
+                        console.log("Setting escRepCustTrackingDate:", currentDateTime);
                     }
                 }
-                if (hasValueChanged(oldValue, newValue)) {
-                  if (key === "returnTrackingCust") {
-    if (!currentAdditionalInfo.escRetTrackingDate || currentAdditionalInfo.escRetTrackingDate.trim() === "") {
-        if (newValue.length > 4) {
-            updatedData.escRetTrackingDate = currentDateTime;
-            console.log("Setting escRetTrackingDate for the first time:", currentDateTime);
-        }
-    } else {
-        console.log("escRetTrackingDate is already set:", currentAdditionalInfo.escRetTrackingDate);
-    }
-} 
-}  
 
+                if (key === "yardTrackingNumber") {
+                    if (!currentAdditionalInfo.escRepYardTrackingDate && normalizeValue(newValue).length > 4) {
+                        updatedData.escRepYardTrackingDate = currentDateTime;
+                        console.log("Setting escRepYardTrackingDate:", currentDateTime);
+                    }
+                }
+
+                if (key === "returnTrackingCust") {
+                    if (!currentAdditionalInfo.escRetTrackingDate && normalizeValue(newValue).length > 4) {
+                        updatedData.escRetTrackingDate = currentDateTime;
+                        console.log("Setting escRetTrackingDate:", currentDateTime);
+                    }
+                }
 
                 if (key === "custreplacementDelivery") {
                     if (newValue === "In Transit" && !currentAdditionalInfo.inTransitpartCustDate) {
@@ -3776,16 +3769,15 @@ $("#saveEsc").on("click", async function () {
                 hasChanges = true;
             }
         }
-        const reimbursementAmount = $("#reimAmount").val();
-        const isReimbursedChecked = $("#reimbursed").prop("checked");
 
-        if (reimbursementAmount && hasValueChanged(currentAdditionalInfo.reimbursementAmount, reimbursementAmount)) {
+        // Handle reimbursement separately
+        if (updatedFields.reimbursementAmount && hasValueChanged(currentAdditionalInfo.reimbursementAmount, updatedFields.reimbursementAmount)) {
             const yardStatus = "Part delivered";
             const newOrderStatus = "Order Fulfilled";
             const reimbursementUpdate = {
                 orderStatus: newOrderStatus,
                 yardStatus: yardStatus,
-                yardIndex:  yardIndex, 
+                yardIndex: yardIndex,
             };
 
             console.log("Sending data for reimbursement:", reimbursementUpdate);
@@ -3826,6 +3818,7 @@ $("#saveEsc").on("click", async function () {
                 { ...updatedData, yardIndex, firstName, orderNo },
                 { headers: token ? { Authorization: `Bearer ${token}` } : {} }
             );
+
             if (patchResponse.status === 200) {
                 alert("Yard Index information and orderHistory updated successfully!");
             } else {
