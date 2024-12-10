@@ -3705,27 +3705,34 @@ $("#saveEsc").on("click", async function () {
         const updatedData = {};
         let hasChanges = false;
 
-        const hasValueChanged = (oldValue, newValue) => oldValue !== newValue;
+        // Helper function to normalize values for comparison
+        const normalizeValue = (value) => {
+            if (value === null || value === undefined) return "";
+            if (typeof value === "boolean") return value ? "true" : "false";
+            if (typeof value === "number") return value.toString();
+            return value.toString().trim();
+        };
+
+        const hasValueChanged = (oldValue, newValue) => normalizeValue(oldValue) !== normalizeValue(newValue);
 
         for (const [key, newValue] of Object.entries(updatedFields)) {
             const oldValue = currentAdditionalInfo[key];
 
             if (hasValueChanged(oldValue, newValue)) {
-              console.log("Values",oldValue, newValue)
                 if (key === "customerTrackingNumberReplacement" && !currentAdditionalInfo.escRepCustTrackingDate) {
-                    if (newValue.length > 4) {
+                    if (normalizeValue(newValue).length > 4) {
                         updatedData.escRepCustTrackingDate = currentDateTime;
                     }
                 }
 
                 if (key === "yardTrackingNumber" && !currentAdditionalInfo.escRepYardTrackingDate) {
-                    if (newValue.length > 4) {
+                    if (normalizeValue(newValue).length > 4) {
                         updatedData.escRepYardTrackingDate = currentDateTime;
                     }
                 }
 
                 if (key === "returnTrackingCust" && !currentAdditionalInfo.escRetTrackingDate) {
-                    if (newValue.length > 4) {
+                    if (normalizeValue(newValue).length > 4) {
                         updatedData.escRetTrackingDate = currentDateTime;
                     }
                 }
@@ -3763,7 +3770,7 @@ $("#saveEsc").on("click", async function () {
         const reimbursementAmount = $("#reimAmount").val();
         const isReimbursedChecked = $("#reimbursed").prop("checked");
 
-        if (reimbursementAmount) {
+        if (reimbursementAmount && hasValueChanged(currentAdditionalInfo.reimbursementAmount, reimbursementAmount)) {
             const yardStatus = "Part delivered";
             const newOrderStatus = "Order Fulfilled";
             const reimbursementUpdate = {
