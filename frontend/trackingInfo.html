@@ -586,54 +586,54 @@ $("#infoTable").append(`
 </tr>
 `);
 }
- // Additional rows for yardTrackingNumber
- if (info.yardTrackingNumber) {
-                $("#infoTable").append(`
-                    <tr>
-                        <td>${dateOnly}</td>
-                        <td>${orderNo}</td>
-                        <td>Replacement Tracking(Yard): ${info.yardTrackingNumber || ""}</td>
-                        <td>${info.escRepYardTrackingDate || ""}</td>
-                        <td>${info.yardShippingMethod || ""} ${info.yardOwnShipping}</td>
-                        <td>${info.inTransitpartYardDate || ""}</td>
-                        <td>${info.yardTrackingETA || ""}</td>
-                        <td>${info.yardDeliveredDate || ""}</td>
-                    </tr>
-                `);
-            }
+// Additional rows for yardTrackingNumber
+if (info.yardTrackingNumber) {
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${orderNo}</td>
+<td>Replacement Tracking(Yard): ${info.yardTrackingNumber || ""}</td>
+<td>${info.escRepYardTrackingDate || ""}</td>
+<td>${info.yardShippingMethod || ""} ${info.yardOwnShipping}</td>
+<td>${info.inTransitpartYardDate || ""}</td>
+<td>${info.yardTrackingETA || ""}</td>
+<td>${info.yardDeliveredDate || ""}</td>
+</tr>
+`);
+}
 
-            // Additional rows for customerTrackingNumberReplacement
-            if (info.customerTrackingNumberReplacement) {
-                $("#infoTable").append(`
-                    <tr>
-                        <td>${dateOnly}</td>
-                        <td>${orderNo}</td>
-                        <td>Replacement Tracking(Cust): ${info.customerTrackingNumberReplacement}</td>
-                        <td>${info.escRepCustTrackingDate || ""}</td>
-                        <td>${info.customerShippingMethodReplacement || ""} ${info.custOwnShipReplacement || ""}</td>
-                        <td>${info.inTransitpartCustDate || ""}</td>
-                        <td>${info.customerETAReplacement || ""}</td>
-                        <td>${info.repPartCustDeliveredDate || ""}</td>
-                    </tr>
-                `);
-            }
+// Additional rows for customerTrackingNumberReplacement
+if (info.customerTrackingNumberReplacement) {
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${orderNo}</td>
+<td>Replacement Tracking(Cust): ${info.customerTrackingNumberReplacement}</td>
+<td>${info.escRepCustTrackingDate || ""}</td>
+<td>${info.customerShippingMethodReplacement || ""} ${info.custOwnShipReplacement || ""}</td>
+<td>${info.inTransitpartCustDate || ""}</td>
+<td>${info.customerETAReplacement || ""}</td>
+<td>${info.repPartCustDeliveredDate || ""}</td>
+</tr>
+`);
+}
 
-            // Additional rows for returnTrackingCust
-            if (info.returnTrackingCust) {
-                $("#infoTable").append(`
-                    <tr>
-                        <td>${dateOnly}</td>
-                        <td>${orderNo}</td>
-                        <td>Return Tracking: ${info.returnTrackingCust || ""}</td>
-                        <td>${info.escRetTrackingDate || ""}</td>
-                        <td>${info.customerShippingMethodReturn || ""} ${info.custOwnShippingReturn || ""}</td>
-                        <td>${info.inTransitReturnDate || ""}</td>
-                        <td>${info.custretPartETA || ""}</td>
-                        <td>${info.returnDeliveredDate || ""}</td>
-                    </tr>
-                `);
-            }
- 
+// Additional rows for returnTrackingCust
+if (info.returnTrackingCust) {
+$("#infoTable").append(`
+<tr>
+<td>${dateOnly}</td>
+<td>${orderNo}</td>
+<td>Return Tracking: ${info.returnTrackingCust || ""}</td>
+<td>${info.escRetTrackingDate || ""}</td>
+<td>${info.customerShippingMethodReturn || ""} ${info.custOwnShippingReturn || ""}</td>
+<td>${info.inTransitReturnDate || ""}</td>
+<td>${info.custretPartETA || ""}</td>
+<td>${info.returnDeliveredDate || ""}</td>
+</tr>
+`);
+}
+
 // Rows for other arrays in additionalInfo
 const arraysToRender = {
 trackingHistory: "Tracking No",
@@ -649,36 +649,36 @@ const array = info[arrayKey];
 if (arrayKey === "trackingHistory" && Array.isArray(array) && array.length > 0) {
 array.forEach((value, idx) => {
 const displayValue =
-  arrayKey === "trackingLinkHistory"
-      ? `<a href="${value}" target="_blank">${value}</a>`
-      : value;
+arrayKey === "trackingLinkHistory"
+? `<a href="${value}" target="_blank">${value}</a>`
+: value;
 
 const estimatedDelivery =
-  arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
-      ? info.etaHistory[idx]
-      : "N/A";
-      const labelCreationDateWithoutFirst =
-  info.labelCreationDate && info.labelCreationDate.length > 1
-    ? info.labelCreationDate.slice(1) // New array excluding the first element
-    : [];
+arrayKey === "trackingHistory" && info.etaHistory && info.etaHistory[idx]
+? info.etaHistory[idx]
+: "N/A";
+const labelCreationDateWithoutFirst =
+info.labelCreationDate && info.labelCreationDate.length > 1
+? info.labelCreationDate.slice(1) // New array excluding the first element
+: [];
 console.log("===",labelCreationDateWithoutFirst)
 const labelCreationDateVoids =
-  arrayKey === "trackingHistory" &&
-  labelCreationDateWithoutFirst[idx] // Adjust index to match the new array
-    ? labelCreationDateWithoutFirst[idx]
-    : "N/A";
+arrayKey === "trackingHistory" &&
+labelCreationDateWithoutFirst[idx] // Adjust index to match the new array
+? labelCreationDateWithoutFirst[idx]
+: "N/A";
 
 $("#infoTable").append(`
-  <tr>
-      <td>${dateOnly}</td>
-      <td>${orderNo}</td>
-      <td>${label}: ${displayValue}</td>
-      <td>${labelCreationDateVoids}</td>
-      <td></td>
-      <td></td> <!-- Empty for Label/History Details -->
-      <td style="color: red;">VOIDED</td>
-      <td>${estimatedDelivery}</td> <!-- Est Delivery column -->
-  </tr>
+<tr>
+<td>${dateOnly}</td>
+<td>${orderNo}</td>
+<td>${label}: ${displayValue}</td>
+<td>${labelCreationDateVoids}</td>
+<td></td>
+<td></td> <!-- Empty for Label/History Details -->
+<td style="color: red;">VOIDED</td>
+<td>${estimatedDelivery}</td> <!-- Est Delivery column -->
+</tr>
 `);
 });
 }
@@ -698,10 +698,10 @@ const array = info[arrayKey];
 // Append only if `trackingHistory` array length > 0
 if (arrayKey === "escRepTrackingHistoryYard" && Array.isArray(array) && array.length > 0) {
 array.forEach((value, idx) => {
-  const displayValueYard =
-  arrayKey === "escRepTrackingHistoryYard"
-      ? `${value}`
-      : value;
+const displayValueYard =
+arrayKey === "escRepTrackingHistoryYard"
+? `${value}`
+: value;
 const estimatedDeliveryYard =
 arrayKey === "escRepTrackingHistoryYard" && info.escRepETAHistoryYard && info.escRepETAHistoryYard[idx]
 ? info.escRepETAHistoryYard[idx]
@@ -774,11 +774,11 @@ $("#infoTable").append(`
 });
 // for esc rep yard
 const arraysToRenderReturn = {
-      escReturnTrackingHistory: "Return Tracking No",
-      escReturnETAHistory: "Return ETA",
-      escReturnShipperNameHistory: "Return Shipper Name",
-      escReturnBOLhistory: "Label Creation Return",
-    };
+escReturnTrackingHistory: "Return Tracking No",
+escReturnETAHistory: "Return ETA",
+escReturnShipperNameHistory: "Return Shipper Name",
+escReturnBOLhistory: "Label Creation Return",
+};
 
 Object.entries(arraysToRenderReturn).forEach(([arrayKey, label]) => {
 const array = info[arrayKey];
@@ -786,10 +786,10 @@ const array = info[arrayKey];
 // Append only if `trackingHistory` array length > 0
 if (arrayKey === "escReturnTrackingHistory" && Array.isArray(array) && array.length > 0) {
 array.forEach((value, idx) => {
-  const displayValueReturn =
-  arrayKey === "escReturnTrackingHistory"
-      ? `${value}`
-      : value;
+const displayValueReturn =
+arrayKey === "escReturnTrackingHistory"
+? `${value}`
+: value;
 const estimatedDeliveryReturn =
 arrayKey === "escReturnTrackingHistory" && info.escReturnETAHistory && info.escReturnETAHistory[idx]
 ? info.escRepETAHistoryCust[idx]
@@ -931,7 +931,6 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-// document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -951,12 +950,12 @@ const basicSearch = (
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value)) ||
 (order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) 
 )) ||
-(order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
-(order.make && order.make.toLowerCase().includes(value)) ||    // Added make
-(order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
-(order.model && order.model.toLowerCase().includes(value))     // Added model
+(order.phone && order.phone.toLowerCase().includes(value)) ||  
+(order.make && order.make.toLowerCase().includes(value)) ||   
+(order.year && order.year.toString().toLowerCase().includes(value)) || 
+(order.model && order.model.toLowerCase().includes(value))   
 );
 
 // Check if any yard detail (including stockNo) matches the search term
