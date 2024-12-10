@@ -3692,17 +3692,21 @@ $("#saveEsc").on("click", async function () {
 
     try {
       console.log("orderNo",orderNo,yardIndex);
-        const response = await axios.get(
-            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex - 1}`,
-            { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      const response = await axios.get(
+            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex - 1 }`,
+            { headers: { Authorization: `Bearer ${token}` } }
         );
 
+        console.log("Response Status:", response.status);
+
         if (response.status !== 200) {
+            console.error("Response Body:", response.data);
             alert("Failed to fetch current order data.");
             return;
         }
 
         const currentAdditionalInfo = response.data;
+        console.log("Current Additional Info:", currentAdditionalInfo);
         const updatedData = {};
         let hasChanges = false;
 
