@@ -577,21 +577,15 @@ sortTable(index, type);
 }
 });
 function renderFilteredOrders(agentName) {
-    const filteredOrders = allOrders.map(order => {
-      // Filter orderHistory for the selected agent
-      const filteredHistory = order.salesAgent.filter(salesAgent =>
-      salesAgent.toLowerCase().includes(agentName.toLowerCase())
-      );
+  // Filter orders based on the salesAgent field
+  const filteredOrders = allOrders.filter(order => 
+    order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
+  );
 
-      // Return the order only if it has filtered history
-      return filteredHistory.length > 0
-        ? { ...order, orderHistory: filteredHistory }
-        : null;
-    }).filter(order => order !== null); // Remove null orders
-
-    renderTableRows(1, filteredOrders);
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-  }
+  // Render the filtered orders in the table
+  renderTableRows(1, filteredOrders);
+  createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+}
 
   // Attach change event to the dropdown
   $("#userDropdown").on("change", function () {
