@@ -3693,7 +3693,7 @@ $("#saveEsc").on("click", async function () {
     try {
       console.log("orderNo",orderNo,yardIndex);
       const response = await axios.get(
-            `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${yardIndex}`,
+            `https://www.spotops360.com/orders/${orderNo}`,
             { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -3705,8 +3705,9 @@ $("#saveEsc").on("click", async function () {
             return;
         }
 
-        const currentAdditionalInfo = response.data;
-        console.log("Current Additional Info:","response",response, currentAdditionalInfo);
+        const data = response.data;
+        const currentAdditionalInfo = data.additionalInfo[yardIndex - 1]
+        console.log("response",data,"Current Additional Info:", currentAdditionalInfo);
         const updatedData = {};
         let hasChanges = false;
 
