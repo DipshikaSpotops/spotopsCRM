@@ -3734,11 +3734,21 @@ $("#saveEsc").on("click", async function () {
                 }
 
                 if (key === "returnTrackingCust") {
-                    if (!currentAdditionalInfo.escRetTrackingDate && normalizeValue(newValue).length > 4) {
-                        updatedData.escRetTrackingDate = currentDateTime;
-                        console.log("Setting escRetTrackingDate:", currentDateTime);
-                    }
-                }
+    console.log("Current escRetTrackingDate value:", currentAdditionalInfo.escRetTrackingDate);
+
+    // Ensure escRetTrackingDate is not set and newValue meets the length criteria
+    if (
+        !currentAdditionalInfo.escRetTrackingDate || 
+        normalizeValue(currentAdditionalInfo.escRetTrackingDate).trim() === ""
+    ) {
+        if (normalizeValue(newValue).length > 4) {
+            updatedData.escRetTrackingDate = currentDateTime;
+            console.log("Setting escRetTrackingDate for the first time:", currentDateTime);
+        }
+    } else {
+        console.log("escRetTrackingDate is already set, skipping update.");
+    }
+}
 
                 if (key === "custreplacementDelivery") {
                     if (newValue === "In Transit" && !currentAdditionalInfo.inTransitpartCustDate) {
