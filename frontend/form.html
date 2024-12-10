@@ -3711,6 +3711,7 @@ $("#saveEsc").on("click", async function () {
             const oldValue = currentAdditionalInfo[key];
 
             if (hasValueChanged(oldValue, newValue)) {
+              console.log("Values",oldValue, newValue)
                 if (key === "customerTrackingNumberReplacement" && !currentAdditionalInfo.escRepCustTrackingDate) {
                     if (newValue.length > 4) {
                         updatedData.escRepCustTrackingDate = currentDateTime;
