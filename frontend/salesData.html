@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>All Orders - Monthly</title>
+<title>Sales Data - Monthly</title>
 <link
 href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 rel="stylesheet"
@@ -370,9 +370,7 @@ aria-labelledby="userMenu"
 ></span>
 </a>
 <div class="submenu" id="submenu-reports">
-<a class="nav-link" href="shippingExpenses.html"
->Shipping Expenses</a
->
+<a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
 <a class="nav-link" href="purchases.html">Purchases</a>
 <!-- <a class="nav-link" href="refundReport.html">Refund Report</a> -->
 <a class="nav-link" href="poReport.html">PO Report</a>
@@ -394,7 +392,13 @@ aria-labelledby="userMenu"
 </div>
 
 <div class="main-content">
-  <h1 class="fixed-header" style="z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: -1%;margin-top: -1%;">View Orders- Monthly</h1>
+  <h1 class="fixed-header" style="z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: -1%;margin-top: -1%;">Sales Data- Monthly</h1>
+  <select name="userDropdowm" id="userDropdown"  class="fixed-header" style="z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 81.1%;margin-top: 0.6%;text-align: center;width: 9%;border-radius:18px;">
+    <option value="">Select Sales-agent</option>
+     <option value="John">John</option>
+     <option value="Michael">Michael</option>
+     <option value="Tony">Tony</option>
+ </select>
   <div id="headerWrap" style="position: fixed;margin-top: 0%;padding: 0%;background-color: white;width: 84.7%;height: 17vh;margin-left: -0.3%;">
   <div>
 <input
@@ -573,7 +577,30 @@ sortTable(index, type);
 });
 }
 });
+function renderFilteredOrders(agentName) {
+    const filteredOrders = allOrders.map(order => {
+      // Filter orderHistory for the selected agent
+      const filteredHistory = order.salesAgent.filter(salesAgent =>
+      salesAgent.toLowerCase().includes(agentName.toLowerCase())
+      );
 
+      // Return the order only if it has filtered history
+      return filteredHistory.length > 0
+        ? { ...order, orderHistory: filteredHistory }
+        : null;
+    }).filter(order => order !== null); // Remove null orders
+
+    renderTableRows(1, filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  }
+
+  // Attach change event to the dropdown
+  $("#userDropdown").on("change", function () {
+    const selectedAgent = $(this).val();
+    if (selectedAgent) {
+      renderFilteredOrders(selectedAgent);
+    }
+  });
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
 const start = (page - 1) * rowsPerPage;
