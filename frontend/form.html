@@ -3735,14 +3735,16 @@ $("#saveEsc").on("click", async function () {
                     }
                 }
                 if (hasValueChanged(oldValue, newValue)) {
-              if (key === "returnTrackingCust") {
-        // Only update if escRetTrackingDate is not set
+                  if (key === "returnTrackingCust") {
+    if (!currentAdditionalInfo.escRetTrackingDate || currentAdditionalInfo.escRetTrackingDate.trim() === "") {
         if (newValue.length > 4) {
             updatedData.escRetTrackingDate = currentDateTime;
+            console.log("Setting escRetTrackingDate for the first time:", currentDateTime);
         }
     } else {
-        console.log("escRetTrackingDate is already set, skipping update.");
+        console.log("escRetTrackingDate is already set:", currentAdditionalInfo.escRetTrackingDate);
     }
+} 
 }  
 
 
