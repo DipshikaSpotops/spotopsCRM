@@ -2618,7 +2618,7 @@ const additionalInfo = order.additionalInfo[actualYardIndex];
 if (!additionalInfo) {
 return res.status(404).json({ error: "Yard index not found" });
 }
-res.status(200).json(additionalInfo);
+res.json(additionalInfo);
 } catch (err) {
 console.error(err);
 res.status(500).json({ error: "Server error" });
