@@ -3737,10 +3737,7 @@ $("#saveEsc").on("click", async function () {
     console.log("Current escRetTrackingDate value:", currentAdditionalInfo.escRetTrackingDate);
 
     // Ensure escRetTrackingDate is not set and newValue meets the length criteria
-    if (
-        !currentAdditionalInfo.escRetTrackingDate || 
-        normalizeValue(currentAdditionalInfo.escRetTrackingDate).trim() === ""
-    ) {
+    if (!currentAdditionalInfo.escRetTrackingDate) {
         if (normalizeValue(newValue).length > 4) {
             updatedData.escRetTrackingDate = currentDateTime;
             console.log("Setting escRetTrackingDate for the first time:", currentDateTime);
