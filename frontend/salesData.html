@@ -653,7 +653,7 @@ $("#userDropdown").on("change", function () {
 const selectedAgent = $(this).val();
 if (selectedAgent) {
 renderFilteredOrders(selectedAgent);
-} if (selectedAgent == "All"){
+}else if (selectedAgent === "All"){
   window.location.reload();
 }
 else {
