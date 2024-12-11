@@ -651,11 +651,16 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 // Attach change event to the dropdown
 $("#userDropdown").on("change", function () {
 const selectedAgent = $(this).val();
-if (selectedAgent) {
-renderFilteredOrders(selectedAgent);
-}else if (selectedAgent === "All"){
-  window.location.reload();
-}
+if (selectedAgent && selectedAgent !== "All") {
+    // Render orders filtered by the selected agent
+    renderFilteredOrders(selectedAgent);
+  } else if (selectedAgent === "All") {
+    // Show all orders without reloading
+    calculateAndUpdateTotals(allOrders); // Recalculate totals for all orders
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+    renderTableRows(1, allOrders); // Render all orders in the table
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders); // Reset pagination
+  }
 else {
 // Reset to all orders if no agent is selected
 calculateAndUpdateTotals(allOrders);
