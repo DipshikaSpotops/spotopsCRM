@@ -153,7 +153,7 @@ padding-left: 35px;
 height: 40px;
 position: fixed;
 top: 60px; /* Adjusting for the navbar height */
-  z-index: 10;
+z-index: 10;
 }
 .profile-table {
 width: 50%;
@@ -177,16 +177,16 @@ display: block;
 width: 82vw; 
 }
 .table-wrapper {
-  max-height: 93vh; 
-  /* overflow-y: auto;  Enable vertical scrolling */
-  display: block;    /* Make the table body scrollable */
+max-height: 93vh; 
+/* overflow-y: auto;  Enable vertical scrolling */
+display: block;    /* Make the table body scrollable */
 }
 
 thead th {
-  position: sticky;
-  top: 0;
-  background-color: #fff; /* Set background color for header */
-  z-index: 1; /* Ensure the header stays on top of the table body */
+position: sticky;
+top: 0;
+background-color: #fff; /* Set background color for header */
+z-index: 1; /* Ensure the header stays on top of the table body */
 }
 table.table td {
 white-space: nowrap;
@@ -197,9 +197,9 @@ text-align: center;
 border-bottom: 1px solid #ddd;
 }
 table.table th {
-  top: 200px; 
-  z-index: 5;
-  /* position: fixed;   */
+top: 200px; 
+z-index: 5;
+/* position: fixed;   */
 background-color: #f2f2f2;
 white-space: nowrap;
 }
@@ -391,48 +391,48 @@ aria-labelledby="userMenu"
 </div>
 
 <div class="main-content">
-  <div>
-  <h1 class="fixed-header" style="z-index:99;position: fixed;background-color: white;width: 85.4%;margin-left: -1%;margin-top: -1%;">Sales Data- Monthly</h1>
-  <select name="userDropdowm" id="userDropdown"  class="fixed-header" style="height: 3vh; z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 14%;margin-top: -0.5%;text-align: center;width: 9%;border-radius:18px;">
-    <option value="">Select Sales-agent</option>
-     <option value="John">John</option>
-     <option value="Michael">Michael</option>
-     <option value="Tony">Tony</option>
- </select>
- <div>
-  <input
-  type="text"
-  class="form-control"
-  id="searchInput"
-  placeholder="Search..."
-  />
-  </div>
-  <div id="gpTotals" style="border: 1px solid #177f80;
-  text-align: center;
-  height: auto;
-  width: auto;
-  border-radius: 8px;
-  margin: 0% -5%;
-  background-color: #f0f0f0;
-  padding: 5px;
-  position: fixed;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;">
-    <div id="totalEstGP">Total Est GP: $0</div>
-    <div id="totalCurrentGP">Total Current GP: $0</div>
-    <div id="totalActualGP">Total Actual GP: $0</div>
-  </div>
-  
-  </div>
-  <div id="headerWrap" style="position: fixed;margin-top: 0%;padding: 0%;background-color: white;width: 84.7%;height: 17vh;margin-left: -0.3%;">
+<div>
+<h1 class="fixed-header" style="z-index:99;position: fixed;background-color: white;width: 85.4%;margin-left: -1%;margin-top: -1%;">Sales Data- Monthly</h1>
+<select name="userDropdowm" id="userDropdown"  class="fixed-header" style="height: 3vh; z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 14%;margin-top: -0.5%;text-align: center;width: 9%;border-radius:18px;">
+<option value="">Select Sales-agent</option>
+<option value="John">John</option>
+<option value="Michael">Michael</option>
+<option value="Tony">Tony</option>
+</select>
+<div>
+<input
+type="text"
+class="form-control"
+id="searchInput"
+placeholder="Search..."
+/>
+</div>
+<div id="gpTotals" style="border: 1px solid #177f80;
+text-align: center;
+height: auto;
+width: auto;
+border-radius: 8px;
+margin: 0% -5%;
+background-color: #f0f0f0;
+padding: 5px;
+position: fixed;
+top: 60px;
+left: 50%;
+transform: translateX(-50%);
+z-index: 999;">
+<div id="totalEstGP">Total Est GP: $0</div>
+<div id="totalCurrentGP">Total Current GP: $0</div>
+<div id="totalActualGP">Total Actual GP: $0</div>
+</div>
+
+</div>
+<div id="headerWrap" style="position: fixed;margin-top: 0%;padding: 0%;background-color: white;width: 84.7%;height: 17vh;margin-left: -0.3%;">
 <!--  controls -->
 <div id="pagination-controls" style="margin-top: 5%;">
-    <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
+<!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
 <div id="filterAndTotal" style="margin-top: 1%;margin-left: -1.5%;">
- <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
+<!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
@@ -442,25 +442,25 @@ aria-labelledby="userMenu"
 </div>
 </div>
 <div class="table-wrapper">
-  <table class="table table-bordered mt-4" style="margin-top: 15rem !important;">
-    <thead style="text-align: center;">
-      <tr>
-        <th style="cursor: pointer" scope="col">Order Date</th>
-        <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Sale Price <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Est GP <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Current GP <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
-      </tr>
-    </thead>
-    <tbody id="infoTable">
-      <!-- Table data goes here -->
-    </tbody>
-  </table>
+<table class="table table-bordered mt-4" style="margin-top: 15rem !important;">
+<thead style="text-align: center;">
+<tr>
+<th style="cursor: pointer" scope="col">Order Date</th>
+<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Agent Name <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Sale Price <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Est GP <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Current GP <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
+</tr>
+</thead>
+<tbody id="infoTable">
+<!-- Table data goes here -->
+</tbody>
+</table>
 </div>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
@@ -593,51 +593,51 @@ sortTable(index, type);
 }
 });
 function calculateAndUpdateTotals(orders) {
-  let totalEstGP = 0;
-  let totalCurrentGP = 0;
-  let totalActualGP = 0;
+let totalEstGP = 0;
+let totalCurrentGP = 0;
+let totalActualGP = 0;
 
-  orders.forEach(order => {
-    totalEstGP += order.grossProfit || 0; // Assuming `grossProfit` is the Est GP
-    totalCurrentGP += order.currentGP || 0; // Assuming `currentGP` is pre-calculated
-    totalActualGP += order.actualGP || 0;
-  });
+orders.forEach(order => {
+totalEstGP += order.grossProfit || 0; // Use backend `grossProfit` if available
+totalCurrentGP += calculateCurrentGP(order); // Use the dynamically calculated `currentGP`
+totalActualGP += order.actualGP || 0; // Use backend `actualGP` if available
+});
 
-  // Update the totals in the UI
-  document.getElementById("totalEstGP").innerHTML = `Total Est GP: $${totalEstGP.toFixed(2)}`;
-  document.getElementById("totalCurrentGP").innerHTML = `Total Current GP: $${totalCurrentGP.toFixed(2)}`;
-  document.getElementById("totalActualGP").innerHTML = `Total Actual GP: $${totalActualGP.toFixed(2)}`;
+// Update the totals in the UI
+document.getElementById("totalEstGP").innerHTML = `Total Est GP: $${totalEstGP.toFixed(2)}`;
+document.getElementById("totalCurrentGP").innerHTML = `Total Current GP: $${totalCurrentGP.toFixed(2)}`;
+document.getElementById("totalActualGP").innerHTML = `Total Actual GP: $${totalActualGP.toFixed(2)}`;
 }
 
 function renderFilteredOrders(agentName) {
-  // Filter orders based on the salesAgent field
-  const filteredOrders = allOrders.filter(order =>
-    order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
-  );
+// Filter orders based on the salesAgent field
+const filteredOrders = allOrders.filter(order =>
+order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
+);
 
-  // Update totals dynamically
-  calculateAndUpdateTotals(filteredOrders);
+// Update totals dynamically
+calculateAndUpdateTotals(filteredOrders);
 
-  // Update the total orders dynamically
-  document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
+// Update the total orders dynamically
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
 
-  // Render the filtered orders in the table
-  renderTableRows(1, filteredOrders);
-  createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+// Render the filtered orders in the table
+renderTableRows(1, filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
 // Attach change event to the dropdown
 $("#userDropdown").on("change", function () {
-  const selectedAgent = $(this).val();
-  if (selectedAgent) {
-    renderFilteredOrders(selectedAgent);
-  } else {
-    // Reset to all orders if no agent is selected
-    calculateAndUpdateTotals(allOrders);
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
-    renderTableRows(1, allOrders);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
-  }
+const selectedAgent = $(this).val();
+if (selectedAgent) {
+renderFilteredOrders(selectedAgent);
+} else {
+// Reset to all orders if no agent is selected
+calculateAndUpdateTotals(allOrders);
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+renderTableRows(1, allOrders);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+}
 });
 
 // Calculate totals at initial load
@@ -650,68 +650,52 @@ const end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
 
 $('#infoTable').empty(); // Clear the table
-ordersForPage.forEach((item) => {
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
 
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
-}
-team = localStorage.getItem('team');
-
-const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-// <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
-
-// const sendInvoice = `
-// <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-// `;
-
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-// console.log(dateOnly);
+ordersForPage.forEach(order => {
+const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
 
 $("#infoTable").append(`
 <tr>
-<td>${dateOnly}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${
-(item.fName && item.lName)
-? `${item.fName} ${item.lName}`
-: (item.customerName || "")
-}</td>
-<td>${item.pReq || item.partName}</td>
+<td>${order.orderDate}</td>
+<td>${order.orderNo}</td>
+<td>${order.salesAgent}</td>
+<td>${order.customerName || ''}</td>
+<td>${order.partName || ''}</td>
+<td>${order.orderStatus || ''}</td>
+<td>$${order.soldP || 0}</td>
+<td>$${order.grossProfit || 0}</td>
+<td>$${currentGP.toFixed(2)}</td>
+<td>$${order.actualGP || 0}</td>
+</tr>
+`);
+});
+}
 
-<td>${item.orderStatus}</td>
-<td>$${item.soldP}</td>
-<td>$${item.grossProfit}</td>
-<td>
-${
-item.additionalInfo && item.additionalInfo.length > 0
-? (() => {
+function calculateCurrentGP(order) {
+if (!order.additionalInfo || order.additionalInfo.length === 0) return 0;
+
 let totalYardSpent = 0;
-item.additionalInfo.forEach(info => {
+
+order.additionalInfo.forEach(info => {
 const yardPP = parseFloat(info.partPrice) || 0;
 const yardOSorYS = info.shippingDetails || '';
 let shippingValueYard = 0;
+
 if (yardOSorYS.includes("Own shipping")) {
 shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
 } else if (yardOSorYS.includes("Yard shipping")) {
 shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
 }
+
 const yardOthers = parseFloat(info.others) || 0;
 const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
 const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
 const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
 const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
 
-// Only calculate if the conditions are met
+// Include only valid expenses based on conditions
 if (
-info.status !== "PO cancelled" || 
+info.status !== "PO cancelled" ||
 (info.status === "PO cancelled" && info.paymentStatus === "Card charged")
 ) {
 totalYardSpent +=
@@ -725,21 +709,11 @@ yardRefundAmount;
 }
 });
 
-const spMinusTax = item.soldP - item.salestax;
-const custRefundedAmount = item.custRefundedAmount || 0;
-const subtractRefund = spMinusTax - custRefundedAmount || 0;
-const currentGP = subtractRefund - totalYardSpent;
-console.log("currentGP", spMinusTax, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
-return `$${currentGP.toFixed(2)}`;
-})()
-: ""
-}
-</td>
-<td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
+const spMinusTax = order.soldP - (order.salestax || 0);
+const custRefundedAmount = parseFloat(order.custRefundedAmount) || 0;
+const subtractRefund = spMinusTax - custRefundedAmount;
 
-</tr>
-`);
-});
+return subtractRefund - totalYardSpent;
 }
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
