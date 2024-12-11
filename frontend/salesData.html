@@ -421,6 +421,7 @@ aria-labelledby="userMenu"
 <h1 class="fixed-header" style="z-index:99;position: fixed;background-color: white;width: 85.4%;margin-left: -1%;margin-top: -1%;text-align: center;">Sales Data- Monthly</h1>
 <select name="userDropdowm" id="userDropdown"  class="fixed-header" style="height: 3vh; z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 25%;margin-top: -0.5%;text-align: center;width: 9%;border-radius:18px;">
 <option value="">Select Sales-agent</option>
+<option value="All">All</option>
 <option value="John">John</option>
 <option value="Michael">Michael</option>
 <option value="Tony">Tony</option>
@@ -652,7 +653,10 @@ $("#userDropdown").on("change", function () {
 const selectedAgent = $(this).val();
 if (selectedAgent) {
 renderFilteredOrders(selectedAgent);
-} else {
+} if (selectedAgent == "All"){
+  window.location.reload();
+}
+else {
 // Reset to all orders if no agent is selected
 calculateAndUpdateTotals(allOrders);
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
