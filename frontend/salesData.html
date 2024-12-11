@@ -680,7 +680,11 @@ $("#infoTable").append(`
 <td>${order.orderDate}</td>
 <td>${order.orderNo}</td>
 <td>${order.salesAgent}</td>
-<td>${order.customerName || ''}</td>
+<td>${
+(item.fName && item.lName)
+? `${item.fName} ${item.lName}`
+: (item.customerName || "")
+}</td>
 <td>${order.partName || ''}</td>
 <td>${order.orderStatus || ''}</td>
 <td>$${order.soldP || 0}</td>
