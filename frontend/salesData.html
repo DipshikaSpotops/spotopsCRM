@@ -681,9 +681,9 @@ $("#infoTable").append(`
 <td>${order.orderNo}</td>
 <td>${order.salesAgent}</td>
 <td>${
-(item.fName && item.lName)
-? `${item.fName} ${item.lName}`
-: (item.customerName || "")
+(order.fName && order.lName)
+? `${order.fName} ${order.lName}`
+: (order.customerName || "")
 }</td>
 <td>${order.partName || ''}</td>
 <td>${order.orderStatus || ''}</td>
