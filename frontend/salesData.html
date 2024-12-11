@@ -700,7 +700,7 @@ $("#infoTable").append(`
 <td>$${order.soldP || 0}</td>
 <td>$${order.grossProfit || 0}</td>
 <td>$${currentGP.toFixed(2)}</td>
-<td>$${order.actualGP || 0}</td>
+<td>$${order.actualGP.toFixed(2) || 0}</td>
 </tr>
 `);
 });
