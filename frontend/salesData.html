@@ -128,6 +128,32 @@ flex-shrink: 0;
 margin: 0% 30%;
 }
 @media (max-width: 768px) {
+    .sidebar {
+        width: 100%; /* Full-width sidebar for mobile */
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .fixed-header {
+        margin: 0;
+        padding: 10px;
+    }
+    #searchInput, #userDropdown {
+        width: 90%;
+        margin: 10px auto;
+    }
+    .table-wrapper {
+        overflow-x: auto;
+    }
+}
+table.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+table.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* @media (max-width: 768px) {
 .sidebar {
 transform: translateX(-100%);
 width: 70%;
@@ -141,7 +167,7 @@ margin-left: 0;
 .toggle-sidebar {
 display: block;
 }
-}
+} */
 #searchInput {
 width: 24%;
 border-radius: 30px;
@@ -407,19 +433,7 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<div id="gpTotals" style="border: 1px solid #177f80;
-text-align: center;
-height: auto;
-width: auto;
-border-radius: 8px;
-margin: 0% -5%;
-background-color: #f0f0f0;
-padding: 5px;
-position: fixed;
-top: 60px;
-left: 50%;
-transform: translateX(-50%);
-z-index: 999;">
+<div id="gpTotals" style="border: 1px solid #177f80;height: auto;width: auto;border-radius: 8px;margin: 0% -5%;background-color: #f0f0f0;padding: 5px;position: fixed;top: 60px;left: 50%;transform: translateX(-50%);z-index: 999;">
 <div id="totalEstGP">Total Est GP: $0</div>
 <div id="totalCurrentGP">Total Current GP: $0</div>
 <div id="totalActualGP">Total Actual GP: $0</div>
