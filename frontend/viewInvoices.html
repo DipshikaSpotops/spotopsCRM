@@ -616,6 +616,7 @@ return;
 
 try {
 // Fetch the bill details from the API
+console.log("billNo",billNo);
 const response = await axios.get(`https://www.spotops360.com/api/bills/${billNo}`);
 const bill = response.data;
 
