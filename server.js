@@ -521,7 +521,7 @@ isCancelled: { type: Boolean, default: false },
 actualGP:Number,
 });
 
-const Bill = mongoose.model("CancelledOrder", BillSchema);
+const Bill = mongoose.model("Bill", BillSchema);
 
 const OrderSchema = new mongoose.Schema({
 orderNo: { type: String, unique: true },
