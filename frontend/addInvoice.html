@@ -166,7 +166,7 @@ background-color: #e9ecef;
 #below{
 margin: -4%;
 }
-#salesAgent {
+#billAgent {
 margin: 12% 58%;
 border-radius: 10px;
 height: 5vh;
@@ -801,7 +801,7 @@ const team = localStorage.getItem("team");
 
 if (firstName) {
 $("#user-name").text(firstName);
-$("#salesAgent").val(firstName);
+$("#billAgent").val(firstName);
 }
 console.log("firstName",firstName);
 if (firstName === "John") {
@@ -914,7 +914,7 @@ $("#firstName").val(data.fName || firstNameE);
 $("#lastName").val(data.lName || lastNameE);
 $("#orderNo").val(data.orderNo);
 $("#orderDate").val(data.orderDate);
-$("#salesAgent").val(data.salesAgent);
+$("#billAgent").val(data.salesAgent);
 $("#bAddress").val(data.bAddressStreet);
 $("#bCity").val(data.bAddressCity);
 $("#bState").val(data.bAddressState);
