@@ -351,82 +351,53 @@ aria-labelledby="userMenu"
 </div>
 </div>
 <div class="invoice-container">
-    <div class="invoice-header">
-        <div>
-            <h1>INVOICE</h1>
-            <p class="invoice-number">INV - 121224 - 001</p>
-        </div>
-        <div class="invoice-dates">
-            <p><strong>Issued Date:</strong> 10 December 2024</p>
-            <p><strong>Due Date:</strong> 11 December 2024</p>
-        </div>
-    </div>
-
-    <div class="invoice-section">
-        <div>
-            <p class="section-title">BILL TO:</p>
-            <p>Isabella Petrova<br>
-            123 Anywhere St., Any City<br>
-            +123 456 7890</p>
-        </div>
-        <div>
-            <p class="section-title">SHIP TO:</p>
-            <p>Isabella Petrova<br>
-            123 Anywhere St., Any City<br>
-            +123 456 7890</p>
-        </div>
-    </div>
-
-    <div class="invoice-section">
-        <table class="details-table">
-            <thead>
-                <tr>
-                    <th>Item Description</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>2002 Kia Carnival - ABS Module (Complete Assembly)</td>
-                    <td>1</td>
-                    <td>$100</td>
-                    <td>$100</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" style="text-align: right;">Sub Total</td>
-                    <td>$100</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;">Tax (7.5%)</td>
-                    <td>Included</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right; font-weight: bold;">Total</td>
-                    <td>$100</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-
-    <div class="terms-container">
-        <p>INSTRUCTIONS / T&amp;C GOES HERE</p>
-    </div>
-
-    <div class="secure-pay-container">
-        <p class="agreement">
-            <input type="checkbox"> I agree to the <a href="#">Terms & Conditions</a>, 
-            <a href="#">Privacy Policy</a>, and <a href="#">Return and Refund Policy</a>.
-        </p>
-        <img src="https://via.placeholder.com/100x50.png?text=Secure+Pay" alt="Secure Pay">
-    </div>
-
-    <div class="footer">
-        100% Safe & Secure | Encrypted Payment Gateway | Your Information is Protected
-    </div>
+  <div class="input-container">
+      <h2>Enter Your Bill Number</h2>
+      <input
+          type="text"
+          id="bill-number"
+          class="form-control"
+          placeholder="Enter Bill Number"
+      />
+      <button
+          id="fetch-invoice"
+          class="btn btn-primary mt-3"
+      >
+          Fetch Invoice
+      </button>
+  </div>
+  <div id="invoice-details" style="display: none;">
+      <div class="invoice-header">
+          <h1>INVOICE</h1>
+          <p id="invoice-number"></p>
+      </div>
+      <div class="invoice-section">
+          <p><strong>BILL TO:</strong></p>
+          <p id="bill-to"></p>
+      </div>
+      <div class="invoice-section">
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Item Description</th>
+                      <th>Qty</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                  </tr>
+              </thead>
+              <tbody id="invoice-items"></tbody>
+          </table>
+      </div>
+      <div>
+          <p><strong>Total:</strong> $<span id="invoice-total"></span></p>
+      </div>
+      <button
+          id="pay-button"
+          class="btn btn-success"
+      >
+          Pay Now
+      </button>
+  </div>
 </div>
 
 <!-- Profile Modal -->
