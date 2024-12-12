@@ -36,7 +36,7 @@ width: 100%;
 position: fixed;
 top: 0;
 z-index: 2;
-border-bottom: 1px solid #e0e0e0;
+bbill-bottom: 1px solid #e0e0e0;
 }
 
 .sidebar {
@@ -63,13 +63,13 @@ background-color: rgba(255, 255, 255, 0.2);
 .sidebar .nav-link.selected {
 background-color: rgba(255, 255, 255, 0.2);
 cursor: default;
-border: none;
+bbill: none;
 }
-#orderNo{
+#billNo{
 text-align: center;
 height: 4vh;
-border: 1px solid #c0c0c0;
-border-radius: 10px;
+bbill: 1px solid #c0c0c0;
+bbill-radius: 10px;
 margin: 1% 37.7%;
 }
 .main-content {
@@ -130,7 +130,7 @@ background-color: black;
 color: white;
 }
 
-#newOrderForm {
+#newBillForm {
 margin: -2% 0% -2% 12%;
 }
 .firstRow {
@@ -151,8 +151,8 @@ height: 8vh;
 }
 .priceRow {
 padding: 14px;
-border: 1px solid #c0c0c0;
-border-radius: 10px;
+bbill: 1px solid #c0c0c0;
+bbill-radius: 10px;
 width: 115%;
 margin: -4% -19%;
 height: 20vh;
@@ -168,17 +168,17 @@ margin: -4%;
 }
 #billAgent {
 margin: 12% 58%;
-border-radius: 10px;
+bbill-radius: 10px;
 height: 5vh;
 text-align: center;
 color: black;
 background-color: grey;
-border: none;
+bbill: none;
 }
-#orderDate {
+#billDate {
 margin: 12% 66%;
 width: 90%;
-border-radius: 10px;
+bbill-radius: 10px;
 color: grey;
 height: 5vh;
 text-align: center;
@@ -198,10 +198,10 @@ window.location.href = "login_signup.html";
 <body>
 <div class="navbar">
 <div class="logo">
-  <a href="index.html">
-    <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
-    </a> 
-  </div>
+<a href="index.html">
+<img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+</a> 
+</div>
 <div class="toggle-sidebar">
 <i class="fas fa-bars"></i>
 </div>
@@ -227,23 +227,23 @@ window.location.href = "login_signup.html";
 ></span>
 </a>
 <div class="submenu" id="submenu-dashboards">
-<a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
-<a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+<a class="nav-link add-bill-link" id="add-bill-link" href="addOrders.html?newEntry=true">Add New Order</a>
+<a class="nav-link placed-bills-link" id="placed-bills-link" href="placedOrders.html">Placed Orders</a>
 <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
-<!-- <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a> -->
-<!-- <a class="nav-link view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a> -->
-<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+<!-- <a class="nav-link view-bills-link" id="view-bills-link" href="bills.html">View Orders</a> -->
+<!-- <a class="nav-link view-bills-monthly-link" id="view-bills-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a> -->
+<a class="nav-link view-all-bills-link" id="view-all-bills-link" href="viewAllOrders.html">View All Orders</a>
 <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
 
 <a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
 <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a>
-<!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
-<!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
-<a class="nav-link cancelled-orders-link"  id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
-<!-- <a class="nav-link view-ordersSheet-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
+<!-- <a class="nav-link teamA-bills-link" id="teamA-bills-link" href="billsMark.html">TeamA Orders</a> -->
+<!-- <a class="nav-link teamB-bills-link" id="teamB-bills-link" href="billsSussane.html">TeamB Orders</a> -->
+<a class="nav-link cancelled-bills-link"  id="cancelled-bills-link" href="cancelledOrders.html">Cancelled Orders</a>
+<!-- <a class="nav-link view-billsSheet-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
 <a class="nav-link view-fulfilled-link" href="fulfilledOrders.html">Fulfilled Orders</a>
-<a class="nav-link escalated-orders" href="escalatedOrders.html">Overall Escalation</a>
-<a class="nav-link ongoingEscalated-orders" href="ongoingEscalations.html">Ongoing Escalation</a>
+<a class="nav-link escalated-bills" href="escalatedOrders.html">Overall Escalation</a>
+<a class="nav-link ongoingEscalated-bills" href="ongoingEscalations.html">Ongoing Escalation</a>
 </div>
 </div>
 <div class="nav-item">
@@ -314,10 +314,10 @@ window.location.href = "login_signup.html";
 <input type="text" id="billAgent" required readonly/>
 </div>
 <div>
-<input type="text" id="orderDate" required readonly/>
+<input type="text" id="billDate" required readonly/>
 </div>
 </div>
-<form id="newOrderForm">
+<form id="newBillForm">
 <div class="main-content">
 <div class="firstRow" id="customer">
 <h6 style="text-align: center; margin-top: 1%;">Customer Info</h6>
@@ -649,51 +649,51 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
 </div>
 </div>  
-<div class="form-group col-md-2" style="display: flex; align-items: center;border: 1px solid #c0c0c0;border-radius: 5px;color: #6e5e5e;height: 3vh;">
-  <label for="expeditorNot" style="margin-right: 10px;">Expedite Shipping</label>
-  <input type="checkbox" id="expeditorNot" style="width: 30px;height: 23px;">
+<div class="form-group col-md-2" style="display: flex; align-items: center;bbill: 1px solid #c0c0c0;bbill-radius: 5px;color: #6e5e5e;height: 3vh;">
+<label for="expeditorNot" style="margin-right: 10px;">Expedite Shipping</label>
+<input type="checkbox" id="expeditorNot" style="width: 30px;height: 23px;">
 </div>
 <div class="form-group col-md-2">
-  <div class="input-group">
-  <div class="input-group-prepend">
-  <span class="input-group-text">%</span>
-  </div>
-  <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
-  </div>
-  </div>  
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">%</span>
+</div>
+<input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
+</div>
+</div>  
 </div>
 <div class="form-row firstFive">
-  <div class="form-group col-md-2">
-  <div class="input-group">
-    <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />  
-  </div>
-  </div>
-  <div class="form-group col-md-2">
-  <div class="input-group">
-  <div class="input-group-prepend">
-  <span class="input-group-text">$</span>
-  </div>
-  <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
-  </div>
-  </div>  
-  <div class="form-group col-md-2">
-    <div class="input-group">
-      <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
-    </div>
-    </div> 
-  <div class="form-group col-md-2" style="display: flex; align-items: center;border: 1px solid #c0c0c0;border-radius: 5px;color: #6e5e5e;height: 3vh;">
-    <label for="dsCall" style="margin-right: 10px;">DS Call</label>
-    <input type="checkbox" id="dsCall" style="width: 30px;height: 23px;">
-  </div>
-  
-  </div>
+<div class="form-group col-md-2">
+<div class="input-group">
+<input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />  
+</div>
+</div>
+<div class="form-group col-md-2">
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text">$</span>
+</div>
+<input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
+</div>
+</div>  
+<div class="form-group col-md-2">
+<div class="input-group">
+<input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
+</div>
+</div> 
+<div class="form-group col-md-2" style="display: flex; align-items: center;bbill: 1px solid #c0c0c0;bbill-radius: 5px;color: #6e5e5e;height: 3vh;">
+<label for="dsCall" style="margin-right: 10px;">DS Call</label>
+<input type="checkbox" id="dsCall" style="width: 30px;height: 23px;">
+</div>
+
+</div>
 
 
 </div>
 <!-- price and gp info till here -->
 <div id="below">
 <div>
-<input type="text" id="orderNo" required placeholder="Enter Order No."/>
+<input type="text" id="billNo" required placeholder="Enter Order No."/>
 </div>
 <button type="submit" class="btn" id="addoBtn">Add New Bill</button>
 </div>
@@ -806,9 +806,9 @@ $("#billAgent").val(firstName);
 console.log("firstName",firstName);
 if (firstName === "John") {
 console.log("first",firstName);
-$("#submenu-dashboards .view-All-orders-link").show();
+$("#submenu-dashboards .view-All-bills-link").show();
 } else{
-$("#submenu-dashboards .view-All-orders-link").hide();
+$("#submenu-dashboards .view-All-bills-link").hide();
 }
 const now = new Date();
 const options = {
@@ -845,92 +845,65 @@ default: return "th";
 }
 };
 
-var orderDateAdd= `${day}${daySuffix(day)} ${month}, ${year}`;
-console.log("orderDate",orderDateAdd);
+var billDateAdd= `${day}${daySuffix(day)} ${month}, ${year}`;
+console.log("billDate",billDateAdd);
 
 const today = new Date().toISOString().split("T")[0];
-$("#orderDate").val(orderDateAdd);
+$("#billDate").val(billDateAdd);
 
 const token = localStorage.getItem("token");
 
 function calculateProfit() {
-  const quoted = parseFloat($("#soldP").val()) || 0;
-  const yardPrice = parseFloat($("#costP").val()) || 0;
-  const shipping = parseFloat($("#shippingFee").val()) || 0;
-  const salesTax = 0.05 * quoted;
-  console.log("quoted",quoted,yardPrice,shipping,salesTax)
-  const grossProfit = quoted - yardPrice - shipping - salesTax;
-  $("#salestax").val(salesTax.toFixed(2));
-  $("#grossProfit").val(grossProfit.toFixed(2));
+const quoted = parseFloat($("#soldP").val()) || 0;
+const yardPrice = parseFloat($("#costP").val()) || 0;
+const shipping = parseFloat($("#shippingFee").val()) || 0;
+const salesTax = 0.05 * quoted;
+console.log("quoted",quoted,yardPrice,shipping,salesTax)
+const grossProfit = quoted - yardPrice - shipping - salesTax;
+$("#salestax").val(salesTax.toFixed(2));
+$("#grossProfit").val(grossProfit.toFixed(2));
 }
 
 $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
 
 
-// Function to extract the highest order number from a collection
-function getHighestOrderNo(orderArr, existingOrderNo) {
-if (orderArr.length === 0) return existingOrderNo;
-const lastElement = orderArr[orderArr.length - 1];
-const lastOrderNo = lastElement.orderNo;
+// Function to extract the highest bill number from a collection
+function getHighestOrderNo(billArr, existingOrderNo) {
+if (billArr.length === 0) return existingOrderNo;
+const lastElement = billArr[billArr.length - 1];
+const lastOrderNo = lastElement.billNo;
 const numberPart = parseInt(lastOrderNo.slice(7), 10);
 return numberPart;
 }
 
 var spMinusTax;
-  // On form submission
-  function updateOrderHistory(orderHistory) {
-const orderHistoryList = $("#orderHistoryList");
-orderHistoryList.empty();
-orderHistory.forEach((historyItem) => {
-const [heading, ...details] = historyItem.split(" by ");
-const listItem = `
-<li class="timeline-item">
-<div class="timeline-panel">
-<div class="timeline-heading">${heading}</div>
-<div class="timeline-body">
-<p>${details.join(" by ")}</p>
-</div>
-</div>
-</li>`;
-orderHistoryList.append(listItem);
-});
-}
+
 const urlParams = new URLSearchParams(window.location.search);
-var orderNo = urlParams.get("orderNo");
-if (orderNo) {
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
+var billNo = urlParams.get("billNo");
+if (billNo) {
+fetch(`https://www.spotops360.com/bills/${billNo}`)
 .then((response) => response.json())
 .then((data) => {
-// document.getElementById("estPP").textContent += data.costP;
-var customerNameE = data.customerName;
-const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
-const firstNameE = nameParts[0] || ""; // Default to empty string if no first name
-const lastNameE = nameParts[1] || "";  // Default to empty string if no last name
 var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
-$("#firstName").val(data.fName || firstNameE);
-$("#lastName").val(data.lName || lastNameE);
-$("#orderNo").val(data.orderNo);
-$("#orderDate").val(data.orderDate);
+$("#firstName").val(data.fName);
+$("#lastName").val(data.lName);
+$("#billNo").val(data.billNo);
+$("#billDate").val(data.billDate);
 $("#billAgent").val(data.salesAgent);
 $("#bAddress").val(data.bAddressStreet);
 $("#bCity").val(data.bAddressCity);
 $("#bState").val(data.bAddressState);
 $("#bZip").val(data.bAddressZip);
 $("#bCountry").val(data.bAddressAcountry);
-// $("#bAddress").val(data.bAddressStreet);
 $("#bAttention").val(data.bName);
 $("#sAddress").val(data.sAddressStreet);
 $("#sCity").val(data.sAddressCity);
 $("#sState").val(data.sAddressState);
 $("#sZip").val(data.sAddressZip);
 $("#sCountry").val(data.sAddressAcountry);
-// $("#bAddress").val(data.bAddress);
-// $("#firstName").val(firstNameE);
-// $("#lastname").val(lastNameE);
-// $("#sAddress").val(data.sAddress);
 $("#sAttention").val(data.attention);
 $("#email").val(data.email);
 $("#phone").val(data.phone);
@@ -946,20 +919,14 @@ $("#costP").val(data.costP);
 $("#shippingFee").val(data.shippingFee);
 $("#salestax").val(data.salestax);
 $("#grossProfit").val(data.grossProfit);
-$("#orderStatus").val(data.orderStatus);
+$("#billStatus").val(data.billStatus);
 $("#vin").val(data.vin);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
 $("#sBusinessName").val(data.businessName);
 $("#dsCall").prop("checked", data.dsCall === "true");
 $("#expeditorNot").prop("checked", data.expediteShipping === "true");
-// data.additionalInfo.forEach((info, index) => {
-// addYardButton(index + 1, `Yard ${index + 1}`);
-// });
-// if (data.trackingInfo) {
-// $("#trackingInfoContainer").html(data.trackingInfo);
-// }
-updateOrderHistory(data.orderHistory);
+
 partDesc = `
 Year: ${data.year}
 Make: ${data.make}
@@ -980,192 +947,187 @@ $(this)
 .toggleClass("fa-chevron-right fa-chevron-down");
 }
 });
-
-
 }
-
 else {
 console.log("Order not found");
 }
 
-$("#newOrderForm").on("submit", function (e) {
-        e.preventDefault();
-
-        const firstName = localStorage.getItem("firstName");
-        const cusFName = $("#firstName").val();
-        const cusLName = $("#lastName").val();
-        const customerName = `${cusFName} ${cusLName}`;
-        const orderNoInput = $("#orderNo").val();
+$("#newBillForm").on("submit", function (e) {
+e.preventDefault();
+const firstName = localStorage.getItem("firstName");
+const cusFName = $("#firstName").val();
+const cusLName = $("#lastName").val();
+const customerName = `${cusFName} ${cusLName}`;
+const billNoInput = $("#billNo").val();
 const newEntry = urlParams.get("newEntry");
-        if (newEntry || !orderNo) {
-            // Create a new order
-            const newOrderData = {
-                orderNo: orderNoInput,
-                orderDate: $("#orderDate").val(),
-                salesAgent: $("#salesAgent").val(),
-                // customerName: customerName,
-                fName: $("#firstName").val(),
-                lName: $("#lastName").val(),
-                bAddressStreet: $("#bAddress").val(),
-                bAddressCity: $("#bCity").val(),
-                bAddressState: $("#bState").val(),
-                bAddressZip: $("#bZip").val(),
-                bAddressAcountry: $("#bCountry").val(),
-                bName: $("#bAttention").val(),
-                sAddressStreet: $("#sAddress").val(),
-                sAddressCity: $("#sCity").val(),
-                sAddressState: $("#sState").val(),
-                sAddressZip: $("#sZip").val(),
-                sAddressAcountry: $("#sCountry").val(),
-                attention: $("#sAttention").val(),
-                email: $("#email").val(),
-                phone: $("#phone").val(),
-                altPhone: $("#altPhone").val(),
-                make: $("#make").val(),
-                model: $("#model").val(),
-                year: $("#year").val(),
-                pReq: $("#pReq").val(),
-                desc: $("#desc").val(),
-                warranty: $("#warranty").val(),
-                soldP: $("#soldP").val(),
-                costP: $("#costP").val(),
-                shippingFee: $("#shippingFee").val(),
-                salestax: $("#salestax").val(),
-                grossProfit: $("#grossProfit").val(),
-                orderStatus: "Placed",
-                vin: $("#vin").val(),
-                last4digits: $("#issueOrder").val(),
-                notes: $("#notes").val(),
-                dsCall: $("#dsCall").prop("checked") ? true : false,
-                expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
-                businessName: $("#sBusinessName").val(),
-            };
+if (newEntry || !billNo) {
+// Create a new bill
+const newBillData = {
+billNo: billNoInput,
+billDate: $("#billDate").val(),
+salesAgent: $("#salesAgent").val(),
+// customerName: customerName,
+fName: $("#firstName").val(),
+lName: $("#lastName").val(),
+bAddressStreet: $("#bAddress").val(),
+bAddressCity: $("#bCity").val(),
+bAddressState: $("#bState").val(),
+bAddressZip: $("#bZip").val(),
+bAddressAcountry: $("#bCountry").val(),
+bName: $("#bAttention").val(),
+sAddressStreet: $("#sAddress").val(),
+sAddressCity: $("#sCity").val(),
+sAddressState: $("#sState").val(),
+sAddressZip: $("#sZip").val(),
+sAddressAcountry: $("#sCountry").val(),
+attention: $("#sAttention").val(),
+email: $("#email").val(),
+phone: $("#phone").val(),
+altPhone: $("#altPhone").val(),
+make: $("#make").val(),
+model: $("#model").val(),
+year: $("#year").val(),
+pReq: $("#pReq").val(),
+desc: $("#desc").val(),
+warranty: $("#warranty").val(),
+soldP: $("#soldP").val(),
+costP: $("#costP").val(),
+shippingFee: $("#shippingFee").val(),
+salestax: $("#salestax").val(),
+grossProfit: $("#grossProfit").val(),
+billStatus: "Placed",
+vin: $("#vin").val(),
+last4digits: $("#issueOrder").val(),
+notes: $("#notes").val(),
+dsCall: $("#dsCall").prop("checked") ? true : false,
+expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
+businessName: $("#sBusinessName").val(),
+};
 
-            fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newOrderData),
-            })
-                .then((response) => {
-                    alert(`Order ${orderNoInput} has been successfully created.`);
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    console.error("Error saving new order:", error);
-                    alert("An error occurred while saving the order. Please try again.");
-                });
-        } else {
-            // Update an existing order
-            const updatedOrderData = {
-                orderNo: orderNoInput,
-                orderDate: $("#orderDate").val(),
-                salesAgent: $("#salesAgent").val(),
-                customerName: customerName,
-                bAddressStreet: $("#bAddress").val(),
-                bAddressCity: $("#bCity").val(),
-                bAddressState: $("#bState").val(),
-                bAddressZip: $("#bZip").val(),
-                bAddressAcountry: $("#bCountry").val(),
-                bName: $("#bAttention").val(),
-                sAddressStreet: $("#sAddress").val(),
-                sAddressCity: $("#sCity").val(),
-                sAddressState: $("#sState").val(),
-                sAddressZip: $("#sZip").val(),
-                sAddressAcountry: $("#sCountry").val(),
-                attention: $("#sAttention").val(),
-                email: $("#email").val(),
-                phone: $("#phone").val(),
-               altPhone: $("#altPhone").val(),
-                make: $("#make").val(),
-                model: $("#model").val(),
-                year: $("#year").val(),
-                pReq: $("#pReq").val(),
-                desc: $("#desc").val(),
-                warranty: $("#warranty").val(),
-                soldP: $("#soldP").val(),
-                costP: $("#costP").val(),
-                shippingFee: $("#shippingFee").val(),
-                salestax: $("#salestax").val(),
-                grossProfit: $("#grossProfit").val(),
-                orderStatus: $("#orderStatus").val(),
-                vin: $("#vin").val(),
-                last4digits: $("#issueOrder").val(),
-                notes: $("#notes").val(),
-                dsCall: $("#dsCall").prop("checked") ? true : false,
-                expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
-                businessName: $("#sBusinessName").val(),
-            };
+fetch(`https://www.spotops360.com/bills?firstName=${firstName}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(newBillData),
+})
+.then((response) => {
+alert(`Order ${billNoInput} has been successfully created.`);
+window.location.reload();
+})
+.catch((error) => {
+console.error("Error saving new bill:", error);
+alert("An error occurred while saving the bill. Please try again.");
+});
+} else {
+// Update an existing bill
+const updatedOrderData = {
+billNo: billNoInput,
+billDate: $("#billDate").val(),
+salesAgent: $("#salesAgent").val(),
+customerName: customerName,
+bAddressStreet: $("#bAddress").val(),
+bAddressCity: $("#bCity").val(),
+bAddressState: $("#bState").val(),
+bAddressZip: $("#bZip").val(),
+bAddressAcountry: $("#bCountry").val(),
+bName: $("#bAttention").val(),
+sAddressStreet: $("#sAddress").val(),
+sAddressCity: $("#sCity").val(),
+sAddressState: $("#sState").val(),
+sAddressZip: $("#sZip").val(),
+sAddressAcountry: $("#sCountry").val(),
+attention: $("#sAttention").val(),
+email: $("#email").val(),
+phone: $("#phone").val(),
+altPhone: $("#altPhone").val(),
+make: $("#make").val(),
+model: $("#model").val(),
+year: $("#year").val(),
+pReq: $("#pReq").val(),
+desc: $("#desc").val(),
+warranty: $("#warranty").val(),
+soldP: $("#soldP").val(),
+costP: $("#costP").val(),
+shippingFee: $("#shippingFee").val(),
+salestax: $("#salestax").val(),
+grossProfit: $("#grossProfit").val(),
+billStatus: $("#billStatus").val(),
+vin: $("#vin").val(),
+last4digits: $("#issueOrder").val(),
+notes: $("#notes").val(),
+dsCall: $("#dsCall").prop("checked") ? true : false,
+expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
+businessName: $("#sBusinessName").val(),
+};
 
-            fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedOrderData),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Failed to update the order.");
-                    }
-                    return response.json();
-                })
-                .then(() => {
-                    alert(`Order ${orderNoInput} has been successfully updated.`);
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    console.error("Error updating order:", error);
-                    alert("An error occurred while updating the order. Please try again.");
-                });
-        }
-    });
+fetch(`https://www.spotops360.com/bills/${billNo}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedOrderData),
+})
+.then((response) => {
+if (!response.ok) {
+throw new Error("Failed to update the bill.");
+}
+return response.json();
+})
+.then(() => {
+alert(`Order ${billNoInput} has been successfully updated.`);
+window.location.reload();
+})
+.catch((error) => {
+console.error("Error updating bill:", error);
+alert("An error occurred while updating the bill. Please try again.");
+});
+}
+});
 
-  // Helper function to format order date
-  function getFormattedOrderDate() {
-    const now = new Date();
-    const options = {
-      timeZone: 'America/Chicago',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    };
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    const parts = formatter.formatToParts(now);
-    const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+// Helper function to format bill date
+function getFormattedOrderDate() {
+const now = new Date();
+const options = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter = new Intl.DateTimeFormat('en-US', options);
+const parts = formatter.formatToParts(now);
+const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 
-    const date = new Date(formattedDate);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    const hour = date.getHours();
-    const minute = date.getMinutes().toString().padStart(2, '0');
+const date = new Date(formattedDate);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hour = date.getHours();
+const minute = date.getMinutes().toString().padStart(2, '0');
 
-    const daySuffix = (day) => {
-      if (day > 3 && day < 21) return "th";
-      switch (day % 10) {
-        case 1: return "st";
-        case 2: return "nd";
-        case 3: return "rd";
-        default: return "th";
-      }
-    };
-
-    return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
-  }
+const daySuffix = (day) => {
+if (day > 3 && day < 21) return "th";
+switch (day % 10) {
+case 1: return "st";
+case 2: return "nd";
+case 3: return "rd";
+default: return "th";
+}
+};
+return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
+}
 
 
 // Sidebar and navigation functionality
 if (team === "Team Charlie") {
 $("#submenu-reports .nav-link").not(':contains("My Sales Report")').hide();
 $(
-"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-ordersSheet-link,.view-orders-link,.customer-approved-link, .view-all-orders-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .view-fulfilled-link, #submenu-dashboards .escalated-orders, #submenu-dashboards .ongoingEscalated-orders"
+"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-billsSheet-link,.view-bills-link,.customer-approved-link, .view-all-bills-link, #submenu-dashboards .teamA-bills-link, #submenu-dashboards .teamB-bills-link, #submenu-dashboards .placed-bills-link, #submenu-dashboards .cancelled-bills-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .view-fulfilled-link, #submenu-dashboards .escalated-bills, #submenu-dashboards .ongoingEscalated-bills"
 ).hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
@@ -1174,14 +1136,14 @@ $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 $(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link"
+"#submenu-dashboards .add-bill-link, .view-individualOrders-link, .teamB-bills-link"
 ).hide();
 } else if (team === "Team Sussane") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 $(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
+"#submenu-dashboards .add-bill-link, .view-individualOrders-link, .teamA-bills-link"
 ).hide();
 } else if (role === "Admin") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
@@ -1195,36 +1157,36 @@ const currentMonth = new Date().getMonth(); // Get current month
 const currentYear = new Date().getFullYear(); // Get current year
 
 axios
-.get(`https://www.spotops360.com/orders`, {
+.get(`https://www.spotops360.com/bills`, {
 headers: { Authorization: `Bearer ${token}` },
 })
 .then((response) => {
-const data = response.data.filter((order) => order.salesAgent === firstName);
-let validOrders = [];
+const data = response.data.filter((bill) => bill.salesAgent === firstName);
+let validBills = [];
 
-// Filter orders by the current month
-// data.forEach((order) => {
-// // const orderDate = parseOrderDate(order.orderDate);
-// const orderMonth = orderDate.getMonth();
-// const orderYear = orderDate.getFullYear();
+// Filter bills by the current month
+// data.forEach((bill) => {
+// // const billDate = parseOrderDate(bill.billDate);
+// const billMonth = billDate.getMonth();
+// const billYear = billDate.getFullYear();
 
-// // Only consider orders from the current month and year
-// if (orderMonth === currentMonth && orderYear === currentYear) {
-// validOrders.push(order);
+// // Only consider bills from the current month and year
+// if (billMonth === currentMonth && billYear === currentYear) {
+// validBills.push(bill);
 // }
 // });
 
-// Process the filtered orders
-updateOrdersUI(validOrders);
+// Process the filtered bills
+updateOrdersUI(validBills);
 })
 .catch((error) => {
-console.error("Error fetching orders:", error);
+console.error("Error fetching bills:", error);
 });
 }
 
-// Function to update the UI with valid orders
-function updateOrdersUI(validOrders) {
-const totalOrders = validOrders.length;
+// Function to update the UI with valid bills
+function updateOrdersUI(validBills) {
+const totalOrders = validBills.length;
 console.log(`Total Orders for this month: ${totalOrders}`);
 
 // Update stats box
@@ -1269,7 +1231,6 @@ console.log("close button clicked");
 location.reload();
 });
 
-
 // Event listener for "Same as Billing Address" checkbox
 $("input[type='checkbox'][value='Same as Billing Adress']").on("change", function () {
 if ($(this).is(":checked")) {
@@ -1281,7 +1242,6 @@ $("#sCountry").val($("#bCountry").val());
 $("#sZip").val($("#bZip").val());
 $("#sAttention").val($("#bAttention").val());
 } else {
-// Clear the shipping address fields if the checkbox is unchecked
 $("#sAddress").val("");
 $("#sCity").val("");
 $("#sState").val("");
@@ -1290,22 +1250,6 @@ $("#sZip").val("");
 $("#sAttention").val("");
 }
 });
-// $("#orderNo").on("blur", function () {
-// const orderNo = $(this).val();
-// console.log("on click",orderNo);
-// if (orderNo) {
-// axios.get(`https://www.spotops360.com/orders/checkOrderNo/${orderNo}`)
-// .then(response => {
-// if (response.data.exists) {
-// alert("Order No. already exists. Please enter a unique Order No.");
-// $(this).val(""); 
-// }
-// })
-// .catch(error => {
-// console.error("Error checking Order No:", error);
-// });
-// }
-// });
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
