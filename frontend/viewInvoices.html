@@ -576,38 +576,56 @@ console.log("close button clicked");
 location.reload();
 });
 $("#fetch-bill").on("click", async function () {
-        const billNumber = $("#bill-number").val();
-        if (!billNumber) {
-            alert("Please enter a bill number.");
+    const billNumber = $("#bill-number").val(); // Get the entered bill number
+    if (!billNumber) {
+        alert("Please enter a bill number.");
+        return;
+    }
+
+    try {
+        // Fetch the bill details from the API
+        const response = await axios.get(`https://www.spotops360.com/api/bills/${billNumber}`);
+        const bill = response.data;
+
+        // Check if the bill data exists
+        if (!bill) {
+            alert("Bill not found. Please check the bill number.");
             return;
         }
 
-        try {
-            const response = await axios.get(`https://www.spotops360.com/api/bills/${billNumber}`);
-            const bill = response.data;
+        // Update invoice number and bill-to information
+        $("#invoice-number").text(`Invoice Number: ${bill.billNumber}`);
+        $("#bill-to").html(bill.billTo);
 
-            $("#bill-number").text(`Invoice Number: ${bill.billNumber}`);
-            $("#bill-to").html(bill.billTo);
-            const itemsHtml = bill
+        // Check if bill.items is an array and generate table rows
+        if (Array.isArray(bill.items) && bill.items.length > 0) {
+            const itemsHtml = bill.items
                 .map(item => `
-                
                     <tr>
-                        <td>${item.description}</td>
-                        <td>${item.qty}</td>
-                        <td>$${item.soldP}</td>
-                        <td>$${item.soldP}</td>
+                        <td>${item.description || "N/A"}</td>
+                        <td>${item.qty || 0}</td>
+                        <td>$${item.soldP || 0}</td>
+                        <td>$${item.soldP || 0}</td>
                     </tr>
                 `)
                 .join("");
             $("#bill-items").html(itemsHtml);
-            $("#bill-total").text(bill.total);
-
-            $("#bill-details").show();
-        } catch (error) {
-            console.error(error);
-            alert("Failed to fetch the bill. Please check the bill number.");
+        } else {
+            // Display a message if no items are found
+            $("#bill-items").html("<tr><td colspan='4'>No items found.</td></tr>");
         }
-    });
+
+        // Update total amount
+        $("#bill-total").text(bill.total ? `$${bill.total}` : "$0.00");
+
+        // Show the bill details section
+        $("#bill-details").show();
+    } catch (error) {
+        console.error(error);
+        alert("Failed to fetch the bill. Please check the bill number or try again later.");
+    }
+});
+
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
