@@ -867,7 +867,7 @@ res.json(order);
 app.get("/bills/:billNo", async (req, res) => {
 try {
 console.log("billNo:", req.params.billNo);
-const bill = await Bill.findOne({ billNumber: req.params.billNo });
+const bill = await Bill.findOne({ billNo: req.params.billNo });
 if (bill) {
 res.json(bill); 
 } else {
