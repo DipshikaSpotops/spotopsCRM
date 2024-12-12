@@ -692,7 +692,7 @@ $("#modal-pay-button").on("click", async function () {
         const { clientSecret } = response.data;
 
         // Initialize Stripe with the test publishable key
-        const stripe = Stripe("pk_test_your_publishable_key"); // Replace with your test publishable key
+        const stripe = Stripe("pk_test_51QUqUvGYqbfUX6jJ4dgOaxrvoWc0IluCZ6OALIZS5lIRQDjcZY8GQSZdM797qlYnDnw4S0l9O4IRm7TzWjLs4t6K00PQRPWheW"); // Replace with your test publishable key
 
         // Display the Stripe payment modal (requires Stripe.js)
         const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
