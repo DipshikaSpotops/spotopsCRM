@@ -674,7 +674,50 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+$("#modal-pay-button").on("click", async function () {
+    const totalAmount = parseFloat($("#modal-total").text().replace("$", ""));
+
+    if (!totalAmount || totalAmount <= 0) {
+        alert("Invalid total amount for payment.");
+        return;
+    }
+
+    try {
+        // Create a payment intent
+        const response = await axios.post("http://localhost:3000/create-payment-intent", {
+            amount: totalAmount, // Amount in dollars
+            currency: "usd", // Default currency
+        });
+
+        const { clientSecret } = response.data;
+
+        // Initialize Stripe with the test publishable key
+        const stripe = Stripe("pk_test_51QUqUvGYqbfUX6jJ4dgOaxrvoWc0IluCZ6OALIZS5lIRQDjcZY8GQSZdM797qlYnDnw4S0l9O4IRm7TzWjLs4t6K00PQRPWheW"); // Replace with your test publishable key
+
+        // Display the Stripe payment modal (requires Stripe.js)
+        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: {
+                    token: "tok_visa", // Use a Stripe test card token
+                },
+            },
+        });
+
+        if (error) {
+            console.error("Payment error:", error.message);
+            alert("Payment failed. Please try again.");
+        } else if (paymentIntent && paymentIntent.status === "succeeded") {
+            alert("Payment successful! Thank you.");
+            // Optionally update the backend with the payment status
+        }
+    } catch (error) {
+        console.error("Error processing payment:", error.message);
+        alert("Failed to process payment. Please try again.");
+    }
+});
+
 });
 </script>
 </body>
 </html>
+on click of <button id="modal-pay-button" class="btn btn-warning btn-lg">Secure Pay</button>, i want to open a stripe payment gateway and PAY
