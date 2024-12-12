@@ -636,8 +636,7 @@ $("#modal-ship-to").html(`${bill.fName} ${bill.lName}<br> ${bill.sAddressStreet}
 
 // Safely handle bill.items
 if (bill) {
-const itemsHtml = bill
-.map(item => `
+const itemsHtml = bill(item => `
 <tr>
 <td>${item.desc || "N/A"}</td>
 <td>${item.qty || 0}</td>
