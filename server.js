@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const bcrypt = require("bcrypt");   
 const nodemailer = require("nodemailer");
+const Stripe = require("stripe");
+const stripe = Stripe("sk_test_51QUqUvGYqbfUX6jJzdBh3xVvyR2gu7w6NvhYJRrOAhNWf6rPVwq5eyid2Rced5DQfpwXsk1gLNfEUwd1mFyXmUy700TW9SiMZa");
 // const puppeteer = require('puppeteer');
 const multer = require("multer");
 const upload = multer(); 
@@ -3393,3 +3395,19 @@ res.status(500).json({ message: "Error updating yard info", error: error.message
 }
 });
     
+// Create a payment intent
+app.post("/create-payment-intent", async (req, res) => {
+  try {
+      const { amount, currency } = req.body;
+
+      const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount * 100, // Amount in cents (e.g., $10 = 1000)
+          currency: currency || "usd", // Default to USD
+      });
+
+      res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+      console.error("Error creating payment intent:", error.message);
+      res.status(500).json({ error: "Failed to create payment intent" });
+  }
+});
