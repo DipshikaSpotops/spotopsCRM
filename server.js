@@ -865,7 +865,7 @@ const order = await Order.findOne({ orderNo: req.params.orderNo });
 res.json(order);
 });
 app.get("/bills/:billNo", async (req, res) => {
-  const order = await Bill.findOne({ billNo: req.params.billNo });
+  const bill = await Bill.findOne({ billNo: req.params.billNo });
   res.json(bill);
   });
 // changing order status
