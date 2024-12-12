@@ -693,7 +693,7 @@ window.location.href = "login_signup.html";
 <!-- price and gp info till here -->
 <div id="below">
 <div>
-<input type="text" id="billNo" required placeholder="Enter Order No."/>
+<input type="text" id="billNo" required placeholder="Enter Bill No."/>
 </div>
 <button type="submit" class="btn" id="addoBtn">Add New Bill</button>
 </div>
@@ -1012,7 +1012,7 @@ headers: {
 body: JSON.stringify(newBillData),
 })
 .then((response) => {
-alert(`Order ${billNoInput} has been successfully created.`);
+alert(`Bill ${billNoInput} has been successfully created.`);
 window.location.reload();
 })
 .catch((error) => {
