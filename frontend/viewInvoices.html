@@ -638,10 +638,10 @@ $("#modal-ship-to").html(`${bill.fName} ${bill.lName}<br> ${bill.sAddressStreet}
 if (bill) {
 const itemsHtml = `
 <tr>
-<td>${item.desc || "N/A"}</td>
-<td>${item.qty || 0}</td>
-<td>$${item.soldP || 0}</td>
-<td>$${item.soldP || 0}</td>
+<td>${bill.desc || "N/A"}</td>
+<td>${bill.qty || 0}</td>
+<td>$${bill.soldP || 0}</td>
+<td>$${bill.soldP || 0}</td>
 </tr>
 `
 .join("");
