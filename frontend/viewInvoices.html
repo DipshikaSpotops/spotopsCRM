@@ -636,14 +636,14 @@ $("#modal-ship-to").html(`${bill.fName} ${bill.lName}<br> ${bill.sAddressStreet}
 
 // Safely handle bill.items
 if (bill) {
-const itemsHtml = bill(item => `
+const itemsHtml = `
 <tr>
 <td>${item.desc || "N/A"}</td>
 <td>${item.qty || 0}</td>
 <td>$${item.soldP || 0}</td>
 <td>$${item.soldP || 0}</td>
 </tr>
-`)
+`
 .join("");
 $("#modal-bill-items").html(itemsHtml);
 } else {
