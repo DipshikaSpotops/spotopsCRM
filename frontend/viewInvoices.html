@@ -608,7 +608,7 @@ console.log("close button clicked");
 location.reload();
 });
 $("#fetch-bill").on("click", async function () {
-const billNumber = $("#bill-number").val(); // Get the entered bill number
+const billNo = $("#bill-number").val(); // Get the entered bill number
 if (!billNumber) {
 alert("Please enter a bill number.");
 return;
@@ -616,7 +616,7 @@ return;
 
 try {
 // Fetch the bill details from the API
-const response = await axios.get(`https://www.spotops360.com/api/bills/${billNumber}`);
+const response = await axios.get(`https://www.spotops360.com/api/bills/${billNo}`);
 const bill = response.data;
 
 // Log the bill to inspect its structure
