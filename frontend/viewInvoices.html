@@ -635,14 +635,14 @@ $("#modal-bill-to").html(`${bill.bName}<br> ${bill.bAddressStreet}<br> ${bill.bA
 $("#modal-ship-to").html(`${bill.fName} ${bill.lName}<br> ${bill.sAddressStreet}<br> ${bill.sAddressCity}, ${bill.sAddressState}, ${bill.sAddressZip}<br> ${bill.phone}` || "N/A");
 
 // Safely handle bill.items
-if (Array.isArray(bill.items) && bill.items.length > 0) {
-const itemsHtml = bill.items
+if (bill) {
+const itemsHtml = bill
 .map(item => `
 <tr>
-<td>${item.description || "N/A"}</td>
+<td>${item.desc || "N/A"}</td>
 <td>${item.qty || 0}</td>
 <td>$${item.soldP || 0}</td>
-<td>$${(item.qty || 0) * (item.soldP || 0)}</td>
+<td>$${item.soldP || 0}</td>
 </tr>
 `)
 .join("");
