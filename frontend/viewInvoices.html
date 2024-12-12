@@ -608,53 +608,62 @@ console.log("close button clicked");
 location.reload();
 });
 $("#fetch-bill").on("click", async function () {
-    const billNumber = $("#bill-number").val(); // Get the entered bill number
-    if (!billNumber) {
-        alert("Please enter a bill number.");
-        return;
-    }
+const billNumber = $("#bill-number").val(); // Get the entered bill number
+if (!billNumber) {
+alert("Please enter a bill number.");
+return;
+}
 
-    try {
-        // Fetch the bill details from the API
-        const response = await axios.get(`https://www.spotops360.com/api/bills/${billNumber}`);
-        const bill = response.data;
+try {
+// Fetch the bill details from the API
+const response = await axios.get(`https://www.spotops360.com/api/bills/${billNumber}`);
+const bill = response.data;
 
-        // Check if the bill data exists
-        if (!bill) {
-            alert("Bill not found. Please check the bill number.");
-            return;
-        }
+// Log the bill to inspect its structure
+console.log("Fetched Bill:", bill);
 
-        // Populate modal with bill details
-        $("#modal-invoice-number").text(`INV - ${bill.billNumber}`);
-        $("#modal-bill-to").html(bill.billTo);
-        $("#modal-ship-to").html(bill.shipTo || bill.billTo); // Use bill-to address if ship-to is unavailable
+// Check if the bill data exists
+if (!bill) {
+alert("Bill not found. Please check the bill number.");
+return;
+}
 
-        // Populate items table
-        const itemsHtml = bill.items
-            .map(item => `
-                <tr>
-                    <td>${item.description || "N/A"}</td>
-                    <td>${item.qty || 0}</td>
-                    <td>$${item.soldP || 0}</td>
-                    <td>$${(item.qty || 0) * (item.soldP || 0)}</td>
-                </tr>
-            `)
-            .join("");
-        $("#modal-bill-items").html(itemsHtml);
+// Update invoice number and bill-to information
+$("#modal-invoice-number").text(`INV - ${bill.billNumber || "N/A"}`);
+$("#modal-bill-to").html(bill.billTo || "N/A");
+$("#modal-ship-to").html(bill.shipTo || bill.billTo || "N/A");
 
-        // Populate totals
-        $("#modal-subtotal").text(`$${bill.subtotal || 0}`);
-        $("#modal-tax").text(`$${bill.tax || 0}`);
-        $("#modal-total").text(`$${bill.total || 0}`);
+// Safely handle bill.items
+if (Array.isArray(bill.items) && bill.items.length > 0) {
+const itemsHtml = bill.items
+.map(item => `
+<tr>
+<td>${item.description || "N/A"}</td>
+<td>${item.qty || 0}</td>
+<td>$${item.soldP || 0}</td>
+<td>$${(item.qty || 0) * (item.soldP || 0)}</td>
+</tr>
+`)
+.join("");
+$("#modal-bill-items").html(itemsHtml);
+} else {
+// Display a message if no items are found
+$("#modal-bill-items").html("<tr><td colspan='4'>No items found.</td></tr>");
+}
 
-        // Show the modal
-        $("#billModal").modal("show");
-    } catch (error) {
-        console.error(error);
-        alert("Failed to fetch the bill. Please check the bill number or try again later.");
-    }
+// Populate totals
+$("#modal-subtotal").text(`$${bill.subtotal || 0}`);
+$("#modal-tax").text(`$${bill.tax || 0}`);
+$("#modal-total").text(`$${bill.total || 0}`);
+
+// Show the modal
+$("#billModal").modal("show");
+} catch (error) {
+console.error("Error fetching bill:", error);
+alert("Failed to fetch the bill. Please check the bill number or try again later.");
+}
 });
+
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
