@@ -487,10 +487,11 @@ escrepBOLhistoryYard: [String]
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
 const BillSchema = new mongoose.Schema({
-orderNo: String,
-orderDate: String,
-salesAgent: String,
-customerName: String,
+billNo: String,
+billDate: String,
+billAgent: String,
+fName: String,
+lName: String,
 bAddressStreet: String,
 bAddressCity: String,
 bAddressState: String,
@@ -525,6 +526,8 @@ trackingInfo: String,
 notes: [String],
 isCancelled: { type: Boolean, default: false },
 actualGP:Number,
+dsCall: String,
+expediteShipping: String,
 });
 
 const Bill = mongoose.model("Bill", BillSchema);
