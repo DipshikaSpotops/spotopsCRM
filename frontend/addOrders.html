@@ -938,6 +938,7 @@ $("#salestax").val(data.salestax);
 $("#grossProfit").val(data.grossProfit);
 $("#orderStatus").val(data.orderStatus);
 $("#vin").val(data.vin);
+$("#partNo").val(data.partNo);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
 $("#sBusinessName").val(data.businessName);
@@ -1024,6 +1025,7 @@ const newEntry = urlParams.get("newEntry");
                 grossProfit: $("#grossProfit").val(),
                 orderStatus: "Placed",
                 vin: $("#vin").val(),
+                partNo: $("#partNo").val(),
                 last4digits: $("#issueOrder").val(),
                 notes: $("#notes").val(),
                 dsCall: $("#dsCall").prop("checked") ? true : false,
@@ -1081,6 +1083,7 @@ const newEntry = urlParams.get("newEntry");
                 grossProfit: $("#grossProfit").val(),
                 orderStatus: $("#orderStatus").val(),
                 vin: $("#vin").val(),
+                partNo: $("#partNo").val(),
                 last4digits: $("#issueOrder").val(),
                 notes: $("#notes").val(),
                 dsCall: $("#dsCall").prop("checked") ? true : false,
