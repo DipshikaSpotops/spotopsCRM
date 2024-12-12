@@ -56,9 +56,6 @@ console.error("Connection failed", err);
 
 let orderCount = 0;
 
-
-
-
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
 console.log("Adding new order");
@@ -199,6 +196,121 @@ res.status(201).json({ newOrder, team: newOrder.team });
 if (error.code === 11000) { // Duplicate key error in MongoDB
 console.error("Duplicate orderNo:", error.keyValue.orderNo);
 return res.status(409).json({ message: "Order No. already exists. Please enter a unique Order No." });
+}
+console.error("Error in invoice creation:", error);
+res.status(500).json({ message: "Error creating order", error: error.message });
+}
+});
+// Add a new bill and update the bill number
+app.post("/bills", async (req, res) => {
+console.log("Adding a new bill");
+var firstName = req.query.firstName;
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+try {
+console.log("Create a new bill:", req.body);
+const {
+billNo,
+billDate,
+billAgent,
+fName,
+lName,
+bAddressStreet,
+bAddressCity,
+bAddressState,
+bAddressZip,
+bAddressAcountry,
+bName,
+sAddressStreet,
+sAddressCity,
+sAddressState,
+sAddressZip,
+sAddressAcountry,
+bAddress,
+sAddress,
+attention,
+email,
+phone,
+altPhone,
+make,
+model,
+year,
+pReq,
+desc,
+warranty,
+soldP,
+costP,
+shippingFee,
+salestax,
+spMinusTax,
+grossProfit,
+businessName,
+billStatus,
+vin,
+last4digits,
+notes,
+expediteShipping,
+dsCall,
+} = req.body;
+
+const newBill = new Bill({
+billNo,
+billDate,
+billAgent,
+bAddressStreet,
+bAddressCity,
+bAddressState,
+bAddressZip,
+bAddressAcountry,
+bName,
+fName,
+lName,
+sAddressStreet,
+sAddressCity,
+sAddressState,
+sAddressZip,
+sAddressAcountry,
+bAddress,
+sAddress,
+attention,
+email,
+phone,
+altPhone,
+make,
+model,
+year,
+pReq,
+desc,
+warranty,
+soldP,
+costP,
+shippingFee,
+salestax,
+spMinusTax,
+grossProfit,
+businessName,
+orderStatus,
+vin,
+last4digits,
+notes,
+expediteShipping,
+dsCall,
+});
+await newBill.save();
+res.status(201).json({ newBill });
+} catch (error) {
+if (error.code === 11000) { // Duplicate key error in MongoDB
+console.error("Duplicate billNo:", error.keyValue.billNo);
+return res.status(409).json({ message: "BIll No. already exists. Please enter a unique Bill No." });
 }
 console.error("Error in invoice creation:", error);
 res.status(500).json({ message: "Error creating order", error: error.message });
@@ -370,7 +482,7 @@ escrepBOLhistoryYard: [String]
 );
 const Yard = mongoose.model('Yard', additionalInfoSchema);
 // Cancelled Orders Schema
-const CancelledOrderSchema = new mongoose.Schema({
+const BillSchema = new mongoose.Schema({
 orderNo: String,
 orderDate: String,
 salesAgent: String,
@@ -380,12 +492,12 @@ bAddressCity: String,
 bAddressState: String,
 bAddressZip: String,
 bAddressAcountry: String,
+sAddressStreet: String,
 sAddressCity: String,
 sAddressState: String,
 sAddressZip: String,
 sAddressAcountry: String,
-bAddress: String,
-sAddress: String,
+bName: String,
 email: String,
 phone: String,
 altPhone: String,
@@ -400,21 +512,16 @@ costP: Number,
 shippingFee: Number,
 salestax: Number,
 grossProfit: Number,
-orderStatus: String,
+billStatus: String,
 vin: String,
 last4digits: String,
-additionalInfo: [additionalInfoSchema],
 trackingInfo: String,
-orderHistory: [String],
 notes: [String],
 isCancelled: { type: Boolean, default: false },
-teamOrder:String,
 actualGP:Number,
-supportNotes:[String]
-
 });
 
-const CancelledOrder = mongoose.model("CancelledOrder", CancelledOrderSchema);
+const Bill = mongoose.model("CancelledOrder", BillSchema);
 
 const OrderSchema = new mongoose.Schema({
 orderNo: { type: String, unique: true },
