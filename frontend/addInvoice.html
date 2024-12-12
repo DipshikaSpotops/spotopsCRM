@@ -609,17 +609,32 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="warranty" placeholder="Warranty(in days)" required />
 </div>
 </div>
-<div class="form-row">
-<div class="form-group col-md-2">
-<input type="text" class="form-control" id="desc" placeholder="Description" />
-</div>
-<div class="form-group col-md-2">
-<input type="text" class="form-control" id="vin" required placeholder="VIN No." />
-</div>
-<div class="form-group col-md-2">
-<input type="text" class="form-control" id="partNo"  placeholder="Part No." />
-</div>
-</div>
+//
+<div class="form-row firstFive">
+    <div class="form-group col-md-2">
+    <div class="input-group">
+    <input type="text" class="form-control" id="desc" placeholder="Description" />
+    </div>
+    </div>
+    <div class="form-group col-md-2">
+    <div class="input-group">
+    <div class="input-group-prepend">
+    <span class="input-group-text">$</span>
+    </div>
+    <input type="text" class="form-control" id="vin" required placeholder="VIN No." />
+    </div>
+    </div>  
+    <div class="form-group col-md-2">
+    <div class="input-group">
+        <input type="text" class="form-control" id="partNo"  placeholder="Part No." />    </div>
+    </div> 
+    <div class="form-group col-md-2">
+        <div class="input-group">
+            <input type="number" class="form-control" id="qty"  placeholder="Quantity" />    </div>
+        </div> 
+    
+    </div>    
+//
 </div>
 <!-- price and gp info -->
 <div class="firstRow" id="priceRow">
@@ -649,7 +664,7 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
 </div>
 </div>  
-<div class="form-group col-md-2" style="display: flex; align-items: center;bbill: 1px solid #c0c0c0;bbill-radius: 5px;color: #6e5e5e;height: 3vh;">
+<div class="form-group col-md-2" style="display: flex; align-items: center;border: 1px solid #c0c0c0;border-radius: 5px;color: #6e5e5e;height: 3vh;">
 <label for="expeditorNot" style="margin-right: 10px;">Expedite Shipping</label>
 <input type="checkbox" id="expeditorNot" style="width: 30px;height: 23px;">
 </div>
@@ -678,10 +693,10 @@ window.location.href = "login_signup.html";
 </div>  
 <div class="form-group col-md-2">
 <div class="input-group">
-<input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
+<input type="text" class="form-control" id="notes" rows="2" placeholder="Bill Notes" style="width: 66%;"></input>
 </div>
 </div> 
-<div class="form-group col-md-2" style="display: flex; align-items: center;bbill: 1px solid #c0c0c0;bbill-radius: 5px;color: #6e5e5e;height: 3vh;">
+<div class="form-group col-md-2" style="display: flex; align-items: center;border: 1px solid #c0c0c0;border-radius: 5px;color: #6e5e5e;height: 3vh;">
 <label for="dsCall" style="margin-right: 10px;">DS Call</label>
 <input type="checkbox" id="dsCall" style="width: 30px;height: 23px;">
 </div>
@@ -921,7 +936,8 @@ $("#salestax").val(data.salestax);
 $("#grossProfit").val(data.grossProfit);
 $("#billStatus").val(data.billStatus);
 $("#vin").val(data.vin);
-$("#partNo").val(data.partNo)
+$("#partNo").val(data.partNo);
+$("#qty").val(data.qty);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
 $("#sBusinessName").val(data.businessName);
@@ -999,6 +1015,7 @@ grossProfit: $("#grossProfit").val(),
 billStatus: "Created",
 vin: $("#vin").val(),
 partNo: $("#partNo").val(),
+qty: $("#qty").val(),
 last4digits: $("#issueOrder").val(),
 notes: $("#notes").val(),
 dsCall: $("#dsCall").prop("checked") ? true : false,
@@ -1057,6 +1074,7 @@ grossProfit: $("#grossProfit").val(),
 billStatus: $("#billStatus").val(),
 vin: $("#vin").val(),
 partNo: $("#partNo").val(),
+qty: $("#qty").val(),
 last4digits: $("#issueOrder").val(),
 notes: $("#notes").val(),
 dsCall: $("#dsCall").prop("checked") ? true : false,

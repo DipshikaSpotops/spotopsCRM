@@ -528,6 +528,7 @@ isCancelled: { type: Boolean, default: false },
 actualGP:Number,
 dsCall: String,
 expediteShipping: String,
+qty: Number,
 });
 
 const Bill = mongoose.model("Bill", BillSchema);
@@ -861,6 +862,10 @@ app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
 res.json(order);
 });
+app.get("/bills/:billNo", async (req, res) => {
+  const order = await Bill.findOne({ billNo: req.params.billNo });
+  res.json(bill);
+  });
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
