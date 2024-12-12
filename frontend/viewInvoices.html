@@ -588,10 +588,9 @@ $("#fetch-bill").on("click", async function () {
 
             $("#bill-number").text(`Invoice Number: ${bill.billNumber}`);
             $("#bill-to").html(bill.billTo);
-            var soldP = item.soldP;
-            var soldPAfterDiscount = soldP - (soldP * 7.5 / 100);
             const itemsHtml = bill.items
                 .map(item => `
+                
                     <tr>
                         <td>${item.description}</td>
                         <td>${item.qty}</td>
