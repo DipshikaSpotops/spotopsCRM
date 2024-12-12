@@ -640,7 +640,7 @@ return;
 }
 
 // Update invoice number and bill-to information
-$("#modal-invoice-number").text(`INV - ${bill.billNo || "N/A"}`);
+$("#modal-invoice-number").text(`${bill.billNo || "N/A"}`);
 $("#modal-bill-to").html(`${bill.bName}<br> ${bill.bAddressStreet}<br> ${bill.bAddressCity}, ${bill.bAddressState}, ${bill.bAddressZip}<br> ${bill.phone}` || "N/A");
 $("#modal-ship-to").html(`${bill.fName} ${bill.lName}<br> ${bill.sAddressStreet}<br> ${bill.sAddressCity}, ${bill.sAddressState}, ${bill.sAddressZip}<br> ${bill.phone}` || "N/A");
 
