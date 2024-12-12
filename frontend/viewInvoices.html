@@ -588,7 +588,7 @@ $("#fetch-bill").on("click", async function () {
 
             $("#bill-number").text(`Invoice Number: ${bill.billNumber}`);
             $("#bill-to").html(bill.billTo);
-            const itemsHtml = bill.items
+            const itemsHtml = bill
                 .map(item => `
                 
                     <tr>
