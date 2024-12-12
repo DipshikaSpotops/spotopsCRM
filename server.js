@@ -865,10 +865,19 @@ const order = await Order.findOne({ orderNo: req.params.orderNo });
 res.json(order);
 });
 app.get("/bills/:billNo", async (req, res) => {
-  console.log("billNo",req.params.billNo);
-  const bill = await Bill.findOne({ billNo: req.params.billNo });
-  res.json(bill);
-  });
+try {
+console.log("billNo:", req.params.billNo);
+const bill = await Bill.findOne({ billNumber: req.params.billNo });
+if (bill) {
+res.json(bill); 
+} else {
+res.status(404).json({ error: "Bill not found" }); 
+}
+} catch (error) {
+console.error("Error fetching bill:", error);
+res.status(500).json({ error: "Internal Server Error" }); 
+}
+});
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
