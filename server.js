@@ -263,6 +263,7 @@ last4digits,
 notes,
 expediteShipping,
 dsCall,
+qty
 } = req.body;
 
 const newBill = new Bill({
@@ -308,6 +309,7 @@ last4digits,
 notes,
 expediteShipping,
 dsCall,
+qty,
 });
 await newBill.save();
 res.status(201).json({ newBill });
