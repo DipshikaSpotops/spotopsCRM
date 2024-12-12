@@ -36,7 +36,7 @@ width: 100%;
 position: fixed;
 top: 0;
 z-index: 2;
-bbill-bottom: 1px solid #e0e0e0;
+border-bottom: 1px solid #e0e0e0;
 }
 
 .sidebar {
@@ -63,13 +63,13 @@ background-color: rgba(255, 255, 255, 0.2);
 .sidebar .nav-link.selected {
 background-color: rgba(255, 255, 255, 0.2);
 cursor: default;
-bbill: none;
+border: none;
 }
 #billNo{
 text-align: center;
 height: 4vh;
-bbill: 1px solid #c0c0c0;
-bbill-radius: 10px;
+border: 1px solid #c0c0c0;
+border-radius: 10px;
 margin: 1% 37.7%;
 }
 .main-content {
@@ -151,8 +151,8 @@ height: 8vh;
 }
 .priceRow {
 padding: 14px;
-bbill: 1px solid #c0c0c0;
-bbill-radius: 10px;
+border: 1px solid #c0c0c0;
+border-radius: 10px;
 width: 115%;
 margin: -4% -19%;
 height: 20vh;
@@ -168,17 +168,17 @@ margin: -4%;
 }
 #billAgent {
 margin: 12% 58%;
-bbill-radius: 10px;
+border-radius: 10px;
 height: 5vh;
 text-align: center;
 color: black;
 background-color: grey;
-bbill: none;
+border: none;
 }
 #billDate {
 margin: 12% 66%;
 width: 90%;
-bbill-radius: 10px;
+border-radius: 10px;
 color: grey;
 height: 5vh;
 text-align: center;
@@ -965,7 +965,7 @@ if (newEntry || !billNo) {
 const newBillData = {
 billNo: billNoInput,
 billDate: $("#billDate").val(),
-salesAgent: $("#salesAgent").val(),
+billAgent: $("#billAgent").val(),
 // customerName: customerName,
 fName: $("#firstName").val(),
 lName: $("#lastName").val(),
@@ -995,7 +995,7 @@ costP: $("#costP").val(),
 shippingFee: $("#shippingFee").val(),
 salestax: $("#salestax").val(),
 grossProfit: $("#grossProfit").val(),
-billStatus: "Placed",
+billStatus: "Created",
 vin: $("#vin").val(),
 last4digits: $("#issueOrder").val(),
 notes: $("#notes").val(),
@@ -1161,22 +1161,8 @@ axios
 headers: { Authorization: `Bearer ${token}` },
 })
 .then((response) => {
-const data = response.data.filter((bill) => bill.salesAgent === firstName);
+const data = response.data;
 let validBills = [];
-
-// Filter bills by the current month
-// data.forEach((bill) => {
-// // const billDate = parseOrderDate(bill.billDate);
-// const billMonth = billDate.getMonth();
-// const billYear = billDate.getFullYear();
-
-// // Only consider bills from the current month and year
-// if (billMonth === currentMonth && billYear === currentYear) {
-// validBills.push(bill);
-// }
-// });
-
-// Process the filtered bills
 updateOrdersUI(validBills);
 })
 .catch((error) => {
@@ -1191,8 +1177,6 @@ console.log(`Total Orders for this month: ${totalOrders}`);
 
 // Update stats box
 $("#totalOrders").text(`Total Orders: ${totalOrders}`);
-
-// Add more UI updates like charts, tables, etc.
 }
 
 // Fetch sales data on page load
