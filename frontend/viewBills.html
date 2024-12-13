@@ -383,92 +383,76 @@ aria-labelledby="userMenu"
 </div>
 </div>
 <div class="modal fade" id="billModal" tabindex="-1" aria-labelledby="billModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" style="margin-top: 10%; padding: 2%;">
-        <div class="modal-header" style="border-bottom: 3px solid #000;">
-          <h1 class="modal-title" id="billModalLabel" style="font-size: 28px; font-weight: bold;">
-            INVOICE <span id="modal-invoice-number" style="font-size: 22px; font-weight: normal;"></span>
-          </h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Bill To and Ship To Section -->
-          <div class="row" style="margin-bottom: 20px;">
-            <div class="col-6">
-              <p><strong>BILL TO:</strong></p>
-              <p id="modal-bill-to" style="line-height: 1.5;"></p>
-            </div>
-            <div class="col-6">
-              <p><strong>SHIP TO:</strong></p>
-              <p id="modal-ship-to" style="line-height: 1.5;"></p>
-            </div>
-          </div>
-  
-          <!-- Table Section -->
-          <div>
-            <table class="table table-bordered">
-              <thead>
-                <tr style="background-color: black; color: white; text-align: center;">
-                  <th>Item Description</th>
-                  <th>Qty</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody id="modal-bill-items"></tbody>
-            </table>
-          </div>
-  
-          <!-- Instructions Section -->
-          <div style="margin-top: 20px; text-align: center;">
-            <p style="border: 2px solid black; padding: 10px; border-radius: 10px; font-weight: bold;">
-              Instructions / T&C Goes Here
-            </p>
-          </div>
-  
-          <!-- Sub Total, Tax, Total Section -->
-          <div class="row" style="margin-top: 20px;">
-            <div class="col-4 text-center">
-              <p style="border: 2px solid black; padding: 10px; border-radius: 10px; font-weight: bold;">
-                Sub Total: <span id="modal-subtotal">$0</span>
-              </p>
-            </div>
-            <div class="col-4 text-center">
-              <p style="border: 2px solid black; padding: 10px; border-radius: 10px; font-weight: bold;">
-                Tax (7.5%): <span id="modal-tax">$0</span>
-              </p>
-            </div>
-            <div class="col-4 text-center">
-              <p style="border: 2px solid black; padding: 10px; border-radius: 10px; font-weight: bold;">
-                Total: <span id="modal-total">$0</span>
-              </p>
-            </div>
-          </div>
-  
-          <!-- Terms Section -->
-          <div class="text-center mt-4">
-            <input type="checkbox" id="terms-agree" />
-            <label for="terms-agree">
-              I agree to the <a href="#">Terms & Conditions</a>, <a href="#">Privacy Policy</a>, and
-              <a href="#">Return and Refund Policy</a>.
-            </label>
-          </div>
-  
-          <!-- Payment Button -->
-          <div class="text-center mt-3">
-            <button id="modal-pay-button" class="btn btn-warning btn-lg" style="background-color: #ff914d; color: black; font-weight: bold; padding: 10px 20px; border-radius: 30px;">
-              Secure Pay
-            </button>
-          </div>
-  
-          <!-- Footer -->
-          <div class="text-center mt-2">
-            <small style="font-size: 10px;">100% Safe & Secure | Encrypted Payment Gateway | Your Information is Protected</small>
-          </div>
-        </div>
-      </div>
+<div class="modal-dialog modal-lg">
+<div class="modal-content" style="width: 125%;margin-top: 26%;margin-left: -2%;">
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-left: 95%;margin-top: 2%;"></button>
+<div class="modal-header" style="border: 3px solid black;margin: 3%;border-radius: 24px;background-color: #e8e8e8;">
+<h1 class="modal-title" id="billModalLabel">BILL <span id="modal-invoice-number" style="font-size: 20px;font-weight: 700;"></span></h1>
+</div>
+<div class="modal-body">
+<div class="row" style="margin-left: 5%;">
+<div class="col-6">
+<p><strong style="color: #050505;font-weight: 800;">BILL TO:</strong></p>
+<p id="modal-bill-to" style="font-family: math;font-weight: 600;margin-top: -2%;"></p>
+</div>
+<div class="col-6">
+<p><strong style="color: #050505;font-weight: 800;">SHIP TO:</strong></p>
+<p id="modal-ship-to" style="font-family: math;font-weight: 600;margin-top: -2%;"></p>
+</div>
+</div>
+<div class="mt-3">
+<table class="table table-bordered">
+<thead>
+<tr>
+<th style="background-color: black;color: white;text-align: center;height: 5vh;">Item Description</th>
+<th style="background-color: black;color: white;text-align: center;height: 5vh;">Qty</th>
+<th style="background-color: black;color: white;text-align: center;height: 5vh;">Price</th>
+<th style="background-color: black;color: white;text-align: center;height: 5vh;">Total</th>
+</tr>
+</thead>
+<tbody id="modal-bill-items"></tbody>
+</table>
+</div>
+<div class="row">
+<div class="col-6" style="border: 3px solid black;margin-left: 1%;width: 45.5%;border-radius: 16px;text-align: center;font-weight: 400;font-size: 25px;">
+<p><strong>Instructions / T&C:</strong></p>
+<!-- <p>Instructions / T&C Goes Here</p> -->
+</div>
+</div>
+<div class="row mt-4">
+    <div class="col-4 offset-2" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0; font-weight: bold;">Sub Total</p>
+        <p style="margin: 0;" id="modal-subtotal">$0</p>
     </div>
-  </div>  
+    <div class="col-4" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0; font-weight: bold;">Tax (7.5%)</p>
+        <p style="margin: 0;" id="modal-tax">$0</p>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-4 offset-4" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0; font-weight: bold;">Total</p>
+        <p style="margin: 0;" id="modal-total">$0</p>
+    </div>
+</div>
+<div class="text-center mt-4">
+<input type="checkbox" id="terms-agree" />
+<label for="terms-agree"> I agree to the
+<a href="#">Terms & Conditions</a>,
+<a href="#">Privacy Policy</a>, and
+<a href="#">Return and Refund Policy</a>.
+</label>
+</div>
+<div class="text-center mt-3">
+<button id="modal-pay-button" class="btn btn-warning btn-lg">Secure Pay</button>
+</div>
+<div class="text-center mt-2">
+<small>100% Safe & Secure | Encrypted Payment Gateway | Your Information is Protected</small>
+</div>
+</div>
+</div>
+</div>
+</div>
 <!-- Profile Modal -->
 <div
 class="modal fade"
