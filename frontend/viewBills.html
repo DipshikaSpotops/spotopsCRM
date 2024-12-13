@@ -418,12 +418,22 @@ aria-labelledby="userMenu"
 <p><strong>Instructions / T&C:</strong></p>
 <!-- <p>Instructions / T&C Goes Here</p> -->
 </div>
-<div class="col-6 text-end">
-<p style="border: 3px solid black;width: 40%;height: 6vh;text-align: center;margin-left: 27%;margin-top: -3.5% !important;"><strong>Sub Total Tax(7.5%) included</strong> <span id="modal-subtotal"></span></p>
-<p style="border: 3px solid black;width: 40%;height: 6vh;text-align: center;margin-left: 66.5%;margin-top: -3.2% !important;"><strong>$0 included</strong> <span id="modal-tax"></span></p>
-<p style="border: 3px solid black;width: 40%;height: 6vh;text-align: center;margin-left: 27%;margin-top: -19.5% !important;"><strong>Total</strong> <span id="modal-subtotal"></span></p>
-<p style="border: 3px solid black;width: 40%;height: 6vh;text-align: center;margin-left: 66.5%;margin-top: -19.5% !important;"><strong>$0</strong> <span id="modal-tax"></span></p>
 </div>
+<div class="row">
+    <!-- Sub Total Section -->
+    <div class="col-6" style="border: 3px solid black; border-radius: 10px; text-align: center; padding: 10px; margin-top: 20px;">
+        <strong>Sub Total:</strong> <span id="modal-subtotal">$0</span>
+    </div>
+    <!-- Tax Section -->
+    <div class="col-6" style="border: 3px solid black; border-radius: 10px; text-align: center; padding: 10px; margin-top: 20px;">
+        <strong>Tax (7.5%):</strong> <span id="modal-tax">$0</span>
+    </div>
+</div>
+<div class="row">
+    <!-- Total Section -->
+    <div class="col-12" style="border: 3px solid black; border-radius: 10px; text-align: center; padding: 10px; margin-top: 20px;">
+        <strong>Total:</strong> <span id="modal-total">$0</span>
+    </div>
 </div>
 <div class="text-center mt-4">
 <input type="checkbox" id="terms-agree" />
