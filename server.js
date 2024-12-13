@@ -3397,17 +3397,15 @@ res.status(500).json({ message: "Error updating yard info", error: error.message
     
 // Create a payment intent
 app.post("/create-payment-intent", async (req, res) => {
-  try {
-      const { amount, currency } = req.body;
-
-      const paymentIntent = await stripe.paymentIntents.create({
-          amount: amount * 100, // Amount in cents (e.g., $10 = 1000)
-          currency: currency || "usd", // Default to USD
-      });
-
-      res.json({ clientSecret: paymentIntent.client_secret });
-  } catch (error) {
-      console.error("Error creating payment intent:", error.message);
-      res.status(500).json({ error: "Failed to create payment intent" });
-  }
+try {
+const { amount, currency } = req.body;
+const paymentIntent = await stripe.paymentIntents.create({
+amount: amount * 100, // Amount in cents (e.g., $10 = 1000)
+currency: currency || "usd", // Default to USD
+});
+res.json({ clientSecret: paymentIntent.client_secret });
+} catch (error) {
+console.error("Error creating payment intent:", error.message);
+res.status(500).json({ error: "Failed to create payment intent" });
+}
 });

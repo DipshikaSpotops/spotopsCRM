@@ -413,29 +413,27 @@ aria-labelledby="userMenu"
 <tbody id="modal-bill-items"></tbody>
 </table>
 </div>
-<div style="display: flex;">
 <div class="row">
 <div class="col-6" style="border: 3px solid black;margin-left: 1%;width: 45.5%;border-radius: 16px;text-align: center;font-weight: 400;font-size: 25px;">
 <p><strong>Instructions / T&C:</strong></p>
 <!-- <p>Instructions / T&C Goes Here</p> -->
 </div>
 </div>
-<div class="row">
-    <!-- Sub Total Section -->
-    <div class="col-6" style="border: 3px solid black; border-radius: 10px; text-align: center; padding: 10px; margin-top: 20px;">
-        <strong>Sub Total:</strong> <span id="modal-subtotal">$0</span>
+<div class="row mt-4">
+    <div class="col-4 offset-2" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0; font-weight: bold;">Sub Total</p>
+        <p style="margin: 0;" id="modal-subtotal">$0</p>
     </div>
-    <!-- Tax Section -->
-    <div class="col-6" style="border: 3px solid black; border-radius: 10px; text-align: center; padding: 10px; margin-top: 20px;">
-        <strong>Tax (7.5%):</strong> <span id="modal-tax">$0</span>
-    </div>
-</div>
-<div class="row">
-    <!-- Total Section -->
-    <div class="col-12" style="border: 3px solid black; border-radius: 10px; text-align: center; padding: 10px; margin-top: 20px;">
-        <strong>Total:</strong> <span id="modal-total">$0</span>
+    <div class="col-4" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0; font-weight: bold;">Tax (7.5%)</p>
+        <p style="margin: 0;" id="modal-tax">$0</p>
     </div>
 </div>
+<div class="row mt-3">
+    <div class="col-4 offset-4" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0; font-weight: bold;">Total</p>
+        <p style="margin: 0;" id="modal-total">$0</p>
+    </div>
 </div>
 <div class="text-center mt-4">
 <input type="checkbox" id="terms-agree" />
