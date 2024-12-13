@@ -414,27 +414,49 @@ aria-labelledby="userMenu"
 </table>
 </div>
 <div class="row">
-<div class="col-6" style="border: 3px solid black;margin-left: 1%;width: 45.5%;border-radius: 16px;text-align: center;font-weight: 400;font-size: 25px;">
-<p><strong>Instructions / T&C:</strong></p>
-<!-- <p>Instructions / T&C Goes Here</p> -->
-</div>
-</div>
-<div class="row mt-4">
-    <div class="col-4 offset-2" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
-        <p style="margin: 0; font-weight: bold;">Sub Total</p>
-        <p style="margin: 0;" id="modal-subtotal">$0</p>
+    <!-- Instructions / T&C: as a single column spanning two rows -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; vertical-align: middle;">
+        <p style="margin: 0;">Instructions / T&C:</p>
     </div>
-    <div class="col-4" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
-        <p style="margin: 0; font-weight: bold;">Tax (7.5%)</p>
-        <p style="margin: 0;" id="modal-tax">$0</p>
+
+    <!-- Empty column -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0;">&nbsp;</p>
+    </div>
+
+    <!-- Sub Total Tax (7.5%) column -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold;">
+        <p style="margin: 0;">Sub Total Tax (7.5%)</p>
+    </div>
+
+    <!-- $1111 Included column -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold;">
+        <p style="margin: 0;">$1111 Included</p>
     </div>
 </div>
-<div class="row mt-3">
-    <div class="col-4 offset-4" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
-        <p style="margin: 0; font-weight: bold;">Total</p>
-        <p style="margin: 0;" id="modal-total">$0</p>
+
+<div class="row">
+    <!-- Spanned column (already included above) -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; font-weight: bold; font-size: 16px; vertical-align: middle;">
+        <!-- No content here as it's already part of the spanned "Instructions / T&C:" -->
+    </div>
+
+    <!-- Empty column -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px;">
+        <p style="margin: 0;">&nbsp;</p>
+    </div>
+
+    <!-- Total column -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold;">
+        <p style="margin: 0;">Total</p>
+    </div>
+
+    <!-- $1111 column -->
+    <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold;">
+        <p style="margin: 0;">$1111</p>
     </div>
 </div>
+
 <div class="text-center mt-4">
 <input type="checkbox" id="terms-agree" />
 <label for="terms-agree"> I agree to the
