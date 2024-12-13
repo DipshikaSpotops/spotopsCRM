@@ -415,14 +415,14 @@ aria-labelledby="userMenu"
 </div>
 <div class="row">
 <!-- Instructions / T&C: as a single column spanning two rows -->
-<!-- <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; vertical-align: middle;">
+<div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; vertical-align: middle;">
 <p style="margin: 0;">Instructions / T&C:</p>
-</div> -->
+</div>
 
 <!-- Empty column -->
-<!-- <div class="col-3" style="text-align: center; padding: 15px; border-radius: 8px;">
+<div class="col-3" style="text-align: center; padding: 15px; border-radius: 8px;">
 <p style="margin: 0;">&nbsp;</p>
-</div> -->
+</div>
 
 <!-- Sub Total Tax (7.5%) column -->
 <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px; font-weight: bold;width: 19%;margin-top: -1.6%;margin-left: 10.5%;">
@@ -442,9 +442,9 @@ aria-labelledby="userMenu"
 </div>
 
 <!-- Empty column -->
-<!-- <div class="col-3" style="text-align: center; padding: 15px; border-radius: 8px;">
+<div class="col-3" style="text-align: center; padding: 15px; border-radius: 8px;">
 <p style="margin: 0;">&nbsp;</p>
-</div> -->
+</div>
 <!-- Total column -->
 <div class="col-3" style="border: 2px solid black; text-align: center; padding: 15px;font-weight: bold;width: 19%;margin-top: 0.%;margin-left: 10.5%;">
 <p style="margin: 0;">Total</p>
@@ -749,9 +749,9 @@ const stripe = Stripe("pk_test_51QUqUvGYqbfUX6jJ4dgOaxrvoWc0IluCZ6OALIZS5lIRQDjc
 // Display the Stripe payment modal (requires Stripe.js)
 const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
 payment_method: {
-card: {
-    token: "tok_visa", // Use a Stripe test card token
-},
+    card: {
+        token: "tok_visa", // Use a Stripe test card token
+    },
 },
 });
 
