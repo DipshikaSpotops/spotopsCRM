@@ -5317,18 +5317,20 @@ const darkModeToggle = document.getElementById("darkModeIcon");
 function toggleDarkMode() {
 document.body.classList.toggle("dark-mode");
 const isDarkMode = document.body.classList.contains("dark-mode");
-$(".sidebarOrder").css("background-color", "black"); 
+$(".sidebarOrder").css({"background-color": "black",
+"color":"#b0bdc7"
+}); 
 $(".form-container").css("background-color", "black"); 
 $(".new-div").css("background-color", "black"); 
 $("#saleNote").css("border", "1px solid rgb(39 43 41)"); 
 $("#comment-boxSupport").css("border", "1px solid rgb(39 43 41)"); 
 $(".timeline-item .timeline-panel .timeline-heading").css("background-color", "rgb(39 43 41)"); 
 $(".timeline-item .timeline-panel .timeline-heading").css("color", "white"); 
-
+$("#commentInput").css("background-color", "rgb(39 43 41)")
 $(".form-control").css({
     "background-color": "rgb(39 43 41)",
     "border": "none",
-    "color": "white",
+    "color": "#b0bdc7",
     "box-shadow": "0 0 5px rgba(0, 0, 0, 0.2)"
   });
   $("#mainDiv").css({
