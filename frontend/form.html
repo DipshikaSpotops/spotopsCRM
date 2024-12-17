@@ -5317,6 +5317,11 @@ const darkModeToggle = document.getElementById("darkModeIcon");
 function toggleDarkMode() {
 document.body.classList.toggle("dark-mode");
 const isDarkMode = document.body.classList.contains("dark-mode");
+$(".sidebarOrder").css("background-color", "black"); 
+$(".form-container").css("background-color", "black"); 
+$(".new-div").css("background-color", "black"); 
+$("..timeline-item .timeline-panel .timeline-heading").css("background-color", "#1d5c7c"); 
+$("..timeline-item .timeline-panel .timeline-heading").css("color", "white"); 
 localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
 updateIcon(isDarkMode);
 }
