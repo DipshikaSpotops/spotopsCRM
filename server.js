@@ -1321,7 +1321,7 @@ yardInfo.storeCredit = storeCredit || null;
 yardInfo.refundedDate = refundedDate || "" ;
 yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
 yardInfo.refundToCollect = refundToCollect || "" ;
-if(refundToCollect){
+if(refundToCollect || collectRefundCheckbox){
 var collectRefund = "Collect Refund"
 }else{
 var collectRefund= "";
