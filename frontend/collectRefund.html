@@ -206,8 +206,54 @@ color:#050505;
   --sidebar-bg: #1f1f1f;
   --sidebar-text: #e0e0e0;
   --table-header-bg: #292929;
-  --filter-bar-bg: #242424;
-  --highlight-bg: #1a1a1a;
+  --table-data-color: #ffffff;
+  --search-bar-bg: #333333;
+  --search-bar-placeholder: #ffffff;
+  --show-total-text: #ffffff;
+  --filter-button-bg: #ffffff;
+  --filter-button-text: #000000;
+  --month-picker-bg: #000000;
+  --month-picker-text: #ffffff;
+}
+
+/* Table headers and data in dark mode */
+[data-theme="dark"] .table th {
+  background-color: var(--table-header-bg);
+  color: var(--table-data-color);
+}
+
+[data-theme="dark"] .table td {
+  color: var(--table-data-color);
+}
+
+/* Search bar in dark mode */
+[data-theme="dark"] #searchInput {
+  background-color: var(--search-bar-bg);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+}
+
+[data-theme="dark"] #searchInput::placeholder {
+  color: var(--search-bar-placeholder);
+}
+
+/* Text of 'showTotalOrders' in dark mode */
+[data-theme="dark"] #showTotalOrders {
+  color: var(--show-total-text);
+}
+
+/* Filter button in dark mode */
+[data-theme="dark"] .filter-bar button {
+  background-color: var(--filter-button-bg);
+  color: var(--filter-button-text);
+  border: 1px solid var(--filter-button-text);
+}
+
+/* Month picker in dark mode */
+[data-theme="dark"] #monthYearPicker {
+  background-color: var(--month-picker-bg);
+  color: var(--month-picker-text);
+  border: 1px solid var(--text-color);
 }
 
 /* General Styling */
@@ -1032,7 +1078,6 @@ $(
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
   });
-
   // Load the user's preferred theme
   const savedTheme = localStorage.getItem("theme") || "light";
   document.documentElement.setAttribute("data-theme", savedTheme);
