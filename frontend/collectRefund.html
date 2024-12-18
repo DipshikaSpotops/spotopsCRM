@@ -220,17 +220,19 @@ color:#050505;
 [data-theme="dark"] .table th {
   background-color: var(--table-header-bg);
   color: var(--table-data-color);
+  border: 1px solid grey;
 }
 
 [data-theme="dark"] .table td {
   color: var(--table-data-color);
+  border: 1px solid grey;
 }
 
 /* Search bar in dark mode */
 [data-theme="dark"] #searchInput {
   background-color: var(--search-bar-bg);
   color: var(--text-color);
-  border: 1px solid var(--text-color);
+  border: 1px solid grey;
 }
 
 [data-theme="dark"] #searchInput::placeholder {
@@ -240,11 +242,12 @@ color:#050505;
 /* Text of 'showTotalOrders' in dark mode */
 [data-theme="dark"] #showTotalOrders {
   color: var(--show-total-text);
+  border: none;
 }
 
 /* Filter button in dark mode */
 [data-theme="dark"] .filter-bar button {
-  background-color: var(--filter-button-bg);
+  background-color: #ac8585;
   color: var(--filter-button-text);
   border: 1px solid var(--filter-button-text);
 }
@@ -253,7 +256,7 @@ color:#050505;
 [data-theme="dark"] #monthYearPicker {
   background-color: var(--month-picker-bg);
   color: var(--month-picker-text);
-  border: 1px solid var(--text-color);
+  border: none;
 }
 
 /* General Styling */
