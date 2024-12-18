@@ -298,6 +298,7 @@ window.location.href = "login_signup.html";
 <div style="display: flex;margin: 2% -2%;">
 <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="showTotalEstGP">Total EstGP This Month-</div>
+<div id="showTotalActualGP">Total Actual This Month-</div>
 </div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
 
@@ -587,13 +588,17 @@ var totalOrders = filteredData.length;
 console.log("totalOrders",totalOrders);
 let totalGrossProfit = 0; // Total gross profit for current page
 let totalEstGP = 0; // Total estGP for all orders
+let totalActualGP = 0;
 filteredData.forEach((item) => {
 const estGP = item.grossProfit || 0;
+const actualGP = item.actualGP || 0;
+totalActualGP += actualGP;
 totalGrossProfit += estGP;
 // totalEstGP += estGP;
 })
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit.toFixed(2)}`;
+document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP This Month- ${totalActualGP.toFixed(2)}`;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
@@ -774,13 +779,17 @@ var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders);
 let totalGrossProfit = 0; // Total gross profit for current page
 let totalEstGP = 0; // Total estGP for all orders
+let totalActualGP = 0;
 allOrders.forEach((item) => {
 const estGP = item.grossProfit || 0;
+const actualGP = item.actualGP || 0;
+totalActualGP += actualGP;
 totalGrossProfit += estGP;
 // totalEstGP += estGP;
 })
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit}`;
+document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit.toFixed(2)}`;
+document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP This Month- ${totalActualGP.toFixed(2)}`;
 // Render the new filtered data
 renderTableRows(1, sortedData);
 createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
