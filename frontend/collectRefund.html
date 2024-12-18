@@ -188,7 +188,8 @@ color:#050505;
 /* Horizontal scroll container for the table */
 .table-responsive {
   overflow-x: auto;
-  white-space: nowrap; /* Ensure the table doesn't wrap */
+  white-space: nowrap; 
+  margin-top: 2%;
 }
 
 /* Scrollbar styling */
@@ -313,7 +314,7 @@ body {
 .scrollable-content {
   overflow-x: auto;
   white-space: nowrap;
-  z-index: 999;
+  /* z-index: 999; */
 }
 
 .dark-mode-toggle {
@@ -336,7 +337,7 @@ body {
 /* Fixed components: Header, search input, and filter bar */
 .fixed-header {
   position: sticky;
-  top: 0;
+  top:54px;;
   z-index: 3; /* Ensure it stays above other elements */
   background-color: var(--bg-color); /* Match the background color */
   padding: 10px 0;
