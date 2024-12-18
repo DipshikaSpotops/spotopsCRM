@@ -615,90 +615,141 @@ sortTable(index, type);
 });
 }
 });
-// Function to calculate totals
 function calculateAndUpdateTotals(orders) {
 let totalEstGP = 0;
 let totalCurrentGP = 0;
 let totalActualGP = 0;
 
 orders.forEach(order => {
-totalEstGP += order.grossProfit || 0;
-totalCurrentGP += calculateCurrentGP(order);
-totalActualGP += order.actualGP || 0;
+totalEstGP += order.grossProfit || 0; // Use backend `grossProfit` if available
+totalCurrentGP += calculateCurrentGP(order); // Use the dynamically calculated `currentGP`
+totalActualGP += order.actualGP || 0; // Use backend `actualGP` if available
 });
 
-// Update totals in the UI
-$("#totalEstGP").html(`<i class="fas fa-chart-line"></i> Total Est GP: <strong>$${totalEstGP.toFixed(2)}</strong>`);
-$("#totalCurrentGP").html(`<i class="fas fa-dollar-sign"></i> Total Current GP: <strong>$${totalCurrentGP.toFixed(2)}</strong>`);
-$("#totalActualGP").html(`<i class="fas fa-check-circle"></i> Total Actual GP: <strong>$${totalActualGP.toFixed(2)}</strong>`);
+// Update the totals in the UI
+document.getElementById("totalEstGP").innerHTML = `Total Est GP: $${totalEstGP.toFixed(2)}`;
+document.getElementById("totalCurrentGP").innerHTML = `Total Current GP: $${totalCurrentGP.toFixed(2)}`;
+document.getElementById("totalActualGP").innerHTML = `Total Actual GP: $${totalActualGP.toFixed(2)}`;
 }
-  // Function to filter orders based on the selected user
-  function filterOrdersByUser(user) {
-    currentUserFilter = user; // Update the current filter
-    filteredOrders = user === "All" ? allOrders : allOrders.filter(order => order.salesAgent === user);
 
-    // Update totals and table
-    calculateAndUpdateTotals(filteredOrders);
-    renderTableRows(1, filteredOrders);
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+function renderFilteredOrders(agentName) {
+// Filter orders based on the salesAgent field
+const filteredOrders = allOrders.filter(order =>
+order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
+);
+
+// Update totals dynamically
+calculateAndUpdateTotals(filteredOrders);
+
+// Update the total orders dynamically
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
+
+// Render the filtered orders in the table
+renderTableRows(1, filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+}
+
+// Attach change event to the dropdown
+$("#userDropdown").on("change", function () {
+const selectedAgent = $(this).val();
+if (selectedAgent && selectedAgent !== "All") {
+    // Render orders filtered by the selected agent
+    renderFilteredOrders(selectedAgent);
+  } else if (selectedAgent === "All") {
+    // Show all orders without reloading
+    calculateAndUpdateTotals(allOrders); // Recalculate totals for all orders
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+    renderTableRows(1, allOrders); // Render all orders in the table
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders); // Reset pagination
   }
-
-  // Event handler for user dropdown
-  $("#userDropdown").on("change", function () {
-    const selectedUser = $(this).val();
-    filterOrdersByUser(selectedUser);
-  });
+else {
+// Reset to all orders if no agent is selected
+calculateAndUpdateTotals(allOrders);
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+renderTableRows(1, allOrders);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+}
+});
 
 // Calculate totals at initial load
 calculateAndUpdateTotals(allOrders);
 
- // Fetch orders based on the selected month
- async function fetchOrdersForMonth(month, year) {
-    try {
-      $("#loadingMessage").show();
-      const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      if (response.status === 200) {
-        allOrders = response.data;
-        filterOrdersByUser(currentUserFilter); // Apply the current user filter
-        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
-      } else {
-        throw new Error("Failed to fetch orders");
-      }
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    } finally {
-      $("#loadingMessage").hide();
-    }
-  }
+// Function to render rows based on the page
+function renderTableRows(page, orders = allOrders) {
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = orders.slice(start, end);
 
- // Calculate Current GP dynamically
- function calculateCurrentGP(order) {
-    if (!order.additionalInfo || order.additionalInfo.length === 0) return 0;
-    let totalYardSpent = 0;
+$('#infoTable').empty(); // Clear the table
 
-    order.additionalInfo.forEach(info => {
-      const partPrice = parseFloat(info.partPrice || 0);
-      const shipping = parseFloat(info.shippingDetails?.split(":")[1]?.trim() || 0);
-      const others = parseFloat(info.others || 0);
-      const refunds = parseFloat(info.refundedAmount || 0);
-      totalYardSpent += partPrice + shipping + others - refunds;
-    });
+ordersForPage.forEach(order => {
+const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
 
-    const soldPrice = order.soldP || 0;
-    const salesTax = order.salestax || 0;
-    const netSold = soldPrice - salesTax;
-    return netSold - totalYardSpent;
-  }
-
-  // Initial fetch and setup
-  const now = new Date();
-  const year = now.getFullYear();
-  const monthNum = now.getMonth() + 1;
-  $("#monthYearPicker").val(`${year}-${monthNum.toString().padStart(2, "0")}`);
-  fetchOrdersForMonth(months[monthNum - 1], year);
+$("#infoTable").append(`
+<tr>
+<td>${order.orderDate}</td>
+<td>${order.orderNo}</td>
+<td>${order.salesAgent}</td>
+<td>${
+(order.fName && order.lName)
+? `${order.fName} ${order.lName}`
+: (order.customerName || "")
+}</td>
+<td>${order.pReq || ''}</td>
+<td>${order.orderStatus || ''}</td>
+<td>$${order.soldP || 0}</td>
+<td>$${order.grossProfit || 0}</td>
+<td>$${currentGP.toFixed(2)}</td>
+<td>$${order.actualGP || 0}</td>
+</tr>
+`);
 });
+}
+
+function calculateCurrentGP(order) {
+if (!order.additionalInfo || order.additionalInfo.length === 0) return 0;
+
+let totalYardSpent = 0;
+
+order.additionalInfo.forEach(info => {
+const yardPP = parseFloat(info.partPrice) || 0;
+const yardOSorYS = info.shippingDetails || '';
+let shippingValueYard = 0;
+
+if (yardOSorYS.includes("Own shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+} else if (yardOSorYS.includes("Yard shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+}
+
+const yardOthers = parseFloat(info.others) || 0;
+const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
+const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
+const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
+const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
+
+// Include only valid expenses based on conditions
+if (
+info.status !== "PO cancelled" ||
+(info.status === "PO cancelled" && info.paymentStatus === "Card charged")
+) {
+totalYardSpent +=
+yardPP +
+shippingValueYard +
+yardOthers +
+escOwnShipReturn +
+escOwnShipReplacement +
+yardOwnShippingReplacement -
+yardRefundAmount;
+}
+});
+
+const spMinusTax = order.soldP - (order.salestax || 0);
+const custRefundedAmount = parseFloat(order.custRefundedAmount) || 0;
+const subtractRefund = spMinusTax - custRefundedAmount;
+
+return subtractRefund - totalYardSpent;
+}
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
@@ -708,44 +759,47 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
- // Create pagination controls
- function createPaginationControls(totalPages, orders = filteredOrders) {
-    const paginationControls = $("#pagination-controls");
-    paginationControls.empty();
+function createPaginationControls(totalPages, orders = allOrders) {
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); // Clear pagination controls
 
-    if (totalPages > 1) {
-      paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`);
-      for (let i = 1; i <= totalPages; i++) {
-        paginationControls.append(`<button class="pageNos btn ${i === currentPage ? "active-page" : ""}" data-page="${i}">${i}</button>`);
-      }
-      paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>`);
-    }
-  }
+if (totalPages > 1) {
+paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-  // Pagination event listeners
-  $("#pagination-controls").on("click", ".pageNos", function () {
-    currentPage = parseInt($(this).data("page"), 10);
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-  });
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
 
-  $("#pagination-controls").on("click", "#prevPage", function () {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTableRows(currentPage);
-      createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-    }
-  });
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
+}
 
-  $("#pagination-controls").on("click", "#nextPage", function () {
-    const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderTableRows(currentPage);
-      createPaginationControls(totalPages, filteredOrders);
-    }
-  });
 
+// Event listener for pagination buttons
+$('#pagination-controls').on('click', '.page-btn', function () {
+const page = $(this).data('page');
+currentPage = page;
+renderTableRows(currentPage);
+
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+});
+
+// "Previous" and "Next" button functionality
+$('#pagination-controls').on('click', '#prevPage', function () {
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+}
+});
+
+$('#pagination-controls').on('click', '#nextPage', function () {
+const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage);
+createPaginationControls(totalPages);
+}
+});
 
 // Token fetching logic
 async function fetchToken() {
@@ -763,7 +817,7 @@ console.error("Error fetching token:", error);
 
 let token = localStorage.getItem("token");
 if (!token) {
-fetchToken();
+await fetchToken();
 token = localStorage.getItem("token");
 }
 const now = new Date();
@@ -796,7 +850,7 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-const ordersResponse =  axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 
@@ -934,38 +988,37 @@ $('#submenu-reports .nav-link:contains("Refund Report")').show();
 $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-// Render rows for the table
-function renderTableRows(page, orders = filteredOrders) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const ordersForPage = orders.slice(start, end);
-
-    $("#infoTable").empty();
-    ordersForPage.forEach(order => {
-      const currentGP = calculateCurrentGP(order); // Calculate Current GP dynamically
-      $("#infoTable").append(`
-        <tr>
-          <td>${order.orderDate}</td>
-          <td>${order.orderNo}</td>
-          <td>${order.salesAgent}</td>
-          <td>${order.customerName || ""}</td>
-          <td>${order.pReq || ""}</td>
-          <td>${order.orderStatus || ""}</td>
-          <td>$${order.soldP || 0}</td>
-          <td>$${order.grossProfit || 0}</td>
-          <td>$${currentGP.toFixed(2)}</td>
-          <td>$${order.actualGP || 0}</td>
-        </tr>
-      `);
-    });
-  }
 // function to filter out data with month and year
-  $("#filterButton").on("click", function () {
-    const [year, monthNumber] = $("#monthYearPicker").val().split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = months[parseInt(monthNumber, 10) - 1];
-    fetchOrdersForMonth(month, year);
-  });
+$("#filterButton").click(async function () {
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
+$("#loadingMessage").show();
+
+const monthYear = $("#monthYearPicker").val(); 
+const [year, monthNumber] = monthYear.split("-");
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = months[parseInt(monthNumber, 10) - 1];
+try {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch current month's orders");
+}
+allOrders = ordersResponse.data;
+var allOrdersLength = allOrders.length;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+} catch (error) {
+console.error("Error fetching current month's orders:", error);
+} finally {
+// Hiding loading overlay regardless of success or error
+$("#loadingMessage").hide();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+}
+});
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
