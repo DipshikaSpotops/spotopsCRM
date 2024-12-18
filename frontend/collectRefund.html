@@ -185,6 +185,25 @@ background-color: #3096a58f;
 padding: 5px;
 color:#050505;
 }
+/* Horizontal scroll container for the table */
+.table-responsive {
+  overflow-x: auto;
+  white-space: nowrap; /* Ensure the table doesn't wrap */
+}
+
+/* Scrollbar styling */
+.table-responsive::-webkit-scrollbar {
+  height: 8px; /* Scrollbar height */
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar thumb color */
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Scrollbar track color */
+}
 /* CSS Variables for Light/Dark Mode */
 :root {
   --bg-color: #ffffff;
@@ -217,13 +236,14 @@ color:#050505;
 
 /* Table headers and data in dark mode */
 [data-theme="dark"] .table th {
-  background-color: var(--table-header-bg);
-  color: var(--table-data-color);
+    background-color: wheat; /* Wheat header background in dark mode */
+  color: black; /* Dark text for better contrast in dark mode */
   border: 1px solid grey;
 }
 
 [data-theme="dark"] .table td {
-  color: var(--table-data-color);
+    background-color: #3c3c3c; /* Dark grey background for data */
+  color: white; /* White text for better contrast */
   border: 1px solid grey;
 }
 
@@ -456,6 +476,7 @@ placeholder="Search..."
 <div id="showTotalOrders">Total Refunds This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>  
+<div class="table-responsive">
 <table class="table table-bordered mt-4">
 <thead>
 <tr id="tableHeader" style="background-color: #f2f2f2">
@@ -484,7 +505,7 @@ Order Date
 </tr>
 </tfoot>
 </table>
-<!-- </div> -->
+</div>
 </div>
 
 <div id="profile-content" class="d-none">
@@ -1091,3 +1112,5 @@ window.location.href = "login_signup.html";
 </script>
 </body>
 </html>
+i want to give a different norder coloe to table th and td maybe greyish and horizontal scroll bar 
+is noy yet visble on the viewport and change the color to data in the table and the table head to wheat
