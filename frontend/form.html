@@ -2238,14 +2238,19 @@ $(".cancelledRefAmount").prop("readonly", false); // Allow editing
 $(".cancelledRefAmount").val(minRefund.toFixed(2)); // Prefill with minimum refund
 // Validate user input for "Personal Reason"
 $(".cancelledRefAmount").on("input", function () {
-const enteredValue = parseFloat($(this).val()) || 0;
+const enteredValue = parseFloat($(this).val()) || 0; // Get the entered value
+const minRefund = soldP * 0.75; // Minimum refund (at least 25% less)
+
 if (enteredValue < minRefund) {
 alert(
 `The refund amount must be at least $${minRefund.toFixed(
 2
 )}. Please adjust the value.`
 );
-$(this).val(minRefund.toFixed(2)); // Reset to minimum
+$(this).val(minRefund.toFixed(2)); // Reset to the minimum value
+} else {
+console.log(`Valid refund amount entered: $${enteredValue.toFixed(2)}`);
+// Allow the user to keep the entered value if it's greater than or equal to the minimum
 }
 });
 } else {
