@@ -2234,24 +2234,29 @@ if (reason === "Same Day") {
 $(".cancelledRefAmount").val(salePrice); 
 } else if (reason === "Personal Reason") {
 const minRefund = salePrice * 0.75; // Minimum refund (at least 25% less)
-$(".cancelledRefAmount").prop("readonly", false);
-$(".cancelledRefAmount").val(minRefund.toFixed(2)); 
+$(".cancelledRefAmount").prop("readonly", false); // Allow editing
+$(".cancelledRefAmount").val(minRefund.toFixed(2)); // Prefill with minimum refund
 // Validate user input for "Personal Reason"
 $(".cancelledRefAmount").on("input", function () {
-const enteredValue = parseFloat($(this).val()) || 0; // Get the entered value
-const minRefund = salePrice * 0.75; // Minimum refund (at least 25% less)
+    const enteredValue = parseFloat($(this).val()) || 0; // Get the entered value, default to 0 if empty
+    const minRefund = soldP * 0.75; // Minimum refund (at least 25% less)
 
-if (enteredValue < minRefund) {
-alert(
-`The refund amount must be at least $${minRefund.toFixed(
-2
-)}. Please adjust the value.`
-);
-$(this).val(minRefund.toFixed(2)); // Reset to the minimum value
-} else if(enteredValue > minRefund) {
-console.log(`Valid refund amount entered: $${enteredValue.toFixed(2)}`);
-// Allow the user to keep the entered value if it's greater than or equal to the minimum
-}
+    if ($(this).val() === "") {
+        // Allow the field to be empty while the user is editing
+        console.log("User is editing the input field.");
+        return;
+    }
+
+    if (enteredValue < minRefund) {
+        alert(
+            `The refund amount must be at least $${minRefund.toFixed(
+                2
+            )}. Please adjust the value.`
+        );
+        $(this).val(minRefund.toFixed(2)); 
+    } else {
+        console.log(`Valid refund amount entered: $${enteredValue.toFixed(2)}`);
+    }
 });
 } else {
 $(".cancelledRefAmount").val(cancelledRefundAmount); 
