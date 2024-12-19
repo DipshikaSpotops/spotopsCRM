@@ -2198,7 +2198,8 @@ $(".orderedDate").val(orderPlacedDate);
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $("#disputeDiv").fadeIn();
-
+var actualGPAfterDispute = actualGp - salePrice  + cancelledRefundAmount;
+console.log("actualGPAfterDispute",salePrice,actualGp,cancelledRefundAmount,actualGPAfterDispute)
 } 
 else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
 // console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
@@ -2267,11 +2268,7 @@ $("#disputeSubmit").on("click", function () {
       alert("Dispute information updated successfully!");
       console.log("Dispute information updated successfully:", response);
 
-      // Calculate `actualGPAfterDispute` and update it
-      const salePrice = parseFloat($("#salePrice").val()) || 0; // Fetch salePrice from an input field or replace with correct variable
-      const actualGp = parseFloat($("#actualGP").val()) || 0; // Fetch actualGp from an input field or replace with correct variable
-      const cancelledRefundAmount = parseFloat($("#cancelledRefundAmount").val()) || 0; // Fetch cancelledRefundAmount from an input field or replace with correct variable
-      
+
       const actualGPAfterDispute = actualGp - salePrice + cancelledRefundAmount;
       console.log("actualGPAfterDispute:", salePrice, actualGp, cancelledRefundAmount, actualGPAfterDispute);
 
