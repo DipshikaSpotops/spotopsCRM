@@ -2138,6 +2138,9 @@ var orderNo = urlParams.get("orderNo");
 var orderPlacedDate;
 var cancelledRefundAmount;
 var refundedAmount;
+var salePrice;
+var actualGp;
+var salesTax;
 // current datetime - US Central time
 const now = new Date();
 const options = {
@@ -2177,6 +2180,9 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(data => {
 orderPlacedDate = data.orderDate;
 cancelledRefundAmount = data.cancelledRefAmount;
+salePrice = data.soldP;
+actualGp = data.actualGP;
+salesTax = data.salestax;
 // console.log("orderDate",orderPlacedDate)
 })
 .catch(error => console.error("Error fetching yard data:", error));
@@ -2192,6 +2198,16 @@ $(".orderedDate").val(orderPlacedDate);
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $("#disputeDiv").fadeIn();
+
+var actualGPAfterDispute = actualGp - salePrice -salesTax + cancelledRefundAmount;
+console.log("actualGPAfterDispute",salePrice,actualGp,cancelledRefundAmount,actualGPAfterDispute)
+axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGPAfterDispute })
+.then(function (response) {
+// console.log("ActualGP information updated successfully:", response);
+})
+.catch(function (error) {
+console.error("Error updating actualGP:", error);
+});
 } 
 else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
 // console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
