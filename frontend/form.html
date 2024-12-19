@@ -2485,7 +2485,7 @@ var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
 var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || 0;  
 var currentActualGp = data.actualGP || 0;
-// console.log("actualGP rn",currentActualGp);
+console.log("order rn",data.orderStatus);
 $("#custRefunds").val(custRefundedAmount.toFixed(2))
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
