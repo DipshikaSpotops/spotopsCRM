@@ -589,7 +589,11 @@ latestOrders.forEach((order) => {
 recentOrdersTable.append(`
 <tr>
 <td>${order.orderNo}</td>
-<td>${order.customerName}</td>
+<td>${
+(order.fName && order.lName)
+? `${order.fName} ${order.lName}`
+: (order.customerName || "")
+}</td>
 <td>${order.orderDate}</td>
 <td>$${order.grossProfit.toFixed(2)}</td>
 </tr>
