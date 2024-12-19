@@ -2308,8 +2308,8 @@ pass: "hweg vrnk qyxx gktv",
 var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
-// to: "dipsikha.spotopsdigital@gmail.com",
-to: `${order.email}`,
+to: "dipsikha.spotopsdigital@gmail.com",
+// to: `${order.email}`,
 bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
 subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
 html: `<p>Dear ${customerName},</p>
