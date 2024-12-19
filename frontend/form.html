@@ -2507,20 +2507,22 @@ axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actua
 console.error("Error updating actualGP:", error);
 });
 } 
+else {
+console.log("Same actualGPS");
+}
+}
+
 if (data.orderStatus === "Dispute"){
 var actualGPAfterDispute = currentActualGp - sp  + custRefundedAmount;
 console.log("actualGPAfterDispute",currentActualGp,sp,custRefundedAmount,actualGPAfterDispute)
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGPAfterDispute })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
+$("#actualGP").val(actualGPAfterDispute.toFixed(2));
 })
 .catch(function (error) {
 console.error("Error updating actualGP:", error);
 });
-}
-else {
-console.log("Same actualGPS");
-}
 }
 }
 
