@@ -2510,6 +2510,7 @@ var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || 0
 var currentActualGp = data.actualGP || 0;
 // console.log("actualGP rn",currentActualGp);
 $("#custRefunds").val(custRefundedAmount.toFixed(2))
+
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
 if (
@@ -2531,6 +2532,7 @@ console.error("Error updating actualGP:", error);
 });
 } else {
 console.log("Same actualGPS");
+$("#actualGP").val(currentActualGp.toFixed(2));
 }
 }
 }
