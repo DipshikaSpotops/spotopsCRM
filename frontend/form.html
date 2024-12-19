@@ -2225,33 +2225,9 @@ $("body").addClass("modal-active");
 $(".orderedDate").val(orderPlacedDate);
 $("#cancelledDate").val(currentDateTime);
 $('.cancelledRefAmount').val(cancelledRefundAmount);
-console.log("Showing cancellation div"); 
+console.log("Showing cancellation div"); // Add this line to check if it's being called
 $("#cancellingOrder").css("display", "block").hide().fadeIn();
-// $("#cancellingOrder").fadeIn(); 
-$("#reasonCancel").on("change", function () {
-const reason = $(this).val(); 
-if (reason === "Same Day") {
-$(".cancelledRefAmount").val(salePrice); 
-} else if (reason === "Personal Reason") {
-const minRefund = salePrice * 0.75; // Minimum refund (at least 25% less)
-$(".cancelledRefAmount").prop("readonly", false); // Allow editing
-$(".cancelledRefAmount").val(minRefund.toFixed(2)); // Prefill with minimum refund
-// Validate user input for "Personal Reason"
-var cancelledRefAmount = $(".cancelledRefAmount").val()
-    if (cancelledRefAmount < minRefund) {
-        alert(
-            `The refund amount must be at least $${minRefund.toFixed(
-                2
-            )}. Please adjust the value.`
-        );
-        $(this).val(minRefund.toFixed(2)); 
-    } else {
-        console.log(`Valid refund amount entered: $${enteredValue.toFixed(2)}`);
-    }
-} else {
-$(".cancelledRefAmount").val(cancelledRefundAmount); 
-}
-});
+// $("#cancellingOrder").fadeIn(); // Ensure this is called
 } 
 else {
 $("#disputeDiv").fadeOut();
