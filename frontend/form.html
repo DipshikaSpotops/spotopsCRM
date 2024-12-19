@@ -2199,7 +2199,7 @@ $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $("#disputeDiv").fadeIn();
 
-var actualGPAfterDispute = actualGp - salePrice -salesTax + cancelledRefundAmount;
+var actualGPAfterDispute = actualGp - salePrice  + cancelledRefundAmount;
 console.log("actualGPAfterDispute",salePrice,actualGp,cancelledRefundAmount,actualGPAfterDispute)
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGPAfterDispute })
 .then(function (response) {
