@@ -2309,8 +2309,8 @@ var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
 to: "dipsikha.spotopsdigital@gmail.com",
-// to: `${order.email}`,
-bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+to: `${order.email}`,
+// bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
 subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
 html: `<p>Dear ${customerName},</p>
 <p>We are reaching out to confirm that your refund of $${refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will find a copy of the refund receipt for your record.</p>
@@ -3035,8 +3035,8 @@ pass: "hweg vrnk qyxx gktv",
 var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
-to: `dipsikha.spotopsdigital@gmail.com`,
-// to: `${order.email}`,
+// to: `dipsikha.spotopsdigital@gmail.com`,
+to: `${order.email}`,
 bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
 subject: `Order Cancellation | ${order.orderNo}`,
 html: `<p>Dear ${customerName},</p>
@@ -3044,8 +3044,7 @@ html: `<p>Dear ${customerName},</p>
 ${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.
 <p>We regret any inconvenience this may have caused you.</p>
 <b>We have canceled your order and will refund you $${cancelledRefAmount}  to the same source account.</b>
-Please call us if you have any questions.Upon reviewing your order, due to this unforeseen circumstance, we are unable to fulfill your order at this time.<br>
-Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within 3-5 business days.<br>
+Please call us if you have any questions. Rest assured, any payment made for the canceled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within 3-5 business days.<br>
 <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.<br>
 If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1(888)-653-2808</b>]. We are here to assist you in any way we can.Thank you for your understanding and continued support.<br></p>
 <p><b>Please reply to this email with a quick confirmation to acknowledge and approve this cancellation request.</b></p>
