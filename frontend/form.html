@@ -2199,15 +2199,6 @@ $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $("#disputeDiv").fadeIn();
 
-var actualGPAfterDispute = actualGp - salePrice  + cancelledRefundAmount;
-console.log("actualGPAfterDispute",salePrice,actualGp,cancelledRefundAmount,actualGPAfterDispute)
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGPAfterDispute })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
 } 
 else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
 // console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
@@ -2244,27 +2235,61 @@ $("body").removeClass("modal-active");
 });
 //for dispute
 $("#disputeSubmit").on("click", function () {
-// console.log("disputeSubmit");
-$("#disputeDiv").fadeOut();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-const disputedDate = $("#disputedDate").val();
-const disputeReason = $("#disputeReason").val();
-// const orderNo = urlParams.get("orderNo");
-// console.log("orderId:", orderNo,"disputedReason:",disputeReason,"disputedDate:",disputedDate);
-const disputeData = {
-disputedDate: disputedDate,
-disputeReason: disputeReason,
-};
-axios.put(`https://www.spotops360.com/orders/${orderNo}/dispute`, disputeData)
-.then(function (response) {
-// console.log("Dispute information updated successfully:", response);
-alert("Dispute information updated successfully!");
-})
-.catch(function (error) {
-// console.error("Error updating dispute:", error);
-alert("Failed to update dispute information.");
-});
+  // Hide the dispute form and modal overlay
+  $("#disputeDiv").fadeOut();
+  $(".modal-overlay").remove();
+  $("body").removeClass("modal-active");
+
+  // Get user input values
+  const disputedDate = $("#disputedDate").val();
+  const disputeReason = $("#disputeReason").val();
+
+  // Validate the inputs
+  if (!disputedDate || !disputeReason) {
+    alert("Please fill in all fields before submitting the dispute.");
+    return;
+  }
+
+  // Log the values for debugging
+  console.log("Disputed Date:", disputedDate);
+  console.log("Dispute Reason:", disputeReason);
+
+  // Prepare data for the dispute update
+  const disputeData = {
+    disputedDate: disputedDate,
+    disputeReason: disputeReason,
+  };
+
+  // Submit the dispute data
+  axios
+    .put(`https://www.spotops360.com/orders/${orderNo}/dispute`, disputeData)
+    .then(function (response) {
+      alert("Dispute information updated successfully!");
+      console.log("Dispute information updated successfully:", response);
+
+      // Calculate `actualGPAfterDispute` and update it
+      const salePrice = parseFloat($("#salePrice").val()) || 0; // Fetch salePrice from an input field or replace with correct variable
+      const actualGp = parseFloat($("#actualGP").val()) || 0; // Fetch actualGp from an input field or replace with correct variable
+      const cancelledRefundAmount = parseFloat($("#cancelledRefundAmount").val()) || 0; // Fetch cancelledRefundAmount from an input field or replace with correct variable
+      
+      const actualGPAfterDispute = actualGp - salePrice + cancelledRefundAmount;
+      console.log("actualGPAfterDispute:", salePrice, actualGp, cancelledRefundAmount, actualGPAfterDispute);
+
+      // Update `actualGPAfterDispute` in the backend
+      axios
+        .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGPAfterDispute })
+        .then(function (response) {
+          console.log("ActualGP information updated successfully:", response);
+        })
+        .catch(function (error) {
+          console.error("Error updating actualGP:", error);
+          alert("Failed to update Actual GP.");
+        });
+    })
+    .catch(function (error) {
+      console.error("Error updating dispute:", error);
+      alert("Failed to update dispute information.");
+    });
 });
 // for dispute till here
 //for custRefund
