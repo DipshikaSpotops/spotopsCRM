@@ -2237,17 +2237,8 @@ const minRefund = salePrice * 0.75; // Minimum refund (at least 25% less)
 $(".cancelledRefAmount").prop("readonly", false); // Allow editing
 $(".cancelledRefAmount").val(minRefund.toFixed(2)); // Prefill with minimum refund
 // Validate user input for "Personal Reason"
-$(".cancelledRefAmount").on("keyup", function () {
-    const enteredValue = parseFloat($(this).val()) || 0; // Get the entered value, default to 0 if empty
-    const minRefund = salePrice * 0.75; // Minimum refund (at least 25% less)
-
-    if ($(this).val() === "") {
-        // Allow the field to be empty while the user is editing
-        console.log("User is editing the input field.");
-        return;
-    }
-
-    if (enteredValue < minRefund) {
+var cancelledRefAmount = $(".cancelledRefAmount").val()
+    if (cancelledRefAmount < minRefund) {
         alert(
             `The refund amount must be at least $${minRefund.toFixed(
                 2
@@ -2257,7 +2248,6 @@ $(".cancelledRefAmount").on("keyup", function () {
     } else {
         console.log(`Valid refund amount entered: $${enteredValue.toFixed(2)}`);
     }
-});
 } else {
 $(".cancelledRefAmount").val(cancelledRefundAmount); 
 }
