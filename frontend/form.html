@@ -2234,8 +2234,8 @@ if (reason === "Same Day") {
 $(".cancelledRefAmount").val(salePrice); 
 } else if (reason === "Personal Reason") {
 const minRefund = salePrice * 0.75; // Minimum refund (at least 25% less)
-$(".cancelledRefAmount").prop("readonly", false); // Allow editing
-$(".cancelledRefAmount").val(minRefund.toFixed(2)); // Prefill with minimum refund
+$(".cancelledRefAmount").prop("readonly", false);
+$(".cancelledRefAmount").val(minRefund.toFixed(2)); 
 // Validate user input for "Personal Reason"
 $(".cancelledRefAmount").on("input", function () {
 const enteredValue = parseFloat($(this).val()) || 0; // Get the entered value
@@ -2248,7 +2248,7 @@ alert(
 )}. Please adjust the value.`
 );
 $(this).val(minRefund.toFixed(2)); // Reset to the minimum value
-} else {
+} else if(enteredValue > minRefund) {
 console.log(`Valid refund amount entered: $${enteredValue.toFixed(2)}`);
 // Allow the user to keep the entered value if it's greater than or equal to the minimum
 }
