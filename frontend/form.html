@@ -2136,6 +2136,8 @@ const queryString = window.location.search.substring(1);
 const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
 var orderPlacedDate;
+var cancelledRefundAmount;
+var refundedAmount;
 // current datetime - US Central time
 const now = new Date();
 const options = {
@@ -2174,6 +2176,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
 orderPlacedDate = data.orderDate;
+cancelledRefundAmount = data.cancelledRefAmount;
 // console.log("orderDate",orderPlacedDate)
 })
 .catch(error => console.error("Error fetching yard data:", error));
@@ -2194,6 +2197,7 @@ else if (newOrderStatus == "Refunded" || newOrderStatus == "Voided") {
 // console.log("refunded?", newOrderStatus,"orderPlaced on:",orderPlacedDate);
 $(".orderedDate").val(orderPlacedDate);
 $(".refundedDate").val(currentDateTime);
+$(".custRefundedAmount").val(cancelledRefundAmount)
 $("body").append('<div class="modal-overlay"></div>');
 $("#custRefund").fadeIn();
 $("body").addClass("modal-active");
@@ -2204,6 +2208,7 @@ $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $(".orderedDate").val(orderPlacedDate);
 $("#cancelledDate").val(currentDateTime);
+$('.cancelledRefAmount').val()
 console.log("Showing cancellation div"); // Add this line to check if it's being called
 $("#cancellingOrder").css("display", "block").hide().fadeIn();
 // $("#cancellingOrder").fadeIn(); // Ensure this is called
