@@ -2235,8 +2235,8 @@ pass: "hweg vrnk qyxx gktv",
 var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
-to: "dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com",
-// to: `${order.email}`,
+// to: "dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com",
+to: `${order.email}`,
 bcc:`dipsikha.spotopsdigital@gmail.com,service@50starsautoparts.com`,
 subject: `Return Process for Replacement of ABS Module / Order No. ${req.params.orderNo}`,
 html: `
