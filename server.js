@@ -3035,8 +3035,8 @@ pass: "hweg vrnk qyxx gktv",
 var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
-to: `dipsikha.spotopsdigital@gmail.com`,
-// to: `${order.email}`,
+// to: `dipsikha.spotopsdigital@gmail.com`,
+to: `${order.email}`,
 bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
 subject: `Order Cancellation | ${order.orderNo}`,
 html: `<p>Dear ${customerName},</p>
