@@ -633,78 +633,72 @@ document.getElementById("totalActualGP").innerHTML = `Total Actual GP: $${totalA
 }
 
 function renderFilteredOrders(agentName) {
-// Filter orders based on the salesAgent field
-const filteredOrders = allOrders.filter(order =>
-order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
-);
+        // Filter orders based on the salesAgent field
+        filteredOrders = allOrders.filter(order =>
+            order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
+        );
 
-// Update totals dynamically
-calculateAndUpdateTotals(filteredOrders);
+        // Update totals dynamically
+        calculateAndUpdateTotals(filteredOrders);
 
-// Update the total orders dynamically
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
+        // Update the total orders dynamically
+        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
 
-// Render the filtered orders in the table
-renderTableRows(1, filteredOrders);
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-}
+        // Render the filtered orders in the table
+        renderTableRows(1, filteredOrders);
+        createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+    }
 
 // Attach change event to the dropdown
 $("#userDropdown").on("change", function () {
-const selectedAgent = $(this).val();
-if (selectedAgent && selectedAgent !== "All") {
-    // Render orders filtered by the selected agent
-    renderFilteredOrders(selectedAgent);
-  } else if (selectedAgent === "All") {
-    // Show all orders without reloading
-    calculateAndUpdateTotals(allOrders); // Recalculate totals for all orders
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
-    renderTableRows(1, allOrders); // Render all orders in the table
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders); // Reset pagination
-  }
-else {
-// Reset to all orders if no agent is selected
-calculateAndUpdateTotals(allOrders);
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
-renderTableRows(1, allOrders);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
-}
-});
+        const selectedAgent = $(this).val();
+        if (selectedAgent && selectedAgent !== "All") {
+            // Render orders filtered by the selected agent
+            renderFilteredOrders(selectedAgent);
+        } else {
+            // Show all orders
+            filteredOrders = []; // Clear the filtered orders
+            calculateAndUpdateTotals(allOrders); // Recalculate totals for all orders
+            document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+            renderTableRows(1, allOrders); // Render all orders in the table
+            createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders); // Reset pagination
+        }
+    });
 
 // Calculate totals at initial load
 calculateAndUpdateTotals(allOrders);
 
 // Function to render rows based on the page
-function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = orders.slice(start, end);
+function renderTableRows(page, orders) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const ordersForPage = orders.slice(start, end);
 
-$('#infoTable').empty(); // Clear the table
+        $("#infoTable").empty(); // Clear the table
 
-ordersForPage.forEach(order => {
-const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
+        ordersForPage.forEach(order => {
+            const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
 
-$("#infoTable").append(`
-<tr>
-<td>${order.orderDate}</td>
-<td>${order.orderNo}</td>
-<td>${order.salesAgent}</td>
-<td>${
-(order.fName && order.lName)
-? `${order.fName} ${order.lName}`
-: (order.customerName || "")
-}</td>
-<td>${order.pReq || ''}</td>
-<td>${order.orderStatus || ''}</td>
-<td>$${order.soldP || 0}</td>
-<td>$${order.grossProfit || 0}</td>
-<td>$${currentGP.toFixed(2)}</td>
-<td>$${order.actualGP || 0}</td>
-</tr>
-`);
-});
-}
+            $("#infoTable").append(`
+                <tr>
+                    <td>${order.orderDate}</td>
+                    <td>${order.orderNo}</td>
+                    <td>${order.salesAgent}</td>
+                    <td>${
+                        (order.fName && order.lName)
+                            ? `${order.fName} ${order.lName}`
+                            : (order.customerName || "")
+                    }</td>
+                    <td>${order.pReq || ''}</td>
+                    <td>${order.orderStatus || ''}</td>
+                    <td>$${order.soldP || 0}</td>
+                    <td>$${order.grossProfit || 0}</td>
+                    <td>$${currentGP.toFixed(2)}</td>
+                    <td>$${order.actualGP || 0}</td>
+                </tr>
+            `);
+        });
+    }
 
 function calculateCurrentGP(order) {
 if (!order.additionalInfo || order.additionalInfo.length === 0) return 0;
@@ -759,48 +753,48 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-function createPaginationControls(totalPages, orders = allOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
+function createPaginationControls(totalPages, orders) {
+        const paginationControls = $("#pagination-controls");
+        paginationControls.empty(); // Clear pagination controls
 
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+        if (totalPages > 1) {
+            paginationControls.append(
+                `<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
+            );
 
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
+            for (let i = 1; i <= totalPages; i++) {
+                paginationControls.append(
+                    `<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
+                );
+            }
 
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
-}
+            paginationControls.append(
+                `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
+            );
+        }
 
+        // Handle "Previous" and "Next" button clicks
+        $("#prevPage").off("click").on("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
+            }
+        });
 
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
+        $("#nextPage").off("click").on("click", function () {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
+            }
+        });
 
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-});
-
-// "Previous" and "Next" button functionality
-$('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-}
-});
-
-$('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(allOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
-}
-});
-
+        // Handle page number clicks
+        $(".page-btn").off("click").on("click", function () {
+            const page = $(this).data("page");
+            currentPage = page;
+            renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
+        });
+    }
 // Token fetching logic
 async function fetchToken() {
 try {
