@@ -3408,3 +3408,15 @@ console.error("Error creating payment intent:", error.message);
 res.status(500).json({ error: "Failed to create payment intent" });
 }
 });
+
+// for more than two yards
+app.get('/moreThanTwoYardsOrders', async (req, res) => {
+  const { month, year, additionalInfoLength } = req.query;
+  const filter = {
+    "orderDate": { $regex: `${month}.*${year}` },
+    "additionalInfo": { $exists: true },
+    "additionalInfoLength": { $gt: parseInt(additionalInfoLength, 10) }
+  };
+  const orders = await db.collection('orders').find(filter).toArray();
+  res.json(orders);
+});
