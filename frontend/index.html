@@ -505,7 +505,6 @@ Close
 <script>
 $(document).ready(async function () {
 console.log("ready function");
-
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -684,11 +683,6 @@ async function fetchDailyOrders() {
         totalGPData[orderDay] += order.actualGP || 0;
       }
     });
-    const ordersWithMultipleAdditionalInfo = orders
-  .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
-  .map(order => order.orderNo);
-
-console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
 
     const ctx = document.getElementById("dailyOrdersChart");
     if (!ctx) {
@@ -735,15 +729,7 @@ console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditi
   }
 }
 fetchDailyOrders();
-const response = fetch(`/moreThanTwoYardsOrders?month=${month}&year=${year}&additionalInfoLength=${additionalInfoLength}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch orders');
-        }
-        const orders = await response.json();
-        if (orders.length === 0) {
-          errorDiv.textContent = 'No orders found for the given filters.';
-          return;
-        }
+
 // monthly overview report start here
 let chartInstances = {}; // Store chart instances by month
 let cachedOrders = {}; // Store cached orders data
