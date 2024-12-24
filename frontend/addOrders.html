@@ -184,6 +184,36 @@ height: 5vh;
 text-align: center;
 background-color: black;
 }
+/* Dark Mode Styles */
+body.dark-mode {
+background-color: #121212;
+color: #ffffff;
+}
+.navbar.dark-mode {
+background-color: #1e1e1e;
+color: #ffffff;
+}
+.sidebar.dark-mode {
+background-color: #1e1e1e;
+color: #ffffff;
+}
+.table.table-dark {
+background-color: #252525;
+color: #ffffff;
+}
+.table.table-dark td,
+.table.table-dark th {
+border-color: #444;
+}
+.dark-mode .btn {
+background-color: #444;
+color: #fff;
+}
+.dark-mode .form-control {
+background-color: #1e1e1e;
+color: #fff;
+border: 1px solid #555;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -213,6 +243,9 @@ window.location.href = "login_signup.html";
 <div class="dropdown-divider"></div>
 <a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
 </div>
+</div>
+<div class="dark-mode-toggle" style="margin-right: 20px;">
+  <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
 </div>
 </div>
 
@@ -1299,6 +1332,39 @@ $("#sAttention").val("");
 // });
 // }
 // });
+// Check localStorage for the dark mode preference
+const isDarkMode = localStorage.getItem("darkMode") === "true";
+
+if (isDarkMode) {
+enableDarkMode();
+}
+
+// Toggle Dark Mode
+$("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
+} else {
+enableDarkMode();
+}
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
@@ -1316,4 +1382,3 @@ $(this).addClass("active");
 </script>
 </body>
 </html>
-<!-- i want to add the following button for dark mode -->
