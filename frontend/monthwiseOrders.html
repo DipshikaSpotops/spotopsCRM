@@ -796,6 +796,10 @@ headers: token ? { Authorization: `Bearer ${token}` } : {},
 if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
+const ordersWithMultipleAdditionalInfo = ordersResponse
+  .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
+  .map(order => order.orderNo);
+console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
 
 allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
