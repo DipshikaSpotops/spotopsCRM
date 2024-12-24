@@ -128,29 +128,29 @@ flex-shrink: 0;
 margin: 0% 30%;
 }
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%; /* Full-width sidebar for mobile */
-    }
-    .main-content {
-        margin-left: 0;
-    }
-    .fixed-header {
-        margin: 0;
-        padding: 10px;
-    }
-    #searchInput, #userDropdown {
-        width: 90%;
-        margin: 10px auto;
-    }
-    .table-wrapper {
-        overflow-x: auto;
-    }
+.sidebar {
+width: 100%; /* Full-width sidebar for mobile */
+}
+.main-content {
+margin-left: 0;
+}
+.fixed-header {
+margin: 0;
+padding: 10px;
+}
+#searchInput, #userDropdown {
+width: 90%;
+margin: 10px auto;
+}
+.table-wrapper {
+overflow-x: auto;
+}
 }
 table.table tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
+background-color: #f9f9f9;
 }
 table.table tbody tr:hover {
-    background-color: #f1f1f1;
+background-color: #f1f1f1;
 }
 
 /* @media (max-width: 768px) {
@@ -436,29 +436,29 @@ placeholder="Search..."
 />
 </div>
 <div id="gpTotals" style="background-color:#234872;color: #c0c8b1;padding: 10px 20px; border-radius: 22px; position: fixed; top: 115px; left: 81%; transform: translateX(-50%); z-index: 999; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); display: flex; gap: 100px; justify-content: space-between; align-items: center; text-align: center;">
-  <div id="totalEstGP" style="flex: 1;white-space: nowrap;">
-      <i class="fas fa-chart-line"></i> Total Est GP: <strong>$0</strong>
-  </div>
-  <div id="totalCurrentGP" style="flex: 1;white-space: nowrap;">
-      <i class="fas fa-dollar-sign"></i> Total Current GP: <strong>$0</strong>
-  </div>
-  <div id="totalActualGP" style="flex: 1;white-space: nowrap;">
-      <i class="fas fa-check-circle"></i> Total Actual GP: <strong>$0</strong>
-  </div>
+<div id="totalEstGP" style="flex: 1;white-space: nowrap;">
+<i class="fas fa-chart-line"></i> Total Est GP: <strong>$0</strong>
+</div>
+<div id="totalCurrentGP" style="flex: 1;white-space: nowrap;">
+<i class="fas fa-dollar-sign"></i> Total Current GP: <strong>$0</strong>
+</div>
+<div id="totalActualGP" style="flex: 1;white-space: nowrap;">
+<i class="fas fa-check-circle"></i> Total Actual GP: <strong>$0</strong>
+</div>
 </div>
 
 </div>
 <div id="headerWrap" style="position: fixed;margin-top: 0%;padding: 0%;background-color: white;width: 84.7%;height: 17vh;margin-left: -0.3%;">
 <!--  controls -->
 <div id="filterAndTotal" style="margin-top: 2%;margin-left: -1.5%;">
-  <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
-  <div class="filter-bar">
-  <input id="monthYearPicker" type="month" class="form-control" />
-  <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
-  </div>
-  <div id="showTotalOrders">Total Orders This Month-</div>
-  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-  </div>  
+<!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
+<div class="filter-bar">
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
+</div>
+<div id="showTotalOrders">Total Orders This Month-</div>
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+</div>  
 <div id="pagination-controls" style="margin-top: 5%;">
 <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
@@ -633,72 +633,72 @@ document.getElementById("totalActualGP").innerHTML = `Total Actual GP: $${totalA
 }
 
 function renderFilteredOrders(agentName) {
-        // Filter orders based on the salesAgent field
-        filteredOrders = allOrders.filter(order =>
-            order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
-        );
+// Filter orders based on the salesAgent field
+filteredOrders = allOrders.filter(order =>
+order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
+);
 
-        // Update totals dynamically
-        calculateAndUpdateTotals(filteredOrders);
+// Update totals dynamically
+calculateAndUpdateTotals(filteredOrders);
 
-        // Update the total orders dynamically
-        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
+// Update the total orders dynamically
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
 
-        // Render the filtered orders in the table
-        renderTableRows(1, filteredOrders);
-        createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-    }
+// Render the filtered orders in the table
+renderTableRows(1, filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+}
 
 // Attach change event to the dropdown
 $("#userDropdown").on("change", function () {
-        const selectedAgent = $(this).val();
-        if (selectedAgent && selectedAgent !== "All") {
-            // Render orders filtered by the selected agent
-            renderFilteredOrders(selectedAgent);
-        } else {
-            // Show all orders
-            filteredOrders = []; // Clear the filtered orders
-            calculateAndUpdateTotals(allOrders); // Recalculate totals for all orders
-            document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
-            renderTableRows(1, allOrders); // Render all orders in the table
-            createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders); // Reset pagination
-        }
-    });
+const selectedAgent = $(this).val();
+if (selectedAgent && selectedAgent !== "All") {
+// Render orders filtered by the selected agent
+renderFilteredOrders(selectedAgent);
+} else {
+// Show all orders
+filteredOrders = []; // Clear the filtered orders
+calculateAndUpdateTotals(allOrders); // Recalculate totals for all orders
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+renderTableRows(1, allOrders); // Render all orders in the table
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders); // Reset pagination
+}
+});
 
 // Calculate totals at initial load
 calculateAndUpdateTotals(allOrders);
 
 // Function to render rows based on the page
 function renderTableRows(page, orders) {
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const ordersForPage = orders.slice(start, end);
+const start = (page - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const ordersForPage = orders.slice(start, end);
 
-        $("#infoTable").empty(); // Clear the table
+$("#infoTable").empty(); // Clear the table
 
-        ordersForPage.forEach(order => {
-            const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
+ordersForPage.forEach(order => {
+const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
 
-            $("#infoTable").append(`
-                <tr>
-                    <td>${order.orderDate}</td>
-                    <td>${order.orderNo}</td>
-                    <td>${order.salesAgent}</td>
-                    <td>${
-                        (order.fName && order.lName)
-                            ? `${order.fName} ${order.lName}`
-                            : (order.customerName || "")
-                    }</td>
-                    <td>${order.pReq || ''}</td>
-                    <td>${order.orderStatus || ''}</td>
-                    <td>$${order.soldP || 0}</td>
-                    <td>$${order.grossProfit || 0}</td>
-                    <td>$${currentGP.toFixed(2)}</td>
-                    <td>$${order.actualGP || 0}</td>
-                </tr>
-            `);
-        });
-    }
+$("#infoTable").append(`
+<tr>
+<td>${order.orderDate}</td>
+<td>${order.orderNo}</td>
+<td>${order.salesAgent}</td>
+<td>${
+(order.fName && order.lName)
+? `${order.fName} ${order.lName}`
+: (order.customerName || "")
+}</td>
+<td>${order.pReq || ''}</td>
+<td>${order.orderStatus || ''}</td>
+<td>$${order.soldP || 0}</td>
+<td>$${order.grossProfit || 0}</td>
+<td>$${currentGP.toFixed(2)}</td>
+<td>$${order.actualGP || 0}</td>
+</tr>
+`);
+});
+}
 
 function calculateCurrentGP(order) {
 if (!order.additionalInfo || order.additionalInfo.length === 0) return 0;
@@ -754,47 +754,47 @@ window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
 function createPaginationControls(totalPages, orders) {
-        const paginationControls = $("#pagination-controls");
-        paginationControls.empty(); // Clear pagination controls
+const paginationControls = $("#pagination-controls");
+paginationControls.empty(); // Clear pagination controls
 
-        if (totalPages > 1) {
-            paginationControls.append(
-                `<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
-            );
+if (totalPages > 1) {
+paginationControls.append(
+`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
+);
 
-            for (let i = 1; i <= totalPages; i++) {
-                paginationControls.append(
-                    `<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
-                );
-            }
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(
+`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
+);
+}
 
-            paginationControls.append(
-                `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
-            );
-        }
+paginationControls.append(
+`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
+);
+}
 
-        // Handle "Previous" and "Next" button clicks
-        $("#prevPage").off("click").on("click", function () {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
-            }
-        });
+// Handle "Previous" and "Next" button clicks
+$("#prevPage").off("click").on("click", function () {
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
+}
+});
 
-        $("#nextPage").off("click").on("click", function () {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
-            }
-        });
+$("#nextPage").off("click").on("click", function () {
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
+}
+});
 
-        // Handle page number clicks
-        $(".page-btn").off("click").on("click", function () {
-            const page = $(this).data("page");
-            currentPage = page;
-            renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
-        });
-    }
+// Handle page number clicks
+$(".page-btn").off("click").on("click", function () {
+const page = $(this).data("page");
+currentPage = page;
+renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
+});
+}
 // Token fetching logic
 var token;
 async function fetchToken() {
@@ -839,7 +839,7 @@ token = localStorage.getItem("token");
 // }
 // Initial data fetch and rendering
 async function fetchOrders() {
-    const now = new Date();
+const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
 year: 'numeric',
@@ -854,6 +854,7 @@ const formatter = new Intl.DateTimeFormat('en-US', options);
 const parts = formatter.formatToParts(now);
 const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 const date = new Date(formattedDate);
+
 // Array of month names
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const day = date.getDate();
@@ -867,29 +868,31 @@ Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
-        try {
-            const ordersResponse = await axios.get(
-                `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-                {
-                    headers: token ? { Authorization: `Bearer ${token}` } : {},
-                }
-            );
+try {
+const ordersResponse = await axios.get(
+`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+{
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+}
+);
 
-            if (ordersResponse.status !== 200) {
-                throw new Error("Failed to fetch current month's orders");
-            }
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch current month's orders");
+}
 
-            allOrders = ordersResponse.data;
-            document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
-            calculateAndUpdateTotals(allOrders);
-            renderTableRows(currentPage, allOrders);
-            createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
-        } catch (error) {
-            console.error("Error fetching orders:", error);
-        }
-    }
+allOrders = ordersResponse.data;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
 
-    await fetchOrders();
+// Calculate totals and render the first page
+calculateAndUpdateTotals(allOrders);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+renderTableRows(1, allOrders); // Render the first page
+} catch (error) {
+console.error("Error fetching orders:", error);
+}
+}
+
+await fetchOrders();
 
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
