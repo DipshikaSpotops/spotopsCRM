@@ -546,7 +546,11 @@ $("#infoTable").append(`
 <td>${dateOnly}</td>
 <td>${item.orderNo}</td>
 <td>
-<b>Customer Name</b>: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}<br> 
+<b>Customer Name</b>: <>${
+(order.fName && order.lName)
+? `${order.fName} ${order.lName}`
+: (order.customerName || "")
+}<br> 
 <b>Attention</b>: ${item.attention || ""}<br>
 ${
 (item.sAddressStreet || item.sAddressCity || item.sAddressState || item.sAddressZip || item.sAddressAcountry) 
