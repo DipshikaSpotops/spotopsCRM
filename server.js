@@ -543,7 +543,7 @@ const taskSchema = new mongoose.Schema({
       taskName: { type: String, required: true },
       assignedTo: { type: String, required: true },
       assignedBy: { type: String, required: true },
-      taskCreatedDate: { type: Date, required: true },
+      taskCreatedDate: { type: String, required: true },
       deadline: { type: Date, required: true },
       taskDescription: { type: String, required: true },
       taskStatus: { type: String, default: "Pending" },
@@ -3439,7 +3439,7 @@ app.get('/moreThanTwoYardsOrders', async (req, res) => {
 app.post("/createTask", async (req, res) => {
   console.log(":inside create Task")
   const { orderNo, taskName, assignedTo, assignedBy, taskCreatedDate, deadline, taskDescription, taskStatus } = req.body;
-
+console.log("orderNo",orderNo);
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
 
