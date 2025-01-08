@@ -1353,8 +1353,11 @@ style="margin-right: 94px;margin-top: -9px;"
             <input type="text" placeholder="Task Name" style="margin-left: -8%;width: 120%;border-radius: 10px;" />
           </div>
           <div class="col">
-            <input id="deadline" type="month" placeholder="Deadline" />
-          </div>
+            <div class="input-container">
+                <input id="deadline" type="month" required />
+                <label for="deadline">Deadline</label>
+              </div>                        
+            </div>
           <div class="col">
             <select>
               <option value="">Assign to</option>
