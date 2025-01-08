@@ -1303,6 +1303,10 @@ style="margin-right: 94px;margin-top: -9px;"
 </div>
 </form>
 </div>
+<!-- create task part -->
+<div class="containers">
+    <h2 id="createTask">Create Task - </h2>
+    </div>
 </div>
 </div>
 <!-- add yard starts here -->
@@ -2465,6 +2469,7 @@ const process = urlParams.get("process");
 // const newEntry = urlParams.get("newEntry");
 var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
+document.getElementById("createTask").textContent += orderNo;
 document.getElementById("yardModalLabel").textContent += orderNo;
 document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
 // console.log("orderNo:", orderNo); 
