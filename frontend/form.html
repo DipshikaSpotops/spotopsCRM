@@ -5627,18 +5627,19 @@ if (!firstName) {
   }
 
   try {
-    // Fetch tasks from your backend API
-    const response = await fetch(`https://www.spotops360.com/taskGroup/${orderNo}`) // Replace with your API endpoint
-    const taskGroups = await response.json();
+    // Fetch tasks for the specific orderNo
+    const response = await fetch(`https://www.spotops360.com/taskGroup/${orderNo}`);
+    const taskGroup = await response.json();
 
-    // Flatten the grouped tasks and filter by assignedTo matching firstName
-    const tasks = taskGroups
-      .flatMap(group =>
-        group.tasks.map(task => ({ ...task, orderNo: group.orderNo }))
-      )
-      .filter(task => task.assignedTo === firstName);
+    if (!taskGroup || !taskGroup.tasks) {
+      alert("No tasks found for the given orderNo.");
+      return;
+    }
 
-    // Render tasks only if there are matching ones
+    // Filter tasks assigned to the logged-in user (matching firstName)
+    const tasks = taskGroup.tasks.filter(task => task.assignedTo === firstName);
+
+    // Get the container and table body elements
     const myTasksContainer = document.getElementById("myTasks");
     const tableBody = document.getElementById("task-table-body");
 
@@ -5685,10 +5686,11 @@ if (!firstName) {
     } else {
       // Hide the container if no tasks match
       myTasksContainer.style.display = "none";
+      alert("No tasks assigned to you for the given orderNo.");
     }
   } catch (error) {
     console.error("Error fetching tasks:", error);
-    // alert("Unable to fetch tasks.");
+    alert("Unable to fetch tasks.");
   }
 });
 </script>
