@@ -5625,7 +5625,7 @@ if (!firstName) {
     // Server responded with a status other than 2xx
     console.error(`HTTP error! status: ${error.response.status}`);
     console.error("Response data:", error.response.data);
-    alert(`Failed to fetch tasks: ${error.response.data.message || "Unknown error"}`);
+    // alert(`Failed to fetch tasks: ${error.response.data.message || "Unknown error"}`);
   } else if (error.request) {
     // No response was received
     console.error("No response received:", error.request);
