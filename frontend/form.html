@@ -993,6 +993,41 @@ input, select, button {
   cursor: pointer;
   padding: 8px;
   text-align: center;
+  margin-left: 26%;
+    width: 75%;
+    border-radius: 10px;
+}
+.input-container {
+  position: relative;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+input[type="date"] {
+  width: 100%;
+  padding: 10px 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  box-sizing: border-box;
+}
+
+.placeholder-text {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: gray;
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+}
+
+input[type="date"]:focus + .placeholder-text,
+input[type="date"]:not(:placeholder-shown) + .placeholder-text {
+  visibility: hidden;
 }
 
 </style>
@@ -1353,10 +1388,13 @@ style="margin-right: 94px;margin-top: -9px;"
             <input type="text" placeholder="Task Name" style="margin-left: -8%;width: 120%;border-radius: 10px;" />
           </div>
           <div class="col">
-            <input id="deadline" type="month" placeholder="Deadline" />
-          </div>
+            <div class="input-container">
+                <input id="deadline" type="date" style="border-radius: 10px;" />
+                <span class="placeholder-text">Deadline</span>
+              </div>
+                </div>
           <div class="col">
-            <select>
+            <select style="border-radius: 10px;">
               <option value="">Assign to</option>
               <option value="April">April</option>
               <option value="David">David</option>
@@ -1373,7 +1411,7 @@ style="margin-right: 94px;margin-top: -9px;"
         <!-- Second Row -->
         <div class="row">
           <div class="col-wide">
-            <input type="text" placeholder="Task Description" />
+            <input type="text" placeholder="Task Description" style="margin-left: 2%;width: 104%;border-radius: 10px;" />
           </div>
           <div class="col">
             <button class="grey-button">Create Task</button>
@@ -5472,6 +5510,13 @@ updateIcon(false);
 // Add click event to toggle dark mode
 darkModeToggle.addEventListener("click", toggleDarkMode);
 // dark mode till here
+const dateInput = document.getElementById("deadline");
+const placeholder = document.querySelector(".placeholder-text");
+
+dateInput.addEventListener("input", () => {
+  placeholder.style.visibility = dateInput.value ? "hidden" : "visible";
+});
+
 });
 </script>
 </body>   
