@@ -895,6 +895,20 @@ console.error("Error fetching bill:", error);
 res.status(500).json({ error: "Internal Server Error" }); 
 }
 });
+app.get("/fetchTasks", async (req, res) => {
+  const orderNo  = req.query.orderNo;
+  console.log("taskGroup:", orderNo);
+  try {
+    const taskGroup = await TaskGroup.findOne({ orderNo });
+    if (!taskGroup) {
+      return res.status(404).json({ message: 'No tasks found for the given orderNo.' });
+    }
+    res.status(200).json(taskGroup.tasks);
+  } catch (error) {
+    console.error('Error fetching tasks by orderNo:', error);
+    res.status(500).json({ message: 'Failed to fetch tasks.' });
+  }
+});
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
@@ -3436,20 +3450,7 @@ app.get('/moreThanTwoYardsOrders', async (req, res) => {
   res.json(orders);
 });
 // createTask
-app.get("/fetchTasks", async (req, res) => {
-  const orderNo  = req.query.orderNo;
-  console.log("taskGroup:", orderNo);
-  try {
-    const taskGroup = await TaskGroup.findOne({ orderNo });
-    if (!taskGroup) {
-      return res.status(404).json({ message: 'No tasks found for the given orderNo.' });
-    }
-    res.status(200).json(taskGroup.tasks);
-  } catch (error) {
-    console.error('Error fetching tasks by orderNo:', error);
-    res.status(500).json({ message: 'Failed to fetch tasks.' });
-  }
-});
+
 app.post("/createTask", async (req, res) => {
   console.log(":inside create Task")
   const { orderNo, taskName, assignedTo, assignedBy, taskCreatedDate, deadline, taskDescription, taskStatus } = req.body;
