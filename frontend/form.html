@@ -5576,7 +5576,6 @@ if (!dateInput.value) {
 }
 // createTask button to save the details
 document.getElementById("createTaskButton").addEventListener("click", async () => {
-  // Collect form values
   const taskName = document.querySelector('input[placeholder="Task Name"]').value;
   const deadline = document.getElementById("deadline").value;
   const assignedTo = document.getElementById('assignTo').value;
@@ -5584,8 +5583,6 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
   const assignedBy = firstName; 
   const taskCreatedDate = currentDateTime; 
   const taskStatus = "Task created"; // Default status
-
-  // Create task object
   const task = {
     taskName,
     orderNo,
@@ -5596,8 +5593,6 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
     taskDescription,
     taskStatus,
   };
-
-  // Send task data to the API
   try {
     const response = await fetch("https://www.spotops360.com/createTask", {
       method: "POST",
@@ -5627,18 +5622,18 @@ if (!firstName) {
   }
 
   try {
-  const response = await fetch(`https://www.spotops360.com/taskGroup/${orderNo}`);
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  const taskGroupRes = await fetch(`https://www.spotops360.com/taskGroup/${orderNo}`);
+console.log("taskGroup res",taskGroupRes)
+  if (!taskGroupRes.ok) {
+    throw new Error(`HTTP error! status: ${taskGroupRes.status}`);
   }
 
-  const contentType = response.headers.get("content-type");
+  const contentType = taskGroupRes.headers.get("content-type");
   if (!contentType || !contentType.includes("application/json")) {
     throw new Error("Invalid response type, expected JSON");
   }
 
-  const taskGroup = await response.json();
+  const taskGroup = await taskGroupRes.json();
 console.log("taskGroup",taskGroup);
   if (!taskGroup || !taskGroup.tasks) {
     alert("No tasks found for the given orderNo.");
