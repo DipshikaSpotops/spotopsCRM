@@ -1353,7 +1353,7 @@ style="margin-right: 94px;margin-top: -9px;"
             <input type="text" placeholder="Task Name" style="margin-left: -8%;width: 120%;border-radius: 10px;" />
           </div>
           <div class="col">
-            <input type="month" placeholder="Deadline" />
+            <input id="deadline" type="month" placeholder="Deadline" />
           </div>
           <div class="col">
             <select>
@@ -2544,6 +2544,7 @@ const process = urlParams.get("process");
 var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
 document.getElementById("createTask").textContent += orderNo;
+$("#deadline").textContent(`Deadline`);
 document.getElementById("yardModalLabel").textContent += orderNo;
 document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
 // console.log("orderNo:", orderNo); 
