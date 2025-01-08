@@ -1015,10 +1015,11 @@ input[type="date"] {
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: white;
-  color: white;
+  color: white; /* Default text color (white) */
   box-sizing: border-box;
   border: 1px solid black;
   height: 42px;
+  transition: color 0.2s ease-in-out; /* Smooth color transition */
 }
 
 .placeholder {
@@ -1034,10 +1035,14 @@ input[type="date"] {
 
 input[type="date"]:focus + .placeholder,
 input[type="date"]:valid + .placeholder {
-    top: 23px;
-    left: 75px;
-    font-size: 16px;
-    color: #79797a;
+  top: 23px;
+  left: 75px;
+  font-size: 16px;
+  color: white; /* Change placeholder color to white */
+}
+
+input[type="date"]:valid {
+  color: black; /* Change text color to black once a date is selected */
 }
 
 </style>
@@ -1402,7 +1407,6 @@ style="margin-right: 94px;margin-top: -9px;"
                 <input id="deadline" type="date" />
                 <label for="deadline" class="placeholder">Deadline</label>
               </div>
-              
                 </div>
           <div class="col">
             <select style="border-radius: 10px;">
