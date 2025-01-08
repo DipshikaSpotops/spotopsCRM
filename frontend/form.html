@@ -955,6 +955,46 @@ box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 .dark-mode .rate-item {
 background-color: #333;
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Spacing between rows */
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.col {
+  flex: 1; /* Make columns equal width */
+  margin-right: 10px; /* Spacing between columns */
+}
+
+.col:last-child {
+  margin-right: 0; /* Remove margin for the last column */
+}
+
+.col-wide {
+  flex: 2; /* Double the width of a normal column */
+}
+
+input, select, button {
+  width: 100%; /* Make inputs/buttons fill their columns */
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.grey-button {
+  background-color: grey;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  text-align: center;
+}
+
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -1305,7 +1345,41 @@ style="margin-right: 94px;margin-top: -9px;"
 </div>
 <!-- create task part -->
 <div class="containers">
-    <h6 id="createTask">Create Task - </h6>
+    <h4 id="createTask">Create Task - </h4>
+    <div class="container">
+        <!-- First Row -->
+        <div class="row">
+          <div class="col">
+            <input type="text" placeholder="Task Name" />
+          </div>
+          <div class="col">
+            <input type="date" placeholder="Deadline" />
+          </div>
+          <div class="col">
+            <select>
+              <option value="">Assign to</option>
+              <option value="April">April</option>
+              <option value="David">David</option>
+              <option value="Erica">Erica</option>
+              <option value="John">John</option>
+              <option value="Korina">Korina</option>
+              <option value="Michael">Michael</option>
+              <option value="Richard">Richard</option>
+              <option value="Shankar">Shankar</option>
+              <option value="Tony">Tony</option>
+            </select>
+          </div>
+        </div>
+        <!-- Second Row -->
+        <div class="row">
+          <div class="col-wide">
+            <input type="text" placeholder="Task Description" />
+          </div>
+          <div class="col">
+            <button class="grey-button">Create Task</button>
+          </div>
+        </div>
+      </div>      
     </div>
 </div>
 </div>
