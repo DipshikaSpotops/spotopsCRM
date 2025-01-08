@@ -3440,7 +3440,7 @@ app.get("taskGroup/:orderNo", async (req, res) => {
   const { orderNo } = req.params.orderNo;
   console.log("taskGroup:", orderNo);
   try {
-    const taskGroup = await TaskGroup.findOne({ orderNo });
+    const taskGroup = await TaskGroup.findOne({ orderNo: req.params.orderNo });
     if (!taskGroup) {
       return res.status(404).json({ message: 'No tasks found for the given orderNo.' });
     }
