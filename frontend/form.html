@@ -1008,18 +1008,23 @@ input, select, button {
   width: 100%;
 }
 
+.input-container {
+  position: relative;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
 input[type="date"] {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 10px;
   background-color: white;
-  color: white; /* Default text color (white) */
+  color: white; /* Initially hide dd-mm-yyyy text */
   box-sizing: border-box;
-  border: 1px solid black;
   height: 42px;
-  transition: color 0.2s ease-in-out; /* Smooth color transition */
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
 .placeholder {
@@ -1028,9 +1033,9 @@ input[type="date"] {
   left: 12px;
   transform: translateY(-50%);
   font-size: 16px;
-  color: gray;
+  color: black; /* Placeholder is visible initially */
   pointer-events: none;
-  transition: 0.2s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
 input[type="date"]:focus + .placeholder,
@@ -1038,13 +1043,12 @@ input[type="date"]:valid + .placeholder {
   top: 23px;
   left: 75px;
   font-size: 16px;
-  color: white; /* Change placeholder color to white */
+  color: white; /* Placeholder changes to white after date selection */
 }
 
 input[type="date"]:valid {
-  color: black; /* Change text color to black once a date is selected */
+  color: black; /* Show selected date text in black */
 }
-
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
