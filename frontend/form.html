@@ -5686,11 +5686,9 @@ if (!firstName) {
     } else {
       // Hide the container if no tasks match
       myTasksContainer.style.display = "none";
-      alert("No tasks assigned to you for the given orderNo.");
     }
   } catch (error) {
     console.error("Error fetching tasks:", error);
-    alert("Unable to fetch tasks.");
   }
 });
 </script>
