@@ -5627,69 +5627,31 @@ if (!firstName) {
   }
 
   try {
-    // Fetch tasks for the specific orderNo
-    const response = await fetch(`https://www.spotops360.com/taskGroup/${orderNo}`);
-    const taskGroup = await response.json();
+  const response = await fetch(`https://www.spotops360.com/taskGroup/${orderNo}`);
 
-    if (!taskGroup || !taskGroup.tasks) {
-      alert("No tasks found for the given orderNo.");
-      return;
-    }
-
-    // Filter tasks assigned to the logged-in user (matching firstName)
-    const tasks = taskGroup.tasks.filter(task => task.assignedTo === firstName);
-
-    // Get the container and table body elements
-    const myTasksContainer = document.getElementById("myTasks");
-    const tableBody = document.getElementById("task-table-body");
-
-    if (tasks.length > 0) {
-      // Clear existing rows
-      tableBody.innerHTML = "";
-
-      // Render the filtered tasks
-      tasks.forEach(task => {
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-          <td>${task.taskName}</td>
-          <td>${task.taskDescription}</td>
-          <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
-          <td>${task.assignedBy}</td>
-          <td>${task.assignedTo}</td>
-          <td>
-            <button class="status-button ${task.taskStatus === 'Completed' ? 'completed' : 'mark-complete'}">
-              ${task.taskStatus === 'Completed' ? 'Completed' : 'Mark As Complete'}
-            </button>
-          </td>
-          <td>
-            <select class="assign-to-dropdown">
-              <option value="">Assign to</option>
-              <option value="April">April</option>
-              <option value="David">David</option>
-              <option value="Erica">Erica</option>
-              <option value="John">John</option>
-              <option value="Korina">Korina</option>
-              <option value="Michael">Michael</option>
-              <option value="Richard">Richard</option>
-              <option value="Shankar">Shankar</option>
-              <option value="Tony">Tony</option>
-            </select>
-          </td>
-        `;
-
-        tableBody.appendChild(row);
-      });
-
-      // Show the container since we have tasks
-      myTasksContainer.style.display = "block";
-    } else {
-      // Hide the container if no tasks match
-      myTasksContainer.style.display = "none";
-    }
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+
+  const contentType = response.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+    throw new Error("Invalid response type, expected JSON");
+  }
+
+  const taskGroup = await response.json();
+console.log("taskGroup",taskGroup);
+  if (!taskGroup || !taskGroup.tasks) {
+    alert("No tasks found for the given orderNo.");
+    return;
+  }
+
+  // Process tasks (filter and render)
+  const tasks = taskGroup.tasks.filter(task => task.assignedTo === firstName);
+  renderTasks(tasks);
+} catch (error) {
+  console.error("Error fetching tasks:", error);
+}
+
 });
 </script>
 </body>   
