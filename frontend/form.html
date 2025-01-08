@@ -5616,7 +5616,7 @@ if (!firstName) {
   console.log("taskGroup data:", taskGroup);
 
   // Process tasks (filter and render)
-  const tasks = taskGroup.tasks.filter(task => task.assignedTo === firstName);
+  const tasks = taskGroup.filter(task => task.assignedTo === firstName);
   renderTasks(tasks);
 
 } catch (error) {
