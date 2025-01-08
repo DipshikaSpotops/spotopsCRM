@@ -1439,7 +1439,7 @@ style="margin-right: 94px;margin-top: -9px;"
             <input type="text" placeholder="Task Description" style="margin-left: -1%;width: 102%;border-radius: 10px;" />
           </div>
           <div class="col">
-            <button class="grey-button">Create Task</button>
+            <button class="grey-button" id="createTaskButton">Create Task</button>
           </div>
         </div>
       </div>      
@@ -5554,6 +5554,52 @@ dateInput.addEventListener("change", () => {
 if (!dateInput.value) {
   dateInput.style.color = "white"; // Hide 'dd-mm-yyyy' initially
 }
+// createTask button to save the details
+document.getElementById("createTaskButton").addEventListener("click", async () => {
+  // Collect form values
+  const taskName = document.querySelector('input[placeholder="Task Name"]').value;
+  const deadline = document.getElementById("deadline").value;
+  const assignedTo = document.querySelector('select').value;
+  const taskDescription = document.querySelector('input[placeholder="Task Description"]').value;
+  const assignedBy = firstName; 
+  const taskCreatedDate = currentDateTime; 
+  const taskStatus = "Task created"; // Default status
+
+  // Create task object
+  const task = {
+    taskName,
+    orderNo,
+    assignedTo,
+    assignedBy,
+    taskCreatedDate,
+    deadline,
+    taskDescription,
+    taskStatus,
+  };
+
+  // Send task data to the API
+  try {
+    const response = await fetch("https://www.spotops360.com/createTask", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      alert("Task created successfully!");
+      console.log("Task saved:", result);
+    } else {
+      const error = await response.json();
+      alert("Failed to create task: " + error.message);
+    }
+  } catch (error) {
+    console.error("Error saving task:", error);
+    alert("An error occurred while saving the task.");
+  }
+});
 
 });
 </script>

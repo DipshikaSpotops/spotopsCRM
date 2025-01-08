@@ -536,7 +536,22 @@ qty: Number,
 });
 
 const Bill = mongoose.model("Bill", BillSchema);
+const taskSchema = new mongoose.Schema({
+  orderNo: { type: String, required: true },
+  tasks: [
+    {
+      taskName: { type: String, required: true },
+      assignedTo: { type: String, required: true },
+      assignedBy: { type: String, required: true },
+      taskCreatedDate: { type: Date, required: true },
+      deadline: { type: Date, required: true },
+      taskDescription: { type: String, required: true },
+      taskStatus: { type: String, default: "Pending" },
+    },
+  ],
+});
 
+const TaskGroup = mongoose.model("TaskGroup", taskSchema);
 const OrderSchema = new mongoose.Schema({
 orderNo: { type: String, unique: true },
 orderDate: String,
@@ -3419,4 +3434,48 @@ app.get('/moreThanTwoYardsOrders', async (req, res) => {
   };
   const orders = await db.collection('orders').find(filter).toArray();
   res.json(orders);
+});
+// createTask
+app.post("/createTask", async (req, res) => {
+  const { orderNo, taskName, assignedTo, assignedBy, taskCreatedDate, deadline, taskDescription, taskStatus } = req.body;
+
+  try {
+    const taskGroup = await TaskGroup.findOne({ orderNo });
+
+    if (taskGroup) {
+      // If orderNo exists, add the new task to the tasks array
+      taskGroup.tasks.push({
+        taskName,
+        assignedTo,
+        assignedBy,
+        taskCreatedDate,
+        deadline,
+        taskDescription,
+        taskStatus,
+      });
+      await taskGroup.save();
+      res.status(200).json({ message: "Task added to existing order.", taskGroup });
+    } else {
+      // If orderNo doesn't exist, create a new document
+      const newTaskGroup = new TaskGroup({
+        orderNo,
+        tasks: [
+          {
+            taskName,
+            assignedTo,
+            assignedBy,
+            taskCreatedDate,
+            deadline,
+            taskDescription,
+            taskStatus,
+          },
+        ],
+      });
+      await newTaskGroup.save();
+      res.status(201).json({ message: "New order created with task.", newTaskGroup });
+    }
+  } catch (error) {
+    console.error("Error creating task:", error);
+    res.status(500).json({ message: "Failed to create task." });
+  }
 });
