@@ -994,32 +994,6 @@ input, select, button {
   padding: 8px;
   text-align: center;
 }
-.input-container {
-  position: relative;
-  width: 100%;
-}
-
-input[type="month"] {
-  width: 100%;
-  padding: 8px 5px;
-  box-sizing: border-box;
-  font-size: 16px;
-}
-
-.placeholder-text {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  font-size: 16px;
-  color: gray;
-  pointer-events: none;
-  transition: 0.2s;
-}
-
-input[type="month"]:focus + .placeholder-text,
-input[type="month"]:not(:placeholder-shown) + .placeholder-text {
-  visibility: hidden;
-}
 
 </style>
 
@@ -1379,10 +1353,7 @@ style="margin-right: 94px;margin-top: -9px;"
             <input type="text" placeholder="Task Name" style="margin-left: -8%;width: 120%;border-radius: 10px;" />
           </div>
           <div class="col">
-            <div class="input-container">
-                <input id="deadline" type="month" onfocus="hidePlaceholder(this)" onblur="showPlaceholder(this)" />
-                <span class="placeholder-text">Deadline</span>
-              </div>              
+            <input id="deadline" type="month" placeholder="Deadline" />
           </div>
           <div class="col">
             <select>
@@ -2573,7 +2544,8 @@ const process = urlParams.get("process");
 var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
 document.getElementById("createTask").textContent += orderNo;
-document.getElementById("deadline").textContent = "Deadline";
+$("#deadline").val(`Deadline`);
+// document.getElementById("deadline").textContent = "Deadline";
 document.getElementById("yardModalLabel").textContent += orderNo;
 document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
 // console.log("orderNo:", orderNo); 
@@ -5501,15 +5473,6 @@ updateIcon(false);
 darkModeToggle.addEventListener("click", toggleDarkMode);
 // dark mode till here
 });
-function hidePlaceholder(input) {
-  input.nextElementSibling.style.visibility = 'hidden';
-}
-
-function showPlaceholder(input) {
-  if (!input.value) {
-    input.nextElementSibling.style.visibility = 'visible';
-  }
-}
 </script>
 </body>   
 </html>
