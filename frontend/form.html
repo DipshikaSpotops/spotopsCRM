@@ -5606,7 +5606,7 @@ if (!firstName) {
   const taskGroupRes = await axios.get(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`);
   console.log("taskGroup response:", orderNo,taskGroupRes.data);
   var taskDta = taskGroupRes.data;
-  console.log("taskGroup data:", taskGroup);
+  console.log("taskGroup data:", taskDta);
   // Filter tasks assigned to the current user
   const tasks = taskDta.tasks.filter(task => task.assignedTo === firstName);
 
