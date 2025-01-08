@@ -3481,7 +3481,7 @@ console.log("orderNo",orderNo);
   }
 });
 app.get('/taskGroup/:orderNo', async (req, res) => {
-  const { orderNo } = req.params;
+  const { orderNo } = req.params.orderNo;
   console.log("taskGroup:", orderNo);
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
