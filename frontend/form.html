@@ -993,8 +993,8 @@ input, select, button {
   cursor: pointer;
   padding: 8px;
   text-align: center;
-  margin-left: 26%;
-    width: 75%;
+  margin-left: 11%;
+    width: 89%;
     border-radius: 10px;
 }
 .input-container {
@@ -1003,21 +1003,26 @@ input, select, button {
   font-family: Arial, sans-serif;
 }
 
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
 input[type="date"] {
   width: 100%;
-  padding: 10px 10px;
+  padding: 10px;
   font-size: 16px;
-  border-radius: 10px;
   border: 1px solid #ccc;
+  border-radius: 10px;
   background-color: white;
   color: black;
   box-sizing: border-box;
 }
 
-.placeholder-text {
+.placeholder {
   position: absolute;
   top: 50%;
-  left: 15px;
+  left: 12px;
   transform: translateY(-50%);
   font-size: 16px;
   color: gray;
@@ -1025,9 +1030,12 @@ input[type="date"] {
   transition: 0.2s ease-in-out;
 }
 
-input[type="date"]:focus + .placeholder-text,
-input[type="date"]:not(:placeholder-shown) + .placeholder-text {
-  visibility: hidden;
+input[type="date"]:focus + .placeholder,
+input[type="date"]:valid + .placeholder {
+  top: -10px;
+  left: 12px;
+  font-size: 12px;
+  color: blue;
 }
 
 </style>
@@ -1389,9 +1397,10 @@ style="margin-right: 94px;margin-top: -9px;"
           </div>
           <div class="col">
             <div class="input-container">
-                <input id="deadline" type="date" style="border-radius: 10px;" />
-                <span class="placeholder-text">Deadline</span>
+                <input id="deadline" type="date" />
+                <label for="deadline" class="placeholder">Deadline</label>
               </div>
+              
                 </div>
           <div class="col">
             <select style="border-radius: 10px;">
@@ -1411,7 +1420,7 @@ style="margin-right: 94px;margin-top: -9px;"
         <!-- Second Row -->
         <div class="row">
           <div class="col-wide">
-            <input type="text" placeholder="Task Description" style="margin-left: 2%;width: 104%;border-radius: 10px;" />
+            <input type="text" placeholder="Task Description" style="margin-left: -1%;width: 102%;border-radius: 10px;" />
           </div>
           <div class="col">
             <button class="grey-button">Create Task</button>
