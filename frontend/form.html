@@ -1410,7 +1410,7 @@ style="margin-right: 94px;margin-top: -9px;"
         <!-- First Row -->
         <div class="row">
           <div class="col">
-            <input type="text" placeholder="Task Name" style="margin-left: -8%;width: 120%;border-radius: 10px;" />
+            <input id="taskName" type="text" placeholder="Task Name" style="margin-left: -8%;width: 120%;border-radius: 10px;" />
           </div>
           <div class="col">
             <div class="input-container">
@@ -1436,7 +1436,7 @@ style="margin-right: 94px;margin-top: -9px;"
         <!-- Second Row -->
         <div class="row">
           <div class="col-wide">
-            <input type="text" placeholder="Task Description" style="margin-left: -1%;width: 102%;border-radius: 10px;" />
+            <input id="taskDesc" type="text" placeholder="Task Description" style="margin-left: -1%;width: 102%;border-radius: 10px;" />
           </div>
           <div class="col">
             <button class="grey-button" id="createTaskButton">Create Task</button>
@@ -5576,10 +5576,10 @@ if (!dateInput.value) {
 }
 // createTask button to save the details
 document.getElementById("createTaskButton").addEventListener("click", async () => {
-  const taskName = document.querySelector('input[placeholder="Task Name"]').value;
+  const taskName = document.getElementById('taskName').value;
   const deadline = document.getElementById("deadline").value;
   const assignedTo = document.getElementById('assignTo').value;
-  const taskDescription = document.querySelector('input[placeholder="Task Description"]').value;
+  const taskDescription = document.getElementById('taskDesc').value;
   const assignedBy = firstName; 
   const taskCreatedDate = currentDateTime; 
   const taskStatus = "Task created"; // Default status
@@ -5625,6 +5625,8 @@ if (!firstName) {
   // Make the GET request using axios
   const taskGroupRes = await axios.get(`https://www.spotops360.com/taskGroup/${orderNo}`);
   console.log("taskGroup response:", taskGroupRes);
+
+  // Check if the response is valid and contains tasks
   const taskGroup = taskGroupRes.data; // Axios automatically parses JSON
   if (!taskGroup || !taskGroup.tasks) {
     return;
