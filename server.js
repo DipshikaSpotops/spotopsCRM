@@ -3436,8 +3436,8 @@ app.get('/moreThanTwoYardsOrders', async (req, res) => {
   res.json(orders);
 });
 // createTask
-app.get("/taskGroup/:orderNo", async (req, res) => {
-  const { orderNo } = req.params.orderNo;
+app.get("/taskGroup", async (req, res) => {
+  const orderNo  = req.query.orderNo;
   console.log("taskGroup:", orderNo);
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo: req.params.orderNo });
