@@ -1445,6 +1445,7 @@ style="margin-right: 94px;margin-top: -9px;"
       </div>      
     </div>
     <!-- my Tasks table -->
+     <div id="myTasks" style="display: none;">
     <h1>My Tasks</h1>
     <table>
       <thead>
@@ -1462,7 +1463,7 @@ style="margin-right: 94px;margin-top: -9px;"
         <!-- Rows will be dynamically added here -->
       </tbody>
     </table>
-
+  </div>
 </div>
 </div>
 <!-- add yard starts here -->
@@ -5620,69 +5621,75 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
   }
 });
 //myTasks display
-const tableBody = document.getElementById("task-table-body");
-  tableBody.innerHTML = "";
+if (!firstName) {
+    alert("No user found in local storage.");
+    return;
+  }
 
   try {
     // Fetch tasks from your backend API
     const response = await fetch("/api/taskGroup"); // Replace with your API endpoint
     const taskGroups = await response.json();
 
-    // Flatten the grouped tasks and create a single array
-    const tasks = taskGroups.flatMap(group =>
-      group.tasks.map(task => ({ ...task, orderNo: group.orderNo }))
-    );
+    // Flatten the grouped tasks and filter by assignedTo matching firstName
+    const tasks = taskGroups
+      .flatMap(group =>
+        group.tasks.map(task => ({ ...task, orderNo: group.orderNo }))
+      )
+      .filter(task => task.assignedTo === firstName);
 
-    // Iterate through the tasks array and render table rows
-    tasks.forEach(task => {
-      const row = document.createElement("tr");
+    // Render tasks only if there are matching ones
+    const myTasksContainer = document.getElementById("myTasks");
+    const tableBody = document.getElementById("task-table-body");
 
-      // Add columns dynamically
-      row.innerHTML = `
-        <td>${task.taskName}</td>
-        <td>${task.taskDescription}</td>
-        <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
-        <td>${task.assignedBy}</td>
-        <td>${task.assignedTo}</td>
-        <td>
-          <button class="status-button ${task.taskStatus === 'Completed' ? 'completed' : 'mark-complete'}">
-            ${task.taskStatus === 'Completed' ? 'Completed' : 'Mark As Complete'}
-          </button>
-        </td>
-        <td>
-          <select class="assign-to-dropdown" data-task-id="${task._id}">
-            <option value="">Assign to</option>
-            <option value="April">April</option>
-            <option value="David">David</option>
-            <option value="Erica">Erica</option>
-            <option value="John">John</option>
-            <option value="Korina">Korina</option>
-            <option value="Michael">Michael</option>
-            <option value="Richard">Richard</option>
-            <option value="Shankar">Shankar</option>
-            <option value="Tony">Tony</option>
-          </select>
-        </td>
-      `;
+    if (tasks.length > 0) {
+      // Clear existing rows
+      tableBody.innerHTML = "";
 
-      // Add event listener for the dropdown
-      const dropdown = row.querySelector(".assign-to-dropdown");
-      dropdown.addEventListener("change", async (event) => {
-        const newAssignedTo = event.target.value;
-        const taskId = event.target.getAttribute("data-task-id");
+      // Render the filtered tasks
+      tasks.forEach(task => {
+        const row = document.createElement("tr");
 
-        if (newAssignedTo) {
-          await updateTaskAssignment(taskId, newAssignedTo);
-          alert(`Task has been assigned to ${newAssignedTo}`);
-          fetchAndRenderTasks(); // Refresh table after update
-        }
+        row.innerHTML = `
+          <td>${task.taskName}</td>
+          <td>${task.taskDescription}</td>
+          <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
+          <td>${task.assignedBy}</td>
+          <td>${task.assignedTo}</td>
+          <td>
+            <button class="status-button ${task.taskStatus === 'Completed' ? 'completed' : 'mark-complete'}">
+              ${task.taskStatus === 'Completed' ? 'Completed' : 'Mark As Complete'}
+            </button>
+          </td>
+          <td>
+            <select class="assign-to-dropdown">
+              <option value="">Assign to</option>
+              <option value="April">April</option>
+              <option value="David">David</option>
+              <option value="Erica">Erica</option>
+              <option value="John">John</option>
+              <option value="Korina">Korina</option>
+              <option value="Michael">Michael</option>
+              <option value="Richard">Richard</option>
+              <option value="Shankar">Shankar</option>
+              <option value="Tony">Tony</option>
+            </select>
+          </td>
+        `;
+
+        tableBody.appendChild(row);
       });
 
-      // Append row to table body
-      tableBody.appendChild(row);
-    });
+      // Show the container since we have tasks
+      myTasksContainer.style.display = "block";
+    } else {
+      // Hide the container if no tasks match
+      myTasksContainer.style.display = "none";
+      alert("No tasks assigned to you.");
+    }
   } catch (error) {
     console.error("Error fetching tasks:", error);
+    alert("Unable to fetch tasks.");
   }
 });
 </script>
