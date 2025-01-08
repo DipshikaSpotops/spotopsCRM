@@ -3436,11 +3436,11 @@ app.get('/moreThanTwoYardsOrders', async (req, res) => {
   res.json(orders);
 });
 // createTask
-app.get("/taskGroup", async (req, res) => {
+app.get("/fetchTasks", async (req, res) => {
   const orderNo  = req.query.orderNo;
   console.log("taskGroup:", orderNo);
   try {
-    const taskGroup = await TaskGroup.findOne({ orderNo: req.params.orderNo });
+    const taskGroup = await TaskGroup.findOne({ orderNo });
     if (!taskGroup) {
       return res.status(404).json({ message: 'No tasks found for the given orderNo.' });
     }
