@@ -5604,7 +5604,7 @@ if (!firstName) {
 
   try {
   // Make the GET request using axios
-  const taskGroupRes = await axios.get(`https://www.spotops360.com/taskGroup?orderNo=${orderNo}`);
+  const taskGroupRes = await axios.get(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`);
   console.log("taskGroup response:", taskGroupRes);
 
   // Check if the response is valid and contains tasks
