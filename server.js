@@ -3481,17 +3481,13 @@ console.log("orderNo",orderNo);
   }
 });
 app.get('/taskGroup/:orderNo', async (req, res) => {
-  const { orderNo } = req.params.orderNo;
-console.log("taskGroup",orderNo);
+  const { orderNo } = req.params;
+  console.log("taskGroup:", orderNo);
   try {
-    // Find the task group by orderNo
     const taskGroup = await TaskGroup.findOne({ orderNo });
-
     if (!taskGroup) {
       return res.status(404).json({ message: 'No tasks found for the given orderNo.' });
     }
-
-    // Return the tasks
     res.status(200).json(taskGroup.tasks);
   } catch (error) {
     console.error('Error fetching tasks by orderNo:', error);
