@@ -5667,33 +5667,22 @@ try {
   // Fetch tasks for the specific orderNo
   const taskGroupRes = await axios.get(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`);
   console.log("taskGroup response:", taskGroupRes.data);
-
   const taskDta = taskGroupRes.data;
-
-  // Get the logged-in user's firstName
   const firstName = localStorage.getItem("firstName");
   if (!firstName) {
     alert("No user found in local storage.");
     return;
   }
-
   // Filter tasks assigned to the current user
   const myTasks = taskDta.filter(task => task.assignedTo === firstName);
-
-  // Get the container and table body elements for both tables
   const myTasksContainer = document.getElementById("myTasks");
   const myTaskTableBody = document.getElementById("task-table-body");
   const allTasksTableBody = document.getElementById("all-task-table-body");
-
-  // Handle "My Tasks" table
+  const allTasksContainer = document.getElementById("allTasks");
   if (myTasks.length > 0) {
-    // Clear existing rows
     myTaskTableBody.innerHTML = "";
-
-    // Render the filtered tasks
     myTasks.forEach(task => {
       const row = document.createElement("tr");
-
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
@@ -5720,26 +5709,17 @@ try {
           </select>
         </td>
       `;
-
       myTaskTableBody.appendChild(row);
     });
-
-    // Show the container since we have tasks
     myTasksContainer.style.display = "block";
   } else {
-    // Hide the container if no tasks match
     myTasksContainer.style.display = "none";
   }
-
-  // Handle "Tasks in this order" table
   if (taskDta.length > 0) {
-    // Clear existing rows
+    console.log("all Task Data",taskDta);
     allTasksTableBody.innerHTML = "";
-
-    // Render all tasks
     taskDta.forEach(task => {
       const row = document.createElement("tr");
-
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
@@ -5769,7 +5749,7 @@ try {
 
       allTasksTableBody.appendChild(row);
     });
-    allTasksTableBody.style.display = "block";
+    allTasksContainer.style.display = "block";
   }
 } catch (error) {
   console.error("Error fetching tasks:", error);
