@@ -5669,40 +5669,39 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
 });
 //myTasks display
 try {
+  // Fetch tasks for the specific orderNo
   const taskGroupRes = await axios.get(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`);
+  console.log("taskGroup response:", taskGroupRes.data);
   const taskDta = taskGroupRes.data;
-
   const firstName = localStorage.getItem("firstName");
   if (!firstName) {
     alert("No user found in local storage.");
     return;
   }
-console.log("taskData",taskDta);
+  // Filter tasks assigned to the current user
   const myTasks = taskDta.filter(task => task.assignedTo === firstName);
   const myTasksContainer = document.getElementById("myTasks");
   const myTaskTableBody = document.getElementById("task-table-body");
   const allTasksTableBody = document.getElementById("all-task-table-body");
   const allTasksContainer = document.getElementById("allTasks");
-
-  // "My Tasks" Table
   if (myTasks.length > 0) {
     myTaskTableBody.innerHTML = "";
-
-    myTasks.forEach((task, index) => {
+    myTasks.forEach((task,index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-        <td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
-          ${formatDeadline(task.deadline)}
-        </td>
+<td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
+  ${formatDeadline(task.deadline)}
+</td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
-          <input style="margin-left: 36%;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} data-index="${index}" />
-        </td>
+  <input style="margin-left: 36%;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+</td>
+
         <td>
-          <select class="assign-to-dropdown" data-index="${index}">
+          <select class="assign-to-dropdown">
             <option value="">Assign to</option>
             <option value="April">April</option>
             <option value="David">David</option>
@@ -5716,52 +5715,30 @@ console.log("taskData",taskDta);
           </select>
         </td>
       `;
-
-      // Add event listener for the checkbox
-      const checkbox = row.querySelector(".status-checkbox");
-      checkbox.addEventListener("change", async (e) => {
-        const isChecked = e.target.checked;
-        await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
-        alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
-      });
-
-      // Add event listener for the dropdown
-      const dropdown = row.querySelector(".assign-to-dropdown");
-      dropdown.addEventListener("change", async (e) => {
-        const newAssignedTo = e.target.value;
-        if (newAssignedTo) {
-          await updateTaskAssignedTo(orderNo, index, newAssignedTo);
-          alert(`Task assigned to ${newAssignedTo}`);
-        }
-      });
-
       myTaskTableBody.appendChild(row);
     });
-
     myTasksContainer.style.display = "block";
   } else {
     myTasksContainer.style.display = "none";
   }
-
-  // "Tasks in this order" Table
   if (taskDta.length > 0) {
+    console.log("all Task Data",taskDta);
     allTasksTableBody.innerHTML = "";
-
-    taskDta.forEach((task, index) => {
+    taskDta.forEach((task,index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-        <td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
-          ${formatDeadline(task.deadline)}
-        </td>
+<td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
+  ${formatDeadline(task.deadline)}
+</td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
-          <input style="margin-left: 36%;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} data-index="${index}" />
-        </td>
+  <input style="    margin-left: 36%;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+</td>
         <td>
-          <select class="assign-to-dropdown" data-index="${index}">
+          <select class="assign-to-dropdown">
             <option value="">Assign to</option>
             <option value="April">April</option>
             <option value="David">David</option>
@@ -5776,33 +5753,16 @@ console.log("taskData",taskDta);
         </td>
       `;
 
-      // Add event listener for the checkbox
-      const checkbox = row.querySelector(".status-checkbox");
-      checkbox.addEventListener("change", async (e) => {
-        const isChecked = e.target.checked;
-        await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
-        alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
-      });
-
-      // Add event listener for the dropdown
-      const dropdown = row.querySelector(".assign-to-dropdown");
-      dropdown.addEventListener("change", async (e) => {
-        const newAssignedTo = e.target.value;
-        if (newAssignedTo) {
-          await updateTaskAssignedTo(orderNo, index, newAssignedTo);
-          alert(`Task assigned to ${newAssignedTo}`);
-        }
-      });
-
       allTasksTableBody.appendChild(row);
     });
-
     allTasksContainer.style.display = "block";
   }
+  attachEventListeners();// for updating statua n assignTo values
 } catch (error) {
   console.error("Error fetching tasks:", error);
 }
 
+// Helper function to check if the deadline is in the past
 function isDeadlinePast(deadline) {
   const now = new Date();
   const deadlineDate = new Date(deadline);
@@ -5814,23 +5774,35 @@ function formatDeadline(deadline) {
   const options = { day: "2-digit", month: "short", year: "numeric" };
   return new Date(deadline).toLocaleDateString("en-US", options);
 }
-// change the taskStatus and assignTo
- const checkbox = row.querySelector(".status-checkbox");
-      checkbox.addEventListener("change", async (e) => {
-        const isChecked = e.target.checked;
-        await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
-        alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
-      });
+function attachEventListeners() {
+  // Checkbox event listeners
+  const checkboxes = document.querySelectorAll(".status-checkbox");
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", async (e) => {
+      const index = e.target.getAttribute("data-index");
+      const orderNo = e.target.getAttribute("data-order");
+      const isChecked = e.target.checked;
 
-      // Add event listener for the dropdown
-      const dropdown = row.querySelector(".assign-to-dropdown");
-      dropdown.addEventListener("change", async (e) => {
-        const newAssignedTo = e.target.value;
-        if (newAssignedTo) {
-          await updateTaskAssignedTo(orderNo, index, newAssignedTo);
-          alert(`Task assigned to ${newAssignedTo}`);
-        }
-      });
+      await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
+      alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
+    });
+  });
+
+  // Dropdown event listeners
+  const dropdowns = document.querySelectorAll(".assign-to-dropdown");
+  dropdowns.forEach(dropdown => {
+    dropdown.addEventListener("change", async (e) => {
+      const index = e.target.getAttribute("data-index");
+      const orderNo = e.target.getAttribute("data-order");
+      const newAssignedTo = e.target.value;
+
+      if (newAssignedTo) {
+        await updateTaskAssignedTo(orderNo, index, newAssignedTo);
+        alert(`Task assigned to ${newAssignedTo}`);
+      }
+    });
+  });
+}
 });
 </script>
 </body>   
