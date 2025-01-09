@@ -5683,13 +5683,10 @@ try {
     myTaskTableBody.innerHTML = "";
     myTasks.forEach(task => {
       const row = document.createElement("tr");
-      const myTaskdate = new Date(task.deadline);
-  const options = { year: 'numeric', month: 'short', day: '2-digit' }; 
-  return myTaskdate.toLocaleDateString('en-US', options);
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-        <td>${myTaskdate}</td>
+        <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
@@ -5722,13 +5719,10 @@ try {
     allTasksTableBody.innerHTML = "";
     taskDta.forEach(task => {
       const row = document.createElement("tr");
-      const date = new Date(task.deadline);
-  const options = { year: 'numeric', month: 'short', day: '2-digit' }; 
-  return date.toLocaleDateString('en-US', options);
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-        <td><${date}</td>
+        <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
@@ -5767,7 +5761,8 @@ function isDeadlinePast(deadline) {
 
 // Helper function to format the deadline date
 function formatDeadline(deadline) {
-  const options = { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" };
+  return date.toLocaleDateString('en-US', options);
+  const options = { day: "2-digit", month: "short", year: "numeric" };
   return new Date(deadline).toLocaleDateString("en-US", options);
 }
 
