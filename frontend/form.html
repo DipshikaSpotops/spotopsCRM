@@ -5774,8 +5774,6 @@ function formatDeadline(deadline) {
   const options = { day: "2-digit", month: "short", year: "numeric" };
   return new Date(deadline).toLocaleDateString("en-US", options);
 }
-function attachEventListeners() {
-  // Checkbox event listeners
   const checkboxes = document.querySelectorAll(".status-checkbox");
   checkboxes.forEach(checkbox => {
     checkbox.addEventListener("change", async (e) => {
@@ -5802,7 +5800,7 @@ function attachEventListeners() {
       }
     });
   });
-}
+
 async function updateTaskStatus(orderNo, index, status) {
   console.log("updateTaskStatus",orderNo,index);
   try {
