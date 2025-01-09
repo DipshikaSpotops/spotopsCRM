@@ -5769,13 +5769,10 @@ try {
 
       allTasksTableBody.appendChild(row);
     });
-
-    // Show the "Tasks in this order" container
-    document.getElementById("allTasks").style.display = "block";
+    allTasksTableBody.style.display = "block";
   }
 } catch (error) {
   console.error("Error fetching tasks:", error);
-  alert("An error occurred while fetching tasks.");
 }
 
 // Helper function to check if the deadline is in the past
