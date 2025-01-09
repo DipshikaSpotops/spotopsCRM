@@ -5683,17 +5683,19 @@ try {
     myTaskTableBody.innerHTML = "";
     myTasks.forEach(task => {
       const row = document.createElement("tr");
+      const myTaskdate = new Date(task.deadline);
+  const options = { year: 'numeric', month: 'short', day: '2-digit' }; 
+  return myTaskdate.toLocaleDateString('en-US', options);
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-        <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
+        <td>${myTaskdate}</td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
-          <button class="status-button ${task.taskStatus === 'Completed' ? 'completed' : 'mark-complete'}">
-            ${task.taskStatus === 'Completed' ? 'Completed' : 'Mark As Complete'}
-          </button>
-        </td>
+  <input type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+</td>
+
         <td>
           <select class="assign-to-dropdown">
             <option value="">Assign to</option>
@@ -5720,17 +5722,18 @@ try {
     allTasksTableBody.innerHTML = "";
     taskDta.forEach(task => {
       const row = document.createElement("tr");
+      const date = new Date(task.deadline);
+  const options = { year: 'numeric', month: 'short', day: '2-digit' }; 
+  return date.toLocaleDateString('en-US', options);
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-        <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
+        <td><${date}</td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
-          <button class="status-button ${task.taskStatus === 'Completed' ? 'completed' : 'mark-complete'}">
-            ${task.taskStatus === 'Completed' ? 'Completed' : 'Mark As Complete'}
-          </button>
-        </td>
+  <input type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+</td>
         <td>
           <select class="assign-to-dropdown">
             <option value="">Assign to</option>
