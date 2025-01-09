@@ -5802,19 +5802,35 @@ try {
 } catch (error) {
   console.error("Error fetching tasks:", error);
 }
-async function updateTaskAssignedTo(orderNo, index, assignedTo) {
-  try {
-    await axios.put(`https://www.spotops360.com/updateTaskAssignedTo`, {
-      orderNo,
-      index,
-      assignedTo,
-    });
-  } catch (error) {
-    console.error("Error updating assignedTo:", error);
-  }
+
+function isDeadlinePast(deadline) {
+  const now = new Date();
+  const deadlineDate = new Date(deadline);
+  return deadlineDate < now;
 }
 
+// Helper function to format the deadline date
+function formatDeadline(deadline) {
+  const options = { day: "2-digit", month: "short", year: "numeric" };
+  return new Date(deadline).toLocaleDateString("en-US", options);
+}
+// change the taskStatus and assignTo
+ const checkbox = row.querySelector(".status-checkbox");
+      checkbox.addEventListener("change", async (e) => {
+        const isChecked = e.target.checked;
+        await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
+        alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
+      });
 
+      // Add event listener for the dropdown
+      const dropdown = row.querySelector(".assign-to-dropdown");
+      dropdown.addEventListener("change", async (e) => {
+        const newAssignedTo = e.target.value;
+        if (newAssignedTo) {
+          await updateTaskAssignedTo(orderNo, index, newAssignedTo);
+          alert(`Task assigned to ${newAssignedTo}`);
+        }
+      });
 });
 </script>
 </body>   
