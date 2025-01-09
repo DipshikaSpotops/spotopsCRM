@@ -507,35 +507,22 @@ $(this).addClass("active");
         let totalTasks = 0;
 
         try {
-            const response = await axios.get(`https://www.spotops360.com/totalTasks?firstName=${firstName}`, {
+            const taskResponse = await axios.get(`https://www.spotops360.com/totalTasks?firstName=${firstName}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-
+            console.log("TaskRes",taskResponse)
+            totalTasks = taskResponse
+            $("#total-tasks").text(totalTasks);
             if (response.status === 200 && response.data) {
                 const taskGroups = response.data; // Assuming taskGroups is an array of documents
 
-                taskGroups.forEach((group) => {
-                    group.tasks.forEach((task) => {
-                        // Check if the task is assigned to the current user and is in the current month
-                        const taskAssignedTo = task.assignedTo;
-                        const taskDate = new Date(task.date); // Assuming each task has a `date` field
-
-                        if (
-                            taskAssignedTo === firstName &&
-                            taskDate.getMonth() === currentMonth &&
-                            taskDate.getFullYear() === currentYear
-                        ) {
-                            totalTasks++;
-                        }
-                    });
-                });
             }
         } catch (error) {
             console.error("Error fetching task groups:", error);
         }
 
         // Update the Total Tasks display
-        $("#total-tasks").text(totalTasks);
+        
     }
 
     // Call the function to calculate total tasks
