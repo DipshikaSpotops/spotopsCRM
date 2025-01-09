@@ -5796,6 +5796,14 @@ document.querySelectorAll('.status-checkbox').forEach(checkbox => {
     updateTaskStatus(orderNo, index, isChecked ? 'Completed' : 'Pending');
   });
 });
+document.querySelectorAll('.assign-to-dropdown').forEach(assignTo => {
+  assignTo.addEventListener('click', function (event) {
+    const index = event.target.getAttribute('data-index');
+    const assignToValue = event.target.value;
+    console.log(`assign to at index: ${index}`);
+    updateTaskAssignedTo(orderNo, index, assignToValue);
+  });
+});
 
 async function updateTaskStatus(orderNo, index, status) {
   try {
@@ -5808,18 +5816,6 @@ async function updateTaskStatus(orderNo, index, status) {
     alert("Task status updated to Completed")
   } catch (error) {
     console.error('Error updating task status:', error);
-  }
-}
-async function updateTaskStatus(orderNo, index, status) {
-  console.log("updateTaskStatus",orderNo,index);
-  try {
-    await axios.put(`https://www.spotops360.com/updateTaskStatus`, {
-      orderNo,
-      index,
-      taskStatus: status,
-    });
-  } catch (error) {
-    console.error("Error updating task status:", error);
   }
 }
 async function updateTaskAssignedTo(orderNo, index, assignedTo) {
