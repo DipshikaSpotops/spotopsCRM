@@ -500,10 +500,8 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
-
-    // Function to calculate total tasks for the user for the current month
     async function calculateTotalTasks() {
-        const currentMonth = new Date().getMonth(); // Current month (0-based index)
+        const currentMonth = new Date().getMonth(); 
         const currentYear = new Date().getFullYear();
         let totalTasks = 0;
 
@@ -519,14 +517,9 @@ $(this).addClass("active");
         } catch (error) {
             console.error("Error fetching task groups:", error);
         }
-
-        // Update the Total Tasks display
-        
     }
-
-    // Call the function to calculate total tasks
     await calculateTotalTasks();
 });
 </script>
 </body>
-</html
+</html>
