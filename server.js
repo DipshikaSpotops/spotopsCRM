@@ -3496,39 +3496,4 @@ app.get("/fetchTasks", async (req, res) => {
   }
 });
 // update task status
-app.put('/updateTaskStatus', async (req, res) => {
-  const { orderNo, index, taskStatus } = req.body;
-
-  try {
-    const taskGroup = await TaskGroup.findOne({ orderNo });
-    if (!taskGroup) {
-      return res.status(404).json({ message: "Order not found." });
-    }
-
-    taskGroup.tasks[index].taskStatus = taskStatus;
-    await taskGroup.save();
-    res.status(200).json({ message: "Task status updated successfully." });
-  } catch (error) {
-    console.error("Error updating task status:", error);
-    res.status(500).json({ message: "Failed to update task status." });
-  }
-});
-// update assignto
-app.put('/updateTaskAssignedTo', async (req, res) => {
-  const { orderNo, index, assignedTo } = req.body;
-
-  try {
-    const taskGroup = await TaskGroup.findOne({ orderNo });
-    if (!taskGroup) {
-      return res.status(404).json({ message: "Order not found." });
-    }
-
-    taskGroup.tasks[index].assignedTo = assignedTo;
-    await taskGroup.save();
-    res.status(200).json({ message: "Task assignedTo updated successfully." });
-  } catch (error) {
-    console.error("Error updating assignedTo:", error);
-    res.status(500).json({ message: "Failed to update assignedTo." });
-  }
-});
 
