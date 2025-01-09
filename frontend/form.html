@@ -5660,6 +5660,11 @@ if (!firstName) {
     console.error("Error setting up the request:", error.message);
   
 }
+function isDeadlinePast(deadline) {
+  const now = new Date();
+  const deadlineDate = new Date(deadline);
+  return deadlineDate < now;
+}
 
 });
 </script>
