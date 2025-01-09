@@ -5677,6 +5677,7 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
       const result = await response.json();
       alert("Task created successfully!");
       console.log("Task saved:", result);
+      window.location.reload();
     } else {
       const error = await response.json();
       alert("Failed to create task: " + error.message);
