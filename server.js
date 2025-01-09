@@ -3535,30 +3535,22 @@ console.log("orderNo",orderNo);
 // total tasks for the current user for the current month
 app.get('/totalTasks', async (req, res) => {
   try {
-    const { firstName } = req.query; // Assuming firstName is sent as a query parameter
+    const { firstName } = req.query; 
     if (!firstName) {
       return res.status(400).json({ error: 'First name is required' });
     }
-
-    // Get the current date in Dallas time zone
-    const currentDate = moment.tz('America/Chicago'); // Dallas time zone
-    const currentMonth = currentDate.month(); // Month (0-based index)
-    const currentYear = currentDate.year(); // Current year
-
+    const currentDate = moment.tz('America/Chicago'); 
+    const currentMonth = currentDate.month(); 
+    const currentYear = currentDate.year(); 
     let totalTasks = 0;
-
-    // Fetch task groups
     const taskGroups = await TaskGroup.find();
-
+    console.log("taskGroups",taskGroups);
     taskGroups.forEach((group) => {
       group.tasks.forEach((task) => {
-        // Parse the taskCreatedDate string into a moment date
         const taskCreatedDate = moment.tz(task.taskCreatedDate, 'America/Chicago');
-
-        // Check if the task is created in the current month and assigned to the user
         if (
           task.assignedTo === firstName &&
-          taskCreatedDate.isValid() && // Ensure the date is valid
+          taskCreatedDate.isValid() && 
           taskCreatedDate.month() === currentMonth &&
           taskCreatedDate.year() === currentYear
         ) {
@@ -3573,3 +3565,5 @@ app.get('/totalTasks', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
