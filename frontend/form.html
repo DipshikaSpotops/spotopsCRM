@@ -5797,7 +5797,7 @@ document.querySelectorAll('.status-checkbox').forEach(checkbox => {
   });
 });
 document.querySelectorAll('.assign-to-dropdown').forEach(assignTo => {
-  assignTo.addEventListener('click', function (event) {
+  assignTo.addEventListener('change', function (event) {
     const index = event.target.getAttribute('data-index');
     const assignToValue = event.target.value;
     console.log(`assign to at index: ${index}`);
