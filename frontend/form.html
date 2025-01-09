@@ -5706,7 +5706,8 @@ try {
         data-order="${orderNo}" 
     </td>
         <td>
-          <select class="assign-to-dropdown">
+          <select data-index="${index}" 
+    data-order="${orderNo}" class="assign-to-dropdown">
             <option value="">Assign to</option>
             <option value="April">April</option>
             <option value="David">David</option>
@@ -5749,7 +5750,8 @@ try {
         data-order="${orderNo}" 
     </td>
         <td>
-          <select class="assign-to-dropdown">
+          <select data-index="${index}" 
+    data-order="${orderNo}" class="assign-to-dropdown">
             <option value="">Assign to</option>
             <option value="April">April</option>
             <option value="David">David</option>
@@ -5794,14 +5796,21 @@ document.querySelectorAll('.status-checkbox').forEach(checkbox => {
     updateTaskStatus(orderNo, index, isChecked ? 'Completed' : 'Pending');
   });
 });
-document.querySelectorAll('.assign-to-dropdown').forEach(assignTo => {
-  assignTo.addEventListener('change', function (event) {
+document.querySelectorAll('.assign-to-dropdown').forEach(dropdown => {
+  dropdown.addEventListener('change', function (event) {
     const index = event.target.getAttribute('data-index');
-    const assignToValue = event.target.value;
-    console.log(`assign to at index: ${index}`);
-    updateTaskAssignedTo(orderNo, index, assignToValue);
+    const orderNo = event.target.getAttribute('data-order');
+    const newAssignedTo = event.target.value;
+
+    if (newAssignedTo) {
+      console.log(`Index: ${index}, Order No: ${orderNo}, Assigned To: ${newAssignedTo}`);
+
+      // Example: Call a function to update the backend
+      updateTaskAssignedTo(orderNo, index, newAssignedTo);
+    }
   });
 });
+
 
 async function updateTaskStatus(orderNo, index, status) {
   try {
