@@ -5677,7 +5677,7 @@ try {
     alert("No user found in local storage.");
     return;
   }
-
+console.log("taskData",taskDta);
   const myTasks = taskDta.filter(task => task.assignedTo === firstName);
   const myTasksContainer = document.getElementById("myTasks");
   const myTaskTableBody = document.getElementById("task-table-body");
