@@ -544,7 +544,7 @@ const taskSchema = new mongoose.Schema({
       assignedTo: { type: String, required: true },
       assignedBy: { type: String, required: true },
       taskCreatedDate: { type: String, required: true },
-      deadline: { type: Date, required: true },
+      deadline: { type: String, required: true },
       taskDescription: { type: String, required: true },
       taskStatus: { type: String, default: "Pending" },
     },
