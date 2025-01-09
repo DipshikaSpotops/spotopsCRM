@@ -927,6 +927,11 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
     res.status(500).json({ message: "Failed to update task status." });
   }
 });
+function parseTaskCreatedDate(dateString) {
+  // Remove ordinal suffixes (e.g., "9th" -> "9")
+  const cleanedDateString = dateString.replace(/(\d+)(st|nd|rd|th)/, '$1');
+  return moment.tz(cleanedDateString, 'D MMM, YYYY HH:mm', 'America/Chicago');
+}
 app.get('/totalTasks', async (req, res) => {
   try {
     const { firstName } = req.query; // Assuming firstName is sent as a query parameter
