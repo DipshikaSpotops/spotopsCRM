@@ -5665,6 +5665,10 @@ function isDeadlinePast(deadline) {
   const deadlineDate = new Date(deadline);
   return deadlineDate < now;
 }
+function formatDeadline(deadline) {
+  const options = { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" };
+  return new Date(deadline).toLocaleDateString("en-US", options);
+}
 
 });
 </script>
