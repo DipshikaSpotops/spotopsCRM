@@ -105,89 +105,6 @@ color: white;
 font-size: 24px;
 cursor: pointer;
 }
-@media (max-width: 768px) {
-.sidebar {
-transform: translateX(-100%);
-width: 70%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
-/* css for daily chart */
-.charts-container {
-display: flex;
-flex-wrap: wrap;
-justify-content: space-around;
-gap: 20px;
-margin-top: 20px;
-margin: 0% -74%;
-}
-}
-
-.chart-wrapper {
-width: 42%;
-min-width: 314px;
-aspect-ratio: 1 / 1;
-/* background-color: #f8f9fa; */
-padding: 10px;
-border-radius: 10px;
-box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-height: 500px;
-margin: 1% 3.5%;
-}
-.charts-container-monthly {
-display: flex;
-justify-content: space-around;
-gap: 20px;
-margin-top: 20px;
-}
-
-.chart-item-monthly {
-width: 30%; /* Adjust size as per preference */
-padding: 10px;
-border-radius: 10px;
-box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-background-color: white;
-height: 400px;
-}
-.rates-container {
-display: flex;
-justify-content: space-around;
-margin-top: 10px;
-background-color: #e0f7fa;
-padding: 5px;
-border-radius: 5px;
-font-weight: bold;
-}
-
-.rate-item {
-width: 30%;
-text-align: center;
-padding: 10px;
-border-radius: 5px;
-}
-
-.rate-success {
-background-color: #d0f0c0; /* Light green */
-}
-
-.rate-escalation {
-background-color: #f0f0c0; /* Light yellow */
-}
-
-.rate-cancellation {
-background-color: #f8d7da; /* Light red */
-}
-/* canvas {
-width: 100% !important;
-height: 100% !important;
-} */
 /* for dark mode */
 .dark-mode {
 background-color: #121212;
@@ -364,7 +281,7 @@ aria-labelledby="userMenu"
 </div>
 
 <div class="main-content">
-  <h1 class="fixed-header" style="text-align: center; margin-right: 34%;">View My Tasks</h1>
+  <h1 class="fixed-header" style="text-align: center; margin-right: 14%;">View My Tasks</h1>
 <div
 class="modal fade"
 id="profileModal"
