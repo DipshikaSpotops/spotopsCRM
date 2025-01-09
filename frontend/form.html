@@ -5625,10 +5625,30 @@ dateInput.addEventListener("change", () => {
 if (!dateInput.value) {
   dateInput.style.color = "white"; // Hide 'dd-mm-yyyy' initially
 }
+// to give time to the deadline
+var combinedDateTime;
+document.getElementById("deadline").addEventListener("change", function () {
+    const dateInput = this.value; 
+    if (!dateInput) {
+      console.log("No date selected");
+      return;
+    }
+    const now = new Date();
+    const options = { timeZone: "America/Chicago", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false };
+    const formatter = new Intl.DateTimeFormat("en-US", options);
+    const timeParts = formatter.formatToParts(now);
+    const hours = timeParts.find(part => part.type === "hour").value.padStart(2, "0");
+    const minutes = timeParts.find(part => part.type === "minute").value.padStart(2, "0");
+    const seconds = timeParts.find(part => part.type === "second").value.padStart(2, "0");
+     combinedDateTime = `${dateInput}T${hours}:${minutes}:${seconds}`;
+    console.log("Selected date with Dallas time:", combinedDateTime);
+
+    // You can use combinedDateTime for further processing (e.g., send to backend)
+  });
 // createTask button to save the details
 document.getElementById("createTaskButton").addEventListener("click", async () => {
   const taskName = document.getElementById('taskName').value;
-  const deadline = document.getElementById("deadline").value;
+  const deadline = combinedDateTime;
   const assignedTo = document.getElementById('assignTo').value;
   const taskDescription = document.getElementById('taskDesc').value;
   const assignedBy = firstName; 
@@ -5841,7 +5861,6 @@ async function updateTaskAssignedTo(orderNo, index, assignedTo) {
     console.error("Error updating assignedTo:", error);
   }
 }
-
 });
 </script>
 </body>   
