@@ -1060,7 +1060,6 @@ input[type="date"]:valid {
     background-color: #c50505;
     color: white;
     padding: 5px;
-    border-radius: 5px;
   }
 
   .status-button {
@@ -5698,7 +5697,7 @@ try {
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
-  <input type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+  <input style="text-align: center;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
 </td>
 
         <td>
@@ -5736,7 +5735,7 @@ try {
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
-  <input type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+  <input style="text-align: center;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
 </td>
         <td>
           <select class="assign-to-dropdown">
