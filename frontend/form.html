@@ -5803,6 +5803,29 @@ function attachEventListeners() {
     });
   });
 }
+async function updateTaskStatus(orderNo, index, status) {
+  try {
+    await axios.put(`https://www.spotops360.com/updateTaskStatus`, {
+      orderNo,
+      index,
+      taskStatus: status,
+    });
+  } catch (error) {
+    console.error("Error updating task status:", error);
+  }
+}
+async function updateTaskAssignedTo(orderNo, index, assignedTo) {
+  try {
+    await axios.put(`https://www.spotops360.com/updateTaskAssignedTo`, {
+      orderNo,
+      index,
+      assignedTo,
+    });
+  } catch (error) {
+    console.error("Error updating assignedTo:", error);
+  }
+}
+
 });
 </script>
 </body>   
