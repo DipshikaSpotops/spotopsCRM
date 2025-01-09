@@ -5761,7 +5761,6 @@ function isDeadlinePast(deadline) {
 
 // Helper function to format the deadline date
 function formatDeadline(deadline) {
-  return date.toLocaleDateString('en-US', options);
   const options = { day: "2-digit", month: "short", year: "numeric" };
   return new Date(deadline).toLocaleDateString("en-US", options);
 }
