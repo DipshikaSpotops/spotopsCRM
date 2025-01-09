@@ -5696,8 +5696,14 @@ try {
 </td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
-        <td>
-  <input style="margin-left: 36%;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+<td>
+  <input
+    style="margin-left: 36%;"
+    type="checkbox"
+    class="status-checkbox"
+    ${task.taskStatus === 'Completed' ? 'checked' : ''}
+    data-index="${index}" <!-- Add data-index to store the row index -->
+  />
 </td>
 
         <td>
@@ -5735,7 +5741,13 @@ try {
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
         <td>
-  <input style="    margin-left: 36%;" type="checkbox" class="status-checkbox" ${task.taskStatus === 'Completed' ? 'checked' : ''} />
+  <input
+    style="margin-left: 36%;"
+    type="checkbox"
+    class="status-checkbox"
+    ${task.taskStatus === 'Completed' ? 'checked' : ''}
+    data-index="${index}" <!-- Add data-index to store the row index -->
+  />
 </td>
         <td>
           <select class="assign-to-dropdown">
@@ -5774,33 +5786,28 @@ function formatDeadline(deadline) {
   const options = { day: "2-digit", month: "short", year: "numeric" };
   return new Date(deadline).toLocaleDateString("en-US", options);
 }
-  const checkboxes = document.querySelectorAll(".status-checkbox");
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener("change", async (e) => {
-      const index = e.target.getAttribute("data-index");
-      const orderNo = e.target.getAttribute("data-order");
-      const isChecked = e.target.checked;
-      console.log("updateTaskStatusIndex",orderNo,index,isChecked)
-      await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
-      alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
-    });
+document.querySelectorAll('.status-checkbox').forEach(checkbox => {
+  checkbox.addEventListener('click', function (event) {
+    const index = event.target.getAttribute('data-index');
+    const isChecked = event.target.checked;
+    console.log(`Checkbox clicked at index: ${index}`);
+    console.log(`Checkbox is now: ${isChecked ? 'Checked' : 'Unchecked'}`);
+    updateTaskStatus(orderNo, index, isChecked ? 'Completed' : 'Pending');
   });
+});
 
-  // Dropdown event listeners
-  const dropdowns = document.querySelectorAll(".assign-to-dropdown");
-  dropdowns.forEach(dropdown => {
-    dropdown.addEventListener("change", async (e) => {
-      const index = e.target.getAttribute("data-index");
-      const orderNo = e.target.getAttribute("data-order");
-      const newAssignedTo = e.target.value;
-
-      if (newAssignedTo) {
-        await updateTaskAssignedTo(orderNo, index, newAssignedTo);
-        alert(`Task assigned to ${newAssignedTo}`);
-      }
+async function updateTaskStatus(orderNo, index, status) {
+  try {
+    await axios.put(`https://www.spotops360.com/updateTaskStatus`, {
+      orderNo,
+      index,
+      taskStatus: status,
     });
-  });
-
+    console.log(`Task at index ${index} updated to ${status}`);
+  } catch (error) {
+    console.error('Error updating task status:', error);
+  }
+}
 async function updateTaskStatus(orderNo, index, status) {
   console.log("updateTaskStatus",orderNo,index);
   try {
