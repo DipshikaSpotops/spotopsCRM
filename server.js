@@ -929,7 +929,7 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
 });
 app.put('/updateTaskAssignedTo', async (req, res) => {
   const { orderNo, index, assignedTo } = req.body;
-
+  console.log("updateTaskAssignedTo",orderNo,index,assignedTo)
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
     if (!taskGroup) {
