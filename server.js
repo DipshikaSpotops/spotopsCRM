@@ -927,6 +927,39 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
     res.status(500).json({ message: "Failed to update task status." });
   }
 });
+// total tasks for the current user for the current month
+app.get('/totalTasks', async (req, res) => {
+  try {
+    const { firstName } = req.query; 
+    if (!firstName) {
+      return res.status(400).json({ error: 'First name is required' });
+    }
+    const currentDate = moment.tz('America/Chicago'); 
+    const currentMonth = currentDate.month(); 
+    const currentYear = currentDate.year(); 
+    let totalTasks = 0;
+    const taskGroups = await TaskGroup.find();
+    console.log("taskGroups",taskGroups);
+    taskGroups.forEach((group) => {
+      group.tasks.forEach((task) => {
+        const taskCreatedDate = moment.tz(task.taskCreatedDate, 'America/Chicago');
+        if (
+          task.assignedTo === firstName &&
+          taskCreatedDate.isValid() && 
+          taskCreatedDate.month() === currentMonth &&
+          taskCreatedDate.year() === currentYear
+        ) {
+          totalTasks++;
+        }
+      });
+    });
+
+    res.status(200).json({ totalTasks });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 app.put('/updateTaskAssignedTo', async (req, res) => {
   const { orderNo, index, assignedTo } = req.body;
   console.log("updateTaskAssignedTo",orderNo,index,assignedTo)
@@ -3532,38 +3565,6 @@ console.log("orderNo",orderNo);
   }
 });
 
-// total tasks for the current user for the current month
-app.get('/totalTasks', async (req, res) => {
-  try {
-    const { firstName } = req.query; 
-    if (!firstName) {
-      return res.status(400).json({ error: 'First name is required' });
-    }
-    const currentDate = moment.tz('America/Chicago'); 
-    const currentMonth = currentDate.month(); 
-    const currentYear = currentDate.year(); 
-    let totalTasks = 0;
-    const taskGroups = await TaskGroup.find();
-    console.log("taskGroups",taskGroups);
-    taskGroups.forEach((group) => {
-      group.tasks.forEach((task) => {
-        const taskCreatedDate = moment.tz(task.taskCreatedDate, 'America/Chicago');
-        if (
-          task.assignedTo === firstName &&
-          taskCreatedDate.isValid() && 
-          taskCreatedDate.month() === currentMonth &&
-          taskCreatedDate.year() === currentYear
-        ) {
-          totalTasks++;
-        }
-      });
-    });
 
-    res.status(200).json({ totalTasks });
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
 
