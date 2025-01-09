@@ -956,7 +956,7 @@ app.get('/totalTasks', async (req, res) => {
     const currentYear = currentDate.year(); 
     let totalTasks = 0;
     const taskGroups = await TaskGroup.find();
-    console.log("taskGroups",taskGroups);
+    console.log("taskGroups",taskGroups,firstName);
     taskGroups.forEach((group) => {
       group.tasks.forEach((task) => {
         const cleanedDateString = task.taskCreatedDate.replace(/(\d+)(st|nd|rd|th)/, '$1');
@@ -968,6 +968,7 @@ app.get('/totalTasks', async (req, res) => {
           taskCreatedDate.year() === currentYear
         ) {
           totalTasks++;
+          console.log("totalTasks",totalTasks);
         }
       });
     });
