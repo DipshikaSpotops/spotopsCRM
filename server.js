@@ -927,25 +927,32 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
     res.status(500).json({ message: "Failed to update task status." });
   }
 });
-// total tasks for the current user for the current month
 app.get('/totalTasks', async (req, res) => {
   try {
-    const { firstName } = req.query; 
+    const { firstName } = req.query; // Assuming firstName is sent as a query parameter
     if (!firstName) {
       return res.status(400).json({ error: 'First name is required' });
     }
-    const currentDate = moment.tz('America/Chicago'); 
-    const currentMonth = currentDate.month(); 
-    const currentYear = currentDate.year(); 
+
+    // Get the current date in Dallas time zone
+    const currentDate = moment.tz('America/Chicago'); // Dallas time zone
+    const currentMonth = currentDate.month(); // Month (0-based index)
+    const currentYear = currentDate.year(); // Current year
+
     let totalTasks = 0;
+
+    // Fetch task groups
     const taskGroups = await TaskGroup.find();
-    console.log("taskGroups",taskGroups);
+
     taskGroups.forEach((group) => {
       group.tasks.forEach((task) => {
-        const taskCreatedDate = moment.tz(task.taskCreatedDate, 'America/Chicago');
+        // Parse the taskCreatedDate string into a moment date
+        const taskCreatedDate = parseTaskCreatedDate(task.taskCreatedDate);
+
+        // Check if the task is created in the current month and assigned to the user
         if (
           task.assignedTo === firstName &&
-          taskCreatedDate.isValid() && 
+          taskCreatedDate.isValid() && // Ensure the date is valid
           taskCreatedDate.month() === currentMonth &&
           taskCreatedDate.year() === currentYear
         ) {
