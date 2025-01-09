@@ -2692,6 +2692,8 @@ var totalSpend = [];
 var totalSum = 0;    
 var pStatus;
 setTimeout(function() {
+fetch(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`)  
+console.log("taskGroup response:", taskGroupRes.data);
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
@@ -2740,7 +2742,6 @@ $("#escTickBox").prop("checked", true);
 } else {
 $("#escTickBox").prop("checked", false);
 }
-
 pStatus = yard.paymentStatus;
 var rStatus = yard.refundStatus;
 console.log("pStatus", pStatus, rStatus);
@@ -5668,6 +5669,7 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
   }
 });
 //myTasks display
+
 try {
   // Fetch tasks for the specific orderNo
   const taskGroupRes = await axios.get(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`);
@@ -5697,15 +5699,15 @@ try {
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
 <td>
-  <input
-    style="margin-left: 36%;"
-    type="checkbox"
-    class="status-checkbox"
-    ${task.taskStatus === 'Completed' ? 'checked' : ''}
-    data-index="${index}" <!-- Add data-index to store the row index -->
-  />
-</td>
-
+      <input 
+        style="margin-left: 36%;" 
+        type="checkbox" 
+        class="status-checkbox" 
+        ${task.taskStatus === 'Completed' ? 'checked' : ''} <!-- Tick if status is Completed -->
+        data-index="${index}" 
+        data-order="${orderNo}" 
+      />
+    </td>
         <td>
           <select class="assign-to-dropdown">
             <option value="">Assign to</option>
@@ -5740,15 +5742,16 @@ try {
 </td>
         <td>${task.assignedBy}</td>
         <td>${task.assignedTo}</td>
-        <td>
-  <input
-    style="margin-left: 36%;"
-    type="checkbox"
-    class="status-checkbox"
-    ${task.taskStatus === 'Completed' ? 'checked' : ''}
-    data-index="${index}" <!-- Add data-index to store the row index -->
-  />
-</td>
+       <td>
+      <input 
+        style="margin-left: 36%;" 
+        type="checkbox" 
+        class="status-checkbox" 
+        ${task.taskStatus === 'Completed' ? 'checked' : ''} <!-- Tick if status is Completed -->
+        data-index="${index}" 
+        data-order="${orderNo}" 
+      />
+    </td>
         <td>
           <select class="assign-to-dropdown">
             <option value="">Assign to</option>
@@ -5804,6 +5807,7 @@ async function updateTaskStatus(orderNo, index, status) {
       taskStatus: status,
     });
     console.log(`Task at index ${index} updated to ${status}`);
+    alert("Task status updated to Completed")
   } catch (error) {
     console.error('Error updating task status:', error);
   }
