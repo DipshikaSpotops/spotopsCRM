@@ -282,6 +282,7 @@ aria-labelledby="userMenu"
 
 <div class="main-content">
   <h1 class="fixed-header" style="text-align: center; margin-right: 14%;">View My Tasks</h1>
+  <div id="total-tasks">Total Tasks This Month-</div>
 <div
 class="modal fade"
 id="profileModal"
@@ -513,8 +514,8 @@ $(this).addClass("active");
             console.log("TaskRes",taskResponse.data)
             totalTasks = taskResponse.data.totalTasks;
             console.log("totalTasks",totalTasks);
-            $("#total-tasks").text(totalTasks);
-           
+            document.getElementById("total-tasks").innerHTML = `Total No of tasks- ${totalTasks}`;
+
         } catch (error) {
             console.error("Error fetching task groups:", error);
         }
