@@ -1057,7 +1057,7 @@ input[type="date"]:valid {
   }
  
   .deadline-past {
-    background-color: red;
+    background-color: #c50505;
     color: white;
     padding: 5px;
     border-radius: 5px;
@@ -5692,7 +5692,7 @@ try {
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-<td class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
+<td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
   ${formatDeadline(task.deadline)}
 </td>
         <td>${task.assignedBy}</td>
@@ -5730,7 +5730,7 @@ try {
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-<td class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
+<td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
   ${formatDeadline(task.deadline)}
 </td>
         <td>${task.assignedBy}</td>
