@@ -5782,7 +5782,7 @@ function attachEventListeners() {
       const index = e.target.getAttribute("data-index");
       const orderNo = e.target.getAttribute("data-order");
       const isChecked = e.target.checked;
-
+      console.log("updateTaskStatusIndex",orderNo,index,isChecked)
       await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
       alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
     });
@@ -5804,6 +5804,7 @@ function attachEventListeners() {
   });
 }
 async function updateTaskStatus(orderNo, index, status) {
+  console.log("updateTaskStatus",orderNo,index);
   try {
     await axios.put(`https://www.spotops360.com/updateTaskStatus`, {
       orderNo,
