@@ -5691,7 +5691,7 @@ try {
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-<td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
+<td class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
   ${formatDeadline(task.deadline)}
 </td>
         <td>${task.assignedBy}</td>
@@ -5735,7 +5735,7 @@ try {
       row.innerHTML = `
         <td>${task.taskName}</td>
         <td>${task.taskDescription}</td>
-<td style="white-space: nowrap;" class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
+<td class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">
   ${formatDeadline(task.deadline)}
 </td>
         <td>${task.assignedBy}</td>
