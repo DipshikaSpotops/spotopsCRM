@@ -511,7 +511,8 @@ $(this).addClass("active");
                 headers: { Authorization: `Bearer ${token}` }
             });
             console.log("TaskRes",taskResponse.data)
-            totalTasks = taskResponse
+            totalTasks = taskResponse.data.totalTasks;
+            console.log("totalTasks",totalTasks);
             $("#total-tasks").text(totalTasks);
            
         } catch (error) {
