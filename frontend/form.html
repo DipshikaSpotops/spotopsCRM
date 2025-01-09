@@ -5820,7 +5820,11 @@ async function updateTaskStatus(orderNo, index, status) {
       taskStatus: status,
     });
     console.log(`Task at index ${index} updated to ${status}`);
+    if(status === "Completed"){
     alert("Task status updated to Completed");
+    }else{
+      alert(" Task status is pending");
+    }
   } catch (error) {
     console.error('Error updating task status:', error);
   }
