@@ -5686,7 +5686,7 @@ try {
   const allTasksContainer = document.getElementById("allTasks");
   if (myTasks.length > 0) {
     myTaskTableBody.innerHTML = "";
-    myTasks.forEach(task => {
+    myTasks.forEach((task,index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${task.taskName}</td>
@@ -5724,7 +5724,7 @@ try {
   if (taskDta.length > 0) {
     console.log("all Task Data",taskDta);
     allTasksTableBody.innerHTML = "";
-    taskDta.forEach(task => {
+    taskDta.forEach((task,index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${task.taskName}</td>
@@ -5757,6 +5757,7 @@ try {
     });
     allTasksContainer.style.display = "block";
   }
+  attachEventListeners();// for updating statua n assignTo values
 } catch (error) {
   console.error("Error fetching tasks:", error);
 }
@@ -5773,7 +5774,35 @@ function formatDeadline(deadline) {
   const options = { day: "2-digit", month: "short", year: "numeric" };
   return new Date(deadline).toLocaleDateString("en-US", options);
 }
-// change the taskStatus
+function attachEventListeners() {
+  // Checkbox event listeners
+  const checkboxes = document.querySelectorAll(".status-checkbox");
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", async (e) => {
+      const index = e.target.getAttribute("data-index");
+      const orderNo = e.target.getAttribute("data-order");
+      const isChecked = e.target.checked;
+
+      await updateTaskStatus(orderNo, index, isChecked ? "Completed" : "Pending");
+      alert(`Task status updated to ${isChecked ? "Completed" : "Pending"}`);
+    });
+  });
+
+  // Dropdown event listeners
+  const dropdowns = document.querySelectorAll(".assign-to-dropdown");
+  dropdowns.forEach(dropdown => {
+    dropdown.addEventListener("change", async (e) => {
+      const index = e.target.getAttribute("data-index");
+      const orderNo = e.target.getAttribute("data-order");
+      const newAssignedTo = e.target.value;
+
+      if (newAssignedTo) {
+        await updateTaskAssignedTo(orderNo, index, newAssignedTo);
+        alert(`Task assigned to ${newAssignedTo}`);
+      }
+    });
+  });
+}
 });
 </script>
 </body>   
