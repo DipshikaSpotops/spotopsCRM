@@ -912,7 +912,7 @@ app.get("/fetchTasks", async (req, res) => {
 // updating taskStatus and assignTo status
 app.put('/updateTaskStatus', async (req, res) => {
   const { orderNo, index, taskStatus } = req.body;
-
+console.log("updateTaskStatus",orderNo,index,taskStatus)
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
     if (!taskGroup) {
