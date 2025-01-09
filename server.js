@@ -959,7 +959,7 @@ app.get('/totalTasks', async (req, res) => {
     console.log("taskGroups",taskGroups);
     taskGroups.forEach((group) => {
       group.tasks.forEach((task) => {
-        const cleanedDateString = dateString.replace(/(\d+)(st|nd|rd|th)/, '$1');
+        const cleanedDateString = task.taskCreatedDate.replace(/(\d+)(st|nd|rd|th)/, '$1');
         const taskCreatedDate = moment.tz(cleanedDateString, 'D MMM, YYYY HH:mm', 'America/Chicago');      
         if (
           task.assignedTo === firstName &&
