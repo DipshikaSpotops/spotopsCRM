@@ -3532,3 +3532,48 @@ console.log("orderNo",orderNo);
   }
 });
 
+// total tasks for the current user for the current month
+app.get('/totalTasks', async (req, res) => {
+  try {
+    const { firstName } = req.query; // Assuming firstName is sent as a query parameter
+    if (!firstName) {
+      return res.status(400).json({ error: 'First name is required' });
+    }
+
+    // Get the current date in Dallas time zone
+    const currentDate = moment.tz('America/Chicago'); // Dallas time zone
+    const currentMonth = currentDate.month(); // Month (0-based index)
+    const currentYear = currentDate.year(); // Current year
+
+    // Start and end of the current month in Dallas time zone
+    const startOfMonth = moment.tz({ year: currentYear, month: currentMonth, day: 1 }, 'America/Chicago').startOf('day').toDate();
+    const endOfMonth = moment.tz({ year: currentYear, month: currentMonth + 1, day: 1 }, 'America/Chicago').startOf('day').toDate();
+
+    // Fetch task groups and calculate total tasks
+    const taskGroups = await TaskGroup.find({
+      'tasks.date': {
+        $gte: startOfMonth, // Start of the month
+        $lt: endOfMonth, // Start of next month
+      },
+    });
+
+    let totalTasks = 0;
+
+    taskGroups.forEach((group) => {
+      group.tasks.forEach((task) => {
+        if (
+          task.assignedTo === firstName &&
+          moment(task.date).month() === currentMonth &&
+          moment(task.date).year() === currentYear
+        ) {
+          totalTasks++;
+        }
+      });
+    });
+
+    res.status(200).json({ totalTasks });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
