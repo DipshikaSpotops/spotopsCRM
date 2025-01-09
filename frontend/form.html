@@ -1037,13 +1037,13 @@ input[type="date"]:valid {
   color: black; /* Show the selected date text in black */
 }
 /* myTaskTable */
-#taskTable {
+#taskTable, #alltaskTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
   }
 
-  .myTaskTh, #taskTable td {
+  .myTaskTh, .allTaskTh , #taskTable td , #alltaskTable td{
     border: 1px solid black;
     padding: 10px;
     text-align: center;
@@ -1470,9 +1470,9 @@ style="margin-right: 94px;margin-top: -9px;"
         </div>
       </div>      
     </div>
-    <!-- my Tasks table -->
-    <div id="myTasks" style="display: none; margin: 20px;">
-      <h1 style="text-align: center;">My Tasks</h1>
+     <!-- my Tasks table -->
+     <div id="myTasks" style="display: none; margin: 20px;">
+      <h4>My Tasks</h4>
       <table id="taskTable" style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr>
@@ -1489,7 +1489,28 @@ style="margin-right: 94px;margin-top: -9px;"
           <!-- Rows will be dynamically added here -->
         </tbody>
       </table>
+    </div> 
+    <!-- tasks in this order -->
+    <div id="myTasks" style="display: none; margin: 20px;">
+      <h4>Tasks in this order</h4>
+      <table id="alltaskTable" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th class="allTaskTh" style="border: 1px solid black; padding: 10px;">Task Name</th>
+            <th class="allTaskTh" style="border: 1px solid black; padding: 10px;">Description</th>
+            <th class="allTaskTh" style="border: 1px solid black; padding: 10px;">Deadline</th>
+            <th class="allTaskTh" style="border: 1px solid black; padding: 10px;">Assigned By</th>
+            <th class="allTaskTh" style="border: 1px solid black; padding: 10px;">Assigned To</th>
+            <th class="allTaskTh" style="border: 1px solid black; padding: 10px;">Status</th>
+            <th class="allTaskTh" style="border: 1px solid black; padding: 10px;">Assign To</th>
+          </tr>
+        </thead>
+        <tbody id="all-task-table-body">
+          <!-- Rows will be dynamically added here -->
+        </tbody>
+      </table>
     </div>    
+    
 </div>
 </div>
 <!-- add yard starts here -->
@@ -5642,29 +5663,35 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
   }
 });
 //myTasks display
-if (!firstName) {
+try {
+  // Fetch tasks for the specific orderNo
+  const taskGroupRes = await axios.get(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`);
+  console.log("taskGroup response:", taskGroupRes.data);
+
+  const taskDta = taskGroupRes.data;
+
+  // Get the logged-in user's firstName
+  const firstName = localStorage.getItem("firstName");
+  if (!firstName) {
     alert("No user found in local storage.");
     return;
   }
 
-  try {
-  const taskGroupRes = await axios.get(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`);
-  console.log("taskGroup response:", orderNo,taskGroupRes.data);
-  var taskDta = taskGroupRes.data;
-  console.log("taskGroup data:", taskDta);
   // Filter tasks assigned to the current user
-  const tasks = taskDta.filter(task => task.assignedTo === firstName);
+  const myTasks = taskDta.filter(task => task.assignedTo === firstName);
 
-  // Get the container and table body elements
+  // Get the container and table body elements for both tables
   const myTasksContainer = document.getElementById("myTasks");
-  const tableBody = document.getElementById("task-table-body");
+  const myTaskTableBody = document.getElementById("task-table-body");
+  const allTasksTableBody = document.getElementById("all-task-table-body");
 
-  if (tasks.length > 0) {
+  // Handle "My Tasks" table
+  if (myTasks.length > 0) {
     // Clear existing rows
-    tableBody.innerHTML = "";
+    myTaskTableBody.innerHTML = "";
 
     // Render the filtered tasks
-    tasks.forEach(task => {
+    myTasks.forEach(task => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -5694,22 +5721,71 @@ if (!firstName) {
         </td>
       `;
 
-      tableBody.appendChild(row);
+      myTaskTableBody.appendChild(row);
     });
 
+    // Show the container since we have tasks
     myTasksContainer.style.display = "block";
   } else {
+    // Hide the container if no tasks match
     myTasksContainer.style.display = "none";
   }
+
+  // Handle "Tasks in this order" table
+  if (taskDta.length > 0) {
+    // Clear existing rows
+    allTasksTableBody.innerHTML = "";
+
+    // Render all tasks
+    taskDta.forEach(task => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${task.taskName}</td>
+        <td>${task.taskDescription}</td>
+        <td><span class="${isDeadlinePast(task.deadline) ? 'deadline-past' : ''}">${formatDeadline(task.deadline)}</span></td>
+        <td>${task.assignedBy}</td>
+        <td>${task.assignedTo}</td>
+        <td>
+          <button class="status-button ${task.taskStatus === 'Completed' ? 'completed' : 'mark-complete'}">
+            ${task.taskStatus === 'Completed' ? 'Completed' : 'Mark As Complete'}
+          </button>
+        </td>
+        <td>
+          <select class="assign-to-dropdown">
+            <option value="">Assign to</option>
+            <option value="April">April</option>
+            <option value="David">David</option>
+            <option value="Erica">Erica</option>
+            <option value="John">John</option>
+            <option value="Korina">Korina</option>
+            <option value="Michael">Michael</option>
+            <option value="Richard">Richard</option>
+            <option value="Shankar">Shankar</option>
+            <option value="Tony">Tony</option>
+          </select>
+        </td>
+      `;
+
+      allTasksTableBody.appendChild(row);
+    });
+
+    // Show the "Tasks in this order" container
+    document.getElementById("allTasks").style.display = "block";
+  }
 } catch (error) {
-    console.error("Error setting up the request:", error.message);
-  
+  console.error("Error fetching tasks:", error);
+  alert("An error occurred while fetching tasks.");
 }
+
+// Helper function to check if the deadline is in the past
 function isDeadlinePast(deadline) {
   const now = new Date();
   const deadlineDate = new Date(deadline);
   return deadlineDate < now;
 }
+
+// Helper function to format the deadline date
 function formatDeadline(deadline) {
   const options = { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" };
   return new Date(deadline).toLocaleDateString("en-US", options);
