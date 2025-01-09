@@ -2692,8 +2692,6 @@ var totalSpend = [];
 var totalSum = 0;    
 var pStatus;
 setTimeout(function() {
-fetch(`https://www.spotops360.com/fetchTasks?orderNo=${orderNo}`)  
-console.log("taskGroup response:", taskGroupRes.data);
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
