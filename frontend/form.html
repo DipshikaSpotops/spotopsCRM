@@ -5784,7 +5784,8 @@ function isDeadlinePast(deadline) {
 
 // Helper function to format the deadline date
 function formatDeadline(deadline) {
-  const options = { day: "2-digit", month: "short", year: "numeric" };
+  const options = { day: "2-digit", month: "short", year: "numeric",hour: "2-digit", minute: "2-digit",hour12: false // Optional: Set to false for 24-hour format, true for 12-hour format
+ };
   return new Date(deadline).toLocaleDateString("en-US", options);
 }
 document.querySelectorAll('.status-checkbox').forEach(checkbox => {
