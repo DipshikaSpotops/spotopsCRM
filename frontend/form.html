@@ -1036,6 +1036,49 @@ input[type="date"]:valid + .placeholder {
 input[type="date"]:valid {
   color: black; /* Show the selected date text in black */
 }
+/* myTaskTable */
+#taskTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .myTaskTh {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .deadline-past {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .status-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .mark-complete {
+    background-color: orange;
+  }
+
+  .completed {
+    background-color: green;
+  }
+
+  .assign-to-dropdown {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -1426,25 +1469,26 @@ style="margin-right: 94px;margin-top: -9px;"
       </div>      
     </div>
     <!-- my Tasks table -->
-     <div id="myTasks" style="display: none;">
-    <h1>My Tasks</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Task Name</th>
-          <th>Description</th>
-          <th>Deadline</th>
-          <th>Assigned By</th>
-          <th>Assigned To</th>
-          <th>Status</th>
-          <th>Assign To</th>
-        </tr>
-      </thead>
-      <tbody id="task-table-body">
-        <!-- Rows will be dynamically added here -->
-      </tbody>
-    </table>
-  </div>
+    <div id="myTasks" style="display: none; margin: 20px;">
+      <h1 style="text-align: center;">My Tasks</h1>
+      <table id="taskTable" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Task Name</th>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Task Name</th>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Description</th>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Deadline</th>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Assigned By</th>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Assigned To</th>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Status</th>
+            <th class="myTaskTh" style="border: 1px solid black; padding: 10px;">Assign To</th>
+          </tr>
+        </thead>
+        <tbody id="task-table-body">
+          <!-- Rows will be dynamically added here -->
+        </tbody>
+      </table>
+    </div>    
 </div>
 </div>
 <!-- add yard starts here -->
