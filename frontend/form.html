@@ -5820,7 +5820,7 @@ async function updateTaskStatus(orderNo, index, status) {
       taskStatus: status,
     });
     console.log(`Task at index ${index} updated to ${status}`);
-    alert("Task status updated to Completed")
+    alert("Task status updated to Completed");
   } catch (error) {
     console.error('Error updating task status:', error);
   }
@@ -5832,6 +5832,7 @@ async function updateTaskAssignedTo(orderNo, index, assignedTo) {
       index,
       assignedTo,
     });
+    alert(`Task assigned now to ${assignedTo}`)
   } catch (error) {
     console.error("Error updating assignedTo:", error);
   }
