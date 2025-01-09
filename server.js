@@ -927,48 +927,6 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
     res.status(500).json({ message: "Failed to update task status." });
   }
 });
-
-app.get('/totalTasks', async (req, res) => {
-  try {
-    const { firstName } = req.query; // Assuming firstName is sent as a query parameter
-    if (!firstName) {
-      return res.status(400).json({ error: 'First name is required' });
-    }
-
-    // Get the current date in Dallas time zone
-    const currentDate = moment.tz('America/Chicago'); // Dallas time zone
-    const currentMonth = currentDate.month(); // Month (0-based index)
-    const currentYear = currentDate.year(); // Current year
-
-    let totalTasks = 0;
-
-    // Fetch task groups
-    const taskGroups = await TaskGroup.find();
-
-    taskGroups.forEach((group) => {
-      group.tasks.forEach((task) => {
-        // Parse the taskCreatedDate string into a moment date
-        const cleanedDateString = task.taskCreatedDate.replace(/(\d+)(st|nd|rd|th)/, '$1');
-        const taskCreatedDate = moment.tz(cleanedDateString, 'D MMM, YYYY HH:mm', 'America/Chicago');;
-
-        // Check if the task is created in the current month and assigned to the user
-        if (
-          task.assignedTo === firstName &&
-          taskCreatedDate.isValid() && // Ensure the date is valid
-          taskCreatedDate.month() === currentMonth &&
-          taskCreatedDate.year() === currentYear
-        ) {
-          totalTasks++;
-        }
-      });
-    });
-
-    res.status(200).json({ totalTasks });
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 app.put('/updateTaskAssignedTo', async (req, res) => {
   const { orderNo, index, assignedTo } = req.body;
   console.log("updateTaskAssignedTo",orderNo,index,assignedTo)
@@ -986,7 +944,40 @@ app.put('/updateTaskAssignedTo', async (req, res) => {
     res.status(500).json({ message: "Failed to update assignedTo." });
   }
 });
+// total tasks for the current user for the current month
+app.get('/totalTasks', async (req, res) => {
+  try {
+    const { firstName } = req.query; 
+    if (!firstName) {
+      return res.status(400).json({ error: 'First name is required' });
+    }
+    const currentDate = moment.tz('America/Chicago'); 
+    const currentMonth = currentDate.month(); 
+    const currentYear = currentDate.year(); 
+    let totalTasks = 0;
+    const taskGroups = await TaskGroup.find();
+    console.log("taskGroups",taskGroups);
+    taskGroups.forEach((group) => {
+      group.tasks.forEach((task) => {
+        const cleanedDateString = dateString.replace(/(\d+)(st|nd|rd|th)/, '$1');
+        const taskCreatedDate = moment.tz(cleanedDateString, 'D MMM, YYYY HH:mm', 'America/Chicago');      
+        if (
+          task.assignedTo === firstName &&
+          taskCreatedDate.isValid() && 
+          taskCreatedDate.month() === currentMonth &&
+          taskCreatedDate.year() === currentYear
+        ) {
+          totalTasks++;
+        }
+      });
+    });
 
+    res.status(200).json({ totalTasks });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
