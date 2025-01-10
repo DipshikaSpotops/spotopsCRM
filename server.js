@@ -979,43 +979,54 @@ app.get('/totalTasks', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-// // check taskGroup collection to change the taskStatus once in every minute
-// async function updateTaskStatuses() {
-//   try {
-//     const currentDallasTime = moment.tz("America/Chicago");
-// console.log("current Dallas time",currentDallasTime);
-//     const taskGroups = await TaskGroup.find({
-//       "tasks.taskStatus": { $ne: "Completed" },
-//     });
-// console.log("taskGroups",taskGroups);
-//     for (const tasks of taskGroups) {
-//       let isUpdated = false;
-//       group.tasks.forEach((task) => {
-//         const taskDeadline = moment.tz(task.deadline, "D MMM, YYYY HH:mm", "America/Chicago");
-//         console.log("taskDeadline",taskDeadline);
-//         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
-//           const diffInHours = taskDeadline.diff(currentDallasTime, "hours");
-//           if (diffInHours <= 2 && diffInHours > 0 && task.taskStatus !== "Alert") {
-//             task.taskStatus = "Alert";
-//             isUpdated = true;
-//           } else if (diffInHours <= 0 && diffInHours > -2 && task.taskStatus !== "Warning") {
-//             task.taskStatus = "Warning";
-//             isUpdated = true;
-//           }
-//         }
-//       });
-
-//       if (isUpdated) {
-//         await group.save();
-//       }
-//     }
-//   } catch (error) {
-//     console.error("Error updating task statuses:", error);
-//   }
-// }
-
-// // Run the function every minute
-// setInterval(updateTaskStatuses, 60 * 1000);
+// // checking taskGroup collection to change the taskStatus once in every minute
+async function updateTaskStatuses() {
+  try {
+    const currentDallasTime = moment.tz("America/Chicago");
+    console.log("current Dallas time", currentDallasTime);
+    const taskGroups = await TaskGroup.find({
+      "tasks.taskStatus": { $ne: "Completed" },
+      "tasks.deadline": { $exists: true },
+    });
+    console.log("taskGroups", taskGroups);
+    let notifications = []; 
+    for (const group of taskGroups) {
+      let isUpdated = false;
+      group.tasks.forEach((task) => {
+        const taskDeadline = moment.tz(task.deadline, "D MMM, YYYY HH:mm", "America/Chicago");
+        if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
+          const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
+          if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
+            task.taskStatus = "Alert";
+            isUpdated = true;
+            notifications.push({ taskId: task._id, message: `Task '${task.name}' is now in ALERT status.` });
+          } else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
+            task.taskStatus = "Warning";
+            isUpdated = true;
+            notifications.push({ taskId: task._id, message: `Task '${task.name}' is now in WARNING status.` });
+          }
+        }
+      });
+      if (isUpdated) {
+        await group.save(); 
+      }
+    }
+    return notifications; 
+  } catch (error) {
+    console.error("Error updating task statuses:", error);
+  }
+}
+app.get("/notifications", async (req, res) => {
+  console.log("notifications")
+  try {
+    const notifications = await updateTaskStatuses(); 
+    console.log("notis",notifications);
+    res.json({ success: true, notifications });
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch notifications." });
+  }
+});
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
