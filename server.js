@@ -983,33 +983,38 @@ app.get('/totalTasks', async (req, res) => {
 async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago");
-    console.log("current Dallas time", currentDallasTime);
+    console.log("Current Dallas time:", currentDallasTime);
     const taskGroups = await TaskGroup.find({
       "tasks.taskStatus": { $ne: "Completed" },
       "tasks.deadline": { $exists: true },
     });
-    console.log("taskGroups", taskGroups);
-    let notifications = []; 
-    for (const group of taskGroups) {
-      let isUpdated = false;
-      group.tasks.forEach((task) => {
+    console.log("Task Groups:", taskGroups);
+    let notifications = [];
+    for (const taskGroup of taskGroups) {
+      let isUpdated = false; 
+      taskGroup.tasks.forEach((task) => {
         const taskDeadline = moment.tz(task.deadline, "D MMM, YYYY HH:mm", "America/Chicago");
-        console.log("taskDeadline",taskDeadline);
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
-            notifications.push({ taskId: task._id, message: `Task '${task.name}' is now in ALERT status.` });
+            notifications.push({
+              taskId: task._id,
+              message: `Task '${task.taskName}' assigned to '${task.assignedTo}' is now in ALERT status.`,
+            });
           } else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
             task.taskStatus = "Warning";
             isUpdated = true;
-            notifications.push({ taskId: task._id, message: `Task '${task.name}' is now in WARNING status.` });
+            notifications.push({
+              taskId: task._id,
+              message: `Task '${task.taskName}' assigned to '${task.assignedTo}' is now in WARNING status.`,
+            });
           }
         }
       });
       if (isUpdated) {
-        await group.save(); 
+        await taskGroup.save();
       }
     }
     return notifications; 
