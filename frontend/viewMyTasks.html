@@ -629,17 +629,12 @@ async function fetchTaskSummary() {
     const response = await axios.get(`https://www.spotops360.com/tasks-summary?firstName=${firstName}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     const summary = response.data;
-
-    // Populate counts
     document.getElementById('completedOnTimeCount').textContent = summary.completedOnTime.length;
     document.getElementById('alertCount').textContent = summary.alert.length;
     document.getElementById('completedLateCount').textContent = summary.completedLate.length;
     document.getElementById('warningCount').textContent = summary.warning.length;
     document.getElementById('notCompletedCount').textContent = summary.notCompleted.length;
-
-    // Populate order numbers
     document.getElementById('completedOnTimeOrders').innerHTML = summary.completedOnTime
       .map((task) => `${task.orderNo} - ${task.taskName}`)
       .join('<br>');
@@ -659,8 +654,6 @@ async function fetchTaskSummary() {
     console.error('Error fetching task summary:', error);
   }
 }
-
-// Fetch and populate the table on page load
 fetchTaskSummary();
 
 });
