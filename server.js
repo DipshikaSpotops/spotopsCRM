@@ -547,8 +547,10 @@ const taskSchema = new mongoose.Schema({
       deadline: { type: String, required: true },
       taskDescription: { type: String, required: true },
       taskStatus: { type: String, default: "Pending" },
+      taskCompletionTime: { type: String },
     },
   ],
+  previousTaskCount: { type: Number, default: 0 }, 
 });
 
 const TaskGroup = mongoose.model("TaskGroup", taskSchema);
@@ -984,99 +986,37 @@ async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago");
     console.log("Current Dallas time:", currentDallasTime);
-
-    // Find all task groups with tasks that are not completed and have deadlines
     const taskGroups = await TaskGroup.find({
       "tasks.taskStatus": { $ne: "Completed" },
       "tasks.deadline": { $exists: true },
     });
-
     console.log("Task Groups:", taskGroups);
-
-    let notifications = []; // Store notifications for updated tasks
-
-    // Iterate through each task group
-    for (const taskGroup of taskGroups) {
-      let isUpdated = false; // Track if any task in this group was updated
-
-      // Iterate through the tasks array in the current task group
-      taskGroup.tasks.forEach((task) => {
-        const taskDeadline = moment.tz(task.deadline, "D MMM, YYYY HH:mm", "America/Chicago");
-
-        if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
-          const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
-
-          // Update task status to Alert or Warning based on deadline proximity
-          if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
-            task.taskStatus = "Alert";
-            isUpdated = true;
-            notifications.push({
-              taskId: task._id,
-              message: `Task '${task.taskName}' assigned to '${task.assignedTo}' is now in ALERT status.`,
-            });
-          } else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
-            task.taskStatus = "Warning";
-            isUpdated = true;
-            notifications.push({
-              taskId: task._id,
-              message: `Task '${task.taskName}' assigned to '${task.assignedTo}' is now in WARNING status.`,
-            });
-          }
-        }
-      });
-
-      // Save the task group only if any task was updated
-      if (isUpdated) {
-        await taskGroup.save();
-      }
-    }
-
-    return notifications; // Return collected notifications
-  } catch (error) {
-    console.error("Error updating task statuses:", error);
-  }
-}
-async function updateTaskStatuses() {
-  try {
-    const currentDallasTime = moment.tz("America/Chicago");
-    console.log("Current Dallas time:", currentDallasTime);
-
-    const taskGroups = await TaskGroup.find({
-      "tasks.taskStatus": { $ne: "Completed" },
-      "tasks.deadline": { $exists: true },
-    });
-
-    console.log("Task Groups:", taskGroups);
-
-    let notifications = []; // Store all notifications
-
+    let notifications = []; 
     for (const taskGroup of taskGroups) {
       let isUpdated = false;
-
-      // Check for new tasks (tasks without taskStatus or with default value)
-      taskGroup.tasks.forEach((task) => {
-        if (!task.taskStatus || task.taskStatus === "Pending") {
+      const currentTaskCount = taskGroup.tasks.length;
+      console.log("currentTaskCount",currentTaskCount);
+      if (currentTaskCount > taskGroup.previousTaskCount) {
+        const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount); 
+        newTasks.forEach((task) => {
           notifications.push({
             taskId: task._id,
-            message: `New Task added: '\n${taskGroup.orderNo} - ${task.taskDescription}\n${currentDallasTime}'.`,
+            message: `New Task added:\n${taskGroup.orderNo} - ${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
           });
-        }
-      });
-
-      // Process tasks for status updates
+        });
+        taskGroup.previousTaskCount = currentTaskCount; // Update the task count
+        isUpdated = true;
+      }
       taskGroup.tasks.forEach((task) => {
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
-
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
-
-          // Handle Alert status
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Alert:\n${taskGroup.orderNo} - ${task.taskDescription}\nDeadline: ${task.deadline}`,
+              message: `Alert:\n${taskGroup.orderNo} - ${task.taskDescription}\n${currentDallasTime}`,
             });
           }
 
@@ -1086,7 +1026,7 @@ async function updateTaskStatuses() {
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Warning:\n${taskGroup.orderNo} - ${task.taskDescription}\nDeadline: ${task.deadline}`,
+              message: `Warning:\n${taskGroup.orderNo} - ${task.taskDescription}\n${currentDallasTime}`,
             });
           }
         }
@@ -1101,14 +1041,11 @@ async function updateTaskStatuses() {
           });
         }
       });
-
-      // Save updates to the group if any task was updated
       if (isUpdated) {
         await taskGroup.save();
       }
     }
-
-    return notifications; // Return all notifications
+    return notifications; 
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
