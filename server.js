@@ -929,7 +929,6 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
         if (taskGroup.tasks[index].taskStatus === "Completed") {
           isUpdated = true;
           notifications.push({
-            taskId: task._id,
             message: `Task Completed:\n${taskGroup.orderNo} - ${taskGroup.tasks[index].taskDescription}\n${currentDallasTime}`,
           });
         }
