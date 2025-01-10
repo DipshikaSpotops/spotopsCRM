@@ -988,7 +988,6 @@ async function updateTaskStatuses() {
     console.log("Current Dallas time:", currentDallasTime);
 
     const taskGroups = await TaskGroup.find({
-      "tasks.taskStatus": { $ne: "Completed" },
       "tasks.deadline": { $exists: true },
     });
 
@@ -1023,7 +1022,6 @@ async function updateTaskStatuses() {
             });
           }
 
-          // Handle Warning status
           else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
             task.taskStatus = "Warning";
             isUpdated = true;
