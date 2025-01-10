@@ -1047,7 +1047,6 @@ async function updateTaskStatuses() {
         await taskGroup.save();
       }
     }
-    
     return notifications; 
   } catch (error) {
     console.error("Error updating task statuses:", error);
@@ -1055,16 +1054,15 @@ async function updateTaskStatuses() {
 }
 
 
-app.get('/notifications', async (req, res) => {
+app.get("/notifications", async (req, res) => {
+  console.log("notifications")
   try {
-    const notifications = await RecentNotification.find()
-      .sort({ timestamp: -1 }) 
-      .limit(10); 
-
-    res.status(200).json({ notifications });
+const notifications = await updateTaskStatuses(); 
+    console.log("notis",notifications);
+    res.json({ success: true, notifications });
   } catch (error) {
-    console.error('Error fetching notifications:', error);
-    res.status(500).json({ error: 'Failed to fetch notifications' });
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch notifications." });
   }
 });
 // changing order status
