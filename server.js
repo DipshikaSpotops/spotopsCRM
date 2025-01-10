@@ -986,22 +986,25 @@ async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago");
     console.log("Current Dallas time:", currentDallasTime);
+
     const taskGroups = await TaskGroup.find({
       "tasks.taskStatus": { $ne: "Completed" },
       "tasks.deadline": { $exists: true },
     });
+
     console.log("Task Groups:", taskGroups);
+
     let notifications = []; 
     for (const taskGroup of taskGroups) {
       let isUpdated = false;
       const currentTaskCount = taskGroup.tasks.length;
       console.log("currentTaskCount",currentTaskCount);
       if (currentTaskCount > taskGroup.previousTaskCount) {
-        const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount); 
+        const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount); // Get newly added tasks
         newTasks.forEach((task) => {
           notifications.push({
             taskId: task._id,
-            message: `New Task added:\n${taskGroup.orderNo} - ${task.taskDescription}\n ${currentDallasTime}`,
+            message: `New Task added:\n${taskGroup.orderNo} - ${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
           });
         });
         taskGroup.previousTaskCount = currentTaskCount; // Update the task count
