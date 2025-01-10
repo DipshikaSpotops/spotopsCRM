@@ -1022,6 +1022,7 @@ async function updateTaskStatuses() {
             taskId: task._id,
             message: `Task Completed:\n${taskGroup.orderNo} - ${task.taskDescription}\nCompleted Time: ${task.taskCompletionTime}`,
           });
+          taskGroup.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
         }
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
@@ -1068,6 +1069,64 @@ const notifications = await updateTaskStatuses();
   } catch (error) {
     console.error("Error fetching notifications:", error);
     res.status(500).json({ success: false, error: "Failed to fetch notifications." });
+  }
+});
+//getting task summary
+app.get("/tasks-summary", async (req, res) => {
+  try {
+    const taskGroups = await TaskGroup.find();
+    const summary = {
+      completedOnTime: [],
+      alert: [],
+      completedLate: [],
+      warning: [],
+      notCompleted: [],
+    };
+
+    taskGroups.forEach((taskGroup) => {
+      taskGroup.tasks.forEach((task) => {
+        const deadline = new Date(task.deadline);
+        const completionTime = task.taskCompletionTime
+          ? new Date(task.taskCompletionTime)
+          : null;
+
+        if (task.taskStatus === "Completed" && completionTime) {
+          // Task completed on time or before the deadline
+          if (completionTime <= deadline) {
+            summary.completedOnTime.push({
+              orderNo: taskGroup.orderNo,
+              taskName: task.taskName,
+            });
+          } else {
+            // Task completed after the deadline
+            summary.completedLate.push({
+              orderNo: taskGroup.orderNo,
+              taskName: task.taskName,
+            });
+          }
+        } else if (task.taskStatus === "Alert") {
+          summary.alert.push({
+            orderNo: taskGroup.orderNo,
+            taskName: task.taskName,
+          });
+        } else if (task.taskStatus === "Warning") {
+          summary.warning.push({
+            orderNo: taskGroup.orderNo,
+            taskName: task.taskName,
+          });
+        } else if (task.taskStatus !== "Completed") {
+          summary.notCompleted.push({
+            orderNo: taskGroup.orderNo,
+            taskName: task.taskName,
+          });
+        }
+      });
+    });
+
+    res.status(200).json(summary); // Return the task summary as JSON
+  } catch (error) {
+    console.error("Error fetching task summary:", error);
+    res.status(500).json({ error: "Failed to fetch task summary" });
   }
 });
 // changing order status
