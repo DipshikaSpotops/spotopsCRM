@@ -626,7 +626,7 @@ document.getElementById("notificationIcon").addEventListener("click", async () =
 // fetch task summary
 async function fetchTaskSummary() {
   try {
-    const response = await axios.get('https://www.spotops360.com/tasks-summary', {
+    const response = await axios.get(`https://www.spotops360.com/tasks-summary?firstName=${firstName}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

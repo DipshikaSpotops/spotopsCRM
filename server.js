@@ -1071,10 +1071,13 @@ const notifications = await updateTaskStatuses();
     res.status(500).json({ success: false, error: "Failed to fetch notifications." });
   }
 });
-//getting task summary
+//getting task summary for a particular user
 app.get("/tasks-summary", async (req, res) => {
   try {
-    const taskGroups = await TaskGroup.find();
+    const { firstName } = req.query; 
+    const taskGroups = await TaskGroup.find({
+      "tasks.assignedTo": firstName, 
+    });
     const summary = {
       completedOnTime: [],
       alert: [],
