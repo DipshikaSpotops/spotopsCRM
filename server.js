@@ -994,6 +994,7 @@ async function updateTaskStatuses() {
       let isUpdated = false; 
       taskGroup.tasks.forEach((task) => {
         const taskDeadline = moment.tz(task.deadline, "D MMM, YYYY HH:mm", "America/Chicago");
+        console.log("taskDeadline",taskDeadline);
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
