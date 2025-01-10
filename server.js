@@ -925,6 +925,7 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
     taskGroup.tasks[index].taskStatus = taskStatus;
     await taskGroup.save();
         // Handle Completed status
+        let notifications = []; 
         if (taskGroup.tasks[index].taskStatus === "Completed") {
           isUpdated = true;
           notifications.push({
