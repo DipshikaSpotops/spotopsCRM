@@ -1019,7 +1019,7 @@ async function updateTaskStatuses() {
 app.get("/notifications", async (req, res) => {
   console.log("notifications")
   try {
-    const notifications = await updateTaskStatuses(); 
+const notifications = await updateTaskStatuses(); 
     console.log("notis",notifications);
     res.json({ success: true, notifications });
   } catch (error) {
