@@ -1075,6 +1075,7 @@ const notifications = await updateTaskStatuses();
 app.get("/tasks-summary", async (req, res) => {
   try {
     const { firstName } = req.query; 
+    console.log("task-summary",firstName);
     const taskGroups = await TaskGroup.find({
       "tasks.assignedTo": firstName, 
     });
