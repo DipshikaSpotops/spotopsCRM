@@ -567,7 +567,9 @@ $(this).addClass("active");
 // notification
 async function fetchNotifications() {
   try {
-    const response = await axios.get("https://www.spotops360.com/notifications");
+    const response = await axios.get("https://www.spotops360.com/notifications", {
+                headers: { Authorization: `Bearer ${token}` }
+            });;
     console.log("noti res",response);
     const notifications = response.data.notifications;
     const notificationCountElement = document.getElementById("notificationCount");
