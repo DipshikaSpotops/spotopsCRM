@@ -570,7 +570,7 @@ async function fetchNotifications() {
     const response = await axios.get("https://www.spotops360.com/notifications", {
                 headers: { Authorization: `Bearer ${token}` }
             });;
-    console.log("noti res",response);
+    console.log("noti res",response.data);
     const notifications = response.data.notifications;
     const notificationCountElement = document.getElementById("notificationCount");
     const count = notifications.length;
