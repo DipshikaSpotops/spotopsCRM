@@ -320,9 +320,38 @@ aria-labelledby="userMenu"
 </div>
 </div>
 
-<div class="main-content">
-  <h1 class="fixed-header" style="text-align: center; margin-right: 14%;">View My Tasks</h1>
-  <div id="total-tasks">Total Tasks This Month-</div>
+
+  <div class="main-content">
+    <h1 class="fixed-header" style="text-align: center; margin-right: 14%;">View My Tasks</h1>
+    <h1 class="fixed-header" style="text-align: center; margin-right: 14%;">View Task Summary</h1>
+    <table class="table table-bordered" id="taskSummaryTable">
+      <thead>
+        <tr>
+          <th>Completed On Time</th>
+          <th>Alert</th>
+          <th>Completed Late</th>
+          <th>Warning</th>
+          <th>Not Completed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="completedOnTimeCount"></td>
+          <td id="alertCount"></td>
+          <td id="completedLateCount"></td>
+          <td id="warningCount"></td>
+          <td id="notCompletedCount"></td>
+        </tr>
+        <tr>
+          <td id="completedOnTimeOrders"></td>
+          <td id="alertOrders"></td>
+          <td id="completedLateOrders"></td>
+          <td id="warningOrders"></td>
+          <td id="notCompletedOrders"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  
 <div
 class="modal fade"
 id="profileModal"
@@ -594,11 +623,47 @@ document.getElementById("notificationIcon").addEventListener("click", async () =
   const dropdown = document.getElementById("notificationDropdown");
   dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
 });
+// fetch task summary
+async function fetchTaskSummary() {
+  try {
+    const response = await axios.get('https://www.spotops360.com/tasks-summary', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const summary = response.data;
+
+    // Populate counts
+    document.getElementById('completedOnTimeCount').textContent = summary.completedOnTime.length;
+    document.getElementById('alertCount').textContent = summary.alert.length;
+    document.getElementById('completedLateCount').textContent = summary.completedLate.length;
+    document.getElementById('warningCount').textContent = summary.warning.length;
+    document.getElementById('notCompletedCount').textContent = summary.notCompleted.length;
+
+    // Populate order numbers
+    document.getElementById('completedOnTimeOrders').innerHTML = summary.completedOnTime
+      .map((task) => `${task.orderNo} - ${task.taskName}`)
+      .join('<br>');
+    document.getElementById('alertOrders').innerHTML = summary.alert
+      .map((task) => `${task.orderNo} - ${task.taskName}`)
+      .join('<br>');
+    document.getElementById('completedLateOrders').innerHTML = summary.completedLate
+      .map((task) => `${task.orderNo} - ${task.taskName}`)
+      .join('<br>');
+    document.getElementById('warningOrders').innerHTML = summary.warning
+      .map((task) => `${task.orderNo} - ${task.taskName}`)
+      .join('<br>');
+    document.getElementById('notCompletedOrders').innerHTML = summary.notCompleted
+      .map((task) => `${task.orderNo} - ${task.taskName}`)
+      .join('<br>');
+  } catch (error) {
+    console.error('Error fetching task summary:', error);
+  }
+}
+
+// Fetch and populate the table on page load
+fetchTaskSummary();
 
 });
 </script>
 </body>
 </html>
-<!-- in the above page for the loggedin user, i want a table format:
- first row should have the count of those tasks which were completed on time or before time so there is a deadline
- in taskGroup collection so, -->
