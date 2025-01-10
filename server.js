@@ -926,7 +926,6 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
     await taskGroup.save();
         // Handle Completed status
         if (taskGroup.tasks[index].taskStatus === "Completed") {
-          task.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
           isUpdated = true;
           notifications.push({
             taskId: task._id,
