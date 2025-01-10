@@ -933,6 +933,7 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
           });
         }
     res.status(200).json({ message: "Task status updated successfully." });
+    return notifications;
   } catch (error) {
     console.error("Error updating task status:", error);
     res.status(500).json({ message: "Failed to update task status." });
