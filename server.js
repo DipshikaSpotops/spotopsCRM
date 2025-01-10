@@ -1058,8 +1058,6 @@ async function updateTaskStatuses() {
     console.error("Error updating task statuses:", error);
   }
 }
-
-
 app.get("/notifications", async (req, res) => {
   console.log("notifications")
   try {
@@ -1127,7 +1125,7 @@ app.get("/tasks-summary", async (req, res) => {
       });
     });
 
-    res.status(200).json(summary); // Return the task summary as JSON
+    res.status(200).json(summary); 
   } catch (error) {
     console.error("Error fetching task summary:", error);
     res.status(500).json({ error: "Failed to fetch task summary" });
