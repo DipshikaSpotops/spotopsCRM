@@ -568,9 +568,8 @@ $(this).addClass("active");
 async function fetchNotifications() {
   try {
     const response = await axios.get("https://www.spotops360.com/notifications");
+    console.log("noti res",response);
     const notifications = response.data.notifications;
-
-    // Update the notification count badge
     const notificationCountElement = document.getElementById("notificationCount");
     const count = notifications.length;
 
