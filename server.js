@@ -552,6 +552,14 @@ const taskSchema = new mongoose.Schema({
   ],
   previousTaskCount: { type: Number, default: 0 }, 
 });
+const notificationSchema = new mongoose.Schema({
+  message: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now },
+  isRead: { type: Boolean, default: false },
+});
+
+const RecentNotification = mongoose.model('RecentNotification', notificationSchema);
+
 
 const TaskGroup = mongoose.model("TaskGroup", taskSchema);
 const OrderSchema = new mongoose.Schema({
@@ -986,21 +994,14 @@ async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago");
     console.log("Current Dallas time:", currentDallasTime);
-
-    // Fetch all task groups
     const taskGroups = await TaskGroup.find({
-      "tasks.deadline": { $exists: true }, // Ensure tasks have deadlines
+      "tasks.deadline": { $exists: true }, 
     });
-
     console.log("Task Groups:", taskGroups);
-
-    let notifications = []; // Store all notifications
-
+    let notifications = [];
     for (const taskGroup of taskGroups) {
-      let isUpdated = false; // Track if any task was updated
+      let isUpdated = false; 
       const currentTaskCount = taskGroup.tasks.length;
-
-      // Check for new tasks
       if (currentTaskCount > (taskGroup.previousTaskCount || 0)) {
         const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount || 0); // Get newly added tasks
         newTasks.forEach((task) => {
@@ -1009,15 +1010,11 @@ async function updateTaskStatuses() {
             message: `New Task added:\n${taskGroup.orderNo} - ${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
           });
         });
-        taskGroup.previousTaskCount = currentTaskCount; // Update the task count
+        taskGroup.previousTaskCount = currentTaskCount; 
         isUpdated = true;
       }
-
-      // Iterate through tasks to check for status changes
       taskGroup.tasks.forEach((task) => {
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
-
-        // Detect if a task was marked as Completed
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
           isUpdated = true;
@@ -1026,12 +1023,8 @@ async function updateTaskStatuses() {
             message: `Task Completed:\n${taskGroup.orderNo} - ${task.taskDescription}\nCompleted Time: ${task.taskCompletionTime}`,
           });
         }
-
-        // Check and update task statuses for Alert and Warning
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
-
-          // Handle Alert status
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
@@ -1040,8 +1033,6 @@ async function updateTaskStatuses() {
               message: `Alert:\n${taskGroup.orderNo} - ${task.taskDescription}\nDeadline Approaching (${currentDallasTime})`,
             });
           }
-
-          // Handle Warning status
           else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
             task.taskStatus = "Warning";
             isUpdated = true;
@@ -1052,29 +1043,31 @@ async function updateTaskStatuses() {
           }
         }
       });
-
-      // Save updates if any changes were made
       if (isUpdated) {
         await taskGroup.save();
       }
     }
-
-    return notifications; // Return all generated notifications
+    // Save notifications to the database
+    for (const notification of notifications) {
+      await RecentNotification.create({ message: notification.message });
+    }
+    return notifications; 
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
 }
 
 
-app.get("/notifications", async (req, res) => {
-  console.log("notifications")
+app.get('/notifications', async (req, res) => {
   try {
-const notifications = await updateTaskStatuses(); 
-    console.log("notis",notifications);
-    res.json({ success: true, notifications });
+    const notifications = await RecentNotification.find()
+      .sort({ timestamp: -1 }) 
+      .limit(10); 
+
+    res.status(200).json({ notifications });
   } catch (error) {
-    console.error("Error fetching notifications:", error);
-    res.status(500).json({ success: false, error: "Failed to fetch notifications." });
+    console.error('Error fetching notifications:', error);
+    res.status(500).json({ error: 'Failed to fetch notifications' });
   }
 });
 // changing order status
