@@ -914,6 +914,7 @@ app.get("/fetchTasks", async (req, res) => {
 // updating taskStatus and assignTo status
 app.put('/updateTaskStatus', async (req, res) => {
   const { orderNo, index, taskStatus } = req.body;
+  const currentDallasTime = moment.tz("America/Chicago");
 console.log("updateTaskStatus",orderNo,index,taskStatus)
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
@@ -923,6 +924,15 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
 
     taskGroup.tasks[index].taskStatus = taskStatus;
     await taskGroup.save();
+        // Handle Completed status
+        if (taskGroup.tasks[index].taskStatus === "Completed") {
+          task.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
+          isUpdated = true;
+          notifications.push({
+            taskId: task._id,
+            message: `Task Completed:\n${taskGroup.orderNo} - ${taskGroup.tasks[index].taskDescription}\n${currentDallasTime}`,
+          });
+        }
     res.status(200).json({ message: "Task status updated successfully." });
   } catch (error) {
     console.error("Error updating task status:", error);
@@ -1030,16 +1040,6 @@ async function updateTaskStatuses() {
               message: `Warning:\n${taskGroup.orderNo} - ${task.taskDescription}\n${currentDallasTime}`,
             });
           }
-        }
-
-        // Handle Completed status
-        if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
-          task.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
-          isUpdated = true;
-          notifications.push({
-            taskId: task._id,
-            message: `Task Completed:\n${taskGroup.orderNo} - ${task.taskDescription}\nCompleted Time: ${task.taskCompletionTime}`,
-          });
         }
       });
       if (isUpdated) {
