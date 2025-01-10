@@ -577,7 +577,7 @@ async function fetchNotifications() {
       notificationCountElement.style.display = "none";
     }
     const notificationList = document.getElementById("notificationList");
-    notificationList.innerHTML = ""; // Clear old notifications
+    // notificationList.innerHTML = ""; // Clear old notifications
 
     notifications.forEach((notification) => {
       const listItem = document.createElement("li");
@@ -588,11 +588,7 @@ async function fetchNotifications() {
     console.error("Error fetching notifications:", error);
   }
 }
-
-// Poll for notifications every minute
 setInterval(fetchNotifications, 60 * 1000);
-
-// Fetch notifications on page load
 fetchNotifications();
 document.getElementById("notificationIcon").addEventListener("click", async () => {
   const dropdown = document.getElementById("notificationDropdown");
@@ -603,9 +599,6 @@ document.getElementById("notificationIcon").addEventListener("click", async () =
 </script>
 </body>
 </html>
-<!-- in the following
- document.getElementById("notificationIcon").addEventListener("click", async () => {
-  const dropdown = document.getElementById("notificationDropdown");
-  dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-});
-i want to show the recent five notifications and it should look like the above image -->
+<!-- in the above page for the loggedin user, i want a table format:
+ first row should have the count of those tasks which were completed on time or before time so there is a deadline
+ in taskGroup collection so, -->
