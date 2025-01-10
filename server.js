@@ -1047,6 +1047,11 @@ async function updateTaskStatuses() {
         await taskGroup.save();
       }
     }
+    // Save notifications to the database
+    for (const notification of notifications) {
+      console.log("notification",notification);
+      await RecentNotification.create({ message: notification.message });
+    }
     return notifications; 
   } catch (error) {
     console.error("Error updating task statuses:", error);
