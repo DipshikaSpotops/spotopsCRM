@@ -567,7 +567,7 @@ $(this).addClass("active");
 // notification
 async function fetchNotifications() {
   try {
-    const response = await axios.get("https://your-backend-url/notifications");
+    const response = await axios.get("https://www.spotops360.com/notifications");
     const notifications = response.data.notifications;
 
     // Update the notification count badge
@@ -605,7 +605,7 @@ document.getElementById("notificationIcon").addEventListener("click", async () =
   dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
 
   if (dropdown.style.display === "block") {
-    await axios.post("https://your-backend-url/notifications/mark-as-read");
+    await axios.post("https://www.spotops360.com/notifications/mark-as-read");
     fetchNotifications(); // Refresh notifications
   }
 });
