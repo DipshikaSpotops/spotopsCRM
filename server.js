@@ -993,7 +993,7 @@ async function updateTaskStatuses() {
     for (const taskGroup of taskGroups) {
       let isUpdated = false; 
       taskGroup.tasks.forEach((task) => {
-        const taskDeadline = moment.tz(task.deadline, "D MMM, YYYY HH:mm", "America/Chicago");
+        const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
         console.log("taskDeadline",taskDeadline);
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
