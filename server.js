@@ -914,7 +914,6 @@ app.get("/fetchTasks", async (req, res) => {
 // updating taskStatus and assignTo status
 app.put('/updateTaskStatus', async (req, res) => {
   const { orderNo, index, taskStatus } = req.body;
-  const currentDallasTime = moment.tz("America/Chicago");
 console.log("updateTaskStatus",orderNo,index,taskStatus)
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
@@ -924,16 +923,7 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
 
     taskGroup.tasks[index].taskStatus = taskStatus;
     await taskGroup.save();
-        // Handle Completed status
-        let notifications = []; 
-        if (taskGroup.tasks[index].taskStatus === "Completed") {
-          isUpdated = true;
-          notifications.push({
-            message: `Task Completed:\n${taskGroup.orderNo} - ${taskGroup.tasks[index].taskDescription}\n${currentDallasTime}`,
-          });
-        }
     res.status(200).json({ message: "Task status updated successfully." });
-    return notifications;
   } catch (error) {
     console.error("Error updating task status:", error);
     res.status(500).json({ message: "Failed to update task status." });
