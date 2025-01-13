@@ -1087,7 +1087,7 @@ app.get("/tasks-summary", async (req, res) => {
       notCompleted: [],
     };
 
-    console.log("taskGroups", taskGroups);
+    console.log("taskGroups", taskGroups.length);
 
     taskGroups.forEach((taskGroup) => {
       taskGroup.tasks.forEach((task) => {
