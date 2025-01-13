@@ -141,7 +141,30 @@ box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 background-color: #333;
 }
 /* notification */
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  display: none; 
+}
 
+.notification-dropdown ul {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+}
+.notification-dropdown ul li {
+  padding: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.notification-dropdown ul li:last-child {
+  border-bottom: none;
+}
 #notificationDropdown {
   max-height: 300px;
   overflow-y: auto;
