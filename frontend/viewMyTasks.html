@@ -611,6 +611,7 @@ async function fetchNotifications() {
 
     // Function to render notifications
     function renderNotifications(notifications) {
+      console.log("not",notifications);
       notificationList.empty(); // Clear current notifications
       notifications.forEach((notification) => {
         let backgroundColor;
