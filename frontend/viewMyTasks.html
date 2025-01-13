@@ -629,8 +629,9 @@ async function fetchNotifications() {
       console.log("not",notifications);
       notificationList.empty(); // Clear current notifications
       notifications.forEach((notification) => {
+        console.log("back",notifications);
         let backgroundColor;
-        switch (notification.type) {
+        switch (notification.mesa) {
           case "Warning":
             backgroundColor = "red";
             break;
