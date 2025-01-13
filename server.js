@@ -554,10 +554,7 @@ const taskSchema = new mongoose.Schema({
 });
 const notificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
-  timestamp: {
-    type: Date,
-    default: () => moment.tz(Date.now(), "America/Chicago").toDate(),
-  },
+  timestamp: { type: String },
   isRead: { type: Boolean, default: false },
 });
 
@@ -1010,7 +1007,7 @@ async function updateTaskStatuses() {
         newTasks.forEach((task) => {
           notifications.push({
             taskId: task._id,
-            message: `New Task added:\n${taskGroup.orderNo} - ${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
+            message: `New Task added:\n${taskGroup.orderNo} - ${task.taskDescription}\nAssigned to: ${task.assignedTo} ${currentDallasTime}`,
           });
         });
         taskGroup.previousTaskCount = currentTaskCount; 
@@ -1023,7 +1020,7 @@ async function updateTaskStatuses() {
           isUpdated = true;
           notifications.push({
             taskId: task._id,
-            message: `Task Completed:\n${taskGroup.orderNo} - ${task.taskDescription}\nCompleted Time: ${task.taskCompletionTime}`,
+            message: `Task Completed:\n${taskGroup.orderNo} - ${task.taskDescription}\nCompleted Time: ${currentDallasTime}`,
           });
           taskGroup.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
         }
@@ -1034,7 +1031,7 @@ async function updateTaskStatuses() {
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Alert:\n${taskGroup.orderNo} - ${task.taskDescription}\nDeadline Approaching (${currentDallasTime})`,
+              message: `Alert(Deadline Approaching):\n${taskGroup.orderNo} - ${task.taskDescription}\n ${currentDallasTime}`,
             });
           }
           else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
@@ -1042,7 +1039,7 @@ async function updateTaskStatuses() {
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Warning:\n${taskGroup.orderNo} - ${task.taskDescription}\nDeadline Missed (${currentDallasTime})`,
+              message: `Warning(Deadline Missed):\n${taskGroup.orderNo} - ${task.taskDescription}\n ${currentDallasTime}`,
             });
           }
         }
@@ -1054,7 +1051,7 @@ async function updateTaskStatuses() {
     // Save notifications to the database
     for (const notification of notifications) {
       console.log("notification",notification);
-      await RecentNotification.create({ message: notification.message });
+      await RecentNotification.create({ message: notification.message});
     }
     return notifications; 
   } catch (error) {
