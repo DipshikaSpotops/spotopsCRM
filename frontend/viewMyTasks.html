@@ -624,30 +624,45 @@ document.getElementById("notificationIcon").addEventListener("click", async () =
   dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
 });
 // fetch task summary
+// Fetch task summary filtered by logged-in user
 async function fetchTaskSummary() {
   try {
     const response = await axios.get(`https://www.spotops360.com/tasks-summary?firstName=${firstName}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const summary = response.data;
-    document.getElementById('completedOnTimeCount').textContent = summary.completedOnTime.length;
-    document.getElementById('alertCount').textContent = summary.alert.length;
-    document.getElementById('completedLateCount').textContent = summary.completedLate.length;
-    document.getElementById('warningCount').textContent = summary.warning.length;
-    document.getElementById('notCompletedCount').textContent = summary.notCompleted.length;
-    document.getElementById('completedOnTimeOrders').innerHTML = summary.completedOnTime
+
+    // Filter tasks by assignedTo matching logged-in user
+    const filterTasks = (tasks) => tasks.filter((task) => task.assignedTo === firstName);
+
+    const filteredSummary = {
+      completedOnTime: filterTasks(summary.completedOnTime),
+      alert: filterTasks(summary.alert),
+      completedLate: filterTasks(summary.completedLate),
+      warning: filterTasks(summary.warning),
+      notCompleted: filterTasks(summary.notCompleted),
+    };
+
+    // Append filtered data to table
+    document.getElementById('completedOnTimeCount').textContent = filteredSummary.completedOnTime.length;
+    document.getElementById('alertCount').textContent = filteredSummary.alert.length;
+    document.getElementById('completedLateCount').textContent = filteredSummary.completedLate.length;
+    document.getElementById('warningCount').textContent = filteredSummary.warning.length;
+    document.getElementById('notCompletedCount').textContent = filteredSummary.notCompleted.length;
+
+    document.getElementById('completedOnTimeOrders').innerHTML = filteredSummary.completedOnTime
       .map((task) => `${task.orderNo} - ${task.taskName}`)
       .join('<br>');
-    document.getElementById('alertOrders').innerHTML = summary.alert
+    document.getElementById('alertOrders').innerHTML = filteredSummary.alert
       .map((task) => `${task.orderNo} - ${task.taskName}`)
       .join('<br>');
-    document.getElementById('completedLateOrders').innerHTML = summary.completedLate
+    document.getElementById('completedLateOrders').innerHTML = filteredSummary.completedLate
       .map((task) => `${task.orderNo} - ${task.taskName}`)
       .join('<br>');
-    document.getElementById('warningOrders').innerHTML = summary.warning
+    document.getElementById('warningOrders').innerHTML = filteredSummary.warning
       .map((task) => `${task.orderNo} - ${task.taskName}`)
       .join('<br>');
-    document.getElementById('notCompletedOrders').innerHTML = summary.notCompleted
+    document.getElementById('notCompletedOrders').innerHTML = filteredSummary.notCompleted
       .map((task) => `${task.orderNo} - ${task.taskName}`)
       .join('<br>');
   } catch (error) {
