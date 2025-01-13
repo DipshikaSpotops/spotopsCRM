@@ -325,7 +325,7 @@ aria-labelledby="userMenu"
 
   <div class="main-content">
     <h1 class="fixed-header" style="text-align: center; margin-right: 14%;">View Task Summary</h1>
-    <h3 class="fixed-header" style="text-align: center; margin-right: 88%;white-space: nowrap;" id="total-tasks">View My Tasks</h3>
+    <h3 class="fixed-header" style="text-align: center;margin-right: 15%;white-space: nowrap;width: 100%;border-bottom: 2px solid black;" id="total-tasks">View My Tasks</h3>
     <table class="table table-bordered" id="taskSummaryTable">
       <thead>
         <tr>
@@ -597,7 +597,7 @@ $(this).addClass("active");
             console.log("TaskRes",taskResponse.data)
             totalTasks = taskResponse.data.totalTasks;
             console.log("totalTasks",totalTasks);
-            document.getElementById("total-tasks").innerHTML = `Total No of tasks- ${totalTasks}`;
+            document.getElementById("total-tasks").innerHTML = `Total No of Tasks- ${totalTasks}`;
 
         } catch (error) {
             console.error("Error fetching task groups:", error);
