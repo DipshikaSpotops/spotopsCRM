@@ -647,7 +647,7 @@ async function fetchNotifications() {
     }
 
     // Toggle notifications dropdown visibility
-    notificationIcon.on("click", async function () {
+    $("#notificationIcon").on("click", async function () {
       const isVisible = notificationDropdown.is(":visible");
 
       if (isVisible) {
