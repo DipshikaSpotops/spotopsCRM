@@ -1073,7 +1073,7 @@ const notifications = await updateTaskStatuses();
 app.get("/tasks-summary", async (req, res) => {
   try {
     const { firstName } = req.query; 
-    console.log("task-summary",firstName);
+    console.log("task-summary--",firstName);
     const taskGroups = await TaskGroup.find({
       "tasks.assignedTo": firstName, 
     });
@@ -1084,7 +1084,7 @@ app.get("/tasks-summary", async (req, res) => {
       warning: [],
       notCompleted: [],
     };
-
+    console.log("taskGroups",taskGroups);
     taskGroups.forEach((taskGroup) => {
       taskGroup.tasks.forEach((task) => {
         const deadline = new Date(task.deadline);
@@ -1100,7 +1100,6 @@ app.get("/tasks-summary", async (req, res) => {
               taskName: task.taskName,
             });
           } else {
-            // Task completed after the deadline
             summary.completedLate.push({
               orderNo: taskGroup.orderNo,
               taskName: task.taskName,
