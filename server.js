@@ -1072,11 +1072,11 @@ const notifications = await updateTaskStatuses();
 
 app.get("/tasks-summary", async (req, res) => {
   try {
-    const { firstName } = req.query; 
+    const { firstName } = req.query;
     console.log("task-summary--", firstName);
 
     const taskGroups = await TaskGroup.find({
-      "tasks.assignedTo": firstName, 
+      "tasks.assignedTo": firstName,
     });
 
     const summary = {
@@ -1091,51 +1091,55 @@ app.get("/tasks-summary", async (req, res) => {
 
     taskGroups.forEach((taskGroup) => {
       taskGroup.tasks.forEach((task) => {
-        console.log("assignedTo",task.assignedTo);
-        const deadline = moment.tz(task.deadline, "America/Chicago").toDate();
-        const completionTime = task.taskCompletionTime
-          ? moment.tz(task.taskCompletionTime, "America/Chicago").toDate()
-          : null;
+        console.log("assignedTo", task.assignedTo);
 
-        if (task.taskStatus === "Completed" && completionTime) {
-          if (completionTime <= deadline) {
-            summary.completedOnTime.push({
+        // Only process tasks assigned to the user
+        if (task.assignedTo === firstName) {
+          const deadline = moment.tz(task.deadline, "America/Chicago").toDate();
+          const completionTime = task.taskCompletionTime
+            ? moment.tz(task.taskCompletionTime, "America/Chicago").toDate()
+            : null;
+
+          if (task.taskStatus === "Completed" && completionTime) {
+            if (completionTime <= deadline) {
+              summary.completedOnTime.push({
+                orderNo: taskGroup.orderNo,
+                taskName: task.taskName,
+                deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
+                completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
+              });
+            } else {
+              summary.completedLate.push({
+                orderNo: taskGroup.orderNo,
+                taskName: task.taskName,
+                deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
+                completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
+              });
+            }
+          } else if (task.taskStatus === "Alert") {
+            summary.alert.push({
               orderNo: taskGroup.orderNo,
               taskName: task.taskName,
               deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-              completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
             });
-          } else {
-            summary.completedLate.push({
+          } else if (task.taskStatus === "Warning") {
+            summary.warning.push({
               orderNo: taskGroup.orderNo,
               taskName: task.taskName,
               deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-              completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
+            });
+          } else if (task.taskStatus !== "Completed") {
+            summary.notCompleted.push({
+              orderNo: taskGroup.orderNo,
+              taskName: task.taskName,
+              deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
             });
           }
-        } else if (task.taskStatus === "Alert") {
-          summary.alert.push({
-            orderNo: taskGroup.orderNo,
-            taskName: task.taskName,
-            deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-          });
-        } else if (task.taskStatus === "Warning") {
-          summary.warning.push({
-            orderNo: taskGroup.orderNo,
-            taskName: task.taskName,
-            deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-          });
-        } else if (task.taskStatus !== "Completed") {
-          summary.notCompleted.push({
-            orderNo: taskGroup.orderNo,
-            taskName: task.taskName,
-            deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-          });
         }
       });
     });
 
-    res.status(200).json(summary); 
+    res.status(200).json(summary);
   } catch (error) {
     console.error("Error fetching task summary:", error);
     res.status(500).json({ error: "Failed to fetch task summary" });
