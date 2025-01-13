@@ -1435,47 +1435,63 @@ style="margin-right: 94px;margin-top: -9px;"
 </form>
 </div>
 <!-- create task part -->
-<div class="containers">
-    <h4 style="font-weight: bold;margin-left: 1%;" id="createTask">Create Task - </h4>
-    <div class="container">
-        <!-- First Row -->
-        <div class="row">
-          <div class="col">
-            <input id="taskName" type="text" placeholder="Task Name" style="margin-left: -8%;width: 120%;border-radius: 10px;height: 3vh;" />
-          </div>
-          <div class="col">
-            <div class="input-container">
-                <input id="deadline" type="datetime-local" style="height: 3vh;" />
-                <label for="deadline" class="placeholder">Deadline</label>
-              </div>
-                </div>
-          <div class="col">
-            <select id="assignTo" style="border-radius: 10px;height: 3vh;width: 97%;">
-              <option value="">Assign to</option>
-              <option value="April">April</option>
-              <option value="David">David</option>
-              <option value="Dipshika">Dipshika</option>
-              <option value="Erica">Erica</option>
-              <option value="John">John</option>
-              <option value="Korina">Korina</option>
-              <option value="Michael">Michael</option>
-              <option value="Richard">Richard</option>
-              <option value="Shankar">Shankar</option>
-              <option value="Tony">Tony</option>
-            </select>
-          </div>
+<div class="container mt-4">
+  <h4 class="font-weight-bold mb-3" id="createTask">Create Task</h4>
+  <div class="container">
+    <!-- First Row -->
+    <div class="row g-3">
+      <div class="col-md-4 col-12">
+        <input
+          id="taskName"
+          type="text"
+          class="form-control"
+          placeholder="Task Name"
+        />
+      </div>
+      <div class="col-md-4 col-12">
+        <div class="input-container">
+          <input
+            id="deadline"
+            type="datetime-local"
+            class="form-control"
+          />
+          <label for="deadline" class="placeholder">Deadline</label>
         </div>
-        <!-- Second Row -->
-        <div class="row">
-          <div class="col-wide">
-            <input id="taskDesc" type="text" placeholder="Task Description" style="margin-left: -1%;width: 102%;border-radius: 10px;height: 3vh;" />
-          </div>
-          <div class="col">
-            <button class="grey-button" id="createTaskButton">Create Task</button>
-          </div>
-        </div>
-      </div>      
+      </div>
+      <div class="col-md-4 col-12">
+        <select id="assignTo" class="form-select">
+          <option value="">Assign to</option>
+          <option value="April">April</option>
+          <option value="David">David</option>
+          <option value="Dipshika">Dipshika</option>
+          <option value="Erica">Erica</option>
+          <option value="John">John</option>
+          <option value="Korina">Korina</option>
+          <option value="Michael">Michael</option>
+          <option value="Richard">Richard</option>
+          <option value="Shankar">Shankar</option>
+          <option value="Tony">Tony</option>
+        </select>
+      </div>
     </div>
+    <!-- Second Row -->
+    <div class="row g-3 mt-3">
+      <div class="col-md-8 col-12">
+        <input
+          id="taskDesc"
+          type="text"
+          class="form-control"
+          placeholder="Task Description"
+        />
+      </div>
+      <div class="col-md-4 col-12 text-md-end text-center">
+        <button class="btn btn-secondary w-100" id="createTaskButton">
+          Create Task
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
      <!-- my Tasks table -->
      <div id="myTasks" style="display: none; margin: 20px;">
       <h4 style="font-weight: bold;">My Tasks</h4>
