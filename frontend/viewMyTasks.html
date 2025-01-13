@@ -631,28 +631,24 @@ async function fetchNotifications() {
       notifications.forEach((notification) => {
         console.log("back",notifications);
         let backgroundColor;
-        switch (notification.mesa) {
-          case "Warning":
-            backgroundColor = "red";
-            break;
-          case "Alert":
-            backgroundColor = "orange";
-            break;
-          case "Task Completed":
-            backgroundColor = "green";
-            break;
-          case "New Task Added":
-            backgroundColor = "blue";
-            break;
-          default:
-            backgroundColor = "black";
-        }
+if (notification.message.includes("Warning")) {
+  backgroundColor = "red";
+} else if (notification.message.includes("Alert")) {
+  backgroundColor = "orange";
+} else if (notification.message.includes("Task Completed")) {
+  backgroundColor = "green";
+} else if (notification.message.includes("New Task added")) {
+  backgroundColor = "blue";
+} else {
+  backgroundColor = "black";
+}
+
 
         const notificationItem = `
           <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: white;">
-            <strong>${notification.type}:</strong><br>
+          
             ${notification.message}<br>
-            <small>${notification.timestamp}</small>
+           
           </li>
         `;
         notificationList.append(notificationItem);
