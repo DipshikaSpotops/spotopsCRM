@@ -589,6 +589,12 @@ $(this).addClass("active");
     }
     await calculateTotalTasks();
 // notification
+const notificationIcon = $("#notificationIcon");
+    const notificationDropdown = $("#notificationDropdown");
+    const notificationList = $("#notificationList");
+    const notificationCountElement = $("#notificationCount");
+
+    let unreadCount = 0;
 async function fetchNotifications() {
       try {
         const response = await axios.get("/recent-notifications"); // Update with your API endpoint
