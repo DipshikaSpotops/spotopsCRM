@@ -166,7 +166,6 @@ background-color: #333;
   border-bottom: none;
 }
 #notificationDropdown {
-  max-height: 300px;
   overflow-y: auto;
   padding: 10px;
   border: 1px solid #ccc;
@@ -593,90 +592,105 @@ $(this).addClass("active");
     await calculateTotalTasks();
 // notification
 const notificationIcon = $("#notificationIcon");
-    const notificationDropdown = $("#notificationDropdown");
-    const notificationList = $("#notificationList");
-    const notificationCountElement = $("#notificationCount");
+const notificationDropdown = $("#notificationDropdown");
+const notificationList = $("#notificationList");
+const notificationCountElement = $("#notificationCount");
 
-    let unreadCount = 0;
+let unreadCount = 0;
+
+// Fetch notifications from the backend
 async function fetchNotifications() {
-      try {
-        const response = await axios.get("/recent-notifications"); // Update with your API endpoint
-        const notifications = response.data;
+  try {
+    const response = await axios.get("/recent-notifications"); // Your API endpoint
+    const notifications = response.data;
 
-        // Update the count for new notifications
-        unreadCount = notifications.length;
-        updateUnreadCount();
-        renderNotifications(notifications);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    }
+    // Filter unread notifications
+    const unreadNotifications = notifications.filter(
+      (notification) => !notification.isRead
+    );
 
-    // Function to render notifications
-    function renderNotifications(notifications) {
-      console.log("not",notifications);
-      notificationList.empty(); // Clear current notifications
-      notifications.forEach((notification) => {
-        console.log("back",notifications);
-        let backgroundColor;
-if (notification.message.includes("Warning")) {
-  backgroundColor = "red";
-} else if (notification.message.includes("Alert")) {
-  backgroundColor = "orange";
-} else if (notification.message.includes("Task Completed")) {
-  backgroundColor = "green";
-} else if (notification.message.includes("New Task added")) {
-  backgroundColor = "blue";
-} else {
-  backgroundColor = "black";
+    // Update the unread count
+    unreadCount = unreadNotifications.length;
+    updateUnreadCount();
+    renderNotifications(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
 }
 
+// Render notifications in the dropdown
+function renderNotifications(notifications) {
+  notificationList.empty(); // Clear current notifications
+  notifications.forEach((notification) => {
+    let backgroundColor;
 
-        const notificationItem = `
-          <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: white;">
-          
-            ${notification.message}<br>
-           
-          </li>
-        `;
-        notificationList.append(notificationItem);
-      });
+    if (notification.message.includes("Warning")) {
+      backgroundColor = "red";
+    } else if (notification.message.includes("Alert")) {
+      backgroundColor = "orange";
+    } else if (notification.message.includes("Task Completed")) {
+      backgroundColor = "green";
+    } else if (notification.message.includes("New Task Added")) {
+      backgroundColor = "blue";
+    } else {
+      backgroundColor = "black";
     }
 
-    // Function to update the unread count
-    function updateUnreadCount() {
-      if (unreadCount > 0) {
-        notificationCountElement.text(unreadCount);
-        notificationCountElement.show();
-      } else {
-        notificationCountElement.hide();
-      }
-    }
+    const notificationItem = `
+      <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: white;">
+        ${notification.message}<br>
+      </li>
+    `;
+    notificationList.append(notificationItem);
+  });
+}
 
-    // Toggle notifications dropdown visibility
-    $("#notificationIcon").on("click", async function () {
-      const isVisible = notificationDropdown.is(":visible");
+// Update the unread notification count
+function updateUnreadCount() {
+  if (unreadCount > 0) {
+    notificationCountElement.text(unreadCount);
+    notificationCountElement.show();
+  } else {
+    notificationCountElement.hide();
+  }
+}
 
-      if (isVisible) {
-        notificationDropdown.hide();
-      } else {
-        notificationDropdown.show();
-        await fetchNotifications(); // Fetch and render notifications on click
-        unreadCount = 0; // Reset unread count when notifications are viewed
-        updateUnreadCount();
-      }
-    });
+// Mark notifications as read when the dropdown is viewed
+async function markNotificationsAsRead() {
+  try {
+    await axios.post("/mark-notifications-read"); // Update your API endpoint
+    unreadCount = 0;
+    updateUnreadCount();
+  } catch (error) {
+    console.error("Error marking notifications as read:", error);
+  }
+}
 
-    // Close dropdown when clicking outside
-    $(document).on("click", function (event) {
-      if (
-        !$(event.target).closest("#notificationIcon").length &&
-        !$(event.target).closest("#notificationDropdown").length
-      ) {
-        notificationDropdown.hide();
-      }
-    });
-    fetchNotifications();
+// Toggle notification dropdown visibility
+notificationIcon.on("click", async function () {
+  const isVisible = notificationDropdown.is(":visible");
+
+  if (isVisible) {
+    notificationDropdown.hide();
+  } else {
+    notificationDropdown.show();
+    await fetchNotifications(); // Fetch notifications on click
+    await markNotificationsAsRead(); // Mark notifications as read
+  }
+});
+
+// Close dropdown when clicking outside
+$(document).on("click", function (event) {
+  if (
+    !$(event.target).closest("#notificationIcon").length &&
+    !$(event.target).closest("#notificationDropdown").length
+  ) {
+    notificationDropdown.hide();
+  }
+});
+
+// Initial fetch on page load
+fetchNotifications();
 // fetch task summary
 async function fetchTaskSummary() {
   try {
