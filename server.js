@@ -1070,13 +1070,17 @@ const notifications = await updateTaskStatuses();
   }
 });
 //getting task summary for a particular user
+const moment = require("moment-timezone");
+
 app.get("/tasks-summary", async (req, res) => {
   try {
     const { firstName } = req.query; 
-    console.log("task-summary--",firstName);
+    console.log("task-summary--", firstName);
+
     const taskGroups = await TaskGroup.find({
       "tasks.assignedTo": firstName, 
     });
+
     const summary = {
       completedOnTime: [],
       alert: [],
@@ -1084,41 +1088,49 @@ app.get("/tasks-summary", async (req, res) => {
       warning: [],
       notCompleted: [],
     };
-    console.log("taskGroups",taskGroups);
+
+    console.log("taskGroups", taskGroups);
+
     taskGroups.forEach((taskGroup) => {
       taskGroup.tasks.forEach((task) => {
-        const deadline = new Date(task.deadline);
+        const deadline = moment.tz(task.deadline, "America/Chicago").toDate();
         const completionTime = task.taskCompletionTime
-          ? new Date(task.taskCompletionTime)
+          ? moment.tz(task.taskCompletionTime, "America/Chicago").toDate()
           : null;
 
         if (task.taskStatus === "Completed" && completionTime) {
-          // Task completed on time or before the deadline
           if (completionTime <= deadline) {
             summary.completedOnTime.push({
               orderNo: taskGroup.orderNo,
               taskName: task.taskName,
+              deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
+              completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
             });
           } else {
             summary.completedLate.push({
               orderNo: taskGroup.orderNo,
               taskName: task.taskName,
+              deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
+              completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
             });
           }
         } else if (task.taskStatus === "Alert") {
           summary.alert.push({
             orderNo: taskGroup.orderNo,
             taskName: task.taskName,
+            deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
           });
         } else if (task.taskStatus === "Warning") {
           summary.warning.push({
             orderNo: taskGroup.orderNo,
             taskName: task.taskName,
+            deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
           });
         } else if (task.taskStatus !== "Completed") {
           summary.notCompleted.push({
             orderNo: taskGroup.orderNo,
             taskName: task.taskName,
+            deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
           });
         }
       });
