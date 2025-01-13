@@ -554,7 +554,10 @@ const taskSchema = new mongoose.Schema({
 });
 const notificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now },
+  timestamp: {
+    type: Date,
+    default: () => moment.tz(Date.now(), "America/Chicago").toDate(),
+  },
   isRead: { type: Boolean, default: false },
 });
 
