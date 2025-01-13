@@ -627,14 +627,14 @@ document.getElementById("notificationIcon").addEventListener("click", async () =
 // Fetch task summary filtered by logged-in user
 async function fetchTaskSummary() {
   try {
-    const response = await axios.get(`https://www.spotops360.com/totalTasks?firstName=${firstName}`, {
+    const response = await axios.get(`https://www.spotops360.com/tasks-summary?firstName=${firstName}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const summary = response.data;
-
+console.log("task-summary",summary);
     // Filter tasks by assignedTo matching logged-in user
     const filterTasks = (tasks) => tasks.filter((task) => task.assignedTo === firstName);
-console.log("filterTasks",filterTasks);
+
     const filteredSummary = {
       completedOnTime: filterTasks(summary.completedOnTime),
       alert: filterTasks(summary.alert),
