@@ -997,7 +997,7 @@ async function updateTaskStatuses() {
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true }, 
     });
-    console.log("Task Groups:", taskGroups);
+    // console.log("Task Groups:", taskGroups);
     let notifications = [];
     for (const taskGroup of taskGroups) {
       let isUpdated = false; 
@@ -1087,7 +1087,7 @@ app.get("/tasks-summary", async (req, res) => {
       notCompleted: [],
     };
 
-    console.log("taskGroups", taskGroups.length);
+    console.log("taskGroups for individual", taskGroups);
 
     taskGroups.forEach((taskGroup) => {
       taskGroup.tasks.forEach((task) => {
