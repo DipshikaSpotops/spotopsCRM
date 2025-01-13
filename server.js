@@ -1069,8 +1069,6 @@ const notifications = await updateTaskStatuses();
     res.status(500).json({ success: false, error: "Failed to fetch notifications." });
   }
 });
-//getting task summary for a particular user
-const moment = require("moment-timezone");
 
 app.get("/tasks-summary", async (req, res) => {
   try {
