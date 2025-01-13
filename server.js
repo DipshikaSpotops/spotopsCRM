@@ -1145,6 +1145,25 @@ app.get("/tasks-summary", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch task summary" });
   }
 });
+// API to fetch recent notifications
+app.get("/recent-notifications", async (req, res) => {
+  try {
+    // Fetch the last 5 notifications in descending order
+    const notifications = await RecentNotification.find({}, { timestamp: 0 }) // Exclude the 'timestamp' field
+    .sort({ _id: -1 }) // Sort by the most recent (_id is created in ascending order by default)
+    .limit(5); // Limit to the last 5 elements
+  
+  const cleanedNotifications = notifications.map(notification => ({
+    type: notification.type,
+    message: notification.message,
+  }));
+
+    res.status(200).json(cleanedNotifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
@@ -1192,25 +1211,7 @@ res.json(updatedOrder);
 res.status(400).send(err.message);
 }
 });
-// API to fetch recent notifications
-app.get("/recent-notifications", async (req, res) => {
-  try {
-    // Fetch the last 5 notifications in descending order
-    const notifications = await RecentNotification.find({}, { timestamp: 0 }) // Exclude the 'timestamp' field
-    .sort({ _id: -1 }) // Sort by the most recent (_id is created in ascending order by default)
-    .limit(5); // Limit to the last 5 elements
-  
-  const cleanedNotifications = notifications.map(notification => ({
-    type: notification.type,
-    message: notification.message,
-  }));
 
-    res.status(200).json(cleanedNotifications);
-  } catch (error) {
-    console.error("Error fetching notifications:", error);
-    res.status(500).json({ error: "Failed to fetch notifications" });
-  }
-});
 // changing the orderStatus and yrdStatus when reimbursement amount is added
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
 const { orderStatus, yardStatus, yardIndex } = req.body;
