@@ -590,39 +590,86 @@ $(this).addClass("active");
     await calculateTotalTasks();
 // notification
 async function fetchNotifications() {
-  try {
-    const response = await axios.get("https://www.spotops360.com/notifications", {
-                headers: { Authorization: `Bearer ${token}` }
-            });;
-    console.log("noti res",response.data);
-    const notifications = response.data.notifications;
-    const notificationCountElement = document.getElementById("notificationCount");
-    const count = notifications.length;
+      try {
+        const response = await axios.get("/recent-notifications"); // Update with your API endpoint
+        const notifications = response.data;
 
-    if (count > 0) {
-      notificationCountElement.textContent = count;
-      notificationCountElement.style.display = "block";
-    } else {
-      notificationCountElement.style.display = "none";
+        // Update the count for new notifications
+        unreadCount = notifications.length;
+        updateUnreadCount();
+        renderNotifications(notifications);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
     }
-    const notificationList = document.getElementById("notificationList");
-    // notificationList.innerHTML = ""; // Clear old notifications
 
-    notifications.forEach((notification) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = notification.message;
-      notificationList.appendChild(listItem);
+    // Function to render notifications
+    function renderNotifications(notifications) {
+      notificationList.empty(); // Clear current notifications
+      notifications.forEach((notification) => {
+        let backgroundColor;
+        switch (notification.type) {
+          case "Warning":
+            backgroundColor = "red";
+            break;
+          case "Alert":
+            backgroundColor = "orange";
+            break;
+          case "Task Completed":
+            backgroundColor = "green";
+            break;
+          case "New Task Added":
+            backgroundColor = "blue";
+            break;
+          default:
+            backgroundColor = "black";
+        }
+
+        const notificationItem = `
+          <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: white;">
+            <strong>${notification.type}:</strong><br>
+            ${notification.message}<br>
+            <small>${notification.timestamp}</small>
+          </li>
+        `;
+        notificationList.append(notificationItem);
+      });
+    }
+
+    // Function to update the unread count
+    function updateUnreadCount() {
+      if (unreadCount > 0) {
+        notificationCountElement.text(unreadCount);
+        notificationCountElement.show();
+      } else {
+        notificationCountElement.hide();
+      }
+    }
+
+    // Toggle notifications dropdown visibility
+    notificationIcon.on("click", async function () {
+      const isVisible = notificationDropdown.is(":visible");
+
+      if (isVisible) {
+        notificationDropdown.hide();
+      } else {
+        notificationDropdown.show();
+        await fetchNotifications(); // Fetch and render notifications on click
+        unreadCount = 0; // Reset unread count when notifications are viewed
+        updateUnreadCount();
+      }
     });
-  } catch (error) {
-    console.error("Error fetching notifications:", error);
-  }
-}
-setInterval(fetchNotifications, 60 * 1000);
-fetchNotifications();
-document.getElementById("notificationIcon").addEventListener("click", async () => {
-  const dropdown = document.getElementById("notificationDropdown");
-  dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-});
+
+    // Close dropdown when clicking outside
+    $(document).on("click", function (event) {
+      if (
+        !$(event.target).closest("#notificationIcon").length &&
+        !$(event.target).closest("#notificationDropdown").length
+      ) {
+        notificationDropdown.hide();
+      }
+    });
+    fetchNotifications();
 // fetch task summary
 async function fetchTaskSummary() {
   try {
@@ -660,7 +707,3 @@ fetchTaskSummary();
 </script>
 </body>
 </html>
-<!--  i have the following function right now
-fetchNotifications()
-so i ahve a collection called recentnotifications  
--->

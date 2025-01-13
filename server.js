@@ -1192,6 +1192,20 @@ res.json(updatedOrder);
 res.status(400).send(err.message);
 }
 });
+// API to fetch recent notifications
+app.get("/recent-notifications", async (req, res) => {
+  try {
+    // Fetch the last 5 notifications in descending order
+    const notifications = await RecentNotification.find()
+      .sort({ timestamp: -1 }) // Sort by most recent
+      .limit(5);
+
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
 // changing the orderStatus and yrdStatus when reimbursement amount is added
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
 const { orderStatus, yardStatus, yardIndex } = req.body;
