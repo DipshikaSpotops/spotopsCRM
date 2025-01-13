@@ -1087,10 +1087,11 @@ app.get("/tasks-summary", async (req, res) => {
       notCompleted: [],
     };
 
-    console.log("taskGroups for individual", taskGroups.orderNo);
+    console.log("taskGroups for individual", taskGroups);
 
     taskGroups.forEach((taskGroup) => {
       taskGroup.tasks.forEach((task) => {
+        console.log("assignedTo",task.assignedTo);
         const deadline = moment.tz(task.deadline, "America/Chicago").toDate();
         const completionTime = task.taskCompletionTime
           ? moment.tz(task.taskCompletionTime, "America/Chicago").toDate()
