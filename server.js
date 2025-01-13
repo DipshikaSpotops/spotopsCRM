@@ -1196,11 +1196,16 @@ res.status(400).send(err.message);
 app.get("/recent-notifications", async (req, res) => {
   try {
     // Fetch the last 5 notifications in descending order
-    const notifications = await RecentNotification.find()
-      .sort({ timestamp: -1 }) // Sort by most recent
-      .limit(5);
+    const notifications = await RecentNotification.find({}, { timestamp: 0 }) // Exclude the 'timestamp' field
+    .sort({ _id: -1 }) // Sort by the most recent (_id is created in ascending order by default)
+    .limit(5); // Limit to the last 5 elements
+  
+  const cleanedNotifications = notifications.map(notification => ({
+    type: notification.type,
+    message: notification.message,
+  }));
 
-    res.status(200).json(notifications);
+    res.status(200).json(cleanedNotifications);
   } catch (error) {
     console.error("Error fetching notifications:", error);
     res.status(500).json({ error: "Failed to fetch notifications" });
