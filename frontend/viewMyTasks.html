@@ -657,14 +657,16 @@ function updateUnreadCount() {
 
 // Mark notifications as read when the dropdown is viewed
 async function markNotificationsAsRead() {
+  const userId = localStorage.getItem("firstName");
   try {
-    await axios.post("/mark-notifications-read"); // Update your API endpoint
+    await axios.post("/mark-notifications-read", { userId });
     unreadCount = 0;
     updateUnreadCount();
   } catch (error) {
     console.error("Error marking notifications as read:", error);
   }
 }
+
 
 // Toggle notification dropdown visibility
 notificationIcon.on("click", async function () {

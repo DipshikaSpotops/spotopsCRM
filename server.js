@@ -1165,15 +1165,18 @@ app.get("/recent-notifications", async (req, res) => {
   }
 });
 app.post("/mark-notifications-read", async (req, res) => {
+  const userId = req.user.id; 
   try {
-    await RecentNotification.updateMany({ isRead: false }, { $set: { isRead: true } });
+    await RecentNotification.updateMany(
+      { userId, isRead: false },
+      { $set: { isRead: true } }
+    );
     res.status(200).send("Notifications marked as read");
   } catch (error) {
     console.error("Error marking notifications as read:", error);
     res.status(500).send("Error marking notifications as read");
   }
 });
-
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
