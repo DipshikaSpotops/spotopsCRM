@@ -329,32 +329,44 @@ aria-labelledby="userMenu"
     <table class="table table-bordered" id="taskSummaryTable">
       <thead>
         <tr>
-          <th>Completed On Time</th>
-          <th>Alert</th>
-          <th>Completed Late</th>
-          <th>Warning</th>
-          <th>Not Completed</th>
+          <th>Category</th>
+          <th>Count</th>
+          <th>Orders</th>
         </tr>
       </thead>
       <tbody>
-        <!-- First Row for Counts -->
+        <!-- Row for Completed On Time -->
         <tr>
+          <th>Completed On Time</th>
           <td id="completedOnTimeCount"></td>
-          <td id="alertCount"></td>
-          <td id="completedLateCount"></td>
-          <td id="warningCount"></td>
-          <td id="notCompletedCount"></td>
-        </tr>
-        <!-- Second Row for Orders -->
-        <tr>
           <td id="completedOnTimeOrders"></td>
+        </tr>
+        <!-- Row for Alert -->
+        <tr>
+          <th>Alert</th>
+          <td id="alertCount"></td>
           <td id="alertOrders"></td>
+        </tr>
+        <!-- Row for Completed Late -->
+        <tr>
+          <th>Completed Late</th>
+          <td id="completedLateCount"></td>
           <td id="completedLateOrders"></td>
+        </tr>
+        <!-- Row for Warning -->
+        <tr>
+          <th>Warning</th>
+          <td id="warningCount"></td>
           <td id="warningOrders"></td>
+        </tr>
+        <!-- Row for Not Completed -->
+        <tr>
+          <th>Not Completed</th>
+          <td id="notCompletedCount"></td>
           <td id="notCompletedOrders"></td>
         </tr>
       </tbody>
-    </table>    
+    </table>     
   </div>  
 <div
 class="modal fade"
