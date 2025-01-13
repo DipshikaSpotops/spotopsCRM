@@ -1165,10 +1165,10 @@ app.get("/recent-notifications", async (req, res) => {
   }
 });
 app.post("/mark-notifications-read", async (req, res) => {
-  const userId = req.user.id; 
+  const userId = req.body.userId;
   try {
     await RecentNotification.updateMany(
-      { userId, isRead: false },
+      { userId, isRead: false }, // Only unread notifications for this user
       { $set: { isRead: true } }
     );
     res.status(200).send("Notifications marked as read");
@@ -1177,6 +1177,7 @@ app.post("/mark-notifications-read", async (req, res) => {
     res.status(500).send("Error marking notifications as read");
   }
 });
+
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
