@@ -1147,7 +1147,7 @@ app.get("/tasks-summary", async (req, res) => {
 });
 // API to fetch recent notifications
 app.get('/recent-notifications', async (req, res) => {
-  const { userId } = req.query.userId;
+  const userId  = req.query.userId;
   console.log("user",userId);
   try {
     const notifications = await RecentNotification.find()
