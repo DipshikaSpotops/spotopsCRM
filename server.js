@@ -1050,7 +1050,7 @@ async function updateTaskStatuses() {
     }
     // Save notifications to the database
     for (const notification of notifications) {
-      console.log("notification",notification);
+      console.log("Recent-not",notification);
       await RecentNotification.create({ message: notification.message});
     }
     return notifications; 
