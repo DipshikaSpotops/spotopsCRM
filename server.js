@@ -1158,6 +1158,7 @@ app.get('/recent-notifications', async (req, res) => {
       ...notification._doc,
       isRead: notification.readBy.includes(userId),
     }));
+    console.log("userSpecificNotifications",userSpecificNotifications);
     res.status(200).json(userSpecificNotifications);
   } catch (error) {
     res.status(500).send({ error: 'Error fetching notifications' });
