@@ -1167,7 +1167,7 @@ const notifications = await updateTaskStatuses();
   }
 });
 app.post('/mark-notifications-read', async (req, res) => {
-  const userId  = req.params.userId;
+  const userId  = req.params;
   console.log("to see readBy",userId);
   try {
     await RecentNotification.updateMany(
