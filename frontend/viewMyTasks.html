@@ -615,7 +615,7 @@ let unreadCount = 0;
 // Fetch notifications from the backend
 async function fetchNotifications() {
   try {
-    const response = await axios.get("/recent-notifications"); // Your API endpoint
+    const response = await axios.get("/notifications"); // Your API endpoint
     const notifications = response.data;
 
     // Filter unread notifications
