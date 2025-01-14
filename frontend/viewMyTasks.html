@@ -181,6 +181,36 @@ background-color: #333;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
+.matrix-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2x2 grid */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.matrix-box {
+  border: 2px solid white;
+  background-color: #1a75d1;
+  border-radius: 10px;
+  padding: 20px;
+  color: #ffd700;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.matrix-box h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.matrix-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.matrix-box ul li {
+  padding: 5px 0;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -323,51 +353,47 @@ aria-labelledby="userMenu"
 </nav>
 </div>
 </div>
-  <div class="main-content">
-    <h1 class="fixed-header" style="text-align: center; margin-right: 1%;color: #d7d2a8;margin-top: -1%;">View Task Summary</h1>
-    <h3 class="fixed-header" style="text-align: center;margin-right: 15%;white-space: nowrap;width: 100%;border-bottom: 2px solid #d7d2a8;color: #d7d2a8;margin-bottom: 1%;" id="total-tasks">View My Tasks</h3>
-    <table class="table table-bordered" id="taskSummaryTable">
-      <thead>
-        <tr>
-          <th style="color: white">Category</th>
-          <th style="color: white">Count</th>
-          <th style="color: white">Orders</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Row for Completed On Time -->
-        <tr>
-          <th style="color: white">Completed On Time</th>
-          <td id="completedOnTimeCount" style="color: white"></td>
-          <td id="completedOnTimeOrders"style="color: white"></td>
-        </tr>
-        <!-- Row for Alert -->
-        <tr>
-          <th style="color: white">Alert</th>
-          <td style="color: white"id="alertCount"></td>
-          <td style="color: white"id="alertOrders"></td>
-        </tr>
-        <!-- Row for Completed Late -->
-        <tr>
-          <th style="color: white">Completed Late</th>
-          <td style="color: white"id="completedLateCount"></td>
-          <td style="color: white"id="completedLateOrders"></td>
-        </tr>
-        <!-- Row for Warning -->
-        <tr>
-          <th style="color: white">Warning</th>
-          <td style="color: white"id="warningCount"></td>
-          <td style="color: white"id="warningOrders"></td>
-        </tr>
-        <!-- Row for Not Completed -->
-        <tr>
-          <th style="color: white">Not Completed</th>
-          <td style="color: white"id="notCompletedCount"></td>
-          <td style="color: white"id="notCompletedOrders"></td>
-        </tr>
-      </tbody>
-    </table>     
-  </div>  
+<div class="main-content">
+  <h1 class="fixed-header" style="text-align: center; color: #d7d2a8;">Task Prioritization Technique Matrix</h1>
+  <div class="matrix-container">
+    <div class="matrix-box">
+      <h3>Completed On Time</h3>
+      <ul>
+        <li id="completedOnTimeCount">Count: 0</li>
+        <li id="completedOnTimeOrders">Orders: </li>
+      </ul>
+    </div>
+    <div class="matrix-box">
+      <h3>Alert</h3>
+      <ul>
+        <li id="alertCount">Count: 0</li>
+        <li id="alertOrders">Orders: </li>
+      </ul>
+    </div>
+    <div class="matrix-box">
+      <h3>Completed Late</h3>
+      <ul>
+        <li id="completedLateCount">Count: 0</li>
+        <li id="completedLateOrders">Orders: </li>
+      </ul>
+    </div>
+    <div class="matrix-box">
+      <h3>Warning</h3>
+      <ul>
+        <li id="warningCount">Count: 0</li>
+        <li id="warningOrders">Orders: </li>
+      </ul>
+    </div>
+    <div class="matrix-box">
+      <h3>Not Completed</h3>
+      <ul>
+        <li id="notCompletedCount">Count: 0</li>
+        <li id="notCompletedOrders">Orders: </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <div
 class="modal fade"
 id="profileModal"
@@ -750,4 +776,3 @@ fetchTaskSummary();
 </script>
 </body>
 </html>
-<!-- in the above html page, i have five categories, but i am uploading the above picture, can we make it look like that except for the picture -->
