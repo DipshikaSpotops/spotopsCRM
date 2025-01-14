@@ -185,34 +185,88 @@ text-align: center;
 background-color: black;
 }
 /* Dark Mode Styles */
-body.dark-mode {
+/* for dark mode */
+.dark-mode {
 background-color: #121212;
-color: #ffffff;
+color: #e0e0e0;
 }
-.navbar.dark-mode {
-background-color: #1e1e1e;
-color: #ffffff;
+.dark-mode .navbar, 
+.dark-mode .sidebar {
+background-color: #1f1f1f;
+border-color: #333;
 }
-.sidebar.dark-mode {
-background-color: #1e1e1e;
-color: #ffffff;
+
+.dark-mode .nav-link,
+.dark-mode .nav-link i {
+color: #b3b3b3 !important;
 }
-.table.table-dark {
-background-color: #252525;
-color: #ffffff;
+
+.dark-mode .nav-link:hover,
+.dark-mode .nav-link.selected {
+background-color: rgba(255, 255, 255, 0.1);
 }
-.table.table-dark td,
-.table.table-dark th {
-border-color: #444;
+
+.dark-mode .main-content {
+background-color: #121212;
+color: #e0e0e0;
 }
-.dark-mode .btn {
-background-color: #444;
-color: #fff;
+
+.dark-mode .chart-wrapper,
+.dark-mode .chart-item-monthly {
+background-color: #1f1f1f;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
-.dark-mode .form-control {
-background-color: #1e1e1e;
-color: #656363;
-border: 1px solid #555;
+
+.dark-mode .rate-item {
+background-color: #333;
+}
+/* notification */
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  display: none; 
+}
+
+.notification-dropdown ul {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  /* border: 1px solid black; */
+}
+.notification-dropdown ul li {
+  padding: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.notification-dropdown ul li:last-child {
+  border-bottom: none;
+}
+#notificationDropdown {
+  overflow-y: auto;
+  /* padding: 10px; */
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  width: 234%;
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border: 2px solid black;
+}
+#viewAlltasks {
+  margin: 3% 37%;
+    border: none;
+    text-decoration-line: underline;
+    color: red;
+    font-weight: bold;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
