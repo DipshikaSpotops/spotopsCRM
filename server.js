@@ -1165,7 +1165,7 @@ app.get('/recent-notifications', async (req, res) => {
   }
 });
 app.post('/mark-notifications-read', async (req, res) => {
-  const { userId } = req.body;
+  const userId  = req.query.userId;
   console.log("to see readBy",userId);
   try {
     await RecentNotification.updateMany(
