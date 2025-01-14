@@ -17,7 +17,7 @@ body {
 display: flex;
 overflow-x: hidden;
 flex-direction: column;
-background-color: #0c4999;
+background-color: #6d8bb2;
 }
 #logoImg {
 height: auto;
@@ -353,47 +353,66 @@ aria-labelledby="userMenu"
 </nav>
 </div>
 </div>
-<div class="main-content">
-  <h1 class="fixed-header" style="text-align: center; margin-right: 1%;color: #d7d2a8;margin-top: -1%;">View Task Summary</h1>
+<h1 class="fixed-header" style="text-align: center; margin-right: 1%;color: #d7d2a8;margin-top: -1%;">View Task Summary</h1>
     <h3 class="fixed-header" style="text-align: center;margin-right: 15%;white-space: nowrap;width: 100%;border-bottom: 2px solid #d7d2a8;color: #d7d2a8;margin-bottom: 1%;" id="total-tasks">View My Tasks</h3>
-  <div class="matrix-container">
-    <div class="matrix-box">
-      <h3>Completed On Time</h3>
-      <ul>
-        <li id="completedOnTimeCount">Count: 0</li>
-        <li id="completedOnTimeOrders">Orders: </li>
-      </ul>
+    <div class="main-content">
+      <h1 class="fixed-header" style="text-align: center; margin-right: 1%;color: #d7d2a8;margin-top: -1%;">View Task Summary</h1>
+      <table class="table table-bordered text-center" style="color: white; margin-top: 20px;">
+        <thead>
+          <tr>
+            <th>Completed On Time</th>
+            <th>Alert</th>
+            <th>Completed Late</th>
+            <th>Warning</th>
+            <th>Not Completed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span id="completedOnTimeCount">Count: 0</span><br />
+              <button class="btn btn-primary btn-sm view-orders-btn" data-category="completedOnTime">View Orders</button>
+            </td>
+            <td>
+              <span id="alertCount">Count: 0</span><br />
+              <button class="btn btn-warning btn-sm view-orders-btn" data-category="alert">View Orders</button>
+            </td>
+            <td>
+              <span id="completedLateCount">Count: 0</span><br />
+              <button class="btn btn-danger btn-sm view-orders-btn" data-category="completedLate">View Orders</button>
+            </td>
+            <td>
+              <span id="warningCount">Count: 0</span><br />
+              <button class="btn btn-secondary btn-sm view-orders-btn" data-category="warning">View Orders</button>
+            </td>
+            <td>
+              <span id="notCompletedCount">Count: 0</span><br />
+              <button class="btn btn-dark btn-sm view-orders-btn" data-category="notCompleted">View Orders</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="matrix-box">
-      <h3>Alert</h3>
-      <ul>
-        <li id="alertCount">Count: 0</li>
-        <li id="alertOrders">Orders: </li>
-      </ul>
+    
+    <!-- Modal for Viewing Orders -->
+    <div class="modal fade" id="ordersModal" tabindex="-1" role="dialog" aria-labelledby="ordersModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ordersModalLabel">Orders for <span id="categoryTitle"></span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul id="ordersList" style="list-style-type: none; padding-left: 0;"></ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="matrix-box">
-      <h3>Completed Late</h3>
-      <ul>
-        <li id="completedLateCount">Count: 0</li>
-        <li id="completedLateOrders">Orders: </li>
-      </ul>
-    </div>
-    <div class="matrix-box">
-      <h3>Warning</h3>
-      <ul>
-        <li id="warningCount">Count: 0</li>
-        <li id="warningOrders">Orders: </li>
-      </ul>
-    </div>
-    <div class="matrix-box">
-      <h3>Not Completed</h3>
-      <ul>
-        <li id="notCompletedCount">Count: 0</li>
-        <li id="notCompletedOrders">Orders: </li>
-      </ul>
-    </div>
-  </div>
-</div>
 
 <div
 class="modal fade"
@@ -742,38 +761,61 @@ $(document).on("click", function (event) {
 fetchNotifications();
 // fetch task summary
 async function fetchTaskSummary() {
-  try {
-    const response = await axios.get(`https://www.spotops360.com/tasks-summary?firstName=${firstName}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const summary = response.data;
-    document.getElementById('completedOnTimeCount').textContent = summary.completedOnTime.length;
-    document.getElementById('alertCount').textContent = summary.alert.length;
-    document.getElementById('completedLateCount').textContent = summary.completedLate.length;
-    document.getElementById('warningCount').textContent = summary.warning.length;
-    document.getElementById('notCompletedCount').textContent = summary.notCompleted.length;
-    document.getElementById('completedOnTimeOrders').innerHTML = summary.completedOnTime
-      .map((task) => `${task.orderNo} - ${task.taskName}`)
-      .join('<br>');
-    document.getElementById('alertOrders').innerHTML = summary.alert
-      .map((task) => `${task.orderNo} - ${task.taskName}`)
-      .join('<br>');
-    document.getElementById('completedLateOrders').innerHTML = summary.completedLate
-      .map((task) => `${task.orderNo} - ${task.taskName}`)
-      .join('<br>');
-    document.getElementById('warningOrders').innerHTML = summary.warning
-      .map((task) => `${task.orderNo} - ${task.taskName}`)
-      .join('<br>');
-    document.getElementById('notCompletedOrders').innerHTML = summary.notCompleted
-      .map((task) => `${task.orderNo} - ${task.taskName}`)
-      .join('<br>');
-  } catch (error) {
-    console.error('Error fetching task summary:', error);
-  }
-}
-fetchTaskSummary();
+      try {
+        const response = await axios.get(`https://www.spotops360.com/tasks-summary?firstName=${firstName}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const summary = response.data;
 
-});
+        // Update counts
+        document.getElementById("completedOnTimeCount").textContent = `Count: ${summary.completedOnTime.length}`;
+        document.getElementById("alertCount").textContent = `Count: ${summary.alert.length}`;
+        document.getElementById("completedLateCount").textContent = `Count: ${summary.completedLate.length}`;
+        document.getElementById("warningCount").textContent = `Count: ${summary.warning.length}`;
+        document.getElementById("notCompletedCount").textContent = `Count: ${summary.notCompleted.length}`;
+
+        // Attach data for modal
+        $(".view-orders-btn").on("click", function () {
+          const category = $(this).data("category");
+          let orders;
+          let title;
+
+          switch (category) {
+            case "completedOnTime":
+              orders = summary.completedOnTime;
+              title = "Completed On Time";
+              break;
+            case "alert":
+              orders = summary.alert;
+              title = "Alert";
+              break;
+            case "completedLate":
+              orders = summary.completedLate;
+              title = "Completed Late";
+              break;
+            case "warning":
+              orders = summary.warning;
+              title = "Warning";
+              break;
+            case "notCompleted":
+              orders = summary.notCompleted;
+              title = "Not Completed";
+              break;
+          }
+
+          $("#categoryTitle").text(title);
+          const ordersList = orders.map(
+            (task) => `<li>${task.orderNo} - ${task.taskName}</li>`
+          );
+          $("#ordersList").html(ordersList.join(""));
+          $("#ordersModal").modal("show");
+        });
+      } catch (error) {
+        console.error("Error fetching task summary:", error);
+      }
+    }
+    fetchTaskSummary();
+    });
 </script>
 </body>
 </html>
