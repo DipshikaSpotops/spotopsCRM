@@ -1166,7 +1166,7 @@ app.get('/recent-notifications', async (req, res) => {
 });
 app.post('/mark-notifications-read', async (req, res) => {
   const { userId } = req.body;
-  console.log("to see readBy");
+  console.log("to see readBy",readBy);
   try {
     await RecentNotification.updateMany(
       { readBy: { $ne: userId } }, // Only update if userId is not in the readBy array
