@@ -157,6 +157,7 @@ background-color: #333;
   list-style: none;
   padding: 10px;
   margin: 0;
+  border: 1px solid black;
 }
 .notification-dropdown ul li {
   padding: 8px;
@@ -671,14 +672,19 @@ function updateUnreadCount() {
     notificationCountElement.hide();
   }
 }
-
 // Mark notifications as read when the dropdown is viewed
 async function markNotificationsAsRead() {
-  const userId = localStorage.getItem("firstName");
   try {
-    await axios.post(`https://www.spotops360.com/mark-notifications-read"?userId= ${ userId }`);
+    if (!firstName) {
+      console.error("User ID not found. Cannot mark notifications as read.");
+      return;
+    }
+    await axios.post(`https://www.spotops360.com/mark-notifications-read`, null, {
+      params: { userId }, 
+    });
     unreadCount = 0;
     updateUnreadCount();
+    console.log("Notifications marked as read successfully.");
   } catch (error) {
     console.error("Error marking notifications as read:", error);
   }
@@ -692,8 +698,8 @@ notificationIcon.on("click", async function () {
     notificationDropdown.hide();
   } else {
     notificationDropdown.show();
-    await fetchNotifications(); // Fetch notifications on click
-    await markNotificationsAsRead(); // Mark notifications as read
+    await fetchNotifications();
+    await markNotificationsAsRead();
   }
 });
 
