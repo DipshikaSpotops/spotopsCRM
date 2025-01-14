@@ -616,7 +616,7 @@ let unreadCount = 0;
 async function fetchNotifications() {
   try {
     const response = await axios.get("https://www.spotops360.com/notifications");
-    //     const notifications = response.data;
+        const notifications = response.data;
 
     // Filter unread notifications
     const unreadNotifications = notifications.filter(
