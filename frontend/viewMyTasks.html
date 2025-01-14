@@ -686,13 +686,13 @@ function renderNotifications(notifications) {
     let backgroundColor;
 
     if (notification.message.includes("Warning")) {
-      backgroundColor = "red";
+      backgroundColor = "#db634a";
     } else if (notification.message.includes("Alert")) {
-      backgroundColor = "orange";
+      backgroundColor = "#fdb044";
     } else if (notification.message.includes("Task Completed")) {
-      backgroundColor = "green";
+      backgroundColor = "#aae3c0";
     } else if (notification.message.includes("New Task added")){
-      backgroundColor = "white";
+      backgroundColor = "#efefef";
     } else {
       backgroundColor = "black";
     }
