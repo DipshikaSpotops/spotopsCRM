@@ -672,7 +672,7 @@ function updateUnreadCount() {
 // Mark notifications as read for this user
 async function markNotificationsAsRead() {
   try {
-    await axios.post(`https://www.spotops360.com/mark-notifications-read?userId=${firsName}`);
+    await axios.post(`https://www.spotops360.com/mark-notifications-read?userId=${firstName}`);
     unreadCount = 0; // Reset unread count
     updateUnreadCount();   
   } catch (error) {
