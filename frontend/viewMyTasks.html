@@ -605,6 +605,7 @@ $(this).addClass("active");
     }
     await calculateTotalTasks();
 // notification
+const userId = localStorage.getItem("userId"); // User-specific ID
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
 const notificationList = $("#notificationList");
@@ -612,13 +613,13 @@ const notificationCountElement = $("#notificationCount");
 
 let unreadCount = 0;
 
-// Fetch notifications from the backend
+// Fetch notifications for all users but track user-specific read status
 async function fetchNotifications() {
   try {
-    const response = await axios.get("/recent-notifications"); // Your API endpoint
+    const response = await axios.get(`/recent-notifications?userId=${userId}`);
     const notifications = response.data;
 
-    // Filter unread notifications
+    // Filter unread notifications for this user
     const unreadNotifications = notifications.filter(
       (notification) => !notification.isRead
     );
@@ -669,12 +670,11 @@ function updateUnreadCount() {
   }
 }
 
-// Mark notifications as read when the dropdown is viewed
+// Mark notifications as read for this user
 async function markNotificationsAsRead() {
-  const userId = localStorage.getItem("firstName");
   try {
     await axios.post("/mark-notifications-read", { userId });
-    unreadCount = 0;
+    unreadCount = 0; // Reset unread count
     updateUnreadCount();
   } catch (error) {
     console.error("Error marking notifications as read:", error);
@@ -690,7 +690,7 @@ notificationIcon.on("click", async function () {
   } else {
     notificationDropdown.show();
     await fetchNotifications(); // Fetch notifications on click
-    await markNotificationsAsRead(); // Mark notifications as read
+    await markNotificationsAsRead(); // Mark notifications as read for this user
   }
 });
 
@@ -703,8 +703,6 @@ $(document).on("click", function (event) {
     notificationDropdown.hide();
   }
 });
-
-// Initial fetch on page load
 fetchNotifications();
 // fetch task summary
 async function fetchTaskSummary() {

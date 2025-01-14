@@ -555,7 +555,7 @@ const taskSchema = new mongoose.Schema({
 const notificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
   timestamp: { type: String },
-  isRead: { type: Boolean, default: false },
+  readBy: [{ type: String }], // Array of user IDs who have read the notification,
 });
 
 const RecentNotification = mongoose.model('RecentNotification', notificationSchema);
@@ -1146,37 +1146,37 @@ app.get("/tasks-summary", async (req, res) => {
   }
 });
 // API to fetch recent notifications
-app.get("/recent-notifications", async (req, res) => {
+app.get('/recent-notifications', async (req, res) => {
+  const { userId } = req.query;
+  console.log("user",userId);
   try {
-    // Fetch the last 5 notifications in descending order
-    const notifications = await RecentNotification.find({}, { timestamp: 0 }) // Exclude the 'timestamp' field
-    .sort({ _id: -1 }) // Sort by the most recent (_id is created in ascending order by default)
-    .limit(5); // Limit to the last 5 elements
-  
-  const cleanedNotifications = notifications.map(notification => ({
-    type: notification.type,
-    message: notification.message,
-  }));
-
-    res.status(200).json(cleanedNotifications);
+    const notifications = await RecentNotification.find()
+      .sort({ _id: -1 })
+      .limit(5);
+    // Marking notifications as unread for this user if they are not in the readBy array
+    const userSpecificNotifications = notifications.map((notification) => ({
+      ...notification._doc,
+      isRead: notification.readBy.includes(userId),
+    }));
+    res.status(200).json(userSpecificNotifications);
   } catch (error) {
-    console.error("Error fetching notifications:", error);
-    res.status(500).json({ error: "Failed to fetch notifications" });
+    res.status(500).send({ error: 'Error fetching notifications' });
   }
 });
-app.post("/mark-notifications-read", async (req, res) => {
-  const userId = req.body.userId;
+app.post('/mark-notifications-read', async (req, res) => {
+  const { userId } = req.body;
   try {
     await RecentNotification.updateMany(
-      { userId, isRead: false }, // Only unread notifications for this user
-      { $set: { isRead: true } }
+      { readBy: { $ne: userId } }, // Only update if userId is not in the readBy array
+      { $addToSet: { readBy: userId } } // Add userId to the readBy array
     );
-    res.status(200).send("Notifications marked as read");
+
+    res.status(200).send({ message: 'Notifications marked as read' });
   } catch (error) {
-    console.error("Error marking notifications as read:", error);
-    res.status(500).send("Error marking notifications as read");
+    res.status(500).send({ error: 'Error marking notifications as read' });
   }
 });
+
 
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {
