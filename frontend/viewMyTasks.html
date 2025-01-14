@@ -615,7 +615,7 @@ let unreadCount = 0;
 // Fetch notifications for all users but track user-specific read status
 async function fetchNotifications() {
   try {
-    const response = await axios.get(`/recent-notifications?userId=${firstName}`);
+    const response = await axios.get(`https://www.spotops360.com/recent-notifications?userId=${firstName}`);
     const notifications = response.data;
 
     // Filter unread notifications for this user
@@ -672,9 +672,9 @@ function updateUnreadCount() {
 // Mark notifications as read for this user
 async function markNotificationsAsRead() {
   try {
-    await axios.post("/mark-notifications-read", { firstName });
+    await axios.post("https://www.spotops360.com/mark-notifications-read", { firstName });
     unreadCount = 0; // Reset unread count
-    updateUnreadCount();
+    updateUnreadCount();   
   } catch (error) {
     console.error("Error marking notifications as read:", error);
   }
