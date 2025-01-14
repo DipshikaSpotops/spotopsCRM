@@ -615,8 +615,8 @@ let unreadCount = 0;
 // Fetch notifications from the backend
 async function fetchNotifications() {
   try {
-    const response = await axios.get("/notifications"); // Your API endpoint
-    const notifications = response.data;
+    const response = await axios.get("https://www.spotops360.com/notifications");
+    //     const notifications = response.data;
 
     // Filter unread notifications
     const unreadNotifications = notifications.filter(
@@ -634,7 +634,8 @@ async function fetchNotifications() {
 
 // Render notifications in the dropdown
 function renderNotifications(notifications) {
-  notificationList.empty(); // Clear current notifications
+  notificationList.empty(); 
+  console.log("notificat",notifications);
   notifications.forEach((notification) => {
     let backgroundColor;
 
@@ -675,7 +676,7 @@ function updateUnreadCount() {
 async function markNotificationsAsRead() {
   const userId = localStorage.getItem("firstName");
   try {
-    await axios.post("/mark-notifications-read", { userId });
+    await axios.post(`https://www.spotops360.com/mark-notifications-read"?userId= ${ userId }`);
     unreadCount = 0;
     updateUnreadCount();
   } catch (error) {
