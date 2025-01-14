@@ -612,13 +612,13 @@ const notificationCountElement = $("#notificationCount");
 
 let unreadCount = 0;
 
-// Fetch notifications for all users but track user-specific read status
+// Fetch notifications from the backend
 async function fetchNotifications() {
   try {
-    const response = await axios.get(`https://www.spotops360.com/recent-notifications?userId=${firstName}`);
+    const response = await axios.get("/recent-notifications"); // Your API endpoint
     const notifications = response.data;
 
-    // Filter unread notifications for this user
+    // Filter unread notifications
     const unreadNotifications = notifications.filter(
       (notification) => !notification.isRead
     );
@@ -669,12 +669,13 @@ function updateUnreadCount() {
   }
 }
 
-// Mark notifications as read for this user
+// Mark notifications as read when the dropdown is viewed
 async function markNotificationsAsRead() {
+  const userId = localStorage.getItem("firstName");
   try {
-    await axios.post(`https://www.spotops360.com/mark-notifications-read?userId=${firstName}`);
-    unreadCount = 0; // Reset unread count
-    updateUnreadCount();   
+    await axios.post("/mark-notifications-read", { userId });
+    unreadCount = 0;
+    updateUnreadCount();
   } catch (error) {
     console.error("Error marking notifications as read:", error);
   }
@@ -689,7 +690,7 @@ notificationIcon.on("click", async function () {
   } else {
     notificationDropdown.show();
     await fetchNotifications(); // Fetch notifications on click
-    await markNotificationsAsRead(); // Mark notifications as read for this user
+    await markNotificationsAsRead(); // Mark notifications as read
   }
 });
 
@@ -702,6 +703,8 @@ $(document).on("click", function (event) {
     notificationDropdown.hide();
   }
 });
+
+// Initial fetch on page load
 fetchNotifications();
 // fetch task summary
 async function fetchTaskSummary() {
