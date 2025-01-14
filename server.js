@@ -997,7 +997,7 @@ async function updateTaskStatuses() {
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true }, 
     });
-    // console.log("Task Groups:", taskGroups);
+    console.log("Task Groups:", taskGroups);
     let notifications = [];
     for (const taskGroup of taskGroups) {
       let isUpdated = false; 
