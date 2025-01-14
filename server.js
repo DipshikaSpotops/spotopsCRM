@@ -997,7 +997,7 @@ async function updateTaskStatuses() {
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true }, 
     });
-    console.log("Task Groups:", taskGroups);
+    // console.log("Task Groups:", taskGroups);
     let notifications = [];
     for (const taskGroup of taskGroups) {
       let isUpdated = false; 
@@ -1050,7 +1050,7 @@ async function updateTaskStatuses() {
     }
     // Save notifications to the database
     for (const notification of notifications) {
-      console.log("Recent-not",notification);
+      console.log("Recent-noyin",notification);
       await RecentNotification.create({ message: notification.message});
     }
     return notifications; 
@@ -1058,17 +1058,17 @@ async function updateTaskStatuses() {
     console.error("Error updating task statuses:", error);
   }
 }
-app.get("/notifications", async (req, res) => {
-  console.log("notifications")
-  try {
-const notifications = await updateTaskStatuses(); 
-    console.log("notis",notifications);
-    res.json({ success: true, notifications });
-  } catch (error) {
-    console.error("Error fetching notifications:", error);
-    res.status(500).json({ success: false, error: "Failed to fetch notifications." });
-  }
-});
+// app.get("/notifications", async (req, res) => {
+//   console.log("notifications")
+//   try {
+// const notifications = await updateTaskStatuses(); 
+//     console.log("notis",notifications);
+//     res.json({ success: true, notifications });
+//   } catch (error) {
+//     console.error("Error fetching notifications:", error);
+//     res.status(500).json({ success: false, error: "Failed to fetch notifications." });
+//   }
+// });
 
 app.get("/tasks-summary", async (req, res) => {
   try {
@@ -1138,7 +1138,6 @@ app.get("/tasks-summary", async (req, res) => {
         }
       });
     });
-
     res.status(200).json(summary);
   } catch (error) {
     console.error("Error fetching task summary:", error);
@@ -1146,7 +1145,10 @@ app.get("/tasks-summary", async (req, res) => {
   }
 });
 // API to fetch recent notifications
-app.get('/recent-notifications', async (req, res) => {
+app.get("/notifications", async (req, res) => {
+  console.log("notifications")
+const notifications = await updateTaskStatuses(); 
+    console.log("notis",notifications);
   const userId  = req.query.userId;
   console.log("user",userId);
   try {
