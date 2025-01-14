@@ -680,7 +680,7 @@ async function markNotificationsAsRead() {
       return;
     }
     await axios.post(`https://www.spotops360.com/mark-notifications-read`, null, {
-      params: { userId }, 
+      params: { firstName }, 
     });
     unreadCount = 0;
     updateUnreadCount();
