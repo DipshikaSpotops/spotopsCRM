@@ -605,7 +605,6 @@ $(this).addClass("active");
     }
     await calculateTotalTasks();
 // notification
-const userId = localStorage.getItem("userId"); // User-specific ID
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
 const notificationList = $("#notificationList");
@@ -616,7 +615,7 @@ let unreadCount = 0;
 // Fetch notifications for all users but track user-specific read status
 async function fetchNotifications() {
   try {
-    const response = await axios.get(`/recent-notifications?userId=${userId}`);
+    const response = await axios.get(`/recent-notifications?userId=${firstName}`);
     const notifications = response.data;
 
     // Filter unread notifications for this user
@@ -673,7 +672,7 @@ function updateUnreadCount() {
 // Mark notifications as read for this user
 async function markNotificationsAsRead() {
   try {
-    await axios.post("/mark-notifications-read", { userId });
+    await axios.post("/mark-notifications-read", { firstName });
     unreadCount = 0; // Reset unread count
     updateUnreadCount();
   } catch (error) {
