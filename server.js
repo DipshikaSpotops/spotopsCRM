@@ -1007,7 +1007,7 @@ async function updateTaskStatuses() {
         newTasks.forEach((task) => {
           notifications.push({
             taskId: task._id,
-            message: `New Task added:\n${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n${currentDallasTime}`,
+            message: `New Task added:${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n${currentDallasTime}`,
           });
         });
         taskGroup.previousTaskCount = currentTaskCount; 
@@ -1020,7 +1020,7 @@ async function updateTaskStatuses() {
           isUpdated = true;
           notifications.push({
             taskId: task._id,
-            message: `Task Completed:\n${taskGroup.orderNo} - \n${task.taskDescription}\n \nAssigned to: ${task.assignedTo} \nCompleted Time: ${currentDallasTime}`,
+            message: `Task Completed:${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \nCompleted Time: ${currentDallasTime}`,
           });
           taskGroup.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
         }
@@ -1031,7 +1031,7 @@ async function updateTaskStatuses() {
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Alert(Deadline Approaching):\n${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n ${currentDallasTime}`,
+              message: `Alert(Deadline Approaching):${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n ${currentDallasTime}`,
             });
           }
           else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
@@ -1039,7 +1039,7 @@ async function updateTaskStatuses() {
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Warning(Deadline Missed):\n${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n ${currentDallasTime}`,
+              message: `Warning(Deadline Missed):${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n ${currentDallasTime}`,
             });
           }
         }
