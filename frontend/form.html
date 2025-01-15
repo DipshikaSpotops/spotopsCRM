@@ -1102,76 +1102,97 @@ window.location.href = "login_signup.html";
 </head>
 
 <body>
-<div class="navbar" id="navbar" style="display: flex">
-<div class="logo">
-<a href="index.html"><img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" /></a>
-</div>
-<div class="navbar-nav" style="flex-direction: row;justify-content: center;align-items: center;margin-left: 74%;font-family: sans-serif;color: wheat;outline: 0;">
-<div class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDashboards" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dashboards</a>
-<div class="dropdown-menu" aria-labelledby="navbarDropdownDashboards">
-<a class="dropdown-item" href="addOrders.html?newEntry=true" style="text-align: center;">Add New Order</a>
-<a class="dropdown-item" href="placedOrders.html">Placed Orders</a>
-<a class="dropdown-item" href="customerApproved.html">Customer Approved</a>
-<!-- <a class="dropdown-item" href="orders.html">View Orders</a> -->
-<a class="dropdown-item view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
-<a class="dropdown-item" href="viewAllOrders.html">View All Orders</a>
-<a class="dropdown-item" href="yardLocatedOrders.html">Yard Located Orders</a>
-<a class="dropdown-item yard-info-link" id="yard-info-link" href="yardInfo.html" style="white-space: initial;">Yard Processing Orders</a>
-<a class="dropdown-item in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
-<!-- <a class="dropdown-item" href="individualOrders.html">View My Orders</a> --> 
-<!-- <a class="dropdown-item" href="ordersMark.html">TeamA Orders</a>  -->
-<!-- <a class="dropdown-item" href="ordersSussane.html">TeamB Orders</a>  -->
-<a class="dropdown-item" href="cancelledOrders.html">Cancelled Orders</a>
-<a class="dropdown-item"  href="refundedOrders.html">Refunded Orders</a>
-<!-- <a class="dropdown-item" href="viewAllOrdersSheetMode.html" style="white-space: initial;">View All Orders- Sheet Mode</a> -->
-<a class="dropdown-item" href="fulfilledOrders.html">Fulfilled Orders</a>
-<a class="dropdown-item" href="escalatedOrders.html">Overall Escalation</a>
-<a class="dropdown-item" href="ongoingEscalations.html">Ongoing Escalation</a>
-</div>
-</div>
-<div class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsers" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Users</a>
-<div class="dropdown-menu" aria-labelledby="navbarDropdownUsers">
-<a class="dropdown-item" href="createUser.html">Create User</a>
-<a class="dropdown-item" href="viewallUsers.html">View Users</a>
-</div>
-</div>
-<div class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTeams" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Teams</a>
-<div class="dropdown-menu" aria-labelledby="navbarDropdownTeams">
-<a class="dropdown-item" href="teams.html">View Teams</a>
-</div>
-</div>
-<div class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReports" role="button" data-toggle="dropdown" aria-haspopup="true"aria-expanded="false">Reports</a>
-<div class="dropdown-menu" aria-labelledby="navbarDropdownReports">
-<a class="dropdown-item" href="shippingExpenses.html">Shipping Expenses</a>
-<a class="dropdown-item" href="purchases.html">Purchases</a>
-<a class="dropdown-item" href="poReport.html">PO Report</a>
-<a class="nav-link" href="pendingYardLocates.html">Pending Yard Locates</a>
-<a class="dropdown-item" href="poSentNotUpdated.html">Pending Labels</a>
-<a class="dropdown-item" href="partShippedNotUpdated.html">Pending Shipouts</a>
-<!-- <a class="dropdown-item" href="salesReport.html">My Sales Report</a> -->
-<a class="dropdown-item" href="storeCredit.html">Store Credits</a>
-<a class="dropdown-item" href="collectRefund.html">Collect Refunds</a>
-<a class="dropdown-item" href="deliveryTime.html">Delivery Report</a>
-<a class="dropdown-item" href="trackingInfo.html">Tracking Report</a>
-</div>
-</div>
-</div>
-<!-- for dark mode -->
-  <!--dark mode till here  -->
-<div class="user-info dropdown">
-<span>Welcome <span id="user-name"></span></span>
-<i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-<a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user"></i> My Profile</a>
-<div class="dropdown-divider"></div>
-<a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-</div>
-</div>
-</div>
+  <div class="navbar">
+    <div class="logo">
+      <a href="index.html">
+      <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+      </a>   
+      </div>
+      <div class="navbar-nav" style="flex-direction: row;justify-content: center;align-items: center;margin-left: 74%;font-family: sans-serif;color: wheat;outline: 0;">
+        <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDashboards" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dashboards</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownDashboards">
+        <a class="dropdown-item" href="addOrders.html?newEntry=true" style="text-align: center;">Add New Order</a>
+        <a class="dropdown-item" href="placedOrders.html">Placed Orders</a>
+        <a class="dropdown-item" href="customerApproved.html">Customer Approved</a>
+        <!-- <a class="dropdown-item" href="orders.html">View Orders</a> -->
+        <a class="dropdown-item view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
+        <a class="dropdown-item" href="viewAllOrders.html">View All Orders</a>
+        <a class="dropdown-item" href="yardLocatedOrders.html">Yard Located Orders</a>
+        <a class="dropdown-item yard-info-link" id="yard-info-link" href="yardInfo.html" style="white-space: initial;">Yard Processing Orders</a>
+        <a class="dropdown-item in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
+        <!-- <a class="dropdown-item" href="individualOrders.html">View My Orders</a> --> 
+        <!-- <a class="dropdown-item" href="ordersMark.html">TeamA Orders</a>  -->
+        <!-- <a class="dropdown-item" href="ordersSussane.html">TeamB Orders</a>  -->
+        <a class="dropdown-item" href="cancelledOrders.html">Cancelled Orders</a>
+        <a class="dropdown-item"  href="refundedOrders.html">Refunded Orders</a>
+        <!-- <a class="dropdown-item" href="viewAllOrdersSheetMode.html" style="white-space: initial;">View All Orders- Sheet Mode</a> -->
+        <a class="dropdown-item" href="fulfilledOrders.html">Fulfilled Orders</a>
+        <a class="dropdown-item" href="escalatedOrders.html">Overall Escalation</a>
+        <a class="dropdown-item" href="ongoingEscalations.html">Ongoing Escalation</a>
+        </div>
+        </div>
+        <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsers" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Users</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownUsers">
+        <a class="dropdown-item" href="createUser.html">Create User</a>
+        <a class="dropdown-item" href="viewallUsers.html">View Users</a>
+        </div>
+        </div>
+        <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTeams" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Teams</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownTeams">
+        <a class="dropdown-item" href="teams.html">View Teams</a>
+        </div>
+        </div>
+        <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReports" role="button" data-toggle="dropdown" aria-haspopup="true"aria-expanded="false">Reports</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownReports">
+        <a class="dropdown-item" href="shippingExpenses.html">Shipping Expenses</a>
+        <a class="dropdown-item" href="purchases.html">Purchases</a>
+        <a class="dropdown-item" href="poReport.html">PO Report</a>
+        <a class="nav-link" href="pendingYardLocates.html">Pending Yard Locates</a>
+        <a class="dropdown-item" href="poSentNotUpdated.html">Pending Labels</a>
+        <a class="dropdown-item" href="partShippedNotUpdated.html">Pending Shipouts</a>
+        <!-- <a class="dropdown-item" href="salesReport.html">My Sales Report</a> -->
+        <a class="dropdown-item" href="storeCredit.html">Store Credits</a>
+        <a class="dropdown-item" href="collectRefund.html">Collect Refunds</a>
+        <a class="dropdown-item" href="deliveryTime.html">Delivery Report</a>
+        <a class="dropdown-item" href="trackingInfo.html">Tracking Report</a>
+        </div>
+        </div>
+        </div>
+    <div class="user-info dropdown" style="display: flex;">
+    <span style="white-space: nowrap;margin-left: -14%;">Welcome <span id="user-name"></span></span>
+    <!-- for dark mode -->
+    <div class="dark-mode-toggle">
+      <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
+    </div>
+    <!--dark mode till here  -->
+    <div class="notification-container" style="margin: 0% 7%;">
+      <i class="fas fa-bell" id="notificationIcon" style="cursor: pointer; position: relative; color: white;margin-left: -19%;font-size: x-large;"></i>
+      <span id="notificationCount" class="notification-badge" style="display:block;margin-right: 20%;margin-top: -3%;">0</span>
+    </div>
+    <div class="notification-dropdown" id="notificationDropdown">
+      <ul id="notificationList"></ul>
+      <button id="viewAlltasks">View All Tasks</button>
+    </div>
+    <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: -4%;font-size: x-large;"></i>
+    <div
+    class="dropdown-menu dropdown-menu-right"
+    aria-labelledby="userMenu"
+    >
+    <a class="dropdown-item" href="#" id="profile"
+    ><i class="fas fa-user"></i> My Profile</a
+    >
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="#" id="logoutLink"
+    ><i class="fas fa-sign-out-alt"></i> Log Out</a
+    >
+    </div>
+    </div>
+    </div>
+<!--  -->
 
 
 <div class="close-btn">
