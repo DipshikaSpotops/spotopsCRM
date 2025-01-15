@@ -447,6 +447,8 @@ window.location.href = "login_signup.html";
 <a class="nav-link fulfilled-orders" href="fulfilledOrders.html">Fulfilled Orders</a>
 <a class="nav-link escalated-orders" href="escalatedOrders.html">Overall Escalation</a>
 <a class="nav-link escalated-orders" href="ongoingEscalations.html">Ongoing Escalation</a>
+<a class="nav-link view-myTasks-link" id="view-myTasks-link" href="viewMyTasks.html">View My Tasks</a>
+<a class="nav-link view-myTasks-link" id="view-myTasks-link" href="viewAllTasks.html">View All Tasks</a>
 </div>
 </div>
 <div class="nav-item">
@@ -1123,6 +1125,9 @@ $(document).on("click", function (event) {
 fetchNotifications();
 
     fetchTaskSummary();
+    $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 
 });
 </script>

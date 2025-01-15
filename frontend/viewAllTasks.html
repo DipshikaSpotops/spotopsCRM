@@ -366,7 +366,7 @@ aria-labelledby="userMenu"
 </div>
 </div>
 <div class="main-content">
-  <h1 class="fixed-header" style="text-align: center; color: black; margin-top: 1%;">
+  <h1 class="fixed-header" style="text-align: center; color: black; margin: 1%;margin-right: 8%;">
     View All Tasks
   </h1>
   <table id="tasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
@@ -776,6 +776,10 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
+$("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
+
     });
 </script>
 </body>

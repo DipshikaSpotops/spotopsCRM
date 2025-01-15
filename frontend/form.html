@@ -1213,6 +1213,8 @@ window.location.href = "login_signup.html";
         <a class="dropdown-item" href="fulfilledOrders.html">Fulfilled Orders</a>
         <a class="dropdown-item" href="escalatedOrders.html">Overall Escalation</a>
         <a class="dropdown-item" href="ongoingEscalations.html">Ongoing Escalation</a>
+        <a class="dropdown-item" id="view-myTasks-link" href="viewMyTasks.html">View My Tasks</a>
+        <a class="dropdown-item" id="view-myTasks-link" href="viewAllTasks.html">View All Tasks</a>
         </div>
         </div>
         <div class="nav-item dropdown">
@@ -6081,6 +6083,9 @@ $(document).on("click", function (event) {
 fetchNotifications();
 
     fetchTaskSummary();
+    $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 
 });
 </script>
