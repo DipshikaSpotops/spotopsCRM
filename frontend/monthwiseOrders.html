@@ -927,6 +927,9 @@ const basicSearch = (
 (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
 (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
 (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+(order.fName && order.fName.toLowerCase().includes(value)) ||
+(order.lName && order.lName.toLowerCase().includes(value)) ||
+(order.bName && order.bName.toLowerCase().includes(value)) ||
 (order.bAddress && order.bAddress.toLowerCase().includes(value)) ||
 (order.sAddress && order.sAddress.toLowerCase().includes(value)) ||
 ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
