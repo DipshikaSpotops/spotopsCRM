@@ -925,7 +925,7 @@ async function fetchTasksOngoingMonth() {
         `;
 
         // Add row to "All Tasks" table
-        if (task.taskStatus !== "Completed" && firstName === task.assignedTo) {
+        if (firstName === task.assignedTo) {
           tableBody.append(row);
         }
 
@@ -944,8 +944,6 @@ async function fetchTasksOngoingMonth() {
     console.error("Error fetching tasks:", error);
   }
 }
-
-// Call the function to fetch and populate tasks for both tables
 fetchTasksOngoingMonth();
 
 // fetch task summary
