@@ -637,6 +637,28 @@ async function fetchTasks() {
       const { orderNo, tasks } = group;
 
       tasks.forEach((task) => {
+        const date = new Date(deadline);
+
+  const day = date.getDate();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time
+  const ordinalSuffix = (n) => {
+    if (n > 3 && n < 21) return "th"; // Covers 11th to 19th
+    switch (n % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  var formattedDeadline = `${day}${ordinalSuffix(day)} ${month}, ${year} ${hours}:${minutes} ${ampm}`;
         const row = `
           <tr>
             <td>${orderNo}</td>
@@ -644,7 +666,7 @@ async function fetchTasks() {
             <td>${task.assignedTo}</td>
             <td>${task.assignedBy}</td>
             <td>${task.taskCreatedDate}</td>
-            <td>${task.deadline}</td>
+            <td>${formattedDeadline}</td>
             <td>${task.taskStatus}</td>
           </tr>
         `;
