@@ -889,6 +889,7 @@ async function fetchTasksOngoingMonth() {
         const deadline = new Date(task.deadline);
         const taskCreatedDate = task.taskCreatedDate;
         console.log("taskCreatedDate",taskCreatedDate);
+        
         // Format the deadline date for display
         const day = deadline.getDate();
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -910,7 +911,17 @@ async function fetchTasksOngoingMonth() {
         };
 
         const formattedDeadline = `${day}${ordinalSuffix(day)} ${month}, ${year} ${hours}:${minutes} ${ampm}`;
+// to take month from createdDate
+  const cleanedDateString = taskCreatedDate.replace(/(\d+)(st|nd|rd|th)/, '$1');
+  const newtaskCreated = new Date(cleanedDateString);
 
+  if (isNaN(date.getTime())) {
+    console.error("Invalid date string format");
+    return null;
+  }
+  var taskCreatedMonth = monthNames[newtaskCreated.getMonth()];
+  var taskCreatedYear = newtaskCreated.getFullYear();
+  console.log("newTaskCreated",taskCreatedMonth,taskCreatedYear);
         // Create a row for the task
         const row = `
           <tr>
@@ -931,9 +942,8 @@ async function fetchTasksOngoingMonth() {
 
         // Add row to "Ongoing Month" table if task was created in the current month and year (Dallas time)
         if (
-          taskCreatedDate.getMonth() === currentMonth &&
-          taskCreatedDate.getFullYear() === currentYear &&
-          task.taskStatus !== "Completed" &&
+          taskCreatedMonth === currentMonth &&
+          taskCreatedYear === currentYear &&
           firstName === task.assignedTo
         ) {
           monthlyTableBody.append(row);
