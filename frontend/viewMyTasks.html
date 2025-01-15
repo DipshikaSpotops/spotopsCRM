@@ -917,7 +917,7 @@ async function fetchTasksOngoingMonth() {
     console.error("Invalid date string format");
     return null;
   }
-  var taskCreatedMonth = newtaskCreated.getMonth() + 1; 
+  var taskCreatedMonth = newtaskCreated.getMonth(); 
 var taskCreatedYear = newtaskCreated.getFullYear();
   const currentMonth = currentDallasDate.getMonth(); // Get the current month (0-indexed)
   const currentYear = currentDallasDate.getFullYear();
