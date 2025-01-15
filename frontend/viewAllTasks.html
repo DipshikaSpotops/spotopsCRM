@@ -637,7 +637,7 @@ async function fetchTasks() {
       const { orderNo, tasks } = group;
 
       tasks.forEach((task) => {
-        const date = new Date(deadline);
+        const date = new Date(task.deadline);
 
   const day = date.getDate();
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
