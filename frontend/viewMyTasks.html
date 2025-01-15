@@ -814,6 +814,7 @@ async function fetchTasks() {
             <td>${task.taskStatus}</td>
           </tr>
         `;
+        console.log("fname",firstName,"status",task.taskStatus);
         if (task.taskStatus !== "Completed" && firstName == task.assignedTo){
         tableBody.append(row);
         }
