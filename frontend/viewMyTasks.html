@@ -918,7 +918,7 @@ async function fetchTasksOngoingMonth() {
     return null;
   }
   var taskCreatedMonth = newtaskCreated.getMonth() + 1; 
-var taskCreatedYear = taskCreatedDate.getFullYear();
+var taskCreatedYear = newtaskCreated.getFullYear();
   const currentMonth = currentDallasDate.getMonth(); // Get the current month (0-indexed)
   const currentYear = currentDallasDate.getFullYear();
   console.log("newTaskCreated",taskCreatedMonth,taskCreatedYear,"current",currentMonth,currentYear);
