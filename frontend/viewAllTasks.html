@@ -645,7 +645,7 @@ async function fetchTasks() {
             <td>${task.assignedBy}</td>
             <td>${new Date(task.createdDate).toLocaleDateString()}</td>
             <td>${new Date(task.deadline).toLocaleDateString()}</td>
-            <td>${task.status}</td>
+            <td>${task.taskStatus}</td>
           </tr>
         `;
         tableBody.append(row);
