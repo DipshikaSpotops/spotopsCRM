@@ -670,7 +670,9 @@ async function fetchTasks() {
             <td>${task.taskStatus}</td>
           </tr>
         `;
+        if (task.taskStatus !== "Completed"){
         tableBody.append(row);
+        }
       });
     });
   } catch (error) {
