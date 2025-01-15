@@ -643,8 +643,8 @@ async function fetchTasks() {
             <td>${task.taskName}</td>
             <td>${task.assignedTo}</td>
             <td>${task.assignedBy}</td>
-            <td>${new Date(task.createdDate).toLocaleDateString()}</td>
-            <td>${new Date(task.deadline).toLocaleDateString()}</td>
+            <td>${task.taskCreatedDate}</td>
+            <td>${task.deadline}</td>
             <td>${task.taskStatus}</td>
           </tr>
         `;
