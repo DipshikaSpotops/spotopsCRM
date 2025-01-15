@@ -989,6 +989,22 @@ app.get('/totalTasks', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+// all tasks fetch which are not yet Completed
+app.get("/alltasks", async (req, res) => {
+  console.log("fetching tasks which are not yet completed");
+  try {
+    const taskGroups = await TaskGroup.find();
+    const filteredTaskGroups = taskGroups.map((group) => ({
+      orderNo: group.orderNo,
+      tasks: group.tasks.filter((task) => task.status !== "Completed"),
+    })).filter(group => group.tasks.length > 0); 
+    console.log("filteredTaskGroups",filteredTaskGroups);
+    res.status(200).json(filteredTaskGroups);
+  } catch (error) {
+    console.error("Error fetching task groups:", error);
+    res.status(500).json({ error: "Failed to fetch task groups" });
+  }
+});
 // // checking taskGroup collection to change the taskStatus once in every minute
 async function updateTaskStatuses() {
   try {
