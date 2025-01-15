@@ -418,6 +418,25 @@ aria-labelledby="userMenu"
           <!-- Table rows will be populated dynamically -->
         </tbody>
       </table>
+      <h3 class="fixed-header" style="text-align: left;white-space: nowrap;width: 100%;color: black;margin-bottom: 1%;" id="monthly-tasks">
+        Tasks for Ongoing Month
+      </h3>
+      <table id="monthlyTasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
+        <thead>
+          <tr>
+            <th>Order No</th>
+            <th>Task Name</th>
+            <th>Assigned To</th>
+            <th>Assigned By</th>
+            <th>Task Created Date</th>
+            <th>Deadline</th>
+            <th>Task Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows will be populated dynamically -->
+        </tbody>
+      </table>      
     </div>
     
     <!-- Modal for Viewing Orders -->
@@ -844,6 +863,91 @@ async function fetchTasks() {
 
 // Call the function to fetch and populate tasks
 fetchTasks();
+// fetch tasks for the particular user for the particular month
+async function fetchTasksOngoingMonth() {
+  try {
+    const response = await axios.get("https://www.spotops360.com/allTasks", {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    const taskGroups = response.data;
+
+    const tableBody = $("#tasksTable tbody");
+    const monthlyTableBody = $("#monthlyTasksTable tbody");
+    tableBody.empty();
+    monthlyTableBody.empty();
+    const currentDateInDallas = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+    const currentDallasDate = new Date(currentDateInDallas);
+
+    const currentMonth = currentDallasDate.getMonth(); // Get the current month (0-indexed)
+    const currentYear = currentDallasDate.getFullYear(); // Get the current year
+
+    taskGroups.forEach((group) => {
+      const { orderNo, tasks } = group;
+
+      tasks.forEach((task) => {
+        // Parse task deadline and taskCreatedDate
+        const deadline = new Date(task.deadline);
+        const taskCreatedDate = new Date(new Date(task.taskCreatedDate).toLocaleString("en-US", { timeZone: "America/Chicago" }));
+
+        // Format the deadline date for display
+        const day = deadline.getDate();
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const month = monthNames[deadline.getMonth()];
+        const year = deadline.getFullYear();
+
+        let hours = deadline.getHours();
+        const minutes = deadline.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time
+        const ordinalSuffix = (n) => {
+          if (n > 3 && n < 21) return "th"; // Covers 11th to 19th
+          switch (n % 10) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+          }
+        };
+
+        const formattedDeadline = `${day}${ordinalSuffix(day)} ${month}, ${year} ${hours}:${minutes} ${ampm}`;
+
+        // Create a row for the task
+        const row = `
+          <tr>
+            <td>${orderNo}</td>
+            <td>${task.taskName}</td>
+            <td>${task.assignedTo}</td>
+            <td>${task.assignedBy}</td>
+            <td>${task.taskCreatedDate}</td>
+            <td>${formattedDeadline}</td>
+            <td>${task.taskStatus}</td>
+          </tr>
+        `;
+
+        // Add row to "All Tasks" table
+        if (task.taskStatus !== "Completed" && firstName === task.assignedTo) {
+          tableBody.append(row);
+        }
+
+        // Add row to "Ongoing Month" table if task was created in the current month and year (Dallas time)
+        if (
+          taskCreatedDate.getMonth() === currentMonth &&
+          taskCreatedDate.getFullYear() === currentYear &&
+          task.taskStatus !== "Completed" &&
+          firstName === task.assignedTo
+        ) {
+          monthlyTableBody.append(row);
+        }
+      });
+    });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+  }
+}
+
+// Call the function to fetch and populate tasks for both tables
+fetchTasksOngoingMonth();
+
 // fetch task summary
 async function fetchTaskSummary() {
       try {
