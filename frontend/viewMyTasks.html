@@ -915,7 +915,7 @@ async function fetchTasksOngoingMonth() {
   const cleanedDateString = taskCreatedDate.replace(/(\d+)(st|nd|rd|th)/, '$1');
   const newtaskCreated = new Date(cleanedDateString);
 
-  if (isNaN(date.getTime())) {
+  if (isNaN(newtaskCreated.getTime())) {
     console.error("Invalid date string format");
     return null;
   }
