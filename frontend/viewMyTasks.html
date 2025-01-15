@@ -887,8 +887,8 @@ async function fetchTasksOngoingMonth() {
       tasks.forEach((task) => {
         // Parse task deadline and taskCreatedDate
         const deadline = new Date(task.deadline);
-        const taskCreatedDate = new Date(new Date(task.taskCreatedDate).toLocaleString("en-US", { timeZone: "America/Chicago" }));
-
+        const taskCreatedDate = task.taskCreatedDate;
+        console.log("taskCreatedDate",taskCreatedDate);
         // Format the deadline date for display
         const day = deadline.getDate();
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
