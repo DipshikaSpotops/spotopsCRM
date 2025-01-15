@@ -877,9 +877,7 @@ async function fetchTasksOngoingMonth() {
     monthlyTableBody.empty();
     const currentDateInDallas = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
     const currentDallasDate = new Date(currentDateInDallas);
-
-    const currentMonth = currentDallasDate.getMonth(); // Get the current month (0-indexed)
-    const currentYear = currentDallasDate.getFullYear(); // Get the current year
+ // Get the current year
 
     taskGroups.forEach((group) => {
       const { orderNo, tasks } = group;
@@ -919,8 +917,9 @@ async function fetchTasksOngoingMonth() {
     console.error("Invalid date string format");
     return null;
   }
-  var taskCreatedMonth = monthNames[newtaskCreated.getMonth()];
-  var taskCreatedYear = newtaskCreated.getFullYear();
+  const taskCreatedMonth = newtaskCreated.getMonth() + 1; 
+  const currentMonth = currentDallasDate.getMonth(); // Get the current month (0-indexed)
+  const currentYear = currentDallasDate.getFullYear();
   console.log("newTaskCreated",taskCreatedMonth,taskCreatedYear,"current",currentMonth,currentYear);
         // Create a row for the task
         const row = `
