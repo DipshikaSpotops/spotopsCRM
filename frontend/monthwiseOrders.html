@@ -1163,6 +1163,9 @@ notificationIcon.on("click", async function () {
     $("table.table th").css({
      "z-index": 0,
     });
+    $(".modal-overlay").css({
+      "z-index":1,
+    })
     $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");    
     await fetchNotifications();
