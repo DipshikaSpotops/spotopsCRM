@@ -242,6 +242,18 @@ text-align: center;
 font-size: 1.5em;
 color: #333;
 }
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
+z-index: 999; /* Places it just below the modal div */
+}
+body.modal-active {
+overflow: hidden; /* Prevents background scrolling when modal is active */
+}
 #showTotalOrders{
 border: 1px solid #c0c0c0;
 text-align: center;
@@ -335,24 +347,6 @@ background-color: #333;
     text-decoration-line: underline;
     color: red;
     font-weight: bold;
-}
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
-  z-index: 999; /* Places it below the dropdown */
-}
-
-body.modal-active {
-  overflow: hidden; /* Prevents background scrolling when modal is active */
-}
-
-.notification-dropdown {
-  z-index: 1001; /* Ensure it is above the modal overlay */
-  position: absolute;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -1158,28 +1152,25 @@ async function markNotificationsAsRead() {
   }
 }
 
+// Toggle notification dropdown visibility
 notificationIcon.on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
 
   if (isVisible) {
     notificationDropdown.hide();
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
   } else {
     notificationDropdown.show();
-
-    // Add modal overlay
-    if (!$(".modal-overlay").length) {
-      $("body").append('<div class="modal-overlay"></div>');
-    }
-    $("body").addClass("modal-active");
-
+    $("table.table th").css({
+     "z-index": 0,
+    });
+    $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
     await fetchNotifications();
     await markNotificationsAsRead();
   }
 });
 
-// Close dropdown and overlay when clicking outside
+// Close dropdown when clicking outside
 $(document).on("click", function (event) {
   if (
     !$(event.target).closest("#notificationIcon").length &&
@@ -1187,7 +1178,7 @@ $(document).on("click", function (event) {
   ) {
     notificationDropdown.hide();
     $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
+$("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
