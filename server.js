@@ -1023,7 +1023,7 @@ async function updateTaskStatuses() {
         newTasks.forEach((task) => {
           notifications.push({
             taskId: task._id,
-            message: `New Task added:${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n${currentDallasTime}`,
+            message: `New Task added:${taskGroup.orderNo} - \n${task.taskDescription}\n${currentDallasTime}`,
           });
         });
         taskGroup.previousTaskCount = currentTaskCount; 
