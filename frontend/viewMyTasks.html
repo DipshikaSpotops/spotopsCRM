@@ -738,7 +738,7 @@ async function fetchNotifications() {
 // Render notifications in the dropdown
 function renderNotifications(notifications) {
   notificationList.empty(); 
-  console.log("notificat",notifications);
+  console.log("notificat",notifications[0]);
   notifications.forEach((notification) => {
     let backgroundColor;
 
@@ -755,9 +755,7 @@ function renderNotifications(notifications) {
     }
 
     const notificationItem = `
-      <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: black;width: 100%;
-    font-weight: bold;
-    "  >
+      <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: black;width: 100%;"  >
         ${notification.message}<br>
       </li>
     `;
