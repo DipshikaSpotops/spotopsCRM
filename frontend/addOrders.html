@@ -1549,7 +1549,6 @@ async function markNotificationsAsRead() {
     console.error("Error marking notifications as read:", error);
   }
 }
-
 // Toggle notification dropdown visibility
 notificationIcon.on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
@@ -1558,6 +1557,14 @@ notificationIcon.on("click", async function () {
     notificationDropdown.hide();
   } else {
     notificationDropdown.show();
+    $("table.table th").css({
+     "z-index": 0,
+    });
+    $(".modal-overlay").css({
+      "z-index":1,
+    })
+    $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
     await fetchNotifications();
     await markNotificationsAsRead();
   }
@@ -1570,10 +1577,11 @@ $(document).on("click", function (event) {
     !$(event.target).closest("#notificationDropdown").length
   ) {
     notificationDropdown.hide();
+    $(".modal-overlay").remove();
+$("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
-
 });
 </script>
 </body>
