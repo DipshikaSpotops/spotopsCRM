@@ -932,6 +932,8 @@ const notificationCountElement = $("#notificationCount");
 let unreadCount = 0;
 
 // Fetch notifications from the backend
+var firstName = localStorage.getItem("firstName");
+$("#user-name").text(firstName);
 async function fetchNotifications() {
   try {
     const response = await axios.get("https://www.spotops360.com/notifications");

@@ -1240,17 +1240,17 @@ $(
 "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link"
 ).hide();
 }
-  // Theme toggle functionality
-  const themeToggle = document.getElementById("darkModeToggle");
-  themeToggle.addEventListener("click", () => {
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    const newTheme = currentTheme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-  });
-  // Load the user's preferred theme
-  const savedTheme = localStorage.getItem("theme") || "light";
-  document.documentElement.setAttribute("data-theme", savedTheme);
+  // // Theme toggle functionality
+  // const themeToggle = document.getElementById("darkModeToggle");
+  // themeToggle.addEventListener("click", () => {
+  //   const currentTheme = document.documentElement.getAttribute("data-theme");
+  //   const newTheme = currentTheme === "dark" ? "light" : "dark";
+  //   document.documentElement.setAttribute("data-theme", newTheme);
+  //   localStorage.setItem("theme", newTheme);
+  // });
+  // // Load the user's preferred theme
+  // const savedTheme = localStorage.getItem("theme") || "light";
+  // document.documentElement.setAttribute("data-theme", savedTheme);
 $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
