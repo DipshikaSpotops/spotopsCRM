@@ -1153,9 +1153,9 @@ async function markNotificationsAsRead() {
 }
 
 // Toggle notification dropdown visibility
-notificationIcon.on("click", async function () {
+$("#notificationIcon").on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
-
+console.log("icon not",isVisible);
   if (isVisible) {
     notificationDropdown.hide();
   } else {
