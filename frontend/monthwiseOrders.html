@@ -338,7 +338,7 @@ background-color: #333;
   top: 50px;
   right: 0px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 999;
   border: 2px solid black;
 }
 #viewAlltasks {
@@ -1159,6 +1159,11 @@ notificationIcon.on("click", async function () {
   if (isVisible) {
     notificationDropdown.hide();
   } else {
+    const iconOffset = notificationIcon.offset();
+    notificationDropdown.css({
+      top: iconOffset.top + notificationIcon.outerHeight(), // Position below the icon
+      left: iconOffset.left - notificationDropdown.outerWidth() / 2, // Center align
+    });
     notificationDropdown.show();
     await fetchNotifications();
     await markNotificationsAsRead();
