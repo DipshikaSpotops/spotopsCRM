@@ -447,6 +447,9 @@ style="display: none"
 
 <script>
 $(document).ready(async function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
@@ -907,10 +910,6 @@ $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
-$("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
 });
 </script>
 </body>

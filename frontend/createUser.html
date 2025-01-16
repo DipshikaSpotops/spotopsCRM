@@ -417,6 +417,9 @@ border-radius: 22px;">Create</button>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script>
 $(document).ready(function() {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -685,10 +688,6 @@ $(document).on("click", function (event) {
 fetchNotifications();
 
     fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
 });
 </script>
 </body>

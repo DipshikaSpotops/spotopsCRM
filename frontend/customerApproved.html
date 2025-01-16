@@ -538,6 +538,9 @@ OK
 </div>
 <script>
 $(document).ready(async function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
@@ -1040,11 +1043,7 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
-
-    fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
+fetchTaskSummary();
 
 });
 </script>
