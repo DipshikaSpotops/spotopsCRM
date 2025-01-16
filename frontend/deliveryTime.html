@@ -227,6 +227,9 @@ background-color: #333;
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 $(document).ready(async function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 const firstName = localStorage.getItem("firstName");
 if (!firstName) {
 window.location.href = "login_signup.html";
@@ -576,12 +579,7 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
-
-    fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
+fetchTaskSummary();
 });
 
 </script>

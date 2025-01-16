@@ -2476,6 +2476,9 @@ Save
 <!-- cancelled orderstatus ends -->
 <script>
 $(document).ready(async function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 const queryString = window.location.search.substring(1);
 // console.log("query string",queryString);
 const urlParams = new URLSearchParams(window.location.search);
@@ -6081,12 +6084,7 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
-
-    fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
+fetchTaskSummary();
 });
 </script>
 </body>   

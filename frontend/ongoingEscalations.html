@@ -561,6 +561,9 @@ Escalation Status
 </div>
 <script>
 $(document).ready(async function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
@@ -1097,12 +1100,7 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
-
-    fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
+fetchTaskSummary();
 });
 </script>
 

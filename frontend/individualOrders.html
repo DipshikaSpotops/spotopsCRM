@@ -484,6 +484,9 @@ window.location.href = "login_signup.html";
 
 <script>
 $(document).ready(async function () {    
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 let sortedData = [];
 const rowsPerPage = 25;
 let currentPage = 1; 
@@ -1034,12 +1037,7 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
-
-    fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
+fetchTaskSummary();
 });
 </script>
 </body>

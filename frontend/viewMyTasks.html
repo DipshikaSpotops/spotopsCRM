@@ -532,6 +532,9 @@ Close
 <script>
 $(document).ready(async function () {
 console.log("ready function");
+$("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -1010,10 +1013,6 @@ async function fetchTaskSummary() {
       }
     }
     fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
     });
 </script>
 </body>

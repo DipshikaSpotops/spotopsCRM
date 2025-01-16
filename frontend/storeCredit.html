@@ -480,6 +480,9 @@ placeholder="Search..."
 </div>
 <script>
 $(document).ready(async function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
@@ -996,12 +999,7 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
-
-    fetchTaskSummary();
-    $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
+fetchTaskSummary();
 });
 </script>
 

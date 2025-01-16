@@ -450,6 +450,9 @@ window.location.href = "login_signup.html";
 
 <script>
 $(document).ready(async function () {
+    $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -723,10 +726,6 @@ $('#logoutLink').on('click', function() {
 window.localStorage.clear();
 window.location.href = 'login_signup.html';
 });
-$("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
-
 });
 </script>
 </body>

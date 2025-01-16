@@ -798,6 +798,9 @@ window.location.href = "login_signup.html";
 </div>
 <script>
 $(document).ready(function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
 // to prefill the stae and the city 
 $("#bZip").on("keyup", function() {
 console.log("BZIP","==");
@@ -1558,9 +1561,6 @@ $(document).on("click", function (event) {
   }
 });
 fetchNotifications();
-$("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
 
 });
 </script>
