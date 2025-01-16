@@ -335,7 +335,7 @@ background-color: #333;
   width: 234%;
   display: none;
   position: absolute;
-  top: 50px;
+  top: 90px;
   right: 0px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -1160,6 +1160,9 @@ notificationIcon.on("click", async function () {
     notificationDropdown.hide();
   } else {
     notificationDropdown.show();
+    $("table.table th").css({
+     "z-index": 0;
+    });
     await fetchNotifications();
     await markNotificationsAsRead();
   }
