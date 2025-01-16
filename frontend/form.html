@@ -5794,6 +5794,7 @@ document.getElementById("createTaskButton").addEventListener("click", async () =
       const error = await response.json();
       alert("Failed to create task: " + error.message);
     }
+    window.location.reload();
   } catch (error) {
     console.error("Error saving task:", error);
     alert("An error occurred while saving the task.");
