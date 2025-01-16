@@ -1161,7 +1161,7 @@ notificationIcon.on("click", async function () {
   } else {
     notificationDropdown.show();
     $("table.table th").css({
-     "z-index": 0;
+     "z-index": 0,
     });
     await fetchNotifications();
     await markNotificationsAsRead();
