@@ -567,6 +567,8 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+var firstName = localStorage.getItem("firstName");
+$("#user-name").text(firstName);
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
