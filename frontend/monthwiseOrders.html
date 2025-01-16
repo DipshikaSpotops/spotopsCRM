@@ -1156,18 +1156,18 @@ async function markNotificationsAsRead() {
 $("#notificationIcon").on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
 console.log("icon not",isVisible);
-  if (isVisible) {
-    notificationDropdown.hide();
-  } else {
+  // if (isVisible) {
+  //   notificationDropdown.hide();
+  // } else {
     const iconOffset = notificationIcon.offset();
     notificationDropdown.css({
-      top: iconOffset.top + notificationIcon.outerHeight(), // Position below the icon
-      left: iconOffset.left - notificationDropdown.outerWidth() / 2, // Center align
+      top: iconOffset.top + notificationIcon.outerHeight(), 
+      left: iconOffset.left - notificationDropdown.outerWidth() / 2, 
     });
     notificationDropdown.show();
     await fetchNotifications();
     await markNotificationsAsRead();
-  }
+  // }
 });
 
 // Close dropdown when clicking outside
