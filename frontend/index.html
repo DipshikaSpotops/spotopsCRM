@@ -271,6 +271,18 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
+/* z-index: 999; Places it just below the modal div */
+}
+body.modal-active {
+overflow: hidden; /* Prevents background scrolling when modal is active */
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
