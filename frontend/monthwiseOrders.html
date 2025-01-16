@@ -348,18 +348,6 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
-/* Apply blur effect to the background except for the dropdown */
-.blur-background {
-  filter: blur(5px);
-  transition: filter 0.3s ease;
-}
-
-/* Prevent notification dropdown from being blurred */
-.notification-dropdown {
-  filter: none !important;
-  position: absolute; /* Ensure dropdown stays above the blurred background */
-  z-index: 9999; /* Ensure dropdown is above all other elements */
-}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -1164,15 +1152,19 @@ async function markNotificationsAsRead() {
   }
 }
 
+// Toggle notification dropdown visibility
 notificationIcon.on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
 
   if (isVisible) {
     notificationDropdown.hide();
-    $("body").removeClass("blur-background"); // Remove blur when dropdown is hidden
   } else {
     notificationDropdown.show();
-    $("body").addClass("blur-background"); // Add blur when dropdown is visible
+    $("table.table th").css({
+     "z-index": 0,
+    });
+    $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
     await fetchNotifications();
     await markNotificationsAsRead();
   }
