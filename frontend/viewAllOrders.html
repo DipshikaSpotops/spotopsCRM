@@ -302,6 +302,18 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5); 
+/* z-index: 999; */
+}
+body.modal-active {
+overflow: hidden; 
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -1038,6 +1050,14 @@ notificationIcon.on("click", async function () {
     notificationDropdown.hide();
   } else {
     notificationDropdown.show();
+    $("table.table th").css({
+     "z-index": 0,
+    });
+    $(".modal-overlay").css({
+      "z-index":1,
+    })
+    $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
     await fetchNotifications();
     await markNotificationsAsRead();
   }
@@ -1050,10 +1070,11 @@ $(document).on("click", function (event) {
     !$(event.target).closest("#notificationDropdown").length
   ) {
     notificationDropdown.hide();
+    $(".modal-overlay").remove();
+$("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
-fetchTaskSummary();
 });
 </script>
 
