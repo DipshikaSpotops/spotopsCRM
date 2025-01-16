@@ -348,6 +348,11 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
+/* Apply blur effect to the background */
+.blur-background {
+  filter: blur(5px); /* Adjust the blur intensity as needed */
+  transition: filter 0.3s ease; /* Smooth transition for the blur effect */
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -1152,17 +1157,21 @@ async function markNotificationsAsRead() {
   }
 }
 
-// Toggle notification dropdown visibility
 notificationIcon.on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
 
   if (isVisible) {
     notificationDropdown.hide();
+    $("table.table th").css({
+      "z-index": ""
+    });
+    $("body").removeClass("blur-background"); // Remove blur when dropdown is hidden
   } else {
     notificationDropdown.show();
     $("table.table th").css({
-     "z-index": 0,
+      "z-index": 0
     });
+    $("body").addClass("blur-background"); // Add blur when dropdown is visible
     await fetchNotifications();
     await markNotificationsAsRead();
   }
