@@ -1177,6 +1177,8 @@ $(document).on("click", function (event) {
     !$(event.target).closest("#notificationDropdown").length
   ) {
     notificationDropdown.hide();
+    $(".modal-overlay").remove();
+$("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
