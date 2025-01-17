@@ -1087,16 +1087,17 @@ async function updateTaskStatuses() {
               message: `Warning (Deadline Missed): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
             });
           }
-
-          // Change "Warning" to "Incomplete" if deadline has passed
           if (diffInMinutes <= 0 && task.taskStatus === "Warning") {
             task.taskStatus = "Incomplete";
             isUpdated = true;
+          
+            // Increment incompleteCountAfterDeadline for the task group
+            taskGroup.incompleteCountAfterDeadline = (taskGroup.incompleteCountAfterDeadline || 0) + 1;
             notifications.push({
               taskId: task._id,
               message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
             });
-          }
+          }          
         }
 
         // Track "Processing" tasks past the deadline

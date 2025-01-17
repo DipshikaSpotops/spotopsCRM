@@ -751,7 +751,11 @@ function renderNotifications(notifications) {
       backgroundColor = "#aae3c0";
     } else if (notification.message.includes("New Task added")) {
       backgroundColor = "#c6c6c6";
-    } else {
+    } 
+    else if (notification.message.includes("Task marked as Incomplete (Missed Deadline)")) {
+      backgroundColor = "#c6c6c6";
+    } 
+    else {
       backgroundColor = "black";
     }
 
