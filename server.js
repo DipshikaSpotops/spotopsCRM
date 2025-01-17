@@ -550,8 +550,13 @@ const taskSchema = new mongoose.Schema({
       taskCompletionTime: { type: String },
     },
   ],
-  previousTaskCount: { type: Number, default: 0 }, 
+  previousTaskCount: { type: Number, default: 0 },
+  warningCountAfterDeadline: { type: Number, default: 0 },  
+  alertCountAfterDeadline: { type: Number, default: 0 },    
+  incompleteCountAfterDeadline: { type: Number, default: 0 },
+  completeCountBeforeDeadline: { type: Number, default: 0 }, 
 });
+
 const notificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
   timestamp: { type: String },
@@ -1011,69 +1016,116 @@ async function updateTaskStatuses() {
     const currentDallasTime = moment.tz("America/Chicago");
     console.log("Current Dallas time:", currentDallasTime);
     const taskGroups = await TaskGroup.find({
-      "tasks.deadline": { $exists: true }, 
+      "tasks.deadline": { $exists: true },
     });
-    // console.log("Task Groups:", taskGroups);
+
     let notifications = [];
     for (const taskGroup of taskGroups) {
-      let isUpdated = false; 
+      let isUpdated = false;
       const currentTaskCount = taskGroup.tasks.length;
+
+      // Handle newly added tasks
       if (currentTaskCount > (taskGroup.previousTaskCount || 0)) {
-        const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount || 0); // Get newly added tasks
+        const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount || 0);
         newTasks.forEach((task) => {
           notifications.push({
             taskId: task._id,
-            message: `New Task added:${taskGroup.orderNo} - \n${task.taskDescription}\n${currentDallasTime}`,
+            message: `New Task added: ${taskGroup.orderNo} - \n${task.taskDescription}\n${currentDallasTime}`,
           });
         });
-        taskGroup.previousTaskCount = currentTaskCount; 
+        taskGroup.previousTaskCount = currentTaskCount;
         isUpdated = true;
       }
+
       taskGroup.tasks.forEach((task) => {
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
+
+        // Track completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
           isUpdated = true;
           notifications.push({
             taskId: task._id,
-            message: `Task Completed:${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \nCompleted Time: ${currentDallasTime}`,
+            message: `Task Completed: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\nCompleted Time: ${currentDallasTime}`,
           });
-          taskGroup.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
+
+          // Count tasks completed before the deadline
+          if (currentDallasTime.isBefore(taskDeadline)) {
+            taskGroup.completeCountBeforeDeadline = (taskGroup.completeCountBeforeDeadline || 0) + 1;
+          }
         }
+
+        // Handle "New Task Created" -> "Processing" after 5 minutes
+        if (task.taskStatus === "New Task Created") {
+          const createdTime = moment.tz(task.taskCreatedDate, "YYYY-MM-DDTHH:mm", "America/Chicago");
+          if (currentDallasTime.diff(createdTime, "minutes") >= 5) {
+            task.taskStatus = "Processing";
+            isUpdated = true;
+            notifications.push({
+              taskId: task._id,
+              message: `Task status changed to Processing: ${taskGroup.orderNo} - \n${task.taskDescription}`,
+            });
+          }
+        }
+
+        // Alert and Warning Statuses
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
+
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Alert(Deadline Approaching):${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n ${currentDallasTime}`,
+              message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
             });
-          }
-          else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
+          } else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
             task.taskStatus = "Warning";
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Warning(Deadline Missed):${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo} \n ${currentDallasTime}`,
+              message: `Warning (Deadline Missed): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
+            });
+          }
+
+          // Change "Warning" to "Incomplete" if deadline has passed
+          if (diffInMinutes <= 0 && task.taskStatus === "Warning") {
+            task.taskStatus = "Incomplete";
+            isUpdated = true;
+            notifications.push({
+              taskId: task._id,
+              message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
             });
           }
         }
+
+        // Track "Processing" tasks past the deadline
+        if (task.taskStatus === "Processing" && currentDallasTime.isAfter(taskDeadline)) {
+          notifications.push({
+            taskId: task._id,
+            message: `Task still in Processing past deadline: ${taskGroup.orderNo} - \n${task.taskDescription}`,
+          });
+        }
       });
+
+      // Save task group if updates were made
       if (isUpdated) {
         await taskGroup.save();
       }
     }
+
     // Save notifications to the database
     for (const notification of notifications) {
-      console.log("Recent-noyin",notification);
-      await RecentNotification.create({ message: notification.message});
+      console.log("Recent Notification:", notification);
+      await RecentNotification.create({ message: notification.message });
     }
-    return notifications; 
+
+    return notifications;
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
 }
+
 // app.get("/notifications", async (req, res) => {
 //   console.log("notifications")
 //   try {
@@ -1089,7 +1141,6 @@ async function updateTaskStatuses() {
 app.get("/tasks-summary", async (req, res) => {
   try {
     const { firstName } = req.query;
-    console.log("task-summary--", firstName);
 
     const taskGroups = await TaskGroup.find({
       "tasks.assignedTo": firstName,
@@ -1101,65 +1152,46 @@ app.get("/tasks-summary", async (req, res) => {
       completedLate: [],
       warning: [],
       notCompleted: [],
+      incomplete: [],
+      processingPastDeadline: [],
     };
-
-    console.log("taskGroups for individual", taskGroups);
 
     taskGroups.forEach((taskGroup) => {
       taskGroup.tasks.forEach((task) => {
-        console.log("assignedTo", task.assignedTo);
+        const deadline = moment.tz(task.deadline, "America/Chicago").toDate();
+        const completionTime = task.taskCompletionTime
+          ? moment.tz(task.taskCompletionTime, "America/Chicago").toDate()
+          : null;
 
-        // Only process tasks assigned to the user
         if (task.assignedTo === firstName) {
-          const deadline = moment.tz(task.deadline, "America/Chicago").toDate();
-          const completionTime = task.taskCompletionTime
-            ? moment.tz(task.taskCompletionTime, "America/Chicago").toDate()
-            : null;
-
           if (task.taskStatus === "Completed" && completionTime) {
             if (completionTime <= deadline) {
-              summary.completedOnTime.push({
-                orderNo: taskGroup.orderNo,
-                taskName: task.taskName,
-                deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-                completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
-              });
+              summary.completedOnTime.push(task);
             } else {
-              summary.completedLate.push({
-                orderNo: taskGroup.orderNo,
-                taskName: task.taskName,
-                deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-                completionTime: moment(completionTime).format("YYYY-MM-DD HH:mm A"),
-              });
+              summary.completedLate.push(task);
             }
           } else if (task.taskStatus === "Alert") {
-            summary.alert.push({
-              orderNo: taskGroup.orderNo,
-              taskName: task.taskName,
-              deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-            });
+            summary.alert.push(task);
           } else if (task.taskStatus === "Warning") {
-            summary.warning.push({
-              orderNo: taskGroup.orderNo,
-              taskName: task.taskName,
-              deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-            });
-          } else if (task.taskStatus !== "Completed") {
-            summary.notCompleted.push({
-              orderNo: taskGroup.orderNo,
-              taskName: task.taskName,
-              deadline: moment(deadline).format("YYYY-MM-DD HH:mm A"),
-            });
+            summary.warning.push(task);
+          } else if (task.taskStatus === "Incomplete") {
+            summary.incomplete.push(task);
+          } else if (task.taskStatus === "Processing" && moment().isAfter(deadline)) {
+            summary.processingPastDeadline.push(task);
+          } else {
+            summary.notCompleted.push(task);
           }
         }
       });
     });
+
     res.status(200).json(summary);
   } catch (error) {
     console.error("Error fetching task summary:", error);
     res.status(500).json({ error: "Failed to fetch task summary" });
   }
 });
+
 // API to fetch recent notifications
 app.get("/notifications", async (req, res) => {
   console.log("notifications")
