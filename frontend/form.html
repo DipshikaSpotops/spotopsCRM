@@ -2840,7 +2840,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
-var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || 0;  
+var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.custRefAmount || 0;  
 var currentActualGp = data.actualGP || 0;
 console.log("order rn",data.orderStatus);
 $("#custRefunds").val(custRefundedAmount.toFixed(2))
@@ -2849,7 +2849,7 @@ $("#custRefunds").val(custRefundedAmount.toFixed(2))
 if (
 (!data.additionalInfo || data.additionalInfo.length === 0) || 
 (data.additionalInfo && data.additionalInfo.length >= 0 && 
-(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded"))
+(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
 ) {
 if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
@@ -2944,7 +2944,7 @@ actualGP = subtractRefund - totalSum;
 // console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
 $("#actualGP").val(actualGP.toFixed(2)); 
 // updateActualGP(orderNo, actualGP);
-if(currentActualGp !== actualGP){
+if(currentActualGp !== actualGP && data.orderStatus !== "Dispute"){
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
