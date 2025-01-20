@@ -671,6 +671,7 @@ sortTable(index, type);
 
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
+    console.log("orders ofr d",orders);
 // Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
 const filteredOrders = orders.filter(item => {
 return (item.orderStatus === "Dispute");
