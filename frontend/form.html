@@ -2610,6 +2610,7 @@ alert("Dispute information updated successfully!");
 // console.error("Error updating dispute:", error);
 alert("Failed to update dispute information.");
 });
+window.location.reload();
 });
 // for dispute till here
 //for custRefund
@@ -2951,7 +2952,6 @@ axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actua
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
 $("#actualGP").val(actualGP.toFixed(2));
-window.location.reload();
 })
 .catch(function (error) {
 console.error("Error updating actualGP:", error);
