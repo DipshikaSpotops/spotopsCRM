@@ -2610,7 +2610,6 @@ alert("Dispute information updated successfully!");
 // console.error("Error updating dispute:", error);
 alert("Failed to update dispute information.");
 });
-window.location.reload();
 });
 // for dispute till here
 //for custRefund
@@ -2830,7 +2829,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
 // console.log("data in setTimeOut", data);
-var orderStatus = data.orderStatus;
+
 var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
@@ -2850,7 +2849,6 @@ actualGP = (sp - custRefundedAmount) - tax;
 $("#actualGP").val(actualGP.toFixed(2));
 
 if (currentActualGp !== actualGP) {
-  console.log("not dispute")
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
@@ -2939,8 +2937,7 @@ actualGP = subtractRefund - totalSum;
 // console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
 $("#actualGP").val(actualGP.toFixed(2)); 
 // updateActualGP(orderNo, actualGP);
-if(currentActualGp !== actualGP && orderStatus !== "Dispute"){
-  console.log("Dispute?",orderStatus);
+if(currentActualGp !== actualGP){
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
@@ -2954,7 +2951,7 @@ console.log("actualGPAfterDispute",totalSum,tax)
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
-$("#actualGP").val(actualGP.toFixed(2));
+$("#actualGP").val(actualGP.toFixed(2));z
 })
 .catch(function (error) {
 console.error("Error updating actualGP:", error);
