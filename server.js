@@ -619,6 +619,7 @@ actualGP:Number,
 supportNotes:[String],
 disputedDate: String ,  
 disputeReason: String,
+custRefAmount: String,
 custRefundDate: String,
 custRefundedAmount: Number,
 cancelledDate: String,
@@ -3156,15 +3157,16 @@ res.status(500).json({ error: "Server error" });
 app.put('/orders/:orderNo/dispute', async (req, res) => {
 console.log("put request for dispute");
 const { orderNo } = req.params;
-const { disputedDate, disputeReason } = req.body;
-console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo);
+const { disputedDate, disputeReason , disputedRefAmount} = req.body;
+console.log("Disputes:", disputedDate, disputeReason, "OrderNo:", orderNo, "disputedRefAmount", disputedRefAmount);
 
 try {
 const order = await Order.findOneAndUpdate(
 { orderNo: orderNo }, 
 { 
 disputedDate: disputedDate, 
-disputeReason: disputeReason 
+disputeReason: disputeReason ,
+custRefAmount: disputedRefAmount,
 },
 { new: true }  
 );
@@ -3196,6 +3198,7 @@ console.log(
 "cancellationReason:", cancellationReason,
 "orderStatus", orderStatus
 );
+// custRefAmount is the standard
 var firstName = req.query.firstName;
 console.log("firstName",firstName )
 try {
@@ -3203,8 +3206,8 @@ const updateFields = {};
 if (custRefundDate) updateFields.custRefundDate = custRefundDate;
 if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
 if (cancelledDate) updateFields.cancelledDate = cancelledDate;
-if (cancelledRefAmount) updateFields.cancelledRefAmount = cancelledRefAmount;
-if (cancellationReason) updateFields.cancellationReason = cancellationReason;
+if (cancelledRefAmount) updateFields.custRefAmount = cancelledRefAmount;
+if (cancellationReason) updateFields.custRefAmount = cancellationReason;
 if (orderStatus) updateFields.orderStatus = orderStatus;
 const order = await Order.findOne({ orderNo: orderNo });
 if (!order) {

@@ -2543,6 +2543,7 @@ $("#orderStatus").on("change", function () {
 const newOrderStatus = $(this).val();
 console.log("Order Status changed to:", newOrderStatus);
 if (newOrderStatus == "Dispute") { 
+$(".disputedRefAmount").val(cancelledRefundAmount)
 // console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
 $("#disputedDate").val(currentDateTime);
 // orderedDate
@@ -2594,6 +2595,7 @@ $("body").removeClass("modal-active");
 });
 //for dispute
 $("#disputeSubmit").on("click", function () {
+const disputedRefAmount = $(".disputedRefAmount").val();
 // console.log("disputeSubmit");
 $("#disputeDiv").fadeOut();
 $(".modal-overlay").remove();
@@ -2605,6 +2607,7 @@ const disputeReason = $("#disputeReason").val();
 const disputeData = {
 disputedDate: disputedDate,
 disputeReason: disputeReason,
+disputedRefAmount: disputedRefAmount
 };
 axios.put(`https://www.spotops360.com/orders/${orderNo}/dispute`, disputeData)
 .then(function (response) {
@@ -2685,7 +2688,7 @@ $("#cancellingOrder").fadeOut();
 // $("body").removeClass("modal-active");
 var firstname = localStorage.getItem("firstName");
 const cancelledDate = $("#cancelledDate").val();
-const cancelledRefAmount = $(".cancelledRefAmount").val();
+const custRefAmount = $(".cancelledRefAmount").val();
 const orderNo = urlParams.get("orderNo");
 const reason = $("#reasonCancel").val();
 
@@ -2696,7 +2699,7 @@ console.log("Order No:", orderNo);
 
 axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, {
 cancelledDate: cancelledDate,
-cancelledRefAmount: cancelledRefAmount,
+custRefAmount: custRefAmount,
 orderNo: orderNo,
 cancellationReason:reason
 })
@@ -2838,7 +2841,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
-var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || 0;  
+var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.disputedRefAmount || 0;  
 var currentActualGp = data.actualGP || 0;
 console.log("order rn",data.orderStatus);
 $("#custRefunds").val(custRefundedAmount.toFixed(2))
@@ -2847,7 +2850,7 @@ $("#custRefunds").val(custRefundedAmount.toFixed(2))
 if (
 (!data.additionalInfo || data.additionalInfo.length === 0) || 
 (data.additionalInfo && data.additionalInfo.length >= 0 && 
-(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded"))
+(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
 ) {
 if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
