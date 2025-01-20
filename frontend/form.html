@@ -2852,7 +2852,7 @@ if (
 (data.additionalInfo && data.additionalInfo.length >= 0 && 
 (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
 ) {
-if (custRefundedAmount) {
+// if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
 $("#actualGP").val(actualGP.toFixed(2));
 
@@ -2868,7 +2868,7 @@ console.error("Error updating actualGP:", error);
 else {
 console.log("Same actualGPS");
 }
-}
+// }
 }
 
 
