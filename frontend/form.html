@@ -2874,9 +2874,29 @@ setTimeout(function () {
         data.additionalInfo.forEach((yard, index) => {
           const yardIndex = index + 1;
           const pStatus = yard.paymentStatus;
+          const rStatus = yard.refundStatus;
 
+          // CSS updates based on conditions
+          if (pStatus === "Card charged" && rStatus === "Refund collected") {
+            $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({
+              "background-color": "#fe8025",
+              border: "none",
+            });
+          } else if (yard.status === "PO cancelled" && pStatus !== "Card charged") {
+            $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({
+              "background-color": "#c3c3c3",
+              border: "none",
+              color: "#ffffff",
+            });
+          } else if (pStatus === "Card charged") {
+            $(`.yard-btn[data-yard-index="${yardIndex}"]`).css(
+              "background-color",
+              "#353d3f"
+            );
+          }
+
+          // Calculate yard-specific costs
           if (pStatus === "Card charged") {
-            // Calculate yard-specific costs
             const yardPP = parseFloat(yard.partPrice) || 0;
             const yardOSorYS = yard.shippingDetails || "";
             const shippingValueYard = yardOSorYS.includes("Own shipping")
