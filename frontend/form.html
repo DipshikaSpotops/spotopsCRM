@@ -2531,7 +2531,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
 orderPlacedDate = data.orderDate;
-cancelledRefundAmount = data.cancelledRefAmount;
+cancelledRefundAmount = data.cancelledRefAmount || data.custRefAmount || data.custRefAmount;
 salePrice = data.soldP;
 actualGp = data.actualGP;
 salesTax = data.salestax;
@@ -2841,7 +2841,7 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
-var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.disputedRefAmount || 0;  
+var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.disputedRefAmount || 0 || data.custRefAmount;  
 var currentActualGp = data.actualGP || 0;
 console.log("order rn",data.orderStatus);
 $("#custRefunds").val(custRefundedAmount.toFixed(2))
