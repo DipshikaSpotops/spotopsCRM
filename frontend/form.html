@@ -2848,8 +2848,7 @@ $("#custRefunds").val(custRefundedAmount)
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
 if (
-(!data.additionalInfo || data.additionalInfo.length === 0) || 
-(data.additionalInfo && data.additionalInfo.length >= 0 && 
+(!data.additionalInfo || data.additionalInfo.length === 0) || (data.additionalInfo && data.additionalInfo.length >= 0 && 
 (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
 ) {
 // if (custRefundedAmount) {
@@ -2876,7 +2875,6 @@ data.additionalInfo.forEach((yard, index) => {
 const yardIndex = index + 1;
 // Check if any entry in additionalInfo has escTicked set to "Yes"
 const isEscTicked = data.additionalInfo.some(info => info.escTicked === "Yes");
-
 if (isEscTicked) {
 $("#escTickBox").prop("checked", true);
 } else {
