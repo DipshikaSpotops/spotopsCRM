@@ -2832,152 +2832,111 @@ document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
 var totalSpend = []; 
 var totalSum = 0;    
 var pStatus;
-setTimeout(function() {
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then(response => response.json())
-.then(data => {
-// console.log("data in setTimeOut", data);
+setTimeout(function () {
+  fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const sp = data.soldP;
+      const tax = data.salestax;
+      const spMinusTax = data.spMinusTax || sp - tax;
+      const custRefundedAmount =
+        data.custRefundedAmount ||
+        data.cancelledRefAmount ||
+        data.disputedRefAmount ||
+        data.custRefAmount ||
+        0;
+      const currentActualGp = data.actualGP || 0;
+      let actualGP = 0;
+      let totalSum = 0;
+      const totalSpend = [];
 
-var sp = data.soldP;
-var tax = data.salestax;
-var spMinusTax = data.spMinusTax || 0 || sp - tax; 
-var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.disputedRefAmount || data.custRefAmount || 0;  
-var currentActualGp = data.actualGP || 0;
-console.log("order rn",data.orderStatus);
-$("#custRefunds").val(custRefundedAmount)
-// console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
-// console.log("yards",data.additionalInfo)
-if (
-(!data.additionalInfo || data.additionalInfo.length === 0) || (data.additionalInfo && data.additionalInfo.length >= 0 && 
-(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
-) {
-// if (custRefundedAmount) {
-actualGP = sp - tax - custRefundedAmount;
-$("#actualGP").val(actualGP.toFixed(2));
+      if (
+        (!data.additionalInfo || data.additionalInfo.length === 0) ||
+        (data.additionalInfo && data.additionalInfo.length >= 0 &&
+          (data.orderStatus === "Order Cancelled" ||
+            data.orderStatus === "Refunded" ||
+            data.orderStatus === "Dispute"))
+      ) {
+        // Calculate actualGP for specific order statuses
+        actualGP = sp - tax - custRefundedAmount;
+        $("#actualGP").val(actualGP.toFixed(2));
 
-if (currentActualGp !== actualGP) {
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
-} 
-else {
-console.log("Same actualGPS");
-}
-// }
-}
+        if (currentActualGp !== actualGP) {
+          axios
+            .put(
+              `https://www.spotops360.com/orders/${orderNo}/updateActualGP`,
+              { actualGP }
+            )
+            .then(() => console.log("ActualGP updated successfully"))
+            .catch((error) => console.error("Error updating actualGP:", error));
+        }
+      } else {
+        data.additionalInfo.forEach((yard, index) => {
+          const yardIndex = index + 1;
+          const pStatus = yard.paymentStatus;
 
+          if (pStatus === "Card charged") {
+            // Calculate yard-specific costs
+            const yardPP = parseFloat(yard.partPrice) || 0;
+            const yardOSorYS = yard.shippingDetails || "";
+            const shippingValueYard = yardOSorYS.includes("Own shipping")
+              ? parseFloat(yardOSorYS.split(":")[1].trim()) || 0
+              : yardOSorYS.includes("Yard shipping")
+              ? parseFloat(yardOSorYS.split(":")[1].trim()) || 0
+              : 0;
+            const yardOthers = parseFloat(yard.others) || 0;
+            const escOwnShipReturn = parseFloat(
+              yard.custOwnShippingReturn
+            ) || 0;
+            const escOwnShipReplacement = parseFloat(
+              yard.custOwnShipReplacement
+            ) || 0;
+            const yardOwnShippingReplacement = parseFloat(
+              yard.yardOwnShipping
+            ) || 0;
+            const yardRefundAmount = parseFloat(yard.refundedAmount) || 0;
 
-data.additionalInfo.forEach((yard, index) => {
-const yardIndex = index + 1;
-// Check if any entry in additionalInfo has escTicked set to "Yes"
-const isEscTicked = data.additionalInfo.some(info => info.escTicked === "Yes");
-if (isEscTicked) {
-$("#escTickBox").prop("checked", true);
-} else {
-$("#escTickBox").prop("checked", false);
-}
-pStatus = yard.paymentStatus;
-var rStatus = yard.refundStatus;
-console.log("pStatusDio", pStatus, rStatus);
-if (pStatus === "Card charged" && rStatus === "Refund collected") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025', 'border': 'none'});
-} 
-else if (yard.status === "PO cancelled" && pStatus !== "Card charged") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#c3c3c3', 'border': 'none',color: '#ffffff'});
-} 
-else if (pStatus === "Card charged") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-}
+            const yardSpent =
+              yardPP +
+              shippingValueYard +
+              yardOthers +
+              escOwnShipReturn +
+              escOwnShipReplacement +
+              yardOwnShippingReplacement -
+              yardRefundAmount;
+            totalSpend.push(yardSpent);
+            totalSum += yardSpent;
+          }
+        });
 
-var yardStatus = yard.status;
-// console.log("current yard status", yardStatus);
-// Update order status based on yard status
-// if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent"){
-// $("#orderStatus").val("Yard Processing");
-// }
-// else if(yardStatus === "Label created") {
-// $("#orderStatus").val("Yard Processing");
-// var labelCreationDate = currentDateTime;
-// }
+        const subtractRefund = spMinusTax - custRefundedAmount;
+        actualGP = subtractRefund - totalSum;
 
-// else if (yardStatus === "Part shipped") {
-// $("#orderStatus").val("In Transit");
-// var partShippedDate = currentDateTime;
-// } else if (yardStatus === "Part delivered") {
-// $("#orderStatus").val("Order Fulfilled");
-// } else if (yardStatus === "Escalation") {
-// $("#orderStatus").val("Escalation");
-// } else if (yardStatus === "Collect refund") {
-// $("#orderStatus").val("Escalation");
-// }
-if(pStatus === "Card charged"){
-var yardPP = parseFloat(yard.partPrice) || 0;
-var yardOSorYS = yard.shippingDetails || '';
-var shippingValueYard = 0;  
-if (yardOSorYS.includes("Own shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
-// console.log("own ship", shippingValueYard);
-} else if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-// console.log("yard ship", shippingValueYard);
-}
-var yardOthers = parseFloat(yard.others) || 0;
-var escOwnShipReturn = parseFloat(yard.custOwnShippingReturn) || 0;
-var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
-var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
-var yardRefundAmount = parseFloat(yard.refundedAmount) || 0;
-var escReimbursement = parseFloat(yard.reimbursementAmount) || 0;
-// console.log("add",yardPP,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,"yardrefundAmount:",yardRefundAmount);
-var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement - yardRefundAmount;
-console.log("yardSpent", yardSpent,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,yardRefundAmount,"escReimbursement",escReimbursement);
-totalSpend.push(yardSpent);
-totalSum += yardSpent;
-// console.log("Current totalSpend array:", totalSpend);
-// console.log("Total sum of all yards:", totalSum);
-var subtractRefund = spMinusTax - custRefundedAmount;
-actualGP = subtractRefund - totalSum;
-// console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
-$("#actualGP").val(actualGP.toFixed(2)); 
-// updateActualGP(orderNo, actualGP);
-if(currentActualGp !== actualGP && data.orderStatus !== "Dispute"){
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
-}else if (data.orderStatus === "Dispute"){
-actualGP =  0 - (totalSum  + tax);
-console.log("actualGPAfterDispute",totalSum,tax)
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-$("#actualGP").val(actualGP.toFixed(2));z
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
-}
-else{
-console.log("same actyal gp foe card charged")
-}
-}
-else{
-  console.log("actualgp to remain 0")
-}
-// else{
-//   actualGP = sp - tax - custRefundedAmount;
-//   console.log("Calculated actualGP for card not charged:", actualGP);
-//   $("#actualGP").val(actualGP.toFixed(2)); 
-// }
-});
-})
-.catch(error => console.error("Error fetching yard data:", error));
+        if (currentActualGp !== actualGP && data.orderStatus !== "Dispute") {
+          axios
+            .put(
+              `https://www.spotops360.com/orders/${orderNo}/updateActualGP`,
+              { actualGP }
+            )
+            .then(() => console.log("ActualGP updated successfully"))
+            .catch((error) => console.error("Error updating actualGP:", error));
+        } else if (data.orderStatus === "Dispute") {
+          actualGP = 0 - (totalSum + tax);
+          axios
+            .put(
+              `https://www.spotops360.com/orders/${orderNo}/updateActualGP`,
+              { actualGP }
+            )
+            .then(() => $("#actualGP").val(actualGP.toFixed(2)))
+            .catch((error) =>
+              console.error("Error updating actualGP for dispute:", error)
+            );
+        } else {
+          console.log("Same actualGP for 'Card charged'");
+        }
+      }
+    })
+    .catch((error) => console.error("Error fetching order data:", error));
 }, 500);
 // part to check paymentStatus and other things like updated actualGP end here
 
