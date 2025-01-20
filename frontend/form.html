@@ -2940,7 +2940,7 @@ actualGP = subtractRefund - totalSum;
 $("#actualGP").val(actualGP.toFixed(2)); 
 // updateActualGP(orderNo, actualGP);
 if(currentActualGp !== actualGP && orderStatus !== "Dispute"){
-  console.log("Dispute?",orderstatus);
+  console.log("Dispute?",orderStatus);
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
