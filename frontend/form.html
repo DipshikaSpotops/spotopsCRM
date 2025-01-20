@@ -2882,7 +2882,7 @@ $("#escTickBox").prop("checked", false);
 }
 pStatus = yard.paymentStatus;
 var rStatus = yard.refundStatus;
-console.log("pStatus", pStatus, rStatus);
+console.log("pStatusDio", pStatus, rStatus);
 if (pStatus === "Card charged" && rStatus === "Refund collected") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025', 'border': 'none'});
 } 
@@ -2966,6 +2966,9 @@ console.error("Error updating actualGP:", error);
 else{
 console.log("same actyal gp foe card charged")
 }
+}
+else{
+  comsole.log("actualgp to remain 0")
 }
 // else{
 //   actualGP = sp - tax - custRefundedAmount;
