@@ -852,7 +852,7 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/cancelled?month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/disputes?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {
@@ -861,7 +861,7 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Disputes This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -961,7 +961,7 @@ const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/cancelled?month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/disputes?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {
@@ -969,7 +969,7 @@ throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Cancelled Orders This Month- ${allOrdersLength}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Disputes This Month- ${allOrdersLength}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
