@@ -2849,6 +2849,7 @@ actualGP = (sp - custRefundedAmount) - tax;
 $("#actualGP").val(actualGP.toFixed(2));
 
 if (currentActualGp !== actualGP && data.orderStatus !== "Dispute") {
+  console.log("not dispute")
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
