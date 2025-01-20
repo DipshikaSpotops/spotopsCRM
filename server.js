@@ -3198,16 +3198,16 @@ console.log(
 "cancellationReason:", cancellationReason,
 "orderStatus", orderStatus
 );
-// custRefAmount is the standard
+// custRefAmount is the
 var firstName = req.query.firstName;
 console.log("firstName",firstName )
 try {
 const updateFields = {};
 if (custRefundDate) updateFields.custRefundDate = custRefundDate;
-if (custRefundedAmount) updateFields.custRefundedAmount = custRefundedAmount;
+if (custRefundedAmount) updateFields.custRefAmount = custRefundedAmount;
 if (cancelledDate) updateFields.cancelledDate = cancelledDate;
 if (cancelledRefAmount) updateFields.custRefAmount = cancelledRefAmount;
-if (cancellationReason) updateFields.custRefAmount = cancellationReason;
+if (cancellationReason) updateFields.cancellationReason = cancellationReason;
 if (orderStatus) updateFields.orderStatus = orderStatus;
 const order = await Order.findOne({ orderNo: orderNo });
 if (!order) {
