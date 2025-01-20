@@ -234,6 +234,17 @@ background: rgba(0, 0, 0, 0.5);
 body.modal-active {
 overflow: hidden; 
 }
+#searchInput {
+  margin: 0 -954%;
+border-radius: 30px;
+border: 1px solid grey;
+background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
+background-size: 20px 22px;
+padding-left: 12px;
+height: 36px;
+width: 186%;
+text-align: center;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -1002,19 +1013,19 @@ var taskCreatedYear = newtaskCreated.getFullYear();
 fetchTasksOngoingMonth();
 
 // fetch task summary
+let allTasks = [];
 async function fetchTaskSummary() {
       try {
         const response = await axios.get(`https://www.spotops360.com/tasks-summary?firstName=${firstName}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const summary = response.data;
-
+        allTasks = response.data;
         // Update counts
-        document.getElementById("completedOnTimeCount").textContent = `Count: ${summary.completedOnTime.length}`;
-        document.getElementById("alertCount").textContent = `Count: ${summary.alert.length}`;
-        document.getElementById("completedLateCount").textContent = `Count: ${summary.completedLate.length}`;
-        document.getElementById("warningCount").textContent = `Count: ${summary.warning.length}`;
-        document.getElementById("notCompletedCount").textContent = `Count: ${summary.notCompleted.length}`;
+        document.getElementById("completedOnTimeCount").textContent = `Count: ${allTasks.completedOnTime.length}`;
+        document.getElementById("alertCount").textContent = `Count: ${allTasks.alert.length}`;
+        document.getElementById("completedLateCount").textContent = `Count: ${allTasks.completedLate.length}`;
+        document.getElementById("warningCount").textContent = `Count: ${allTasks.warning.length}`;
+        document.getElementById("notCompletedCount").textContent = `Count: ${allTasks.notCompleted.length}`;
 
         // Attach data for modal
         $(".view-orders-btn").on("click", function () {
@@ -1024,23 +1035,23 @@ async function fetchTaskSummary() {
 
           switch (category) {
             case "completedOnTime":
-              orders = summary.completedOnTime;
+              orders = allTasks.completedOnTime;
               title = "Completed On Time";
               break;
             case "alert":
-              orders = summary.alert;
+              orders = allTasks.alert;
               title = "Alert";
               break;
             case "completedLate":
-              orders = summary.completedLate;
+              orders = allTasks.completedLate;
               title = "Completed Late";
               break;
             case "warning":
-              orders = summary.warning;
+              orders = allTasks.warning;
               title = "Warning";
               break;
             case "notCompleted":
-              orders = summary.notCompleted;
+              orders = allTasks.notCompleted;
               title = "Not Completed";
               break;
           }
@@ -1057,6 +1068,39 @@ async function fetchTaskSummary() {
       }
     }
     fetchTaskSummary();
+    $("#searchInput").on("keyup", function () {
+const value = $(this).val().toLowerCase();
+const filteredTasks = allTasks.filter(order => {
+const basicSearch = (
+(allTasks.orderNo && String(allTasks.orderNo).toLowerCase().includes(value)));
+const taskSearch = allTasks.tasks && allTasks.tasks.some((info, index) => {
+const taskIndex = `Index ${index + 1}`; 
+return (
+taskIndex.includes(value) || 
+(info.taskName && info.taskName.toLowerCase().includes(value)) ||
+(info.assignedTo && String(info.assignedTo).toLowerCase().includes(value)) || 
+(info.assignedBy && info.assignedBy.toLowerCase().includes(value)) || 
+(info.taskCreatedDate && info.taskCreatedDate.toLowerCase().includes(value)) || 
+(info.deadline && info.deadline.toLowerCase().includes(value)) ||
+(info.taskDescription && info.taskDescription.toLowerCase().includes(value)) ||
+(info.taskStatus && info.taskStatus.toLowerCase().includes(value)) ||
+(info.taskCompletionTime && info.taskCompletionTime.toLowerCase().includes(value))
+);
+});
+
+// Return true if any of the basic fields or yard details match the search term
+return basicSearch || yardSearch;
+});
+
+// If a search is active, display the filtered results, otherwise reset to the full dataset
+if (filteredOrders.length > 0 || value === "") {
+renderTableRows(1, filteredOrders); // Render the first page of filtered results
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+} else {
+$("#infoTable").empty(); // Clear the table if no results are found
+$("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+}
+});
     });
 </script>
 </body>

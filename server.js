@@ -1142,11 +1142,9 @@ async function updateTaskStatuses() {
 app.get("/tasks-summary", async (req, res) => {
   try {
     const { firstName } = req.query;
-
     const taskGroups = await TaskGroup.find({
       "tasks.assignedTo": firstName,
     });
-
     const summary = {
       completedOnTime: [],
       alert: [],
