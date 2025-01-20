@@ -2844,6 +2844,7 @@ var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || d
 var currentActualGp = data.actualGP || 0;
 console.log("order rn",data.orderStatus);
 $("#custRefunds").val(custRefundedAmount)
+$("#actualGP").val(currentActualGp.toFixed(2));
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
 if (
