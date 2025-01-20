@@ -2853,7 +2853,7 @@ if (
 (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
 ) {
 // if (custRefundedAmount) {
-actualGP = sp - sp - custRefundedAmount - tax;
+actualGP = sp - tax - custRefundedAmount;
 $("#actualGP").val(actualGP.toFixed(2));
 
 if (currentActualGp !== actualGP) {
