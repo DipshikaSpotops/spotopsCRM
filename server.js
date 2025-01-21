@@ -1154,39 +1154,6 @@ async function updateTaskStatuses() {
     console.error("Error updating task statuses:", error);
   }
 }
-async function shouldRunUpdateTaskStatuses() {
-  const currentDallasTime = moment.tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss");
-
-  const tasksRequiringUpdate = await TaskGroup.countDocuments({
-    $or: [
-      { "tasks.taskStatus": "New Task Created" },
-      { 
-        "tasks.deadline": { $lte: currentDallasTime }, 
-        "tasks.taskStatus": { $in: ["Alert", "Warning", "Processing"] }, 
-      },
-    ],
-  });
-
-  return tasksRequiringUpdate > 0;
-}
-
-async function callUpdateTaskStatuses() {
-  try {
-    console.log("Checking if task statuses need updating...");
-    const shouldUpdate = await shouldRunUpdateTaskStatuses();
-    if (shouldUpdate) {
-      console.log("Updates required. Running updateTaskStatuses...");
-      await updateTaskStatuses();
-    } else {
-      console.log("No updates required at this time.");
-    }
-  } catch (error) {
-    console.error("Error in callUpdateTaskStatuses:", error);
-  } finally {
-    setTimeout(callUpdateTaskStatuses, 300000); 
-  }
-}
-callUpdateTaskStatuses();
 
 
 // app.get("/notifications", async (req, res) => {
