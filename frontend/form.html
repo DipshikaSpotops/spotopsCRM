@@ -2849,10 +2849,9 @@ $("#actualGP").val(currentActualGp.toFixed(2));
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
 if (
-(!data.additionalInfo || data.additionalInfo.length === 0) || 
-(data.additionalInfo && data.additionalInfo.length >= 0 && 
+(!data.additionalInfo || data.additionalInfo.length === 0) && 
 (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
-) {
+{
 if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
 $("#actualGP").val(actualGP.toFixed(2));
