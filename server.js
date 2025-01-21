@@ -1154,8 +1154,6 @@ async function updateTaskStatuses() {
     console.error("Error updating task statuses:", error);
   }
 }
-const moment = require("moment-timezone");
-
 async function shouldRunUpdateTaskStatuses() {
   const currentDallasTime = moment.tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss");
 
