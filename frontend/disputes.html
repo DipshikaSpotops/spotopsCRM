@@ -724,15 +724,23 @@ const refundedAmount = info.refundedAmount || 0;
 const custOwnShipReplacement = info.custOwnShipReplacement || 0;
 const yardOwnShipping = info.yardOwnShipping || 0;
 const custOwnShippingReturn = info.custOwnShippingReturn || 0;
-
 const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
-
+const yardSpendTotal =
+            partPrice + 
+            shippingCost + 
+            others - 
+            refundedAmount + 
+            yardOwnShipping + 
+            custOwnShippingReturn - 
+            custOwnShipReplacement;
+            const escSpending = yardOwnShipping + 
+            custOwnShippingReturn + 
+            custOwnShipReplacement;
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
 Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
 Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
-Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
-${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}<br>
+Yard Spend: ${yardSpendTotal}<br>
 Yard refund: ${refundedAmount}
 `;
 })

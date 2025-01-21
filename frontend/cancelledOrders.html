@@ -728,15 +728,20 @@ const refundedAmount = info.refundedAmount || 0;
 const custOwnShipReplacement = info.custOwnShipReplacement || 0;
 const yardOwnShipping = info.yardOwnShipping || 0;
 const custOwnShippingReturn = info.custOwnShippingReturn || 0;
-
 const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
-
+const yardSpendTotal =
+            partPrice + 
+            shippingCost + 
+            others - 
+            refundedAmount + 
+            yardOwnShipping + 
+            custOwnShippingReturn - 
+            custOwnShipReplacement;
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
 Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
 Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
-Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
-${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}<br>
+Yard Spend: ${yardSpendTotal}<br>
 Yard refund: ${refundedAmount}
 `;
 })
@@ -760,26 +765,30 @@ return parts[1]?.split(" on ")[0] || "Unknown";
 <td>${item.orderStatus}</td>
 <td>
 ${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info) => {
-const shippingCost = info.shippingDetails
-? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
-: 0;
-const partPrice = info.partPrice || 0;
-const others = info.others || 0;
-const refundedAmount = info.refundedAmount || 0;
-const yardOwnShipping = info.yardOwnShipping || 0;
-const custOwnShippingReturn = info.custOwnShippingReturn || 0;
-const custOwnShipReplacement = info.custOwnShipReplacement || 0;
-
-// Calculate and return the Yard Spend
-return `Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
-${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}`;
-})
-.join("<br>")
-: ""
+  item.additionalInfo && item.additionalInfo.length > 0
+    ? item.additionalInfo
+        .map((info) => {
+          if (info.paymentStatus === "Card charged") { 
+            const shippingCost = info.shippingDetails
+              ? parseFloat(info.shippingDetails.match(/\d+/)?.[0]) || 0
+              : 0;
+            const partPrice = info.partPrice || 0;
+            const others = info.others || 0;
+            const refundedAmount = info.refundedAmount || 0;
+            const yardOwnShipping = info.yardOwnShipping || 0;
+            const custOwnShippingReturn = info.custOwnShippingReturn || 0;
+            const custOwnShipReplacement = info.custOwnShipReplacement || 0;
+            return `Yard Spend: ${partPrice} + ${shippingCost} + ${others} - ${refundedAmount} + 
+            ${yardOwnShipping} + ${custOwnShippingReturn} - ${custOwnShipReplacement}`;
+          } else {
+            return ""; 
+          }
+        })
+        .filter((result) => result) 
+        .join("<br>")
+    : ""
 }
+</td>
 </td>
 <td style="justify-content: center;">${actions}</td>
 </tr>
