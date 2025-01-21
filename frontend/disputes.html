@@ -739,8 +739,10 @@ const yardSpendTotal =
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
 Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
-Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
-Yard Spend: ${yardSpendTotal}<br>
+Esc spending: ${escSpending}<br>
+Status: ${info.status} ${info.paymentStatus} ${
+  info.paymentStatus === "Card charged" ? `Yard Spend: ${yardSpendTotal}` : ""
+}<br>
 Yard refund: ${refundedAmount}
 `;
 })
