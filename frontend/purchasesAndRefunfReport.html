@@ -418,17 +418,78 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-<!-- <div id="purchases-content"> -->
-<h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Purchases and Refunds</h1>
-<div id="filterAndTotal" style="display: flex;">
-    <div class="filter-bar">
-    <input id="monthYearPicker" type="month" class="form-control" />
-    <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
-    </div>
-    <div id="showTotalOrders">Total Orders This Month-</div>
-    <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+    <h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Purchases and Refunds</h1>
+    <div id="filterAndTotal" style="display: flex; align-items: center; margin-bottom: 20px;">
+      <div class="filter-bar" style="margin-right: 20px;">
+        <input id="monthYearPicker" type="month" class="form-control" />
+      </div>
+      <button id="filterButton" class="btn btn-primary" style="background-color: black; border: none; margin-right: 20px;">
+        Filter
+      </button>
+      <div id="showTotalOrders">Total Orders This Month -</div>
+      <div id="loadingMessage" style="display: none; margin-left: 20px;"><b>Loading, please wait...</b></div>
     </div> 
-</div>
+  
+    <!-- Table for Purchases and Refunds -->
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+      <table class="table table-bordered" style="width: 80%; text-align: center;">
+        <thead style="background-color: #f8f9fa;">
+          <tr>
+            <th>Heading</th>
+            <th>Total Amount</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total POs Sent</td>
+            <td id="totalPOsAmount">$0.00</td>
+            <td id="totalPOsCount">0</td>
+          </tr>
+          <tr>
+            <td>Total Cancelled POs</td>
+            <td id="cancelledPOsAmount">$0.00</td>
+            <td id="cancelledPOsCount">0</td>
+          </tr>
+          <tr>
+            <td>Not Charged POs</td>
+            <td id="notChargedPOsAmount">$0.00</td>
+            <td id="notChargedPOsCount">0</td>
+          </tr>
+          <tr>
+            <td>Charged POs</td>
+            <td id="chargedPOsAmount">$0.00</td>
+            <td id="chargedPOsCount">0</td>
+          </tr>
+          <tr>
+            <td>Charged Twice Orders</td>
+            <td id="chargedTwiceAmount">$0.00</td>
+            <td id="chargedTwiceCount">0</td>
+          </tr>
+          <tr>
+            <td>Refund to be Collected</td>
+            <td id="refundToBeCollectedAmount">$0.00</td>
+            <td id="refundToBeCollectedCount">0</td>
+          </tr>
+          <tr>
+            <td>Refund Collected</td>
+            <td id="refundCollectedAmount">$0.00</td>
+            <td id="refundCollectedCount">0</td>
+          </tr>
+          <tr>
+            <td>Own Shipping</td>
+            <td id="ownShippingAmount">$0.00</td>
+            <td id="ownShippingCount">0</td>
+          </tr>
+          <tr>
+            <td>Yard Shipping</td>
+            <td id="yardShippingAmount">$0.00</td>
+            <td id="yardShippingCount">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>  
 
 <div id="profile-content" class="d-none">
 <h1>User Profile</h1>
@@ -499,7 +560,7 @@ $("#monthYearPicker").val(`${year}-${monthNum}`);
 await fetchYardInfo(month, year);
 
 // Fetch yard info data for a specific month and 
-async function fetchYardInfo(month, year) {
+async function fetchPOs(month, year) {
 try {
 $("#loadingMessage").show();
 const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
