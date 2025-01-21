@@ -546,7 +546,7 @@ const taskSchema = new mongoose.Schema({
       taskCreatedDate: { type: String, required: true },
       deadline: { type: String, required: true },
       taskDescription: { type: String, required: true },
-      taskStatus: { type: String, default: "Pending" },
+      taskStatus: { type: String, required: true},
       taskCompletionTime: { type: String },
     },
   ],
@@ -555,6 +555,7 @@ const taskSchema = new mongoose.Schema({
   alertCountAfterDeadline: { type: Number, default: 0 },    
   incompleteCountAfterDeadline: { type: Number, default: 0 },
   completeCountBeforeDeadline: { type: Number, default: 0 }, 
+  processingCountAfterDeadline: {type: Number, default: 0},
 });
 
 const notificationSchema = new mongoose.Schema({
@@ -1035,13 +1036,15 @@ app.get("/alltasks", async (req, res) => {
 // // checking taskGroup collection to change the taskStatus once in every minute
 async function updateTaskStatuses() {
   try {
-    const currentDallasTime = moment.tz("America/Chicago");
+    const currentDallasTime = moment.tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss");
     console.log("Current Dallas time:", currentDallasTime);
+
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true },
     });
 
     let notifications = [];
+
     for (const taskGroup of taskGroups) {
       let isUpdated = false;
       const currentTaskCount = taskGroup.tasks.length;
@@ -1062,9 +1065,9 @@ async function updateTaskStatuses() {
       taskGroup.tasks.forEach((task) => {
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
 
-        // Track completed tasks
+        // Handle completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
-          task.taskCompletionTime = currentDallasTime.format("YYYY-MM-DDTHH:mm:ss");
+          task.taskCompletionTime = currentDallasTime;
           isUpdated = true;
           notifications.push({
             taskId: task._id,
@@ -1072,7 +1075,7 @@ async function updateTaskStatuses() {
           });
 
           // Count tasks completed before the deadline
-          if (currentDallasTime.isBefore(taskDeadline)) {
+          if (moment(currentDallasTime).isBefore(taskDeadline)) {
             taskGroup.completeCountBeforeDeadline = (taskGroup.completeCountBeforeDeadline || 0) + 1;
           }
         }
@@ -1080,7 +1083,7 @@ async function updateTaskStatuses() {
         // Handle "New Task Created" -> "Processing" after 5 minutes
         if (task.taskStatus === "New Task Created") {
           const createdTime = moment.tz(task.taskCreatedDate, "YYYY-MM-DDTHH:mm", "America/Chicago");
-          if (currentDallasTime.diff(createdTime, "minutes") >= 5) {
+          if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
             task.taskStatus = "Processing";
             isUpdated = true;
             notifications.push({
@@ -1092,8 +1095,9 @@ async function updateTaskStatuses() {
 
         // Alert and Warning Statuses
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
-          const diffInMinutes = taskDeadline.diff(currentDallasTime, "minutes");
+          const diffInMinutes = taskDeadline.diff(moment(currentDallasTime), "minutes");
 
+          // Handle Alert status
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
@@ -1101,33 +1105,36 @@ async function updateTaskStatuses() {
               taskId: task._id,
               message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
             });
-          } else if (diffInMinutes <= 0 && diffInMinutes > -120 && task.taskStatus !== "Warning") {
-            task.taskStatus = "Warning";
-            isUpdated = true;
-            notifications.push({
-              taskId: task._id,
-              message: `Warning (Deadline Missed): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
-            });
           }
-          if (diffInMinutes <= 0 && task.taskStatus === "Warning") {
-            task.taskStatus = "Incomplete";
-            isUpdated = true;
-          
-            // Increment incompleteCountAfterDeadline for the task group
-            taskGroup.incompleteCountAfterDeadline = (taskGroup.incompleteCountAfterDeadline || 0) + 1;
-            notifications.push({
-              taskId: task._id,
-              message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
-            });
-          }          
-        }
 
-        // Track "Processing" tasks past the deadline
-        if (task.taskStatus === "Processing" && currentDallasTime.isAfter(taskDeadline)) {
-          notifications.push({
-            taskId: task._id,
-            message: `Task still in Processing past deadline: ${taskGroup.orderNo} - \n${task.taskDescription}`,
-          });
+          // Handle Warning, Incomplete, and Processing statuses
+          if (diffInMinutes <= 0) {
+            if (task.taskStatus === "Alert") {
+              taskGroup.alertCountAfterDeadline = (taskGroup.alertCountAfterDeadline || 0) + 1;
+            }
+
+            if (task.taskStatus === "Warning") {
+              task.taskStatus = "Incomplete";
+              isUpdated = true;
+              taskGroup.warningCountAfterDeadline = (taskGroup.warningCountAfterDeadline || 0) + 1;
+              notifications.push({
+                taskId: task._id,
+                message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
+              });
+            }
+
+            if (task.taskStatus === "Incomplete") {
+              taskGroup.incompleteCountAfterDeadline = (taskGroup.incompleteCountAfterDeadline || 0) + 1;
+            }
+
+            if (task.taskStatus === "Processing") {
+              taskGroup.processingCountAfterDeadline = (taskGroup.processingCountAfterDeadline || 0) + 1;
+              notifications.push({
+                taskId: task._id,
+                message: `Task still in Processing past deadline: ${taskGroup.orderNo} - \n${task.taskDescription}`,
+              });
+            }
+          }
         }
       });
 

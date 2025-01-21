@@ -453,22 +453,16 @@ aria-labelledby="userMenu"
         </tbody>
       </table>
       <h3 class="fixed-header" style="text-align: left;white-space: nowrap;width: 100%;color: black;margin-bottom: 1%;margin-top: 2%;" id="monthly-tasks">Task Report</h3>
-      <table id="monthlyTasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
-        <thead>
-          <tr>
-            <th>Order No</th>
-            <th>Task Name</th>
-            <th>Assigned To</th>
-            <th>Assigned By</th>
-            <th>Task Created Date</th>
-            <th>Deadline</th>
-            <th>Task Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Table rows will be populated dynamically -->
-        </tbody>
-      </table>      
+      <div id="taskStatusCounts" class="task-status-container" style="color: black; margin-top: 20px;">
+        <h3>Task Status Summary</h3>
+        <ul>
+          <li>Alert Count: <span id="alertCount"></span></li>
+          <li>Completed On Time: <span id="completedOnTimeCount"></span></li>
+          <li>Completed Late: <span id="completedLateCount"></span></li>
+          <li>Warning Count: <span id="warningCount"></span></li>
+          <li>Not Completed: <span id="notCompletedCount"></span></li>
+        </ul>
+      </div>           
     </div>
     
     <!-- Modal for Viewing Orders -->
