@@ -111,10 +111,6 @@ margin-top: 30px;
 .brand-table-container {
 margin-top: 30px;
 }
-.form-group {
-width: 10%;
-margin-bottom: 20px;
-}
 .submenu {
 display: block; /* Show submenus by default */
 }
@@ -312,12 +308,27 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <h1>Sales Report</h1>
-<div class="form-group">
-<label for="salesFilter">Filter:</label>
-<select class="form-control" id="salesFilter">
-<option value="daily">Daily</option>
-<option value="monthly">Monthly</option>
-</select>
+<div class="filters">
+  <div class="form-group">
+    <label for="dailyMonthFilter">Daily Data:</label>
+    <select class="form-control" id="dailyMonthFilter">
+      <!-- Options dynamically generated -->
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="monthlyYearFilter">Monthly Data - Year:</label>
+    <select class="form-control" id="monthlyYearFilter">
+      <!-- Options dynamically generated -->
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="yearlyFilter">Yearly Data:</label>
+    <select class="form-control" id="yearlyFilter">
+      <!-- Options dynamically generated -->
+    </select>
+  </div>
 </div>
 
 <div class="chart-row">
@@ -488,39 +499,113 @@ $(".close").click(function () {
 location.reload();
 });
 
-let dailyData = []; // Store the daily data (data for the current month)
-let currentMonthStats = {};
+const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
 
-// Fetch data for daily graph (only for the current month)
-async function fetchSalesDataForCurrentMonth() {
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
-const currentYear = currentDate.getFullYear();
+  // Populate Month Dropdown for Daily Data
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  months.forEach((month, index) => {
+    const isSelected = index === currentMonth ? "selected" : "";
+    $("#dailyMonthFilter").append(`<option value="${index}" ${isSelected}>${month}</option>`);
+  });
 
-try {
-const response = await axios.get(`https://www.spotops360.com/orders`, {
-headers: { Authorization: `Bearer ${token}` },
+  // Populate Year Dropdown for Monthly and Yearly Data
+  for (let year = currentYear; year >= currentYear - 5; year--) {
+    const isSelected = year === currentYear ? "selected" : "";
+    $("#monthlyYearFilter, #yearlyFilter").append(`<option value="${year}" ${isSelected}>${year}</option>`);
+  }
+
+  // Fetch and Render Data for Current Month (Daily Graph)
+  await fetchDailyData(currentMonth, currentYear);
+
+  // Fetch and Render Data for Selected Year (Monthly Graph)
+  await fetchMonthlyData(currentYear);
+
+  // Fetch and Render Data for Selected Year (Yearly Graph)
+  await fetchYearlyData(currentYear);
+
+  // Event Listeners for Filters
+  $("#dailyMonthFilter").on("change", async function () {
+    const selectedMonth = parseInt($(this).val());
+    await fetchDailyData(selectedMonth, currentYear);
+  });
+
+  $("#monthlyYearFilter").on("change", async function () {
+    const selectedYear = parseInt($(this).val());
+    await fetchMonthlyData(selectedYear);
+  });
+
+  $("#yearlyFilter").on("change", async function () {
+    const selectedYear = parseInt($(this).val());
+    await fetchYearlyData(selectedYear);
+  });
 });
 
-if (response.status !== 200) {
-throw new Error("Failed to fetch orders");
+// Fetch Daily Data
+async function fetchDailyData(month, year) {
+  try {
+    const response = await axios.get(`https://www.spotops360.com/orders`, {
+      params: { month: months[month], year },
+    });
+    const orders = response.data;
+    // Process and update daily chart
+    updateChart("salesChart", orders, "Days of the Month");
+  } catch (error) {
+    console.error("Error fetching daily data:", error);
+  }
 }
 
-dailyData = response.data.filter((order) => {
-const parsedOrderDate = parseOrderDate(order.orderDate);
-if (!parsedOrderDate) return false;
-
-const orderMonth = parsedOrderDate.getMonth();
-const orderYear = parsedOrderDate.getFullYear();
-// console.log("salesAgent",order.salesAgent);
-return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
-});
-
-calculateStats(dailyData); // Calculate stats for current month
-} catch (error) {
-console.error("Error fetching sales data:", error);
+// Fetch Monthly Data
+async function fetchMonthlyData(year) {
+  try {
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, { params: { year } });
+    const orders = response.data;
+    // Process and update monthly chart
+    updateChart("monthlySalesChart", orders, "Months");
+  } catch (error) {
+    console.error("Error fetching monthly data:", error);
+  }
 }
+
+// Fetch Yearly Data
+async function fetchYearlyData(year) {
+  try {
+    const response = await axios.get(`https://www.spotops360.com/orders/yearly`, { params: { year } });
+    const orders = response.data;
+    // Process and update yearly chart
+    updateChart("yearlySalesChart", orders, "Years");
+  } catch (error) {
+    console.error("Error fetching yearly data:", error);
+  }
 }
+
+// Update Chart
+function updateChart(chartId, data, xLabel) {
+  const ctx = document.getElementById(chartId).getContext("2d");
+  if (window[chartId]) {
+    window[chartId].destroy();
+  }
+  window[chartId] = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: data.labels, // X-axis labels
+      datasets: [
+        {
+          label: "Number of Orders",
+          data: data.values, // Y-axis values
+          backgroundColor: "rgba(75, 192, 192, 0.5)",
+          borderColor: "rgba(75, 192, 192, 1)",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: xLabel } },
+        y: { title: { display: true, text: "Orders" }, beginAtZero: true },
+      },
+    },
+  });
 
 // Calculate stats based on daily data (for the current month)
 function calculateStats(data) {
