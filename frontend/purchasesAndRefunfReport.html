@@ -419,42 +419,15 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <!-- <div id="purchases-content"> -->
-<h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Shipping Expenses</h1>
-<div style="align-items: center; justify-content: center">
-<input
-type="text"
-class="form-control"
-id="searchInput"
-placeholder="Search..."
-/>
-</div>
-<!-- <div class="table-responsive mx-auto" style="max-width: 90%"> -->
-<div id="pagination-controls" class="mt-3 mb-3"></div>
+<h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Purchases and Refunds</h1>
 <div id="filterAndTotal" style="display: flex;">
-<div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
-</div>
-<div id="showTotalOrders">Total Shipping Cost This Month-</div>
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-</div>  
-<table class="table table-bordered mt-4">
-<thead>
-<tr id="tableHeader" style="background-color: #f2f2f2">
-<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#x25B2;</span></th>
-<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderDate">Order Date</th>
-</tr>
-</thead>
-<tbody id="yardInfoTable" style="text-align: center">
-<!-- Yard information will be appended here -->
-</tbody>
-<tfoot id="tableFooter">
-<tr>
-<!-- Footer content will be generated dynamically -->
-</tr>
-</tfoot>
-</table>
-<!-- </div> -->
+    <div class="filter-bar">
+    <input id="monthYearPicker" type="month" class="form-control" />
+    <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
+    </div>
+    <div id="showTotalOrders">Total Orders This Month-</div>
+    <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+    </div> 
 </div>
 
 <div id="profile-content" class="d-none">
@@ -476,112 +449,6 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
-let yardOrders = [];
-const rowsPerPage = 25;
-let currentPage = 1;  
-let currentSort = {
-column: "",
-order: "asc", // ascending by default
-};
-
-function sortTable(column, order, isDateColumn, isYardColumn) {
-const tbody = $("#yardInfoTable");
-const rows = tbody.find("tr").toArray();
-
-rows.sort(function (a, b) {
-let cellA = $(a).find("td").eq(column).text().trim();
-let cellB = $(b).find("td").eq(column).text().trim();
-
-if (isDateColumn) {
-// Convert date strings into Date objects for sorting
-cellA = new Date(cellA);
-cellB = new Date(cellB);
-return order === "asc" ? cellA - cellB : cellB - cellA;
-} else if (isYardColumn) {
-// Sort Yard columns alphabetically
-return order === "asc"
-? cellA.localeCompare(cellB)
-: cellB.localeCompare(cellA);
-} else {
-// General string comparison for other columns
-return order === "asc"
-? cellA.localeCompare(cellB)
-: cellB.localeCompare(cellA);
-}
-});
-
-// Append sorted rows back to the table body
-$.each(rows, function (index, row) {
-tbody.append(row);
-});
-}
-
-// Click event for sorting columns with numerical values and dates
-$(document).on("click", ".onlyNumber", function () {
-const column = $(this).closest("th").index();
-const sortBy = $(this).closest("th").data("sort");
-
-// Ensure sortBy is defined before using it
-if (!sortBy) return;
-
-// Determine if the column is a date column or Yard column
-const isDateColumn = sortBy === "orderDate";
-const isYardColumn = sortBy.startsWith("yard");
-
-// Toggle the sort order
-currentSort.order =
-currentSort.column === sortBy && currentSort.order === "asc"
-? "desc"
-: "asc";
-currentSort.column = sortBy;
-
-sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-
-// Update sort icon
-$(".sort-icon").html("&#9650;"); 
-$(this)
-.find(".sort-icon")
-.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
-});
-// Click event for sorting Yard columns
-$(document).on("click", ".fYardName", function () {
-const column = $(this).closest("th").index();
-const sortBy = $(this).closest("th").data("sort");
-const isYardColumn = sortBy.startsWith("yard");
-currentSort.order =
-currentSort.column === sortBy && currentSort.order === "asc"
-? "desc"
-: "asc";
-currentSort.column = sortBy;
-
-sortTable(column, currentSort.order, false, isYardColumn);
-$(".fYardName").html("&#9650;");
-$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;");
-});
-
-$(document).on(
-"click",
-"th[data-sort], th[data-sort] .sort-icon",
-function (event) {
-const $target = $(event.target);
-const $th = $target.closest("th");
-const column = $th.index();
-const sortBy = $th.data("sort");
-const isDateColumn = sortBy === "orderDate";
-const isYardColumn = sortBy.startsWith("yard");
-currentSort.order =
-currentSort.column === sortBy && currentSort.order === "asc"
-? "desc"
-: "asc";
-currentSort.column = sortBy;
-
-sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-$("th[data-sort] .sort-icon").html("&#9650;"); 
-$th
-.find(".sort-icon")
-.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
-}
-);
 
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -801,46 +668,9 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-function createPaginationControls(totalPages, orders = yardOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
-
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
-
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
-}
 
 
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-});
 
-// "Previous" and "Next" button functionality
-$('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-}
-});
-
-$('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(yardOrders.length / 25);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
-}
-});
 // Filter by month and year
 $("#filterButton").click(async function () {
 const monthYear = $("#monthYearPicker").val(); 
