@@ -56,7 +56,7 @@ left: 0;
 width: 100%;
 height: 100%;
 background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
-/* z-index: 999; Places it just below the modal div */
+z-index: 999; 
 }
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
@@ -1167,6 +1167,13 @@ background-color: #333;
     text-decoration-line: underline;
     color: red;
     font-weight: bold;
+}
+#refundEmail{
+  border: none;
+    background-color: white;
+    color: blue;
+    text-decoration-line: underline;
+    cursor: pointer;
 }
 </style>
 
@@ -3857,8 +3864,6 @@ window.location.reload();
 // refundCollect part ends here
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
 $("#editYardPopup").show();
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
 $("#yardIndexEdit").val(yardIndex);
