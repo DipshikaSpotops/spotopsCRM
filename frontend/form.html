@@ -2142,9 +2142,21 @@ Save
 <label for="refundedDateLbel" style="font-family: inherit;">Refunded Date:</label>
 <input type="date" class="form-control" id="refundedDate" placeholder="Enter refunded date" style="width:64%;border-radius: 20px;text-align: center;margin-top: -1%;margin-left: 12%;" />
 </div>
+<div id="refundReason" style="display:flex;margin: 4%;white-space: nowrap;">
+  <label for="refundReason" style="font-family: inherit;">Refund Reason:<br></label>
+<select class="form-control paymentStatusRefund" id="paymentStatusSelect" style="margin: -0.6% 10%;width: 64%;border-radius: 20px;text-align: center;">
+<option value="">Choose</option>
+<option value="Damaged">Damaged</option>
+<option value="Defective">Defective</option>
+<option value="Incorrect">Incorrect</option>
+</select> 
+</div>
 <div id="storeCreditContainer" style="margin: 3% 4%;">
 <input type="checkbox" id="storeCreditCheckbox" style="width: 2%;" />
 <label for="storeCreditCheckbox" style="font-family: inherit;"> Store Credit</label>
+</div>
+<div id="sendRefundEmail" style="margin: 3% 4%;">
+<button id="refundEmail">Send Refund Email</button>  
 </div>
 <button class="save" id="refundSubmit" style="background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;">Save</button>
 </div>
