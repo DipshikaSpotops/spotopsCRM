@@ -3504,7 +3504,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   from: "purchase@auto-partsgroup.com",
   // to: `dipsikha.spotopsdigital@gmail.com`,
   to: `${yardEmail}`,
-  bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+  bcc:`purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com`,
   subject: `Request for Yard Refund | ${order.orderNo}`,
   html: `<p>Dear ${yardAgent},</p>
   <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
