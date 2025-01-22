@@ -3490,7 +3490,7 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   });
   var yardAgent = order.additionalInfo[yardIndex].agentName;
   var partPrice = order.additionalInfo[yardIndex].partPrice;
-  const yardOSorYS = info.shippingDetails || '';
+  const yardOSorYS = order.additionalInfo[yardIndex].shippingDetails || '';
   let shippingValueYard = 0;
  if (yardOSorYS.includes("Yard shipping")) {
 shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
