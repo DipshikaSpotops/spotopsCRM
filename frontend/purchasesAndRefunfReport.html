@@ -572,21 +572,19 @@ document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month-
           totals[3].count++;
         }
         // Row 5: Charged Twice Orders
-        let countedOrders = new Set(); // Use a Set to keep track of counted order numbers
-
+        let countedOrders = new Set(); // Set to keep track of counted order numbers
 if (
   order.additionalInfo.length > 1 &&
   info.paymentStatus === "Card charged"
 ) {
   if (!countedOrders.has(order.orderNo)) {
+    console.log("orderNo for more than 1 yard",order.orderNo);
     // Check if the order is already counted
     totals[4].count++; // Increment the order count
     countedOrders.add(order.orderNo); // Add the order to the Set
   }
-
   totals[4].amount += parseFloat(info.partPrice || 0);
 }
-
         // Row 6: Refund to be Collected
         if (info.collectRefundCheckbox == "Ticked" && !info.refundedAmount) {
           totals[5].amount += parseFloat(info.refundToCollect || 0);
