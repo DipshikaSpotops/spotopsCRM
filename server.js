@@ -3499,11 +3499,12 @@ var others = order.additionalInfo[yardIndex].others || 0;
 var chargedAmount = partPrice + shippingValueYard + others;
 var stockNo = order.additionalInfo[yardIndex].stockNo || "NA";
 var shipperName = order.additionalInfo[yardIndex].shipperName || "";
+var yardEmail = order.additionalInfo[yardIndex].email;
   const mailOptions = {
   from: "service@50starsautoparts.com",
-  to: `dipsikha.spotopsdigital@gmail.com`,
-  // to: `${order.email}`,
-  // bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+  // to: `dipsikha.spotopsdigital@gmail.com`,
+  to: `${yardEmail}`,
+  bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
   subject: `Request for Yard Refund | ${order.orderNo}`,
   html: `<p>Dear ${yardAgent},</p>
   <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
