@@ -3556,10 +3556,10 @@ let selectedYardIndex;
 // }
 $('#yardInfoContainer').on('click', '.cardcharged', function () {
 selectedYardIndex = $(this).data('yard-index');
-$("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
-// $(".mainDiv").addClass("blur");
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
+$("#cardCharged").fadeIn(); // Show the #cardCharged div with a fade-in effect
+// $(".mainDiv").addClass("blur");
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
@@ -3575,10 +3575,10 @@ $("#cardChargedDate").val(yardData.cardChargedDate);
 $('#yardInfoContainer').on('click', '.refundCollect', function () {
 selectedYardIndex = $(this).data('yard-index');
 console.log("refund collected part",selectedYardIndex);
-$("#refundCollect").fadeIn(); 
-// $(".mainDiv").addClass("blur");
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
+$("#refundCollect").fadeIn(); 
+// $(".mainDiv").addClass("blur");
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
@@ -3627,10 +3627,9 @@ $("#paymentStatusSelect").val("")
 $('#yardInfoContainer').on('click', '.escalation', async function () {
 const selectedYardIndex = $(this).data('yard-index');
 const orderNo = urlParams.get("orderNo");
-
-$("#escRMA").fadeIn();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
+$("#escRMA").fadeIn();
 $("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
 
 try {
@@ -3863,6 +3862,8 @@ window.location.reload();
 
 // refundCollect part ends here
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
+  $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
 $("#editYardPopup").show();
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
