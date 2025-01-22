@@ -3484,8 +3484,8 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-  user: "service@50starsautoparts.com",
-  pass: "hweg vrnk qyxx gktv",
+  user: "purchase@auto-partsgroup.com",
+  pass: "cuuy wetn vefs uiwx",
   },
   });
   var yardAgent = order.additionalInfo[yardIndex].agentName;
@@ -3501,7 +3501,7 @@ var stockNo = order.additionalInfo[yardIndex].stockNo || "NA";
 var shipperName = order.additionalInfo[yardIndex].shipperName || "";
 var yardEmail = order.additionalInfo[yardIndex].email;
   const mailOptions = {
-  from: "service@50starsautoparts.com",
+  from: "purchase@auto-partsgroup.com",
   // to: `dipsikha.spotopsdigital@gmail.com`,
   to: `${yardEmail}`,
   bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
