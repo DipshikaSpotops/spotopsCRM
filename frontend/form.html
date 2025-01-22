@@ -2166,6 +2166,11 @@ Save
 <input type="checkbox" id="storeCreditCheckbox" style="width: 2%;" />
 <label for="storeCreditCheckbox" style="font-family: inherit;"> Store Credit</label>
 </div>
+<button type="button" id="attachPO" style="margin-top:4%";>Attach a PO</button>
+<div id="driveLinkContainerPO" style="display: none; margin-top: 10px;">
+<!-- <label for="driveLink">Enter Google Drive or PDF Link:</label> -->
+<input type="file" id="poFilePDF" accept=".pdf">
+</div>
 <div id="sendRefundEmail" style="margin: 3% 4%;">
 <button id="sendRefundEmail">Send Refund Email</button>  
 </div>
@@ -3636,7 +3641,7 @@ const orderNo = urlParams.get("orderNo");
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $("#escRMA").fadeIn();
-$("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit").data("yard-index", selectedYardIndex);
+$("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit, #sendRefundEmail").data("yard-index", selectedYardIndex);
 
 try {
 const response = await axios.get(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`);
@@ -4683,21 +4688,20 @@ $("#sendRefundEmail").on("click", function () {
 $("#sendRefundEmail").prop("disabled", true).css("filter", "blur(2px)");
 const refundReason = $("#refundReasonYard").val();
 const returnTracking = $("#returnTrackingNo").val();
+const refundToCollect = $("refundToCollect").val();
 // var shipperName = $("#shipperNameEdit").val();
 // if (shipperName === "Others") {
 // shipperName = $("#otherShipperInput").val();
 // }
-const data = {
-  refundReason: refundReason,
-  returnTracking: returnTracking,
-};
-
-fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}`, {
+const yardIndex = $(this).data("yard-index");
+const fileInput = document.getElementById("poFilePDF");
+const file = fileInput.files[0] || "";
+console.log("yardddd",yardIndex);
+const formData = new FormData();
+formData.append("pdfFile", file);
+fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}?yardIndex=${yardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}`, {
 method: "POST",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(data),
+body: formData,
 })
 .then((response) => response.json())
 .then((result) => {

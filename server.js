@@ -3457,6 +3457,98 @@ console.error("Server  at the end:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+// to send refund email to the yard
+app.post("/orders/sendRefundEmail/:orderNo", upload.single("pdfFile"), async (req, res) => {
+  console.log("send refund email to the yard");
+  try {
+  const order = await Order.findOne({ orderNo: req.params.orderNo });
+  console.log("no", order);
+  if (!order) {
+  return res.status(400).send("Order not found");
+  }
+  const pdfFile = req.file; 
+if (!pdfFile) return res.status(400).send("No PDF file uploaded");
+  var orderDate = order.orderDate;
+  var yardIndex = req.query.yardIndex;
+  var refundReason = req.query.refundReason;
+  var returnTracking = req.query.returnTracking;
+  var refundToCollect = req.query.refundToCollect;
+  console.log("yardIndex",yardIndex);
+  const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
+  date.setDate(date.getDate() - 1);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');  
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  var orderedDate =  `${month}/${day}/${year}`;
+  console.log("refundReason", refundReason, returnTracking, refundToCollect);
+  const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+  user: "service@50starsautoparts.com",
+  pass: "hweg vrnk qyxx gktv",
+  },
+  });
+  var yardAgent = order.additionalInfo[yardIndex].agentName;
+  var partPrice = order.additionalInfo[yardIndex].partPrice;
+  const yardOSorYS = info.shippingDetails || '';
+  let shippingValueYard = 0;
+ if (yardOSorYS.includes("Yard shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+}
+var others = order.additionalInfo[yardIndex].others || 0;
+var chargedAmount = partPrice + shippingValueYard + others;
+var stockNo = order.additionalInfo[yardIndex].stockNo || "NA";
+var shipperName = order.additionalInfo[yardIndex].shipperName || "";
+  const mailOptions = {
+  from: "service@50starsautoparts.com",
+  to: `dipsikha.spotopsdigital@gmail.com`,
+  // to: `${order.email}`,
+  // bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+  subject: `Request for Yard Refund | ${order.orderNo}`,
+  html: `<p>Dear ${yardAgent},</p>
+  <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
+  ${order.model} ${order.pReq}</b> I request a refund for the same. The charge details are as follows:
+  <p>Total amount charged: ${chargedAmount} </p>
+  <p>Stock No: ${stockNo}</p>
+  <p>Return tracking number : ${returnTracking} ${shipperName}</p>
+  <p>I kindly request you to process the refund at your earliest convenience and share the refund receipt with me.</p>
+  <p>If tany further information or documentation is required, please do not hesitate to contact me.</p>
+  <p>Thank you for your understanding and cooperation.</p>
+  <p>I appreciate your prompt attention to this matter and look forward to a swift resolution.</p>
+  <p>Note : If you have another company name or DBA, please do let us know. Purchase Order has been attached for your reference.</p>
+             
+  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  attachments: [
+    {
+    filename: pdfFile.originalname,
+    content: pdfFile.buffer,
+    },
+    {
+    filename: "logo.png",
+    path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+    cid: "logo",
+    },
+    ],
+  };
+  
+  console.log("mail", mailOptions);
+  
+  transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+  console.error("Error sending mail:", error);
+  res.status(500).json({ message: `Error sending mail: ${error.message}` });
+  } else {
+  console.log("Cancellation email sent successfully:", info.response);
+  res.json({ message: `Cancellation email sent successfully` });
+  }
+  
+  });
+  } catch (error) {
+  console.error("Server  at the end:", error);
+  res.status(500).json({ message: "Server error", error });
+  }
+  });
 // to check orderNo existence
 app.get('/orders/checkOrderNo/:orderNo', async (req, res) => {
 const { orderNo } = req.params;
