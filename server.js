@@ -3458,7 +3458,7 @@ res.status(500).json({ message: "Server error", error });
 }
 });
 // to send refund email to the yard
-app.post("/orders/sendRefundEmail/:orderNo", upload.single("pdfFile"), async (req, res) => {
+app.post("/orders/sendRefundEmailYard/:orderNo", upload.single("pdfFile"), async (req, res) => {
   console.log("send refund email to the yard");
   try {
   const order = await Order.findOne({ orderNo: req.params.orderNo });

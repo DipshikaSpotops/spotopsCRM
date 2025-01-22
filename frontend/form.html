@@ -4699,7 +4699,7 @@ const file = fileInput.files[0] || "";
 console.log("yardddd",selectedYardIndex,yardIndex);
 const formData = new FormData();
 formData.append("pdfFile", file);
-fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}`, {
+fetch(`https://www.spotops360.com/orders/sendRefundEmailYard/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}`, {
 method: "POST",
 body: formData,
 })
