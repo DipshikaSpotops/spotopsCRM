@@ -149,7 +149,7 @@ justify-content: flex-end;
 align-items: center;
 gap: 10px;
 margin-bottom: 10px;
-width: 8%;
+width: auto;
 margin: 0% 4%;
 }
 .filter-bar button {
@@ -419,7 +419,7 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
     <h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Purchases and Refunds</h1>
-    <div id="filterAndTotal" style="display: flex; align-items: center; margin-bottom: 20px;">
+    <div id="filterAndTotal" style="display: flex; align-items: center; margin: 1% 36%">
       <div class="filter-bar" style="margin-right: 20px;">
         <input id="monthYearPicker" type="month" class="form-control" />
       </div>
@@ -524,6 +524,9 @@ async function fetchMonthlyOrders(month, year) {
       );
       if (response.status !== 200) throw new Error("Failed to fetch data");
       const orders = response.data;
+var totalOrders = orders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
       processOrders(orders);
     } catch (error) {
       console.error("Error fetching monthly orders:", error);
