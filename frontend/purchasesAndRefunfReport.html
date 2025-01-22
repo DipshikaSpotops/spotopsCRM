@@ -580,14 +580,15 @@ document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month-
           totals[4].count++;
         }
         // Row 6: Refund to be Collected
-        if (info.refundStatus !== "Refund collected") {
+        if (info.refundStatus !== "Refund collected" || info.refundStatus === "Refund not collected") {
           totals[5].amount += parseFloat(info.refundToCollect || 0);
           totals[5].count++;
         }
         // Row 7: Refund Collected
+        if (info.refundStatus === "Refund collected") {
         totals[6].amount += parseFloat(info.refundedAmount || 0);
         totals[6].count++;
-       
+        }
         const yardOSorYS = info.shippingDetails || '';
          // Row 8: Own Shipping
 let shippingValueYard = 0;
