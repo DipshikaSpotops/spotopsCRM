@@ -3575,7 +3575,7 @@ $(".paymentStatus").val(yardData.paymentStatus);
 $("#cardChargedDate").val(yardData.cardChargedDate);
 })
 });
-//for refubd status
+//for refund status
 $('#yardInfoContainer').on('click', '.refundCollect', function () {
 selectedYardIndex = $(this).data('yard-index');
 console.log("refund collected part",selectedYardIndex);
@@ -3596,6 +3596,8 @@ $("#refundedAmountContainer").show()
 // Prefill input fields
 $("#refundedAmount").val(yardData.refundedAmount);
 $("#refundToCollect").val(yardData.refundToCollect);
+$("#refundReasonYard").val(yardData.refundReason);
+$("#returnTrackingNo").val(yardData.returnTrackingCust);
 var shippDetails = yardData.shippingDetails;
 if (shippDetails && shippDetails.includes("Yard shipping")) {
 var yardShippingValue = shippDetails.split(":")[1].trim();
