@@ -3508,7 +3508,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   subject: `Request for Yard Refund | ${order.orderNo}`,
   html: `<p>Dear ${yardAgent},</p>
   <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
-  ${order.model} ${order.pReq}</b> I request a refund for the same.
+  ${order.model} ${order.pReq}</b>. I request a refund for the same.
   <p>Requested refund amount : $${refundToCollect} </p>
   <p>Stock No: ${stockNo}</p>
   <p>Return tracking number : ${returnTracking} (${shipperName})</p>
