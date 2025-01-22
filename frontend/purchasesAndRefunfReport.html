@@ -589,13 +589,13 @@ async function fetchMonthlyOrders(month, year) {
 let shippingValueYard = 0;
 if (yardOSorYS.includes("Own shipping")) {
 shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-totals[7].amount += ownShipping;
+totals[7].amount += shippingValueYard;
 totals[7].count++;
 } 
         // Row 9: Yard Shipping
         if (yardOSorYS.includes("Yard shipping")) {
 shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-totals[8].amount += yardShipping;
+totals[8].amount += shippingValueYard;
 totals[8].count++;
 }
       });
