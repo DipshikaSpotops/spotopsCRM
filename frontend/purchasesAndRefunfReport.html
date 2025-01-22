@@ -629,7 +629,7 @@ totals[8].count++;
   $("#filterButton").click(async function () {
     const monthYear = $("#monthYearPicker").val();
     const [year, month] = monthYear.split("-");
-    await fetchMonthlyOrders(parseInt(month), parseInt(year));
+    await fetchMonthlyOrders(month,year);
   });
 
 $("#yardInfoTable").on("click", ".process-btn", function () {
