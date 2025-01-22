@@ -580,7 +580,7 @@ document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month-
           totals[4].count++;
         }
         // Row 6: Refund to be Collected
-        if (info.refundStatus !== "Refund collected" || info.refundStatus === "Refund not collected") {
+        if (info.collectRefundCheckbox == "Ticked" && !info.refundedAmount) {
           totals[5].amount += parseFloat(info.refundToCollect || 0);
           totals[5].count++;
         }
