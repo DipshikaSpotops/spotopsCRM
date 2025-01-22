@@ -440,53 +440,9 @@ window.location.href = "login_signup.html";
             <th>Count</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Total POs Sent</td>
-            <td id="totalPOsAmount">$0.00</td>
-            <td id="totalPOsCount">0</td>
-          </tr>
-          <tr>
-            <td>Total Cancelled POs</td>
-            <td id="cancelledPOsAmount">$0.00</td>
-            <td id="cancelledPOsCount">0</td>
-          </tr>
-          <tr>
-            <td>Not Charged POs</td>
-            <td id="notChargedPOsAmount">$0.00</td>
-            <td id="notChargedPOsCount">0</td>
-          </tr>
-          <tr>
-            <td>Charged POs</td>
-            <td id="chargedPOsAmount">$0.00</td>
-            <td id="chargedPOsCount">0</td>
-          </tr>
-          <tr>
-            <td>Charged Twice Orders</td>
-            <td id="chargedTwiceAmount">$0.00</td>
-            <td id="chargedTwiceCount">0</td>
-          </tr>
-          <tr>
-            <td>Refund to be Collected</td>
-            <td id="refundToBeCollectedAmount">$0.00</td>
-            <td id="refundToBeCollectedCount">0</td>
-          </tr>
-          <tr>
-            <td>Refund Collected</td>
-            <td id="refundCollectedAmount">$0.00</td>
-            <td id="refundCollectedCount">0</td>
-          </tr>
-          <tr>
-            <td>Own Shipping</td>
-            <td id="ownShippingAmount">$0.00</td>
-            <td id="ownShippingCount">0</td>
-          </tr>
-          <tr>
-            <td>Yard Shipping</td>
-            <td id="yardShippingAmount">$0.00</td>
-            <td id="yardShippingCount">0</td>
-          </tr>
-        </tbody>
+        <tbody id="yardInfoTable" style="text-align: center">
+          <!-- Yard information will be appended here -->
+          </tbody>
       </table>
     </div>
   </div>  
@@ -557,172 +513,135 @@ Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
-await fetchYardInfo(month, year);
+// await fetchYardInfo(month, year);
+async function fetchMonthlyOrders(month, year) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-// Fetch yard info data for a specific month and 
-async function fetchPOs(month, year) {
-try {
-$("#loadingMessage").show();
-const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: { Authorization: `Bearer ${token}` },
-});
+      if (response.status !== 200) throw new Error("Failed to fetch data");
+      const orders = response.data;
+      processOrders(orders);
+    } catch (error) {
+      console.error("Error fetching monthly orders:", error);
+    }
+  }
 
-if (response.status !== 200) throw new Error("Failed to fetch data");
-yardOrders = response.data;
-let totalSpend = 0;  
-let totalSpendShipping = 0;
-yardOrders.forEach(order => {
-let orderSpend = 0;  
-let shippingCost = 0;
-order.additionalInfo.forEach(info => {
-shippingCost = info.shippingDetails ? 
-parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 : 0;
-const partPrice = parseFloat(info.partPrice || 0);
-const others = parseFloat(info.others || 0);
-const refundedAmount = parseFloat(info.refundedAmount || 0);
+  // Process Orders and Populate the Table
+  function processOrders(orders) {
+    const tableBody = $("#yardInfoTable");
+    tableBody.empty(); // Clear table
 
-const itemSpend = partPrice + others + shippingCost - refundedAmount;
-orderSpend += itemSpend;  
-});
-// console.log("ship",shippingCost);
-order.totalSpend = orderSpend;  
-totalSpendShipping += shippingCost;  
-});
-// console.log("Total spend across all orders:", totalSpendShipping);
-// console.log("yardOrders with calculated spends", yardOrders);
-document.getElementById("showTotalOrders").innerHTML = `Total Shipping Cost This Month- $${totalSpendShipping.toFixed(2)}`;
-renderTableRows(currentPage, yardOrders);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-} catch (error) {
-console.error("Error fetching yard info:", error);
-alert("Failed to fetch data");
-} finally {
-$("#loadingMessage").hide();
-}
-}
+    // Initialize Totals
+    const totals = [
+      { amount: 0, count: 0 }, // Row 1: Total POs Sent
+      { amount: 0, count: 0 }, // Row 2: Total Cancelled POs
+      { amount: 0, count: 0 }, // Row 3: Not Charged POs
+      { amount: 0, count: 0 }, // Row 4: Charged POs
+      { amount: 0, count: 0 }, // Row 5: Charged Twice Orders
+      { amount: 0, count: 0 }, // Row 6: Refund to be Collected
+      { amount: 0, count: 0 }, // Row 7: Refund Collected
+      { amount: 0, count: 0 }, // Row 8: Own Shipping
+      { amount: 0, count: 0 }, // Row 9: Yard Shipping
+    ];
 
-function renderTableRows(page, data = yardOrders) {
-const start = (page - 1) * 25;
-const end = start + 25;
-const pageData = data.slice(start, end);
-const tableHeader = $("#tableHeader");
-const tableFooter = $("#tableFooter");
-$("#yardInfoTable").empty();
-let maxYards = 0;
-let totalPartPriceSum = 0;
-let totalShippingSum = 0;
-let totalOverallSum = 0;
-let totalRefundsSum = 0;
-let totalOthersSum = 0;
-let totalOverallRefund = 0;
-$("#yardInfoTable").empty();
-pageData.forEach((item) => {
-if (item.additionalInfo.length > maxYards) {
-maxYards = item.additionalInfo.length;
-}
-});
-tableHeader.find("th:gt(1)").remove(); 
-for (let i = 1; i <= maxYards; i++) {
-tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
-);
-}
-tableHeader.append(
-'<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
-);
-tableHeader.append('<th scope="col">Actions</th>');
+    // Process Each Order
+    orders.forEach((order) => {
+      order.additionalInfo.forEach((info) => {
+        // Row 1: Total POs Sent
+        totals[0].amount += parseFloat(info.partPrice || 0);
+        totals[0].count++;
 
-pageData.forEach((item) => {
-let appendOrder = false;
-let yardInfoHtml = "";
-let totalPartPrice = 0;
-let totalShipping = 0;
-let otherCharges = 0;
-let overallPurchaseCost = 0;
-let totalOveralls = 0;
-let overAllwithRefund = 0;
-let tRefunds = 0;
-let overallAppend = 0;
+        // Row 2: Total Cancelled POs
+        if (info.status === "PO cancelled") {
+          totals[1].amount += parseFloat(info.partPrice || 0);
+          totals[1].count++;
+        }
 
-for (let i = 0; i < maxYards; i++) {
-if (
-item.additionalInfo[i] &&
-item.additionalInfo[i].shippingDetails
-) {
-appendOrder = true;
-const partPrice = parseFloat(
-item.additionalInfo[i].partPrice || 0
-);
-let otherC = parseFloat(item.additionalInfo[i].others || 0);
-let shippingDetails = item.additionalInfo[i].shippingDetails;
-let shippingCharge = 0;
-let shippingType = "";
-let refunds = parseFloat(
-item.additionalInfo[i].refundedAmount || 0
-);
-// console.log("refunds", refunds);
-if (shippingDetails) {
-const shippingArray = shippingDetails.split(":");
-shippingCharge = parseFloat(shippingArray[1]?.trim() || 0);
-shippingType = shippingDetails.split(":")[0].trim();
-}
-totalPartPrice += partPrice;
-totalShipping += shippingCharge;
-otherCharges += otherC;
-tRefunds += refunds;
-overallPurchaseCost = partPrice + shippingCharge + otherC;
-overAllwithRefund = overallPurchaseCost - refunds;
-// console.log(overallPurchaseCost,"overall with refunds",overAllwithRefund);
-totalOveralls += overAllwithRefund;
-// console.log("yotalOveralls", totalOveralls);
-yardInfoHtml += `<td>
-${item.additionalInfo[i].yardName || ""}${
-item.additionalInfo[i].yardName ? "" : ""
-}<br>
-Shipping: ${item.additionalInfo[i].shippingDetails || ""}${
-item.additionalInfo[i].shippingDetails ? "" : ""
-}
-</td>`;
-} else {
-yardInfoHtml += "<td></td>";
-}
-}
+        // Row 3: Not Charged POs
+        if (!info.paymentStatus || info.paymentStatus === "Card not charged") {
+          totals[2].amount += parseFloat(info.partPrice || 0);
+          totals[2].count++;
+        }
 
-if (appendOrder) {
-totalPartPriceSum += totalPartPrice;
-totalShippingSum += totalShipping;
-totalOthersSum += otherCharges;
-totalOverallSum += overAllwithRefund;
-totalRefundsSum += tRefunds;
-// console.log("overall after refund", totalOverallSum);
-const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
-$("#yardInfoTable").append(
-`<tr>
-<td>${item.orderNo}</td>
-<td>${dateOnly}</td>
-${yardInfoHtml}
-<td>${totalShipping.toFixed(2)}</td>
-<td><button class="btn btn-success btn-sm process-btn" data-id="${
-item.orderNo
-}" style="background-color: #cae8c9;
-border: none;
-color: #61a55e;">View</button></td>
-</tr>`
-);
-}
-});
+        // Row 4: Charged POs
+        if (info.paymentStatus === "Card charged") {
+          totals[3].amount += parseFloat(info.partPrice || 0);
+          totals[3].count++;
+        }
 
-let footerHtml = "<tr>";
-for (let i = 0; i <= maxYards + 1; i++) {
-footerHtml += "<td></td>";
-}
-footerHtml += `
-<td id="totalShipping" style="text-align:center;">$${totalShippingSum.toFixed(
-2
-)}</td>
-</tr>`;
-tableFooter.html(footerHtml);
-}
+        // Row 5: Charged Twice Orders
+        if (
+          order.additionalInfo.length > 1 &&
+          info.collectRefundCheckbox !== "Ticked"
+        ) {
+          totals[4].amount += parseFloat(info.partPrice || 0);
+          totals[4].count++;
+        }
+
+        // Row 6: Refund to be Collected
+        if (info.refundStatus !== "Refund collected") {
+          totals[5].amount += parseFloat(info.refundToCollect || 0);
+          totals[5].count++;
+        }
+
+        // Row 7: Refund Collected
+        totals[6].amount += parseFloat(info.refundedAmount || 0);
+        totals[6].count++;
+
+        // Row 8: Own Shipping
+        if (info.shippingMethod?.includes("Own shipping")) {
+          const ownShipping = parseFloat(
+            info.shippingMethod.split(":")[1]?.trim() || 0
+          );
+          totals[7].amount += ownShipping;
+          totals[7].count++;
+        }
+
+        // Row 9: Yard Shipping
+        if (info.shippingMethod?.includes("Yard shipping")) {
+          const yardShipping = parseFloat(
+            info.shippingMethod.split(":")[1]?.trim() || 0
+          );
+          totals[8].amount += yardShipping;
+          totals[8].count++;
+        }
+      });
+    });
+
+    // Populate the Table
+    const headings = [
+      "Total POs Sent",
+      "Total Cancelled POs",
+      "Not Charged POs",
+      "Charged POs",
+      "Charged Twice Orders",
+      "Refund to be Collected",
+      "Refund Collected",
+      "Own Shipping",
+      "Yard Shipping",
+    ];
+    totals.forEach((total, index) => {
+      tableBody.append(`
+        <tr>
+          <td>${headings[index]}</td>
+          <td>$${total.amount.toFixed(2)}</td>
+          <td>${total.count}</td>
+        </tr>
+      `);
+    });
+  }
+  await fetchMonthlyOrders(month, year);
+
+  // Filter Orders by Month and Year
+  $("#filterButton").click(async function () {
+    const monthYear = $("#monthYearPicker").val();
+    const [year, month] = monthYear.split("-");
+    await fetchMonthlyOrders(parseInt(month), parseInt(year));
+  });
 
 $("#yardInfoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
@@ -733,16 +652,16 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
 
 
 // Filter by month and year
-$("#filterButton").click(async function () {
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-await fetchYardInfo(month, year);
-currentPage = 1;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-});
+// $("#filterButton").click(async function () {
+// const monthYear = $("#monthYearPicker").val(); 
+// const [year, monthNumber] = monthYear.split("-");
+// const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+// const month = months[parseInt(monthNumber, 10) - 1];
+// await fetchYardInfo(month, year);
+// currentPage = 1;
+// renderTableRows(currentPage);
+// createPaginationControls(Math.ceil(yardOrders.length / 25));
+// });
 
 // Search functionality
 $("#searchInput").on("keyup", function () {
@@ -1028,3 +947,13 @@ fetchNotifications();
 </script>
 </body>
 </html>
+on the load of the page, what i want is for monthly orders for the current month, I mean all the orders in a month have to be considered ok
+in the 1st row, 2nd column i want the total of orders.additionalInfo[i].partPrice and in the 3rd column , i need the count of orders.additionalInfo[i]
+in the 2nd row, 2nd column i want the total of orders.additionalInfo[i].partPrice if the orders.additionalInfo[i].status is PO cancelled and in the 3rd column , i need the count of orders.additionalInfo[i] if the orders.additionalInfo[i].status is PO cancelled
+in the 3rd row, 2nd column i want the total of orders.additionalInfo[i].partPrice if the orders.additionalInfo[i].paymentStatus is empty or Card not charged and in the 3rd column , i need the count of orders.additionalInfo[i] if the if the orders.additionalInfo[i].paymentStatus is empty or Card not charged
+in the 4th row, 2nd column i want the total of orders.additionalInfo[i].partPrice if the orders.additionalInfo[i].paymentStatus is Card charged and in the 3rd column , i need the count of orders.additionalInfo[i] if the orders.additionalInfo[i].paymentStatus is Card charged
+in the 5th row, 2nd column i want the total of orders.additionalInfo[i].partPrice if the orders.additionalInfo[i] length is more than 1 but the element whose orders.additionalInfo[i].collectRefundCheckbox value is Ticked should be ignored and in the 3rd column , i need the count of orders.additionalInfo[i] if the orders.additionalInfo[i] length is more than 1 but the element whose orders.additionalInfo[i].collectRefundCheckbox value is Ticked should be ignored
+in the 6th row, 2nd column i want the total of orders.additionalInfo[i].refundToCollect but the element whose orders.additionalInfo[i].refundStatus value is Refund collected should be ignored and in the 3rd column , i need the count of orders.additionalInfo[i].refundCollect but orders.additionalInfo[i].refundStatus value is Refund collected should be ignored
+in the 7th row, 2nd column i want the total of orders.additionalInfo[i].refundedAmount and in the 3rd column , i need the count of orders.additionalInfo[i].refundedAmount
+in the 8th row, 2nd column i want the total of orders.additionalInfo[i].shippingMethod if orders.additionalInfo[i].shippingMethod includes Own shipping, now the value will be in the format Own Shipping : 20 so we just have to take the value 20 and in the 3rd column , i need the count of orders.additionalInfo[i].shippingMethod if orders.additionalInfo[i].shippingMethod includes Own shipping
+in the 9th row, 2nd column i want the total of orders.additionalInfo[i].shippingMethod if orders.additionalInfo[i].shippingMethod includes Yard shipping, now the value will be in the format Yard Shipping : 20 so we just have to take the value 20 and in the 3rd column , i need the count of orders.additionalInfo[i].shippingMethod if orders.additionalInfo[i].shippingMethod includes Yard shipping
