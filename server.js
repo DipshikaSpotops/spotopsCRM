@@ -484,7 +484,8 @@ escrepBOLhistoryCust: [String],
 escRepTrackingHistoryYard: [String],
 escRepETAHistoryYard: [String],
 escRepShipperNameHistoryYard: [String],
-escrepBOLhistoryYard: [String]
+escrepBOLhistoryYard: [String],
+refundReason: String,
 },
 {strict:false}
 );

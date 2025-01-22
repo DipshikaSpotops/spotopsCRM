@@ -2151,19 +2151,23 @@ Save
 </div>
 <div id="refundReason" style="display:flex;margin: 4%;white-space: nowrap;">
   <label for="refundReason" style="font-family: inherit;">Refund Reason:<br></label>
-<select class="form-control paymentStatusRefund" id="paymentStatusSelect" style="margin: -0.6% 10%;width: 64%;border-radius: 20px;text-align: center;">
+<select class="form-control refundReason" id="refundReasonYard" style="margin: -0.6% 10%;width: 64%;border-radius: 20px;text-align: center;">
 <option value="">Choose</option>
 <option value="Damaged">Damaged</option>
 <option value="Defective">Defective</option>
 <option value="Incorrect">Incorrect</option>
 </select> 
 </div>
+<div id="returnTracking" style="display:flex;margin: 4%;white-space: nowrap;">
+  <label for="returnTrackingNo" style="font-family: inherit;">Return Tracking No:<br></label>
+  <input type="text" class="form-control" id="returnTrackingNo" placeholder="Return Tx" style="width:64%;border-radius: 20px;text-align: center;margin-top: -1%;margin-left: 12%;" />
+</div>
 <div id="storeCreditContainer" style="margin: 3% 4%;">
 <input type="checkbox" id="storeCreditCheckbox" style="width: 2%;" />
 <label for="storeCreditCheckbox" style="font-family: inherit;"> Store Credit</label>
 </div>
 <div id="sendRefundEmail" style="margin: 3% 4%;">
-<button id="refundEmail">Send Refund Email</button>  
+<button id="sendRefundEmail">Send Refund Email</button>  
 </div>
 <button class="save" id="refundSubmit" style="background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;">Save</button>
 </div>
@@ -3859,17 +3863,11 @@ console.error("Error:", error);
 
 window.location.reload();
 });
-function ensureModalOverlay() {
-  if (!$(".modal-overlay").length) {
-    $("body").append('<div class="modal-overlay"></div>');
-  }
-  if (!$("body").hasClass("modal-active")) {
-    $("body").addClass("modal-active");
-  }
-}
+
 // refundCollect part ends here
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
-  ensureModalOverlay();
+$("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");
 $("#editYardPopup").show();
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
@@ -4677,6 +4675,41 @@ console.error("Error:", error);
 alert("Please fill in all the tracking information fields.");
 $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"); 
 }
+});
+// send Refund Email to the yard
+$("#sendRefundEmail").on("click", function () {
+$("#sendRefundEmail").prop("disabled", true).css("filter", "blur(2px)");
+const refundReason = $("#refundReasonYard").val();
+const returnTracking = $("#returnTrackingNo").val();
+// var shipperName = $("#shipperNameEdit").val();
+// if (shipperName === "Others") {
+// shipperName = $("#otherShipperInput").val();
+// }
+const data = {
+  refundReason: refundReason,
+  returnTracking: returnTracking,
+};
+
+fetch(`https://www.spotops360.com/orders/sendRefundEmail/${orderNo}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(data),
+})
+.then((response) => response.json())
+.then((result) => {
+alert("Refund email sent to the yard");
+$("#editYardInfo")
+.prop("disabled", false) 
+.css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+
+
 });
 // send esc Return email
 $("#sendRMAEmail").on("click", function () {
