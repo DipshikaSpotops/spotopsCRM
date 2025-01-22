@@ -3859,11 +3859,17 @@ console.error("Error:", error);
 
 window.location.reload();
 });
-
+function ensureModalOverlay() {
+  if (!$(".modal-overlay").length) {
+    $("body").append('<div class="modal-overlay"></div>');
+  }
+  if (!$("body").hasClass("modal-active")) {
+    $("body").addClass("modal-active");
+  }
+}
 // refundCollect part ends here
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
-  $("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");
+  ensureModalOverlay();
 $("#editYardPopup").show();
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
