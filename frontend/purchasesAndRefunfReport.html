@@ -628,9 +628,10 @@ totals[8].count++;
 
   // Filter Orders by Month and Year
   $("#filterButton").click(async function () {
-    const monthYear = $("#monthYearPicker").val();
-    const [year, month] = monthYear.split("-");
-    console.log("Filtering orders for:", month, year);
+    const monthYear = $("#monthYearPicker").val(); 
+const [year, monthNumber] = monthYear.split("-");
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = months[parseInt(monthNumber, 10) - 1];
     await fetchMonthlyOrders(month, year);
 });
 
