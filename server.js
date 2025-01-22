@@ -3469,7 +3469,7 @@ app.post("/orders/sendRefundEmailYard/:orderNo", upload.single("pdfFile"), async
   const pdfFile = req.file; 
 if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var orderDate = order.orderDate;
-  var yardIndex = req.query.yardIndex;
+  var yardIndex = req.query.yardIndex - 1;
   var refundReason = req.query.refundReason;
   var returnTracking = req.query.returnTracking;
   var refundToCollect = req.query.refundToCollect;
