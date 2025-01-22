@@ -3507,8 +3507,8 @@ var shipperName = order.additionalInfo[yardIndex].shipperName || "";
   subject: `Request for Yard Refund | ${order.orderNo}`,
   html: `<p>Dear ${yardAgent},</p>
   <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
-  ${order.model} ${order.pReq}</b> I request a refund for the same. The charge details are as follows:
-  <p>Refquested refund amount : $${refundToCollect} </p>
+  ${order.model} ${order.pReq}</b> I request a refund for the same.
+  <p>Requested refund amount : $${refundToCollect} </p>
   <p>Stock No: ${stockNo}</p>
   <p>Return tracking number : ${returnTracking} (${shipperName})</p>
   <p>I kindly request you to process the refund at your earliest convenience and share the refund receipt with us.</p>
