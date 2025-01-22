@@ -521,7 +521,6 @@ async function fetchMonthlyOrders(month, year) {
         `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       if (response.status !== 200) throw new Error("Failed to fetch data");
       const orders = response.data;
       processOrders(orders);
@@ -548,31 +547,26 @@ async function fetchMonthlyOrders(month, year) {
       { amount: 0, count: 0 }, // Row 9: Yard Shipping
     ];
 
-    // Process Each Order
     orders.forEach((order) => {
       order.additionalInfo.forEach((info) => {
         // Row 1: Total POs Sent
         totals[0].amount += parseFloat(info.partPrice || 0);
         totals[0].count++;
-
         // Row 2: Total Cancelled POs
         if (info.status === "PO cancelled") {
           totals[1].amount += parseFloat(info.partPrice || 0);
           totals[1].count++;
         }
-
         // Row 3: Not Charged POs
         if (!info.paymentStatus || info.paymentStatus === "Card not charged") {
           totals[2].amount += parseFloat(info.partPrice || 0);
           totals[2].count++;
         }
-
         // Row 4: Charged POs
         if (info.paymentStatus === "Card charged") {
           totals[3].amount += parseFloat(info.partPrice || 0);
           totals[3].count++;
         }
-
         // Row 5: Charged Twice Orders
         if (
           order.additionalInfo.length > 1 &&
@@ -581,34 +575,29 @@ async function fetchMonthlyOrders(month, year) {
           totals[4].amount += parseFloat(info.partPrice || 0);
           totals[4].count++;
         }
-
         // Row 6: Refund to be Collected
         if (info.refundStatus !== "Refund collected") {
           totals[5].amount += parseFloat(info.refundToCollect || 0);
           totals[5].count++;
         }
-
         // Row 7: Refund Collected
         totals[6].amount += parseFloat(info.refundedAmount || 0);
         totals[6].count++;
-
-        // Row 8: Own Shipping
-        if (info.shippingMethod?.includes("Own shipping")) {
-          const ownShipping = parseFloat(
-            info.shippingMethod.split(":")[1]?.trim() || 0
-          );
-          totals[7].amount += ownShipping;
-          totals[7].count++;
-        }
-
+       
+        const yardOSorYS = info.shippingDetails || '';
+         // Row 8: Own Shipping
+let shippingValueYard = 0;
+if (yardOSorYS.includes("Own shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+totals[7].amount += ownShipping;
+totals[7].count++;
+} 
         // Row 9: Yard Shipping
-        if (info.shippingMethod?.includes("Yard shipping")) {
-          const yardShipping = parseFloat(
-            info.shippingMethod.split(":")[1]?.trim() || 0
-          );
-          totals[8].amount += yardShipping;
-          totals[8].count++;
-        }
+        if (yardOSorYS.includes("Yard shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+totals[8].amount += yardShipping;
+totals[8].count++;
+}
       });
     });
 
@@ -822,17 +811,13 @@ const notificationCountElement = $("#notificationCount");
 
 let unreadCount = 0;
 
-// Fetch notifications from the backend
 async function fetchNotifications() {
   try {
     const response = await axios.get("https://www.spotops360.com/notifications");
         const notifications = response.data;
- // Filter unread notifications for the logged-in user
  const unreadNotifications = notifications.filter(
         (notification) => !notification.readBy.includes(firstName)
       );
-
-    // Update the unread count
     unreadCount = unreadNotifications.length;
     updateUnreadCount();
     renderNotifications(notifications);
@@ -841,14 +826,11 @@ async function fetchNotifications() {
   }
 }
 
-// Render notifications in the dropdown
 function renderNotifications(notifications) {
   notificationList.empty(); 
   console.log("notificat", notifications[0]);
   notifications.forEach((notification) => {
     let backgroundColor;
-
-    // Determine background color based on the message content
     if (notification.message.includes("Warning")) {
       backgroundColor = "#db634a";
     } else if (notification.message.includes("Alert")) {
@@ -864,16 +846,10 @@ function renderNotifications(notifications) {
     else {
       backgroundColor = "black";
     }
-
-    // Split the message into lines
     const lines = notification.message.split("\n");
     const firstLine = `<b>${lines[0]}</b>`;
     const remainingLines = lines.slice(1).join("<br>");
-
-    // Combine the formatted message
     const formattedMessage = `${firstLine}<br>${remainingLines}`;
-
-    // Create the notification item
     const notificationItem = `
       <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: black; width: 100%; border: 1px solid black;">
         ${formattedMessage}
@@ -883,7 +859,6 @@ function renderNotifications(notifications) {
   });
 }
 
-// Update the unread notification count
 function updateUnreadCount() {
   if (unreadCount > 0) {
     notificationCountElement.text(unreadCount);
@@ -910,7 +885,6 @@ async function markNotificationsAsRead() {
   }
 }
 
-/// Toggle notification dropdown visibility
 notificationIcon.on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
 
@@ -931,7 +905,6 @@ $("body").addClass("modal-active");
   }
 });
 
-// Close dropdown when clicking outside
 $(document).on("click", function (event) {
   if (
     !$(event.target).closest("#notificationIcon").length &&
