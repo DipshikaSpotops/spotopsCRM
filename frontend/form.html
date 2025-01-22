@@ -1168,7 +1168,7 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
-#sendRefundEmail{
+#sendRefundEmailYard{
   border: none;
     background-color: white;
     color: blue;
@@ -2171,8 +2171,8 @@ Save
 <!-- <label for="driveLink">Enter Google Drive or PDF Link:</label> -->
 <input type="file" id="poFilePDF" accept=".pdf">
 </div>
-<div id="sendRefundEmail" style="margin: 3% 4%;">
-<button id="sendRefundEmail">Send Refund Email</button>  
+<div id="sendRefundEmailY" style="margin: 3% 4%;">
+<button id="sendRefundEmailYard">Send Refund Email</button>  
 </div>
 <button class="save" id="refundSubmit" style="background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;">Save</button>
 </div>
@@ -3641,7 +3641,7 @@ const orderNo = urlParams.get("orderNo");
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
 $("#escRMA").fadeIn();
-$("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit, #sendRefundEmail").data("yard-index", selectedYardIndex);
+$("#saveEsc,#sendRMAEmail,#sendReimburseEmail,.custRefundSubmit, #sendRefundEmailYard").data("yard-index", selectedYardIndex);
 
 try {
 const response = await axios.get(`https://www.spotops360.com/orders/${orderNo}?firstName=${firstName}`);
@@ -4684,8 +4684,8 @@ $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"
 }
 });
 // send Refund Email to the yard
-$("#sendRefundEmail").on("click", function () {
-$("#sendRefundEmail").prop("disabled", true).css("filter", "blur(2px)");
+$("#sendRefundEmailYard").on("click", function () {
+$("#sendRefundEmailYard").prop("disabled", true).css("filter", "blur(2px)");
 const refundReason = $("#refundReasonYard").val();
 const returnTracking = $("#returnTrackingNo").val();
 const refundToCollect = $("#refundToCollect").val();
@@ -4706,7 +4706,7 @@ body: formData,
 .then((response) => response.json())
 .then((result) => {
 alert("Refund email sent to the yard");
-$("#editYardInfo")
+$("#sendRefundEmailYard")
 .prop("disabled", false) 
 .css("filter", "none"); 
 console.log("Success:", result);
