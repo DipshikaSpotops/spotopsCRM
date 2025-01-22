@@ -4688,7 +4688,7 @@ $("#sendRefundEmail").on("click", function () {
 $("#sendRefundEmail").prop("disabled", true).css("filter", "blur(2px)");
 const refundReason = $("#refundReasonYard").val();
 const returnTracking = $("#returnTrackingNo").val();
-const refundToCollect = $("refundToCollect").val();
+const refundToCollect = $("#refundToCollect").val();
 // var shipperName = $("#shipperNameEdit").val();
 // if (shipperName === "Others") {
 // shipperName = $("#otherShipperInput").val();

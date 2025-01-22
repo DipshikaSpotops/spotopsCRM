@@ -3508,14 +3508,14 @@ var shipperName = order.additionalInfo[yardIndex].shipperName || "";
   html: `<p>Dear ${yardAgent},</p>
   <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
   ${order.model} ${order.pReq}</b> I request a refund for the same. The charge details are as follows:
-  <p>Total amount charged: ${chargedAmount} </p>
+  <p>Total amount charged: $${refundToCollect} </p>
   <p>Stock No: ${stockNo}</p>
-  <p>Return tracking number : ${returnTracking} ${shipperName}</p>
-  <p>I kindly request you to process the refund at your earliest convenience and share the refund receipt with me.</p>
-  <p>If tany further information or documentation is required, please do not hesitate to contact me.</p>
+  <p>Return tracking number : ${returnTracking} (${shipperName})</p>
+  <p>I kindly request you to process the refund at your earliest convenience and share the refund receipt with us.</p>
+  <p>If any further information or documentation is required, please do not hesitate to contact us.</p>
   <p>Thank you for your understanding and cooperation.</p>
   <p>I appreciate your prompt attention to this matter and look forward to a swift resolution.</p>
-  <p>Note : If you have another company name or DBA, please do let us know. Purchase Order has been attached for your reference.</p>
+  <p>Note : If you have another company name or DBA, please do let us know. Purchase Order has been attached below for your reference.</p>
              
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
