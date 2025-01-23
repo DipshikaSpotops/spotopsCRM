@@ -6000,7 +6000,7 @@ document.querySelectorAll('.status-checkbox').forEach(checkbox => {
     const isChecked = event.target.checked;
     console.log(`Checkbox clicked at index: ${index}`);
     console.log(`Checkbox is now: ${isChecked ? 'Checked' : 'Unchecked'}`);
-    updateTaskStatus(orderNo, index, isChecked ? 'Completed' : 'Pending');
+    updateTaskStatus(orderNo, index, isChecked ? 'Completed' : 'Processing');
   });
 });
 document.querySelectorAll('.assign-to-dropdown').forEach(dropdown => {
