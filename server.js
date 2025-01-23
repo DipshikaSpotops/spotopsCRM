@@ -1085,7 +1085,8 @@ async function updateTaskStatuses() {
     const createdTimeFormat = createdTimePro.format("YYYY-MM-DDTHH:mm:ss");
         console.log("Task status:", task.taskStatus);
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
-        console.log("task deadline",taskDeadline);
+        var deadlineFormatted = taskDeadline.format("YYYY-MM-DDTHH:mm:ss");
+        console.log("task deadline",deadlineFormatted);
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime;
           isUpdated = true;
@@ -1096,7 +1097,7 @@ async function updateTaskStatuses() {
             });
             processedTasks.add(task._id.toString());
           }
-          if (moment(currentDallasTime).isBefore(taskDeadline)) {
+          if (moment(currentDallasTime).isBefore(deadlineFormatted)) {
             task.completeCountBeforeDeadline = (task.completeCountBeforeDeadline || 0) + 1;
           }
         }
@@ -1115,14 +1116,14 @@ async function updateTaskStatuses() {
             }
           }
         }
-        if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
-          console.log("completed?",task.taskStatus,taskDeadline,currentDallasTime);
-          const diffInMinutes = taskDeadline.diff(moment(currentDallasTime), "minutes");
+        if (task.taskStatus !== "Completed" && deadlineFormatted.isValid()) {
+          console.log("completed?",task.taskStatus,deadlineFormatted,currentDallasTime);
+          const diffInMinutes = deadlineFormatted.diff(moment(currentDallasTime), "minutes");
           console.log("diff",diffInMinutes)
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
-            if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
+            if (!processedTasks.has(task._id.toString())) { 
               notifications.push({
                 taskId: task._id,
                 message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
