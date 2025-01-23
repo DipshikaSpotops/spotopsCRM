@@ -1145,14 +1145,15 @@ async function updateTaskStatuses() {
                 taskId: task._id,
                 message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
               });
-              processedTasks.add(task._id.toString()); // Mark task as processed
+              processedTasks.add(task._id.toString());
+              task.alertCountAfterDeadline = (task.alertCountAfterDeadline || 0) + 1; // Mark task as processed
             }
           }
 
           if (diffInMinutes <= 0) {
-            if (task.taskStatus === "Alert") {
-              task.alertCountAfterDeadline = (task.alertCountAfterDeadline || 0) + 1;
-            }
+            // if (task.taskStatus === "Alert") {
+            //   task.alertCountAfterDeadline = (task.alertCountAfterDeadline || 0) + 1;
+            // }
 
             if (task.taskStatus === "Warning") {
               task.taskStatus = "Incomplete";
