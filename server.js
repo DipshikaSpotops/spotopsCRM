@@ -1071,7 +1071,7 @@ async function updateTaskStatuses() {
           }
         }
         //"New Task Created" -> "Processing" after 5 minutes
-        if (task.taskStatus === "New Task Created") {
+        if (task.taskStatus === "New task added") {
           const createdTime = moment.tz(task.taskCreatedDate, "YYYY-MM-DDTHH:mm", "America/Chicago");
           if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
             task.taskStatus = "Processing";
