@@ -1076,6 +1076,7 @@ async function updateTaskStatuses() {
         if (task.taskStatus === "New task added") {
           console.log("New", task.taskStatus);
           const createdTime = moment.tz(task.taskCreatedDate, "YYYY-MM-DDTHH:mm", "America/Chicago");
+          console.log("createdTime:",createdTime,"currentDallasTime:",currentDallasTime);
           if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
             task.taskStatus = "Processing";
             isUpdated = true;
