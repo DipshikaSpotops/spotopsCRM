@@ -1093,7 +1093,7 @@ async function updateTaskStatuses() {
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
         const formattedDeadline = taskDeadline.format("YYYY-MM-DDTHH:mm:ss");
         console.log("Task Status:", task.taskStatus);
-        console.log("Task Deadline:", formattedDeadline);
+        console.log("Task Deadline:", formattedDeadline,"current", currentDallasTime);
 
         // Handle completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
