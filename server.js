@@ -1115,6 +1115,7 @@ async function updateTaskStatuses() {
 
         // Handle "New task added" -> "Processing" after 5 minutes
         if (task.taskStatus === "New task added") {
+          console.log("New",currentDallasTime,createdTime)
           if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
             task.taskStatus = "Processing";
             isUpdated = true;
