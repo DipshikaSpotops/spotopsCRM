@@ -1078,8 +1078,9 @@ async function updateTaskStatuses() {
           console.log("New", task.taskStatus);
           const createdTime = moment.tz("23 01, 2025 9:19", "DD MM, YYYY HH:mm", "America/Chicago");
 console.log("Parsed createdTime:", createdTime.format("YYYY-MM-DDTHH:mm:ss"));
-          console.log("createdTime:",createdTime,"currentDallasTime:",currentDallasTime);
-          if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
+var formattedCreatedTime= createdTime.format("YYYY-MM-DDTHH:mm:ss")          
+console.log("createdTime:",formattedCreatedTime,"currentDallasTime:",currentDallasTime);
+          if (moment(currentDallasTime).diff(formattedCreatedTime, "minutes") >= 5) {
             console.log("to chnage to processing");
             task.taskStatus = "Processing";
             isUpdated = true;
