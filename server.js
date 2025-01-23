@@ -1046,6 +1046,7 @@ async function updateTaskStatuses() {
     for (const taskGroup of taskGroups) {
       let isUpdated = false;
       const currentTaskCount = taskGroup.tasks.length;
+      console.log("currentTaskCount",currentTaskCount, taskGroup);
       if (currentTaskCount > (taskGroup.previousTaskCount || 0)) {
         const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount || 0);
         newTasks.forEach((task) => {
