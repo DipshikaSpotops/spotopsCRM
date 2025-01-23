@@ -1129,6 +1129,7 @@ async function updateTaskStatuses() {
       console.log("Recent Notification:", notification);
       await RecentNotification.create({ message: notification.message });
     }
+    console.log("notifications on updateTaskStatuses",notifications)
     return notifications;
   } catch (error) {
     console.error("Error updating task statuses:", error);
