@@ -1076,23 +1076,10 @@ async function updateTaskStatuses() {
 
         if (task.taskStatus === "New task added") {
           console.log("New", task.taskStatus);
-          const formattedTaskCreatedDate = task.taskCreatedDate
-  .replace(/(\d+)(st|nd|rd|th)/, '$1') 
-  .replace(/Jan/, '01') 
-  .replace(/Feb/, '02')
-  .replace(/Mar/, '03')
-  .replace(/Apr/, '04')
-  .replace(/May/, '05')
-  .replace(/Jun/, '06')
-  .replace(/Jul/, '07')
-  .replace(/Aug/, '08')
-  .replace(/Sep/, '09')
-  .replace(/Oct/, '10')
-  .replace(/Nov/, '11')
-  .replace(/Dec/, '12');
-console.log("Formatted taskCreatedDate:", formattedTaskCreatedDate);
-          console.log("createdTime:",formattedTaskCreatedDate,"currentDallasTime:",currentDallasTime);
-          if (moment(currentDallasTime).diff(formattedTaskCreatedDate, "minutes") >= 5) {
+          const createdTime = moment.tz("23 01, 2025 9:19", "DD MM, YYYY HH:mm", "America/Chicago");
+console.log("Parsed createdTime:", createdTime.format("YYYY-MM-DDTHH:mm:ss"));
+          console.log("createdTime:",createdTime,"currentDallasTime:",currentDallasTime);
+          if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
             console.log("to chnage to processing");
             task.taskStatus = "Processing";
             isUpdated = true;
