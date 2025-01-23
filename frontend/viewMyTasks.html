@@ -741,7 +741,7 @@ let unreadCount = 0;
 // Fetch notifications from the backend
 async function fetchNotifications() {
   try {
-    const response = await axios.get("https://www.spotops360.com/notifications");
+    const response = await axios.get(`https://www.spotops360.com/notifications?userId=${firstName}`);
         const notifications = response.data;
  // Filter unread notifications for the logged-in user
  const unreadNotifications = notifications.filter(
