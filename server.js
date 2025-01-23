@@ -1038,30 +1038,11 @@ app.get("/alltasks", async (req, res) => {
 async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss");
-    const formattedTaskCreatedDate = task.taskCreatedDate
-      .replace(/(\d+)(st|nd|rd|th)/, '$1')
-      .replace(/Jan/, '01')
-      .replace(/Feb/, '02')
-      .replace(/Mar/, '03')
-      .replace(/Apr/, '04')
-      .replace(/May/, '05')
-      .replace(/Jun/, '06')
-      .replace(/Jul/, '07')
-      .replace(/Aug/, '08')
-      .replace(/Sep/, '09')
-      .replace(/Oct/, '10')
-      .replace(/Nov/, '11')
-      .replace(/Dec/, '12');
-    console.log("Formatted taskCreatedDate:", formattedTaskCreatedDate);
-    const createdTimePro = moment.tz(formattedTaskCreatedDate, "DD MM, YYYY HH:mm", "America/Chicago");
-    const createdTimeFormat = createdTimePro.format("YYYY-MM-DDTHH:mm:ss");
-    console.log("createdTime:", createdTimeFormat, "currentDallasTime:", currentDallasTime);
-
+    console.log("currentDallasTime:", currentDallasTime);
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true },
     });
-
-    const processedTasks = new Set(); // Track processed tasks
+    const processedTasks = new Set();
     let notifications = [];
 
     for (const taskGroup of taskGroups) {
@@ -1085,6 +1066,23 @@ async function updateTaskStatuses() {
       }
 
       taskGroup.tasks.forEach((task) => {
+        const formattedTaskCreatedDate = task.taskCreatedDate
+      .replace(/(\d+)(st|nd|rd|th)/, '$1')
+      .replace(/Jan/, '01')
+      .replace(/Feb/, '02')
+      .replace(/Mar/, '03')
+      .replace(/Apr/, '04')
+      .replace(/May/, '05')
+      .replace(/Jun/, '06')
+      .replace(/Jul/, '07')
+      .replace(/Aug/, '08')
+      .replace(/Sep/, '09')
+      .replace(/Oct/, '10')
+      .replace(/Nov/, '11')
+      .replace(/Dec/, '12');
+    console.log("Formatted taskCreatedDate:", formattedTaskCreatedDate);
+    const createdTimePro = moment.tz(formattedTaskCreatedDate, "DD MM, YYYY HH:mm", "America/Chicago");
+    const createdTimeFormat = createdTimePro.format("YYYY-MM-DDTHH:mm:ss");
         console.log("Task status:", task.taskStatus);
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
         console.log("task deadline",taskDeadline);
