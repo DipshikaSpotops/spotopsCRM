@@ -1132,9 +1132,10 @@ async function updateTaskStatuses() {
   }
 }
 const interval = setInterval(async () => {
+  
   try {
     await updateTaskStatuses();
-    console.log("Task statuses updated successfully.");
+    console.log("5 min interval.");
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
