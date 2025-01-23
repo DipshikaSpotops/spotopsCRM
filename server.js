@@ -1131,15 +1131,17 @@ async function updateTaskStatuses() {
     console.error("Error updating task statuses:", error);
   }
 }
+console.log("Setting up interval...");
 const interval = setInterval(async () => {
-  
+  console.log("Interval triggered. Running updateTaskStatuses...");
   try {
     await updateTaskStatuses();
-    console.log("5 min interval.");
+    console.log("updateTaskStatuses completed successfully.");
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
-}, 300000); // 5 minutes in milliseconds
+}, 300000);
+console.log("Interval set up successfully."); // 5 minutes in milliseconds
 // app.get("/notifications", async (req, res) => {
 //   console.log("notifications")
 //   try {
