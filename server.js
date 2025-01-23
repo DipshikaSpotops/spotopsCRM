@@ -1210,7 +1210,7 @@ app.get("/notifications", async (req, res) => {
 const notifications = await updateTaskStatuses(); 
     console.log("notis",notifications);
   const userId  = req.query.userId;
-  console.log("user",userId);
+  console.log("userrrr",userId);
   try {
     const notifications = await RecentNotification.find()
       .sort({ _id: -1 })
