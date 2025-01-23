@@ -1073,11 +1073,27 @@ async function updateTaskStatuses() {
           }
         }
         //"New Task Created" -> "Processing" after 5 minutes
+
         if (task.taskStatus === "New task added") {
           console.log("New", task.taskStatus);
-          const createdTime = moment.tz(task.taskCreatedDate, "YYYY-MM-DDTHH:mm", "America/Chicago");
-          console.log("createdTime:",createdTime,"currentDallasTime:",currentDallasTime);
-          if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
+          const formattedTaskCreatedDate = task.taskCreatedDate
+  .replace(/(\d+)(st|nd|rd|th)/, '$1') 
+  .replace(/Jan/, '01') 
+  .replace(/Feb/, '02')
+  .replace(/Mar/, '03')
+  .replace(/Apr/, '04')
+  .replace(/May/, '05')
+  .replace(/Jun/, '06')
+  .replace(/Jul/, '07')
+  .replace(/Aug/, '08')
+  .replace(/Sep/, '09')
+  .replace(/Oct/, '10')
+  .replace(/Nov/, '11')
+  .replace(/Dec/, '12');
+console.log("Formatted taskCreatedDate:", formattedTaskCreatedDate);
+          console.log("createdTime:",formattedTaskCreatedDate,"currentDallasTime:",currentDallasTime);
+          if (moment(currentDallasTime).diff(formattedTaskCreatedDate, "minutes") >= 5) {
+            console.log("to chnage to processing");
             task.taskStatus = "Processing";
             isUpdated = true;
             notifications.push({
