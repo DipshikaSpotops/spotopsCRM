@@ -1059,7 +1059,7 @@ async function updateTaskStatuses() {
         isUpdated = true;
       }
       taskGroup.tasks.forEach((task) => {
-        console.log("Task status:", task,task.taskStatus);
+        console.log("Task status:",task.taskStatus);
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime;
@@ -1074,6 +1074,7 @@ async function updateTaskStatuses() {
         }
         //"New Task Created" -> "Processing" after 5 minutes
         if (task.taskStatus === "New task added") {
+          console.log("New", task.taskStatus);
           const createdTime = moment.tz(task.taskCreatedDate, "YYYY-MM-DDTHH:mm", "America/Chicago");
           if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
             task.taskStatus = "Processing";
