@@ -1091,9 +1091,9 @@ async function updateTaskStatuses() {
         const formattedTaskCreatedDate = formatTaskCreatedDate(task.taskCreatedDate);
         const createdTime = moment.tz(formattedTaskCreatedDate, "DD MM, YYYY HH:mm", "America/Chicago");
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
-
+        const formattedDeadline = taskDeadline.format("YYYY-MM-DDTHH:mm:ss");
         console.log("Task Status:", task.taskStatus);
-        console.log("Task Deadline:", taskDeadline.format("YYYY-MM-DDTHH:mm:ss"));
+        console.log("Task Deadline:", formattedDeadline);
 
         // Handle completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
@@ -1108,7 +1108,7 @@ async function updateTaskStatuses() {
             processedTasks.add(task._id.toString()); // Mark task as processed
           }
 
-          if (moment(currentDallasTime).isBefore(taskDeadline)) {
+          if (moment(currentDallasTime).isBefore(formattedDeadline)) {
             task.completeCountBeforeDeadline = (task.completeCountBeforeDeadline || 0) + 1;
           }
         }
@@ -1131,8 +1131,8 @@ async function updateTaskStatuses() {
         }
 
         // Handle deadlines for non-completed tasks
-        if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
-          const diffInMinutes = taskDeadline.diff(moment(currentDallasTime), "minutes");
+        if (task.taskStatus !== "Completed" && formattedDeadline.isValid()) {
+          const diffInMinutes = formattedDeadline.diff(moment(currentDallasTime), "minutes");
           console.log("Time Difference (Minutes):", diffInMinutes);
 
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
