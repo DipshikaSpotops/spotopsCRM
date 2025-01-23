@@ -1059,6 +1059,7 @@ async function updateTaskStatuses() {
         isUpdated = true;
       }
       taskGroup.tasks.forEach((task) => {
+        console.log("Task status:", task,task.taskStatus);
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime;
