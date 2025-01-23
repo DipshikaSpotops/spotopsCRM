@@ -1038,7 +1038,24 @@ app.get("/alltasks", async (req, res) => {
 async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss");
-    console.log("Current Dallas time:", currentDallasTime);
+    const formattedTaskCreatedDate = task.taskCreatedDate
+  .replace(/(\d+)(st|nd|rd|th)/, '$1') 
+  .replace(/Jan/, '01') 
+  .replace(/Feb/, '02')
+  .replace(/Mar/, '03')
+  .replace(/Apr/, '04')
+  .replace(/May/, '05')
+  .replace(/Jun/, '06')
+  .replace(/Jul/, '07')
+  .replace(/Aug/, '08')
+  .replace(/Sep/, '09')
+  .replace(/Oct/, '10')
+  .replace(/Nov/, '11')
+  .replace(/Dec/, '12');
+console.log("Formatted taskCreatedDate:", formattedTaskCreatedDate);
+const createdTimePro = moment.tz(formattedTaskCreatedDate, "DD MM, YYYY HH:mm", "America/Chicago");
+const  createdTimeFormat = createdTimePro.format("YYYY-MM-DDTHH:mm:ss");
+          console.log("createdTime:",createdTimeFormat,"currentDallasTime:",currentDallasTime);
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true },
     });
@@ -1076,11 +1093,7 @@ async function updateTaskStatuses() {
 
         if (task.taskStatus === "New task added") {
           console.log("New", task.taskStatus);
-          const createdTime = moment.tz("23 01, 2025 9:19", "DD MM, YYYY HH:mm", "America/Chicago");
-console.log("Parsed createdTime:", createdTime.format("YYYY-MM-DDTHH:mm:ss"));
-var formattedCreatedTime= createdTime.format("YYYY-MM-DDTHH:mm:ss")          
-console.log("createdTime:",formattedCreatedTime,"currentDallasTime:",currentDallasTime);
-          if (moment(currentDallasTime).diff(formattedCreatedTime, "minutes") >= 5) {
+          if (moment(currentDallasTime).diff(createdTimeFormat, "minutes") >= 5) {
             console.log("to chnage to processing");
             task.taskStatus = "Processing";
             isUpdated = true;
