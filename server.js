@@ -547,16 +547,16 @@ const taskSchema = new mongoose.Schema({
       taskCreatedDate: { type: String, required: true },
       deadline: { type: String, required: true },
       taskDescription: { type: String, required: true },
-      taskStatus: { type: String, required: true},
+      taskStatus: { type: String, required: true },
       taskCompletionTime: { type: String },
+      warningCountAfterDeadline: { type: Number, default: 0 },
+      alertCountAfterDeadline: { type: Number, default: 0 },
+      incompleteCountAfterDeadline: { type: Number, default: 0 },
+      completeCountBeforeDeadline: { type: Number, default: 0 },
+      processingCountAfterDeadline: { type: Number, default: 0 },
     },
   ],
   previousTaskCount: { type: Number, default: 0 },
-  warningCountAfterDeadline: { type: Number, default: 0 },  
-  alertCountAfterDeadline: { type: Number, default: 0 },    
-  incompleteCountAfterDeadline: { type: Number, default: 0 },
-  completeCountBeforeDeadline: { type: Number, default: 0 }, 
-  processingCountAfterDeadline: {type: Number, default: 0},
 });
 
 const notificationSchema = new mongoose.Schema({
@@ -1039,48 +1039,38 @@ async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss");
     console.log("Current Dallas time:", currentDallasTime);
-
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true },
     });
     let notifications = [];
-
     for (const taskGroup of taskGroups) {
       let isUpdated = false;
       const currentTaskCount = taskGroup.tasks.length;
-
-      // Handle newly added tasks
       if (currentTaskCount > (taskGroup.previousTaskCount || 0)) {
         const newTasks = taskGroup.tasks.slice(taskGroup.previousTaskCount || 0);
         newTasks.forEach((task) => {
           notifications.push({
             taskId: task._id,
-            message: `New Task added: ${taskGroup.orderNo} - \n${task.taskDescription}\n${currentDallasTime}`,
+            message: `New Task added: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
           });
         });
         taskGroup.previousTaskCount = currentTaskCount;
         isUpdated = true;
       }
-
       taskGroup.tasks.forEach((task) => {
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
-
-        // Handle completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime;
           isUpdated = true;
           notifications.push({
             taskId: task._id,
-            message: `Task Completed: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\nCompleted Time: ${currentDallasTime}`,
+            message: `Task Completed: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
           });
-
-          // Count tasks completed before the deadline
           if (moment(currentDallasTime).isBefore(taskDeadline)) {
-            taskGroup.completeCountBeforeDeadline = (taskGroup.completeCountBeforeDeadline || 0) + 1;
+            task.completeCountBeforeDeadline = (task.completeCountBeforeDeadline || 0) + 1;
           }
         }
-
-        // Handle "New Task Created" -> "Processing" after 5 minutes
+        //"New Task Created" -> "Processing" after 5 minutes
         if (task.taskStatus === "New Task Created") {
           const createdTime = moment.tz(task.taskCreatedDate, "YYYY-MM-DDTHH:mm", "America/Chicago");
           if (moment(currentDallasTime).diff(createdTime, "minutes") >= 5) {
@@ -1088,16 +1078,12 @@ async function updateTaskStatuses() {
             isUpdated = true;
             notifications.push({
               taskId: task._id,
-              message: `Task status changed to Processing: ${taskGroup.orderNo} - \n${task.taskDescription}`,
+              message: `Task status changed to Processing: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
             });
           }
         }
-
-        // Alert and Warning Statuses
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
           const diffInMinutes = taskDeadline.diff(moment(currentDallasTime), "minutes");
-
-          // Handle Alert status
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
@@ -1106,29 +1092,24 @@ async function updateTaskStatuses() {
               message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
             });
           }
-
-          // Handle Warning, Incomplete, and Processing statuses
           if (diffInMinutes <= 0) {
             if (task.taskStatus === "Alert") {
-              taskGroup.alertCountAfterDeadline = (taskGroup.alertCountAfterDeadline || 0) + 1;
+              task.alertCountAfterDeadline = (task.alertCountAfterDeadline || 0) + 1;
             }
-
             if (task.taskStatus === "Warning") {
               task.taskStatus = "Incomplete";
               isUpdated = true;
-              taskGroup.warningCountAfterDeadline = (taskGroup.warningCountAfterDeadline || 0) + 1;
+              task.warningCountAfterDeadline = (task.warningCountAfterDeadline || 0) + 1;
               notifications.push({
                 taskId: task._id,
                 message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
               });
             }
-
             if (task.taskStatus === "Incomplete") {
-              taskGroup.incompleteCountAfterDeadline = (taskGroup.incompleteCountAfterDeadline || 0) + 1;
+              task.incompleteCountAfterDeadline = (task.incompleteCountAfterDeadline || 0) + 1;
             }
-
             if (task.taskStatus === "Processing") {
-              taskGroup.processingCountAfterDeadline = (taskGroup.processingCountAfterDeadline || 0) + 1;
+              task.processingCountAfterDeadline = (task.processingCountAfterDeadline || 0) + 1;
               notifications.push({
                 taskId: task._id,
                 message: `Task still in Processing past deadline: ${taskGroup.orderNo} - \n${task.taskDescription}`,
@@ -1137,26 +1118,27 @@ async function updateTaskStatuses() {
           }
         }
       });
-
-      // Save task group if updates were made
       if (isUpdated) {
         await taskGroup.save();
       }
     }
-
-    // Save notifications to the database
     for (const notification of notifications) {
       console.log("Recent Notification:", notification);
       await RecentNotification.create({ message: notification.message });
     }
-
     return notifications;
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
 }
-
-
+const interval = setInterval(async () => {
+  try {
+    await updateTaskStatuses();
+    console.log("Task statuses updated successfully.");
+  } catch (error) {
+    console.error("Error updating task statuses:", error);
+  }
+}, 300000); // 5 minutes in milliseconds
 // app.get("/notifications", async (req, res) => {
 //   console.log("notifications")
 //   try {
