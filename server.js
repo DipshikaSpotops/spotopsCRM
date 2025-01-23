@@ -1118,8 +1118,8 @@ async function updateTaskStatuses() {
         }
         if (task.taskStatus !== "Completed" && deadlineFormatted) {
           console.log("completed?",task.taskStatus,deadlineFormatted,currentDallasTime);
-          const diffInMinutes = deadlineFormatted.diff(moment(currentDallasTime), "minutes");
-          console.log("diff",diffInMinutes)
+          const diffInMinutes = deadlineFormatted.diff(currentDallasTime, "minutes");
+          console.log("diffInMinutes",diffInMinutes);
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
