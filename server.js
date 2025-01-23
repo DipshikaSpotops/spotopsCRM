@@ -1136,7 +1136,7 @@ const interval = setInterval(async () => {
   console.log("Interval triggered. Running updateTaskStatuses...");
   try {
     await updateTaskStatuses();
-    console.log("updateTaskStatuses completed successfully.");
+    console.log("interval ran.");
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
