@@ -1089,37 +1089,36 @@ async function updateTaskStatuses() {
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime;
           isUpdated = true;
-          if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
+          if (!processedTasks.has(task._id.toString())) { 
             notifications.push({
               taskId: task._id,
               message: `Task Completed: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
             });
-            processedTasks.add(task._id.toString()); // Mark task as processed
+            processedTasks.add(task._id.toString());
           }
           if (moment(currentDallasTime).isBefore(taskDeadline)) {
             task.completeCountBeforeDeadline = (task.completeCountBeforeDeadline || 0) + 1;
           }
         }
-
-        // "New Task Created" -> "Processing" after 5 minutes
         if (task.taskStatus === "New task added") {
-          console.log("New", task.taskStatus);
+          // console.log("New", task.taskStatus);
           if (moment(currentDallasTime).diff(createdTimeFormat, "minutes") >= 5) {
-            console.log("to change to processing");
+            // console.log("to change to processing");
             task.taskStatus = "Processing";
             isUpdated = true;
-            if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
+            if (!processedTasks.has(task._id.toString())) { 
               notifications.push({
                 taskId: task._id,
                 message: `Task status changed to Processing: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
               });
-              processedTasks.add(task._id.toString()); // Mark task as processed
+              processedTasks.add(task._id.toString()); 
             }
           }
         }
-
         if (task.taskStatus !== "Completed" && taskDeadline.isValid()) {
+          console.log("completed?",task.taskStatus,taskDeadline,currentDallasTime);
           const diffInMinutes = taskDeadline.diff(moment(currentDallasTime), "minutes");
+          console.log("diff",diffInMinutes)
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
