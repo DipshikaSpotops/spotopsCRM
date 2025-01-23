@@ -1131,7 +1131,7 @@ async function updateTaskStatuses() {
         }
 
         // Handle deadlines for non-completed tasks
-        if (task.taskStatus !== "Completed" && formattedDeadline.isValid()) {
+        if (task.taskStatus !== "Completed" && formattedDeadline) {
           const diffInMinutes = formattedDeadline.diff(moment(currentDallasTime), "minutes");
           console.log("Time Difference (Minutes):", diffInMinutes);
 
