@@ -549,8 +549,8 @@ const taskSchema = new mongoose.Schema({
       taskDescription: { type: String, required: true },
       taskStatus: { type: String, required: true },
       taskCompletionTime: { type: String },
-      warningCountAfterDeadline: { type: Number, default: 0 },
-      alertCountAfterDeadline: { type: Number, default: 0 },
+      warningCounts: { type: Number, default: 0 },
+      alertCounts: { type: Number, default: 0 },
       incompleteCountAfterDeadline: { type: Number, default: 0 },
       completeCountBeforeDeadline: { type: Number, default: 0 },
       processingCountAfterDeadline: { type: Number, default: 0 },
@@ -1134,8 +1134,8 @@ async function updateTaskStatuses() {
         if (task.taskStatus !== "Completed" && formattedDeadline) {
           const date1 = moment(formattedDeadline);
           const date2 = moment(currentDallasTime);
-          console.log("dates",date1, date2);
-          const diffInMinutes = date2.diff(date1, "minutes");          
+          console.log("dates",date1, date2)
+          const diffInMinutes = date1.diff(date2, "minutes");          
           console.log("Time Difference (Minutes):", diffInMinutes);
           console.log("diffInMinutes",diffInMinutes);
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
@@ -1148,26 +1148,26 @@ async function updateTaskStatuses() {
                 message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
               });
               processedTasks.add(task._id.toString());
-              task.alertCountAfterDeadline = (task.alertCountAfterDeadline || 0) + 1; // Mark task as processed
+              task.alertCounts = (task.alertCounts || 0) + 1; // Mark task as processed
             }
           }
 
           if (diffInMinutes <= 0) {
             // if (task.taskStatus === "Alert") {
-            //   task.alertCountAfterDeadline = (task.alertCountAfterDeadline || 0) + 1;
+            //   task.alertCounts = (task.alertCounts || 0) + 1;
             // }
 
             if (task.taskStatus === "Warning") {
               task.taskStatus = "Incomplete";
               isUpdated = true;
-              task.warningCountAfterDeadline = (task.warningCountAfterDeadline || 0) + 1;
+              task.warningCounts = (task.warningCounts || 0) + 1;
 
-              if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
+              if (!processedTasks.has(task._id.toString())) { 
                 notifications.push({
                   taskId: task._id,
                   message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
                 });
-                processedTasks.add(task._id.toString()); // Mark task as processed
+                processedTasks.add(task._id.toString()); 
               }
             }
 
