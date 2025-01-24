@@ -1088,12 +1088,17 @@ async function updateTaskStatuses() {
 
       // Process each task in the group
       taskGroup.tasks.forEach((task) => {
+        if (processedTasks.has(task._id.toString())) {
+          return; // Skip already processed tasks
+        }
+
         const formattedTaskCreatedDate = formatTaskCreatedDate(task.taskCreatedDate);
         const createdTime = moment.tz(formattedTaskCreatedDate, "DD MM, YYYY HH:mm", "America/Chicago");
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
         const formattedDeadline = taskDeadline.format("YYYY-MM-DDTHH:mm:ss");
         console.log("Task Status:", task.taskStatus);
-        console.log("Task Deadline:", formattedDeadline,"current", currentDallasTime);
+        console.log("Task Deadline:", formattedDeadline, "current", currentDallasTime);
+
         // Handle completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime;
@@ -1114,21 +1119,6 @@ async function updateTaskStatuses() {
 
         // Handle "New task added" -> "Processing" after 5 minutes
         if (task.taskStatus === "New task added") {
-          console.log("New",currentDallasTime,createdTime.format("YYYY-MM-DDTHH:mm:ss"))
-          if (moment(currentDallasTime).diff(createdTime.format("YYYY-MM-DDTHH:mm:ss"), "minutes") >= 5) {
-            task.taskStatus = "Processing";
-            isUpdated = true;
-
-            if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
-              notifications.push({
-                taskId: task._id,
-                message: `Task status changed to Processing: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
-              });
-              processedTasks.add(task._id.toString()); // Mark task as processed
-            }
-          }
-        }else if (task.taskStatus === "New task added") {
-          console.log("New",currentDallasTime,createdTime.format("YYYY-MM-DDTHH:mm:ss"))
           if (moment(currentDallasTime).diff(createdTime.format("YYYY-MM-DDTHH:mm:ss"), "minutes") >= 5) {
             task.taskStatus = "Processing";
             isUpdated = true;
@@ -1142,64 +1132,58 @@ async function updateTaskStatuses() {
             }
           }
         }
-        // if the task is not completed
+
+        // Handle tasks that are not completed
         if (task.taskStatus !== "Completed" && formattedDeadline) {
           const date1 = new Date(currentDallasTime);
           const date2 = new Date(formattedDeadline);
-          console.log("deadline:",date2,"currentTime:",date1);
           const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
-          const millisecondsInADay = 1000 * 60 * 60 * 24; 
-          const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInADay);
-          const millisecondsInAMinute = 1000 * 60; // 1 minute = 60000 milliseconds
-          const differenceInMinutes = Math.floor((differenceInMilliseconds % millisecondsInADay) / millisecondsInAMinute);
-          const diffInMinutes = Math.floor(differenceInMilliseconds / millisecondsInAMinute);
-          console.log(`Difference: ${differenceInDays} days and ${differenceInMinutes} minutes`);
-          console.log(`Total Time Difference (Minutes): ${diffInMinutes}`);
-          console.log("diffInMinutes",diffInMinutes);
-         if  (task.taskStatus === "Processing") {
-          if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
-            task.taskStatus = "Alert";
+          const diffInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
+
+          console.log("diffInMinutes", diffInMinutes);
+
+          if (task.taskStatus === "Processing") {
+            if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
+              task.taskStatus = "Alert";
+              isUpdated = true;
+              if (!processedTasks.has(task._id.toString())) {
+                notifications.push({
+                  taskId: task._id,
+                  message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
+                });
+                processedTasks.add(task._id.toString());
+                task.alertCounts = (task.alertCounts || 0) + 1;
+              }
+            }
+          } else if (task.taskStatus === "Alert") {
+            if (diffInMinutes >= 0 && task.taskStatus !== "Warning") {
+              task.taskStatus = "Warning";
+              isUpdated = true;
+              if (!processedTasks.has(task._id.toString())) {
+                notifications.push({
+                  taskId: task._id,
+                  message: `Warning (Deadline Exceeded): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
+                });
+                processedTasks.add(task._id.toString());
+                task.warningCounts = (task.warningCounts || 0) + 1;
+              }
+            }
+          } else if (task.taskStatus === "Warning") {
+            task.taskStatus = "Incomplete";
             isUpdated = true;
-            if (!processedTasks.has(task._id.toString())) { 
+            task.warningCounts = (task.warningCounts || 0) + 1;
+
+            if (!processedTasks.has(task._id.toString())) {
               notifications.push({
                 taskId: task._id,
-                message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
+                message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
               });
               processedTasks.add(task._id.toString());
-              task.alertCounts = (task.alertCounts || 0) + 1; 
             }
+          } else if (task.taskStatus === "Incomplete") {
+            task.incompleteCountAfterDeadline = (task.incompleteCountAfterDeadline || 0) + 1;
           }
         }
-        else if  (task.taskStatus === "Alert"){
-        if (diffInMinutes >= 0 && task.taskStatus !== "Warning") {
-          task.taskStatus = "Warning";
-          isUpdated = true;
-          if (!processedTasks.has(task._id.toString())) {
-            notifications.push({
-              taskId: task._id,
-              message: `Warning (Deadline Exceeded): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
-            });
-            processedTasks.add(task._id.toString());
-            task.warningCounts = (task.alertCounts || 0) + 1;
-          }
-        }
-      }else if (task.taskStatus === "Warning") {
-        task.taskStatus = "Incomplete";
-        isUpdated = true;
-        task.warningCounts = (task.warningCounts || 0) + 1;
-
-        if (!processedTasks.has(task._id.toString())) { 
-          notifications.push({
-            taskId: task._id,
-            message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
-          });
-          processedTasks.add(task._id.toString()); 
-        }
-      }else if (task.taskStatus === "Incomplete") {
-        task.incompleteCountAfterDeadline = (task.incompleteCountAfterDeadline || 0) + 1;
-      }
-    }
-      
       });
 
       // Save the task group if updates were made
@@ -1220,17 +1204,17 @@ async function updateTaskStatuses() {
     console.error("Error updating task statuses:", error);
   }
 }
-// console.log("Setting up interval...");
-// const interval = setInterval(async () => {
-//   console.log("Interval triggered. Running updateTaskStatuses...");
-//   try {
-//     await updateTaskStatuses();
-//     console.log("interval ran.");
-//   } catch (error) {
-//     console.error("Error updating task statuses:", error);
-//   }
-// }, 60000);
-// console.log("Interval set up successfully."); // 5 minutes in milliseconds
+console.log("Setting up interval...");
+const interval = setInterval(async () => {
+  console.log("Interval triggered. Running updateTaskStatuses...");
+  try {
+    await updateTaskStatuses();
+    console.log("interval ran.");
+  } catch (error) {
+    console.error("Error updating task statuses:", error);
+  }
+}, 60000);
+console.log("Interval set up successfully."); // 5 minutes in milliseconds
 // app.get("/notifications", async (req, res) => {
 //   console.log("notifications")
 //   try {
