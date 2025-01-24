@@ -1113,7 +1113,6 @@ function renderNotifications(notifications) {
     notificationList.append(notificationItem);
   });
 }
-// Mark notifications as read when the dropdown is viewed
 async function markNotificationsAsRead() {
   try {
     const role = localStorage.getItem('role');
@@ -1122,7 +1121,6 @@ async function markNotificationsAsRead() {
       console.error("User ID not found. Cannot mark notifications as read.");
       return;
     }
-    // Mark notifications as read based on role
     await axios.post(`https://www.spotops360.com/mark-notifications-read`, null, {
       params: { firstName, role }, 
     });
@@ -1137,15 +1135,10 @@ async function updateUnreadCount() {
   try {
     const role = localStorage.getItem('role');
     const firstName = localStorage.getItem('firstName');
-
-    // Fetch unread notifications count based on role
     const response = await axios.get(`https://www.spotops360.com/unread-notifications-count`, {
       params: { firstName, role },
     });
-
     const unreadCount = response.data.count;
-
-    // Update the UI
     if (unreadCount > 0) {
       notificationCountElement.text(unreadCount);
       notificationCountElement.show();
