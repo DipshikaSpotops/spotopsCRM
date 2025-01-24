@@ -1132,9 +1132,8 @@ async function updateTaskStatuses() {
 
         // Handle deadlines for non-completed tasks
         if (task.taskStatus !== "Completed" && formattedDeadline) {
-          const date1 = moment(currentDallasTime);
-          const date2 = moment(formattedDeadline);
-          console.log("calculate diff",date1,date2);
+          const date1 = new Date(currentDallasTime);
+          const date2 = new Date(formattedDeadline);
 const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
 const millisecondsInADay = 1000 * 60 * 60 * 24; 
 const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInADay);
