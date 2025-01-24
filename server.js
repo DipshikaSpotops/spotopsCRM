@@ -1171,7 +1171,7 @@ async function updateTaskStatuses() {
           }
         }
         else if  (task.taskStatus === "Alert"){
-        if (diffInMinutes <= 0 && task.taskStatus !== "Warning") {
+        if (diffInMinutes >= 0 && task.taskStatus !== "Warning") {
           task.taskStatus = "Warning";
           isUpdated = true;
           if (!processedTasks.has(task._id.toString())) {
