@@ -1057,8 +1057,9 @@ function renderNotifications(notifications) {
   notificationList.empty();
   const role = localStorage.getItem('role');
   const firstName = localStorage.getItem('firstName');
+  console.log("note",notifications);
   const filteredNotifications = notifications.filter(notification => {
-    console.log("note",notification);
+    
     if (role === 'Admin') {
       return true;
     } else {
