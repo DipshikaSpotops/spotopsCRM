@@ -1213,7 +1213,7 @@ const interval = setInterval(async () => {
   } catch (error) {
     console.error("Error updating task statuses:", error);
   }
-}, 60000);
+}, 5 * 60 * 1000);
 console.log("Interval set up successfully."); // 5 minutes in milliseconds
 // app.get("/notifications", async (req, res) => {
 //   console.log("notifications")
