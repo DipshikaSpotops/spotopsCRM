@@ -1063,7 +1063,7 @@ function renderNotifications(notifications) {
     if (role === 'Admin') {
       return true;
     } else {
-      return notification.assignedTo === firstName;
+      return notification.message.includes(firstName);
     }
   });
   console.log("notificat", filteredNotifications[0]);
