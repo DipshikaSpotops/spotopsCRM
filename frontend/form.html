@@ -6078,18 +6078,34 @@ async function fetchNotifications() {
 
 // Render notifications in the dropdown
 function renderNotifications(notifications) {
-  notificationList.empty();
+  notificationList.empty(); // Clear the notification list
   const role = localStorage.getItem('role');
   const firstName = localStorage.getItem('firstName');
+
+  // Filter notifications based on role and firstName
   const filteredNotifications = notifications.filter(notification => {
     if (role === 'Admin') {
-      return true;
+      return true; // Admin sees all notifications
     } else {
-      return notification.assignedTo === firstName;
+      return notification.message.includes(firstName); // Non-admin sees only their notifications
     }
   });
-  console.log("notificat", filteredNotifications[0]);
-  filteredNotifications.forEach((notification) => {
+
+  // Get the last 5 notifications
+  const lastFiveNotifications = filteredNotifications.slice(-5);
+
+  // If no notifications, display "No notifications"
+  if (lastFiveNotifications.length === 0) {
+    notificationList.append(`
+      <li style="margin-bottom: 5px; padding: 10px; background-color: #f0f0f0; color: black; width: 100%; border: 1px solid black;">
+        No notifications
+      </li>
+    `);
+    return; // Exit the function early
+  }
+
+  // Render the last 5 notifications
+  lastFiveNotifications.forEach((notification) => {
     let backgroundColor;
     if (notification.message.includes("Warning")) {
       backgroundColor = "#db634a";
@@ -6108,10 +6124,14 @@ function renderNotifications(notifications) {
     } else {
       backgroundColor = "black";
     }
+
+    // Split the message into lines
     const lines = notification.message.split("\n");
     const firstLine = `<b>${lines[0]}</b>`;
     const remainingLines = lines.slice(1).join("<br>");
     const formattedMessage = `${firstLine}<br>${remainingLines}`;
+
+    // Create the notification item
     const notificationItem = `
       <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: black; width: 100%; border: 1px solid black;">
         ${formattedMessage}

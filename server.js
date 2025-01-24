@@ -1287,11 +1287,9 @@ const notifications = await updateTaskStatuses();
   const userId  = req.query.userId;
   console.log("userrrr",userId);
   try {
-    const notifications = await RecentNotification.find()
-      .sort({ _id: -1 })
-      .limit(5);
+    const notificationss = await RecentNotification.find({})
     // Marking notifications as unread for this user if they are not in the readBy array
-    const userSpecificNotifications = notifications.map((notification) => ({
+    const userSpecificNotifications = notificationss.map((notification) => ({
       ...notification._doc,
       isRead: notification.readBy.includes(userId),
     }));
