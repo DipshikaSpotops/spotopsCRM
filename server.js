@@ -1094,7 +1094,6 @@ async function updateTaskStatuses() {
         const formattedDeadline = taskDeadline.format("YYYY-MM-DDTHH:mm:ss");
         console.log("Task Status:", task.taskStatus);
         console.log("Task Deadline:", formattedDeadline,"current", currentDallasTime);
-
         // Handle completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
           task.taskCompletionTime = currentDallasTime;
@@ -1128,9 +1127,22 @@ async function updateTaskStatuses() {
               processedTasks.add(task._id.toString()); // Mark task as processed
             }
           }
-        }
+        }else if (task.taskStatus === "New task added") {
+          console.log("New",currentDallasTime,createdTime.format("YYYY-MM-DDTHH:mm:ss"))
+          if (moment(currentDallasTime).diff(createdTime.format("YYYY-MM-DDTHH:mm:ss"), "minutes") >= 5) {
+            task.taskStatus = "Processing";
+            isUpdated = true;
 
-        // Handle deadlines for non-completed tasks
+            if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
+              notifications.push({
+                taskId: task._id,
+                message: `Task status changed to Processing: ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}`,
+              });
+              processedTasks.add(task._id.toString()); // Mark task as processed
+            }
+          }
+        }
+        // if the task is not completed
         if (task.taskStatus !== "Completed" && formattedDeadline) {
           const date1 = new Date(currentDallasTime);
           const date2 = new Date(formattedDeadline);
@@ -1144,56 +1156,50 @@ async function updateTaskStatuses() {
           console.log(`Difference: ${differenceInDays} days and ${differenceInMinutes} minutes`);
           console.log(`Total Time Difference (Minutes): ${diffInMinutes}`);
           console.log("diffInMinutes",diffInMinutes);
+         if  (task.taskStatus === "Processing") {
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
             isUpdated = true;
-
-            if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
+            if (!processedTasks.has(task._id.toString())) { 
               notifications.push({
                 taskId: task._id,
                 message: `Alert (Deadline Approaching): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
               });
               processedTasks.add(task._id.toString());
-              task.alertCounts = (task.alertCounts || 0) + 1; // Mark task as processed
-            }
-          }
-
-          if (diffInMinutes <= 0) {
-            // if (task.taskStatus === "Alert") {
-            //   task.alertCounts = (task.alertCounts || 0) + 1;
-            // }
-
-            if (task.taskStatus === "Warning") {
-              task.taskStatus = "Incomplete";
-              isUpdated = true;
-              task.warningCounts = (task.warningCounts || 0) + 1;
-
-              if (!processedTasks.has(task._id.toString())) { 
-                notifications.push({
-                  taskId: task._id,
-                  message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
-                });
-                processedTasks.add(task._id.toString()); 
-              }
-            }
-
-            if (task.taskStatus === "Incomplete") {
-              task.incompleteCountAfterDeadline = (task.incompleteCountAfterDeadline || 0) + 1;
-            }
-
-            if (task.taskStatus === "Processing") {
-              task.processingCountAfterDeadline = (task.processingCountAfterDeadline || 0) + 1;
-
-              if (!processedTasks.has(task._id.toString())) { // Check if task is already processed
-                notifications.push({
-                  taskId: task._id,
-                  message: `Task still in Processing past deadline: ${taskGroup.orderNo} - \n${task.taskDescription}`,
-                });
-                processedTasks.add(task._id.toString()); // Mark task as processed
-              }
+              task.alertCounts = (task.alertCounts || 0) + 1; 
             }
           }
         }
+        else if  (task.taskStatus === "Alert"){
+        if (diffInMinutes <= 0 && task.taskStatus !== "Warning") {
+          task.taskStatus = "Warning";
+          isUpdated = true;
+          if (!processedTasks.has(task._id.toString())) {
+            notifications.push({
+              taskId: task._id,
+              message: `Warning (Deadline Exceeded): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
+            });
+            processedTasks.add(task._id.toString());
+            task.warningCounts = (task.alertCounts || 0) + 1;
+          }
+        }
+      }else if (task.taskStatus === "Warning") {
+        task.taskStatus = "Incomplete";
+        isUpdated = true;
+        task.warningCounts = (task.warningCounts || 0) + 1;
+
+        if (!processedTasks.has(task._id.toString())) { 
+          notifications.push({
+            taskId: task._id,
+            message: `Task marked as Incomplete (Missed Deadline): ${taskGroup.orderNo} - \n${task.taskDescription}\nAssigned to: ${task.assignedTo}\n${currentDallasTime}`,
+          });
+          processedTasks.add(task._id.toString()); 
+        }
+      }else if (task.taskStatus === "Incomplete") {
+        task.incompleteCountAfterDeadline = (task.incompleteCountAfterDeadline || 0) + 1;
+      }
+    }
+      
       });
 
       // Save the task group if updates were made
