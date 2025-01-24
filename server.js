@@ -1138,8 +1138,8 @@ const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
 const millisecondsInADay = 1000 * 60 * 60 * 24; 
 const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInADay);
 const millisecondsInAMinute = 1000 * 60; 
-const differenceInMinutes = Math.floor((differenceInMilliseconds % millisecondsInADay) / millisecondsInAMinute);
-console.log(`Difference: ${differenceInDays} days and ${differenceInMinutes} minutes`);
+const diffInMinutes = Math.floor((differenceInMilliseconds % millisecondsInADay) / millisecondsInAMinute);
+console.log(`Difference: ${differenceInDays} days and ${diffInMinutes} minutes`);
           console.log("dates",date1, date2)
           console.log("Time Difference (Minutes):", diffInMinutes);
           console.log("diffInMinutes",diffInMinutes);
