@@ -1052,12 +1052,19 @@ async function fetchNotifications() {
 
 // Render notifications in the dropdown
 function renderNotifications(notifications) {
-  notificationList.empty(); 
-  console.log("notificat", notifications[0]);
-  notifications.forEach((notification) => {
+  notificationList.empty();
+  const role = localStorage.getItem('role');
+  const firstName = localStorage.getItem('firstName');
+  const filteredNotifications = notifications.filter(notification => {
+    if (role === 'Admin') {
+      return true;
+    } else {
+      return notification.assignedTo === firstName;
+    }
+  });
+  console.log("notificat", filteredNotifications[0]);
+  filteredNotifications.forEach((notification) => {
     let backgroundColor;
-
-    // Determine background color based on the message content
     if (notification.message.includes("Warning")) {
       backgroundColor = "#db634a";
     } else if (notification.message.includes("Alert")) {
@@ -1066,29 +1073,19 @@ function renderNotifications(notifications) {
       backgroundColor = "#aae3c0";
     } else if (notification.message.includes("New Task added")) {
       backgroundColor = "#c6c6c6";
-    } 
-    else if (notification.message.includes("Task marked as Incomplete (Missed Deadline)")) {
-      backgroundColor = "#d24949";
-    } 
-    else if (notification.message.includes("Task still in Processing past deadline")) {
+    } else if (notification.message.includes("Task still in Processing past deadline")) {
       backgroundColor = "#5fa33a";
-    } 
-    else if (notification.message.includes("Task status changed to Processing")) {
+    } else if (notification.message.includes("Task status changed to Processing")) {
       backgroundColor = "#d24949";
-    }
-    else {
+    } else if (notification.message.includes("Task marked as Incomplete (Missed Deadline)")) {
+      backgroundColor = "#d24949";
+    } else {
       backgroundColor = "black";
     }
-
-    // Split the message into lines
     const lines = notification.message.split("\n");
     const firstLine = `<b>${lines[0]}</b>`;
     const remainingLines = lines.slice(1).join("<br>");
-
-    // Combine the formatted message
     const formattedMessage = `${firstLine}<br>${remainingLines}`;
-
-    // Create the notification item
     const notificationItem = `
       <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: black; width: 100%; border: 1px solid black;">
         ${formattedMessage}
