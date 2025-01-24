@@ -1304,8 +1304,8 @@ app.post('/mark-notifications-read', async (req, res) => {
   console.log("to see readBy",userId);
   try {
     await RecentNotification.updateMany(
-      { readBy: { $ne: userId } }, // Only update if userId is not in the readBy array
-      { $addToSet: { readBy: userId } } // Add userId to the readBy array
+      { readBy: { $ne: userId } }, 
+      { $addToSet: { readBy: userId } } 
     );
 
     res.status(200).send({ message: 'Notifications marked as read' });
@@ -1313,7 +1313,24 @@ app.post('/mark-notifications-read', async (req, res) => {
     res.status(500).send({ error: 'Error marking notifications as read' });
   }
 });
+app.get('/unread-notifications-count', async (req, res) => {
+  const { firstName, role } = req.query;
 
+  try {
+    let query = { readBy: { $ne: firstName } }; // Notifications not read by the user
+
+    if (role !== 'Admin') {
+      // For non-Admin, filter notifications that include the user's firstName in the message
+      query.message = { $regex: firstName, $options: 'i' }; // Case-insensitive search
+    }
+
+    const unreadCount = await RecentNotification.countDocuments(query);
+    res.status(200).json({ count: unreadCount });
+  } catch (error) {
+    console.error("Error fetching unread notifications count:", error);
+    res.status(500).send({ error: 'Error fetching unread notifications count' });
+  }
+});
 
 // changing order status
 app.put("/orders/:orderNo", async (req, res) => {

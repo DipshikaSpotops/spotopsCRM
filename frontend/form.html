@@ -6140,8 +6140,6 @@ function renderNotifications(notifications) {
     notificationList.append(notificationItem);
   });
 }
-
-// Update the unread notification count
 function updateUnreadCount() {
   if (unreadCount > 0) {
     notificationCountElement.text(unreadCount);
@@ -6150,7 +6148,6 @@ function updateUnreadCount() {
     notificationCountElement.hide();
   }
 }
-// Mark notifications as read when the dropdown is viewed
 async function markNotificationsAsRead() {
   try {
     if (!firstName) {
