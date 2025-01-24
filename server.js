@@ -1134,14 +1134,15 @@ async function updateTaskStatuses() {
         if (task.taskStatus !== "Completed" && formattedDeadline) {
           const date1 = new Date(currentDallasTime);
           const date2 = new Date(formattedDeadline);
-const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
-const millisecondsInADay = 1000 * 60 * 60 * 24; 
-const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInADay);
-const millisecondsInAMinute = 1000 * 60; 
-const diffInMinutes = Math.floor((differenceInMilliseconds % millisecondsInADay) / millisecondsInAMinute);
-console.log(`Difference: ${differenceInDays} days and ${diffInMinutes} minutes`);
-          console.log("dates",date1, date2)
-          console.log("Time Difference (Minutes):", diffInMinutes);
+          console.log("deadline:",date2,"currentTime:",date1);
+          const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
+          const millisecondsInADay = 1000 * 60 * 60 * 24; 
+          const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInADay);
+          const millisecondsInAMinute = 1000 * 60; // 1 minute = 60000 milliseconds
+          const differenceInMinutes = Math.floor((differenceInMilliseconds % millisecondsInADay) / millisecondsInAMinute);
+          const diffInMinutes = Math.floor(differenceInMilliseconds / millisecondsInAMinute);
+          console.log(`Difference: ${differenceInDays} days and ${differenceInMinutes} minutes`);
+          console.log(`Total Time Difference (Minutes): ${diffInMinutes}`);
           console.log("diffInMinutes",diffInMinutes);
           if (diffInMinutes <= 120 && diffInMinutes > 0 && task.taskStatus !== "Alert") {
             task.taskStatus = "Alert";
