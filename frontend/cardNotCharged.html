@@ -645,6 +645,7 @@ yardOrders = allOrders.filter((item) => {
             const statusMatches = item.paymentStatus === "Card not charged" || item.paymentStatus === "";
             return statusMatches;
     });
+    console.log("orderss",allOrders,yardOrders);
 let totalSpend = 0;  
 let totalSpendShipping = 0;
 yardOrders.forEach(order => {
