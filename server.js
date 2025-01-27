@@ -2763,7 +2763,7 @@ const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: "dipsikha.spotopsdigital@gmail.com",
 to: `${order.email}`,
-// bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
+bcc:`service@50starsautoparts.com,dipsikha.spotopsdigital@gmail.com`,
 subject: `Refund Processed for Your Order ${req.params.orderNo} with 50 Stars Auto Parts`,
 html: `<p>Dear ${customerName},</p>
 <p>We are reaching out to confirm that your refund of $${refundedAmount} for the order #${req.params.orderNo} has been succcessfully processed. Attached to this email, you will find a copy of the refund receipt for your record.</p>
