@@ -648,11 +648,17 @@ async function fetchYardInfo(month, year) {
         yardOrders = response.data.map(order => {
     const filteredAdditionalInfo = order.additionalInfo.filter(
         info =>
+            // Include only if paymentStatus is empty or "Card not charged" and status is not "PO cancelled"
             (!info.paymentStatus || info.paymentStatus === "Card not charged") && 
-            info.status !== "PO cancelled" 
+            info.status !== "PO cancelled"
     );
-    return { ...order, additionalInfo: filteredAdditionalInfo };
-});
+
+    // Only include orders that have at least one valid yard after filtering
+    if (filteredAdditionalInfo.length > 0) {
+        return { ...order, additionalInfo: filteredAdditionalInfo };
+    }
+    return null; // Exclude orders with no valid yards
+}).filter(order => order !== null); // Remove null orders
 
 
         // Determine the maximum number of valid yards across all orders
