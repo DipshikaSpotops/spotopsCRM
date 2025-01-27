@@ -642,7 +642,7 @@ headers: { Authorization: `Bearer ${token}` },
 if (response.status !== 200) throw new Error("Failed to fetch data");
 var allOrders = response.data;
 yardOrders = allOrders.filter((item) => {
-            const statusMatches = item.paymentStatus === "Card not charged" || item.paymentStatus === "";
+            const statusMatches = item.paymentStatus = "";
             return statusMatches;
     });
     console.log("orderss",allOrders,yardOrders);
