@@ -680,14 +680,21 @@ async function fetchYardInfo(month, year) {
     }
 }
 
-function renderTableRows(page, data = yardOrders, maxYards) {
+function renderTableRows(page, data = yardOrders) {
+    const rowsPerPage = 25; // Define rows per page
     const start = (page - 1) * rowsPerPage; // Calculate the start index
     const end = start + rowsPerPage;       // Calculate the end index
     const pageData = data.slice(start, end); // Slice data for the current page
 
-    console.log("Current Page:", page, "Start:", start, "End:", end, "Page Data:", pageData);
+    // Dynamically calculate maxYards for the current page data
+    const maxYards = pageData.reduce((max, order) => {
+        return Math.max(max, order.additionalInfo.length);
+    }, 0);
+
+    console.log("Current Page:", page, "Max Yards:", maxYards, "Page Data:", pageData);
 
     const tableHeader = $("#tableHeader");
+    const tableFooter = $("#tableFooter");
     $("#yardInfoTable").empty(); // Clear previous rows
 
     // Update table headers dynamically
@@ -698,7 +705,7 @@ function renderTableRows(page, data = yardOrders, maxYards) {
         );
     }
     tableHeader.append(
-        '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Approximate Card Charged($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+        '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
     );
 
     // Render table rows for the current page
@@ -732,7 +739,7 @@ function renderTableRows(page, data = yardOrders, maxYards) {
                     ${info.yardName || ""}<br>
                     Shipping: ${shippingDetails}<br>
                     Part price: $${partPrice} | Others: $${others}<br>
-                    PO sent on : ${info.poSentDate}
+                    PO sent on : ${info.poSentDate || "N/A"}
                 </td>`;
             } else {
                 yardInfoHtml += "<td></td>"; // Empty cell for missing yards
@@ -748,7 +755,16 @@ function renderTableRows(page, data = yardOrders, maxYards) {
             </tr>`
         );
     });
+
+    // Update table footer with totals
+    let footerHtml = "<tr>";
+    for (let i = 0; i <= maxYards + 1; i++) {
+        footerHtml += "<td></td>";
+    }
+    footerHtml += `<td style="text-align:center;">$${totalShipping.toFixed(2)}</td></tr>`;
+    tableFooter.html(footerHtml);
 }
+
 
 $("#yardInfoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
