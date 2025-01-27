@@ -646,11 +646,14 @@ async function fetchYardInfo(month, year) {
 
         // Filter the `additionalInfo` and retain only valid entries
         yardOrders = response.data.map(order => {
-            const filteredAdditionalInfo = order.additionalInfo.filter(
-                info => (!info.paymentStatus || info.paymentStatus === "Card not charged") && info.status === "PO cancelled"
-            );
-            return { ...order, additionalInfo: filteredAdditionalInfo };
-        });
+    const filteredAdditionalInfo = order.additionalInfo.filter(
+        info =>
+            (!info.paymentStatus || info.paymentStatus === "Card not charged") && 
+            info.status !== "PO cancelled" 
+    );
+    return { ...order, additionalInfo: filteredAdditionalInfo };
+});
+
 
         // Determine the maximum number of valid yards across all orders
         const maxYards = yardOrders.reduce(
@@ -726,7 +729,6 @@ function renderTableRows(page, data = yardOrders, maxYards) {
         );
     });
 }
-
 $("#yardInfoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
