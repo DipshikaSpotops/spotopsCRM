@@ -707,15 +707,30 @@ function renderTableRows(page, data = yardOrders, maxYards) {
                 const shippingCharge = shippingDetails
                     ? parseFloat(shippingDetails.split(":")[1]?.trim()) || 0
                     : 0;
-
+                    const yardShipping = shippingDetails
+    ? shippingDetails.includes("Yard Shipping")
+        ? parseFloat(
+              shippingDetails
+                  .split(";")
+                  .find(detail => detail.trim().startsWith("Yard Shipping")) 
+                  ?.split(":")[1] 
+                  ?.trim()
+          ) || 0 
+        : 0
+    : 0;
                 totalShipping += shippingCharge;
-
+                // approximate card charged value
+                const partPrice = parseFloat(info.partPrice || 0);
+                const others = parseFloat(info.others || 0);
+              var totalCardCharged = partPrice + yardShipping + others;
                 yardInfoHtml += `<td>
                     ${info.yardName || ""}<br>
-                    Shipping: ${shippingDetails}
+                    Shipping: ${shippingDetails}<br>
+                    Part price: $${partPrice} | Others: $${others}
+                    PO sent on : ${info.poSentDate}
                 </td>`;
             } else {
-                yardInfoHtml += "<td></td>"; // Empty cell for missing yards
+                yardInfoHtml += "<td></td>"; 
             }
         }
 
@@ -724,7 +739,7 @@ function renderTableRows(page, data = yardOrders, maxYards) {
                 <td>${order.orderNo}</td>
                 <td>${order.orderDate}</td>
                 ${yardInfoHtml}
-                <td>${totalShipping.toFixed(2)}</td>
+                <td>${totalCardCharged.toFixed(2)}</td>
                 <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
             </tr>`
         );
