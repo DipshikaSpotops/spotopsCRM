@@ -643,7 +643,7 @@ async function fetchYardInfo(month, year) {
 
         if (response.status !== 200) throw new Error("Failed to fetch data");
 
-        console.log("API Response:", response.data); // Debug: Check the API data
+        console.log("API Response:", response.data); 
 
         yardOrders = response.data.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
@@ -656,14 +656,11 @@ async function fetchYardInfo(month, year) {
             }
             return null;
         }).filter(order => order !== null);
-
-        console.log("Filtered Yard Orders:", yardOrders); // Debug: Check filtered data
-
+        console.log("Filtered Yard Orders:", yardOrders); 
         const maxYards = yardOrders.reduce(
             (max, order) => Math.max(max, order.additionalInfo.length),
             0
         );
-
         renderTableRows(currentPage, yardOrders, maxYards);
         createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     } catch (error) {
@@ -677,14 +674,10 @@ function renderTableRows(page, data = yardOrders, maxYards) {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const pageData = data.slice(start, end);
-
+    console.log("maxYards",maxYards);
     const tableHeader = $("#tableHeader");
     $("#yardInfoTable").empty();
-
-    // Remove old yard headers
     tableHeader.find("th:gt(1)").remove();
-
-    // Dynamically add yard headers based on maxYards
     for (let i = 1; i <= maxYards; i++) {
         tableHeader.append(
             `<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
@@ -780,10 +773,8 @@ $("#filterButton").click(async function () {
     const [year, monthNumber] = monthYear.split("-");
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const month = months[parseInt(monthNumber, 10) - 1];
-
     await fetchYardInfo(month, year);
-
-    currentPage = 1; // Reset to the first page
+    currentPage = 1; 
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 });
