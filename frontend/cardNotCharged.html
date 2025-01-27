@@ -780,29 +780,32 @@ function createPaginationControls(totalPages, orders = yardOrders) {
 
 // Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
+    const page = $(this).data('page');
+    currentPage = page;
+    console.log("Page Clicked:", page, "Current Orders Length:", yardOrders.length);
+    renderTableRows(currentPage, yardOrders); // Use yardOrders explicitly
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 });
 
-// "Previous" and "Next" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-}
+    if (currentPage > 1) {
+        currentPage--;
+        console.log("Previous Page:", currentPage, "Yard Orders Length:", yardOrders.length);
+        renderTableRows(currentPage, yardOrders);
+        createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(yardOrders.length / 25);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
-}
+    const totalPages = Math.ceil(yardOrders.length / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        console.log("Next Page:", currentPage, "Yard Orders Length:", yardOrders.length);
+        renderTableRows(currentPage, yardOrders);
+        createPaginationControls(totalPages);
+    }
 });
+
 // Filter by month and year
 $("#filterButton").click(async function () {
     const monthYear = $("#monthYearPicker").val();
