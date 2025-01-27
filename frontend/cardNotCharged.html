@@ -640,12 +640,9 @@ headers: { Authorization: `Bearer ${token}` },
 });
 
 if (response.status !== 200) throw new Error("Failed to fetch data");
-var allOrders = response.data;
-yardOrders = allOrders.filter((item) => {
-            const statusMatches = item.paymentStatus = "";
-            return statusMatches;
-    });
-    console.log("orderss",allOrders,yardOrders);
+yardOrders = response.data.filter(order =>
+order.additionalInfo.some(info => info.paymentStatus === "")
+);
 let totalSpend = 0;  
 let totalSpendShipping = 0;
 yardOrders.forEach(order => {
