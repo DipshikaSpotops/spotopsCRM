@@ -733,7 +733,7 @@ function renderTableRows(page, data = yardOrders) {
                               ?.trim()
                       ) || 0
                     : 0;
-                const totalCardCharged = partPrice + yardShipping + others;
+                var totalCardCharged = partPrice + yardShipping + others;
 
                 yardInfoHtml += `<td>
                     ${info.yardName || ""}<br>
