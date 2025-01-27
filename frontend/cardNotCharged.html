@@ -667,7 +667,7 @@ async function fetchYardInfo(month, year) {
                 0
               )
             : 0;
-
+        console.log("yard",yardOrders,maxYards)
         renderTableRows(currentPage, yardOrders, maxYards);
         createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     } catch (error) {
