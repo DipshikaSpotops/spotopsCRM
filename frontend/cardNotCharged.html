@@ -435,7 +435,7 @@ placeholder="Search..."
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
-<div id="showTotalOrders">Total Shipping Cost This Month-</div>
+<!-- <div id="showTotalOrders">Total Card Cost This Month-</div> -->
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>  
 <table class="table table-bordered mt-4">
@@ -691,7 +691,7 @@ function renderTableRows(page, data = yardOrders, maxYards) {
         );
     }
     tableHeader.append(
-        '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+        '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Approximate Card Charged($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
     );
     tableHeader.append('<th scope="col">Actions</th>');
 
@@ -726,7 +726,7 @@ function renderTableRows(page, data = yardOrders, maxYards) {
                 yardInfoHtml += `<td>
                     ${info.yardName || ""}<br>
                     Shipping: ${shippingDetails}<br>
-                    Part price: $${partPrice} | Others: $${others}
+                    Part price: $${partPrice} | Others: $${others}<br>
                     PO sent on : ${info.poSentDate}
                 </td>`;
             } else {
