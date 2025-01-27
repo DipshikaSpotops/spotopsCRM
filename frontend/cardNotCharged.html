@@ -647,7 +647,7 @@ async function fetchYardInfo(month, year) {
         // Filter the `additionalInfo` and retain only valid entries
         yardOrders = response.data.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
-                info => !info.paymentStatus || info.paymentStatus === "Card not charged"
+                info => (!info.paymentStatus || info.paymentStatus === "Card not charged") && info.status === "PO cancelled"
             );
             return { ...order, additionalInfo: filteredAdditionalInfo };
         });
