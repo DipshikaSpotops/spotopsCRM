@@ -693,7 +693,7 @@ function renderTableRows(page, data = yardOrders, maxYards) {
     tableHeader.append(
         '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Approximate Card Charged($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
     );
-    var totalOrders = yardOrders.length;
+    tableHeader.append('<th scope="col">Actions</th>');
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
     // Render rows
