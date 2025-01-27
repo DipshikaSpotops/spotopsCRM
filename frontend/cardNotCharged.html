@@ -783,7 +783,7 @@ $('#pagination-controls').on('click', '.page-btn', function () {
 const page = $(this).data('page');
 currentPage = page;
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 });
 $('#pagination-controls').on('click', '#prevPage', function () {
     if (currentPage > 1) {
@@ -799,8 +799,9 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     if (currentPage < totalPages) {
         currentPage++;
         console.log("Next Page:", currentPage, "Yard Orders Length:", yardOrders.length);
-        fetchYardInfo()
-    }
+        renderTableRows(currentPage, yardOrders);
+        createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+        }
 });
 
 // Filter by month and year
