@@ -727,7 +727,7 @@ function renderTableRows(page, data = yardOrders) {
                 const yardOSorYS = info.shippingDetails || '';
          // Row 8: Own Shipping
 let shippingValueYard = 0;
-if (yardOSorYS.includes("Own shipping")) {
+if (yardOSorYS.includes("Yard shipping")) {
 shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0
 } 
 console.log("yard shipping",shippingValueYard);
