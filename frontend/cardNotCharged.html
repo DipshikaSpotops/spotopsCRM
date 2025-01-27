@@ -782,8 +782,7 @@ $("#filterButton").click(async function () {
     const month = months[parseInt(monthNumber, 10) - 1];
     await fetchYardInfo(month, year);
     currentPage = 1; 
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    
 });
 
 // Search functionality
