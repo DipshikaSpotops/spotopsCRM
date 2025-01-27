@@ -644,30 +644,26 @@ async function fetchYardInfo(month, year) {
 
         if (response.status !== 200) throw new Error("Failed to fetch data");
 
-        // Filter the `additionalInfo` and retain only valid entries
+        // Filter and process data
         yardOrders = response.data.map(order => {
-    const filteredAdditionalInfo = order.additionalInfo.filter(
-        info =>
-            // Include only if paymentStatus is empty or "Card not charged" and status is not "PO cancelled"
-            (!info.paymentStatus || info.paymentStatus === "Card not charged") && 
-            info.status !== "PO cancelled"
-    );
+            const filteredAdditionalInfo = order.additionalInfo.filter(
+                info =>
+                    (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
+                    info.status !== "PO cancelled"
+            );
+            if (filteredAdditionalInfo.length > 0) {
+                return { ...order, additionalInfo: filteredAdditionalInfo };
+            }
+            return null; // Exclude orders with no valid yards
+        }).filter(order => order !== null);
 
-    // Only include orders that have at least one valid yard after filtering
-    if (filteredAdditionalInfo.length > 0) {
-        return { ...order, additionalInfo: filteredAdditionalInfo };
-    }
-    return null; // Exclude orders with no valid yards
-}).filter(order => order !== null); // Remove null orders
-
-
-        // Determine the maximum number of valid yards across all orders
+        // Determine the maximum number of yards
         const maxYards = yardOrders.reduce(
             (max, order) => Math.max(max, order.additionalInfo.length),
             0
         );
 
-        // Update the table with valid orders and render the data
+        // Update the table with valid orders
         renderTableRows(currentPage, yardOrders, maxYards);
         createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     } catch (error) {
@@ -683,10 +679,9 @@ function renderTableRows(page, data = yardOrders, maxYards) {
     const pageData = data.slice(start, end);
 
     const tableHeader = $("#tableHeader");
-    const tableFooter = $("#tableFooter");
     $("#yardInfoTable").empty();
 
-    // Clear previous yard headers and generate dynamic yard columns
+    // Generate dynamic yard columns
     tableHeader.find("th:gt(1)").remove();
     for (let i = 1; i <= maxYards; i++) {
         tableHeader.append(
@@ -698,7 +693,7 @@ function renderTableRows(page, data = yardOrders, maxYards) {
     );
     tableHeader.append('<th scope="col">Actions</th>');
 
-    // Render rows with yard columns dynamically filled
+    // Render rows
     pageData.forEach(order => {
         let yardInfoHtml = "";
         let totalShipping = 0;
@@ -723,7 +718,6 @@ function renderTableRows(page, data = yardOrders, maxYards) {
             }
         }
 
-        // Append the row for the order
         $("#yardInfoTable").append(
             `<tr>
                 <td>${order.orderNo}</td>
@@ -781,14 +775,14 @@ createPaginationControls(totalPages);
 });
 // Filter by month and year
 $("#filterButton").click(async function () {
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-await fetchYardInfo(month, year);
-currentPage = 1;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
+    const monthYear = $("#monthYearPicker").val(); 
+    const [year, monthNumber] = monthYear.split("-");
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = months[parseInt(monthNumber, 10) - 1];
+    await fetchYardInfo(month, year);
+    currentPage = 1;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 });
 
 // Search functionality
