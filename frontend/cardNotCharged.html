@@ -435,7 +435,7 @@ placeholder="Search..."
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
-<!-- <div id="showTotalOrders">Total Card Cost This Month-</div> -->
+<div id="showTotalOrders">Total Card Not Charged-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>  
 <table class="table table-bordered mt-4">
@@ -693,8 +693,9 @@ function renderTableRows(page, data = yardOrders, maxYards) {
     tableHeader.append(
         '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Approximate Card Charged($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
     );
-    tableHeader.append('<th scope="col">Actions</th>');
-
+    var totalOrders = yardOrders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
     // Render rows
     pageData.forEach(order => {
         let yardInfoHtml = "";
