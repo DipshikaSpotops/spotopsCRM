@@ -419,7 +419,7 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <!-- <div id="purchases-content"> -->
-<h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Shipping Expenses</h1>
+<h1 style="text-align: center; margin-right: 92px; margin-top: 20px">Card not Charged</h1>
 <div style="align-items: center; justify-content: center">
 <input
 type="text"
@@ -640,7 +640,11 @@ headers: { Authorization: `Bearer ${token}` },
 });
 
 if (response.status !== 200) throw new Error("Failed to fetch data");
-yardOrders = response.data;
+var allOrders = response.data;
+yardOrders = allOrders.filter((item) => {
+            const statusMatches = item.paymentStatus === "Card not charged" || item.paymentStatus === "";
+            return statusMatches;
+    });
 let totalSpend = 0;  
 let totalSpendShipping = 0;
 yardOrders.forEach(order => {
