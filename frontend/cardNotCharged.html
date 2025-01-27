@@ -644,30 +644,22 @@ async function fetchYardInfo(month, year) {
 
         if (response.status !== 200) throw new Error("Failed to fetch data");
 
-        // Filter `additionalInfo` entries and attach filtered data to orders
+        // Filter the `additionalInfo` and retain only valid entries
         yardOrders = response.data.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
                 info => !info.paymentStatus || info.paymentStatus === "Card not charged"
             );
             return { ...order, additionalInfo: filteredAdditionalInfo };
-        }).filter(order => order.additionalInfo.length > 0); // Keep only orders with filtered items
-
-        // Calculate the total shipping cost for all filtered orders
-        let totalSpendShipping = 0;
-        yardOrders.forEach(order => {
-            order.additionalInfo.forEach(info => {
-                const shippingCost = info.shippingDetails
-                    ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0
-                    : 0;
-                totalSpendShipping += shippingCost;
-            });
         });
 
-        // Update the UI with the total shipping cost
-        document.getElementById("showTotalOrders").innerHTML = `Total Shipping Cost This Month - $${totalSpendShipping.toFixed(2)}`;
+        // Determine the maximum number of valid yards across all orders
+        const maxYards = yardOrders.reduce(
+            (max, order) => Math.max(max, order.additionalInfo.length),
+            0
+        );
 
-        // Render the filtered orders into the table
-        renderTableRows(currentPage, yardOrders);
+        // Update the table with valid orders and render the data
+        renderTableRows(currentPage, yardOrders, maxYards);
         createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     } catch (error) {
         console.error("Error fetching yard info:", error);
@@ -676,8 +668,7 @@ async function fetchYardInfo(month, year) {
         $("#loadingMessage").hide(); // Hide loading message
     }
 }
-
-function renderTableRows(page, data = yardOrders) {
+function renderTableRows(page, data = yardOrders, maxYards) {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const pageData = data.slice(start, end);
@@ -686,14 +677,8 @@ function renderTableRows(page, data = yardOrders) {
     const tableFooter = $("#tableFooter");
     $("#yardInfoTable").empty();
 
-    let maxYards = 0;
-    pageData.forEach(item => {
-        if (item.additionalInfo.length > maxYards) {
-            maxYards = item.additionalInfo.length;
-        }
-    });
-
-    tableHeader.find("th:gt(1)").remove(); // Clear previous yard headers
+    // Clear previous yard headers and generate dynamic yard columns
+    tableHeader.find("th:gt(1)").remove();
     for (let i = 1; i <= maxYards; i++) {
         tableHeader.append(
             `<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
@@ -704,23 +689,30 @@ function renderTableRows(page, data = yardOrders) {
     );
     tableHeader.append('<th scope="col">Actions</th>');
 
+    // Render rows with yard columns dynamically filled
     pageData.forEach(order => {
         let yardInfoHtml = "";
         let totalShipping = 0;
 
-        order.additionalInfo.forEach(info => {
-            const shippingDetails = info.shippingDetails || "";
-            const shippingCharge = shippingDetails
-                ? parseFloat(shippingDetails.split(":")[1]?.trim()) || 0
-                : 0;
+        // Generate cells for all yards up to `maxYards`
+        for (let i = 0; i < maxYards; i++) {
+            if (order.additionalInfo[i]) {
+                const info = order.additionalInfo[i];
+                const shippingDetails = info.shippingDetails || "";
+                const shippingCharge = shippingDetails
+                    ? parseFloat(shippingDetails.split(":")[1]?.trim()) || 0
+                    : 0;
 
-            totalShipping += shippingCharge;
+                totalShipping += shippingCharge;
 
-            yardInfoHtml += `<td>
-                ${info.yardName || ""}<br>
-                Shipping: ${shippingDetails}
-            </td>`;
-        });
+                yardInfoHtml += `<td>
+                    ${info.yardName || ""}<br>
+                    Shipping: ${shippingDetails}
+                </td>`;
+            } else {
+                yardInfoHtml += "<td></td>"; // Empty cell for missing yards
+            }
+        }
 
         // Append the row for the order
         $("#yardInfoTable").append(
@@ -735,12 +727,10 @@ function renderTableRows(page, data = yardOrders) {
     });
 }
 
-
 $("#yardInfoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
-
 function createPaginationControls(totalPages, orders = yardOrders) {
 const paginationControls = $('#pagination-controls');
 paginationControls.empty(); // Clear pagination controls
