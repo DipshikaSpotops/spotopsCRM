@@ -724,17 +724,14 @@ function renderTableRows(page, data = yardOrders) {
 
                 const partPrice = parseFloat(info.partPrice || 0);
                 const others = parseFloat(info.others || 0);
-                const yardShipping = shippingDetails.includes("Yard shipping")
-                    ? parseFloat(
-                          shippingDetails
-                              .split(";")
-                              .find(detail => detail.trim().startsWith("Yard Shipping"))
-                              ?.split(":")[1]
-                              ?.trim()
-                      ) || 0
-                    : 0;
-console.log("yard shipping",yardShipping);
-                var totalCardCharged = partPrice + yardShipping + others;
+                const yardOSorYS = info.shippingDetails || '';
+         // Row 8: Own Shipping
+let shippingValueYard = 0;
+if (yardOSorYS.includes("Own shipping")) {
+shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0
+} 
+console.log("yard shipping",shippingValueYard);
+                var totalCardCharged = partPrice + shippingValueYard + others;
 
                 yardInfoHtml += `<td>
                     ${info.yardName || ""}<br>
