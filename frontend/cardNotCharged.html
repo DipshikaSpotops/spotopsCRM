@@ -780,13 +780,11 @@ function createPaginationControls(totalPages, orders = yardOrders) {
 
 // Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-    const page = $(this).data('page');
-    currentPage = page;
-    console.log("Page Clicked:", page, "Current Orders Length:", yardOrders.length);
-    renderTableRows(currentPage, yardOrders); // Use yardOrders explicitly
-    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+const page = $(this).data('page');
+currentPage = page;
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 });
-
 $('#pagination-controls').on('click', '#prevPage', function () {
     if (currentPage > 1) {
         currentPage--;
@@ -801,8 +799,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     if (currentPage < totalPages) {
         currentPage++;
         console.log("Next Page:", currentPage, "Yard Orders Length:", yardOrders.length);
-        renderTableRows(currentPage, yardOrders);
-        createPaginationControls(totalPages);
+        fetchYardInfo()
     }
 });
 
