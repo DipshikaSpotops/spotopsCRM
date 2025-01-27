@@ -641,9 +641,13 @@ async function fetchYardInfo(month, year) {
             { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        if (response.status !== 200) throw new Error("Failed to fetch data");
-
-        console.log("API Response:", response.data); 
+        if (response.status !== 200 || !response.data || response.data.length === 0) {
+            alert("No data found for the selected month and year");
+            yardOrders = [];
+            renderTableRows(1, [], 0); // Render empty table
+            createPaginationControls(0); // No pagination
+            return;
+        }
 
         yardOrders = response.data.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
@@ -656,16 +660,19 @@ async function fetchYardInfo(month, year) {
             }
             return null;
         }).filter(order => order !== null);
-        console.log("Filtered Yard Orders:", yardOrders); 
-        const maxYards = yardOrders.reduce(
-            (max, order) => Math.max(max, order.additionalInfo.length),
-            0
-        );
+
+        const maxYards = yardOrders.length > 0
+            ? yardOrders.reduce(
+                (max, order) => Math.max(max, order.additionalInfo.length),
+                0
+              )
+            : 0;
+
         renderTableRows(currentPage, yardOrders, maxYards);
         createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     } catch (error) {
-        console.error("Error fetching yard info:", error);
-        alert("Failed to fetch data");
+        console.error("Error fetching yard info:", error.message);
+        alert("Failed to fetch data. Please try again.");
     } finally {
         $("#loadingMessage").hide();
     }
