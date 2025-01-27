@@ -726,7 +726,7 @@ function renderTableRows(page, data = yardOrders) {
         $("#yardInfoTable").append(
             `<tr>
                 <td>${order.orderNo}</td>
-                <td>${order.orderDate.split(" ")[0]}</td>
+                <td>${order.orderDate}</td>
                 ${yardInfoHtml}
                 <td>${totalShipping.toFixed(2)}</td>
                 <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;">View</button></td>
