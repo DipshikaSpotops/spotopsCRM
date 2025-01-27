@@ -705,7 +705,7 @@ function renderTableRows(page, data = yardOrders) {
         );
     }
     tableHeader.append(
-        '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+        '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Approximate Card Charged($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
     );
 
     // Render table rows for the current page
@@ -751,18 +751,21 @@ function renderTableRows(page, data = yardOrders) {
                 <td>${order.orderNo}</td>
                 <td>${order.orderDate}</td>
                 ${yardInfoHtml}
-                <td>$${totalShipping.toFixed(2)}</td>
+                <td>$${totalCardCharged.toFixed(2)}</td>
             </tr>`
         );
+        var totalOrders = yardOrders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Card Not Charged Orders- ${totalOrders}`;
     });
 
     // Update table footer with totals
-    let footerHtml = "<tr>";
-    for (let i = 0; i <= maxYards + 1; i++) {
-        footerHtml += "<td></td>";
-    }
-    footerHtml += `<td style="text-align:center;">$${totalShipping.toFixed(2)}</td></tr>`;
-    tableFooter.html(footerHtml);
+    // let footerHtml = "<tr>";
+    // for (let i = 0; i <= maxYards + 1; i++) {
+    //     footerHtml += "<td></td>";
+    // }
+    // footerHtml += `<td style="text-align:center;">$${totalShipping.toFixed(2)}</td></tr>`;
+    // tableFooter.html(footerHtml);
 }
 
 
