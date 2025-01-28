@@ -3370,8 +3370,8 @@ var customerNameE = data.customerName;
 const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
 const firstNameE = nameParts[0] || ""; // Default to empty string if no first name
 const lastNameE = nameParts[1] || "";  // Default to empty string if no last name
-var fName = firstNameE || data.fName;
-var lName = lastNameE || data.lName;
+var fName =  data.fName || firstNameE;
+var lName =  data.lName ||lastNameE ;
 var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
