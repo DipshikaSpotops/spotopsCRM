@@ -6303,6 +6303,43 @@ $("body").removeClass("modal-active");
 });
 fetchNotifications();
 });
+// upload pictures to an s3 bucket
+  function openFileUploadModal() {
+    document.getElementById("fileUploadModal").style.display = "flex";
+  }
+  function closeModal() {
+    document.getElementById("fileUploadModal").style.display = "none";
+  }
+  async function uploadPictures() {
+    conole.log("orderNo to upload pictures",orderNo);
+    const files = document.getElementById("fileInput").files;
+    if (!orderNo || files.length === 0) {
+      alert("Please provide Order No and select at least one picture.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("orderNo", orderNo);
+    Array.from(files).forEach((file) => {
+      formData.append("pictures", file);
+    });
+
+    try {
+      //  API call to backend for uploading to S3
+      const response = await fetch("/upload", {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        alert("Pictures uploaded successfully!");
+        closeModal();
+      } else {
+        alert("Failed to upload pictures. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading pictures:", error);
+      alert("An error occurred. Please try again.");
+    }
+  }
 </script>
 </body>   
 </html>
