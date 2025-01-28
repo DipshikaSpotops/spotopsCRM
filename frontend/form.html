@@ -2600,7 +2600,7 @@ Save
     <input id="orderNoForPictures" type="text" placeholder="Enter Order No" style="width: 100%; padding: 8px; margin: 10px 0; border: none; border-radius: 4px;text-align: center;" />
     <input id="fileInput" type="file" multiple accept="image/*" style="margin: 10px 0;" />
     <button onclick="uploadPictures()">Upload</button>
-    <button onclick="closeModal()" style="background: #dc3545; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-left: 10px;">Cancel</button>
+    <button class="closeUploadModal" style="background: #dc3545; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-left: 10px;">Cancel</button>
   </div>
 </div>
 <script>
@@ -6303,9 +6303,10 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
     document.getElementById("fileUploadModal").style.display = "flex";
     document.getElementById("fileUploadModal").style.textAlign = "center";
   })
-  function closeModal() {
+  $(".closeUploadModal").on("click",function(){ 
     document.getElementById("fileUploadModal").style.display = "none";
-  }
+  })
+
   async function uploadPictures() {
     conole.log("orderNo to upload pictures",orderNo);
     const files = document.getElementById("fileInput").files;
@@ -6327,7 +6328,7 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
       });
       if (response.ok) {
         alert("Pictures uploaded successfully!");
-        closeModal();
+        document.getElementById("fileUploadModal").style.display = "none";
       } else {
         alert("Failed to upload pictures. Please try again.");
       }
