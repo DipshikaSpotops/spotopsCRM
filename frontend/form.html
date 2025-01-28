@@ -2602,7 +2602,7 @@ Save
     <h4 style="text-decoration-line: underline;">Upload Pictures for Order</h4>
     <input id="orderNoForPictures" type="text" placeholder="Enter Order No" style="width: 100%; padding: 8px; margin: 10px 0; border: none; border-radius: 4px;text-align: center;" />
     <input id="fileInput" type="file" multiple accept="image/*" style="margin: 10px 0;" />
-    <button onclick="uploadPictures()" style="margin-left: -12%;background-color: #ff914d;border: 1px solid black;width: auto;font-weight: bold;border-radius: 12px; box-shadow: 0px 4px 6px ">Upload</button>
+    <button class="uploadPicturesToS3" style="margin-left: -12%;background-color: #ff914d;border: 1px solid black;width: auto;font-weight: bold;border-radius: 12px; box-shadow: 0px 4px 6px ">Upload</button>
   </div>
 </div>
 <script>
@@ -6309,7 +6309,7 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
     document.getElementById("fileUploadModal").style.display = "none";
   })
 
-  async function uploadPictures() {
+  $("#uploadPicturesToS3").on("click", async function() {
     conole.log("orderNo to upload pictures",orderNo);
     const files = document.getElementById("fileInput").files;
     if (!orderNo || files.length === 0) {
@@ -6321,10 +6321,9 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
     Array.from(files).forEach((file) => {
       formData.append("pictures", file);
     });
-
+    console.log("pictures to S3",formData)
     try {
-      //  API call to backend for uploading to S3
-      const response = await fetch("/upload", {
+      const response = await fetch("https://www.spotops360.com/uploadToS3", {
         method: "POST",
         body: formData,
       });
@@ -6338,7 +6337,7 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
       console.error("Error uploading pictures:", error);
       alert("An error occurred. Please try again.");
     }
-  }
+  })
 });
 
 </script>

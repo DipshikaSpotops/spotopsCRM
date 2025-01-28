@@ -9,7 +9,8 @@ const Stripe = require("stripe");
 const stripe = Stripe("sk_test_51QUqUvGYqbfUX6jJzdBh3xVvyR2gu7w6NvhYJRrOAhNWf6rPVwq5eyid2Rced5DQfpwXsk1gLNfEUwd1mFyXmUy700TW9SiMZa");
 // const puppeteer = require('puppeteer');
 const multer = require("multer");
-const upload = multer(); 
+const AWS = require("aws-sdk");
+const path = require("path");
 const fs = require("fs");
 const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
@@ -25,7 +26,13 @@ const { Server } = require("http");
 
 const port = 3000;
 const app = express();
-
+// s3 bucket for uploading order specific pictures
+const s3 = new AWS.S3();
+const BUCKET_NAME = "order-specific-pictures";
+// Multer configuration for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 app.use(cors({
 origin: 'https://spotops360.com', // Replace with your frontend's domain
 methods: 'GET,POST,PUT,DELETE,OPTIONS',
@@ -4012,6 +4019,37 @@ console.log("orderNo",orderNo);
   } catch (error) {
     console.error("Error creating task:", error);
     res.status(500).json({ message: "Failed to create task." });
+  }
+});
+// upload pictures to s3 bucket(order-specific)
+app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
+  const { orderNo } = req.body;
+  const files = req.files;
+console.log("orderNo",orderNo,files);
+  if (!orderNo || !files || files.length === 0) {
+    return res.status(400).send("Order No and pictures are required.");
+  }
+
+  try {
+    // Upload each file to S3
+    const uploadPromises = files.map((file) => {
+      const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
+      return s3
+        .upload({
+          Bucket: BUCKET_NAME,
+          Key: fileKey,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        })
+        .promise();
+    });
+
+    await Promise.all(uploadPromises);
+
+    res.status(200).send("Pictures uploaded successfully.");
+  } catch (error) {
+    console.error("Error uploading to S3:", error);
+    res.status(500).send("Failed to upload pictures.");
   }
 });
 
