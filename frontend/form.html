@@ -2597,10 +2597,12 @@ Save
 <div id="fileUploadModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 2000; justify-content: center; align-items: center;">
   <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
     <h4 style="text-decoration-line: underline;">Upload Pictures for Order</h4>
+    <button type="button" class="close" data-dismiss="modal"aria-label="Close">
+<span id="closeUploadModal" aria-hidden="true">&times;</span>
+</button>
     <input id="orderNoForPictures" type="text" placeholder="Enter Order No" style="width: 100%; padding: 8px; margin: 10px 0; border: none; border-radius: 4px;text-align: center;" />
     <input id="fileInput" type="file" multiple accept="image/*" style="margin: 10px 0;" />
     <button onclick="uploadPictures()">Upload</button>
-    <button class="closeUploadModal" style="background: #dc3545; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-left: 10px;">Cancel</button>
   </div>
 </div>
 <script>
