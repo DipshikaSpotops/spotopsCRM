@@ -2598,9 +2598,9 @@ Save
   <div style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center;">
     <h4>Upload Pictures for Order</h4>
     <label for="orderNo">Order No:</label>
-    <input id="orderNo" type="text" placeholder="Enter Order No" style="width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;" />
+    <input id="orderNoForPictures" type="text" placeholder="Enter Order No" style="width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;" />
     <input id="fileInput" type="file" multiple accept="image/*" style="margin: 10px 0;" />
-    <button onclick="uploadPictures()" style="background: #28a745; color: white; padding: 8px 20px; border: none; border-radius: 4px;">Upload</button>
+    <button onclick="uploadPictures()" class="save">Upload</button>
     <button onclick="closeModal()" style="background: #dc3545; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-left: 10px;">Cancel</button>
   </div>
 </div>
@@ -6305,7 +6305,9 @@ fetchNotifications();
 });
 // upload pictures to an s3 bucket
   function openFileUploadModal() {
+$("#orderNoForPictures").val(orderNo);  
     document.getElementById("fileUploadModal").style.display = "flex";
+    document.getElementById("fileUploadModal").style.textAlign = "center";
   }
   function closeModal() {
     document.getElementById("fileUploadModal").style.display = "none";
