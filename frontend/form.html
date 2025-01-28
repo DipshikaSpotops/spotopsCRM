@@ -2602,7 +2602,7 @@ Save
     <h4 style="text-decoration-line: underline;">Upload Pictures for Order</h4>
     <input id="orderNoForPictures" type="text" placeholder="Enter Order No" style="width: 100%; padding: 8px; margin: 10px 0; border: none; border-radius: 4px;text-align: center;" />
     <input id="fileInput" type="file" multiple accept="image/*" style="margin: 10px 0;" />
-    <button onclick="uploadPictures()">Upload</button>
+    <button onclick="uploadPictures()" style="margin-left: -12%;background-color: #ff914d;border: 1px solid black;width: auto;font-weight: bold;border-radius: 12px; box-shadow: 0px 4px 6px ">Upload</button>
   </div>
 </div>
 <script>
@@ -6305,7 +6305,7 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
     document.getElementById("fileUploadModal").style.display = "flex";
     document.getElementById("fileUploadModal").style.textAlign = "center";
   })
-  $(".closeUploadModal").on("click",function(){ 
+  $("#closeUploadModal").on("click",function(){ 
     document.getElementById("fileUploadModal").style.display = "none";
   })
 
