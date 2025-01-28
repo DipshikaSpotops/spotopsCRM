@@ -2589,9 +2589,20 @@ Save
 </div>
 <!-- cancelled orderstatus ends -->
  <!-- floating upload button -->
- <div class="floating-icon" onclick="handleUploadClick()">
+<div class="floating-icon" onclick="openFileUploadModal()">
   <i class="fas fa-upload"></i>
   <div class="floating-icon-tooltip">Upload Pictures</div>
+</div>
+<!-- Modal for Upload -->
+<div id="fileUploadModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 2000; justify-content: center; align-items: center;">
+  <div style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center;">
+    <h4>Upload Pictures for Order</h4>
+    <label for="orderNo">Order No:</label>
+    <input id="orderNo" type="text" placeholder="Enter Order No" style="width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;" />
+    <input id="fileInput" type="file" multiple accept="image/*" style="margin: 10px 0;" />
+    <button onclick="uploadPictures()" style="background: #28a745; color: white; padding: 8px 20px; border: none; border-radius: 4px;">Upload</button>
+    <button onclick="closeModal()" style="background: #dc3545; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-left: 10px;">Cancel</button>
+  </div>
 </div>
 <script>
 $(document).ready(async function () {
@@ -6295,4 +6306,3 @@ fetchNotifications();
 </script>
 </body>   
 </html>
-<!-- now for a logged-in user, in the  -->
