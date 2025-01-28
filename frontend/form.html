@@ -6302,10 +6302,8 @@ $("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
-});
 // upload pictures to an s3 bucket
   function openFileUploadModal() {
-  var orderNo = urlParams.get("orderNo");
 $("#orderNoForPictures").val(orderNo);  
     document.getElementById("fileUploadModal").style.display = "flex";
     document.getElementById("fileUploadModal").style.textAlign = "center";
@@ -6314,7 +6312,6 @@ $("#orderNoForPictures").val(orderNo);
     document.getElementById("fileUploadModal").style.display = "none";
   }
   async function uploadPictures() {
-  var orderNo = urlParams.get("orderNo");
     conole.log("orderNo to upload pictures",orderNo);
     const files = document.getElementById("fileInput").files;
     if (!orderNo || files.length === 0) {
@@ -6344,6 +6341,8 @@ $("#orderNoForPictures").val(orderNo);
       alert("An error occurred. Please try again.");
     }
   }
+});
+
 </script>
 </body>   
 </html>
