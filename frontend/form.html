@@ -13,6 +13,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css
 rel="stylesheet"
 />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 <style>
 #paymentStatusRefund,
 #refundedAmountContainer,
@@ -205,25 +207,7 @@ margin-top: 15px;
 background-color: #0056b3;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-#refundCollect {
-width: 95%;
-}
 
-#paymentStatusRefund,
-#paymentStatusSelect {
-width: 100%;
-display: block;
-margin-bottom: 10px;
-}
-
-#refundedAmountContainer,
-#storeCreditContainer,
-#collectRefundContainer {
-margin-top: 10px;
-}
-}
 
 #editYardPopup {
 display: block;
@@ -287,18 +271,9 @@ width: 40%;
 }
 }
 
-@media screen and (max-width: 768px) {
-#submitComments {
-width: 50%; 
-}
-}
 
-@media screen and (max-width: 480px) {
-#submitComments {
-width: 60%; 
-height: 5vh;
-}
-}
+
+
 
 
 .btn {
@@ -810,7 +785,9 @@ width: 100%;
 height: auto;
 position: relative;
 }
-
+#submitComments {
+width: 50%; 
+}
 .navbar {
 flex-direction: column;
 align-items: flex-start;
@@ -829,12 +806,20 @@ margin: auto;
 .sidebar.hide {
 transform: translateX(-100%);
 }
-
 .sidebar.show {
 transform: translateX(0);
 }
+.floating-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      bottom: 15px;
+      right: 15px;
+    }
+    .floating-icon-tooltip {
+      font-size: 12px;
+      bottom: 70px;
 }
-
 .horizontal-sidebar {
 display: flex;
 flex-direction: row;
@@ -847,7 +832,6 @@ left: auto;
 height: auto;
 background-color: #006666;
 }
-
 .horizontal-sidebar .nav-link {
 flex: 1;
 text-align: center;
@@ -882,7 +866,6 @@ margin: 6% 43%;
 border-radius: 12px;
 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
-
 /* Fix input box disabling issue */
 input:disabled,
 textarea:disabled,
@@ -900,23 +883,19 @@ margin: 2% 0%;
 border: 1px solid #c0c0c0;
 padding: 33px;
 }
-
 .escalationReturn .form-group {
 flex: 1;
 min-width: 200px; 
 }
-
 .checkbox-group {
 display: flex;
 gap: 10px;
 flex-direction: column; 
 }
-
 .form-group label {
 display: block;
 margin-bottom: 5px;
 }
-
 .form-group input[type="text"], .form-group select {
 width: 100%; 
 }
@@ -930,22 +909,18 @@ color: #e0e0e0;
 background-color: #1f1f1f;
 border-color: #333;
 }
-
 .dark-mode .nav-link,
 .dark-mode .nav-link i {
 color: #b3b3b3 !important;
 }
-
 .dark-mode .nav-link:hover,
 .dark-mode .nav-link.selected {
 background-color: rgba(255, 255, 255, 0.1);
 }
-
 .dark-mode .main-content {
 background-color: #121212;
 color: #e0e0e0;
 }
-
 .dark-mode .chart-wrapper,
 .dark-mode .chart-item-monthly {
 background-color: #1f1f1f;
@@ -957,30 +932,24 @@ background-color: #333;
 .container {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Spacing between rows */
+  gap: 10px; 
 }
-
 .row {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-
 .col {
   flex: 1; /* Make columns equal width */
-  margin-right: 10px; /* Spacing between columns */
+  margin-right: 10px; 
 }
 
 .col:last-child {
-  margin-right: 0; /* Remove margin for the last column */
+  margin-right: 0;
 }
-
 .col-wide {
-  flex: 2; /* Double the width of a normal column */
+  flex: 2; 
 }
-
-
-
 .grey-button {
   background-color: grey;
   color: white;
@@ -997,9 +966,6 @@ background-color: #333;
   width: 100%;
   font-family: Arial, sans-serif;
 }
-
-
-
 input[type="date"] {
   width: 100%;
   padding: 10px;
@@ -1175,6 +1141,69 @@ background-color: #333;
     text-decoration-line: underline;
     cursor: pointer;
 }
+/* floating icon */
+  /* Floating Icon Styles */
+  .floating-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .floating-icon:hover {
+    transform: scale(1.1);
+    background-color: #218838;
+  }
+
+  /* Tooltip */
+  .floating-icon-tooltip {
+    position: absolute;
+    bottom: 80px;
+    right: 10px;
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .floating-icon:hover .floating-icon-tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+  @media screen and (max-width: 480px) {
+    .floating-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      bottom: 10px;
+      right: 10px;
+    }
+    .floating-icon-tooltip {
+      font-size: 10px;
+      bottom: 60px;
+    }
+    #submitComments {
+width: 60%; 
+height: 5vh;
+}
+  }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -2509,6 +2538,11 @@ Save
 <button type="button" id="cancelledRefundSubmit" class="save" style="align-self: flex-start;">Save and Send Email</button>
 </div>
 <!-- cancelled orderstatus ends -->
+ <!-- floating upload button -->
+ <div class="floating-icon" onclick="handleUploadClick()">
+  <i class="fas fa-upload"></i>
+  <div class="floating-icon-tooltip">Upload</div>
+</div>
 <script>
 $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
