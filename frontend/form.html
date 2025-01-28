@@ -6313,6 +6313,7 @@ $("#orderNoForPictures").val(orderNo);
     document.getElementById("fileUploadModal").style.display = "none";
   }
   async function uploadPictures() {
+  var orderNo = urlParams.get("orderNo");
     conole.log("orderNo to upload pictures",orderNo);
     const files = document.getElementById("fileInput").files;
     if (!orderNo || files.length === 0) {
