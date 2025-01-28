@@ -6299,7 +6299,7 @@ fetchNotifications();
 // upload pictures to an s3 bucket
 $(".floating-icon-tooltip").on("click",function(){ 
 console.log("floating icon clicked",orderNo);
-$("#orderNoForPictures").val(orderNo);  
+$("#orderNoForPictures").val(`Order No: ${orderNo}`);  
     document.getElementById("fileUploadModal").style.display = "flex";
     document.getElementById("fileUploadModal").style.textAlign = "center";
   })
