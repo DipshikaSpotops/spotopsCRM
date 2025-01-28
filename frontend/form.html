@@ -6299,6 +6299,7 @@ $("body").removeClass("modal-active");
 fetchNotifications();
 // upload pictures to an s3 bucket
 $("#floating-icon").on("click",function(){ 
+console.log("floating icon clicked",orderNo);
 $("#orderNoForPictures").val(orderNo);  
     document.getElementById("fileUploadModal").style.display = "flex";
     document.getElementById("fileUploadModal").style.textAlign = "center";
