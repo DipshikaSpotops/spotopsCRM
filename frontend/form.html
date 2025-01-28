@@ -207,7 +207,25 @@ margin-top: 15px;
 background-color: #0056b3;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+#refundCollect {
+width: 95%;
+}
 
+#paymentStatusRefund,
+#paymentStatusSelect {
+width: 100%;
+display: block;
+margin-bottom: 10px;
+}
+
+#refundedAmountContainer,
+#storeCreditContainer,
+#collectRefundContainer {
+margin-top: 10px;
+}
+}
 
 #editYardPopup {
 display: block;
@@ -271,9 +289,18 @@ width: 40%;
 }
 }
 
+@media screen and (max-width: 768px) {
+#submitComments {
+width: 50%; 
+}
+}
 
-
-
+@media screen and (max-width: 480px) {
+#submitComments {
+width: 60%; 
+height: 5vh;
+}
+}
 
 
 .btn {
@@ -785,9 +812,7 @@ width: 100%;
 height: auto;
 position: relative;
 }
-#submitComments {
-width: 50%; 
-}
+
 .navbar {
 flex-direction: column;
 align-items: flex-start;
@@ -806,20 +831,12 @@ margin: auto;
 .sidebar.hide {
 transform: translateX(-100%);
 }
+
 .sidebar.show {
 transform: translateX(0);
 }
-.floating-icon {
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
-      bottom: 15px;
-      right: 15px;
-    }
-    .floating-icon-tooltip {
-      font-size: 12px;
-      bottom: 70px;
 }
+
 .horizontal-sidebar {
 display: flex;
 flex-direction: row;
@@ -832,6 +849,7 @@ left: auto;
 height: auto;
 background-color: #006666;
 }
+
 .horizontal-sidebar .nav-link {
 flex: 1;
 text-align: center;
@@ -866,6 +884,7 @@ margin: 6% 43%;
 border-radius: 12px;
 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
+
 /* Fix input box disabling issue */
 input:disabled,
 textarea:disabled,
@@ -883,19 +902,23 @@ margin: 2% 0%;
 border: 1px solid #c0c0c0;
 padding: 33px;
 }
+
 .escalationReturn .form-group {
 flex: 1;
 min-width: 200px; 
 }
+
 .checkbox-group {
 display: flex;
 gap: 10px;
 flex-direction: column; 
 }
+
 .form-group label {
 display: block;
 margin-bottom: 5px;
 }
+
 .form-group input[type="text"], .form-group select {
 width: 100%; 
 }
@@ -909,18 +932,22 @@ color: #e0e0e0;
 background-color: #1f1f1f;
 border-color: #333;
 }
+
 .dark-mode .nav-link,
 .dark-mode .nav-link i {
 color: #b3b3b3 !important;
 }
+
 .dark-mode .nav-link:hover,
 .dark-mode .nav-link.selected {
 background-color: rgba(255, 255, 255, 0.1);
 }
+
 .dark-mode .main-content {
 background-color: #121212;
 color: #e0e0e0;
 }
+
 .dark-mode .chart-wrapper,
 .dark-mode .chart-item-monthly {
 background-color: #1f1f1f;
@@ -932,24 +959,30 @@ background-color: #333;
 .container {
   display: flex;
   flex-direction: column;
-  gap: 10px; 
+  gap: 10px; /* Spacing between rows */
 }
+
 .row {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
+
 .col {
   flex: 1; /* Make columns equal width */
-  margin-right: 10px; 
+  margin-right: 10px; /* Spacing between columns */
 }
 
 .col:last-child {
-  margin-right: 0;
+  margin-right: 0; /* Remove margin for the last column */
 }
+
 .col-wide {
-  flex: 2; 
+  flex: 2; /* Double the width of a normal column */
 }
+
+
+
 .grey-button {
   background-color: grey;
   color: white;
@@ -966,6 +999,9 @@ background-color: #333;
   width: 100%;
   font-family: Arial, sans-serif;
 }
+
+
+
 input[type="date"] {
   width: 100%;
   padding: 10px;
@@ -1182,11 +1218,27 @@ background-color: #333;
     opacity: 0;
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
+
   .floating-icon:hover .floating-icon-tooltip {
     visibility: visible;
     opacity: 1;
   }
-}
+
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .floating-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      bottom: 15px;
+      right: 15px;
+    }
+    .floating-icon-tooltip {
+      font-size: 12px;
+      bottom: 70px;
+    }
+  }
+
   @media screen and (max-width: 480px) {
     .floating-icon {
       width: 40px;
@@ -1199,10 +1251,6 @@ background-color: #333;
       font-size: 10px;
       bottom: 60px;
     }
-    #submitComments {
-width: 60%; 
-height: 5vh;
-}
   }
 </style>
 
