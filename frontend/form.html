@@ -6325,7 +6325,7 @@ $(".floating-icon-tooltip").on("click", async function () {
     if (!response.ok) {
       throw new Error("Failed to fetch images");
     }
-    const images = await response.json();
+    const images = response.data;
 
     // Clear any existing images in the container
     $("#uploadedImagesContainer").empty();
