@@ -4038,7 +4038,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
           Key: fileKey,
           Body: file.buffer,
           ContentType: file.mimetype,
-          ACL: 'public-read', // <-- Set public-read access
+          // ACL: 'public-read', // <-- Set public-read access
         }).promise();
 
         return `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${fileKey}`;
