@@ -2610,7 +2610,7 @@ Save
     </button>
     
     <!-- Section to Display Uploaded Images -->
-    <div id="uploadedImagesContainer" style="margin-top: 10px;display: flex;"></div>
+    <div id="uploadedImagesContainer" style="margin-top: 10px; display: flex; flex-wrap: wrap;"></div>
   </div>
 </div>
 <script>
@@ -6376,12 +6376,16 @@ $(".floating-icon-tooltip").on("click", async function () {
     const imagesContainer = document.getElementById("uploadedImagesContainer");
     imagesContainer.innerHTML = ""; 
 
-    // Append each uploaded image to the container
+    // Append each uploaded image
     data.uploadedImages.forEach((url) => {
       const imgElement = document.createElement("div");
+      imgElement.style.width = "16.66%";  // 100% divided by 6 images per row
+      imgElement.style.boxSizing = "border-box";
+      imgElement.style.padding = "5px";
+
       imgElement.innerHTML = `
         <a href="${url}" target="_blank">
-          <img src="${url}" alt="Uploaded Image" style="width: 100px; height: auto; border: 1px solid #ccc; padding: 5px;" />
+          <img src="${url}" alt="Uploaded Image" style="width: 100%; height: auto; border: 1px solid #ccc;" />
         </a>
       `;
       imagesContainer.appendChild(imgElement);
