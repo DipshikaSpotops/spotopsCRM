@@ -4074,3 +4074,23 @@ console.log("uploading to s3",orderNo);
     res.status(500).send("Failed to upload pictures.");
   }
 });
+// order-specific images
+app.get("/getOrderImages", async (req, res) => {
+  const orderNo = req.query.orderNo;
+  if (!orderNo) {
+    return res.status(400).send("Order No is required.");
+  }
+
+  try {
+    const order = await Order.findOne({ orderNo: orderNo });
+
+    if (!order) {
+      return res.status(404).send("Order not found.");
+    }
+console.log("image array",order.images);
+    res.status(200).json(order.images);  
+  } catch (error) {
+    console.error("Error fetching order images:", error);
+    res.status(500).send("Error retrieving images.");
+  }
+});

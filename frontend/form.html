@@ -6307,12 +6307,42 @@ $("body").removeClass("modal-active");
 });
 fetchNotifications();
 // upload pictures to an s3 bucket
-$(".floating-icon-tooltip").on("click",function(){ 
-console.log("floating icon clicked",orderNo);
-$("#orderNoForPictures").val(`Order No: ${orderNo}`);  
-    document.getElementById("fileUploadModal").style.display = "flex";
-    document.getElementById("fileUploadModal").style.textAlign = "center";
-  })
+$(".floating-icon-tooltip").on("click", async function () {
+  console.log("Floating icon clicked", orderNo);
+
+  // Set the order number in the input field
+  $("#orderNoForPictures").val(`Order No: ${orderNo}`);
+
+  // Display the file upload modal
+  document.getElementById("fileUploadModal").style.display = "flex";
+  document.getElementById("fileUploadModal").style.textAlign = "center";
+
+  // Fetch and display the images from MongoDB
+  try {
+    const response = await fetch(`/getOrderImages?orderNo=${orderNo}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch images");
+    }
+    const images = await response.json();
+
+    // Clear any existing images in the container
+    $("#uploadedImagesContainer").empty();
+
+    // Append images to the container
+    images.forEach((image) => {
+      const imgElement = `
+        <div style="margin: 5px;">
+          <a href="${image.url}" target="_blank">
+            <img src="${image.url}" alt="Uploaded Image" style="width: 100px; height: auto; border: 1px solid #ccc; padding: 5px;" />
+          </a>
+        </div>
+      `;
+      $("#uploadedImagesContainer").append(imgElement);
+    });
+  } catch (error) {
+    console.error("Error fetching and displaying images:", error);
+  }
+});
   $("#closeUploadModal").on("click",function(){ 
     document.getElementById("fileUploadModal").style.display = "none";
   })
