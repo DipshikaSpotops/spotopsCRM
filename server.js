@@ -4024,33 +4024,34 @@ console.log("orderNo",orderNo);
 app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
   const { orderNo } = req.body;
   const files = req.files;
-console.log("orderNo",orderNo,files);
+
   if (!orderNo || !files || files.length === 0) {
     return res.status(400).send("Order No and pictures are required.");
   }
 
   try {
-    // Upload each file to S3
-    const uploadPromises = files.map((file) => {
-      const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
-      return s3
-        .upload({
-          Bucket: "order-specific-pictures",
+    // Upload each file to S3 and collect URLs
+    const uploadedFiles = await Promise.all(
+      files.map(async (file) => {
+        const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
+        await s3.upload({
+          Bucket: BUCKET_NAME,
           Key: fileKey,
           Body: file.buffer,
           ContentType: file.mimetype,
-        })
-        .promise();
-    });
+        }).promise();
 
-    await Promise.all(uploadPromises);
+        return `https://www.spotops360.com/${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`; // Return S3 file URL
+      })
+    );
 
-    res.status(200).send("Pictures uploaded successfully.");
+    res.status(200).json(uploadedFiles);
   } catch (error) {
     console.error("Error uploading to S3:", error);
     res.status(500).send("Failed to upload pictures.");
   }
 });
+
 
 
 
