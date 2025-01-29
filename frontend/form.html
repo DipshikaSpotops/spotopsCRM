@@ -2610,10 +2610,7 @@ Save
     </button>
     
     <!-- Section to Display Uploaded Images -->
-    <div id="uploadedFilesContainer" style="margin-top: 20px;">
-      <h5>Uploaded Files:</h5>
-      <ul id="uploadedFilesList" style="list-style-type: none; padding: 0;"></ul>
-    </div>
+    <div id="uploadedImagesContainer" style="margin-top: 10px;"></div>
   </div>
 </div>
 <script>
@@ -6319,9 +6316,9 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
   $("#closeUploadModal").on("click",function(){ 
     document.getElementById("fileUploadModal").style.display = "none";
   })
-  $(".uploadPicturesToS3").on("click", async function() {
-  console.log("Uploading pictures for order:", orderNo);
+  $(".uploadPicturesToS3").on("click", async function () {
   const files = document.getElementById("fileInput").files;
+  const orderNo = $("#orderNoForPictures").val();
 
   if (!orderNo || files.length === 0) {
     alert("Please provide Order No and select at least one picture.");
@@ -6341,10 +6338,20 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
     });
 
     if (response.ok) {
-      const uploadedFiles = await response.json(); // Get uploaded file URLs from the backend
-      displayUploadedFiles(uploadedFiles, orderNo); // Display uploaded files
+      const data = await response.json();
+      const imagesContainer = document.getElementById("uploadedImagesContainer");
+      imagesContainer.innerHTML = ""; // Clear previous images
+
+      data.images.forEach((imageUrl) => {
+        const imageElement = document.createElement("a");
+        imageElement.href = imageUrl;
+        imageElement.target = "_blank";
+        imageElement.innerHTML = `<img src="${imageUrl}" style="width: 100px; height: auto; margin: 10px;" alt="Uploaded Image"/>`;
+        imagesContainer.appendChild(imageElement);
+      });
+
       alert("Pictures uploaded successfully!");
-      document.getElementById("fileInput").value = ""; // Clear file input
+      document.getElementById("fileUploadModal").style.display = "none";
     } else {
       alert("Failed to upload pictures. Please try again.");
     }

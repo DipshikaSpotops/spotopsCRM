@@ -4030,30 +4030,29 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
   }
 
   try {
-    // Upload each file to S3 and collect URLs
-    const uploadedFiles = await Promise.all(
-      files.map(async (file) => {
-        const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
-        await s3.upload({
-          Bucket: BUCKET_NAME,
-          Key: fileKey,
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        }).promise();
+    const images = [];
 
-        return `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`; // Return S3 file URL
-      })
-    );
+    for (const file of files) {
+      const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
 
-    res.status(200).json(uploadedFiles);
+      // Upload the file to S3
+      await s3.upload({
+        Bucket: BUCKET_NAME,
+        Key: fileKey,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+        ACL: 'public-read', // Ensures the uploaded images can be viewed
+      }).promise();
+
+      // Store the URL in the images array
+      const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
+      images.push(imageUrl);
+    }
+
+    // Return the images array as JSON response
+    res.status(200).json({ images });
   } catch (error) {
     console.error("Error uploading to S3:", error);
     res.status(500).send("Failed to upload pictures.");
   }
 });
-
-
-
-
-
-
