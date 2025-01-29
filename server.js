@@ -10,7 +10,6 @@ const stripe = Stripe("sk_test_51QUqUvGYqbfUX6jJzdBh3xVvyR2gu7w6NvhYJRrOAhNWf6rP
 // const puppeteer = require('puppeteer');
 const multer = require("multer");
 const AWS = require("aws-sdk");
-const path = require("path");
 const fs = require("fs");
 const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
