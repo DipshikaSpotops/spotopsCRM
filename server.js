@@ -4035,7 +4035,7 @@ console.log("orderNo",orderNo,files);
       const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
       return s3
         .upload({
-          Bucket: BUCKET_NAME,
+          Bucket: "order-specific-pictures",
           Key: fileKey,
           Body: file.buffer,
           ContentType: file.mimetype,
