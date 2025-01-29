@@ -6336,10 +6336,10 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
       method: "POST",
       body: formData,
     });
-
+console.log("res",response)
     if (response.ok) {
       const data = await response.json();
-      console.log("image array",data);
+      console.log("image array",data)
       const imagesContainer = document.getElementById("uploadedImagesContainer");
       imagesContainer.innerHTML = ""; // Clear previous images
 
