@@ -4053,7 +4053,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
         Key: fileKey,
         Body: file.buffer,
         ContentType: file.mimetype,
-        ACL: 'public-read', // Ensures the uploaded images can be viewed
+        // ACL: 'public-read', // Ensures the uploaded images can be viewed
       }).promise();
 
       // Store the URL in the images array
