@@ -4059,6 +4059,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
       // Store the URL in the images array
       const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
       const order = await Order.findOne({ orderNo: orderNo });
+      console.log("found order",order);
       order.images.push(imageUrl);
       }
       images.push(imageUrl);
