@@ -4063,7 +4063,7 @@ console.log("orderNo",orderNo);
     }
 
     // Return the images array as JSON response
-    res.status(200).json({ images });
+    res.status(200).json({ imageUrl });
   } catch (error) {
     console.error("Error uploading to S3:", error);
     res.status(500).send("Failed to upload pictures.");
