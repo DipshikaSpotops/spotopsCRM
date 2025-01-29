@@ -6321,7 +6321,7 @@ $(".floating-icon-tooltip").on("click", async function () {
   try {
   //www.spotops360.com/getImages?orderNo=${orderNo}
     const response = await axios.get(`https://www.spotops360.com/getImages?orderNo=${orderNo}`);
-    console.log("orderImages",response);
+    console.log("orderImages",response.data);
     if (!response.ok) {
       throw new Error("Failed to fetch images");
     }
