@@ -4075,7 +4075,7 @@ console.log("uploading to s3",orderNo);
   }
 });
 // order-specific images
-app.get("/getOrderImages", async (req, res) => {
+app.get("/getImages", async (req, res) => {
   const orderNo = req.query.orderNo;
   console.log("orderImage",orderNo);
   if (!orderNo) {
