@@ -636,6 +636,7 @@ cancelledRefAmount: Number,
 cancellationReason:String,
 expediteShipping: String, 
 dsCall: String,
+images: [imageSchema], 
 });
 
 const Order = mongoose.model("Order", OrderSchema);
