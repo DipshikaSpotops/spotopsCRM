@@ -4034,36 +4034,42 @@ console.log("orderNo",orderNo);
 });
 // upload pictures to s3 bucket(order-specific)
 app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
-  const orderNo  = req.query.orderNo;
+  const orderNo = req.query.orderNo || req.body.orderNo;  // Check both locations for orderNo
   const files = req.files;
-console.log("orderNo",orderNo);
+
   if (!orderNo || !files || files.length === 0) {
     return res.status(400).send("Order No and pictures are required.");
   }
 
   try {
-    var imageUrl;
     const order = await Order.findOne({ orderNo: orderNo });
+    if (!order) {
+      return res.status(404).send("Order not found.");
+    }
+
+    const imageUrls = [];  // Store all uploaded image URLs
+
     for (const file of files) {
       const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
 
-      // Upload the file to S3
+      // Upload to S3
       await s3.upload({
         Bucket: BUCKET_NAME,
         Key: fileKey,
         Body: file.buffer,
         ContentType: file.mimetype,
-        // ACL: 'public-read', // Ensures the uploaded images can be viewed
       }).promise();
 
-      // Store the URL in the images array
-       imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
-      console.log("found order",order)
-      order.images.push(imageUrl);
+      const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
+      order.images.push(imageUrl);  // Add the image URL to the order's images array
+      imageUrls.push(imageUrl);  // Store the image URL to return in the response
     }
-    res.status(200).json({ imageUrl });
+
+    await order.save();  // Save updated order to the database
+
+    res.status(200).json({ uploadedImages: imageUrls });
   } catch (error) {
-    console.error("Error uploading to S3:", error);
+    console.error("Error uploading to S3 or saving to DB:", error);
     res.status(500).send("Failed to upload pictures.");
   }
 });
