@@ -4030,6 +4030,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
   }
 
   try {
+    // Upload each file to S3 and collect URLs
     const uploadedFiles = await Promise.all(
       files.map(async (file) => {
         const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
@@ -4038,10 +4039,9 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
           Key: fileKey,
           Body: file.buffer,
           ContentType: file.mimetype,
-          // ACL: 'public-read', // <-- Set public-read access
         }).promise();
 
-        return `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${fileKey}`;
+        return `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`; // Return S3 file URL
       })
     );
 
@@ -4051,6 +4051,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
     res.status(500).send("Failed to upload pictures.");
   }
 });
+
 
 
 
