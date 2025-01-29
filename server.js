@@ -4061,8 +4061,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
       }).promise();
 
       const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
-      order.images.push(imageUrl);  // Add the image URL to the order's images array
-      imageUrls.push(imageUrl);  // Store the image URL to return in the response
+      order.images.push(imageUrl);  
     }
 
     await order.save();  // Save updated order to the database
