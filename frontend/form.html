@@ -6320,7 +6320,8 @@ $(".floating-icon-tooltip").on("click", async function () {
   // Fetch and display the images from MongoDB
   try {
   //www.spotops360.com/getImages?orderNo=${orderNo}
-    const response = await fetch(`https://www.spotops360.com/getImages?orderNo=${orderNo}`)
+    const response = await fetch(`https://www.spotops360.com/getImages?orderNo=${orderNo}`);
+    console.log("orderImages",response);
     if (!response.ok) {
       throw new Error("Failed to fetch images");
     }

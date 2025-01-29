@@ -4077,6 +4077,7 @@ console.log("uploading to s3",orderNo);
 // order-specific images
 app.get("/getOrderImages", async (req, res) => {
   const orderNo = req.query.orderNo;
+  console.log("orderImage",orderNo);
   if (!orderNo) {
     return res.status(400).send("Order No is required.");
   }
