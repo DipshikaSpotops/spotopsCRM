@@ -211,6 +211,27 @@ console.error("Error in invoice creation:", error);
 res.status(500).json({ message: "Error creating order", error: error.message });
 }
 });
+// order-specific images
+app.get("/getImages", async (req, res) => {
+  const orderNo = req.query.orderNo;
+  console.log("orderImage",orderNo);
+  if (!orderNo) {
+    return res.status(400).send("Order No is required.");
+  }
+
+  try {
+    const order = await Order.findOne({ orderNo: orderNo });
+
+    if (!order) {
+      return res.status(404).send("Order not found.");
+    }
+console.log("image array",order.images);
+    res.status(200).json(order.images);  
+  } catch (error) {
+    console.error("Error fetching order images:", error);
+    res.status(500).send("Error retrieving images.");
+  }
+});
 // Add a new bill and update the bill number
 app.post("/bills", async (req, res) => {
 console.log("Adding a new bill");
@@ -4072,26 +4093,5 @@ console.log("uploading to s3",orderNo);
   } catch (error) {
     console.error("Error uploading to S3 or saving to DB:", error);
     res.status(500).send("Failed to upload pictures.");
-  }
-});
-// order-specific images
-app.get("/getImages", async (req, res) => {
-  const orderNo = req.query.orderNo;
-  console.log("orderImage",orderNo);
-  if (!orderNo) {
-    return res.status(400).send("Order No is required.");
-  }
-
-  try {
-    const order = await Order.findOne({ orderNo: orderNo });
-
-    if (!order) {
-      return res.status(404).send("Order not found.");
-    }
-console.log("image array",order.images);
-    res.status(200).json(order.images);  
-  } catch (error) {
-    console.error("Error fetching order images:", error);
-    res.status(500).send("Error retrieving images.");
   }
 });
