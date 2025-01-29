@@ -954,7 +954,7 @@ res.status(500).json({ error: "Internal Server Error" });
 });
 app.get("/fetchTasks", async (req, res) => {
   const orderNo  = req.query.orderNo;
-  console.log("taskGroup:", orderNo);
+  // console.log("taskGroup:", orderNo);
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
     if (!taskGroup) {
@@ -969,7 +969,7 @@ app.get("/fetchTasks", async (req, res) => {
 // updating taskStatus and assignTo status
 app.put('/updateTaskStatus', async (req, res) => {
   const { orderNo, index, taskStatus } = req.body;
-console.log("updateTaskStatus",orderNo,index,taskStatus)
+// console.log("updateTaskStatus",orderNo,index,taskStatus)
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
     if (!taskGroup) {
@@ -986,7 +986,7 @@ console.log("updateTaskStatus",orderNo,index,taskStatus)
 });
 app.put('/updateTaskAssignedTo', async (req, res) => {
   const { orderNo, index, assignedTo } = req.body;
-  console.log("updateTaskAssignedTo",orderNo,index,assignedTo)
+  // console.log("updateTaskAssignedTo",orderNo,index,assignedTo)
   try {
     const taskGroup = await TaskGroup.findOne({ orderNo });
     if (!taskGroup) {
@@ -1013,7 +1013,7 @@ app.get('/totalTasks', async (req, res) => {
     const currentYear = currentDate.year(); 
     let totalTasks = 0;
     const taskGroups = await TaskGroup.find();
-    console.log("taskGroups",taskGroups,firstName);
+    // console.log("taskGroups",taskGroups,firstName);
     taskGroups.forEach((group) => {
       group.tasks.forEach((task) => {
         const cleanedDateString = task.taskCreatedDate.replace(/(\d+)(st|nd|rd|th)/, '$1');
@@ -1025,7 +1025,7 @@ app.get('/totalTasks', async (req, res) => {
           taskCreatedDate.year() === currentYear
         ) {
           totalTasks++;
-          console.log("totalTasks",totalTasks);
+          // console.log("totalTasks",totalTasks);
         }
       });
     });
@@ -1045,7 +1045,7 @@ app.get("/alltasks", async (req, res) => {
       orderNo: group.orderNo,
       tasks: group.tasks.filter((task) => task.status !== "Completed"),
     })).filter(group => group.tasks.length > 0); 
-    console.log("filteredTaskGroups",filteredTaskGroups);
+    // console.log("filteredTaskGroups",filteredTaskGroups);
     res.status(200).json(filteredTaskGroups);
   } catch (error) {
     console.error("Error fetching task groups:", error);
@@ -1086,7 +1086,7 @@ async function updateTaskStatuses() {
     for (const taskGroup of taskGroups) {
       let isUpdated = false;
       const currentTaskCount = taskGroup.tasks.length;
-      console.log("Current Task Count:", currentTaskCount, "Task Group:", taskGroup);
+      // console.log("Current Task Count:", currentTaskCount, "Task Group:", taskGroup);
 
       // Handle newly added tasks
       if (currentTaskCount > (taskGroup.previousTaskCount || 0)) {
@@ -1114,8 +1114,8 @@ async function updateTaskStatuses() {
         const createdTime = moment.tz(formattedTaskCreatedDate, "DD MM, YYYY HH:mm", "America/Chicago");
         const taskDeadline = moment.tz(task.deadline, "YYYY-MM-DDTHH:mm", "America/Chicago");
         const formattedDeadline = taskDeadline.format("YYYY-MM-DDTHH:mm:ss");
-        console.log("Task Status:", task.taskStatus);
-        console.log("Task Deadline:", formattedDeadline, "current", currentDallasTime);
+        // console.log("Task Status:", task.taskStatus);
+        // console.log("Task Deadline:", formattedDeadline, "current", currentDallasTime);
 
         // Handle completed tasks
         if (task.taskStatus === "Completed" && !task.taskCompletionTime) {
@@ -1212,7 +1212,7 @@ async function updateTaskStatuses() {
 
     // Create notifications for unique tasks
     for (const notification of notifications) {
-      console.log("Recent Notification:", notification);
+      // console.log("Recent Notification:", notification);
       await RecentNotification.create({ message: notification.message });
     }
 
@@ -1299,11 +1299,11 @@ app.get("/tasks-summary", async (req, res) => {
 
 // API to fetch recent notifications
 app.get("/notifications", async (req, res) => {
-  console.log("notifications")
+  // console.log("notifications")
 const notifications = await updateTaskStatuses(); 
-    console.log("notis",notifications);
+    // console.log("notis",notifications);
   const userId  = req.query.userId;
-  console.log("userrrr",userId);
+  // console.log("userrrr",userId);
   try {
     const notificationss = await RecentNotification.find({})
     // Marking notifications as unread for this user if they are not in the readBy array
@@ -1319,7 +1319,7 @@ const notifications = await updateTaskStatuses();
 });
 app.post('/mark-notifications-read', async (req, res) => {
   const userId  = req.query.firstName;
-  console.log("to see readBy",userId);
+  // console.log("to see readBy",userId);
   try {
     await RecentNotification.updateMany(
       { readBy: { $ne: userId } }, 
