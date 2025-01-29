@@ -6322,7 +6322,6 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
   $(".uploadPicturesToS3").on("click", async function() {
   console.log("Uploading pictures for order:", orderNo);
   const files = document.getElementById("fileInput").files;
-  const orderNo = document.getElementById("orderNoForPictures").value.trim();
 
   if (!orderNo || files.length === 0) {
     alert("Please provide Order No and select at least one picture.");
