@@ -2662,7 +2662,7 @@ default: return "th";
 };
 var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
 // common fetch of orders
-fetch(`https://www.spotops360.com/orders/?orderNo=${orderNo}`)
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
 orderPlacedDate = data.orderDate;
@@ -6332,7 +6332,7 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
   });
 
   try {
-    const response = await fetch("https://www.spotops360.com/uploadToS3", {
+    const response = await fetch(`https://www.spotops360.com/uploadToS3?orderNo=${orderNo}`, {
       method: "POST",
       body: formData,
     });
