@@ -1056,7 +1056,7 @@ app.get("/alltasks", async (req, res) => {
 async function updateTaskStatuses() {
   try {
     const currentDallasTime = moment.tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss");
-    console.log("Current Dallas Time:", currentDallasTime);
+    // console.log("Current Dallas Time:", currentDallasTime);
 
     const taskGroups = await TaskGroup.find({
       "tasks.deadline": { $exists: true },
@@ -1311,7 +1311,7 @@ const notifications = await updateTaskStatuses();
       ...notification._doc,
       isRead: notification.readBy.includes(userId),
     }));
-    console.log("userSpecificNotifications",userSpecificNotifications);
+    // console.log("userSpecificNotifications",userSpecificNotifications);
     res.status(200).json(userSpecificNotifications);
   } catch (error) {
     res.status(500).send({ error: 'Error fetching notifications' });
