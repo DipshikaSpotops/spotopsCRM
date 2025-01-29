@@ -4036,14 +4036,14 @@ console.log("orderNo",orderNo);
 app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
   const { orderNo } = req.body;
   const files = req.files;
-
+console.log("orderNo",orderNo);
   if (!orderNo || !files || files.length === 0) {
     return res.status(400).send("Order No and pictures are required.");
   }
 
   try {
-    const images = [];
-
+    // const images = [];
+    const order = await Order.findOne({ orderNo: orderNo });
     for (const file of files) {
       const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
 
@@ -4058,7 +4058,6 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
 
       // Store the URL in the images array
       const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
-      const order = await Order.findOne({ orderNo: orderNo });
       console.log("found order",order)
       order.images.push(imageUrl);
     }
