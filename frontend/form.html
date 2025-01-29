@@ -6336,26 +6336,19 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
       method: "POST",
       body: formData,
     });
-console.log("res",response)
-    if (response.ok) {
-      const data = await response.json();
-      console.log("image array",data)
+console.log("res",response.url)
       const imagesContainer = document.getElementById("uploadedImagesContainer");
-      imagesContainer.innerHTML = ""; // Clear previous images
-
-      data.images.forEach((imageUrl) => {
+      imagesContainer.innerHTML = ""; 
         const imageElement = document.createElement("a");
         imageElement.href = imageUrl;
         imageElement.target = "_blank";
         imageElement.innerHTML = `<img src="${imageUrl}" style="width: 100px; height: auto; margin: 10px;" alt="Uploaded Image"/>`;
-        imagesContainer.appendChild(imageElement);
-      });
+        imagesContainer.appendChild(response.url);
+     
 
       alert("Pictures uploaded successfully!");
       document.getElementById("fileUploadModal").style.display = "none";
-    } else {
-      alert("Failed to upload pictures. Please try again.");
-    }
+  
   } catch (error) {
     console.error("Error uploading pictures:", error);
     alert("An error occurred. Please try again.");
