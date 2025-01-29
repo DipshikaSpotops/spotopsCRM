@@ -4034,7 +4034,7 @@ console.log("orderNo",orderNo);
 });
 // upload pictures to s3 bucket(order-specific)
 app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
-  const { orderNo } = req.body;
+  const orderNo  = req.query.orderNo;
   const files = req.files;
 console.log("orderNo",orderNo);
   if (!orderNo || !files || files.length === 0) {
@@ -4042,7 +4042,7 @@ console.log("orderNo",orderNo);
   }
 
   try {
-    // const images = [];
+    
     const order = await Order.findOne({ orderNo: orderNo });
     for (const file of files) {
       const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
