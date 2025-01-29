@@ -6336,14 +6336,10 @@ $("#orderNoForPictures").val(`Order No: ${orderNo}`);
       method: "POST",
       body: formData,
     });
-console.log("res",response.url)
+console.log("res",response)
       const imagesContainer = document.getElementById("uploadedImagesContainer");
       imagesContainer.innerHTML = ""; 
-        const imageElement = document.createElement("a");
-        imageElement.href = imageUrl;
-        imageElement.target = "_blank";
-        imageElement.innerHTML = `<img src="${imageUrl}" style="width: 100px; height: auto; margin: 10px;" alt="Uploaded Image"/>`;
-        imagesContainer.appendChild(response.url);
+         imagesContainer.appendChild(response.url);
      
 
       alert("Pictures uploaded successfully!");
