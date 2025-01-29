@@ -575,6 +575,17 @@ const RecentNotification = mongoose.model('RecentNotification', notificationSche
 
 
 const TaskGroup = mongoose.model("TaskGroup", taskSchema);
+const imageSchema = new mongoose.Schema({
+  url: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  uploadedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 const OrderSchema = new mongoose.Schema({
 orderNo: { type: String, unique: true },
 orderDate: String,
@@ -636,7 +647,7 @@ cancelledRefAmount: Number,
 cancellationReason:String,
 expediteShipping: String, 
 dsCall: String,
-
+images: [imageSchema],
 });
 
 const Order = mongoose.model("Order", OrderSchema);
