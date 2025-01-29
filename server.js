@@ -4034,7 +4034,7 @@ console.log("orderNo",orderNo);
 });
 // upload pictures to s3 bucket(order-specific)
 app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
-  const orderNo = req.query.orderNo || req.body.orderNo;  // Check both locations for orderNo
+  const orderNo = req.query.orderNo || req.body.orderNo;
   const files = req.files;
 
   if (!orderNo || !files || files.length === 0) {
@@ -4047,7 +4047,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
       return res.status(404).send("Order not found.");
     }
 
-    const imageUrls = [];  // Store all uploaded image URLs
+    const imageUrls = [];
 
     for (const file of files) {
       const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
@@ -4061,10 +4061,12 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
       }).promise();
 
       const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
-      order.images.push(imageUrl);  
+      order.images.push({ url: imageUrl });
+      imageUrls.push(imageUrl);
     }
 
-    await order.save();  // Save updated order to the database
+    // Save the order document
+    await order.save();
 
     res.status(200).json({ uploadedImages: imageUrls });
   } catch (error) {
