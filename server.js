@@ -4042,7 +4042,7 @@ console.log("orderNo",orderNo);
   }
 
   try {
-    
+    var imageUrl;
     const order = await Order.findOne({ orderNo: orderNo });
     for (const file of files) {
       const fileKey = `${orderNo}/${Date.now()}_${path.basename(file.originalname)}`;
@@ -4057,12 +4057,10 @@ console.log("orderNo",orderNo);
       }).promise();
 
       // Store the URL in the images array
-      const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
+       imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
       console.log("found order",order)
       order.images.push(imageUrl);
     }
-
-    // Return the images array as JSON response
     res.status(200).json({ imageUrl });
   } catch (error) {
     console.error("Error uploading to S3:", error);
