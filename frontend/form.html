@@ -6347,11 +6347,12 @@ $(".floating-icon-tooltip").on("click", async function () {
   })
   $(".uploadPicturesToS3").on("click", async function () {
   const files = document.getElementById("fileInput").files;
-  // const orderNo = $("#orderNoForPictures").val();
+
   if (!orderNo || files.length === 0) {
     alert("Please provide Order No and select at least one picture.");
     return;
   }
+
   const formData = new FormData();
   formData.append("orderNo", orderNo);
   Array.from(files).forEach((file) => {
@@ -6363,15 +6364,32 @@ $(".floating-icon-tooltip").on("click", async function () {
       method: "POST",
       body: formData,
     });
-console.log("res",response)
-      const imagesContainer = document.getElementById("uploadedImagesContainer");
-      imagesContainer.innerHTML = ""; 
-         imagesContainer.appendChild(response.url);
-     
 
-      alert("Pictures uploaded successfully!");
-      document.getElementById("fileUploadModal").style.display = "none";
-  
+    if (!response.ok) {
+      throw new Error("Failed to upload pictures");
+    }
+
+    // Parse the JSON response to get image URLs
+    const data = await response.json();
+    console.log("Uploaded Images:", data.uploadedImages);
+
+    const imagesContainer = document.getElementById("uploadedImagesContainer");
+    imagesContainer.innerHTML = ""; 
+
+    // Append each uploaded image to the container
+    data.uploadedImages.forEach((url) => {
+      const imgElement = document.createElement("div");
+      imgElement.innerHTML = `
+        <a href="${url}" target="_blank">
+          <img src="${url}" alt="Uploaded Image" style="width: 100px; height: auto; border: 1px solid #ccc; padding: 5px;" />
+        </a>
+      `;
+      imagesContainer.appendChild(imgElement);
+    });
+
+    alert("Pictures uploaded successfully!");
+    document.getElementById("fileUploadModal").style.display = "none";
+
   } catch (error) {
     console.error("Error uploading pictures:", error);
     alert("An error occurred. Please try again.");

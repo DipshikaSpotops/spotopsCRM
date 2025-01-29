@@ -4057,7 +4057,8 @@ console.log("orderNo",orderNo);
 app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
   const orderNo = req.query.orderNo || req.body.orderNo;
   const files = req.files;
-console.log("uploading to s3",orderNo);
+
+  console.log("Uploading to S3 for orderNo:", orderNo);
   if (!orderNo || !files || files.length === 0) {
     return res.status(400).send("Order No and pictures are required.");
   }
@@ -4082,13 +4083,14 @@ console.log("uploading to s3",orderNo);
       }).promise();
 
       const imageUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
+      imageUrls.push(imageUrl);  // Collect URLs to send to the frontend
       order.images.push({ url: imageUrl });
-      // imageUrls.push(imageUrl);
     }
 
     // Save the order document
     await order.save();
 
+    // Return the uploaded image URLs
     res.status(200).json({ uploadedImages: imageUrls });
   } catch (error) {
     console.error("Error uploading to S3 or saving to DB:", error);
