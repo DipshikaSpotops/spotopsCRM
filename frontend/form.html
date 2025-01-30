@@ -6307,7 +6307,7 @@ $("body").removeClass("modal-active");
 });
 fetchNotifications();
 // upload pictures to an s3 bucket
-$(".floating-icon-tooltip").on("click", async function () {
+$(".floating-icon").on("click", async function () {
   console.log("Floating icon clicked", orderNo);
 
   // Set the order number in the input field
@@ -6393,7 +6393,7 @@ $(".floating-icon-tooltip").on("click", async function () {
 
     alert("Pictures uploaded successfully!");
     document.getElementById("fileUploadModal").style.display = "none";
-
+    window.location.reload();
   } catch (error) {
     console.error("Error uploading pictures:", error);
     alert("An error occurred. Please try again.");
