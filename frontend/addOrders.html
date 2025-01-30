@@ -108,120 +108,20 @@ color: white;
 font-size: 24px;
 cursor: pointer;
 }
-/* General Adjustments for Small Screens */
 @media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    padding: 15px;
-  }
-
-  .logo img {
-    width: 120px;
-    margin-bottom: 10px;
-  }
-
-  .user-info {
-    margin-top: 10px;
-  }
-
-  .sidebar {
-    width: 60%;
-    transform: translateX(-100%);
-  }
-
-  .sidebar.show {
-    transform: translateX(0);
-  }
-
-  .main-content {
-    margin-left: 0;
-    padding: 10px;
-  }
-
-  #orderNo,
-  #addoBtn {
-    width: 80%;
-    margin: 10px auto;
-  }
-
-  .firstRow {
-    flex-direction: column;
-    margin: 10px auto;
-  }
-
-  .form-group {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  #salesAgent,
-  #orderDate {
-    width: 90%;
-    margin: 10px auto;
-  }
-
-  #newOrderForm {
-    padding: 0 5px;
-  }
+.sidebar {
+transform: translateX(-100%);
+width: 70%;
 }
-
-/* Very Small Screens (Phones) */
-@media (max-width: 576px) {
-  .toggle-sidebar {
-    display: block;
-  }
-
-  .navbar {
-    padding: 10px;
-  }
-
-  #logoImg {
-    width: 100px;
-  }
-
-  #salesAgent,
-  #orderDate {
-    font-size: 14px;
-    padding: 5px;
-  }
-
-  #bAttention, #bState, #sState, #sCountry {
-    font-size: 14px;
-  }
-
-  .form-row {
-    flex-wrap: wrap;
-  }
-
-  .form-group {
-    width: 100%;
-    padding: 5px;
-  }
-
-  .sidebar {
-    width: 80%;
-  }
+.sidebar.show {
+transform: translateX(0);
 }
-
-/* Medium Devices (Tablets) */
-@media (max-width: 992px) {
-  .main-content {
-    margin-left: 0;
-  }
-
-  #newOrderForm {
-    padding: 10px;
-  }
-
-  .form-group {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  #addoBtn {
-    margin: 0 auto;
-    width: 80%;
-  }
+.main-content {
+margin-left: 0;
+}
+.toggle-sidebar {
+display: block;
+}
 }
 /* Specific styles for the New Order Entry page */
 #addoBtn {
