@@ -1054,26 +1054,31 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 $("#filterButton").click(async function () {
     const monthYear = $("#monthYearPicker").val();  // e.g., "2025-01"
     const [year, month] = monthYear.split("-");  // Split year and month
-
     try {
-      const response = await axios.get(`/orders/monthly`, {
-        params: {
-          month: month,  // "01" for January
-          year: year
-        }
-      });
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 
-      if (response.data.length === 0) {
-        console.log("No orders found for the selected month.");
-        $("#infoTable").html(`<tr><td colspan="13">No orders found</td></tr>`);
-      } else {
-        // Render the orders to the table
-        renderTableRows(1, response.data);
-        createPaginationControls(Math.ceil(response.data.length / rowsPerPage));
-      }
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch current month's orders");
+}
+
+
+allOrders = ordersResponse.data;
+const ordersWithMultipleAdditionalInfo = allOrders
+  .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
+  .map(order => order.orderNo);
+console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
+var totalOrders = allOrders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+sortedData = sortOrdersByOrderNoDesc(allOrders);
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+} catch (error) {
+console.error("Error fetching current month's orders:", error);
+}
+
 });
 
 
