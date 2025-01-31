@@ -676,118 +676,100 @@ sortTable(index, type);
 
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = orders.slice(start, end);
-
-$('#infoTable').empty(); // Clear the table
-ordersForPage.forEach((item) => {
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
-
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const ordersForPage = orders.slice(start, end);
+    renderOrders(ordersForPage); // Use renderOrders to append rows
 }
-team = localStorage.getItem('team');
-// console.log("team",team);
-const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
 
+// Updated renderOrders function to append rows dynamically
+function renderOrders(items) {
+    $("#infoTable").empty(); // Clear existing rows
 
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-// <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
+    items.forEach(item => {
+        const bAddress = item.bAddress || ""; 
+        const sAddress = item.sAddress || "";
 
-// const sendInvoice = `
-// <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-// `;
+        // Address formatting logic
+        const bParts = bAddress ? bAddress.split(',') : [];
+        const firstLineB = bParts.length > 1 ? `${bParts[0].trim()}, ${bParts[1].trim()}` : "";
+        const secondLineB = bParts.length > 4 ? `${bParts[2].trim()}, ${bParts[3].trim()}, ${bParts[4].trim()}` : "";
+        const additionalLineB = bParts.length > 5 ? bParts.slice(5).map(part => part.trim()).join(', ') : "";
+        const formattedBAddress = `${firstLineB}<br>${secondLineB}${additionalLineB ? `<br>${additionalLineB}` : ""}`;
 
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-// const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-// console.log(dateOnly);
+        const sParts = sAddress ? sAddress.split(',') : [];
+        const firstLineS = sParts.length > 1 ? `${sParts[0].trim()}, ${sParts[1].trim()}` : "";
+        const secondLineS = sParts.length > 4 ? `${sParts[2].trim()}, ${sParts[3].trim()}, ${sParts[4].trim()}` : "";
+        const formattedSAddress = `${firstLineS}<br>${secondLineS}<br>`;
 
-$("#infoTable").append(`
-<tr>
-<td>${item.orderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>Customer Name: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}<br>
-${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
-${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}
-</td>
+        const exp = item.expediteShipping === "true" ? "Expedite shipping" : "";
+        const ds = item.dsCall === "true" ? "DS Call" : "";
 
-<td>Part required: ${item.pReq || item.partName}<br>
-${item.year} ${item.make} ${item.model}
-</td>
-<td>${  
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} | ${info.phone}<br> ${info.status} Stock No.: ${info.stockNo || ""}<br> Part price: $${info.partPrice} ${info.shippingDetails || ""} Others: $${info.others || 0}<br>  ${info.paymentStatus || ""} Refunds: ${info.refundedAmount || 0}`)
+        const datetime = item.orderDate;
+  const date = new Date(datetime);
 
-.join("<br>")
-: ""
-}</td>
-<td>${item.orderStatus}</td>
-<td>$${item.soldP}</td>
-<td>$${item.grossProfit}</td>
-<td>
-${
-item.additionalInfo && item.additionalInfo.length > 0
-? (() => {
-let totalYardSpent = 0;
-item.additionalInfo.forEach(info => {
-const yardPP = parseFloat(info.partPrice) || 0;
-const yardOSorYS = info.shippingDetails || '';
-let shippingValueYard = 0;
-if (yardOSorYS.includes("Own shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-} else if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-}
-const yardOthers = parseFloat(info.others) || 0;
-const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
-const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
-const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
-const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
+  const day = date.getDate();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const year = date.getFullYear();
 
-// Only calculate if the conditions are met
-if (
-info.status !== "PO cancelled" || 
-(info.status === "PO cancelled" && info.paymentStatus === "Card charged")
-) {
-totalYardSpent +=
-yardPP +
-shippingValueYard +
-yardOthers +
-escOwnShipReturn +
-escOwnShipReplacement +
-yardOwnShippingReplacement -
-yardRefundAmount;
-}
-});
+  const suffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
 
-const spMinusTax = item.soldP - item.salestax;
-const custRefundedAmount = item.custRefundedAmount || 0;
-const subtractRefund = spMinusTax - custRefundedAmount || 0;
-const currentGP = subtractRefund - totalYardSpent;
-console.log("currentGP", spMinusTax, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
-return `$${currentGP.toFixed(2)}`;
-})()
-: ""
-}
-</td>
-<td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
-<td ${escalationStyle}>${escalationStatus}</td>
-<td>${actions}</td>
-<td>${item.email}</td>
-</tr>
-`);
-});
+  var formattedOrderDate=  `${day}${suffix(day)} ${monthNames[date.getMonth()]}, ${year}`;
+        $("#infoTable").append(
+            `<tr data-id="${item.orderNo}">
+                <td>
+                    <button style="background-color: #cae8c9; border: none; color: #61a55e;" 
+                        class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">
+                        Approve
+                    </button>
+                    <button style="background-color: #fcdfda; border: none; color: #72504a;" 
+                        class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
+                        Cancel
+                    </button>
+                </td>
+                <td>${formattedOrderDate || ''}</td>
+                <td>${item.orderNo || ''}</td>
+                <td>${item.salesAgent || ''}</td>
+                <td>
+                    Name: ${(item.fName && item.lName) ? `${item.fName} ${item.lName}` : (item.customerName || "")}<br>
+                    Email: ${item.email || ''}<br>
+                    Phone: ${item.phone || ''}<br>
+                    Alt Phone: ${item.altPhone || ''}<br>
+                    Billing Address:
+                    ${(item.bName || item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry)
+                        ? `<b>Billing Name</b>: ${item.bName || ""} <br>${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}<br> `
+                        : `${formattedBAddress || ""}`}
+                </td>
+                <td>
+                    ${(item.sAddressStreet || item.sAddressCity || item.sAddressState || item.sAddressZip || item.sAddressAcountry)
+                        ? `<b>Attention</b>:${item.attention}<br> ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}`
+                        : `${formattedSAddress || ""}`}
+                <td>Part Name: ${item.pReq || item.partName || ''}<br>
+                    <b>Quoted Price:</b> $${item.soldP || 0}<br>
+                    ${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
+                    ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
+                </td>
+                <td>
+                    Year: ${item.year || ''}<br>
+                    Make: ${item.make || ''}<br>
+                    Model: ${item.model || ''}<br>
+                    Part Description: ${item.desc || ''}<br>
+                    VIN: ${item.vin || ''}<br>
+                    Warranty: ${item.warranty || 0} days<br>
+                </td>
+                <td>${item.orderStatus || ''}</td>
+                <td>${item.email || ''}</td>
+            </tr>`
+        );
+    });
 }
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
