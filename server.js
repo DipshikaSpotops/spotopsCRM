@@ -886,14 +886,25 @@ var salesAgent = req.query.firstName;
 const month = req.query.month;
 const year = req.query.year;
 try {
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-const monthlySalesPersonOrders = await Order.find({
-$and: [
-{ orderDate: { $regex: monthYearPattern } },
-{ salesAgent: salesAgent }
-]
-});
-res.json(monthlySalesPersonOrders);
+  const { month, year } = req.query;
+console.log("salesPersonWise",month,year);
+  if (!month || !year) {
+    return res.status(400).json({ message: "Month and year are required" });
+  }
+
+  // Construct the start and end date for the range
+  const startDate = new Date(`${year}-${month}-01`);
+  const endDate = new Date(startDate);
+  endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+  const orders = await Order.find({
+    orderDate: {
+      $gte: startDate,
+      $lt: endDate
+    },salesAgent: salesAgent,
+  });
+
+  res.json(orders);
 } catch (error) {
 console.error("Error fetching salesPersonOrders:", error);
 res.status(500).json({ message: "Server error", error });
