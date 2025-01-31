@@ -609,7 +609,7 @@ const imageSchema = new mongoose.Schema({
 });
 const OrderSchema = new mongoose.Schema({
 orderNo: { type: String, unique: true },
-orderDate: String,
+orderDate: { type: Date, required: true },
 fName: String,
 lName: String,
 salesAgent: String,
@@ -946,29 +946,27 @@ res.status(500).json({ message: "Server error", error });
 //   mongoose.connection.close();  
 // }
 // });
-
-app.get("/orders/monthly", async (req, res) => {
+app.get('/orders/monthly', async (req, res) => {
   try {
-    const month = req.query.month;
-    const year = req.query.year;
+    const { month, year } = req.query;
 
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    // Convert the provided month and year into start and end dates
-    const startDate = moment(`${year}-${month}-01`, "YYYY-MMM-DD").startOf('month').toDate();
-    const endDate = moment(startDate).endOf('month').toDate();
-console.log("startDate",startDate,"endDate",endDate);
-    // Query using date range with the index on `orderDate`
-    const monthlyOrders = await Order.find({
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
       orderDate: {
         $gte: startDate,
         $lt: endDate
       }
     });
 
-    res.json(monthlyOrders);
+    res.json(orders);
   } catch (error) {
     console.error("Error fetching orders for specified month and year:", error);
     res.status(500).json({ message: "Server error", error });
