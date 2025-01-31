@@ -732,7 +732,7 @@ console.log("placed",month,year);
 app.get("/orders/customerApproved", async (req, res) => {
   try {
     const { month, year } = req.query;
-console.log("placed",month,year);
+console.log("customer approved",month,year);
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
@@ -759,7 +759,7 @@ res.status(500).json({ message: "Server error", error });
 app.get("/orders/yardProcessing", async (req, res) => {
   try {
     const { month, year } = req.query;
-console.log("placed",month,year);
+console.log("yard processing",month,year);
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
@@ -784,21 +784,27 @@ res.status(500).json({ message: "Server error", error });
 });
 // for in Transit
 app.get("/orders/inTransit", async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-const inTransitOrders = await Order.find({
-$and: [
-{ orderDate: { $regex: monthYearPattern } },
-{ orderStatus: "In Transit" }
-]
-});
-res.json(inTransitOrders);
-} catch (error) {
+  try {
+    const { month, year } = req.query;
+console.log("transit",month,year);
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },orderStatus: "In Transit",
+    });
+
+    res.json(orders);
+  } catch (error) {
 console.error("Error fetching inTransit orders:", error);
 res.status(500).json({ message: "Server error", error });
 }  
