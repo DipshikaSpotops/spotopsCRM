@@ -866,15 +866,24 @@ const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Es
 if (!month || !year) {
 return res.status(400).json({ message: "Month and year are required" });
 }
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-const escalatedOrders = await Order.find({
-$and: [
-{ orderDate: { $regex: monthYearPattern } },
-{ orderStatus: { $in: validStatuses }, },
-{ additionalInfo: { $elemMatch: { escTicked: "Yes" } } }
-]
-});
-res.json(escalatedOrders);
+
+  if (!month || !year) {
+    return res.status(400).json({ message: "Month and year are required" });
+  }
+  const startDate = new Date(`${year}-${month}-01`);
+  const endDate = new Date(startDate);
+  endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+  const orders = await Order.find({
+    orderDate: {
+      $gte: startDate,
+      $lt: endDate
+    },
+    orderStatus: { $in: validStatuses },
+    additionalInfo: { $elemMatch: { escTicked: "Yes" } }
+  });
+
+  res.json(orders);
 } catch (error) {
 console.error("Error fetching fulfilled orders:", error);
 res.status(500).json({ message: "Server error", error });
@@ -883,8 +892,6 @@ res.status(500).json({ message: "Server error", error });
 // for salespersonWise data
 app.get("/orders/salesPersonWise", async (req, res) => {
 var salesAgent = req.query.firstName;
-const month = req.query.month;
-const year = req.query.year;
 try {
   const { month, year } = req.query;
 console.log("salesPersonWise",month,year);
