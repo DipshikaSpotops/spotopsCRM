@@ -709,9 +709,8 @@ app.get("/orders/placed", async (req, res) => {
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
-    const startOfMonth = new Date(`${year}-${month}-01T00:00:00.000Z`);
-    const endOfMonth = new Date(startOfMonth);
-    endOfMonth.setMonth(endOfMonth.getMonth() + 1); 
+    const startOfMonth = new Date(`${year}-${month}-01`);
+    const endOfMonth = new Date(startDate);
     const placedOrders = await Order.find({
       orderDate: { $gte: startOfMonth, $lt: endOfMonth },
       orderStatus: "Placed",
