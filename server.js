@@ -730,21 +730,27 @@ console.log("placed",month,year);
 });
 // for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-const customerApprovedOrders = await Order.find({
-$and: [
-{ orderDate: { $regex: monthYearPattern } },
-{ orderStatus: "Customer approved" }
-]
-});
-res.json(customerApprovedOrders);
-} catch (error) {
+  try {
+    const { month, year } = req.query;
+console.log("placed",month,year);
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },orderStatus: "Customer approved",
+    });
+
+    res.json(orders);
+  } catch (error) {
 console.error("Error fetching customerApproved orders:", error);
 res.status(500).json({ message: "Server error", error });
 }
