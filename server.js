@@ -63,7 +63,21 @@ console.error("Connection failed", err);
 });
 
 let orderCount = 0;
+const db = mongoose.connection;
 
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', async function () {
+  console.log('Connected to MongoDB');
+
+  try {
+    await db.collection('orders').createIndex({ orderDate: 1 });
+    console.log('Index created successfully');
+  } catch (error) {
+    console.error('Error creating index:', error);
+  } finally {
+    mongoose.connection.close();  // Close connection after creating index
+  }
+});
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
 console.log("Adding new order");
