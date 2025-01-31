@@ -699,10 +699,25 @@ function renderTableRows(page, orders = allOrders) {
             <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>`;
 
         const yardlength = item.additionalInfo.length;
+        const date = new Date(item.orderDate);
+  const day = date.getDate();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const year = date.getFullYear();
 
+  const suffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  var formattedOrderDate =  `${day}${suffix(day)} ${monthNames[date.getMonth()]}, ${year}`;
         $("#infoTable").append(`
             <tr>
-                <td>${item.orderDate}</td>
+                <td>${formattedOrderDate}</td>
                 <td>${item.orderNo}</td>
                 <td>${item.salesAgent}</td>
                 <td>${item.customerName}</td>
