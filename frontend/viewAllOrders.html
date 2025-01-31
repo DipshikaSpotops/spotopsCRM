@@ -677,7 +677,22 @@ function renderTableRows(orders) {
     const editButton = (team === "Team Mark" || team === "Team Sussane")
 ? "" // Hide the edit button
 : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+const date = new Date(item.orderDate);
+  const day = date.getDate();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const year = date.getFullYear();
 
+  const suffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  var formattedOrderDate =  `${day}${suffix(day)} ${monthNames[date.getMonth()]}, ${year}`;
 
 const actions = `
 ${editButton}
@@ -685,7 +700,7 @@ ${editButton}
     
     $("#infoTable").append(`
       <tr>
-        <td>${dateOnly}</td>
+        <td>${formattedOrderDate}</td>
         <td>${item.orderNo}</td>
         <td>${item.salesAgent}</td>
         <td>${
