@@ -811,21 +811,27 @@ res.status(500).json({ message: "Server error", error });
 });
 // for fulfilled
 app.get("/orders/fulfilled", async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-const fulfilledOrders = await Order.find({
-$and: [
-{ orderDate: { $regex: monthYearPattern } },
-{ orderStatus: "Order Fulfilled" }
-]
-});
-res.json(fulfilledOrders);
-} catch (error) {
+  try {
+    const { month, year } = req.query;
+console.log("fulfilled",month,year);
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },orderStatus: "Order Fulfilled",
+    });
+
+    res.json(orders);
+  } catch (error) {
 console.error("Error fetching fulfilled orders:", error);
 res.status(500).json({ message: "Server error", error });
 }    
@@ -895,21 +901,27 @@ res.status(500).json({ message: "Server error", error });
 });
 // for cancelled
 app.get("/orders/cancelled", async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-const cancelledOrders = await Order.find({
-$and: [
-{ orderDate: { $regex: monthYearPattern } },
-{ orderStatus: "Order Cancelled" }
-]
-});
-res.json(cancelledOrders);
-} catch (error) {
+  try {
+    const { month, year } = req.query;
+console.log("cancelled",month,year);
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },orderStatus: "Order Cancelled",
+    });
+
+    res.json(orders);
+  } catch (error) {
 console.error("Error fetching cancelled orders:", error);
 res.status(500).json({ message: "Server error", error });
 }  
@@ -917,19 +929,25 @@ res.status(500).json({ message: "Server error", error });
 // for disputes
 app.get("/orders/disputes", async (req, res) => {
   try {
-  const month = req.query.month;
-  const year = req.query.year;
-  if (!month || !year) {
-  return res.status(400).json({ message: "Month and year are required" });
-  }
-  const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-  const cancelledOrders = await Order.find({
-  $and: [
-  { orderDate: { $regex: monthYearPattern } },
-  { orderStatus: "Dispute" }
-  ]
-  });
-  res.json(cancelledOrders);
+    const { month, year } = req.query;
+console.log("dispute",month,year);
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },orderStatus: "Dispute",
+    });
+
+    res.json(orders);
   } catch (error) {
   console.error("Error fetching disputed orders:", error);
   res.status(500).json({ message: "Server error", error });
@@ -937,21 +955,27 @@ app.get("/orders/disputes", async (req, res) => {
   });
 // for refunded
 app.get("/orders/refunded", async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
-const refundedOrders = await Order.find({
-$and: [
-{ orderDate: { $regex: monthYearPattern } },
-{ orderStatus: "Refunded" }
-]
-});
-res.json(refundedOrders);
-} catch (error) {
+  try {
+    const { month, year } = req.query;
+console.log("refunded",month,year);
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },orderStatus: "Refunded",
+    });
+
+    res.json(orders);
+  } catch (error) {
 console.error("Error fetching cancelled orders:", error);
 res.status(500).json({ message: "Server error", error });
 }  
