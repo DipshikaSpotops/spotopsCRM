@@ -937,7 +937,6 @@ app.get('/orders/monthly', async (req, res) => {
   try {
     const { month, year, page = 1, limit = 25 } = req.query;
 
-    // Convert month name to month number for comparison
     const dateStart = new Date(`${month} 1, ${year}`);
     const dateEnd = new Date(dateStart);
     dateEnd.setMonth(dateStart.getMonth() + 1);  // Go to the next month
@@ -978,52 +977,32 @@ app.get('/orders/monthly', async (req, res) => {
       },
       {
         $addFields: {
-          cleanedOrderDateTrimmed: {
-            $trim: { input: "$cleanedOrderDate" }  // Trim leading/trailing spaces
-          }
-        }
-      },
-      {
-        $addFields: {
           parsedDate: {
             $dateFromString: {
               dateString: {
-                $replaceAll: {
-                  input: "$cleanedOrderDateTrimmed",
-                  find: "\\s+",  // Replace multiple spaces with a single space
-                  replacement: " "
-                }
+                $trim: { input: "$cleanedOrderDate" }
               },
-              format: "%d %b, %Y %H:%M"
+              // If date contains time, parse with time format, otherwise parse as date-only
+              format: {
+                $cond: {
+                  if: { $regexMatch: { input: "$cleanedOrderDate", regex: /[0-9]:[0-9]/ } },
+                  then: "%d %b, %Y %H:%M",
+                  else: "%d %b, %Y"
+                }
+              }
             }
           }
         }
       },
       {
-        $addFields: {
-          parsedDateWithoutTime: {
-            $cond: [
-              { $eq: ["$parsedDate", null] },
-              {
-                $dateFromString: {
-                  dateString: "$cleanedOrderDateTrimmed",
-                  format: "%d %b, %Y"
-                }
-              },
-              "$parsedDate"
-            ]
-          }
-        }
-      },
-      {
         $match: {
-          parsedDateWithoutTime: {
+          parsedDate: {
             $gte: dateStart,
             $lt: dateEnd
           }
         }
       },
-      { $sort: { parsedDateWithoutTime: -1 } },
+      { $sort: { parsedDate: -1 } },
       { $skip: (page - 1) * limit },
       { $limit: parseInt(limit) }
     ]);
@@ -1042,6 +1021,7 @@ app.get('/orders/monthly', async (req, res) => {
     res.status(500).send('Failed to fetch orders.');
   }
 });
+
 
 
 app.get("/orders/:orderNo", async (req, res) => {
