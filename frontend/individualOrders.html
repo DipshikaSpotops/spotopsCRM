@@ -744,9 +744,7 @@ const estGrossP = item.grossProfit || 0;
 totalGrossProfit += estGrossP;// for current page
 totalEstGP += estGrossP; //for all orders
 console.log("gps",totalGrossProfit,totalEstGP);
-const datetime = "2025-01-31T21:09:01.000Z";
-console.log("Original Date:", datetime);
-
+const datetime = item.orderDate;
 const date = new Date(datetime);
 const day = date.getUTCDate();  // Use UTC day
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
