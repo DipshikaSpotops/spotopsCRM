@@ -744,7 +744,9 @@ const estGrossP = item.grossProfit || 0;
 totalGrossProfit += estGrossP;// for current page
 totalEstGP += estGrossP; //for all orders
 console.log("gps",totalGrossProfit,totalEstGP);
-const datetime = item.orderDate;const date = new Date(datetime);
+const datetime = item.orderDate;
+console.log("date",datetime);
+const date = new Date(datetime);
   const day = date.getDate();
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const year = date.getFullYear();
