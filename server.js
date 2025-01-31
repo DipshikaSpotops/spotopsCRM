@@ -939,7 +939,7 @@ app.get('/orders/monthly', async (req, res) => {
     const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(`${year}-${month}-01`);
     endDate.setMonth(endDate.getMonth() + 1);  // Next month for end date
-
+console.log("monthly orders",month,year,startDate,endDate);
     // Use aggregation to filter and paginate
     const orders = await Order.aggregate([
       { 
