@@ -933,25 +933,47 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // monthly orders
-app.get("/orders/monthly", async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', async function () {
+//   console.log('Connected to MongoDB');
+// try {
+//    db.collection('orders').createIndex({ orderDate: 1 });
+//   console.log('Index created successfully');
+// } catch (error) {
+//   console.error('Error creating index:', error);
+// } finally {
+//   mongoose.connection.close();  
+// }
+// });
+const moment = require('moment');
 
-const monthlyOrders = await Order.find({
-orderDate: {
-$regex: monthYearPattern,
-},
-});
-res.json(monthlyOrders);
-} catch (error) {
-console.error("Error fetching orders for specified month and year:", error);
-res.status(500).json({ message: "Server error", error });
-}
+app.get("/orders/monthly", async (req, res) => {
+  try {
+    const month = req.query.month;
+    const year = req.query.year;
+
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Convert the provided month and year into start and end dates
+    const startDate = moment(`${year}-${month}-01`, "YYYY-MMM-DD").startOf('month').toDate();
+    const endDate = moment(startDate).endOf('month').toDate();
+console.log("startDate",startDate,"endDate",endDate);
+    // Query using date range with the index on `orderDate`
+    const monthlyOrders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      }
+    });
+
+    res.json(monthlyOrders);
+  } catch (error) {
+    console.error("Error fetching orders for specified month and year:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
 });
 
 
