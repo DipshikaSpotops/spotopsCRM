@@ -702,22 +702,29 @@ res.status(500).json({ message: "Server error" });
 });
 
 // for only placed orders
-app.get("/orders/placed", async (req, res) => {
+app.get('/orders/placed', async (req, res) => {
   try {
-    const month = req.query.month;
-    const year = req.query.year;
+    const { month, year } = req.query;
+console.log("placed",month,year);
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
-    const startOfMonth = new Date(`${year}-${month}-01`);
-    const endOfMonth = new Date(startDate);
-    const placedOrders = await Order.find({
-      orderDate: { $gte: startOfMonth, $lt: endOfMonth },
-      orderStatus: "Placed",
+
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },orderStatus: "Placed",
     });
-    res.json(placedOrders);
+
+    res.json(orders);
   } catch (error) {
-    console.error("Error fetching placed orders:", error);
+    console.error("Error fetching placed orders for specified month and year:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
