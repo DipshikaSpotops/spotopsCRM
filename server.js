@@ -933,25 +933,41 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // monthly orders
-app.get("/orders/monthly", async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
-const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
+app.get('/orders/monthly', async (req, res) => {
+  try {
+    const { month, year, page = 1, limit = 25 } = req.query;
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(`${year}-${month}-01`);
+    endDate.setMonth(endDate.getMonth() + 1);  // Next month for end date
 
-const monthlyOrders = await Order.find({
-orderDate: {
-$regex: monthYearPattern,
-},
-});
-res.json(monthlyOrders);
-} catch (error) {
-console.error("Error fetching orders for specified month and year:", error);
-res.status(500).json({ message: "Server error", error });
-}
+    // Use aggregation to filter and paginate
+    const orders = await Order.aggregate([
+      { 
+        $match: { 
+          orderDate: { 
+            $gte: startDate, 
+            $lt: endDate 
+          } 
+        } 
+      },
+      { $sort: { orderDate: -1 } },  // Sort by latest orders first
+      { $skip: (page - 1) * limit },  // Skip documents for pagination
+      { $limit: parseInt(limit) }  // Limit the number of documents returned
+    ]);
+
+    const totalCount = await Order.countDocuments({
+      orderDate: { $gte: startDate, $lt: endDate }
+    });
+
+    res.status(200).json({
+      orders,
+      totalPages: Math.ceil(totalCount / limit),
+      currentPage: page
+    });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).send('Failed to fetch orders.');
+  }
 });
 
 
