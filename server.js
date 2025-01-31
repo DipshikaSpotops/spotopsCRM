@@ -936,81 +936,116 @@ res.status(500).json({ message: "Server error", error });
 app.get('/orders/monthly', async (req, res) => {
   try {
     const { month, year, page = 1, limit = 25 } = req.query;
-
-    // Convert month string to correct format (e.g., Jan -> 01)
-    const monthMap = {
-      Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05", Jun: "06",
-      Jul: "07", Aug: "08", Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-    };
-    const monthNumber = monthMap[month];
-    const startDate = new Date(`${year}-${monthNumber}-01`);
-    const endDate = new Date(`${year}-${monthNumber}-01`);
-    endDate.setMonth(endDate.getMonth() + 1);
-
-    console.log("Fetching orders for month:", month, year, startDate, endDate);
-
+    console.log("monthly",month,year)
+    // Use aggregation to clean and filter dates properly
     const orders = await Order.aggregate([
       {
         $addFields: {
-          orderDateParsed: {
+          cleanedOrderDate: {
             $dateFromString: {
               dateString: {
                 $replaceAll: {
                   input: "$orderDate",
-                  find: "th",  // Remove ordinal suffixes like 'th', 'st', etc.
+                  find: /(st|nd|rd|th)/g,  // Strip suffixes like '1st', '2nd', '3rd', '4th'
                   replacement: ""
                 }
               },
-              format: "%d %b, %Y"  // Format to parse e.g., '28 Jan, 2025'
+              format: "%d %b, %Y %H:%M"  // Handle '1 Aug, 2024 9:12' format
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          fallbackOrderDate: {
+            $cond: {
+              if: { $eq: ["$cleanedOrderDate", null] },
+              then: {
+                $dateFromString: {
+                  dateString: {
+                    $replaceAll: {
+                      input: "$orderDate",
+                      find: /(st|nd|rd|th)/g,
+                      replacement: ""
+                    }
+                  },
+                  format: "%d %b, %Y"  // Handle '1 Aug, 2024' format
+                }
+              },
+              else: "$cleanedOrderDate"
             }
           }
         }
       },
       {
         $match: {
-          orderDateParsed: {
-            $gte: startDate,
-            $lt: endDate
+          fallbackOrderDate: {
+            $gte: new Date(`${year}-${month}-01`),
+            $lt: new Date(`${year}-${month}-01`).setMonth(new Date(`${year}-${month}-01`).getMonth() + 1)
           }
         }
       },
-      { $sort: { orderDateParsed: -1 } },  // Sort by parsed date
-      { $skip: (page - 1) * limit },  // Paginate
+      { $sort: { fallbackOrderDate: -1 } },
+      { $skip: (page - 1) * limit },
       { $limit: parseInt(limit) }
     ]);
 
     const totalCount = await Order.aggregate([
       {
         $addFields: {
-          orderDateParsed: {
+          cleanedOrderDate: {
             $dateFromString: {
               dateString: {
                 $replaceAll: {
                   input: "$orderDate",
-                  find: "th",  // Handle suffixes
+                  find: /(st|nd|rd|th)/g,
                   replacement: ""
                 }
               },
-              format: "%d %b, %Y"
+              format: "%d %b, %Y %H:%M"
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          fallbackOrderDate: {
+            $cond: {
+              if: { $eq: ["$cleanedOrderDate", null] },
+              then: {
+                $dateFromString: {
+                  dateString: {
+                    $replaceAll: {
+                      input: "$orderDate",
+                      find: /(st|nd|rd|th)/g,
+                      replacement: ""
+                    }
+                  },
+                  format: "%d %b, %Y"
+                }
+              },
+              else: "$cleanedOrderDate"
             }
           }
         }
       },
       {
         $match: {
-          orderDateParsed: {
-            $gte: startDate,
-            $lt: endDate
+          fallbackOrderDate: {
+            $gte: new Date(`${year}-${month}-01`),
+            $lt: new Date(`${year}-${month}-01`).setMonth(new Date(`${year}-${month}-01`).getMonth() + 1)
           }
         }
       },
       { $count: "totalCount" }
     ]);
 
+    const totalPages = totalCount.length ? Math.ceil(totalCount[0].totalCount / limit) : 0;
+
     res.status(200).json({
       orders,
-      totalPages: Math.ceil((totalCount[0]?.totalCount || 0) / limit),
-      currentPage: page
+      totalPages,
+      currentPage: parseInt(page)
     });
   } catch (error) {
     console.error('Error fetching orders:', error);
