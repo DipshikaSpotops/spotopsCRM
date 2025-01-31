@@ -553,7 +553,7 @@ $(document).ready(async function () {
 let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
-let isFetching = false;
+
 // Sorting Order Object
 var team, role;
 let sortOrder = {
@@ -888,38 +888,30 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 console.log("month",month,"year",year);
 //orders for the current month
-async function fetchOrders(page = 1) {
-  if (isFetching) return;
-  isFetching = true;
+try {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 
-  try {
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-      params: {
-        month: month,
-        year: year,
-        page,
-        limit: rowsPerPage
-      }
-    });
-    const { orders, totalPages } = response.data;
-    renderTableRows(orders);  
-    currentPage = page;
-    if (currentPage >= totalPages) {
-      window.removeEventListener('scroll', handleScroll);
-    }
-  } catch (error) {
-    console.error("Error fetching paginated orders:", error);
-  } finally {
-    isFetching = false;
-  }
+if (ordersResponse.status !== 200) {
+throw new Error("Failed to fetch current month's orders");
 }
-function handleScroll() {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-    fetchOrders(currentPage + 1);  // Fetch next page when scrolled to bottom
-  }
+
+
+allOrders = ordersResponse.data;
+const ordersWithMultipleAdditionalInfo = allOrders
+  .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
+  .map(order => order.orderNo);
+console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
+var totalOrders = allOrders.length;
+console.log("totalOrders",totalOrders)
+document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+sortedData = sortOrdersByOrderNoDesc(allOrders);
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+} catch (error) {
+console.error("Error fetching current month's orders:", error);
 }
-window.addEventListener('scroll', handleScroll);
-fetchOrders(1); 
 
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();

@@ -933,95 +933,26 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // monthly orders
-app.get('/orders/monthly', async (req, res) => {
-  try {
-    const { month, year, page = 1, limit = 25 } = req.query;
+app.get("/orders/monthly", async (req, res) => {
+try {
+const month = req.query.month;
+const year = req.query.year;
+if (!month || !year) {
+return res.status(400).json({ message: "Month and year are required" });
+}
+const monthYearPattern = new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s${month},\\s${year}\\b`, 'i');
 
-    const dateStart = new Date(`${month} 1, ${year}`);
-    const dateEnd = new Date(dateStart);
-    dateEnd.setMonth(dateStart.getMonth() + 1);  // Go to the next month
-
-    const orders = await Order.aggregate([
-      {
-        $addFields: {
-          cleanedOrderDate: {
-            $trim: {
-              input: {
-                $replaceAll: {
-                  input: {
-                    $replaceAll: {
-                      input: {
-                        $replaceAll: {
-                          input: {
-                            $replaceAll: {
-                              input: "$orderDate",
-                              find: "st",
-                              replacement: ""
-                            }
-                          },
-                          find: "nd",
-                          replacement: ""
-                        }
-                      },
-                      find: "rd",
-                      replacement: ""
-                    }
-                  },
-                  find: "th",
-                  replacement: ""
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        $addFields: {
-          parsedDate: {
-            $dateFromString: {
-              dateString: {
-                $trim: { input: "$cleanedOrderDate" }
-              },
-              // If date contains time, parse with time format, otherwise parse as date-only
-              format: {
-                $cond: {
-                  if: { $regexMatch: { input: "$cleanedOrderDate", regex: /[0-9]:[0-9]/ } },
-                  then: "%d %b, %Y %H:%M",
-                  else: "%d %b, %Y"
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        $match: {
-          parsedDate: {
-            $gte: dateStart,
-            $lt: dateEnd
-          }
-        }
-      },
-      { $sort: { parsedDate: -1 } },
-      { $skip: (page - 1) * limit },
-      { $limit: parseInt(limit) }
-    ]);
-
-    const totalCount = await Order.countDocuments({
-      orderDate: { $gte: dateStart, $lt: dateEnd }
-    });
-
-    res.status(200).json({
-      orders,
-      totalPages: Math.ceil(totalCount / limit),
-      currentPage: parseInt(page)
-    });
-  } catch (error) {
-    console.error('Error fetching orders:', error);
-    res.status(500).send('Failed to fetch orders.');
-  }
+const monthlyOrders = await Order.find({
+orderDate: {
+$regex: monthYearPattern,
+},
 });
-
+res.json(monthlyOrders);
+} catch (error) {
+console.error("Error fetching orders for specified month and year:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
 
 
 app.get("/orders/:orderNo", async (req, res) => {
