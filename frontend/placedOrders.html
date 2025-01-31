@@ -1005,7 +1005,24 @@ ds = "DS Call";
 ds = "";
 }
 const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+const date = new Date(datetime);
+
+  const day = date.getDate();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const year = date.getFullYear();
+
+  const suffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  var formattedOrderdate=  `${day}${suffix(day)} ${monthNames[date.getMonth()]}, ${year}`;
+
 // Append data to the table with optional chaining and default values
 $("#infoTable").append(
 `<tr data-id="${item.orderNo}">
@@ -1019,7 +1036,7 @@ class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
 Cancel
 </button>
 </td>
-<td>${dateOnly || ''}</td>
+<td>${formattedOrderdate || ''}</td>
 <td>${item.orderNo || ''}</td>
 <td>${item.salesAgent || ''}</td>
 <td>
