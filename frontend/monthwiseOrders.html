@@ -567,29 +567,29 @@ orderStatus: "asc",
 email: "asc",
 };
 
-function parseCustomDate(dateString) {
-const months = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-Nov: "11", Dec: "12"
-};
+// function parseCustomDate(dateString) {
+// const months = {
+// Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+// Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+// Nov: "11", Dec: "12"
+// };
 
-// Extract parts from the string (day, month, year, time)
-const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+// // Extract parts from the string (day, month, year, time)
+// const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
 
-if (parts) {
-const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
-const month = months[parts[2]];
-const year = parts[3];
-const hour = parts[4];
-const minute = parts[5];
+// if (parts) {
+// const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
+// const month = months[parts[2]];
+// const year = parts[3];
+// const hour = parts[4];
+// const minute = parts[5];
 
-// Return a valid date string for comparison
-return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-}
+// // Return a valid date string for comparison
+// return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+// }
 
-return null;
-}
+// return null;
+// }
 // Sort the table by the Order Date column
 function sortTableByDate() {
 const table = $("#infoTable");
@@ -708,12 +708,12 @@ ${editButton}
 
 const yardlength = item.additionalInfo.length;
 const datetime = item.orderDate;
-const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+// const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
 // console.log(dateOnly);
 
 $("#infoTable").append(`
 <tr>
-<td>${dateOnly}</td>
+<td>${item.orderDate}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
 <td>Customer Name: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}<br>
@@ -1037,35 +1037,31 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");    
+  $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
+  const monthYear = $("#monthYearPicker").val(); 
+  const [year, monthNumber] = monthYear.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+
+  try {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    allOrders = ordersResponse.data;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  } catch (error) {
+    console.error("Error fetching current month's orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
+
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
