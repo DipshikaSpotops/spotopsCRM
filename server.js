@@ -936,7 +936,7 @@ res.status(500).json({ message: "Server error", error });
 app.get('/orders/monthly', async (req, res) => {
   try {
     const { month, year, page = 1, limit = 25 } = req.query;
-    
+
     // Convert month name to month number for comparison
     const dateStart = new Date(`${month} 1, ${year}`);
     const dateEnd = new Date(dateStart);
@@ -946,29 +946,40 @@ app.get('/orders/monthly', async (req, res) => {
       {
         $addFields: {
           cleanedOrderDate: {
-            $replaceAll: {
+            $trim: {
               input: {
                 $replaceAll: {
                   input: {
                     $replaceAll: {
                       input: {
                         $replaceAll: {
-                          input: "$orderDate",
-                          find: "st",
+                          input: {
+                            $replaceAll: {
+                              input: "$orderDate",
+                              find: "st",
+                              replacement: ""
+                            }
+                          },
+                          find: "nd",
                           replacement: ""
                         }
                       },
-                      find: "nd",
+                      find: "rd",
                       replacement: ""
                     }
                   },
-                  find: "rd",
+                  find: "th",
                   replacement: ""
                 }
-              },
-              find: "th",
-              replacement: ""
+              }
             }
+          }
+        }
+      },
+      {
+        $addFields: {
+          cleanedOrderDateTrimmed: {
+            $trim: { input: "$cleanedOrderDate" }  // Trim leading/trailing spaces
           }
         }
       },
@@ -976,7 +987,13 @@ app.get('/orders/monthly', async (req, res) => {
         $addFields: {
           parsedDate: {
             $dateFromString: {
-              dateString: "$cleanedOrderDate",
+              dateString: {
+                $replaceAll: {
+                  input: "$cleanedOrderDateTrimmed",
+                  find: "\\s+",  // Replace multiple spaces with a single space
+                  replacement: " "
+                }
+              },
               format: "%d %b, %Y %H:%M"
             }
           }
@@ -989,7 +1006,7 @@ app.get('/orders/monthly', async (req, res) => {
               { $eq: ["$parsedDate", null] },
               {
                 $dateFromString: {
-                  dateString: "$cleanedOrderDate",
+                  dateString: "$cleanedOrderDateTrimmed",
                   format: "%d %b, %Y"
                 }
               },
@@ -1011,78 +1028,13 @@ app.get('/orders/monthly', async (req, res) => {
       { $limit: parseInt(limit) }
     ]);
 
-    const totalCount = await Order.aggregate([
-      {
-        $addFields: {
-          cleanedOrderDate: {
-            $replaceAll: {
-              input: {
-                $replaceAll: {
-                  input: {
-                    $replaceAll: {
-                      input: {
-                        $replaceAll: {
-                          input: "$orderDate",
-                          find: "st",
-                          replacement: ""
-                        }
-                      },
-                      find: "nd",
-                      replacement: ""
-                    }
-                  },
-                  find: "rd",
-                  replacement: ""
-                }
-              },
-              find: "th",
-              replacement: ""
-            }
-          }
-        }
-      },
-      {
-        $addFields: {
-          parsedDate: {
-            $dateFromString: {
-              dateString: "$cleanedOrderDate",
-              format: "%d %b, %Y %H:%M"
-            }
-          }
-        }
-      },
-      {
-        $addFields: {
-          parsedDateWithoutTime: {
-            $cond: [
-              { $eq: ["$parsedDate", null] },
-              {
-                $dateFromString: {
-                  dateString: "$cleanedOrderDate",
-                  format: "%d %b, %Y"
-                }
-              },
-              "$parsedDate"
-            ]
-          }
-        }
-      },
-      {
-        $match: {
-          parsedDateWithoutTime: {
-            $gte: dateStart,
-            $lt: dateEnd
-          }
-        }
-      },
-      { $count: "totalCount" }
-    ]);
-
-    const totalPages = totalCount.length ? Math.ceil(totalCount[0].totalCount / limit) : 0;
+    const totalCount = await Order.countDocuments({
+      orderDate: { $gte: dateStart, $lt: dateEnd }
+    });
 
     res.status(200).json({
       orders,
-      totalPages,
+      totalPages: Math.ceil(totalCount / limit),
       currentPage: parseInt(page)
     });
   } catch (error) {
