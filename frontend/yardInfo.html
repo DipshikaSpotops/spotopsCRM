@@ -674,7 +674,7 @@ const date = new Date(item.orderDate);
   var formattedOrderDate =  `${day}${suffix(day)} ${monthNames[date.getMonth()]}, ${year}`;
 $("#infoTable").append(`
 <tr>
-<td>${dateOnly}</td>
+<td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
 <td>${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}</td>
