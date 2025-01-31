@@ -63,7 +63,7 @@ console.error("Connection failed", err);
 });
 const db = mongoose.connection;
 try {
-  await db.collection('orders').createIndex({ orderDate: 1 });
+   db.collection('orders').createIndex({ orderDate: 1 });
   console.log('Index created successfully');
 } catch (error) {
   console.error('Error creating index:', error);
