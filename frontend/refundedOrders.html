@@ -775,7 +775,7 @@ return parts[1]?.split(" on ")[0] || "Unknown";
 }
 </td>
 <td>${custRefundDatedateOnly}</td>
-<td>${item.custRefundedAmount}</td>
+<td>${item.custRefAmount || item.custRefundedAmount}</td>
 <td>${item.orderStatus}</td>
 <td>
 ${
