@@ -936,56 +936,77 @@ res.status(500).json({ message: "Server error", error });
 app.get('/orders/monthly', async (req, res) => {
   try {
     const { month, year, page = 1, limit = 25 } = req.query;
-    console.log("monthly",month,year)
-    // Use aggregation to clean and filter dates properly
+    
+    // Convert month name to month number for comparison
+    const dateStart = new Date(`${month} 1, ${year}`);
+    const dateEnd = new Date(dateStart);
+    dateEnd.setMonth(dateStart.getMonth() + 1);  // Go to the next month
+
     const orders = await Order.aggregate([
       {
         $addFields: {
           cleanedOrderDate: {
-            $dateFromString: {
-              dateString: {
+            $replaceAll: {
+              input: {
                 $replaceAll: {
-                  input: "$orderDate",
-                  find: /(st|nd|rd|th)/g,  // Strip suffixes like '1st', '2nd', '3rd', '4th'
+                  input: {
+                    $replaceAll: {
+                      input: {
+                        $replaceAll: {
+                          input: "$orderDate",
+                          find: "st",
+                          replacement: ""
+                        }
+                      },
+                      find: "nd",
+                      replacement: ""
+                    }
+                  },
+                  find: "rd",
                   replacement: ""
                 }
               },
-              format: "%d %b, %Y %H:%M"  // Handle '1 Aug, 2024 9:12' format
+              find: "th",
+              replacement: ""
             }
           }
         }
       },
       {
         $addFields: {
-          fallbackOrderDate: {
-            $cond: {
-              if: { $eq: ["$cleanedOrderDate", null] },
-              then: {
+          parsedDate: {
+            $dateFromString: {
+              dateString: "$cleanedOrderDate",
+              format: "%d %b, %Y %H:%M"
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          parsedDateWithoutTime: {
+            $cond: [
+              { $eq: ["$parsedDate", null] },
+              {
                 $dateFromString: {
-                  dateString: {
-                    $replaceAll: {
-                      input: "$orderDate",
-                      find: /(st|nd|rd|th)/g,
-                      replacement: ""
-                    }
-                  },
-                  format: "%d %b, %Y"  // Handle '1 Aug, 2024' format
+                  dateString: "$cleanedOrderDate",
+                  format: "%d %b, %Y"
                 }
               },
-              else: "$cleanedOrderDate"
-            }
+              "$parsedDate"
+            ]
           }
         }
       },
       {
         $match: {
-          fallbackOrderDate: {
-            $gte: new Date(`${year}-${month}-01`),
-            $lt: new Date(`${year}-${month}-01`).setMonth(new Date(`${year}-${month}-01`).getMonth() + 1)
+          parsedDateWithoutTime: {
+            $gte: dateStart,
+            $lt: dateEnd
           }
         }
       },
-      { $sort: { fallbackOrderDate: -1 } },
+      { $sort: { parsedDateWithoutTime: -1 } },
       { $skip: (page - 1) * limit },
       { $limit: parseInt(limit) }
     ]);
@@ -994,14 +1015,37 @@ app.get('/orders/monthly', async (req, res) => {
       {
         $addFields: {
           cleanedOrderDate: {
-            $dateFromString: {
-              dateString: {
+            $replaceAll: {
+              input: {
                 $replaceAll: {
-                  input: "$orderDate",
-                  find: /(st|nd|rd|th)/g,
+                  input: {
+                    $replaceAll: {
+                      input: {
+                        $replaceAll: {
+                          input: "$orderDate",
+                          find: "st",
+                          replacement: ""
+                        }
+                      },
+                      find: "nd",
+                      replacement: ""
+                    }
+                  },
+                  find: "rd",
                   replacement: ""
                 }
               },
+              find: "th",
+              replacement: ""
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          parsedDate: {
+            $dateFromString: {
+              dateString: "$cleanedOrderDate",
               format: "%d %b, %Y %H:%M"
             }
           }
@@ -1009,31 +1053,25 @@ app.get('/orders/monthly', async (req, res) => {
       },
       {
         $addFields: {
-          fallbackOrderDate: {
-            $cond: {
-              if: { $eq: ["$cleanedOrderDate", null] },
-              then: {
+          parsedDateWithoutTime: {
+            $cond: [
+              { $eq: ["$parsedDate", null] },
+              {
                 $dateFromString: {
-                  dateString: {
-                    $replaceAll: {
-                      input: "$orderDate",
-                      find: /(st|nd|rd|th)/g,
-                      replacement: ""
-                    }
-                  },
+                  dateString: "$cleanedOrderDate",
                   format: "%d %b, %Y"
                 }
               },
-              else: "$cleanedOrderDate"
-            }
+              "$parsedDate"
+            ]
           }
         }
       },
       {
         $match: {
-          fallbackOrderDate: {
-            $gte: new Date(`${year}-${month}-01`),
-            $lt: new Date(`${year}-${month}-01`).setMonth(new Date(`${year}-${month}-01`).getMonth() + 1)
+          parsedDateWithoutTime: {
+            $gte: dateStart,
+            $lt: dateEnd
           }
         }
       },
