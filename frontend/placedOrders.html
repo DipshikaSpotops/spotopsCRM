@@ -1019,7 +1019,7 @@ const suffix = (day) => {
     default: return "th";
   }
 };
-const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+var formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
 // Append data to the table with optional chaining and default values
 $("#infoTable").append(
 `<tr data-id="${item.orderNo}">
@@ -1033,7 +1033,7 @@ class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
 Cancel
 </button>
 </td>
-<td>${formattedOrderdate || ''}</td>
+<td>${formattedOrderDate || ''}</td>
 <td>${item.orderNo || ''}</td>
 <td>${item.salesAgent || ''}</td>
 <td>
