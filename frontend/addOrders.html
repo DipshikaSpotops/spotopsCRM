@@ -174,6 +174,7 @@ text-align: center;
 color: black;
 background-color: grey;
 border: none;
+display: none;
 }
 #orderDate {
 margin: 12% 66%;
@@ -183,6 +184,7 @@ color: grey;
 height: 5vh;
 text-align: center;
 background-color: black;
+display: none;
 }
 /* Dark Mode Styles */
 /* for dark mode */
@@ -418,8 +420,10 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-<h2 style="margin: 0% 0% -3% 18%;color: grey;">ADD NEW ORDER</h2>
-<div id="firstRow" style="display: flex; margin: 0% 28%;">
+<h2 style="    color: grey;
+margin-left: 45%;
+margin-top: -3%;">ADD NEW ORDER</h2>
+<div id="firstRow">
 <div>
 <input type="text" id="salesAgent" required readonly/>
 </div>
