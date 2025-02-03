@@ -378,11 +378,26 @@ ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
 yardInfoHtml += "<td></td>";
 }
 }
+const datetime = item.orderDate;
+const date = new Date(datetime);
+const day = date.getUTCDate();  // Use UTC day
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const year = date.getUTCFullYear();  // Use UTC year
 
+const suffix = (day) => {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+};
+const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
 $("#yardInfoTable").append(
 `<tr>
 <td>${item.orderNo}</td>
-<td>${item.orderDate}</td>
+<td>${formattedOrderDate}</td>
 ${yardInfoHtml}
 </tr>`
 );

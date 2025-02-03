@@ -654,9 +654,23 @@ console.log("filtered",filteredOrders);
 const ordersForPage = filteredOrders.slice(start, end);
 $('#infoTable').empty(); // Clear the table
 ordersForPage.forEach((item) => {
-const orderDate = item.orderDate || "";
-const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
-const orderNo = item.orderNo || "";
+  const datetime = item.orderDate;
+const date = new Date(datetime);
+const day = date.getUTCDate();  // Use UTC day
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const year = date.getUTCFullYear();  // Use UTC year
+
+const suffix = (day) => {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+};
+const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+  const orderNo = item.orderNo || "";
 
 item.additionalInfo.forEach((info, index) => {
 const trackingNo = info.trackingNo || "";
@@ -675,7 +689,7 @@ console.log("labelCreationDateOnly",labelCreationDateOnly);
 if (trackingNo.length > 0) {
 $("#infoTable").append(`
 <tr>
-<td>${dateOnly}</td>
+<td>${formattedOrderDate}</td>
 <td>${orderNo}</td>
 <td>${trackingNo}</td>
 <td>${labelCreationDateOnly || ""}</td>
