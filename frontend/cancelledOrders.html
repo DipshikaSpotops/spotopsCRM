@@ -1009,11 +1009,11 @@ $("#filterButton").click(async function () {
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");    
 $("#loadingMessage").show();
-const monthYear = $("#monthYearPicker").val(); 
-localStorage.setItem('selectedMonthYear', monthYear); 
+const monthYear = $("#monthYearPicker").val();  
 const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
+localStorage.setItem('selectedMonthYear', monthYear);
 try {
 const ordersResponse = await axios.get(`https://www.spotops360.com/orders/cancelled?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
