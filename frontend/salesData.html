@@ -716,21 +716,22 @@ sortTable(index, type);
 }
 });
 function calculateAndUpdateTotals(orders) {
-let totalEstGP = 0;
-let totalCurrentGP = 0;
-let totalActualGP = 0;
+    let totalEstGP = 0;
+    let totalCurrentGP = 0;
+    let totalActualGP = 0;
 
-orders.forEach(order => {
-totalEstGP += order.grossProfit || 0; // Use backend `grossProfit` if available
-totalCurrentGP += calculateCurrentGP(order); // Use the dynamically calculated `currentGP`
-totalActualGP += order.actualGP || 0; // Use backend `actualGP` if available
-});
+    orders.forEach(order => {
+        totalEstGP += order.grossProfit || 0;
+        totalCurrentGP += calculateCurrentGP(order);
+        totalActualGP += order.actualGP || 0;
+    });
 
-// Update the totals in the UI
-document.getElementById("totalEstGP").innerHTML = `Total Est GP: $${totalEstGP.toFixed(2)}`;
-document.getElementById("totalCurrentGP").innerHTML = `Total Current GP: $${totalCurrentGP.toFixed(2)}`;
-document.getElementById("totalActualGP").innerHTML = `Total Actual GP: $${totalActualGP.toFixed(2)}`;
+    // Update the totals in the UI
+    document.getElementById("totalEstGP").innerHTML = `<i class="fas fa-chart-line"></i> Total Est GP: <strong>$${totalEstGP.toFixed(2)}</strong>`;
+    document.getElementById("totalCurrentGP").innerHTML = `<i class="fas fa-dollar-sign"></i> Total Current GP: <strong>$${totalCurrentGP.toFixed(2)}</strong>`;
+    document.getElementById("totalActualGP").innerHTML = `<i class="fas fa-check-circle"></i> Total Actual GP: <strong>$${totalActualGP.toFixed(2)}</strong>`;
 }
+
 
 function renderFilteredOrders(agentName) {
 // Filter orders based on the salesAgent field
@@ -1114,34 +1115,42 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+    $("body").append('<div class="modal-overlay"></div>');
+    $("body").addClass("modal-active");
+    $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
+    const monthYear = $("#monthYearPicker").val();
+    const [year, monthNumber] = monthYear.split("-");
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = months[parseInt(monthNumber, 10) - 1];
+
+    try {
+        const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+
+        if (ordersResponse.status !== 200) {
+            throw new Error("Failed to fetch filtered orders");
+        }
+
+        // Update the orders and display them
+        allOrders = ordersResponse.data;
+        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+
+        // Recalculate totals and update them
+        calculateAndUpdateTotals(allOrders);
+
+        // Render the filtered orders
+        renderTableRows(1, allOrders);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+    } catch (error) {
+        console.error("Error fetching filtered orders:", error);
+    } finally {
+        // Hide the loading message and overlay
+        $("#loadingMessage").hide();
+        $(".modal-overlay").remove();
+        $("body").removeClass("modal-active");
+    }
 });
 
 $("#logoutLink").click(function () {
@@ -1309,3 +1318,4 @@ fetchNotifications();
 </script>
 </body>
 </html>
+bro filter button is not working for the above html page and also on click of filter button total est gp,total current gp, total actual gp inside id=gpTotals should update accordingly
