@@ -517,7 +517,7 @@ window.location.href = "login_signup.html";
 <div>
 <h1 class="fixed-header" style="position: fixed; z-index:1;background-color: white;width: 85.4%;margin-left: -3%;margin-top: -1%;text-align: center;">Sales Data- Monthly</h1>
 <select name="userDropdowm" id="userDropdown"  class="fixed-header" style="height: 3vh; z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 23%;margin-top: -0.5%;text-align: center;width: 9%;border-radius:18px;">
-<option value="">Select Sales-agent</option>
+<option value="Select">Select Sales-agent</option>
 <option value="All">All</option>
 <option value="John">John</option>
 <option value="Mark">Mark</option>
@@ -1146,10 +1146,11 @@ $("#filterButton").click(async function () {
 
         // Recalculate totals and update them
         calculateAndUpdateTotals(allOrders);
-
+     $("#userDropdown").val("Select");
         // Render the filtered orders
         renderTableRows(1, allOrders);
         createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+
     } catch (error) {
         console.error("Error fetching filtered orders:", error);
     } finally {
