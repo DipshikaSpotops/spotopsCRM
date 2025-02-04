@@ -781,7 +781,8 @@ ordersForPage.forEach(order => {
 const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
 let actualG = order.actualGP;
 if(actualG !== undefined){
-  actualG = (order.actualGP).toFixed(2);
+  actualG = order.actualGP;
+  actualG.toFixed(2)
 }else{
   actualG = 0;
 }
