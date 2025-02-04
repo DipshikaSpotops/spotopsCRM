@@ -1013,8 +1013,8 @@ $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
-const savedPage = localStorage.getItem('currentPage');
-    currentPage = savedPage ? parseInt(savedPage) : 1;
+const savedMonth = localStorage.getItem('currentMonth');
+    currentPage = savedMonth ? parseInt(savedMonth) : 1;
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage));
 $(".sidebar .nav-link").on("click", function () {

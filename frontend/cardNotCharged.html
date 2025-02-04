@@ -845,6 +845,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
 // Filter by month and year
 $("#filterButton").click(async function () {
     const monthYear = $("#monthYearPicker").val();
+    localStorage.setItem('selectedMonthYear', monthYear); 
     const [year, monthNumber] = monthYear.split("-");
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const month = months[parseInt(monthNumber, 10) - 1];

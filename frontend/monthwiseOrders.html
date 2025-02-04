@@ -1113,7 +1113,7 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-    const monthYear = $("#monthYearPicker").val();  // e.g., "2025-01"
+    const monthYear = $("#monthYearPicker").val();  
     localStorage.setItem('selectedMonthYear', monthYear); 
     $("#loadingMessage").show(); 
     await fetchOrdersForSelectedMonth(monthYear);
