@@ -1059,6 +1059,15 @@ $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
+const savedPage = localStorage.getItem('currentPage');
+    currentPage = savedPage ? parseInt(savedPage) : 1;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+$(".sidebar .nav-link").on("click", function () {
+    localStorage.removeItem('selectedMonthYear');
+    localStorage.removeItem('currentPage');
+    console.log("Cleared saved month and page number");
+});
 // notification
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
