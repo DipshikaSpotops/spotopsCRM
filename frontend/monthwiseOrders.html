@@ -1062,8 +1062,10 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
     const monthYear = $("#monthYearPicker").val();  // e.g., "2025-01"
-    localStorage.setItem('selectedMonthYear', monthYear);  // Store in localStorage
+    localStorage.setItem('selectedMonthYear', monthYear); 
+    $("#loadingMessage").show(); 
     await fetchOrdersForSelectedMonth(monthYear);
+    $("#loadingMessage").hide();
 });
 
 // On page load, check for previously selected month/year
@@ -1094,6 +1096,7 @@ async function fetchOrdersForSelectedMonth(monthYear) {
         document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrders.length}`;
         renderTableRows(1, allOrders);
         createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
     } catch (error) {
         console.error("Error fetching current month's orders:", error);
     }
