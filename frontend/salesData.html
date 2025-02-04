@@ -779,7 +779,12 @@ $("#infoTable").empty(); // Clear the table
 
 ordersForPage.forEach(order => {
 const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
-const actualG = order.actualGP;
+let actualG = order.actualGP;
+if(actualG !== undefined){
+  actualG = (order.actualGP).toFixed(2);
+}else{
+  actualG = 0;
+}
 console.log("actualG",actualG);
 $("#infoTable").append(`
 <tr>
