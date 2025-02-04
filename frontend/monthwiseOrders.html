@@ -132,6 +132,9 @@ margin: 0% 30%;
   margin-left: -1.5%;
 }
 @media (max-width: 768px) {
+  #showTotalOrders{
+    margin: 0% 30%;
+  }
 .sidebar {
 transform: translateX(-100%);
 width: 70%;
@@ -147,12 +150,18 @@ padding: 10px;
 display: block;
 }
 #filterAndTotal {
-  margin-top: 11%;
+  margin-top: 2%;
   margin-left: -3.5%;
     }
     #searchInput {
         width: 80%;
         margin: 10px;
+    }
+    .filter-bar{
+      width: 23%;
+    }
+    #pagination-controls{
+    margin-top: 20%;
     }
 }
 .dark-mode .table {
@@ -375,6 +384,9 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
+#pagination-controls {
+margin-top: 5%;
+}
 @media (max-width: 480px) {
 #pagination-controls {
 font-size: 14px;
@@ -551,7 +563,7 @@ placeholder="Search..."
 />
 </div>
 <!--  controls -->
-<div id="pagination-controls" style="margin-top: 5%;">
+<div id="pagination-controls">
     <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
 <div id="filterAndTotal">
