@@ -348,6 +348,15 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
+@media (max-width: 480px) {
+#pagination-controls {
+font-size: 14px;
+}
+.table-responsive {
+width: 100%;
+font-size: 12px;
+}
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -829,10 +838,11 @@ paginationControls.append(`<button class="previousNext" id="nextPage" ${currentP
 
 // Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    const page = $(this).data('page');
+    localStorage.setItem('currentPage', page);
+    currentPage = page;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 });
 
 // "Previous" and "Next" button functionality
@@ -1052,33 +1062,42 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
     const monthYear = $("#monthYearPicker").val();  // e.g., "2025-01"
-    const [year, month] = monthYear.split("-");  // Split year and month
+    localStorage.setItem('selectedMonthYear', monthYear);  // Store in localStorage
+    await fetchOrdersForSelectedMonth(monthYear);
+});
+
+// On page load, check for previously selected month/year
+$(document).ready(function () {
+    const savedMonthYear = localStorage.getItem('selectedMonthYear');
+    if (savedMonthYear) {
+        $("#monthYearPicker").val(savedMonthYear);
+        fetchOrdersForSelectedMonth(savedMonthYear);  // Automatically fetch orders
+    }
+    const savedPage = localStorage.getItem('currentPage');
+    currentPage = savedPage ? parseInt(savedPage) : 1;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+});
+
+async function fetchOrdersForSelectedMonth(monthYear) {
+    const [year, month] = monthYear.split("-");
     try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
+        const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
 
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
+        if (ordersResponse.status !== 200) {
+            throw new Error("Failed to fetch current month's orders");
+        }
+
+        allOrders = ordersResponse.data;
+        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrders.length}`;
+        renderTableRows(1, allOrders);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    } catch (error) {
+        console.error("Error fetching current month's orders:", error);
+    }
 }
-
-
-allOrders = ordersResponse.data;
-const ordersWithMultipleAdditionalInfo = allOrders
-  .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
-  .map(order => order.orderNo);
-console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
-var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-}
-
-});
 
 
 $("#logoutLink").click(function () {
