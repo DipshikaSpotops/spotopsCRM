@@ -1273,7 +1273,7 @@ window.location.href = "login_signup.html";
 });
 const savedPage = localStorage.getItem('currentPage');
     currentPage = savedPage ? parseInt(savedPage) : 1;
-    renderTableRows(currentPage);
+    renderTable(currentPage);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 $(".sidebar .nav-link").on("click", function () {
     localStorage.removeItem('selectedMonthYear');
