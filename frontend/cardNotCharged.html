@@ -743,7 +743,7 @@ console.log("yard shipping",shippingValueYard);
                 yardInfoHtml += "<td></td>"; // Empty cell for missing yards
             }
         }
-        const datetime = order.orderDate;
+        const datetime = item.orderDate;
 const date = new Date(datetime);
 const day = date.getUTCDate();  // Use UTC day
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -845,7 +845,6 @@ $('#pagination-controls').on('click', '#nextPage', function () {
 // Filter by month and year
 $("#filterButton").click(async function () {
     const monthYear = $("#monthYearPicker").val();
-    localStorage.setItem('selectedMonthYear', monthYear); 
     const [year, monthNumber] = monthYear.split("-");
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const month = months[parseInt(monthNumber, 10) - 1];
@@ -1059,15 +1058,6 @@ $(
 $("#logoutLink").on("click", function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
-});
-const savedPage = localStorage.getItem('currentPage');
-    currentPage = savedPage ? parseInt(savedPage) : 1;
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-$(".sidebar .nav-link").on("click", function () {
-    localStorage.removeItem('selectedMonthYear');
-    localStorage.removeItem('currentPage');
-    console.log("Cleared saved month and page number");
 });
 // notification
 const notificationIcon = $("#notificationIcon");

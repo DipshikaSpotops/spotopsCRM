@@ -1113,12 +1113,24 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-    const monthYear = $("#monthYearPicker").val();  
+    const monthYear = $("#monthYearPicker").val();  // e.g., "2025-01"
     localStorage.setItem('selectedMonthYear', monthYear); 
     $("#loadingMessage").show(); 
     await fetchOrdersForSelectedMonth(monthYear);
     $("#loadingMessage").hide();
 });
+
+// On page load, check for previously selected month/year
+    const savedMonthYear = localStorage.getItem('selectedMonthYear');
+    if (savedMonthYear) {
+        $("#monthYearPicker").val(savedMonthYear);
+        fetchOrdersForSelectedMonth(savedMonthYear);  // Automatically fetch orders
+    }
+    const savedPage = localStorage.getItem('currentPage');
+    currentPage = savedPage ? parseInt(savedPage) : 1;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
 
 async function fetchOrdersForSelectedMonth(monthYear) {
     const [year, month] = monthYear.split("-");
@@ -1146,10 +1158,6 @@ window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
 // Clear localStorage when a sidebar menu item is clicked
-const savedPage = localStorage.getItem('currentPage');
-    currentPage = savedPage ? parseInt(savedPage) : 1;
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 $(".sidebar .nav-link").on("click", function () {
     localStorage.removeItem('selectedMonthYear');
     localStorage.removeItem('currentPage');
