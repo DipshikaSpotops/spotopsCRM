@@ -779,7 +779,7 @@ $("#infoTable").empty(); // Clear the table
 
 ordersForPage.forEach(order => {
 const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
-
+const actualG = order.actualGP;
 $("#infoTable").append(`
 <tr>
 <td>${order.orderDate}</td>
@@ -795,7 +795,7 @@ $("#infoTable").append(`
 <td>$${order.soldP || 0}</td>
 <td>$${order.grossProfit || 0}</td>
 <td>$${currentGP.toFixed(2)}</td>
-<td>$${(order.actualGP).toFixed(2) || 0}</td>
+<td>$${actualG.toFixed(2)|| 0}</td>
 </tr>
 `);
 });
@@ -1318,4 +1318,3 @@ fetchNotifications();
 </script>
 </body>
 </html>
-bro filter button is not working for the above html page and also on click of filter button total est gp,total current gp, total actual gp inside id=gpTotals should update accordingly
