@@ -1009,7 +1009,7 @@ $("#filterButton").click(async function () {
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");    
 $("#loadingMessage").show();
-
+localStorage.setItem('selectedMonthYear', monthYear); 
 const monthYear = $("#monthYearPicker").val(); 
 const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
