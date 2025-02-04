@@ -829,25 +829,28 @@ paginationControls.append(`<button class="previousNext" id="nextPage" ${currentP
 
 // Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage); // Use the filtered orders
-});
+    const page = $(this).data('page');
+    currentPage = page;
+    localStorage.setItem('currentPage', currentPage);
+    renderTableRows(currentPage);
+  });
 
-$('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage); // Use the filtered orders
-}
-});
+  $('#pagination-controls').on('click', '#prevPage', function () {
+    if (currentPage > 1) {
+      currentPage--;
+      localStorage.setItem('currentPage', currentPage);
+      renderTableRows(currentPage);
+    }
+  });
 
-$('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage); // Use the filtered orders
-}
-});
+  $('#pagination-controls').on('click', '#nextPage', function () {
+    const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      localStorage.setItem('currentPage', currentPage);
+      renderTableRows(currentPage);
+    }
+  });
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
 $("#user-name").text(firstName);
@@ -1006,50 +1009,60 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
-const monthYear = $("#monthYearPicker").val();  
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-localStorage.setItem('selectedMonthYear', monthYear);
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/cancelled?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Cancelled Orders This Month- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
+    const monthYear = $("#monthYearPicker").val();
+    localStorage.setItem('selectedMonthYear', monthYear);
+    $("body").append('<div class="modal-overlay"></div>');
+    $("body").addClass("modal-active");    
+    $("#loadingMessage").show();
 
-$("#logoutLink").click(function () {
-window.localStorage.clear();
-window.location.href = "login_signup.html";
-});
+    const [year, monthNumber] = monthYear.split("-");
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = months[parseInt(monthNumber, 10) - 1];
 
-const savedMonthYear = localStorage.getItem('selectedMonthYear');
-    if (savedMonthYear) {
-        $("#monthYearPicker").val(savedMonthYear);
-        fetchOrdersForSelectedMonth(savedMonthYear);  // Automatically fetch orders
+    try {
+      const ordersResponse = await axios.get(`https://www.spotops360.com/orders/cancelled?month=${month}&year=${year}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (ordersResponse.status !== 200) {
+        throw new Error("Failed to fetch current month's orders");
+      }
+      allOrders = ordersResponse.data;
+      var allOrdersLength = allOrders.length;
+      document.getElementById("showTotalOrders").innerHTML = `Total Cancelled Orders This Month- ${allOrdersLength}`;
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    } catch (error) {
+      console.error("Error fetching current month's orders:", error);
+    } finally {
+      $("#loadingMessage").hide();
+      $(".modal-overlay").remove();
+      $("body").removeClass("modal-active");
     }
-    const savedPage = localStorage.getItem('currentPage');
-    currentPage = savedPage ? parseInt(savedPage) : 1;
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  });
+
+
+$(".sidebar .nav-link").on("click", function () {
+    localStorage.removeItem('selectedMonthYear');
+    localStorage.removeItem('currentPage');
+    console.log("Cleared saved month and page number");
+  });
+
+  // Clear saved data and log out
+  $("#logoutLink").click(function () {
+    localStorage.clear();
+    window.location.href = "login_signup.html";
+  });
+
+  // Restore saved page and month/year if available
+  const savedPage = localStorage.getItem('currentPage');
+  currentPage = savedPage ? parseInt(savedPage) : 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  const savedMonthYear = localStorage.getItem('selectedMonthYear');
+  if (savedMonthYear) {
+    $("#monthYearPicker").val(savedMonthYear);
+  }
 // notification
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
