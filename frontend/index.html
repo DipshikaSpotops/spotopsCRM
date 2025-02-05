@@ -807,45 +807,75 @@ await fetchLatestThreeMonthsOrders();
 }
 
 // Fetch daily orders and display them in a chart
+// Global variable to track the daily orders chart
+let dailyOrdersChartInstance = null;
+
 async function fetchDailyOrders() {
   const now = new Date();
   const options = {
-    timeZone: 'America/Chicago',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: false,
   };
-  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const formatter = new Intl.DateTimeFormat("en-US", options);
   const parts = formatter.formatToParts(now);
   const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
   const date = new Date(formattedDate);
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const month = months[date.getMonth()];
   const year = date.getFullYear();
 
   try {
     console.log(`Fetching data for ${month} ${year}`);
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`);
+    const response = await axios.get(
+      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`
+    );
     const orders = response.data;
-    
+
     if (!orders || !Array.isArray(orders)) {
       console.error("Invalid orders data.");
       return;
     }
 
-    const monthMap = { Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05", Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10", Nov: "11", Dec: "12" };
+    const monthMap = {
+      Jan: "01",
+      Feb: "02",
+      Mar: "03",
+      Apr: "04",
+      May: "05",
+      Jun: "06",
+      Jul: "07",
+      Aug: "08",
+      Sep: "09",
+      Oct: "10",
+      Nov: "11",
+      Dec: "12",
+    };
     const monthNum = parseInt(monthMap[month], 10);
     const daysInMonth = new Date(year, monthNum, 0).getDate();
     const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
     const totalOrdersData = Array(daysInMonth).fill(0);
     const totalGPData = Array(daysInMonth).fill(0);
 
-    // Helper function for date parsing
     function parseOrderDate(orderDate) {
       const [dayPart, monthStr, yearStr] = orderDate.split(" ");
       const day = parseInt(dayPart);
@@ -854,7 +884,7 @@ async function fetchDailyOrders() {
       return new Date(year, month, day);
     }
 
-    orders.forEach(order => {
+    orders.forEach((order) => {
       const orderDate = parseOrderDate(order.orderDate);
       const orderDay = orderDate.getDate() - 1;
       if (orderDay >= 0 && orderDay < daysInMonth) {
@@ -863,13 +893,15 @@ async function fetchDailyOrders() {
       }
     });
 
-    const ctx = document.getElementById("dailyOrdersChart");
-    if (!ctx) {
-      console.error("dailyOrdersChart element not found.");
-      return;
+    const ctx = document.getElementById("dailyOrdersChart").getContext("2d");
+
+    // Destroy the previous chart instance if it exists
+    if (dailyOrdersChartInstance) {
+      dailyOrdersChartInstance.destroy();
     }
 
-    new Chart(ctx.getContext("2d"), {
+    // Create new chart
+    dailyOrdersChartInstance = new Chart(ctx, {
       type: "line",
       data: {
         labels: labels,
@@ -879,29 +911,29 @@ async function fetchDailyOrders() {
             backgroundColor: "rgba(54, 162, 235, 0.5)",
             borderColor: "rgba(54, 162, 235, 1)",
             data: totalOrdersData,
-            fill: true
+            fill: true,
           },
           {
             label: "Actual GP",
             backgroundColor: "rgba(75, 192, 192, 0.5)",
             borderColor: "rgba(75, 192, 192, 1)",
             data: totalGPData,
-            fill: true
-          }
-        ]
+            fill: true,
+          },
+        ],
       },
       options: {
         responsive: true,
         scales: {
           x: {
-            title: { display: true, text: "Day of the Month" }
+            title: { display: true, text: "Day of the Month" },
           },
           y: {
             title: { display: true, text: "Actual GP" },
-            min: 0
-          }
-        }
-      }
+            min: 0,
+          },
+        },
+      },
     });
   } catch (error) {
     console.error("Error fetching daily orders:", error);
@@ -996,9 +1028,20 @@ async function fetchAndDisplayThreeMonthsData() {
 }
 
 // Function to initialize the Monthly Sales Progress Chart
+let monthlySalesProgressChartInstance = null;
+
 function initializeMonthlySalesProgressChart(labels, data) {
-  const ctx = document.getElementById("monthlySalesProgressChart").getContext("2d");
-  new Chart(ctx, {
+  const ctx = document
+    .getElementById("monthlySalesProgressChart")
+    .getContext("2d");
+
+  // Destroy the previous chart instance if it exists
+  if (monthlySalesProgressChartInstance) {
+    monthlySalesProgressChartInstance.destroy();
+  }
+
+  // Create a new chart
+  monthlySalesProgressChartInstance = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
@@ -1021,12 +1064,16 @@ function initializeMonthlySalesProgressChart(labels, data) {
     },
   });
 }
-
 // Call the main function to fetch and display data for the three months
 fetchAndDisplayThreeMonthsData();
-
-
 function updateMonthlyChart(index, monthName, orders) {
+  const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
+
+  // Destroy the previous chart instance if it exists
+  if (chartInstances[index]) {
+    chartInstances[index].destroy();
+  }
+
   const statusLabels = [
     "Placed",
     "Customer approved",
@@ -1036,34 +1083,15 @@ function updateMonthlyChart(index, monthName, orders) {
     "Order Fulfilled",
     "Order Cancelled",
     "Refunded",
-    "Dispute"
+    "Dispute",
   ];
 
-  const statusCounts = statusLabels.map(status =>
-    orders.filter(order => order.orderStatus === status).length
+  const statusCounts = statusLabels.map((status) =>
+    orders.filter((order) => order.orderStatus === status).length
   );
 
-  const totalOrders = orders.length;
-  const fulfilledOrders = statusCounts[5]; // Order Fulfilled
-  const escalations = statusCounts[4]; // Escalation
-  const cancellations = statusCounts[6] + statusCounts[7] + statusCounts[8]; // Cancelled + Refunded + Dispute
-
-  // Calculate rates
-  const successRate = ((fulfilledOrders / totalOrders) * 100).toFixed(2);
-  const escalationRate = ((escalations / totalOrders) * 100).toFixed(2);
-  const cancellationRate = ((cancellations / totalOrders) * 100).toFixed(2);
-
-  // Display the rates
-  document.getElementById(`rates-month-${index}`).innerHTML = `
-    <div class="rate-item total-orders">Total No of Orders: ${totalOrders}</div>
-    <div class="rate-item rate-success">Success Rate: ${successRate}%</div>
-    <div class="rate-item rate-escalation">Escalation Rate: ${escalationRate}%</div>
-    <div class="rate-item rate-cancellation">Cancellation Rate: ${cancellationRate}%</div>
-  `;
-
-  // Render the pie chart
-  const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
-  new Chart(ctx, {
+  // Create and store the new chart
+  chartInstances[index] = new Chart(ctx, {
     type: "pie",
     data: {
       labels: statusLabels,
@@ -1080,29 +1108,30 @@ function updateMonthlyChart(index, monthName, orders) {
             "#4c8b0f",
             "#ff2121",
             "#5a3286",
-            "#e6cff2"
+            "#e6cff2",
           ],
-          hoverOffset: 4
-        }
-      ]
+          hoverOffset: 4,
+        },
+      ],
     },
     options: {
       responsive: true,
       plugins: {
         legend: {
-          position: "right"
+          position: "right",
         },
         title: {
           display: true,
-          text: `Order Status Distribution for ${monthName}`
-        }
-      }
-    }
+          text: `Order Status Distribution for ${monthName}`,
+        },
+      },
+    },
   });
 
   // Set the month name in the header
   document.getElementById(`month-name-${index}`).innerText = monthName;
 }
+
 fetchAndDisplayThreeMonthsData();
 // for dark mode
 const darkModeToggle = document.getElementById("darkModeIcon");
