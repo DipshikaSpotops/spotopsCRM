@@ -877,61 +877,48 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-// Function to create pagination controls
 function createPaginationControls(totalPages, orders) {
-  const paginationControls = $("#pagination-controls");
-  paginationControls.empty(); // Clear previous controls
+const paginationControls = $("#pagination-controls");
+paginationControls.empty(); // Clear pagination controls
 
-  if (totalPages > 1) {
-    // Previous button
-    paginationControls.append(
-      `<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
-    );
+if (totalPages > 1) {
+paginationControls.append(
+`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
+);
 
-    // Page number buttons
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(
-        `<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
-      );
-    }
-
-    // Next button
-    paginationControls.append(
-      `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
-    );
-  }
-
-  // Event listeners for "Previous" and "Next" buttons
-  $("#prevPage").off("click").on("click", function () {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
-      updatePaginationStyles();
-    }
-  });
-
-  $("#nextPage").off("click").on("click", function () {
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
-      updatePaginationStyles();
-    }
-  });
-
-  // Event listener for page number buttons
-  $(".page-btn").off("click").on("click", function () {
-    currentPage = parseInt($(this).data("page"));
-    renderTableRows(currentPage, filteredOrders.length > 0 ? filteredOrders : allOrders);
-    updatePaginationStyles();
-  });
-
-  // Update pagination button styles
-  function updatePaginationStyles() {
-    $(".page-btn").removeClass("active-page");
-    $(`.page-btn[data-page=${currentPage}]`).addClass("active-page");
-  }
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(
+`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
+);
 }
 
+paginationControls.append(
+`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
+);
+}
+
+// Handle "Previous" and "Next" button clicks
+$("#prevPage").off("click").on("click", function () {
+if (currentPage > 1) {
+currentPage--;
+renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
+}
+});
+
+$("#nextPage").off("click").on("click", function () {
+if (currentPage < totalPages) {
+currentPage++;
+renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
+}
+});
+
+// Handle page number clicks
+$(".page-btn").off("click").on("click", function () {
+const page = $(this).data("page");
+currentPage = page;
+renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
+});
+}
 // Token fetching logic
 var token;
 async function fetchToken() {
