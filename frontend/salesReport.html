@@ -407,33 +407,25 @@ window.location.href = "login_signup.html";
 
 <script>
 function parseOrderDate(dateString) {
-    // Regex to handle formats like "26th Nov, 2024"
-    const regex = /(\d{1,2})(?:st|nd|rd|th)? (\w{3}), (\d{4})/i; // Match day, month abbreviation, and year
-    const match = dateString.match(regex);
+    // Convert the date to Dallas local time
+    const date = new Date(dateString);
+    const options = { timeZone: 'America/Chicago', year: 'numeric', month: 'short', day: 'numeric' };
 
-    if (match) {
-        const day = match[1].padStart(2, "0"); // Ensure day is zero-padded
-        const month = match[2];
-        const year = match[3];
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const [{ value: month }, , { value: day }, , { value: year }] = formatter.formatToParts(date);
 
-        // Month abbreviations mapped to numbers
-        const monthMap = {
-            Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6,
-            Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12
-        };
-
-        const monthNumber = monthMap[month];
-
-        if (monthNumber) {
-            // Format as ISO 8601 date for easy parsing
-            const formattedDate = `${year}-${String(monthNumber).padStart(2, "0")}-${day}`;
-            return new Date(formattedDate); // Return JS Date object
+    // Determine suffix for the day
+    const suffix = (day) => {
+        if (day > 3 && day < 21) return "th";
+        switch (day % 10) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
         }
-    }
+    };
 
-    // Log unrecognized formats for debugging
-    console.error("Unrecognized date format:", dateString);
-    return null;
+    return `${day}${suffix(day)} ${month}, ${year}`;
 }
 
 
@@ -632,9 +624,11 @@ const currentDate = new Date();
 const currentMonth = currentDate.getMonth(); 
 const currentYear = currentDate.getFullYear();
 try {
-const response = await axios.get(`https://www.spotops360.com/orders`, {
-headers: { Authorization: `Bearer ${token}` },
-});
+  const response = await axios.get(
+        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
