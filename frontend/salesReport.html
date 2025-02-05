@@ -490,7 +490,26 @@ location.reload();
 
 let dailyData = []; // Store the daily data (data for the current month)
 let currentMonthStats = {};
-
+const now = new Date();
+const options = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter = new Intl.DateTimeFormat('en-US', options);
+const parts = formatter.formatToParts(now);
+const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+const date = new Date(formattedDate);
+// Array of month names
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var day = date.getDate();
+var month = months[date.getMonth()];
+var year = date.getFullYear();
 // Fetch data for daily graph (only for the current month)
 async function fetchSalesDataForCurrentMonth() {
 const currentDate = new Date();
@@ -498,9 +517,10 @@ const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
 const currentYear = currentDate.getFullYear();
 
 try {
-const response = await axios.get(`https://www.spotops360.com/orders`, {
-headers: { Authorization: `Bearer ${token}` },
-});
+  const response = await axios.get(
+        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
