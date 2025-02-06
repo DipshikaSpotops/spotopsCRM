@@ -22,7 +22,9 @@ const Team = require("./backend/models/Team"); // Import Team model
 const { url } = require("inspector");
 const { getMaxListeners } = require("events");
 const { Server } = require("http");
-
+const compression = require('compression');
+// Middleware for compression
+app.use(compression());
 const port = 3000;
 const app = express();
 // s3 bucket for uploading order specific pictures
@@ -1051,14 +1053,43 @@ app.get('/orders/monthly', async (req, res) => {
     // Construct the start and end date for the range
     const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    endDate.setMonth(endDate.getMonth() + 1);
 
-    const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
+    // Fetch orders from the database
+    console.time('fetchOrders');
+    const orders = await Order.find(
+      {
+        orderDate: {
+          $gte: startDate,
+          $lt: endDate,
+        },
+      },
+      {
+        orderNo: 1,
+        orderDate: 1,
+        salesAgent: 1,
+        customerName: 1,
+        pReq: 1,
+        additionalInfo: 1,
+        orderStatus: 1,
+        soldP: 1,
+        grossProfit: 1,
+        actualGP: 1,
+        email: 1,
+        fName: 1,
+        lName: 1,
+        attention: 1,
+        sAddressStreet: 1,
+        sAddressCity: 1,
+        sAddressState: 1,
+        sAddressZip: 1,
+        sAddressAcountry: 1,
+        year: 1,
+        make: 1,
+        model: 1,
       }
-    });
+    );
+    console.timeEnd('fetchOrders');
 
     res.json(orders);
   } catch (error) {
