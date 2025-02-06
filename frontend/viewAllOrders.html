@@ -795,7 +795,7 @@ throw new Error("Failed to fetch orders");
 
 var orders = ordersResponse.data;
 allOrders = orders;
-
+console.log("ordersPerPage",allOrders);
 // Sort and render the orders
 allOrders = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(allOrders);
