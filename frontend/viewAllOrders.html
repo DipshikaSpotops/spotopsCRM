@@ -793,7 +793,7 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
 
-var orders = ordersResponse.data;
+var orders = ordersResponse.data.orders;
 allOrders = orders;
 
 // Sort and render the orders
