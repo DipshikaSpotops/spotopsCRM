@@ -626,26 +626,23 @@ sortTable(index, type);
 });
 const rowsPerPage = 25;
 let currentPage = 1;
-async function fetchOrders(page = 1) {
+// Debounce to avoid too many API calls
+function debounce(func, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+async function fetchOrders(page = 1, searchTerm = "") {
   try {
-    const token = localStorage.getItem("token");
     const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
-      params: { page, limit: 25 },
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      params: { page, limit: rowsPerPage, searchTerm },
     });
 
-    console.log("API response:", response.data); // Log the response for debugging
-
-    const { orders, totalPages, currentPage } = response.data;
-
-    // Check if 'orders' is an array
-    if (!Array.isArray(orders)) {
-      console.error("Error: Expected 'orders' to be an array, but received:", orders);
-      return;
-    }
-
-    renderTableRows(orders); 
-    createPaginationControls(totalPages, currentPage);
+    const { orders, totalPages } = response.data;
+    renderTableRows(orders);
+    createPaginationControls(totalPages, page);
   } catch (error) {
     console.error("Error fetching orders:", error);
   }
@@ -723,9 +720,8 @@ ${editButton}
     `);
   });
 }
-
 function createPaginationControls(totalPages, currentPage) {
-  const paginationControls = $('#pagination-controls');
+  const paginationControls = $("#pagination-controls");
   paginationControls.empty();
 
   if (totalPages > 1) {
@@ -740,10 +736,11 @@ function createPaginationControls(totalPages, currentPage) {
 }
 
 // Event listeners for pagination buttons
+// Pagination controls
 $('#pagination-controls').on('click', '.pageNos', function () {
-  const page = $(this).data('page');
-  currentPage = page;
-  fetchOrders(currentPage);
+  currentPage = $(this).data('page');
+  const searchTerm = $("#searchInput").val().trim();
+  fetchOrders(currentPage, searchTerm);
 });
 
 $('#pagination-controls').on('click', '#prevPage', function () {
@@ -814,55 +811,15 @@ console.error("Error fetching orders:", error);
 // });
 
 // Filtering functionality for  the search bar
-$("#searchInput").on("keyup", function () {
-  const value = $(this).val().toLowerCase();
-  
-  // Filter the entire allOrders dataset based on the search term
-  const filteredOrders = allOrders.filter(order => {
-    // Check basic fields including phone, make, year, and model
-    const basicSearch = (
-      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
-      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.email && order.email.toLowerCase().includes(value)) ||
-      (order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
-)) ||
-      (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
-      (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
-      (order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
-      (order.model && order.model.toLowerCase().includes(value))     // Added model
-    );
-
-    // Check if any yard detail (including stockNo) matches the search term
-    const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
-      const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
-      return (
-        yardLabel.includes(value) || 
-        (info.yardName && info.yardName.toLowerCase().includes(value)) || 
-        (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-        (info.status && info.status.toLowerCase().includes(value)) ||
-        (info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
-      );
-    });
-
-    // Return true if any of the basic fields or yard details match the search term
-    return basicSearch || yardSearch;
-  });
-
-  // If a search is active, display the filtered results, otherwise reset to the full dataset
-  if (filteredOrders.length > 0 || value === "") {
-  renderTableRows(filteredOrders); // Corrected call
-  createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-} else {
-  $("#infoTable").empty(); // Clear the table if no results are found
-  $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-}
-});
-
+// Update search and pagination dynamically
+$("#searchInput").on(
+  "keyup",
+  debounce(function () {
+    const searchTerm = $(this).val().trim();
+    currentPage = 1;  // Reset to the first page
+    fetchOrders(currentPage, searchTerm);  // Fetch based on search
+  }, 300)  // Debounce by 300ms
+);
 
 // Sort orders by Order No in descending order
 function sortOrdersByOrderNoDesc(orders) {
