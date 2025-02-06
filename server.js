@@ -1046,26 +1046,34 @@ app.get("/orders/monthly", async (req, res) => {
   try {
     const { month, year, page = 1, limit = 25 } = req.query;
 
-    // Convert month name to numeric format if necessary
-    const monthNum = parseInt(month, 10);
+    // Convert month to correct 0-based format for Date (e.g., January is 0)
+    const monthNum = parseInt(month, 10) - 1;
 
-    // Filter orders for the selected month and paginate
+    // Start date of the selected month
+    const startDate = new Date(Date.UTC(year, monthNum, 1));
+    
+    // Start date of the next month
+    const endDate = new Date(Date.UTC(year, monthNum + 1, 1));
+
+    // Get total orders count for the selected month
     const totalOrders = await Order.countDocuments({
-      orderDate: { $gte: new Date(`${year}-${monthNum}-01`), $lt: new Date(`${year}-${monthNum + 1}-01`) },
+      orderDate: { $gte: startDate, $lt: endDate }
     });
 
+    // Paginate orders for the selected month
     const orders = await Order.find({
-      orderDate: { $gte: new Date(`${year}-${monthNum}-01`), $lt: new Date(`${year}-${monthNum + 1}-01`) },
+      orderDate: { $gte: startDate, $lt: endDate }
     })
       .skip((page - 1) * limit)
-      .limit(limit);
+      .limit(limit)
+      .sort({ orderDate: 1 });  // Sort by orderDate in ascending order
 
     res.json({ orders, totalPages: Math.ceil(totalOrders / limit) });
   } catch (error) {
+    console.error("Error fetching monthly orders:", error);
     res.status(500).json({ error: "Failed to fetch monthly orders" });
   }
 });
-
 
 app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
