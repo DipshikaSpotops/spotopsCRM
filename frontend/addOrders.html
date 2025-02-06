@@ -6,16 +6,11 @@
 <title>New Order Entry</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 body {
 display: flex;
 overflow-x: hidden;
 flex-direction: column;
-  font-family: 'Poppins', sans-serif;
-  color: #333333;
-  background-color: #F5F7FA;
-  background: linear-gradient(135deg, #F5F7FA, #E6E9ED);
 }
 #logoImg {
 height: auto;
@@ -23,21 +18,17 @@ width: 150px;
 margin: -16px 6px;
 }
 .navbar .user-info span {
-  margin-right: 10px;
-  color: white;
-  font-weight: 500;
+margin-right: 10px;
+color: white;
 }
 .navbar .user-icon {
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+color: white;
+cursor: pointer;
 }
 .navbar {
-/* color: white; */
+color: white;
 /* background-color: black; */
 background: linear-gradient(90deg, #4A90E2, #50E3C2);
-color: white;
-background-color: black;
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -48,11 +39,10 @@ top: 0;
 z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
-.navbar .user-icon:hover {
-  transform: scale(1.1);
-}
+
 .sidebar {
-background-color: black;
+/* background-color: black; */
+background: linear-gradient(90deg, #4A90E2, #50E3C2);
 position: fixed;
 z-index: 1;
 top: 0;
@@ -63,17 +53,13 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
-box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-background: linear-gradient(180deg, #4A90E2, #50E3C2);
 }
 .sidebar .nav-link {
 color: #ffffff;
 cursor: pointer;
-padding: 10px 20px;
-transition: background-color 0.3s ease;
 }
 .sidebar .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+background-color: rgba(255, 255, 255, 0.2);
 }
 .sidebar .nav-link.active,
 .sidebar .nav-link.selected {
@@ -92,8 +78,8 @@ margin: 1% 37.7%;
 width: 100%;
 flex-grow: 1;
 padding: 20px;
-margin-left: 7%;
-margin-top: 2%;
+margin-left: 4%;
+margin-top: 5%;
 transition: margin-left 0.3s ease;
 }
 .submenu {
@@ -141,59 +127,19 @@ display: block;
 }
 /* Specific styles for the New Order Entry page */
 #addoBtn {
-/* margin: 0% 38.1%;
+margin: 0% 38.1%;
 background-color: black;
-color: white; */
-background: linear-gradient(90deg, #4A90E2, #50E3C2);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+color: white;
 }
-#addoBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
-}
+
 #newOrderForm {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 1200px;
+margin: -2% 0% -2% 12%;
 }
-.btn {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.nav-link {
-  transition: color 0.3s ease, background-color 0.3s ease;
-}
-.form-control {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-control:focus {
-  border-color: #4A90E2;
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
-}
-
 .firstRow {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  background: #f9f9f9;
+border: 1px solid #c0c0c0;
+border-radius: 10px;
+margin: -3% 18% 4% 2%;
+padding: 1%;
 }
 .firstFive {
 margin: 0% 0% 0% -1%;
@@ -305,16 +251,9 @@ background-color: #333;
   border-bottom: none;
 }
 #notificationDropdown {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  max-height: 400px;
   overflow-y: auto;
-   overflow-y: auto;
   /* padding: 10px; */
-  /* border: 1px solid #ccc;
+  border: 1px solid #ccc;
   background-color: white;
   color: black;
   width: 234%;
@@ -324,41 +263,14 @@ background-color: #333;
   right: 0px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  border: 2px solid black; */
+  border: 2px solid black;
 }
-#notificationList li {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.3s ease;
-}
-
-#notificationList li:hover {
-  background-color: #f5f7fa;
-}
-
 #viewAlltasks {
   margin: 3% 37%;
     border: none;
     text-decoration-line: underline;
     color: red;
     font-weight: bold;
-}
-#notificationList li {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.3s ease;
-}
-
-#notificationList li:hover {
-  background-color: #f5f7fa;
-}
-#darkModeIcon {
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-#darkModeIcon:hover {
-  transform: rotate(20deg);
-  color: #FF6F61;
 }
 .modal-overlay {
 position: fixed;
@@ -510,7 +422,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-<h2 style="text-align: center;text-decoration-line: underline;margin-bottom: 3%;margin-left: -2%;">ADD NEW ORDER</h2>
+<h2 style="text-align: center;margin-top: -2%;text-decoration-line: underline;">ADD NEW ORDER</h2>
 <div id="firstRow">
 <div>
 <input type="text" id="salesAgent" required readonly/>
