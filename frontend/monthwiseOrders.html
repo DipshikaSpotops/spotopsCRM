@@ -1119,8 +1119,7 @@ async function fetchOrdersForSelectedMonth(monthYear, page = 1, limit = 25) {
   try {
     $("#loadingMessage").show(); // Show loading spinner
 
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-      params: { month, year, page, limit },
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&page=${page}&limit=${limit}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
