@@ -1040,40 +1040,33 @@ res.status(500).json({ message: "Server error", error });
 //   mongoose.connection.close();  
 // }
 // });
-// Sample backend route for paginated monthly orders
-app.get("/orders/monthly", async (req, res) => {
-  console.log("monthly orders fetch");
+app.get('/orders/monthly', async (req, res) => {
   try {
-    const { month, year, page = 1, limit = 25 } = req.query;
+    const { month, year } = req.query;
 
-    // Convert month to correct 0-based format for Date (e.g., January is 0)
-    const monthNum = parseInt(month, 10) - 1;
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
 
-    // Start date of the selected month
-    const startDate = new Date(Date.UTC(year, monthNum, 1));
-    
-    // Start date of the next month
-    const endDate = new Date(Date.UTC(year, monthNum + 1, 1));
+    // Construct the start and end date for the range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
 
-    // Get total orders count for the selected month
-    const totalOrders = await Order.countDocuments({
-      orderDate: { $gte: startDate, $lt: endDate }
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      }
     });
 
-    // Paginate orders for the selected month
-    const orders = await Order.find({
-      orderDate: { $gte: startDate, $lt: endDate }
-    })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ orderDate: 1 });  // Sort by orderDate in ascending order
-
-    res.json({ orders, totalPages: Math.ceil(totalOrders / limit) });
+    res.json(orders);
   } catch (error) {
-    console.error("Error fetching monthly orders:", error);
-    res.status(500).json({ error: "Failed to fetch monthly orders" });
+    console.error("Error fetching orders for specified month and year:", error);
+    res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 app.get("/orders/:orderNo", async (req, res) => {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
