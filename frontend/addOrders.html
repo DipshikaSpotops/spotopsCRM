@@ -75,7 +75,7 @@ border: none;
 #orderNo{
 text-align: center;
 height: 4vh;
-border: 1px solid #c0c0c0;
+border: 1px solid #248287;
 border-radius: 10px;
 margin: 1% 37.7%;
 }
@@ -133,18 +133,22 @@ display: block;
 /* Specific styles for the New Order Entry page */
 #addoBtn {
 margin: 0% 38.1%;
-background-color: black;
+background: linear-gradient(160deg, #101a18, #80cbbc);
 color: white;
 }
-
+#addoBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+}
 #newOrderForm {
 margin: -2% 0% -2% 12%;
 }
 .firstRow {
-border: 1px solid #c0c0c0;
+border: 1px solid #248287;
 border-radius: 10px;
 margin: -3% 18% 4% 2%;
 padding: 1%;
+color: #023f42;
 }
 .firstFive {
 margin: 0% 0% 0% -1%;
@@ -427,7 +431,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-<h2 style="text-align: center;margin-top: -2%;text-decoration-line: underline;">ADD NEW ORDER</h2>
+<h2 style="text-align: center;margin-top: -2%;text-decoration-line: underline;color: #023f42;">ADD NEW ORDER</h2>
 <div id="firstRow">
 <div>
 <input type="text" id="salesAgent" required readonly/>
