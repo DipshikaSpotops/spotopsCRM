@@ -1114,33 +1114,12 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
-async function fetchOrdersForSelectedMonth(monthYear, page = 1, limit = 25) {
-  const [year, month] = monthYear.split("-");
-  try {
-    $("#loadingMessage").show(); // Show loading spinner
-
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&page=${page}&limit=${limit}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-
-    if (response.status !== 200) throw new Error("Failed to fetch current month's orders");
-
-    const { orders, totalPages } = response.data;
-    allOrders = orders;
-    renderTableRows(page, allOrders);
-    createPaginationControls(totalPages);
-
-  } catch (error) {
-    console.error("Error fetching current month's orders:", error);
-  } finally {
-    $("#loadingMessage").hide(); // Hide loading spinner
-  }
-}
-
-// Trigger fetchOrdersForSelectedMonth on filterButton click
 $("#filterButton").click(async function () {
-  const monthYear = $("#monthYearPicker").val();
-  await fetchOrdersForSelectedMonth(monthYear);  // Fetch initial page of orders
+    const monthYear = $("#monthYearPicker").val();  // e.g., "2025-01"
+    localStorage.setItem('selectedMonthYear', monthYear); 
+    $("#loadingMessage").show(); 
+    await fetchOrdersForSelectedMonth(monthYear);
+    $("#loadingMessage").hide();
 });
 
 // On page load, check for previously selected month/year
@@ -1155,7 +1134,26 @@ $("#filterButton").click(async function () {
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
 
+async function fetchOrdersForSelectedMonth(monthYear) {
+    const [year, month] = monthYear.split("-");
+    try {
+        const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
 
+        if (ordersResponse.status !== 200) {
+            throw new Error("Failed to fetch current month's orders");
+        }
+
+        allOrders = ordersResponse.data;
+        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrders.length}`;
+        renderTableRows(1, allOrders);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+    } catch (error) {
+        console.error("Error fetching current month's orders:", error);
+    }
+}
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
