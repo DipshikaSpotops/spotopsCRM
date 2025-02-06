@@ -1040,30 +1040,28 @@ res.status(500).json({ message: "Server error", error });
 //   mongoose.connection.close();  
 // }
 // });
-app.get('/orders/monthly', async (req, res) => {
+// Sample backend route for paginated monthly orders
+app.get("/orders/monthly", async (req, res) => {
   try {
-    const { month, year } = req.query;
+    const { month, year, page = 1, limit = 25 } = req.query;
 
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
+    // Convert month name to numeric format if necessary
+    const monthNum = parseInt(month, 10);
 
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
-
-    const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
-      }
+    // Filter orders for the selected month and paginate
+    const totalOrders = await Order.countDocuments({
+      orderDate: { $gte: new Date(`${year}-${monthNum}-01`), $lt: new Date(`${year}-${monthNum + 1}-01`) },
     });
 
-    res.json(orders);
+    const orders = await Order.find({
+      orderDate: { $gte: new Date(`${year}-${monthNum}-01`), $lt: new Date(`${year}-${monthNum + 1}-01`) },
+    })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({ orders, totalPages: Math.ceil(totalOrders / limit) });
   } catch (error) {
-    console.error("Error fetching orders for specified month and year:", error);
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ error: "Failed to fetch monthly orders" });
   }
 });
 
