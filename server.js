@@ -1042,6 +1042,7 @@ res.status(500).json({ message: "Server error", error });
 // });
 // Sample backend route for paginated monthly orders
 app.get("/orders/monthly", async (req, res) => {
+  console.log("monthly orders fetch");
   try {
     const { month, year, page = 1, limit = 25 } = req.query;
 
