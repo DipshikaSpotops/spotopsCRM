@@ -626,140 +626,86 @@ sortTable(index, type);
 });
 const rowsPerPage = 25;
 let currentPage = 1;
-async function fetchOrders(page = 1) {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
-      params: { page, limit: 25 },
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
+  // Fetch orders for the current page
+  async function fetchOrders(page = 1) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
+        params: { page, limit: rowsPerPage },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
 
-    console.log("API response:", response.data); // Log the response for debugging
-
-    const { orders, totalPages, currentPage } = response.data;
-
-    // Check if 'orders' is an array
-    if (!Array.isArray(orders)) {
-      console.error("Error: Expected 'orders' to be an array, but received:", orders);
-      return;
+      const { orders, totalPages, currentPage } = response.data;
+      renderTableRows(orders);
+      createPaginationControls(totalPages, currentPage);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
     }
-
-    renderTableRows(orders); 
-    createPaginationControls(totalPages, currentPage);
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-  }
-}
-
-// Function to render rows based on the page
-
-// <td>${sendInvoice}</td>
-var firstname = localStorage.getItem("firstName");
-if (firstName) {
-$("#user-name").text(firstName);
-}
-if (!firstName) {
-window.location.href = "login_signup.html";
-}
-// Function to create pagination controls
-function renderTableRows(orders) {
-  if (!Array.isArray(orders)) {
-    console.error("renderTableRows expected an array but received:", orders);
-    return;
   }
 
-  $("#infoTable").empty(); // Clear existing rows
+  // Render table rows
+  function renderTableRows(orders) {
+    const fragment = document.createDocumentFragment();
 
-  orders.forEach((item) => {
-    // Existing rendering logic
-    const escalationStatus = item.additionalInfo && item.additionalInfo[0]?.escTicked === "Yes" ? "Yes" : "";
-    const escalationStyle = item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes" ? 'style="background-color: lightgreen;"' : '';
-    const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
-    const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
-const datetime = item.orderDate;
-const date = new Date(datetime);
-const day = date.getUTCDate();  // Use UTC day
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const year = date.getUTCFullYear();  // Use UTC year
-
-const suffix = (day) => {
-  if (day > 3 && day < 21) return "th";
-  switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
-  }
-};
-const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-const actions = `
-${editButton}
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-    
-    $("#infoTable").append(`
-      <tr>
-        <td>${formattedOrderDate}</td>
+    orders.forEach((item) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${item.orderDate}</td>
         <td>${item.orderNo}</td>
         <td>${item.salesAgent}</td>
-        <td>${
-(item.fName && item.lName)
-? `${item.fName} ${item.lName}`
-: (item.customerName || "")
-}</td>
-        <td>${item.pReq || item.partName}</td>
-        <td>${
-          item.additionalInfo && item.additionalInfo.length > 0
-            ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""}`).join("<br>")
-            : ""
-        }</td>
+        <td>${item.customerName}</td>
+        <td>${item.pReq}</td>
+        <td>${item.yard}</td>
         <td>${item.orderStatus}</td>
-        <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
-        <td ${escalationStyle}>${escalationStatus}</td>
-        <td>${actions}</td>
+        <td>${item.actualGP}</td>
+        <td>${item.escalationStatus}</td>
+        <td>
+          <button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>
+          <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>
+        </td>
         <td>${item.email}</td>
-      </tr>
-    `);
-  });
-}
+      `;
+      fragment.appendChild(row);
+    });
 
-function createPaginationControls(totalPages, currentPage) {
-  const paginationControls = $('#pagination-controls');
-  paginationControls.empty();
+    $("#infoTable").empty().append(fragment);
+  }
 
-  if (totalPages > 1) {
-    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+  // Pagination controls
+  function createPaginationControls(totalPages, currentPage) {
+    const paginationControls = $('#pagination-controls');
+    paginationControls.empty();
 
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
+    if (totalPages > 1) {
+      paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+
+      for (let i = 1; i <= totalPages; i++) {
+        paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
+      }
+
+      paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
     }
-
-    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
   }
-}
 
-// Event listeners for pagination buttons
-$('#pagination-controls').on('click', '.pageNos', function () {
-  const page = $(this).data('page');
-  currentPage = page;
-  fetchOrders(currentPage);
-});
-
-$('#pagination-controls').on('click', '#prevPage', function () {
-  if (currentPage > 1) {
-    currentPage--;
+  // Event listeners for pagination
+  $('#pagination-controls').on('click', '.pageNos', function () {
+    currentPage = $(this).data('page');
     fetchOrders(currentPage);
-  }
-});
+  });
 
-$('#pagination-controls').on('click', '#nextPage', function () {
-  if (currentPage < totalPages) {
-    currentPage++;
-    fetchOrders(currentPage);
-  }
-});
+  $('#pagination-controls').on('click', '#prevPage', function () {
+    if (currentPage > 1) {
+      currentPage--;
+      fetchOrders(currentPage);
+    }
+  });
 
+  $('#pagination-controls').on('click', '#nextPage', function () {
+    if (currentPage < totalPages) {
+      currentPage++;
+      fetchOrders(currentPage);
+    }
+  });
 
 // Token fetching logic
 async function fetchToken() {
@@ -1138,3 +1084,5 @@ fetchNotifications();
 
 </body>
 </html>
+bro the above page loading has become super slow, previously i had 25 orders in one page so it was fast,
+now it has become uper slow, come up with a solution
