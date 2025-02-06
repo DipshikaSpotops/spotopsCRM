@@ -24,9 +24,10 @@ const { getMaxListeners } = require("events");
 const { Server } = require("http");
 const compression = require('compression');
 // Middleware for compression
-app.use(compression());
 const port = 3000;
 const app = express();
+app.use(compression());
+
 // s3 bucket for uploading order specific pictures
 const s3 = new AWS.S3();
 const BUCKET_NAME = "order-specific-pictures";
