@@ -629,6 +629,7 @@ let currentPage = 1;
 // Debounce to avoid too many API calls
 function debounce(func, delay) {
   let timer;
+  console.log("debounce");
   return function (...args) {
     clearTimeout(timer);
     timer = setTimeout(() => func.apply(this, args), delay);
