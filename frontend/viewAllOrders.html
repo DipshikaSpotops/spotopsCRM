@@ -814,11 +814,16 @@ console.error("Error fetching orders:", error);
 //     fetchOrders(currentPage, searchTerm);  // Fetch based on search
 //   }, 300)  // Debounce by 300ms
 // );
-console.log("allOrders",allDOrders);
+const ordersAll = await axios.get(`https://www.spotops360.com/orders`, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+
+   var  searchOrders = ordersAll.data;
+   console.log('searchInpur',searchOrders);
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
-console.log("allOrders",allDOrders);
-const filteredOrders = allDOrders.filter(order => {
+// console.log("allOrders",allDOrders);
+const filteredOrders = searchOrders.filter(order => {
 const basicSearch = (
 (order.soldP && String(order.soldP).toLowerCase().includes(value)) || // Converting soldP to string
 (order.grossProfit && String(order.grossProfit).toLowerCase().includes(value)) || 
