@@ -682,11 +682,12 @@ res.json(orders);
 });
 // Search Orders API
 app.get("/searchOrders", async (req, res) => {
+  console.log("SearchPrdfer")
   try {
     const query = req.query.query || "";
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 25;
-
+console.log("query",query,page,limit);
     // MongoDB $or clause to search across multiple fields
     const searchCriteria = query
       ? {
@@ -1098,16 +1099,13 @@ res.status(500).json({ message: "Server error", error });
 app.get('/orders/monthly', async (req, res) => {
   try {
     const { month, year } = req.query;
-
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
-
     // Construct the start and end date for the range
     const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
-
     // Fetch orders from the database
     console.log('fetchOrders');
     const orders = await Order.find(
@@ -1142,8 +1140,7 @@ app.get('/orders/monthly', async (req, res) => {
         model: 1,
       }
     );
-    console.timeEnd('fetchOrders');
-
+    console.log('fetchOrders');
     res.json(orders);
   } catch (error) {
     console.error("Error fetching orders for specified month and year:", error);
