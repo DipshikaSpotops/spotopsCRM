@@ -1016,7 +1016,7 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // monthly orders
-// const db = mongoose.connection;
+const db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'connection error:'));
 // db.once('open', async function () {
 //   console.log('Connected to MongoDB');
