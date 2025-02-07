@@ -1109,7 +1109,7 @@ app.get('/orders/monthly', async (req, res) => {
     endDate.setMonth(endDate.getMonth() + 1);
 
     // Fetch orders from the database
-    console.time('fetchOrders');
+    console.log('fetchOrders');
     const orders = await Order.find(
       {
         orderDate: {
