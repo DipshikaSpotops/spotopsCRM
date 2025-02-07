@@ -808,8 +808,7 @@ console.error("Error fetching orders:", error);
 // Filtering functionality for  the search bar
 // Update search and pagination dynamically
 // Update search and pagination dynamically
-$("#searchInput").on(
-  "keyup", function () {
+$(document).on("keyup", "#searchInput", function () {
     const searchTerm = $(this).val().trim().toLowerCase();
 console.log("searchTerm",searchTerm);
     if (searchTerm === "") {
