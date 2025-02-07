@@ -748,7 +748,7 @@ app.get("/ordersPerPage", async (req, res) => {
             { customerName: { $regex: searchTerm, $options: "i" } },
             { email: { $regex: searchTerm, $options: "i" } },
             { phone: { $regex: searchTerm, $options: "i" } },
-            { "additionalInfo.yardName": { $regex: query, $options: "i" } }, 
+            { "additionalInfo.yardName": { $regex: searchTerm, $options: "i" } }, 
           ],
         }
       : {};
