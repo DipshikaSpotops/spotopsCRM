@@ -629,7 +629,6 @@ let currentPage = 1;
 // Debounce to avoid too many API calls
 function debounce(func, delay) {
   let timer;
-  console.log("debounce");
   return function (...args) {
     clearTimeout(timer);
     timer = setTimeout(() => func.apply(this, args), delay);
@@ -807,32 +806,15 @@ console.error("Error fetching orders:", error);
 
 // Filtering functionality for  the search bar
 // Update search and pagination dynamically
-// Update search and pagination dynamically
-$(document).on("keyup", "#searchInput", function () {
-    const searchTerm = $(this).val().trim().toLowerCase();
-console.log("searchTerm",searchTerm);
-    if (searchTerm === "") {
-      fetchOrders(currentPage);
-      return;
-    }
-    try {
-      const response =  axios.get(`https://www.spotops360.com/searchOrders?query=${searchTerm}&page=${currentPage}&limit=${rowsPerPage}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-
-      const { orders, totalPages } = response.data;
-
-      if (orders.length > 0) {
-        renderTableRows(orders);
-        createPaginationControls(totalPages, 1);
-      } else {
-        $("#infoTable").empty();
-        $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-      }
-    } catch (error) {
-      console.error("Error fetching filtered orders:", error);
-    }
-  })
+$("#searchInput").on(
+  "keyup",
+  debounce(function () {
+    const searchTerm = $(this).val().trim();
+    console.log("searchTerm",searchTerm)
+    currentPage = 1;  // Reset to the first page
+    fetchOrders(currentPage, searchTerm);  // Fetch based on search
+  }, 300)  // Debounce by 300ms
+);
 // const ordersAll = await axios.get(`https://www.spotops360.com/orders`, {
 // headers: token ? { Authorization: `Bearer ${token}` } : {},
 // });
