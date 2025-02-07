@@ -502,6 +502,14 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+$("#searchInput").on(
+  "keyup",function () {
+    const searchTerm = $(this).val().trim();
+    console.log("searchTerm",searchTerm)
+    currentPage = 1;  // Reset to the first page
+    fetchOrders(currentPage, searchTerm);  // Fetch based on search
+ // Debounce by 300ms
+});
 let allOrders = [];
 
 
@@ -806,14 +814,14 @@ console.error("Error fetching orders:", error);
 
 // Filtering functionality for  the search bar
 // Update search and pagination dynamically
-$("#searchInput").on(
-  "keyup",function () {
-    const searchTerm = $(this).val().trim();
-    console.log("searchTerm",searchTerm)
-    currentPage = 1;  // Reset to the first page
-    fetchOrders(currentPage, searchTerm);  // Fetch based on search
- // Debounce by 300ms
-});
+// $("#searchInput").on(
+//   "keyup",function () {
+//     const searchTerm = $(this).val().trim();
+//     console.log("searchTerm",searchTerm)
+//     currentPage = 1;  // Reset to the first page
+//     fetchOrders(currentPage, searchTerm);  // Fetch based on search
+//  // Debounce by 300ms
+// });
 // const ordersAll = await axios.get(`https://www.spotops360.com/orders`, {
 // headers: token ? { Authorization: `Bearer ${token}` } : {},
 // });
