@@ -680,15 +680,58 @@ app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
 res.json(orders);
 });
-app.get("/searchOrders", (req, res) => {
-  const query = req.query.query.toLowerCase();
+// Search Orders API
+app.get("/searchOrders", async (req, res) => {
+  try {
+    const query = req.query.query || "";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 25;
 
-  const filteredOrders = Order.filter((order) => {
-    return (
-      (order.orderNo && order.orderNo.toLowerCase().includes(query)) 
-    );
-  });
-})
+    // MongoDB $or clause to search across multiple fields
+    const searchCriteria = query
+      ? {
+          $or: [
+            { orderNo: { $regex: query, $options: "i" } },
+            { fName: { $regex: query, $options: "i" } },
+            { lName: { $regex: query, $options: "i" } },
+            { salesAgent: { $regex: query, $options: "i" } },
+            { customerName: { $regex: query, $options: "i" } },
+            { email: { $regex: query, $options: "i" } },
+            { phone: { $regex: query, $options: "i" } },
+            { make: { $regex: query, $options: "i" } },
+            { model: { $regex: query, $options: "i" } },
+            { bAddressStreet: { $regex: query, $options: "i" } },
+            { sAddressStreet: { $regex: query, $options: "i" } },
+            { "additionalInfo.yardName": { $regex: query, $options: "i" } }, // Searching inside additionalInfo array
+            { orderStatus: { $regex: query, $options: "i" } },
+            { trackingInfo: { $regex: query, $options: "i" } },
+            { notes: { $regex: query, $options: "i" } },
+          ],
+        }
+      : {};
+
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+
+    // Query the database with search criteria, pagination, and sorting
+    const orders = await Order.find(searchCriteria)
+      .skip(skip)
+      .limit(limit)
+      .sort({ orderDate: -1 }); // Sort by order date in descending order
+
+    // Get the total count for pagination
+    const totalOrders = await Order.countDocuments(searchCriteria);
+
+    res.json({
+      orders,
+      totalPages: Math.ceil(totalOrders / limit),
+    });
+  } catch (error) {
+    console.error("Error searching orders:", error);
+    res.status(500).send("An error occurred while searching orders.");
+  }
+});
+
 // orders per page fpr server side pagination
 app.get("/ordersPerPage", async (req, res) => {
   try {
