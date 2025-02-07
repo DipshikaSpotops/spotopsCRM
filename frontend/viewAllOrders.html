@@ -808,34 +808,34 @@ console.error("Error fetching orders:", error);
 // Filtering functionality for  the search bar
 // Update search and pagination dynamically
 // Update search and pagination dynamically
-$("#searchInput").on(
-  "keyup",
-  debounce(function () {
+$("#searchInput").on("keyup", debounce(async function () {
     const searchTerm = $(this).val().trim().toLowerCase();
-    currentPage = 1; 
-    const filteredOrders = allDOrders.filter(order => {
-      return (
-        (order.orderNo && String(order.orderNo).toLowerCase().includes(searchTerm)) ||
-        (order.salesAgent && order.salesAgent.toLowerCase().includes(searchTerm)) ||
-        (order.customerName && order.customerName.toLowerCase().includes(searchTerm)) ||
-        (order.fName && order.fName.toLowerCase().includes(searchTerm)) ||
-        (order.lName && order.lName.toLowerCase().includes(searchTerm)) ||
-        (order.pReq && order.pReq.toLowerCase().includes(searchTerm)) ||
-        (order.partName && order.partName.toLowerCase().includes(searchTerm)) ||
-        (order.email && order.email.toLowerCase().includes(searchTerm)) ||
-        (order.orderDate && order.orderDate.toLowerCase().includes(searchTerm))
-      );
-    });
-
-    if (filteredOrders.length > 0) {
-      renderTableRows(filteredOrders); // Render filtered orders
-      createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), 1);
-    } else {
-      $("#infoTable").empty(); 
-      $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+    
+    // If the search term is empty, fetch all orders
+    if (searchTerm === "") {
+      fetchOrders(currentPage);
+      return;
     }
-  }, 300) 
-);
+
+    try {
+      // Send a request to search orders based on orderNo or yard
+      const response = await axios.get("https://www.spotops360.com/searchOrders", {
+        params: { query: searchTerm },
+      });
+
+      const filteredOrders = response.data;
+
+      if (filteredOrders.length > 0) {
+        renderTableRows(filteredOrders); // Render filtered orders
+        createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), 1);
+      } else {
+        $("#infoTable").empty();
+        $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  }, 300));
 // const ordersAll = await axios.get(`https://www.spotops360.com/orders`, {
 // headers: token ? { Authorization: `Bearer ${token}` } : {},
 // });

@@ -680,6 +680,15 @@ app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
 res.json(orders);
 });
+app.get("/searchOrders", (req, res) => {
+  const query = req.query.query.toLowerCase();
+
+  const filteredOrders = Order.filter((order) => {
+    return (
+      (order.orderNo && order.orderNo.toLowerCase().includes(query)) 
+    );
+  });
+})
 // orders per page fpr server side pagination
 app.get("/ordersPerPage", async (req, res) => {
   try {
