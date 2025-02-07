@@ -820,8 +820,8 @@ $("#searchInput").on(
     }
 
     try {
-      const response = await axios.get("https://www.spotops360.com/searchOrders", {
-        params: { query: searchTerm, page: currentPage, limit: rowsPerPage },
+      const response = await axios.get(`https://www.spotops360.com/searchOrders?query=${searchTerm}&page=${currentPage}&limit=${rowsPerPage}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       const { orders, totalPages } = response.data;
