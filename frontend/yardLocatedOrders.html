@@ -667,6 +667,9 @@ const suffix = (day) => {
   }
 };
 const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+var desc = item.desc;
+var vin = item.vin;
+console.log("desc",desc,"vin",vin);
 $("#infoTable").append(`
 <tr>
 <td>${formattedOrderDate}</td>
