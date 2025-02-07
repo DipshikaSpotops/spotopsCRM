@@ -656,6 +656,7 @@ var allDOrders;
       const { orders, totalPages: total } = response.data;
       totalPages = total;
       allDOrders = orders;
+      console.log("allDOrders",allDOrders);
       renderTableRows(orders);
       createPaginationControls(totalPages, page);
     } catch (error) {
