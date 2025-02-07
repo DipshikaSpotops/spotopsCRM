@@ -645,6 +645,7 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 let totalPages = 1 ;
+var allDOrders;
  // Function to fetch orders with pagination
  async function fetchOrders(page = 1, searchTerm = "") {
     try {
@@ -654,6 +655,7 @@ let totalPages = 1 ;
 
       const { orders, totalPages: total } = response.data;
       totalPages = total;
+      allDOrders = orders;
       renderTableRows(orders);
       createPaginationControls(totalPages, page);
     } catch (error) {
@@ -795,23 +797,23 @@ console.error("Error fetching orders:", error);
 
 
 // Filtering functionality
-// $("#searchInput").on("keyup", function () {
-//   const value = $(this).val().toLowerCase();
-//   $("#infoTable tr").filter(function () {
-//     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-//   });
-// });
+$("#searchInput").on("keyup", function () {
+  const value = $(this).val().toLowerCase();
+  $("#infoTable tr").filter(function () {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+  });
+});
 
 // Filtering functionality for  the search bar
 // Update search and pagination dynamically
-$("#searchInput").on(
-  "keyup",
-  debounce(function () {
-    const searchTerm = $(this).val().trim();
-    currentPage = 1;  // Reset to the first page
-    fetchOrders(currentPage, searchTerm);  // Fetch based on search
-  }, 300)  // Debounce by 300ms
-);
+// $("#searchInput").on(
+//   "keyup",
+//   debounce(function () {
+//     const searchTerm = $(this).val().trim();
+//     currentPage = 1;  // Reset to the first page
+//     fetchOrders(currentPage, searchTerm);  // Fetch based on search
+//   }, 300)  // Debounce by 300ms
+// );
 
 // Sort orders by Order No in descending order
 function sortOrdersByOrderNoDesc(orders) {
