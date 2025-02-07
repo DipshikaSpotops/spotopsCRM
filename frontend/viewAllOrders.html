@@ -809,8 +809,7 @@ console.error("Error fetching orders:", error);
 // Update search and pagination dynamically
 // Update search and pagination dynamically
 $("#searchInput").on(
-  "keyup",
-  debounce(async function () {
+  "keyup",async function () {
     const searchTerm = $(this).val().trim().toLowerCase();
 console.log("searchTerm",searchTerm);
     // If search term is empty, fetch all orders
@@ -836,8 +835,7 @@ console.log("searchTerm",searchTerm);
     } catch (error) {
       console.error("Error fetching filtered orders:", error);
     }
-  }, 300) // Debounce to reduce API requests
-);
+  })
 // const ordersAll = await axios.get(`https://www.spotops360.com/orders`, {
 // headers: token ? { Authorization: `Bearer ${token}` } : {},
 // });
