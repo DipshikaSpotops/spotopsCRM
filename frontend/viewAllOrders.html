@@ -812,7 +812,7 @@ $("#searchInput").on(
   "keyup",
   debounce(async function () {
     const searchTerm = $(this).val().trim().toLowerCase();
-
+console.log("searchTerm",searchTerm);
     // If search term is empty, fetch all orders
     if (searchTerm === "") {
       fetchOrders(currentPage);
