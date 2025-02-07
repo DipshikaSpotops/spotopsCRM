@@ -681,31 +681,45 @@ const orders = await Order.find({});
 res.json(orders);
 });
 // orders per page fpr server side pagination
-app.get('/ordersPerPage', async (req, res) => {
-  console.log("25 in one page");
-  const { page = 1, limit = 25, searchTerm = '' } = req.query;
-  const offset = (page - 1) * limit;
+app.get("/ordersPerPage", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 25;
+    const searchTerm = req.query.searchTerm || "";
 
-  const query = `
-    SELECT * FROM orders
-    WHERE customerName LIKE ? OR orderNo LIKE ?
-    LIMIT ? OFFSET ?
-  `;
-  const countQuery = `
-    SELECT COUNT(*) as total FROM orders
-    WHERE customerName LIKE ? OR orderNo LIKE ?
-  `;
+    // MongoDB query with search
+    const query = searchTerm
+      ? {
+          $or: [
+            { orderNo: { $regex: searchTerm, $options: "i" } },
+            { customerName: { $regex: searchTerm, $options: "i" } },
+            { email: { $regex: searchTerm, $options: "i" } },
+            { phone: { $regex: searchTerm, $options: "i" } },
+          ],
+        }
+      : {};
 
-  const searchParam = `%${searchTerm}%`;
-  const [orders, total] = await Promise.all([
-    db.query(query, [searchParam, searchParam, limit, offset]),
-    db.query(countQuery, [searchParam, searchParam])
-  ]);
+    // Count total documents matching the search
+    const totalOrders = await Order.countDocuments(query);
 
-  res.json({
-    orders,
-    totalPages: Math.ceil(total[0].total / limit)
-  });
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * limit;
+
+    // Find matching orders with pagination
+    const orders = await Order.find(query)
+      .sort({ _id: -1 }) // Fetch latest orders first
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      orders,
+      totalPages: Math.ceil(totalOrders / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // for only placed orders
@@ -1016,7 +1030,7 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // monthly orders
-const db = mongoose.connection;
+// const db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'connection error:'));
 // db.once('open', async function () {
 //   console.log('Connected to MongoDB');
