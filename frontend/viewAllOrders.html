@@ -720,7 +720,10 @@ var allDOrders;
       `);
     });
   }
-
+  $("#infoTable").on("click", ".process-btn", function () {
+const id = $(this).data("id");
+window.location.href = `form.html?orderNo=${id}&process=true`;
+});
   // Function to create pagination controls
   function createPaginationControls(totalPages, currentPage) {
     const paginationControls = $("#pagination-controls");
@@ -908,10 +911,10 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}`;
 });
 
-$("#infoTable").on("click", ".process-btn", function () {
-const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}&process=true`;
-});
+// $("#infoTable").on("click", ".process-btn", function () {
+// const id = $(this).data("id");
+// window.location.href = `form.html?orderNo=${id}&process=true`;
+// });
 
 $("#infoTable").on("click", ".cancel-btn", function () {
 const id = $(this).data("id");
