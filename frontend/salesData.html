@@ -146,6 +146,11 @@ margin: 10px auto;
 overflow-x: auto;
 }
 }
+@media(max-width: 1200px){
+  #gpTotals {
+    gap: 24px;
+  }
+}
 table.table tbody tr:nth-child(odd) {
 background-color: #f9f9f9;
 }
@@ -374,6 +379,22 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
+#gpTotals {
+  background-color:#234872;
+  color: #c0c8b1;
+  padding: 10px 20px; 
+  border-radius: 22px; 
+  position: fixed; 
+  top: 115px; left: 81%; 
+  transform: translateX(-50%); 
+  z-index: 1; 
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); 
+  display: flex; 
+  gap: 100px; 
+  justify-content: space-between; 
+  align-items: center; 
+  text-align: center;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -532,7 +553,7 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<div id="gpTotals" style="background-color:#234872;color: #c0c8b1;padding: 10px 20px; border-radius: 22px; position: fixed; top: 115px; left: 81%; transform: translateX(-50%); z-index: 1; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); display: flex; gap: 100px; justify-content: space-between; align-items: center; text-align: center;">
+<div id="gpTotals">
 <div id="totalEstGP" style="flex: 1;white-space: nowrap;">
 <i class="fas fa-chart-line"></i> Total Est GP: <strong>$0</strong>
 </div>
