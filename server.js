@@ -3781,12 +3781,12 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var returnTracking = req.query.returnTracking;
   var refundToCollect = req.query.refundToCollect;
   console.log("yardIndex",yardIndex);
-  const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
-  date.setDate(date.getDate() - 1);
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');  
-  const day = date.getDate().toString().padStart(2, '0');
-  const year = date.getFullYear();
-  var orderedDate =  `${month}/${day}/${year}`;
+  // const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
+  // date.setDate(date.getDate() - 1);
+  // const month = (date.getMonth() + 1).toString().padStart(2, '0');  
+  // const day = date.getDate().toString().padStart(2, '0');
+  // const year = date.getFullYear();
+  // var orderedDate =  `${month}/${day}/${year}`;
   console.log("refundReason", refundReason, returnTracking, refundToCollect);
   const transporter = nodemailer.createTransport({
   service: "gmail",
