@@ -130,25 +130,135 @@ margin: 0% 30%;
 #gpTotals {
   background-color: #234872;
   color: #c0c8b1;
-  padding: 10px 20px;
+  padding: 10px;
   border-radius: 22px;
   position: fixed;
   top: 115px;
-  left: 81%;
+  left: 50%;
   transform: translateX(-50%);
   z-index: 1;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   display: flex;
-  gap: 100px;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  width: 33%;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  width: 85%;
 }
+
 #gpTotals div {
   flex: 1;
-  white-space: nowrap;
+  white-space: normal;
 }
+
+#searchInput,
+#userDropdown {
+  width: 90%;
+  margin: 10px auto;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Mobile-first design */
+@media (min-width: 480px) {
+  #gpTotals {
+    width: 95%;
+    padding: 8px;
+    gap: 15px;
+    align-items: center;
+  }
+
+  #gpTotals div {
+    font-size: 14px;
+  }
+
+  #searchInput {
+    width: 80%;
+  }
+
+  #userDropdown {
+    width: auto;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    width: 17%;
+    position: fixed;
+  }
+
+  .main-content {
+    margin-left: 17%;
+  }
+
+  #gpTotals {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 60%;
+    padding: 10px 20px;
+    gap: 30px;
+  }
+
+  #gpTotals div {
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  #searchInput {
+    width: 60%;
+  }
+
+  #userDropdown {
+    width: auto;
+    margin: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  #gpTotals {
+    width: 40%;
+    padding: 12px 24px;
+  }
+
+  .sidebar {
+    width: 13%;
+  }
+
+  .main-content {
+    margin-left: 14%;
+  }
+}
+
+@media (min-width: 1200px) {
+  #gpTotals {
+    width: 33%;
+    padding: 16px 32px;
+    gap: 40px;
+  }
+
+  #pagination-controls {
+    margin-top: 2%;
+  }
+
+  #filterAndTotal {
+    margin-top: 1%;
+    margin-left: 0;
+  }
+
+  #searchInput {
+    width: 40%;
+  }
+
+  #userDropdown {
+    width: 200px;
+    margin: 0;
+  }
+}
+
 #filterAndTotal {
 margin-top: 2%;
 margin-left: -1.5%;
@@ -178,87 +288,8 @@ margin: 10px auto;
 .table-wrapper {
 overflow-x: auto;
 }
-#gpTotals {
-  width: 85% !important;
-    gap: 10px !important;
-    padding: 8px 16px !important;
-    top: 178px !important;
-    left: 87% !important;
-    width: auto !important;
-    flex-direction: column !important;
-    float: left !important;
-    margin-right: 9% !important;
-    align-items: flex-start;
-  }
-  #gpTotals div {
-    /* text-align: center !important; */
-    white-space: normal !important;
-  }
-  #pagination-controls {
-    margin-top: 8% !important;
-  }
-  #filterAndTotal {
-    margin-top: 6% !important;
-    margin-left: -0.5% !important;
-  }
-  #searchInput {
-    width: 22% !important;
-    top: 113px !important;
-    right: 10%;
-  }
-  #userDropdown {
-    margin-left: 22% !important;
-    margin-top: 5.2% !important;
-    width: auto !important;
-  }
 }
-@media (min-width: 1200px) {
-  #gpTotals {
-    width: 85% !important;
-    gap: 10px !important;
-    padding: 8px 16px !important;
-    top: 178px !important;
-    left: 87% !important;
-    width: auto !important;
-    flex-direction: column !important;
-    float: left !important;
-    margin-right: 9% !important;
-    align-items: flex-start;
-  }
-  #pagination-controls {
-    margin-top: 8% !important;
-  }
-  #filterAndTotal {
-    margin-top: 6% !important;
-    margin-left: -0.5% !important;
-  }
-  #searchInput {
-    width: 22% !important;
-    top: 113px !important;
-    right: 10%;
-  }
-  #userDropdown {
-    margin-left: 22% !important;
-    margin-top: 5.2% !important;
-    width: auto !important;
-  }
-}
-@media (min-width: 480px) {
-  #gpTotals {
-    width: 95% !important;
-    gap: 10px !important;
-    padding: 8px !important;
-    top: 178px !important;
-    left: 87% !important;
-    width: 20% !important;
-    flex-direction: column !important;
-    float: left !important;
-    margin-right: 9% !important;
-  }
-  #gpTotals div {
-    font-size: 14px !important;
-  }
-}
+
 table.table tbody tr:nth-child(odd) {
 background-color: #f9f9f9;
 }
