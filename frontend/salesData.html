@@ -149,6 +149,16 @@ margin: 0% 30%;
   flex: 1;
   white-space: nowrap;
 }
+#filterAndTotal {
+margin-top: 2%;
+margin-left: -1.5%;
+}
+#pagination-controls {
+  margin-top: 18%;
+}
+#userDropdown {
+  height: 3vh; z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 23%;margin-top: -0.5%;text-align: center;width: 9%;border-radius:18px;
+}
 @media (max-width: 768px) {
 .sidebar {
 width: 100% ; /* Full-width sidebar for mobile */
@@ -187,7 +197,7 @@ overflow-x: auto;
 @media (max-width: 1200px) {
   #gpTotals {
     width: 85% !important;
-    gap: 40px !important;
+    gap: 10px !important;
     padding: 8px 16px !important;
     top: 178px !important;
     left: 87% !important;
@@ -195,6 +205,22 @@ overflow-x: auto;
     flex-direction: column !important;
     float: left !important;
     margin-right: 9% !important;
+  }
+  #pagination-controls {
+    margin-top: 18% !important;
+  }
+  #filterAndTotal {
+    margin-top: 12% !important;
+    margin-left: 3.5% !important;
+  }
+  #searchInput {
+    width: 38% !important;
+    top: 113px !important;
+  }
+  #userDropdown {
+    margin-left: 34% !important;
+    margin-top: 10.5% !important;
+    width: auto !important;
   }
 }
 @media (max-width: 480px) {
@@ -584,7 +610,7 @@ window.location.href = "login_signup.html";
 <div class="main-content">
 <div>
 <h1 class="fixed-header" style="position: fixed; z-index:1;background-color: white;width: 85.4%;margin-left: -1%;margin-top: -1%;text-align: center;">Sales Data- Monthly</h1>
-<select name="userDropdowm" id="userDropdown"  class="fixed-header" style="height: 3vh; z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 23%;margin-top: -0.5%;text-align: center;width: 9%;border-radius:18px;">
+<select name="userDropdowm" id="userDropdown"  class="fixed-header">
 <option value="Select">Select Sales-agent</option>
 <option value="All">All</option>
 <option value="John">John</option>
@@ -615,7 +641,7 @@ placeholder="Search..."
 </div>
 <div id="headerWrap" style="position: fixed;margin-top: 0%;padding: 0%;background-color: white;width: 84.7%;height: 17vh;margin-left: -0.3%;">
 <!--  controls -->
-<div id="filterAndTotal" style="margin-top: 2%;margin-left: -1.5%;">
+<div id="filterAndTotal">
 <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control" />
@@ -624,7 +650,7 @@ placeholder="Search..."
 <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>  
-<div id="pagination-controls" style="margin-top: 5%;">
+<div id="pagination-controls">
 <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
 
