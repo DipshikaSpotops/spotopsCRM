@@ -146,12 +146,32 @@ margin: 10px auto;
 overflow-x: auto;
 }
 #gpTotals {
-    gap: 24px;
+    flex-direction: column;
+    gap: 15px;
+    padding: 12px;
+    width: 90%;
+  }
+
+  #gpTotals div {
+    text-align: center;
+    white-space: normal; 
   }
 }
-@media(max-width: 2000px){
+@media (max-width: 1200px) {
   #gpTotals {
-    gap: 24px;
+    gap: 50px;
+    padding: 8px 15px;
+    width: 80%;
+  }
+}
+@media (max-width: 480px) {
+  #gpTotals {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  #gpTotals div {
+    font-size: 14px;
   }
 }
 table.table tbody tr:nth-child(odd) {
@@ -1361,7 +1381,7 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
-fetchNotifications();
+fetchNotifications(); 
 });
 </script>
 </body>
