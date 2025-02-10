@@ -793,7 +793,7 @@ $("#infoTable").append(`
 <td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
-<td>Customer Name: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}<br>
+<td>Customer Name: ${item.customerName || ""} || ${item.fName || ""} ${item.lName || ""}<br>
 ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
 ${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}
 </td>
