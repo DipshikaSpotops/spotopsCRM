@@ -710,7 +710,7 @@ var allDOrders;
           <td>${item.salesAgent}</td>
           <td>${(item.fName && item.lName) ? `${item.fName} ${item.lName}` : (item.customerName || "")}</td>
           <td>${item.pReq || item.partName}</td>
-          <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""}`).join("<br>") : ""}<br> Part price: $${info.partPrice} | $${info.shippingMethod} | Others: $${info.others}</td>
+          <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""} <br> Part price: $${info.partPrice} | $${info.shippingMethod} | Others: $${info.others}`).join("<br>") : ""}</td>
           <td>${item.orderStatus}</td>
           <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
           <td ${escalationStyle}>${escalationStatus}</td>
