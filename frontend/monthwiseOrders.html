@@ -15,7 +15,7 @@ rel="stylesheet"
 <style>
 body {
 display: flex;
-overflow-x: hidden;
+overflow: hidden;
 flex-direction: column;
 background-color: #eaf6ff;
 text-align: center;
@@ -420,7 +420,7 @@ font-size: 12px;
 }
 }
 .table-wrapper {
-  max-height: 1300px; 
+  max-height: 900px; 
   overflow-y: auto;
 }
 
@@ -601,7 +601,7 @@ placeholder="Search..."
  <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;color: white;width: auto;" />
-<button id="filterButton" class="btn btn-primary" style="background-color: #35554f;color: white;">Filter</button>
+<button id="filterButton" class="btn btn-primary" style="background-color: #35554f;color: white;border: none;">Filter</button>
 </div>
 <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
