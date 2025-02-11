@@ -2425,7 +2425,7 @@ Save
 </select>
 <div id="customerShippingValueReturn" style="display: none;">
 <label>Enter Shipping Value:</label>
-<input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 18px;text-align: center;width: 50%;margin-top: 3%;margin-left: 1%;">
+<input id="custOwnShippingReturn" type="text" placeholder="Shipping value" style="border: 1px solid #c0c0c0;color:grey; height: 3vh;border-radius: 18px;text-align: center;width: 50%;margin-top: 3%;margin-left: 1%;" />
 </div>
 <div id="retPartETA">
 <label>ETA:</label>
@@ -4224,7 +4224,8 @@ $("#saveEsc").on("click", async function () {
     const orderNo = urlParams.get("orderNo");
     const firstName = localStorage.getItem("firstName");
     const token = localStorage.getItem("token");
-
+    // custOwnShippingReturn
+    console.log("custOwnShippingReturn")
     const updatedFields = {
         escalationProcess: $("#escProcess").val(),
         custReason: $("#custReason").val(),
@@ -4245,6 +4246,7 @@ $("#saveEsc").on("click", async function () {
         custretPartETA: $("#custretPartETA").val(),
         customerShipperReturn: $("#customerShipperReturn").val(),
         returnTrackingCust: $("#returnTrackingCust").val(),
+        custOwnShippingReturn: $("#custOwnShippingReturn").val(),
         custReturnDelivery: $("#custReturnDelivery").val(),
         reimbursementAmount: $("#reimAmount").val(),
         isReimbursedChecked: $("#reimbursed").prop("checked"),
