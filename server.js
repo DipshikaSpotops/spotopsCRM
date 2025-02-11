@@ -3780,6 +3780,7 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var refundReason = req.query.refundReason;
   var returnTracking = req.query.returnTracking;
   var refundToCollect = req.query.refundToCollect;
+  var shipperName = req.query.shipper;
   console.log("yardIndex",yardIndex);
   // const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
   // date.setDate(date.getDate() - 1);
@@ -3805,7 +3806,6 @@ shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
 var others = order.additionalInfo[yardIndex].others || 0;
 var chargedAmount = partPrice + shippingValueYard + others;
 var stockNo = order.additionalInfo[yardIndex].stockNo || "NA";
-var shipperName = order.additionalInfo[yardIndex].shipperName || "";
 var yardEmail = order.additionalInfo[yardIndex].email;
   const mailOptions = {
   from: "purchase@auto-partsgroup.com",

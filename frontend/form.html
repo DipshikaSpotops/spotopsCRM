@@ -4799,6 +4799,7 @@ $("#sendRefundEmailYard").prop("disabled", true).css("filter", "blur(2px)");
 const refundReason = $("#refundReasonYard").val();
 const returnTracking = $("#returnTrackingNo").val();
 const refundToCollect = $("#refundToCollect").val();
+const shipper = $("#customerShipperReturn").val();
 // var shipperName = $("#shipperNameEdit").val();
 // if (shipperName === "Others") {
 // shipperName = $("#otherShipperInput").val();
@@ -4809,7 +4810,7 @@ const file = fileInput.files[0] || "";
 console.log("yardddd",selectedYardIndex,yardIndex);
 const formData = new FormData();
 formData.append("pdfFile", file);
-fetch(`https://www.spotops360.com/orders/sendRefundEmailYard/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}`, {
+fetch(`https://www.spotops360.com/orders/sendRefundEmailYard/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}&shipper=${shipper}`, {
 method: "POST",
 body: formData,
 })
