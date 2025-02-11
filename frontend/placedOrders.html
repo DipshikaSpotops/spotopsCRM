@@ -141,6 +141,13 @@ margin-left: 0;
 .toggle-sidebar {
 display: block;
 }
+.table-wrapper {
+      overflow-x: auto; /* Enable horizontal scroll for smaller screens */
+    }
+
+    table {
+      min-width: 800px;
+    }
 }
 .profile-table {
 width: 50%;
@@ -335,6 +342,36 @@ background-color: #333;
     font-weight: bold;
 }
 
+
+#mainHeading {
+  text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
+}
+@media (max-width: 320px) {
+#mainHeading {
+  font-size: 20px;
+}
+}
+.table-wrapper {
+  max-height: 1300px; 
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #35554f; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -500,6 +537,7 @@ placeholder="Search..."
 <div id="showTotalOrders">Total Placed Orders This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
+<div class="table-wrapper"></div>
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
@@ -518,7 +556,8 @@ placeholder="Search..."
 <tbody id="infoTable">
 <!-- Information from the form will be appended here -->
 </tbody>
-</table>  
+</table> 
+</div> 
 </div>
 
 <!-- Profile Section -->
