@@ -512,8 +512,7 @@ placeholder="Search..."
 </div>
 <div id="filterAndTotal" style="display: flex;">
   <div class="filter-bar">
-    <input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;
-    color: white;" />
+    <input id="monthYearPicker" type="month" style="background-color: #35554f;color: white;" />
     <button id="filterButton" class="btn btn-primary" style="background-color: #35554f;border: none;color: white;">Filter</button>
   </div>
   <div id="showTotalOrders">Total Customer Approved Orders This Month-</div>
@@ -891,7 +890,7 @@ const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()
 // Append data to the table with optional chaining and default values
 $("#infoTable").append(
 `<tr>
-<td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#cae8c9;color: #61a55e;border:none;">Process</button></td>
+<td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color:#35554f;color: white;border:none;">Process</button></td>
 <td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
