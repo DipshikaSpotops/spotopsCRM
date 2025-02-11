@@ -600,7 +600,7 @@ placeholder="Search..."
 <div id="filterAndTotal">
  <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
 <div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;color: white;" />
+<input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;color: white;width: auto;" />
 <button id="filterButton" class="btn btn-primary" style="background-color: #35554f;color: white;">Filter</button>
 </div>
 <div id="showTotalOrders">Total Orders This Month-</div>
@@ -913,7 +913,7 @@ const paginationControls = $('#pagination-controls');
 paginationControls.empty(); // Clear pagination controls
 
 if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext btn btn-primary" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+paginationControls.append(`<button class="previousNext btn btn-primary" id="prevPage" ${currentPage === 1 ? 'disabled' : ''} style="background-color:#35554f">Previous</button>`);
 
 for (let i = 1; i <= totalPages; i++) {
 paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
