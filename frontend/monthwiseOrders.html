@@ -17,8 +17,8 @@ body {
 display: flex;
 overflow-x: hidden;
 flex-direction: column;
-height: 100vh;
-margin: 0;
+background-color: #eaf6ff;
+text-align: center;
 }
 /* btn pagination */
 .pageNos{
@@ -50,7 +50,8 @@ cursor: pointer;
 }
 .navbar {
 color: white;
-background-color: black;
+/* background-color: black; */
+background: linear-gradient(160deg, #101a18, #80cbbc);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -62,7 +63,8 @@ z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
-background-color: black;
+/* background-color: black; */
+background: linear-gradient(160deg, #101a18, #80cbbc);
 position: fixed;
 z-index: 1;
 top: 0;
@@ -163,6 +165,13 @@ display: block;
     #pagination-controls{
     margin-top: 20%;
     }
+    .table-wrapper {
+      overflow-x: auto; 
+    }
+
+    table {
+      min-width: 800px;
+    }
 }
 .dark-mode .table {
     background-color: #333;
@@ -219,12 +228,6 @@ width: 82vw;
   margin-left: -1%;
 }
 
-thead th {
-  position: sticky;
-  top: 0;
-  background-color: #fff; /* Set background color for header */
-  z-index: 1; /* Ensure the header stays on top of the table body */
-}
 table.table td {
 white-space: nowrap;
 overflow: auto;
@@ -233,17 +236,8 @@ padding: 8px;
 text-align: center;
 border-bottom: 1px solid #ddd;
 }
-table.table th {
-  top: 200px; 
-  z-index: 5;
-  /* position: fixed;   */
-background-color: #f2f2f2;
-white-space: nowrap;
-}
-table.table td.actions {
-display: flex;
-gap: 5px;
-}
+
+
 .btn {
 padding: 0.375rem 0.75rem;
 }
@@ -409,6 +403,27 @@ font-size: 12px;
 .fixed-header{
   font-size: 28px;
 }
+}
+.table-wrapper {
+  max-height: 900px; 
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #35554f; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -602,6 +617,7 @@ placeholder="Search..."
       <!-- Table data goes here -->
     </tbody>
   </table>
+</div>
 </div>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
