@@ -17,7 +17,6 @@ body {
   display: flex;
     overflow-x: hidden;
     flex-direction: column;
-    font-family: 'Poppins', sans-serif;
     color: #333333;
     background-color: #eaf6ff;
 }
@@ -195,7 +194,7 @@ cursor: pointer;
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 20px;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .chart-item-monthly {
@@ -835,19 +834,15 @@ async function fetchDailyOrders() {
       console.error("Invalid orders data.");
       return;
     }
-
-    // Get number of days in the Dallas time zone's current month
     const daysInMonth = new Date(year, currentDallasDate.getMonth() + 1, 0).getDate();
     const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
     const totalOrdersData = Array(daysInMonth).fill(0);
     const totalGPData = Array(daysInMonth).fill(0);
-
-    // Process each order and convert the order date to Dallas time
     orders.forEach(order => {
       const orderDateInDallas = new Date(
         new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
       );
-      const orderDay = orderDateInDallas.getDate() - 1; // Adjust for zero-based index
+      const orderDay = orderDateInDallas.getDate() - 1; 
 
       if (orderDay >= 0 && orderDay < daysInMonth) {
         totalOrdersData[orderDay] += 1;
@@ -877,7 +872,7 @@ async function fetchDailyOrders() {
         datasets: [
           {
             label: "Total Orders",
-            backgroundColor: "#bdbdbd",
+            backgroundColor: "rgba(54, 162, 235, 0.5)",
             borderColor: "rgba(54, 162, 235, 1)",
             data: totalOrdersData,
             fill: true,
@@ -1085,11 +1080,11 @@ function updateMonthlyChart(index, monthName, orders) {
           backgroundColor: [
             "#d5f0c0", // Placed
             "#ffe5a0", // Customer approved
-            "#bfe1f6", // Yard Processing
-            "#1e6693", // In Transit
-            "#e6cff2", // Escalation
-            "#4c8b0f", // Order Fulfilled
-            "#ff2121", // Order Cancelled
+            "#97d8fb", // Yard Processing
+            "#c3d5fa", // In Transit
+            "#f8aaa8", // Escalation
+            "#a7cf90", // Order Fulfilled
+            "#dd412b", // Order Cancelled
             "#5a3286", // Refunded
             "#e6cff2", // Dispute
           ],
