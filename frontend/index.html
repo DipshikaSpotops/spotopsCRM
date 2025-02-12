@@ -14,9 +14,12 @@ rel="stylesheet"
 />
 <style>
 body {
-display: flex;
-overflow-x: hidden;
-flex-direction: column;
+  display: flex;
+    overflow-x: hidden;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+    color: #333333;
+    background-color: #eaf6ff;
 }
 #logoImg {
 height: auto;
@@ -33,7 +36,8 @@ cursor: pointer;
 }
 .navbar {
 color: white;
-background-color: black;
+/* background-color: black; */
+background: linear-gradient(160deg, #101a18, #80cbbc);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -45,7 +49,9 @@ z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
-background-color: black;
+/* background-color: black; */
+background: linear-gradient(160deg, #101a18, #80cbbc);
+text-align: left;
 position: fixed;
 z-index: 1;
 top: 0;
