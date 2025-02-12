@@ -511,34 +511,33 @@ var month = months[date.getMonth()];
 var year = date.getFullYear();
 // Fetch data for daily graph (only for the current month)
 async function fetchSalesDataForCurrentMonth() {
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
-const currentYear = currentDate.getFullYear();
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
+  const currentYear = currentDate.getFullYear();
 
-try {
-  const response = await axios.get(
-        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  try {
+    const response = await axios.get(
+      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-if (response.status !== 200) {
-throw new Error("Failed to fetch orders");
-}
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch orders");
+    }
 
-dailyData = response.data.filter((order) => {
-const parsedOrderDate = parseOrderDate(order.orderDate);
-if (!parsedOrderDate) return false;
+    dailyData = response.data.filter((order) => {
+      const parsedOrderDate = new Date(order.orderDate); // Parse the orderDate into a Date object
+      if (!parsedOrderDate) return false;
 
-const orderMonth = parsedOrderDate.getMonth();
-const orderYear = parsedOrderDate.getFullYear();
-// console.log("salesAgent",order.salesAgent);
-return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
-});
+      const orderMonth = parsedOrderDate.getMonth();
+      const orderYear = parsedOrderDate.getFullYear();
+      return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
+    });
 
-calculateStats(dailyData); // Calculate stats for current month
-} catch (error) {
-console.error("Error fetching sales data:", error);
-}
+    calculateStats(dailyData); // Calculate stats for current month
+  } catch (error) {
+    console.error("Error fetching sales data:", error);
+  }
 }
 
 // Calculate stats based on daily data (for the current month)
@@ -627,49 +626,55 @@ $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
 
 // Fetch data based on the selected filter (daily or monthly) for the chart
 async function fetchSalesData(filter) {
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth(); 
-const currentYear = currentDate.getFullYear();
-try {
-  const response = await axios.get(
-        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); 
+  const currentYear = currentDate.getFullYear();
 
-if (response.status !== 200) {
-throw new Error("Failed to fetch orders");
-}
-const data = response.data.filter((order) => order.salesAgent === firstName);
-const salesData = [];
-const labels = filter === "daily" 
-? getDaysInMonth(currentMonth, currentYear) 
-: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  try {
+    const response = await axios.get(
+      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-labels.forEach((label) => {
-salesData.push(0);
-});
-data.forEach((order) => {
-const parsedOrderDate = parseOrderDate(order.orderDate);
-if (!parsedOrderDate) return;
-// For daily, only include orders from the current month
-if (filter === "daily") {
-const orderMonth = parsedOrderDate.getMonth();
-const orderYear = parsedOrderDate.getFullYear();
-if (orderMonth !== currentMonth || orderYear !== currentYear) return;
-}
-const label = filter === "daily" 
-? parsedOrderDate.getDate().toString() 
-: parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
-const labelIndex = labels.indexOf(label);
-if (labelIndex !== -1) {
-salesData[labelIndex] += 1;
-}
-});
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch orders");
+    }
 
-updateSalesChart(salesData, labels, filter); // Update chart based on the selected filter
-} catch (error) {
-console.error("Error fetching sales data:", error);
-}
+    const data = response.data.filter((order) => order.salesAgent === firstName);
+    const salesData = [];
+    const labels = filter === "daily" 
+      ? getDaysInMonth(currentMonth, currentYear) 
+      : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    labels.forEach((label) => {
+      salesData.push(0);
+    });
+
+    data.forEach((order) => {
+      const parsedOrderDate = new Date(order.orderDate); // Parse the orderDate into a Date object
+      if (!parsedOrderDate) return;
+
+      // For daily, only include orders from the current month
+      if (filter === "daily") {
+        const orderMonth = parsedOrderDate.getMonth();
+        const orderYear = parsedOrderDate.getFullYear();
+        if (orderMonth !== currentMonth || orderYear !== currentYear) return;
+      }
+
+      const label = filter === "daily" 
+        ? parsedOrderDate.getDate().toString() 
+        : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
+
+      const labelIndex = labels.indexOf(label);
+      if (labelIndex !== -1) {
+        salesData[labelIndex] += 1;
+      }
+    });
+
+    updateSalesChart(salesData, labels, filter); // Update chart based on the selected filter
+  } catch (error) {
+    console.error("Error fetching sales data:", error);
+  }
 }
 
 function updateSalesChart(salesData, labels, filter) {
