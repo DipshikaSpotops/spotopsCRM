@@ -406,28 +406,35 @@ window.location.href = "login_signup.html";
 </div>
 
 <script>
+
 function parseOrderDate(dateString) {
-    // Convert the date to Dallas local time
-    const date = new Date(dateString);
-    const options = { timeZone: 'America/Chicago', year: 'numeric', month: 'short', day: 'numeric' };
+  // Parse the ISO 8601 date string into a Date object
+  const date = new Date(dateString);
 
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    const [{ value: month }, , { value: day }, , { value: year }] = formatter.formatToParts(date);
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    console.error("Invalid date:", dateString);
+    return null;
+  }
 
-    // Determine suffix for the day
-    const suffix = (day) => {
-        if (day > 3 && day < 21) return "th";
-        switch (day % 10) {
-            case 1: return "st";
-            case 2: return "nd";
-            case 3: return "rd";
-            default: return "th";
-        }
-    };
+  // Convert the date to Dallas local time
+  const options = { timeZone: 'America/Chicago', year: 'numeric', month: 'short', day: 'numeric' };
+  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const [{ value: month }, , { value: day }, , { value: year }] = formatter.formatToParts(date);
 
-    return `${day}${suffix(day)} ${month}, ${year}`;
+  // Determine suffix for the day
+  const suffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  return `${day}${suffix(day)} ${month}, ${year}`;
 }
-
 
 $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
