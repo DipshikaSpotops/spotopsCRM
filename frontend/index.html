@@ -275,6 +275,7 @@ border-radius: 5px;
 font-weight: bold;
 } */
 
+
 .rate-item {
 width: 30%;
 text-align: center;
@@ -1030,7 +1031,6 @@ function initializeMonthlySalesProgressChart(labels, data) {
   });
 }
 // Call the main function to fetch and display data for the three months
-fetchAndDisplayThreeMonthsData();
 function updateMonthlyChart(index, monthName, orders) {
   const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
 
@@ -1055,6 +1055,18 @@ function updateMonthlyChart(index, monthName, orders) {
     orders.filter((order) => order.orderStatus === status).length
   );
 
+  // Calculate the required metrics
+  const totalOrders = orders.length;
+  const totalFulfilled = orders.filter((order) => order.orderStatus === "Order Fulfilled").length;
+  const totalEscalated = orders.filter((order) => order.orderStatus === "Escalation").length;
+  const totalCancelled = orders.filter((order) => order.orderStatus === "Order Cancelled").length;
+  const totalRefunded = orders.filter((order) => order.orderStatus === "Refunded").length;
+
+  // Compute rates
+  const successRate = totalOrders > 0 ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
+  const escalationRate = totalOrders > 0 ? ((totalEscalated / totalOrders) * 100).toFixed(2) : 0;
+  const cancellationRate = totalOrders > 0 ? (((totalCancelled + totalRefunded) / totalOrders) * 100).toFixed(2) : 0;
+
   // Create and store the new chart
   chartInstances[index] = new Chart(ctx, {
     type: "pie",
@@ -1065,15 +1077,15 @@ function updateMonthlyChart(index, monthName, orders) {
           label: `Order Status Distribution for ${monthName}`,
           data: statusCounts,
           backgroundColor: [
-            "#d5f0c0",
-            "#ffe5a0",
-            "#bfe1f6",
-            "#1e6693",
-            "#e6cff2",
-            "#4c8b0f",
-            "#ff2121",
-            "#5a3286",
-            "#e6cff2",
+            "#d5f0c0", // Placed
+            "#ffe5a0", // Customer approved
+            "#bfe1f6", // Yard Processing
+            "#1e6693", // In Transit
+            "#e6cff2", // Escalation
+            "#4c8b0f", // Order Fulfilled
+            "#ff2121", // Order Cancelled
+            "#5a3286", // Refunded
+            "#e6cff2", // Dispute
           ],
           hoverOffset: 4,
         },
@@ -1095,7 +1107,28 @@ function updateMonthlyChart(index, monthName, orders) {
 
   // Set the month name in the header
   document.getElementById(`month-name-${index}`).innerText = monthName;
+
+  // Update the summary metrics below each chart
+  document.getElementById(`rates-month-${index}`).innerHTML = `
+    <div class="rate-item rate-success">
+      <span><i class="fas fa-check-circle"></i> Success Rate:</span>
+      <strong>${successRate}%</strong>
+    </div>
+    <div class="rate-item rate-escalation">
+      <span><i class="fas fa-exclamation-triangle"></i> Escalation Rate:</span>
+      <strong>${escalationRate}%</strong>
+    </div>
+    <div class="rate-item rate-cancellation">
+      <span><i class="fas fa-times-circle"></i> Cancellation Rate:</span>
+      <strong>${cancellationRate}%</strong>
+    </div>
+    <div class="rate-item total-orders">
+      <span><i class="fas fa-shopping-cart"></i> Total Orders:</span>
+      <strong>${totalOrders}</strong>
+    </div>
+  `;
 }
+
 
 fetchAndDisplayThreeMonthsData();
 // for dark mode
