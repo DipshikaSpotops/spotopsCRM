@@ -13,10 +13,10 @@ color: white;
 }
 body {
 display: flex;
+overflow: hidden;
 flex-direction: column;
-height: 100vh;
-margin: 0;
-padding: 0;
+background-color: #eaf6ff;
+text-align: center;
 }
 #searchInput {
 width: 40%;
@@ -352,6 +352,10 @@ table thead th {
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
 }
+#filterAndTotal{
+  display: flex;
+    margin-left: 38%;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -443,7 +447,7 @@ window.location.href = "login_signup.html";
 <div class="table-responsive">
 <div id="filterAndTotal" style="display: flex;">
 <div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
+<input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;color: white;width: auto;" />
 <button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
 <div style="display: flex;margin: 2% -2%;">
