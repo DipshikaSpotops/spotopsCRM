@@ -1030,26 +1030,38 @@ window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
 function createPaginationControls(totalPages, orders) {
-const paginationControls = $("#pagination-controls");
-paginationControls.empty(); // Clear pagination controls
+  const paginationControls = $("#pagination-controls");
+  paginationControls.empty(); // Clear pagination controls
 
-if (totalPages > 1) {
-paginationControls.append(
-`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
-);
+  if (totalPages > 1) {
+    paginationControls.append(
+      `<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
+    );
 
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(
-`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
-);
-}
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(
+        `<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
+      );
+    }
 
-paginationControls.append(
-`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
-);
-}
-}
+    paginationControls.append(
+      `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
+    );
+  }
+}// Handle page number clicks
+$(document).on("click", ".page-btn", function () {
+  const page = $(this).data("page");
+  currentPage = page;
 
+  // Remove the active-page class from all buttons
+  $(".page-btn").removeClass("active-page");
+
+  // Add the active-page class to the clicked button
+  $(this).addClass("active-page");
+
+  // Render the table rows for the selected page
+  renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
+});
 // Handle page number clicks
 $(".page-btn").off("click").on("click", function () {
 const page = $(this).data("page");
@@ -1480,4 +1492,3 @@ fetchNotifications();
 </script>
 </body>
 </html>
-bro for thr above html page, the active-page element to make the pageNo color grey for the current page is not working
