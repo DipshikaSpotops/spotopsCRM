@@ -1050,21 +1050,6 @@ paginationControls.append(
 }
 }
 
-// Handle "Previous" and "Next" button clicks
-$("#prevPage").off("click").on("click", function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
-}
-});
-
-$("#nextPage").off("click").on("click", function () {
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
-}
-});
-
 // Handle page number clicks
 $(".page-btn").off("click").on("click", function () {
 const page = $(this).data("page");
@@ -1495,3 +1480,4 @@ fetchNotifications();
 </script>
 </body>
 </html>
+bro for thr above html page, the active-page element to make the pageNo color grey for the current page is not working
