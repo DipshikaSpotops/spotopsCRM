@@ -541,68 +541,69 @@ async function fetchSalesDataForCurrentMonth() {
 }
 
 // Calculate stats based on daily data (for the current month)
-function calculateStatsForFilter(data, filter) {
-  let totalOrders = 0;
-  let estimatedGP = 0;
-  let highestGP = 0;
-  let actualAGPArr = [];
-  let totalAgp = 0;
-  let validOrdersCount = 0;
-  let actualGP = 0;
+function calculateStats(data) {
+let totalOrders = 0;
+let estimatedGP = 0;
+let highestGP = 0;
+let actualAGPArr = [];
+let totalAgp = 0;
+let validOrdersCount = 0;
+let actualGP = 0;
 
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
-  const currentYear = currentDate.getFullYear();
+data.forEach((order) => {
+totalOrders += 1;
+const salePrice = order.soldP;
+const salestax = order.salestax || 0;
+const estGP = order.grossProfit;
 
-  data.forEach((order) => {
-    const parsedOrderDate = new Date(order.orderDate); // Parse the orderDate into a Date object
-    if (!parsedOrderDate) return;
 
-    // Filter data based on the selected filter
-    if (filter === "daily") {
-      const orderMonth = parsedOrderDate.getMonth();
-      const orderYear = parsedOrderDate.getFullYear();
-      if (orderMonth !== currentMonth || orderYear !== currentYear) return;
-    }
+estimatedGP += estGP;
 
-    totalOrders += 1;
-    const salePrice = order.soldP;
-    const salestax = order.salestax || 0;
-    const estGP = order.grossProfit;
+let totalSpending = 0;
+let validOrder = false;
+actualGP = order.actualGP || 0;
+console.log("actualGP",actualGP);
+if (order.additionalInfo && order.additionalInfo.length > 0) {
+validOrdersCount++;
+order.additionalInfo.forEach((info) => {
+// const shippingDetails = info.shippingDetails ? info.shippingDetails.split(":")[1].trim() : "0";
+// const shippingCharge = parseFloat(shippingDetails) || 0;
+// const partPrice = parseFloat(info.partPrice) || 0;
+// const otherCost = parseFloat(info.others) || 0;
+// const returnShippingCharge = parseFloat(info.returnShippingCharge) || 0;
+// const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
-    estimatedGP += estGP;
-
-    let totalSpending = 0;
-    let validOrder = false;
-    actualGP = order.actualGP || 0;
-
-    if (order.additionalInfo && order.additionalInfo.length > 0) {
-      validOrdersCount++;
-      order.additionalInfo.forEach((info) => {
-        if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
-          validOrder = true;
-        }
-      });
-
-      if (validOrder) {
-        actualAGPArr.push(actualGP);
-        highestGP = Math.max(highestGP, actualGP);
-      }
-    }
-  });
-
-  totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
-  const averageGP = validOrdersCount > 0 ? totalAgp / validOrdersCount : 0;
-
-  return {
-    totalOrders,
-    estimatedGP,
-    highestGP,
-    estimatedAverageGP: averageGP,
-    totalAgp,
-  };
+// totalSpending += shippingCharge + partPrice + otherCost + returnShippingCharge - refundedAmount;
+if (info.paymentStatus === "Card charged" || info.paymentStatus === "Refund collected") {
+validOrder = true;
 }
+});
 
+if (validOrder) {
+// const actualGPForOrder = salePrice - salestax - totalSpending;
+console.log("valid",validOrder,actualGP)
+actualAGPArr.push(actualGP);
+highestGP = Math.max(highestGP, actualGP);
+}
+}
+});
+
+totalAgp = actualAGPArr.reduce((partialSum, c) => partialSum + c, 0);
+const averageGP = validOrdersCount > 0 ? totalAgp / validOrdersCount : 0;
+
+currentMonthStats = {
+totalOrders,
+estimatedGP,
+highestGP,
+estimatedAverageGP: averageGP,
+totalAgp,
+};
+
+// Update the stats-container with the current month's stats
+updateStats(currentMonthStats);
+updateRecentOrders(data);
+updateBrandSummary(data);
+}
 
 function getDaysInMonth(month, year) {
 const date = new Date(year, month, 1);
@@ -613,18 +614,20 @@ date.setDate(date.getDate() + 1);
 }
 return days;
 }
-// Function to update the stats-container based on the selected filter
-function updateStatsForFilter(filter) {
-  const data = filter === "daily" ? dailyData : allOrders; // Use dailyData for daily filter, allOrders for monthly
-  const stats = calculateStatsForFilter(data, filter);
-  updateStats(stats);
-}
 
+// Updating the stats-container with the provided stats
+function updateStats(stats) {
+$("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
+$("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
+$("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
+$("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
+$("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
+}
 
 // Fetch data based on the selected filter (daily or monthly) for the chart
 async function fetchSalesData(filter) {
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
+  const currentMonth = currentDate.getMonth(); 
   const currentYear = currentDate.getFullYear();
 
   try {
@@ -639,8 +642,8 @@ async function fetchSalesData(filter) {
 
     const data = response.data.filter((order) => order.salesAgent === firstName);
     const salesData = [];
-    const labels = filter === "daily"
-      ? getDaysInMonth(currentMonth, currentYear)
+    const labels = filter === "daily" 
+      ? getDaysInMonth(currentMonth, currentYear) 
       : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     labels.forEach((label) => {
@@ -658,8 +661,8 @@ async function fetchSalesData(filter) {
         if (orderMonth !== currentMonth || orderYear !== currentYear) return;
       }
 
-      const label = filter === "daily"
-        ? parsedOrderDate.getDate().toString()
+      const label = filter === "daily" 
+        ? parsedOrderDate.getDate().toString() 
         : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
 
       const labelIndex = labels.indexOf(label);
@@ -669,25 +672,11 @@ async function fetchSalesData(filter) {
     });
 
     updateSalesChart(salesData, labels, filter); // Update chart based on the selected filter
-    updateStatsForFilter(filter); // Update stats based on the selected filter
   } catch (error) {
     console.error("Error fetching sales data:", error);
   }
 }
-// Update the stats-container with the provided stats
-function updateStats(stats) {
-  $("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
-  $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
-  $("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
-  $("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
-  $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
-}
 
-// Event listener for filter change
-$("#salesFilter").on("change", function () {
-  const filter = $(this).val();
-  fetchSalesData(filter); // Fetch data and update chart and stats
-});
 function updateSalesChart(salesData, labels, filter) {
 const ctx = document.getElementById("salesChart").getContext("2d");
 if (window.salesChart instanceof Chart) {
