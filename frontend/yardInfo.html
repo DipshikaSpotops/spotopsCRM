@@ -15,10 +15,10 @@ rel="stylesheet"
 <style>
 body {
 display: flex;
-overflow-x: hidden;
+overflow: hidden;
 flex-direction: column;
-height: 100vh;
-margin: 0;
+background-color: #eaf6ff;
+text-align: center;
 }
 /* btn pagination */
 .pageNos{
@@ -27,7 +27,7 @@ color: black;
 border: none;
 }
 .previousNext{
-background-color: black;
+background-color: #35554f;
 color: white;
 border: none;
 padding: 10px;
@@ -50,7 +50,8 @@ cursor: pointer;
 }
 .navbar {
 color: white;
-background-color: black;
+/* background-color: black; */
+background: linear-gradient(160deg, #101a18, #80cbbc);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -62,7 +63,7 @@ z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
-background-color: black;
+/* background-color: black; */
 position: fixed;
 z-index: 1;
 top: 0;
@@ -73,6 +74,8 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
+background: linear-gradient(160deg, #101a18, #80cbbc);
+text-align: left;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -226,7 +229,7 @@ height: auto;
 width: auto;
 border-radius: 8px;
 margin: 1% -3%;
-background-color: #3096a58f;
+background-color: #35554f;
 padding: 5px;
 }
 .filter-bar {
@@ -333,6 +336,35 @@ background: rgba(0, 0, 0, 0.5);
 }
 body.modal-active {
 overflow: hidden; 
+}
+#mainHeading {
+  text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
+}
+@media (max-width: 320px) {
+#mainHeading {
+  font-size: 20px;
+}
+}
+.table-wrapper {
+  max-height: 900px; 
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #35554f; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -487,8 +519,8 @@ placeholder="Search..."
  <div id="pagination-controls" class="mt-3 mb-3"></div>
  <div id="filterAndTotal" style="display: flex;">
 <div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
+<input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;color: white;width: auto;" />
+<button id="filterButton" class="btn btn-primary" style="background-color: #35554f;color: white;border: none;">Filter</button>
 </div>
 <div style="display: flex;margin: 0% 1%;">
 <div id="showTotalOrders">Total Orders This Month-</div>
