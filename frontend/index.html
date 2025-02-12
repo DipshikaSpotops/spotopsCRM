@@ -815,12 +815,11 @@ await fetchLatestThreeMonthsOrders();
 // Fetch daily orders and display them in a chart
 // Global variable to track the daily orders chart
 let dailyOrdersChartInstance = null;
+
 async function fetchDailyOrders() {
-  // Get the current date and time in Dallas (America/Chicago)
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
 
-  // Extract month and year in Dallas time
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const month = months[currentDallasDate.getMonth()];
   const year = currentDallasDate.getFullYear();
@@ -834,15 +833,17 @@ async function fetchDailyOrders() {
       console.error("Invalid orders data.");
       return;
     }
+
     const daysInMonth = new Date(year, currentDallasDate.getMonth() + 1, 0).getDate();
     const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
     const totalOrdersData = Array(daysInMonth).fill(0);
     const totalGPData = Array(daysInMonth).fill(0);
+
     orders.forEach(order => {
       const orderDateInDallas = new Date(
         new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
       );
-      const orderDay = orderDateInDallas.getDate() - 1; 
+      const orderDay = orderDateInDallas.getDate() - 1;
 
       if (orderDay >= 0 && orderDay < daysInMonth) {
         totalOrdersData[orderDay] += 1;
@@ -864,6 +865,10 @@ async function fetchDailyOrders() {
       dailyOrdersChartInstance.destroy();
     }
 
+    // Define custom colors for lines
+    const totalOrdersColor = "rgba(255, 99, 132, 1)"; // Red
+    const actualGPColor = "rgba(54, 162, 235, 1)"; // Blue
+
     // Create new chart
     dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
       type: "line",
@@ -872,17 +877,23 @@ async function fetchDailyOrders() {
         datasets: [
           {
             label: "Total Orders",
-            backgroundColor: "rgba(54, 162, 235, 0.5)",
-            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: totalOrdersColor,
+            pointBackgroundColor: totalOrdersColor,
+            pointBorderColor: "#fff",
             data: totalOrdersData,
-            fill: true,
+            fill: true, // Fill the area under the curve
+            tension: 0.4, // Smooth curves
           },
           {
             label: "Actual GP",
-            backgroundColor: "rgba(75, 192, 192, 0.5)",
-            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: actualGPColor,
+            pointBackgroundColor: actualGPColor,
+            pointBorderColor: "#fff",
             data: totalGPData,
             fill: true,
+            tension: 0.4,
           },
         ],
       },
