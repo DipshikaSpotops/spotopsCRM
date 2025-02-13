@@ -3524,7 +3524,7 @@ const {
 custRefundDate, 
 custRefundedAmount, 
 cancelledDate, 
-cancelledRefAmount,
+custRefAmount,
 cancellationReason,
 orderStatus
 } = req.body;
