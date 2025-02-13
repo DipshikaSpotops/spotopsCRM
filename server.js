@@ -3530,7 +3530,7 @@ orderStatus
 } = req.body;
 console.log(
 "Refunds:", custRefundDate, custRefundedAmount, 
-"Cancellations:", cancelledDate, cancelledRefAmount, 
+"Cancellations:", cancelledDate, custRefAmount, 
 "OrderNo:", orderNo,
 "cancellationReason:", cancellationReason,
 "orderStatus", orderStatus
@@ -3543,7 +3543,7 @@ const updateFields = {};
 if (custRefundDate) updateFields.custRefundDate = custRefundDate;
 if (custRefundedAmount) updateFields.custRefAmount = custRefundedAmount;
 if (cancelledDate) updateFields.cancelledDate = cancelledDate;
-if (cancelledRefAmount) updateFields.custRefAmount = cancelledRefAmount;
+if (custRefAmount) updateFields.custRefAmount = custRefAmount;
 if (cancellationReason) updateFields.cancellationReason = cancellationReason;
 if (orderStatus) updateFields.orderStatus = orderStatus;
 const order = await Order.findOne({ orderNo: orderNo });
