@@ -720,7 +720,7 @@ const suffix = (day) => {
   }
 };
 const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-const cancelleddateOnly = item.cancelledDate.split(" ")[0] + " " + item.cancelledDate.split(" ")[1] + " " + item.cancelledDate.split(" ")[2];
+const cancelleddateOnly = item.cancelledDate;
 
 $("#infoTable").append(`
 <tr>
