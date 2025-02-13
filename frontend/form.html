@@ -2831,7 +2831,7 @@ const reason = $("#reasonCancel").val();
 
 console.log("Captured Data:");
 console.log("Cancelled Date:", cancelledDate);
-console.log("Cancelled Refund Amount:", cancelledRefAmount);
+// console.log("Cancelled Refund Amount:", cancelledRefAmount);
 console.log("Order No:", orderNo);
 
 axios.put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=${firstname}`, {
