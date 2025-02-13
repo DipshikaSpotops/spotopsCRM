@@ -14,11 +14,11 @@ rel="stylesheet"
 />
 <style>
 body {
-display: flex;
-overflow-x: hidden;
+  display: flex;
+overflow: hidden;
 flex-direction: column;
-height: 100vh;
-margin: 0;
+background-color: #eaf6ff;
+text-align: center;
 }
 /* btn pagination */
 .pageNos{
@@ -50,7 +50,7 @@ cursor: pointer;
 }
 .navbar {
 color: white;
-background-color: black;
+/* background-color: black; */
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -60,9 +60,10 @@ position: fixed;
 top: 0;
 z-index: 3;
 border-bottom: 1px solid #e0e0e0;
+background: linear-gradient(160deg, #101a18, #80cbbc);
 }
 .sidebar {
-background-color: black;
+/* background-color: black; */
 position: fixed;
 z-index: 1;
 top: 0;
@@ -73,6 +74,8 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
+background: linear-gradient(160deg, #101a18, #80cbbc);
+text-align: left;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -132,7 +135,7 @@ margin: 0% 30%;
   color: #c0c8b1;
   padding: 10px;
   border-radius: 22px;
-  position: fixed;
+  /* position: fixed; */
   top: 115px;
   left: 50%;
   transform: translateX(-50%);
@@ -353,11 +356,7 @@ border-radius: 4px;
 display: block;
 width: 82vw; 
 }
-.table-wrapper {
-max-height: 93vh; 
-/* overflow-y: auto;  Enable vertical scrolling */
-display: block;    /* Make the table body scrollable */
-}
+
 
 thead th {
 position: sticky;
@@ -438,7 +437,7 @@ height: auto;
 width: auto;
 border-radius: 8px;
 margin: 0% 13%;
-background-color: #3096a58f;
+background-color: #35554f;
 padding: 5px;
 position: fixed;
 }
@@ -525,7 +524,39 @@ background-color: #333;
     color: red;
     font-weight: bold;
 }
+.table-wrapper {
+  max-height: 900px; 
+  overflow-y: auto;
+}
+#mainHeading {
+  text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
+}
+@media (max-width: 320px) {
+#mainHeading {
+  font-size: 20px;
+}
+}
+.table-wrapper {
+  max-height: 900px; 
+  overflow-y: auto;
+}
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #35554f; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
