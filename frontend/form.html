@@ -2842,11 +2842,11 @@ cancellationReason:reason
 })
 .then(function (response) {
 console.log("Refund information updated successfully:", response.data);
-$("#custRefunds").val(cancelledRefAmount);
+$("#custRefunds").val(custRefAmount);
 alert("Refund information for cancelled order updated successfully!");
 
 // Send cancellation email after successful refund update
-return axios.post(`/orders/sendCancelEmail/${orderNo}?cancelledRefAmount=${cancelledRefAmount}`);
+return axios.post(`/orders/sendCancelEmail/${orderNo}?cancelledRefAmount=${custRefAmount}`);
 })
 .then(function (response) {
 console.log("Cancellation email sent successfully:", response.data.message);
