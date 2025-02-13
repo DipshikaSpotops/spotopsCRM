@@ -15,8 +15,10 @@ rel="stylesheet"
 <style>
 body {
 display: flex;
-overflow-x: scroll;
+overflow-x: hidden;
 flex-direction: column;
+height: 100vh;
+margin: 0;
 }
 #logoImg {
 height: auto;
@@ -45,7 +47,7 @@ height: 40px;
 }
 .navbar {
 color: white;
-background-color: black;
+/* background-color: black; */
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -55,9 +57,10 @@ position: fixed;
 top: 0;
 z-index: 2;
 border-bottom: 1px solid #e0e0e0;
+background: linear-gradient(160deg, #101a18, #80cbbc);
 }
 .sidebar {
-background-color: black;
+/* background-color: black; */
 position: fixed;
 z-index: 1;
 top: 0;
@@ -68,6 +71,8 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
+background: linear-gradient(160deg, #101a18, #80cbbc);
+text-align: left;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -181,7 +186,7 @@ height: auto;
 width: auto;
 border-radius: 8px;
 margin: 1% -3%;
-background-color: #3096a58f;
+background-color: #35554f;
 padding: 5px;
 color:#050505;
 }
@@ -323,14 +328,6 @@ body {
   margin: -2% -6%;
   cursor: pointer;
 }
-/* Sticky table headers */
-.table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2; /* Ensure it stays on top */
-  background-color: white; /* Match header color */
-  border: 1px solid grey;
-}
 
 /* Fixed components: Header, search input, and filter bar */
 .fixed-header {
@@ -457,6 +454,39 @@ background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
 }
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
+}
+.table-wrapper {
+  max-height: 900px; 
+  overflow-y: auto;
+}
+#mainHeading {
+  text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
+}
+@media (max-width: 320px) {
+#mainHeading {
+  font-size: 20px;
+}
+}
+.table-wrapper {
+  max-height: 900px; 
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #35554f; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -625,7 +655,7 @@ window.location.href = "login_signup.html";
         <div id="showTotalOrders">Total Refunds This Month-</div>
       </div>
     </div>
-    <div class="table-responsive">
+    <div class="table-wrapper">
       <table class="table table-bordered mt-4">
         <thead>
           <tr id="tableHeader" style="background-color: #f2f2f2">
