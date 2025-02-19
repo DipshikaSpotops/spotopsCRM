@@ -921,9 +921,16 @@ async function fetchDailyOrders() {
       dailyOrdersChartInstance.destroy();
     }
 
-    // Define custom colors for lines
-    const totalOrdersColor = "rgba(255, 99, 132, 1)"; // Red
-    const actualGPColor = "rgba(54, 162, 235, 1)"; // Blue
+    // Check if dark mode is enabled
+    const isDarkMode = document.body.classList.contains("dark-mode");
+
+    // Define colors based on dark mode
+    const totalOrdersColor = isDarkMode ? "rgba(255, 205, 86, 1)" : "rgba(255, 99, 132, 1)"; // Yellow in dark mode, Red in light mode
+    const actualGPColor = isDarkMode ? "rgba(102, 187, 106, 1)" : "rgba(54, 162, 235, 1)"; // Green in dark mode, Blue in light mode
+    const backgroundColor1 = isDarkMode ? "rgba(255, 205, 86, 0.2)" : "rgba(255, 99, 132, 0.2)";
+    const backgroundColor2 = isDarkMode ? "rgba(102, 187, 106, 0.2)" : "rgba(54, 162, 235, 0.2)";
+    const gridColor = isDarkMode ? "#555" : "#ddd";
+    const textColor = isDarkMode ? "#dfe6e9" : "#000";
 
     // Create new chart
     dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
@@ -933,7 +940,7 @@ async function fetchDailyOrders() {
         datasets: [
           {
             label: "Total Orders",
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            backgroundColor: backgroundColor1,
             borderColor: totalOrdersColor,
             pointBackgroundColor: totalOrdersColor,
             pointBorderColor: "#fff",
@@ -943,7 +950,7 @@ async function fetchDailyOrders() {
           },
           {
             label: "Actual GP",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            backgroundColor: backgroundColor2,
             borderColor: actualGPColor,
             pointBackgroundColor: actualGPColor,
             pointBorderColor: "#fff",
@@ -957,11 +964,22 @@ async function fetchDailyOrders() {
         responsive: true,
         scales: {
           x: {
-            title: { display: true, text: "Day of the Month" },
+            title: { display: true, text: "Day of the Month", color: textColor },
+            ticks: { color: textColor },
+            grid: { color: gridColor },
           },
           y: {
-            title: { display: true, text: "Actual GP" },
+            title: { display: true, text: "Actual GP", color: textColor },
             min: 0,
+            ticks: { color: textColor },
+            grid: { color: gridColor },
+          },
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: textColor, // Update legend text color for dark mode
+            },
           },
         },
       },
