@@ -921,9 +921,14 @@ async function fetchDailyOrders() {
       dailyOrdersChartInstance.destroy();
     }
 
-    // Define custom colors for lines
-    const totalOrdersColor = "rgba(255, 99, 132, 1)"; // Red
-    const actualGPColor = "rgba(54, 162, 235, 1)"; // Blue
+    // Check if dark mode is enabled
+    const isDarkMode = document.body.classList.contains("dark-mode");
+
+    // Set colors based on mode
+    const totalOrdersColor = isDarkMode ? "rgba(0, 255, 255, 1)" : "rgba(255, 99, 132, 1)"; // Cyan in dark mode, Red in light mode
+    const actualGPColor = isDarkMode ? "rgba(255, 165, 0, 1)" : "rgba(54, 162, 235, 1)"; // Orange in dark mode, Blue in light mode
+    const totalOrdersFill = isDarkMode ? "rgba(0, 255, 255, 0.2)" : "rgba(255, 99, 132, 0.2)";
+    const actualGPFill = isDarkMode ? "rgba(255, 165, 0, 0.2)" : "rgba(54, 162, 235, 0.2)";
 
     // Create new chart
     dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
@@ -933,7 +938,7 @@ async function fetchDailyOrders() {
         datasets: [
           {
             label: "Total Orders",
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            backgroundColor: totalOrdersFill,
             borderColor: totalOrdersColor,
             pointBackgroundColor: totalOrdersColor,
             pointBorderColor: "#fff",
@@ -943,7 +948,7 @@ async function fetchDailyOrders() {
           },
           {
             label: "Actual GP",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            backgroundColor: actualGPFill,
             borderColor: actualGPColor,
             pointBackgroundColor: actualGPColor,
             pointBorderColor: "#fff",
@@ -972,6 +977,7 @@ async function fetchDailyOrders() {
     console.error("Error fetching daily orders:", error);
   }
 }
+
 
 fetchDailyOrders();
 
