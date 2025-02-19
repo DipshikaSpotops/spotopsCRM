@@ -1003,7 +1003,6 @@ async function fetchDailyOrders() {
           },
           title: {
             display: true,
-            text: "Daily Orders (This Month)",
             color: colors.axisColor,
           },
         },
@@ -1168,18 +1167,32 @@ function initializeMonthlySalesProgressChart(labels, data) {
       ],
     },
     options: {
+      
       responsive: true,
-      scales: {
-        x: {
+        scales: {
+          x: {
             title: { display: true, text: "Month", color: colors.axisColor },
             ticks: { color: colors.axisColor },
             grid: { color: colors.gridColor },
-          }
+          },
           y: {
             title: { display: true, text: "Actual GP", color: colors.axisColor },
             ticks: { color: colors.axisColor },
             grid: { color: colors.gridColor },
+            min: 0, // Prevent negative values
           },
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: colors.legendColor,
+            },
+          },
+          title: {
+            display: true,
+            color: colors.axisColor,
+          },
+        },
     },
   });
 }
