@@ -211,10 +211,15 @@ color: #e0e0e0;
 }
 .dark-mode .firstRow {
 color: white;
+border: 1px solid #484b4b;
 }
 .dark-mode .form-control{
 border: none;
-color: #454242;
+background-color: #454242;
+}
+.dark-mode .dollars{
+  border: none;
+background-color: #454242;
 }
 .dark-mode .navbar, 
 .dark-mode .sidebar {
@@ -768,7 +773,7 @@ window.location.href = "login_signup.html";
 <div class="form-group col-md-2">
 <div class="input-group">
 <div class="input-group-prepend">
-<span class="input-group-text">$</span>
+<span class="input-group-text dollars">$</span>
 </div>
 <input type="text" class="form-control" id="soldP" required placeholder="Sale Price" />
 </div>
@@ -776,7 +781,7 @@ window.location.href = "login_signup.html";
 <div class="form-group col-md-2">
 <div class="input-group">
 <div class="input-group-prepend">
-<span class="input-group-text">$</span>
+<span class="input-group-text dollars">$</span>
 </div>
 <input type="text" class="form-control" id="costP" required placeholder="Est. Yard Price" />
 </div>
@@ -784,7 +789,7 @@ window.location.href = "login_signup.html";
 <div class="form-group col-md-2">
 <div class="input-group">
 <div class="input-group-prepend">
-<span class="input-group-text">$</span>
+<span class="input-group-text dollars">$</span>
 </div>
 <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
 </div>
@@ -796,7 +801,7 @@ window.location.href = "login_signup.html";
 <div class="form-group col-md-2">
   <div class="input-group">
   <div class="input-group-prepend">
-  <span class="input-group-text">%</span>
+  <span class="input-group-text dollars">%</span>
   </div>
   <input type="text" class="form-control" id="salestax" readonly required placeholder="Sales Tax" />
   </div>
@@ -811,7 +816,7 @@ window.location.href = "login_signup.html";
   <div class="form-group col-md-2">
   <div class="input-group">
   <div class="input-group-prepend">
-  <span class="input-group-text">$</span>
+  <span class="input-group-text dollars">$</span>
   </div>
   <input type="text" class="form-control" id="grossProfit" readonly required placeholder="Estimated GP" />
   </div>
