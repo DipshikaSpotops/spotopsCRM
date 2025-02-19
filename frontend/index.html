@@ -872,6 +872,16 @@ await fetchLatestThreeMonthsOrders();
 // Global variable to track the daily orders chart
 let dailyOrdersChartInstance = null;
 
+function getChartColors() {
+  const isDarkMode = document.body.classList.contains("dark-mode");
+
+  return {
+    totalOrdersColor: isDarkMode ? "rgba(255, 193, 7, 1)" : "rgba(255, 99, 132, 1)", // Yellow in dark mode, Red in light mode
+    actualGPColor: isDarkMode ? "rgba(40, 167, 69, 1)" : "rgba(54, 162, 235, 1)", // Green in dark mode, Blue in light mode
+    totalOrdersBg: isDarkMode ? "rgba(255, 193, 7, 0.2)" : "rgba(255, 99, 132, 0.2)",
+    actualGPBg: isDarkMode ? "rgba(40, 167, 69, 0.2)" : "rgba(54, 162, 235, 0.2)"
+  };
+}
 async function fetchDailyOrders() {
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
@@ -921,14 +931,8 @@ async function fetchDailyOrders() {
       dailyOrdersChartInstance.destroy();
     }
 
-    // Check if dark mode is enabled
-    const isDarkMode = document.body.classList.contains("dark-mode");
-console.log("isDark",isDarkMode);
-    // Set colors based on mode
-    const totalOrdersColor = isDarkMode ? "rgba(0, 255, 255, 1)" : "rgba(255, 99, 132, 1)"; // Cyan in dark mode, Red in light mode
-    const actualGPColor = isDarkMode ? "rgba(255, 165, 0, 1)" : "rgba(54, 162, 235, 1)"; // Orange in dark mode, Blue in light mode
-    const totalOrdersFill = isDarkMode ? "rgba(0, 255, 255, 0.2)" : "rgba(255, 99, 132, 0.2)";
-    const actualGPFill = isDarkMode ? "rgba(255, 165, 0, 0.2)" : "rgba(54, 162, 235, 0.2)";
+    // Get correct colors based on the mode
+    const colors = getChartColors();
 
     // Create new chart
     dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
@@ -938,9 +942,9 @@ console.log("isDark",isDarkMode);
         datasets: [
           {
             label: "Total Orders",
-            backgroundColor: totalOrdersFill,
-            borderColor: totalOrdersColor,
-            pointBackgroundColor: totalOrdersColor,
+            backgroundColor: colors.totalOrdersBg,
+            borderColor: colors.totalOrdersColor,
+            pointBackgroundColor: colors.totalOrdersColor,
             pointBorderColor: "#fff",
             data: totalOrdersData,
             fill: true, // Fill the area under the curve
@@ -948,9 +952,9 @@ console.log("isDark",isDarkMode);
           },
           {
             label: "Actual GP",
-            backgroundColor: actualGPFill,
-            borderColor: actualGPColor,
-            pointBackgroundColor: actualGPColor,
+            backgroundColor: colors.actualGPBg,
+            borderColor: colors.actualGPColor,
+            pointBackgroundColor: colors.actualGPColor,
             pointBorderColor: "#fff",
             data: totalGPData,
             fill: true,
@@ -977,6 +981,34 @@ console.log("isDark",isDarkMode);
     console.error("Error fetching daily orders:", error);
   }
 }
+const darkModeToggle = document.getElementById("darkModeIcon");
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+  const isDarkMode = document.body.classList.contains("dark-mode");
+  localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+
+  // Change icon
+  darkModeToggle.classList.toggle("fa-moon", !isDarkMode);
+  darkModeToggle.classList.toggle("fa-sun", isDarkMode);
+
+  // Re-fetch chart with correct colors
+  fetchDailyOrders();
+}
+
+// Check stored preference and apply dark mode if needed
+const savedDarkMode = localStorage.getItem("darkMode");
+if (savedDarkMode === "enabled") {
+  document.body.classList.add("dark-mode");
+  darkModeToggle.classList.remove("fa-moon");
+  darkModeToggle.classList.add("fa-sun");
+} else {
+  darkModeToggle.classList.add("fa-moon");
+  darkModeToggle.classList.remove("fa-sun");
+}
+
+// Event listener for dark mode toggle
+darkModeToggle.addEventListener("click", toggleDarkMode);
 
 
 fetchDailyOrders();
