@@ -1170,11 +1170,16 @@ function initializeMonthlySalesProgressChart(labels, data) {
     options: {
       responsive: true,
       scales: {
-        x: { title: { display: true, text: "Month" , color: colors.axisColor,ticks: { color: colors.axisColor },
-        grid: { color: colors.gridColor },} },
-        y: { title: { display: true, text: "Actual GP", color: colors.axisColor,ticks: { color: colors.axisColor },
-        grid: { color: colors.gridColor }, } },
-      },
+        x: {
+            title: { display: true, text: "Month", color: colors.axisColor },
+            ticks: { color: colors.axisColor },
+            grid: { color: colors.gridColor },
+          }
+          y: {
+            title: { display: true, text: "Actual GP", color: colors.axisColor },
+            ticks: { color: colors.axisColor },
+            grid: { color: colors.gridColor },
+          },
     },
   });
 }
