@@ -876,17 +876,24 @@ function getChartColors() {
   const isDarkMode = document.body.classList.contains("dark-mode");
 
   return {
-    totalOrdersColor: isDarkMode ? "#c1627e" : "rgba(255, 99, 132, 1)", // Yellow in dark mode, Red in light mode
-    actualGPColor: isDarkMode ? "#6a74fb" : "rgba(54, 162, 235, 1)", // Green in dark mode, Blue in light mode
+    totalOrdersColor: isDarkMode ? "#c1627e" : "rgba(255, 99, 132, 1)", 
+    actualGPColor: isDarkMode ? "#6a74fb" : "rgba(54, 162, 235, 1)", 
     totalOrdersBg: isDarkMode ? "rgba(255, 193, 7, 0.2)" : "rgba(255, 99, 132, 0.2)",
     actualGPBg: isDarkMode ? "#29638c" : "rgba(54, 162, 235, 0.2)",
     
-    // Axis and label colors
-    axisColor: isDarkMode ? "#FFFFFF" : "#000000", // White in dark mode, Black in light mode
-    gridColor: isDarkMode ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)", // Lighter grid for dark mode
-    legendColor: isDarkMode ? "#FFFFFF" : "#000000" // Legend text color
+    axisColor: isDarkMode ? "#FFFFFF" : "#000000",
+    gridColor: isDarkMode ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)", 
+    legendColor: isDarkMode ? "#FFFFFF" : "#000000", 
+
+    // Monthly chart colors
+    pieChartBgColors: isDarkMode
+      ? ["#8B5CF6", "#A78BFA", "#6366F1", "#60A5FA", "#22D3EE", "#34D399", "#F87171", "#FACC15", "#E879F9"]
+      : ["#d5f0c0", "#ffe5a0", "#97d8fb", "#c3d5fa", "#f8aaa8", "#a7cf90", "#dd412b", "#5a3286", "#e6cff2"],
+    pieChartBorderColor: isDarkMode ? "#B3B3B3" : "#C0C0C0",
+    pieChartLegendColor: isDarkMode ? "#FFFFFF" : "#000000"
   };
 }
+
 async function fetchDailyOrders() {
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
@@ -1168,9 +1175,20 @@ function updateMonthlyChart(index, monthName, orders) {
     chartInstances[index].destroy();
   }
 
+  // Function to check dark mode and set colors accordingly
+  const isDarkMode = document.body.classList.contains("dark-mode");
+  const colors = {
+    backgroundColors: isDarkMode
+      ? ["#8B5CF6", "#A78BFA", "#6366F1", "#60A5FA", "#22D3EE", "#34D399", "#F87171", "#FACC15", "#E879F9"]
+      : ["#d5f0c0", "#ffe5a0", "#97d8fb", "#c3d5fa", "#f8aaa8", "#a7cf90", "#dd412b", "#5a3286", "#e6cff2"],
+    borderColor: isDarkMode ? "#B3B3B3" : "#C0C0C0",
+    legendColor: isDarkMode ? "#FFFFFF" : "#000000",
+    titleColor: isDarkMode ? "#FFFFFF" : "#000000",
+  };
+
   const statusLabels = [
     "Placed",
-    "Customer approved",
+    "Customer Approved",
     "Yard Processing",
     "In Transit",
     "Escalation",
@@ -1205,20 +1223,10 @@ function updateMonthlyChart(index, monthName, orders) {
         {
           label: `Order Status Distribution for ${monthName}`,
           data: statusCounts,
-          backgroundColor: [
-            "#d5f0c0", // Placed
-            "#ffe5a0", // Customer approved
-            "#97d8fb", // Yard Processing
-            "#c3d5fa", // In Transit
-            "#f8aaa8", // Escalation
-            "#a7cf90", // Order Fulfilled
-            "#dd412b", // Order Cancelled
-            "#5a3286", // Refunded
-            "#e6cff2", // Dispute
-          ],
-          border:"none",
+          backgroundColor: colors.backgroundColors,
+          borderColor: colors.borderColor,
+          borderWidth: 1,
           hoverOffset: 4,
-          borderColor:"#c0c0c0",
         },
       ],
     },
@@ -1226,11 +1234,15 @@ function updateMonthlyChart(index, monthName, orders) {
       responsive: true,
       plugins: {
         legend: {
+          labels: {
+            color: colors.legendColor, // Legend text color
+          },
           position: "right",
         },
         title: {
           display: true,
           text: `Order Status Distribution for ${monthName}`,
+          color: colors.titleColor, // Chart title color
         },
       },
     },
@@ -1259,6 +1271,7 @@ function updateMonthlyChart(index, monthName, orders) {
     </div>
   `;
 }
+
 
 
 fetchAndDisplayThreeMonthsData();
