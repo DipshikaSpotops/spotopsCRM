@@ -887,7 +887,6 @@ function getChartColors() {
     legendColor: isDarkMode ? "#FFFFFF" : "#000000" // Legend text color
   };
 }
-
 async function fetchDailyOrders() {
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
@@ -973,27 +972,28 @@ async function fetchDailyOrders() {
         scales: {
           x: {
             title: { display: true, text: "Day of the Month", color: colors.axisColor },
-            ticks: { color: colors.axisColor }, // X-axis labels
-            grid: { color: colors.gridColor } // Grid lines
+            ticks: { color: colors.axisColor },
+            grid: { color: colors.gridColor },
           },
           y: {
             title: { display: true, text: "Actual GP", color: colors.axisColor },
-            ticks: { color: colors.axisColor }, // Y-axis labels
-            grid: { color: colors.gridColor } // Grid lines
+            ticks: { color: colors.axisColor },
+            grid: { color: colors.gridColor },
+            min: 0, // Prevent negative values
           },
         },
         plugins: {
           legend: {
             labels: {
-              color: colors.legendColor // Change legend text color
-            }
+              color: colors.legendColor,
+            },
           },
           title: {
             display: true,
             text: "Daily Orders (This Month)",
-            color: colors.axisColor
-          }
-        }
+            color: colors.axisColor,
+          },
+        },
       },
     });
 
@@ -1002,6 +1002,7 @@ async function fetchDailyOrders() {
     console.error("Error fetching daily orders:", error);
   }
 }
+
 
 const darkModeToggle = document.getElementById("darkModeIcon");
 
