@@ -873,105 +873,61 @@ await fetchLatestThreeMonthsOrders();
 let dailyOrdersChartInstance = null;
 
 async function fetchDailyOrders() {
-  const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-  const currentDallasDate = new Date(now);
+  const ctx = document.getElementById("dailyOrdersChart").getContext("2d");
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[currentDallasDate.getMonth()];
-  const year = currentDallasDate.getFullYear();
+  // Destroy previous chart if it exists
+  if (dailyOrdersChartInstance) {
+    dailyOrdersChartInstance.destroy();
+  }
 
-  try {
-    console.log(`Fetching data for ${month} ${year}`);
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`);
-    const orders = response.data;
+  const isDarkMode = document.body.classList.contains("dark-mode");
 
-    if (!orders || !Array.isArray(orders)) {
-      console.error("Invalid orders data.");
-      return;
-    }
-
-    const daysInMonth = new Date(year, currentDallasDate.getMonth() + 1, 0).getDate();
-    const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
-    const totalOrdersData = Array(daysInMonth).fill(0);
-    const totalGPData = Array(daysInMonth).fill(0);
-
-    orders.forEach(order => {
-      const orderDateInDallas = new Date(
-        new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
-      );
-      const orderDay = orderDateInDallas.getDate() - 1;
-
-      if (orderDay >= 0 && orderDay < daysInMonth) {
-        totalOrdersData[orderDay] += 1;
-        totalGPData[orderDay] += order.actualGP || 0;
-      }
-    });
-
-    console.log("Total Orders Data (daily):", totalOrdersData);
-    console.log("Total GP Data (daily):", totalGPData);
-
-    const ctx = document.getElementById("dailyOrdersChart");
-    if (!ctx) {
-      console.error("dailyOrdersChart element not found.");
-      return;
-    }
-
-    // Destroy the previous chart instance if it exists
-    if (dailyOrdersChartInstance) {
-      dailyOrdersChartInstance.destroy();
-    }
-
-    // Define custom colors for lines
-    const totalOrdersColor = "rgba(255, 99, 132, 1)"; // Red
-    const actualGPColor = "rgba(54, 162, 235, 1)"; // Blue
-
-    // Create new chart
-    dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Total Orders",
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            borderColor: totalOrdersColor,
-            pointBackgroundColor: totalOrdersColor,
-            pointBorderColor: "#fff",
-            data: totalOrdersData,
-            fill: true, // Fill the area under the curve
-            tension: 0.4, // Smooth curves
+  dailyOrdersChartInstance = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["1", "2", "3", "4", "5"], // Sample Data
+      datasets: [
+        {
+          label: "Total Orders",
+          backgroundColor: isDarkMode
+            ? darkModeColors.lineBackgroundColor[0]
+            : "rgba(255, 99, 132, 0.2)",
+          borderColor: isDarkMode
+            ? darkModeColors.lineBorderColor[0]
+            : "rgba(255, 99, 132, 1)",
+          pointBackgroundColor: isDarkMode
+            ? darkModeColors.lineBorderColor[0]
+            : "rgba(255, 99, 132, 1)",
+          data: [10, 20, 30, 40, 50], // Sample Data
+          fill: true,
+          tension: 0.4,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          ticks: {
+            color: isDarkMode ? darkModeColors.textColor : "#000",
           },
-          {
-            label: "Actual GP",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
-            borderColor: actualGPColor,
-            pointBackgroundColor: actualGPColor,
-            pointBorderColor: "#fff",
-            data: totalGPData,
-            fill: true,
-            tension: 0.4,
+          grid: {
+            color: isDarkMode ? darkModeColors.gridColor : "#ddd",
           },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            title: { display: true, text: "Day of the Month" },
+        },
+        y: {
+          ticks: {
+            color: isDarkMode ? darkModeColors.textColor : "#000",
           },
-          y: {
-            title: { display: true, text: "Actual GP" },
-            min: 0,
+          grid: {
+            color: isDarkMode ? darkModeColors.gridColor : "#ddd",
           },
         },
       },
-    });
-
-    console.log("Chart rendered successfully.");
-  } catch (error) {
-    console.error("Error fetching daily orders:", error);
-  }
+    },
+  });
 }
+
 
 fetchDailyOrders();
 
