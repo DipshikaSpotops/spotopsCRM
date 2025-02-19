@@ -913,8 +913,8 @@ if (!token) {
 await fetchToken();
 token = localStorage.getItem("token");
 }
-$(document).ready(async function () {
-    const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
 
     if (lastVisitedPage && document.referrer.includes("form.html")) {
         let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
@@ -933,7 +933,6 @@ $(document).ready(async function () {
         // If coming from another menu, set it to the current month
         const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
         const date = new Date(now);
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const month = months[date.getMonth()];
         const year = date.getFullYear();
         $("#monthYearPicker").val(`${year}-${String(date.getMonth() + 1).padStart(2, "0")}`);
@@ -965,7 +964,6 @@ $(document).ready(async function () {
         sessionStorage.removeItem("selectedMonthYear");
         sessionStorage.removeItem("currentPage");
     });
-});
 
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
