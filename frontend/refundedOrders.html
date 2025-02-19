@@ -915,23 +915,7 @@ token = localStorage.getItem("token");
 }
 
 // Fetch orders and apply pagination
-const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-
-if (lastVisitedPage && document.referrer.includes("form.html")) {
-    let savedMonthYear = sessionStorage.getItem("refundedOrders_monthYear");
-    let savedPage = sessionStorage.getItem("refundedOrders_page");
-
-    if (savedMonthYear) {
-        $("#monthYearPicker").val(savedMonthYear); // Restore filter
-    }
-
-    if (savedPage) {
-        currentPage = parseInt(savedPage); // Restore page
-    }
-
-    sessionStorage.removeItem("lastVisitedPage"); // Clear after restoring
-} else {
-  const now = new Date();
+const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
 year: 'numeric',
@@ -947,7 +931,7 @@ const parts = formatter.formatToParts(now);
 const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 const date = new Date(formattedDate);
 // Array of month names
-const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const day = date.getDate();
 const month = months[date.getMonth()];
 const year = date.getFullYear();
@@ -959,12 +943,6 @@ Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
-}
-
-// Fetch and display orders
-const [year, monthNumber] = $("#monthYearPicker").val().split("-");
-const month = months[parseInt(monthNumber, 10) - 1];
-
 //orders for the current month
 try {
 const ordersResponse = await axios.get(`https://www.spotops360.com/orders/refunded?month=${month}&year=${year}`, {
@@ -1026,14 +1004,9 @@ return orderNoB - orderNoA;
 }
 
 $("#infoTable").on("click", ".process-btn", function () {
-    const id = $(this).data("id");
-    // Save state before navigating
-    sessionStorage.setItem("lastVisitedPage", window.location.href); // Save last visited URL
-    sessionStorage.setItem("refundedOrders_monthYear", $("#monthYearPicker").val());
-    sessionStorage.setItem("refundedOrders_page", currentPage);
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+const id = $(this).data("id");
+window.location.href = `form.html?orderNo=${id}&process=true`;
 });
-
 
 
 
