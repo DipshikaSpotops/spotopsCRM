@@ -1140,7 +1140,6 @@ async function fetchAndDisplayThreeMonthsData() {
 let monthlySalesProgressChartInstance = null;
 
 function initializeMonthlySalesProgressChart(labels, data) {
-  const colors = getChartColors();
   const ctx = document
     .getElementById("monthlySalesProgressChart")
     .getContext("2d");
@@ -1170,8 +1169,10 @@ function initializeMonthlySalesProgressChart(labels, data) {
     options: {
       responsive: true,
       scales: {
-        x: { title: { display: true, text: "Month" , color: colors.axisColor} },
-        y: { title: { display: true, text: "Actual GP", color: colors.axisColor } },
+        x: { title: { display: true, text: "Month" , color: colors.axisColor,ticks: { color: colors.axisColor },
+        grid: { color: colors.gridColor },} },
+        y: { title: { display: true, text: "Actual GP", color: colors.axisColor,ticks: { color: colors.axisColor },
+        grid: { color: colors.gridColor }, } },
       },
     },
   });
