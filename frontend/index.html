@@ -877,9 +877,14 @@ function getChartColors() {
 
   return {
     totalOrdersColor: isDarkMode ? "rgba(255, 193, 7, 1)" : "rgba(255, 99, 132, 1)", // Yellow in dark mode, Red in light mode
-    actualGPColor: isDarkMode ? "#696ffb" : "rgba(54, 162, 235, 1)", // Green in dark mode, Blue in light mode
+    actualGPColor: isDarkMode ? "rgba(40, 167, 69, 1)" : "rgba(54, 162, 235, 1)", // Green in dark mode, Blue in light mode
     totalOrdersBg: isDarkMode ? "rgba(255, 193, 7, 0.2)" : "rgba(255, 99, 132, 0.2)",
-    actualGPBg: isDarkMode ? "rgba(40, 167, 69, 0.2)" : "rgba(54, 162, 235, 0.2)"
+    actualGPBg: isDarkMode ? "rgba(40, 167, 69, 0.2)" : "rgba(54, 162, 235, 0.2)",
+    
+    // Axis and label colors
+    axisColor: isDarkMode ? "#FFFFFF" : "#000000", // White in dark mode, Black in light mode
+    gridColor: isDarkMode ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)", // Lighter grid for dark mode
+    legendColor: isDarkMode ? "#FFFFFF" : "#000000" // Legend text color
   };
 }
 
@@ -948,8 +953,8 @@ async function fetchDailyOrders() {
             pointBackgroundColor: colors.totalOrdersColor,
             pointBorderColor: "#fff",
             data: totalOrdersData,
-            fill: true, // Fill the area under the curve
-            tension: 0.4, // Smooth curves
+            fill: true,
+            tension: 0.4,
           },
           {
             label: "Actual GP",
@@ -967,13 +972,28 @@ async function fetchDailyOrders() {
         responsive: true,
         scales: {
           x: {
-            title: { display: true, text: "Day of the Month" },
+            title: { display: true, text: "Day of the Month", color: colors.axisColor },
+            ticks: { color: colors.axisColor }, // X-axis labels
+            grid: { color: colors.gridColor } // Grid lines
           },
           y: {
-            title: { display: true, text: "Actual GP" },
-            min: 0,
+            title: { display: true, text: "Actual GP", color: colors.axisColor },
+            ticks: { color: colors.axisColor }, // Y-axis labels
+            grid: { color: colors.gridColor } // Grid lines
           },
         },
+        plugins: {
+          legend: {
+            labels: {
+              color: colors.legendColor // Change legend text color
+            }
+          },
+          title: {
+            display: true,
+            text: "Daily Orders (This Month)",
+            color: colors.axisColor
+          }
+        }
       },
     });
 
