@@ -882,6 +882,7 @@ function getChartColors() {
     actualGPBg: isDarkMode ? "rgba(40, 167, 69, 0.2)" : "rgba(54, 162, 235, 0.2)"
   };
 }
+
 async function fetchDailyOrders() {
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
@@ -981,6 +982,7 @@ async function fetchDailyOrders() {
     console.error("Error fetching daily orders:", error);
   }
 }
+
 const darkModeToggle = document.getElementById("darkModeIcon");
 
 function toggleDarkMode() {
@@ -1009,7 +1011,6 @@ if (savedDarkMode === "enabled") {
 
 // Event listener for dark mode toggle
 darkModeToggle.addEventListener("click", toggleDarkMode);
-
 
 fetchDailyOrders();
 
