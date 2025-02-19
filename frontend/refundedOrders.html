@@ -1005,7 +1005,9 @@ return orderNoB - orderNoA;
 
 $("#infoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}&process=true`;
+sessionStorage.setItem("refundedOrders_monthYear", $("#monthYearPicker").val());
+    sessionStorage.setItem("refundedOrders_page", currentPage);
+    window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
 

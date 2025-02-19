@@ -203,6 +203,15 @@ h2 {
     text-decoration-line: underline;
     color: #023f42;
 }
+#expediteS {
+  display: flex
+;
+    align-items: center;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    color: #6e5e5e;
+    height: 3vh;
+}
 /* Dark Mode Styles */
 /* for dark mode */
 .dark-mode {
@@ -219,8 +228,9 @@ background-color: #454242;
 }
 .dark-mode .dollars{
   border: none;
-background-color: black;
+background-color: #c2c0c0;
 }
+
 .dark-mode .navbar, 
 .dark-mode .sidebar {
   background: #1f2940;
@@ -794,7 +804,7 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="shippingFee" required placeholder="Est. Shipping" />
 </div>
 </div>  
-<div class="form-group col-md-2" style="display: flex; align-items: center;border: 1px solid #c0c0c0;border-radius: 5px;color: #6e5e5e;height: 3vh;">
+<div class="form-group col-md-2" id="expediteS">
   <label for="expeditorNot" style="margin-right: 10px;">Expedite Shipping</label>
   <input type="checkbox" id="expeditorNot" style="width: 30px;height: 23px;">
 </div>
