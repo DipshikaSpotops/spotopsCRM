@@ -1140,6 +1140,7 @@ async function fetchAndDisplayThreeMonthsData() {
 let monthlySalesProgressChartInstance = null;
 
 function initializeMonthlySalesProgressChart(labels, data) {
+  const colors = getChartColors();
   const ctx = document
     .getElementById("monthlySalesProgressChart")
     .getContext("2d");
