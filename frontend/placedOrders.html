@@ -77,6 +77,7 @@ height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
 text-align: left;
+scrollbar-color: white white;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -266,10 +267,18 @@ color:white;
 #filterButton {
   background-color: #35554f;color:white; border: none;
 }
+.approve-btn {
+  background-color: #35554f;
+    border: none;
+    color: white;
+}
 /* for dark mode */
 .dark-mode {
 background-color: #141b2d;
 color: #999999;
+}
+.dark-mode .approve-btn {
+  background-color: #29638c;
 }
 .dark-mode #mainHeading{
 color: #999999;
@@ -297,6 +306,7 @@ background-color: #0e0c0c;
 .dark-mode .sidebar {
   background: #1f2940;
   border-color: #333;
+  scrollbar-color: #1f2940 #1f2940;
 }
 .dark-mode #showTotalOrders {
   background-color: #29638c;
@@ -1107,7 +1117,7 @@ var formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}
 $("#infoTable").append(
 `<tr data-id="${item.orderNo}">
 <td>
-<button style="background-color: #35554f; border: none; color: white;" 
+<button 
 class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">
 Approve
 </button>
