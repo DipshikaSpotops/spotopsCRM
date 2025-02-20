@@ -483,6 +483,16 @@ table thead th {
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
 }
+.table tbody tr:hover {
+    background-color: #c0c0c0 !important; /* Light green shade */
+    cursor: pointer;
+}
+
+/* Selected row style */
+.table tbody tr.selected {
+    background-color: #757070 !important; /* Blue shade */
+    color: white;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -1456,7 +1466,13 @@ $("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
+$("#yardInfoTable").on("click", "tr", function () {
+        // Remove selection from all rows
+        $("#yardInfoTable tr").removeClass("selected");
 
+        // Add selection to the clicked row
+        $(this).addClass("selected");
+    });
 });
 </script>
 </body>
