@@ -1023,10 +1023,7 @@ $("#infoTable").on("click", ".process-btn", function () {
     window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 $("#infoTable").on("click", "tr", function () {
-        // Remove selection from all rows
         $("#infoTable tr").removeClass("selected");
-
-        // Add selection to the clicked row
         $(this).addClass("selected");
     });
 
