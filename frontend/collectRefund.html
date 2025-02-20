@@ -674,7 +674,7 @@ window.location.href = "login_signup.html";
             </th>
           </tr>
         </thead>
-        <tbody id="InfoTable" style="text-align: center">
+        <tbody id="yardInfoTable" style="text-align: center">
 <!-- Yard information will be appended here -->
 </tbody>
 <tfoot id="tableFooter">
@@ -1470,9 +1470,9 @@ $(document).ready(function () {
     // Highlight row on hover (CSS handles this)
 
     // Row selection logic
-    $("#infoTable").on("click", "tr", function () {
+    $("#yardInfoTable").on("click", "tr", function () {
         // Remove selection from all rows
-        $("#infoTable tr").removeClass("selected");
+        $("#yardInfoTable tr").removeClass("selected");
 
         // Add selection to the clicked row
         $(this).addClass("selected");
