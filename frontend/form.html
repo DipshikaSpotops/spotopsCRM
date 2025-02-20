@@ -924,13 +924,23 @@ width: 100%;
 }
 /* for dark mode */
 .dark-mode {
-background-color: #121212;
-color: #e0e0e0;
+background-color: #141b2d;
+color: #999999;
+}
+.dark-mode h2{
+color: #999999;
+}
+.dark-mode .form-control{
+border: none;
+background-color: #0e0c0c;
+}
+.dark-mode .navbar .user-info span, #darkModeIcon, #notificationIcon, #userMenu{
+  color: white;
 }
 .dark-mode .navbar, 
 .dark-mode .sidebar {
-background-color: #1f1f1f;
-border-color: #333;
+  background: #1f2940;
+  border-color: #333;
 }
 
 .dark-mode .nav-link,
@@ -944,18 +954,12 @@ background-color: rgba(255, 255, 255, 0.1);
 }
 
 .dark-mode .main-content {
-background-color: #121212;
+background-color: #141b2d;
 color: #e0e0e0;
 }
 
-.dark-mode .chart-wrapper,
-.dark-mode .chart-item-monthly {
-background-color: #1f1f1f;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-.dark-mode .rate-item {
-background-color: #333;
-}
+
+
 .container {
   display: flex;
   flex-direction: column;
@@ -1088,40 +1092,7 @@ input[type="date"]:valid {
     height: 3vh;
   }
   /* for dark mode */
-.dark-mode {
-background-color: #121212;
-color: #e0e0e0;
-}
-.dark-mode .navbar, 
-.dark-mode .sidebar {
-background-color: #1f1f1f;
-border-color: #333;
-}
 
-.dark-mode .nav-link,
-.dark-mode .nav-link i {
-color: #b3b3b3 !important;
-}
-
-.dark-mode .nav-link:hover,
-.dark-mode .nav-link.selected {
-background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode .main-content {
-background-color: #121212;
-color: #e0e0e0;
-}
-
-.dark-mode .chart-wrapper,
-.dark-mode .chart-item-monthly {
-background-color: #1f1f1f;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .rate-item {
-background-color: #333;
-}
 /* notification */
 .notification-badge {
   position: absolute;
@@ -5878,52 +5849,32 @@ alert("An unexpected error occurred. Please try again.");
 //     window.history.back();
 // });
 // for dark mode
-const darkModeToggle = document.getElementById("darkModeIcon");
-// Function to toggle dark mode
-function toggleDarkMode() {
-document.body.classList.toggle("dark-mode");
-const isDarkMode = document.body.classList.contains("dark-mode");
-$(".sidebarOrder").css({"background-color": "black",
-"color":"#b0bdc7"
-}); 
-$(".form-container").css("background-color", "black"); 
-$(".new-div").css("background-color", "black"); 
-$("#saleNote").css("border", "1px solid rgb(39 43 41)"); 
-$("#comment-boxSupport").css("border", "1px solid rgb(39 43 41)"); 
-$(".timeline-item .timeline-panel .timeline-heading").css("background-color", "rgb(39 43 41)"); 
-$(".timeline-item .timeline-panel .timeline-heading").css("color", "white"); 
-$("#commentInput").css("background-color", "rgb(39 43 41)")
-$(".form-control").css({
-    "background-color": "rgb(39 43 41)",
-    "border": "none",
-    "color": "#b0bdc7",
-    "box-shadow": "0 0 5px rgba(0, 0, 0, 0.2)"
-  });
-  $(".mainDiv").css({
-    "background-color": "black",
-    "font-family": "cursive",
-    "font-size": "20px"
-  });
-  
-localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
-updateIcon(isDarkMode);
-}
-// Function to update the icon
-function updateIcon(isDarkMode) {
-darkModeToggle.classList.toggle("fa-moon", !isDarkMode);
-darkModeToggle.classList.toggle("fa-sun", isDarkMode);
-}
-// Check localStorage for dark mode preference
-const savedDarkMode = localStorage.getItem("darkMode");
-if (savedDarkMode === "enabled") {
-document.body.classList.add("dark-mode");
-updateIcon(true);
+// Toggle Dark Mode
+$("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
 } else {
-updateIcon(false);
+enableDarkMode();
 }
-// Add click event to toggle dark mode
-darkModeToggle.addEventListener("click", toggleDarkMode);
-// dark mode till here
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
 const dateInput = document.getElementById("deadline");
 const placeholderLabel = document.querySelector(".placeholder");
 
