@@ -348,11 +348,6 @@ text-align: center;
   margin: 0 auto;
   width: 40%;
 }
-/* Ensure the table data scrolls while headers remain fixed */
-.table tbody tr td {
-  background-color: var(--bg-color);
-  text-align: center;
-}
 /* for dark mode */
 .dark-mode {
 background-color: #121212;
@@ -483,17 +478,15 @@ table thead th {
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
 }
-#yardInfoTable tr:hover {
-    background-color: black !important;
+.table tbody tr:hover {
+    background-color: grey !important;
     cursor: pointer;
-    z-index: 3;
 }
 
 /* Selected row style */
 .table tbody tr.selected {
-    background-color: black !important; 
+    background-color: #757070 !important; 
     color: grey;
-    z-index: 3;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
