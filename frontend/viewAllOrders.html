@@ -1240,10 +1240,7 @@ $("body").removeClass("modal-active");
 });
 fetchNotifications();
 $("#infoTable").on("click", "tr", function () {
-        // Remove selection from all rows
-        $("#InfoTable tr").removeClass("selected");
-
-        // Add selection to the clicked row
+        $("#infoTable tr").removeClass("selected");
         $(this).addClass("selected");
     });
         // Toggle Dark Mode
