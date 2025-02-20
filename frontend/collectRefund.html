@@ -870,7 +870,6 @@ const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
 
     const [year, monthNumber] = $("#monthYearPicker").val().split("-");
     const month = months[parseInt(monthNumber, 10) - 1];
-$("#monthYearPicker").val(`${year}-${month}`);
 await fetchYardInfo(month, year);
 // Fetch yard info data for a specific month and 
 async function fetchYardInfo(month, year) {
