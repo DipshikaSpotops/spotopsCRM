@@ -1419,6 +1419,9 @@ $("body").removeClass("modal-active");
   }
 });
  // Toggle Dark Mode
+ if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
  $("#darkModeIcon").on("click", function () {
 if ($("body").hasClass("dark-mode")) {
 disableDarkMode();
