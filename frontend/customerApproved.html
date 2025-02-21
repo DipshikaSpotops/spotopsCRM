@@ -326,6 +326,7 @@ border: 1px solid #484b4b;
 }
 .dark-mode #searchInput {
     background-color: #1f2940;
+    color: white;
 }
 .dark-mode .table-dark.table-bordered {
     border: 0;
@@ -438,6 +439,17 @@ const firstName = localStorage.getItem("firstName");
 if (!firstName) {
 window.location.href = "login_signup.html";
 }
+</script>
+<script>
+  (function() {
+    const isDarkMode = localStorage.getItem("darkMode") === "true";
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark-mode");
+    } else {
+      document.documentElement.classList.add("light-mode");
+    }
+    document.body.style.display = "block"; // Show the page after setting the theme
+  })();
 </script>
 </head>
 <body>
