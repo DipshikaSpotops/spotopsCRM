@@ -605,7 +605,6 @@ placeholder="Search..."
 <th style="cursor: pointer;" scope="col">Sale Info<span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Part Info <span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer;" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer;" scope="col">Email <span class="sort-icon onlyNumber">&#9650;</span></th>
 </tr>
 </thead>
 <tbody id="infoTable">
@@ -1148,6 +1147,7 @@ Name: ${
 Email: ${item.email || ''}<br>
 Phone: ${item.phone || ''}<br>
 Alt Phone: ${item.altPhone || ''}<br>
+Email: ${item.email || ""}<br>
 Billing Address:
 ${
 (item.bName ||  item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry) 
@@ -1175,7 +1175,6 @@ VIN: ${item.vin || ''}<br>
 Warranty: ${item.warranty || 0} days<br>
 </td>
 <td>${item.orderStatus || ''}</td>
-<td>${item.email || ''}</td>
 </tr>`
 );
 })
