@@ -1031,7 +1031,7 @@ function toggleDarkMode() {
 
 // Check stored preference and apply dark mode if needed
 const savedDarkMode = localStorage.getItem("darkMode");
-if (savedDarkMode === "enabled") {
+if (savedDarkMode === "true") {
   document.body.classList.add("dark-mode");
   darkModeToggle.classList.remove("fa-moon");
   darkModeToggle.classList.add("fa-sun");
