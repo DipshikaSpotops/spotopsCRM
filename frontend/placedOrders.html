@@ -272,10 +272,19 @@ color:white;
     border: none;
     color: white;
 }
+.cancel-btn {
+  background-color: #c40505; border: none; color: white;
+}
 /* for dark mode */
 .dark-mode {
 background-color: #141b2d;
 color: #999999;
+}
+.dark-mode .cancel-btn {
+  background-color: #d9d9d9;
+    border: none;
+    color: red;
+    font-weight: 600;
 }
 .dark-mode .approve-btn {
   background-color: #29638c;
@@ -1122,7 +1131,7 @@ $("#infoTable").append(
 class="btn btn-success btn-sm approve-btn" data-id="${item.orderNo}">
 Approve
 </button>
-<button style="background-color: #c40505; border: none; color: white;" 
+<button 
 class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}">
 Cancel
 </button>
