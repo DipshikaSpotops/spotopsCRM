@@ -1239,7 +1239,7 @@ function updateMonthlyChart(index, monthName, orders) {
   // Compute rates
   const successRate = totalOrders > 0 ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
   const escalationRate = totalOrders > 0 ? ((totalEscalated / totalOrders) * 100).toFixed(2) : 0;
-  const cancellationRate = totalOrders > 0 ? (((totalCancelled + totalRefunded) / totalOrders) * 100).toFixed(2) : 0;
+  const cancellationRate = totalOrders > 0 ? (((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100).toFixed(2) : 0;
 
   // Create and store the new chart
   chartInstances[index] = new Chart(ctx, {

@@ -766,7 +766,7 @@ if (item.orderStatus === "Order Cancelled") {
     }
 // totalEstGP += estGP;
 })
-let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded) / totalOrders) * 100 : 0;
+let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100 : 0;
 
 // Update the cancellation rate div
 document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
