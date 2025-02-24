@@ -794,7 +794,8 @@ table.table th {
 /* white-space: nowrap; */
 /* overflow: hidden; */
 text-overflow: ellipsis;
-font-weight: normal;
+    font-weight: normal;
+
 }
 
 .add-yard-btn {
@@ -6258,6 +6259,39 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
+ // Toggle Dark Mode
+ if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
+ $("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
+} else {
+enableDarkMode();
+}
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
+$("#infoTable").on("click", "tr", function () {
+        $("#infoTable tr").removeClass("selected");
+        $(this).addClass("selected");
+    });
 fetchNotifications();
 // upload pictures to an s3 bucket
 $(".floating-icon").on("click", async function () {
@@ -6366,35 +6400,6 @@ function displayUploadedFiles(uploadedFiles, orderNo) {
   });
 
   document.getElementById("uploadedFilesContainer").style.display = "block";
-}
-// Toggle Dark Mode
-if (localStorage.getItem("darkMode") === "true") {
-    enableDarkMode();
-  }
- $("#darkModeIcon").on("click", function () {
-if ($("body").hasClass("dark-mode")) {
-disableDarkMode();
-} else {
-enableDarkMode();
-}
-});
-
-function enableDarkMode() {
-$("body").addClass("dark-mode");
-$(".navbar").addClass("dark-mode");
-$(".sidebar").addClass("dark-mode");
-$("table").addClass("table-dark");
-$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-localStorage.setItem("darkMode", "true");
-}
-
-function disableDarkMode() {
-$("body").removeClass("dark-mode");
-$(".navbar").removeClass("dark-mode");
-$(".sidebar").removeClass("dark-mode");
-$("table").removeClass("table-dark");
-$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-localStorage.setItem("darkMode", "false");
 }
 });
 
