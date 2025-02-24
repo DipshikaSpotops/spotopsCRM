@@ -14,11 +14,11 @@ rel="stylesheet"
 />
 <style>
 body {
-display: flex;
-overflow-x: hidden;
+  display: flex;
+overflow: hidden;
 flex-direction: column;
-height: 100vh;
-margin: 0;
+background-color: #eaf6ff;
+text-align: center;
 }
 /* btn pagination */
 .pageNos{
@@ -49,8 +49,8 @@ color: white;
 cursor: pointer;
 }
 .navbar {
-color: white;
-background-color: black;
+  color: white;
+background: linear-gradient(160deg, #101a18, #80cbbc);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -62,7 +62,7 @@ z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
-background-color: black;
+  background: linear-gradient(160deg, #101a18, #80cbbc);
 position: fixed;
 z-index: 1;
 top: 0;
@@ -73,6 +73,7 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
+text-align: left;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -228,6 +229,28 @@ border-radius: 8px;
 margin: 1% -3%;
 background-color: #3096a58f;
 padding: 5px;
+}
+#showTotalOrders{
+  border: 1px solid #c0c0c0;
+    text-align: center;
+    height: auto;
+    width: auto;
+    border-radius: 8px;
+    margin: 1% -3%;
+    /* background-color: #3096a58f; */
+    padding: 5px;
+    background-color: #35554f;
+    color: white;
+}
+#monthYearPicker{
+  background-color: #35554f;
+    color: white;
+    width: auto;
+}
+#filterButton {
+  background-color: #35554f;
+    color: white;
+    border: none;
 }
 .filter-bar {
 display: flex;
@@ -499,7 +522,7 @@ placeholder="Search..."
  <div id="filterAndTotal" style="display: flex;">
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
+<button id="filterButton" class="btn btn-primary">Filter</button>
 </div>
 <div style="display: flex;margin: 0% 1%;">
 <div id="showTotalOrders">Total Orders This Month-</div>
