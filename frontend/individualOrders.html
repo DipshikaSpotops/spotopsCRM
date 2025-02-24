@@ -1060,12 +1060,12 @@ if (item.orderStatus === "Order Cancelled") {
     else if (item.orderStatus === "Dispute") {
         totalDisputed++;
     }
-
+    let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100 : 0;
 })
 document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
 document.getElementById("showTotalEstGP").innerHTML = `Total Est GP- ${totalGrossProfit.toFixed(2)}`;
 document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP- ${totalActualGP.toFixed(2)}`;
-document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${totalActualGP.toFixed(2)}`;
+document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}`;
 // Render the new filtered data
 renderTableRows(1, sortedData);
 createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
