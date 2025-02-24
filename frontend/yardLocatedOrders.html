@@ -420,16 +420,16 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 </script>
-<!-- <script>
+<script>
   (function() {
     const isDarkMode = localStorage.getItem("darkMode") === "true";
     if (isDarkMode) {
-      document.documentElement.classList.add("dark-mode");
+      enableDarkMode()
     } else {
-      document.documentElement.classList.add("light-mode");
+      disableDarkMode()
     }
   })();
-</script> -->
+</script>
 </head>
 <body>
     <div class="navbar">
