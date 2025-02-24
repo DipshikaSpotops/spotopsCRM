@@ -442,8 +442,8 @@ window.location.href = "login_signup.html";
 </script>
 <script>
   (function() {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-    if (isDarkMode) {
+    const isDarkMode = localStorage.getItem("darkMode");
+    if (isDarkMode === true) {
       document.documentElement.classList.add("dark-mode");
       document.body.classList.add("dark-mode");
     } else {
@@ -452,6 +452,7 @@ window.location.href = "login_signup.html";
     }
   })();
 </script>
+
 </head>
 <body>
   <div class="navbar">
