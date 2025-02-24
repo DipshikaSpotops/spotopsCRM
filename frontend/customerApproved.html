@@ -95,7 +95,7 @@ border: none;
   flex-grow: 1;
 padding: 20px;
 margin-left: 14%;
-margin-top: 14px;
+margin-top: 60px;
 transition: margin-left 0.3s ease;
 /* overflow-y: auto; */
 }
@@ -440,19 +440,17 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 </script>
-<!-- <script>
+<script>
   (function() {
-    const isDarkMode = localStorage.getItem("darkMode");
-    if (isDarkMode === true) {
+    const isDarkMode = localStorage.getItem("darkMode") === "true";
+    if (isDarkMode) {
       document.documentElement.classList.add("dark-mode");
-      document.body.classList.add("dark-mode");
     } else {
       document.documentElement.classList.add("light-mode");
-      document.body.classList.add("light-mode");
     }
+    document.body.style.display = "block"; // Show the page after setting the theme
   })();
-</script> -->
-
+</script>
 </head>
 <body>
   <div class="navbar">
@@ -599,7 +597,7 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<div id="filterAndTotal" style="display: flex;margin-left: 36.5%;">
+<div id="filterAndTotal" style="display: flex;margin-left: 38%;">
   <div class="filter-bar">
     <input id="monthYearPicker" type="month"/>
     <button id="filterButton" class="btn btn-primary">Filter</button>
@@ -1242,19 +1240,21 @@ enableDarkMode();
 });
 
 function enableDarkMode() {
-  document.documentElement.classList.add("dark-mode");
-  document.body.classList.add("dark-mode");
-  $(".navbar, .sidebar, table").addClass("dark-mode");
-  $("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-  localStorage.setItem("darkMode", "true");
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
 }
 
 function disableDarkMode() {
-  document.documentElement.classList.remove("dark-mode");
-  document.body.classList.remove("dark-mode");
-  $(".navbar, .sidebar, table").removeClass("dark-mode");
-  $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-  localStorage.setItem("darkMode", "false");
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
 }
 fetchNotifications();
 
