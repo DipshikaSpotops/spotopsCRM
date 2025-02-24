@@ -294,10 +294,31 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     color: white;
     border: none;
 }
+.edit-btn {
+background-color: #96dce1;
+    border: none;
+    color: #38696c;
+}
+.process-btn {
+  background-color: #cae8c9;
+    border: none;
+    color: #61a55e;
+}
 /* for dark mode */
 .dark-mode {
 background-color: #141b2d;
 color: #999999;
+}
+.dark-mode .edit-btn {
+  background-color: #141b2d;
+    border: none;
+    color: white;
+}
+.dark-mode .process-btn {
+  background-color: white;
+    border: none;
+    color: #007413;
+    font-weight: 500;
 }
 .dark-mode #monthYearPicker{
 background-color: #29638c;
@@ -846,12 +867,12 @@ team = localStorage.getItem('team');
 // console.log("team",team);
 const editButton = (team === "Team Mark" || team === "Team Sussane")
 ? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
 
 
 const actions = `
 ${editButton}
-<button class="btn btn-primary btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+<button class="btn btn-primary btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 // <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
 
 // const sendInvoice = `
