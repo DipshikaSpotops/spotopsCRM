@@ -246,6 +246,11 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 #filterButton{
   background-color: #35554f;color: white;width: auto;border: none;
 }
+.edit-btn{
+  background-color: #96dce1;
+    border: none;
+    color: #38696c;
+}
 /* for dark mode */
 .dark-mode {
 background-color: #141b2d;
@@ -264,8 +269,13 @@ background-color: #29638c;
 color: white;
 border: none;
 }
-.dark-mode #showTotalEstGP{
+.dark-mode .edit-btn{
 background-color: #29638c;
+color: white;
+border: none;
+}
+.dark-mode #showTotalEstGP{
+background-color: #141b2d;
 color: white;
 border: none;
 }
@@ -886,7 +896,7 @@ const suffix = (day) => {
   }
 };
 const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-const actions = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+const actions = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
 $("#infoTable").append(`
 <tr>
 <td>${formattedOrderDate}</td>
@@ -1067,7 +1077,7 @@ let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + tota
 document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
 document.getElementById("showTotalEstGP").innerHTML = `Total Est GP- ${totalGrossProfit.toFixed(2)}`;
 document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP- ${totalActualGP.toFixed(2)}`;
-document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}`;
+document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
 // Render the new filtered data
 renderTableRows(1, sortedData);
 createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
