@@ -253,7 +253,7 @@ border: 1px solid #484b4b;
 }
 .dark-mode .table-dark.table-bordered {
     border: 0;
-     background-color: #29638c;;
+    background-color: #2c3e50;
 }
 .dark-mode .form-control{
 border: none;
@@ -1244,6 +1244,9 @@ $("#infoTable").on("click", "tr", function () {
         $(this).addClass("selected");
     });
         // Toggle Dark Mode
+        if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
 $("#darkModeIcon").on("click", function () {
 if ($("body").hasClass("dark-mode")) {
 disableDarkMode();
