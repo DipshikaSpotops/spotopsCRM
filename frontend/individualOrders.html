@@ -1067,7 +1067,7 @@ let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + tota
 document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
 document.getElementById("showTotalEstGP").innerHTML = `Total Est GP- ${totalGrossProfit.toFixed(2)}`;
 document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP- ${totalActualGP.toFixed(2)}`;
-document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}`;
+document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
 // Render the new filtered data
 renderTableRows(1, sortedData);
 createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
