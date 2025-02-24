@@ -869,7 +869,7 @@ ordersForPage.forEach((item) => {
 const estGrossP = item.grossProfit || 0;
 totalGrossProfit += estGrossP;// for current page
 totalEstGP += estGrossP; //for all orders
-console.log("gps",totalGrossProfit,totalEstGP);
+// console.log("gps",totalGrossProfit,totalEstGP);
 const datetime = item.orderDate;
 const date = new Date(datetime);
 const day = date.getUTCDate();  // Use UTC day
