@@ -526,7 +526,7 @@ window.location.href = "login_signup.html";
 <button id="filterButton" class="btn btn-primary">Filter</button>
 </div>
 <div style="display: flex;margin: 2% -3%;gap: 26px;">
-<div id="showTotalOrders" style="display: block;">Total Orders- </div>
+<div id="showTotalOrders">Total Orders- </div>
 <div id="showTotalEstGP">Total EstGP- </div>
 <div id="showTotalActualGP">Total Actual- </div>
 <div id="showCancellationRate">Cancellation Rate-</div>
@@ -1016,7 +1016,7 @@ $(this).addClass("active");
 });
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-$("#showTotalOrders").hide();
+// $("#showTotalOrders").hide();
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");    
 $("#loadingMessage").show();
