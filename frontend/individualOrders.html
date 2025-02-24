@@ -750,6 +750,7 @@ let totalEstGP = 0; // Total estGP for all orders
 let totalActualGP = 0;
 let totalCancelled = 0;
 let totalRefunded = 0;
+let totalDisputed = 0;
 filteredData.forEach((item) => {
 const estGP = item.grossProfit || 0;
 const actualGP = item.actualGP || 0;
@@ -759,6 +760,9 @@ if (item.orderStatus === "Order Cancelled") {
         totalCancelled++;
     } else if (item.orderStatus === "Refunded") {
         totalRefunded++;
+    }
+    else if (item.orderStatus === "Dispute") {
+        totalDisputed++;
     }
 // totalEstGP += estGP;
 })

@@ -1234,6 +1234,7 @@ function updateMonthlyChart(index, monthName, orders) {
   const totalEscalated = orders.filter((order) => order.orderStatus === "Escalation").length;
   const totalCancelled = orders.filter((order) => order.orderStatus === "Order Cancelled").length;
   const totalRefunded = orders.filter((order) => order.orderStatus === "Refunded").length;
+  const totalDisputed = orders.filter((order) => order.orderStatus === "Dispute").length
 
   // Compute rates
   const successRate = totalOrders > 0 ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
