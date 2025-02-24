@@ -455,9 +455,9 @@ window.location.href = "login_signup.html";
 <button id="filterButton" class="btn btn-primary" style="background-color: #35554f;color: white;width: auto;border: none;">Filter</button>
 </div>
 <div style="display: flex;margin: 2% -2%;">
-<div id="showTotalOrders">Total Orders This Month-</div>
-<div id="showTotalEstGP">Total EstGP This Month-</div>
-<div id="showTotalActualGP">Total Actual This Month-</div>
+<div id="showTotalOrders">Total Orders- </div>
+<div id="showTotalEstGP">Total EstGP- </div>
+<div id="showTotalActualGP">Total Actual- </div>
 <div id="showCancellationRate">Cancellation Rate-</div>
 </div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
@@ -770,9 +770,9 @@ let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded) / tot
 
 // Update the cancellation rate div
 document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit.toFixed(2)}`;
-document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP This Month- ${totalActualGP.toFixed(2)}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
+document.getElementById("showTotalEstGP").innerHTML = `Total Est GP- ${totalGrossProfit.toFixed(2)}`;
+document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP- ${totalActualGP.toFixed(2)}`;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
