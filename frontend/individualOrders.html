@@ -526,7 +526,7 @@ window.location.href = "login_signup.html";
 <button id="filterButton" class="btn btn-primary">Filter</button>
 </div>
 <div style="display: flex;margin: 2% -3%;gap: 26px;">
-<div id="showTotalOrders">Total Orders- </div>
+<div id="showTotalOrders" style="display: block;">Total Orders- </div>
 <div id="showTotalEstGP">Total EstGP- </div>
 <div id="showTotalActualGP">Total Actual- </div>
 <div id="showCancellationRate">Cancellation Rate-</div>
@@ -869,7 +869,7 @@ ordersForPage.forEach((item) => {
 const estGrossP = item.grossProfit || 0;
 totalGrossProfit += estGrossP;// for current page
 totalEstGP += estGrossP; //for all orders
-// console.log("gps",totalGrossProfit,totalEstGP);
+console.log("gps",totalGrossProfit,totalEstGP);
 const datetime = item.orderDate;
 const date = new Date(datetime);
 const day = date.getUTCDate();  // Use UTC day
@@ -1067,7 +1067,7 @@ let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + tota
 document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
 document.getElementById("showTotalEstGP").innerHTML = `Total Est GP- ${totalGrossProfit.toFixed(2)}`;
 document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP- ${totalActualGP.toFixed(2)}`;
-document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
+document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}`;
 // Render the new filtered data
 renderTableRows(1, sortedData);
 createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
