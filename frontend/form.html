@@ -29,6 +29,7 @@ background-color: #f8f9fa;
     display: flex;
     overflow-x: hidden;
     flex-direction: column;
+    font-weight: bolder;
 }
 #escRMA {
 display: none; 
@@ -313,6 +314,7 @@ height: 600px;
 width: 100%;
 border: 1px solid rgb(168, 164, 164);
 overflow-y: scroll;
+font-weight: 200;
 }
 #saveEsc {
 margin: 3% 44%;
@@ -619,6 +621,7 @@ top: 0;
 z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 height: 60px; 
+font-weight: 500;
 }
 
 .navbar.black {
@@ -2922,7 +2925,7 @@ const process = urlParams.get("process");
 // const newEntry = urlParams.get("newEntry");
 var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
-document.getElementById("createTask").textContent += orderNo;
+document.getElementById("createTask").textContent += " " + orderNo;
 $("#deadline").val(`Deadline`);
 // document.getElementById("deadline").textContent = "Deadline";
 document.getElementById("yardModalLabel").textContent += orderNo;
