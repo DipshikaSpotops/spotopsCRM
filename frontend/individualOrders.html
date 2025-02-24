@@ -230,6 +230,9 @@ background-color: #35554f;
 color: white;
 padding: 5px;
 }
+#showCancellationRate{
+  background-color: #35554f;
+}
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
 }
@@ -446,6 +449,7 @@ window.location.href = "login_signup.html";
 <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="showTotalEstGP">Total EstGP This Month-</div>
 <div id="showTotalActualGP">Total Actual This Month-</div>
+<div id="showCancellationRate">Cancellation Rate-</div>
 </div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
 
@@ -739,13 +743,24 @@ console.log("totalOrders",totalOrders);
 let totalGrossProfit = 0; // Total gross profit for current page
 let totalEstGP = 0; // Total estGP for all orders
 let totalActualGP = 0;
+let totalCancelled = 0;
+let totalRefunded = 0;
 filteredData.forEach((item) => {
 const estGP = item.grossProfit || 0;
 const actualGP = item.actualGP || 0;
 totalActualGP += actualGP;
 totalGrossProfit += estGP;
+if (item.orderStatus === "Order Cancelled") {
+        totalCancelled++;
+    } else if (item.orderStatus === "Refunded") {
+        totalRefunded++;
+    }
 // totalEstGP += estGP;
 })
+let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded) / totalOrders) * 100 : 0;
+
+// Update the cancellation rate div
+document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 document.getElementById("showTotalEstGP").innerHTML = `Total Est GP This Month- ${totalGrossProfit.toFixed(2)}`;
 document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP This Month- ${totalActualGP.toFixed(2)}`;
