@@ -257,7 +257,6 @@ margin-left: 10px;
   background-color: #35554f;
     color: white;
     border: none;
-    margin-right: 6%;
 }
 #pagination-controls {
 margin-top: -5%;
@@ -778,7 +777,7 @@ escalationStyle = 'style="background-color: lightgreen;"';
 }
 const team = localStorage.getItem('team');
 const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #141b2d; border: none; color: white;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #35554f; border: none; color: white;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 const yardlength = item.additionalInfo.length;
 const datetime = item.orderDate;
 const date = new Date(datetime);
@@ -874,27 +873,30 @@ paginationControls.append(`<button class="previousNext" id="nextPage" ${currentP
 }
 
 // Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage); // Use the filtered orders
+$(document).on('click', '.page-btn', function () {
+    currentPage = parseInt($(this).data('page'));  // Update current page
+    renderTableRows(currentPage);  // Re-render table with the updated page
+    updatePaginationControls(); // Update pagination UI
 });
 
-$('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage); // Use the filtered orders
-}
+// Handle previous button
+$(document).on('click', '#prevPage', function () {
+    if (currentPage > 1) {
+        currentPage--; // Decrease current page
+        renderTableRows(currentPage);
+        updatePaginationControls();
+    }
 });
 
-$('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(allOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage); // Use the filtered orders
-}
+// Handle next button
+$(document).on('click', '#nextPage', function () {
+    const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++; // Increase current page
+        renderTableRows(currentPage);
+        updatePaginationControls();
+    }
 });
-
 
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
