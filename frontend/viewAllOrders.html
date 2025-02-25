@@ -254,6 +254,10 @@ border: 1px solid #484b4b;
   background-color: #0e0c0c;
   border: none;
 }
+.dark-mode #searchInput {
+    background-color: #1f2940;
+    color: white;
+}
 .dark-mode .table-dark.table-bordered {
     border: 0;
     background-color: #2c3e50;
@@ -541,6 +545,7 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <div class="container-fluid mt-2">
+  <div class="topHeads">
 <h1 class="fixed-header" style="text-align: center; margin-right: 34%;">View All Orders</h1>
 <div>
 <input
@@ -549,6 +554,7 @@ class="form-control"
 id="searchInput"
 placeholder="Search..."
 />
+</div>
 </div>
 <!-- pagination controls -->
 <div id="pagination-controls" class="mt-3 mb-3"></div>
