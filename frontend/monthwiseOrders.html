@@ -1012,14 +1012,12 @@ if (totalPages > 1) {
 }
 
 
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-    const page = $(this).data('page');
-    localStorage.setItem('currentPage', page);
-    currentPage = page;
+$('#pagination-controls').on('click', '.pageNos', function () {
+    currentPage = $(this).data('page');
+    const searchTerm = $("#searchInput").val().trim();
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-});
+  });
 
 // "Previous" and "Next" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
