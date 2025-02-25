@@ -573,7 +573,7 @@ placeholder="Search..."
       <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-      <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col">Part Req <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Actual GP <span class="aToZ">&#9650;</span></th>
@@ -808,7 +808,7 @@ var allDOrders;
           <td>${item.orderNo}</td>
           <td>${item.salesAgent}</td>
           <td>${(item.fName && item.lName) ? `${item.fName} ${item.lName}` : (item.customerName || "")}</td>
-          <td>${item.pReq || item.partName}</td>
+          <td>${item.pReq || item.partName}<br> Make: ${item.make}<br> Model: ${item.model}</td>
           <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""} <br> Part price: $${info.partPrice} | $${info.shippingDetails} | Others: $${info.others || 0}`).join("<br>") : ""}</td>
           <td>${item.orderStatus}</td>
           <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
