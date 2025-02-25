@@ -1001,13 +1001,14 @@ const paginationControls = $('#pagination-controls');
 paginationControls.empty(); // Clear pagination controls
 
 if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext btn btn-primary" id="prevPage" ${currentPage === 1 ? 'disabled' : ''} >Previous</button>`);
+      paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
+      for (let i = 1; i <= totalPages; i++) {
+        paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
+      }
 
-paginationControls.append(`<button class="previousNext btn btn-primary" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
+      paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    }
 }
 
 
