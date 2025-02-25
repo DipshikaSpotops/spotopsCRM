@@ -3362,13 +3362,11 @@ $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
 // $("#bAddress").val(data.bAddress);
 $("#bAddress").val(
-data.bAddress ||
 `${data.bAddressStreet || ""}, ${data.bAddressCity || ""}, ${data.bAddressState || ""}, ${data.bAddressZip || ""}, ${data.bAddressAcountry || ""}`
 );
 $("#firstName").val(fName);
 $("#lastname").val(lName);
 $("#sAddress").val(
-data.sAddress ||
 `${data.sAddressStreet || ""}, ${data.sAddressCity || ""}, ${data.sAddressState || ""}, ${data.sAddressZip || ""}, ${data.sAddressAcountry || ""}`
 );
 $("#attention").val(data.attention);
