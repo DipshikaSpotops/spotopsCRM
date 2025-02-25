@@ -1014,6 +1014,7 @@ if (totalPages > 1) {
 
 $('#pagination-controls').on('click', '.pageNos', function () {
     currentPage = $(this).data('page');
+    console.log("pageNo:",currentPage);
     const searchTerm = $("#searchInput").val().trim();
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
