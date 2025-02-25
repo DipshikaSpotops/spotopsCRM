@@ -37,7 +37,7 @@ cursor: pointer;
   width: auto;
     border-radius: 30px;
     border: 1px solid grey;
-    margin: 21% -72%;
+    margin: 21% -48%;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
@@ -329,10 +329,6 @@ text-align: center;
   gap: 10px;
   margin: 0% 4%;
 }
-
-.fixed-header #searchInput {
-  margin: 0 auto;
-}
 #monthYearPicker{
   background-color: #35554f;
     color: white;
@@ -344,7 +340,7 @@ text-align: center;
     border: none;
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
+  text-align: center; margin-left: -2%; margin-top: 37px;color: #023f42;white-space: nowrap;
 }
 /* for dark mode */
 .dark-mode {
@@ -506,9 +502,44 @@ body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
 }
 .table-wrapper {
-  max-height: 900px; 
+  max-height: 80vh; 
   overflow-y: auto;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  position: relative;
 }
+.table-wrapper {
+  max-height: 80vh; /* Ensure the table wrapper has a max height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  position: relative;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  white-space: nowrap; /* Prevent text wrapping */
+  text-align: center;
+}
+
+th:first-child,
+td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: #35554f; /* Adjust based on your theme */
+  color: white;
+  z-index: 2;
+  border-right: 2px solid #ddd; /* Add a border for better visibility */
+}
+
+.dark-mode th:first-child,
+.dark-mode td:first-child {
+  background-color: #1f2940;
+  color: #e0e0e0;
+}
+
 #mainHeading {
   text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
 }
@@ -552,6 +583,7 @@ table thead th {
 }
 .topHeads{
   display: flex;
+  margin-left: 30%;
 }
 #mainHeading {
   text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
