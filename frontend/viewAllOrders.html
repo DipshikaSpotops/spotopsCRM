@@ -808,7 +808,7 @@ var allDOrders;
           <td>${item.orderNo}</td>
           <td>${item.salesAgent}</td>
           <td>${(item.fName && item.lName) ? `${item.fName} ${item.lName}` : (item.customerName || "")}</td>
-          <td>${item.pReq || item.partName}<br> <b>Make</b>: ${item.make}<br> <b>Model</b>: ${item.model}</td>
+          <td>${item.pReq || item.partName}<br> <b>Make</b>: ${item.make}<br> <b>Model</b>: ${item.model}<br> <b>Year</b>: ${item.year}</td>
           <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""} <br> Part price: $${info.partPrice} | $${info.shippingDetails} | Others: $${info.others || 0}`).join("<br>") : ""}</td>
           <td>${item.orderStatus}</td>
           <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
