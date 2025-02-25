@@ -332,7 +332,6 @@ text-align: center;
 
 .fixed-header #searchInput {
   margin: 0 auto;
-  width: 40%;
 }
 #monthYearPicker{
   background-color: #35554f;
@@ -343,6 +342,9 @@ text-align: center;
   background-color: #35554f;
     color: white;
     border: none;
+}
+#mainHeading {
+  text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
 }
 /* for dark mode */
 .dark-mode {
@@ -551,6 +553,9 @@ table thead th {
 .topHeads{
   display: flex;
 }
+#mainHeading {
+  text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -696,7 +701,7 @@ window.location.href = "login_signup.html";
 <div class="main-content">
     <div class="fixed-header">
       <div class="topHeads">
-      <h1 style="text-align: center;">Collect Refund</h1>
+      <h1 id="mainHeading">Collect Refund</h1>
       <div style="align-items: center; justify-content: center">
         <input
           type="text"
@@ -1534,6 +1539,9 @@ $("#yardInfoTable").on("click", "tr", function () {
         $(this).addClass("selected");
     });
     // Toggle Dark Mode
+    if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
 $("#darkModeIcon").on("click", function () {
   console.log("darkModeIcon  clicked");
 if ($("body").hasClass("dark-mode")) {
