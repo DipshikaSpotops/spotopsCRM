@@ -216,15 +216,16 @@ background-color: grey;
 color: white;
 }
 #showTotalOrders{
-border: 1px solid #c0c0c0;
-text-align: center;
-height: auto;
-width: auto;
-border-radius: 8px;
-margin: 1% -3%;
-background-color: #35554f;
-color: white;
-padding: 5px;
+  border: 1px solid #c0c0c0;
+    text-align: center;
+    height: auto;
+    width: auto;
+    border-radius: 8px;
+    margin: 11% 0%;
+    /* background-color: #3096a58f; */
+    padding: 5px;
+    background-color: #35554f;
+    color: white;
 }
 .filter-bar {
 display: flex;
@@ -244,7 +245,17 @@ margin-left: 10px;
     margin-left: 6%;
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
+  text-align: center; margin-right: 125px; margin-top: -23px;color: #023f42;white-space: nowrap;
+}
+#monthYearPicker{
+  background-color: #35554f;
+    color: white;
+    width: auto;
+}
+#filterButton {
+  background-color: #35554f;
+    color: white;
+    border: none;
 }
 /* for dark mode */
 .dark-mode {
@@ -588,8 +599,8 @@ window.location.href = "login_signup.html";
 <h1 id="mainHeading">Yard Processing Orders </h1>
 <div id="filterAndTotal">
   <div class="filter-bar">
-  <input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;color: white;width: auto;" />
-  <button id="filterButton" class="btn btn-primary" style="background-color: #35554f;color: white;border: none;">Filter</button>
+  <input id="monthYearPicker" type="month" class="form-control"/>
+  <button id="filterButton" class="btn btn-primary">Filter</button>
   </div>
   <div style="display: flex;margin: 0% 1%;">
   <div id="showTotalOrders">Total Orders This Month-</div>
