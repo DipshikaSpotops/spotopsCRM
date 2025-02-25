@@ -750,8 +750,8 @@ app.get("/ordersPerPage", async (req, res) => {
             { phone: { $regex: searchTerm, $options: "i" } },
             { "additionalInfo.yardName": { $regex: searchTerm, $options: "i" } }, 
             { "additionalInfo.trackingNo": { $regex: searchTerm, $options: "i" } },
-            { "additionalInfo.make": { $regex: searchTerm, $options: "i" } },
-            { "additionalInfo.model": { $regex: searchTerm, $options: "i" } },
+            { make: { $regex: searchTerm, $options: "i" } },
+            { model: { $regex: searchTerm, $options: "i" } },
           ],
         }
       : {};
