@@ -3362,13 +3362,21 @@ $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
 // $("#bAddress").val(data.bAddress);
 $("#bAddress").val(
-`${data.bAddressStreet || ""}, ${data.bAddressCity || ""}, ${data.bAddressState || ""}, ${data.bAddressZip || ""}, ${data.bAddressAcountry || ""}`
-);
+  data.bAddress && data.bAddress.trim() !== "" 
+    ? data.bAddress 
+    : [data.bAddressStreet, data.bAddressCity, data.bAddressState, data.bAddressZip, data.bAddressAcountry]
+        .filter(Boolean) 
+        .join(", ") 
+      );
 $("#firstName").val(fName);
 $("#lastname").val(lName);
 $("#sAddress").val(
-`${data.sAddressStreet || ""}, ${data.sAddressCity || ""}, ${data.sAddressState || ""}, ${data.sAddressZip || ""}, ${data.sAddressAcountry || ""}`
-);
+  data.sAddress && data.sAddress.trim() !== "" 
+    ? data.bAddress 
+    : [data.sAddressStreet, data.sAddressCity, data.sAddressState, data.sAddressZip, data.sAddressAcountry]
+        .filter(Boolean) 
+        .join(", ") 
+      );
 $("#attention").val(data.attention);
 $("#email").val(data.email);
 $("#phone").val(data.phone);
