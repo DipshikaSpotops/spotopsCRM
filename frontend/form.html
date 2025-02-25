@@ -5852,31 +5852,7 @@ alert("An unexpected error occurred. Please try again.");
 // });
 // for dark mode
 // Toggle Dark Mode
-$("#darkModeIcon").on("click", function () {
-if ($("body").hasClass("dark-mode")) {
-disableDarkMode();
-} else {
-enableDarkMode();
-}
-});
 
-function enableDarkMode() {
-$("body").addClass("dark-mode");
-$(".navbar").addClass("dark-mode");
-$(".sidebar").addClass("dark-mode");
-$("table").addClass("table-dark");
-$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-localStorage.setItem("darkMode", "true");
-}
-
-function disableDarkMode() {
-$("body").removeClass("dark-mode");
-$(".navbar").removeClass("dark-mode");
-$(".sidebar").removeClass("dark-mode");
-$("table").removeClass("table-dark");
-$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-localStorage.setItem("darkMode", "false");
-}
 const dateInput = document.getElementById("deadline");
 const placeholderLabel = document.querySelector(".placeholder");
 
@@ -6265,39 +6241,6 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
- // Toggle Dark Mode
- if (localStorage.getItem("darkMode") === "true") {
-    enableDarkMode();
-  }
- $("#darkModeIcon").on("click", function () {
-if ($("body").hasClass("dark-mode")) {
-disableDarkMode();
-} else {
-enableDarkMode();
-}
-});
-
-function enableDarkMode() {
-$("body").addClass("dark-mode");
-$(".navbar").addClass("dark-mode");
-$(".sidebar").addClass("dark-mode");
-$("table").addClass("table-dark");
-$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-localStorage.setItem("darkMode", "true");
-}
-
-function disableDarkMode() {
-$("body").removeClass("dark-mode");
-$(".navbar").removeClass("dark-mode");
-$(".sidebar").removeClass("dark-mode");
-$("table").removeClass("table-dark");
-$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-localStorage.setItem("darkMode", "false");
-}
-$("#infoTable").on("click", "tr", function () {
-        $("#infoTable tr").removeClass("selected");
-        $(this).addClass("selected");
-    });
 fetchNotifications();
 // upload pictures to an s3 bucket
 $(".floating-icon").on("click", async function () {
