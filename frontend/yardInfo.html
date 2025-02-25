@@ -1249,7 +1249,6 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
-fetchNotifications();
 // Toggle Dark Mode
 if (localStorage.getItem("darkMode") === "true") {
     enableDarkMode();
@@ -1316,6 +1315,8 @@ $("#infoTable").on("click", "tr", function () {
         $("#infoTable tr").removeClass("selected");
         $(this).addClass("selected");
     });
+fetchNotifications();
+
 });
 </script>
 
