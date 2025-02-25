@@ -21,16 +21,19 @@ background-color: #eaf6ff;
 text-align: center;
 }
 #searchInput {
-width: 40%;
-border-radius: 30px;
-border: 1px solid grey;
-margin: 1% 28%;
-background: white
-url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png)
-5px center no-repeat;
-background-size: 20px 20px;
-padding-left: 35px;
-height: 40px;
+  width: auto;
+    border-radius: 30px;
+    border: 1px solid grey;
+    margin: 18% 5%;
+    background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
+    background-size: 20px 20px;
+    padding-left: 35px;
+    height: 40px;
+}
+#filterAndTotal {
+  display: flex;
+    margin-left: 41%;
+    margin-top: -2%;
 }
 .navbar {
 color: white;
@@ -614,7 +617,7 @@ placeholder="Search..."
 />
 </div>
 </div>
-<div id="filterAndTotal" style="display: flex;margin-left: 41%;">
+<div id="filterAndTotal">
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control"  />
 <button id="filterButton" class="btn btn-primary" >Filter</button>
