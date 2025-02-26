@@ -507,13 +507,13 @@ table thead th {
   display: flex;
 }
 .table tbody tr:hover {
-    background-color: #c0c0c0 !important;
-    cursor: pointer;
+  background-color: #c0c0c0 !important; 
+  cursor: pointer;
 }
 
-/* Selected row style */
 .table tbody tr.selected {
-    background-color: #757070 !important; 
+  background-color: #757070 !important;
+  outline: 2px solid #000 !important; /* Optional: Add border to ensure visibility */
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -1471,13 +1471,14 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
-$("#infoTable").on("click", "tr", function () {
-        $("#infoTable tr").removeClass("selected");
-        $(this).addClass("selected");
-    });
+$(document).on("click", "#infoTable tr", function () {
+  console.log("Row clicked:", $(this).text()); // Debugging
+  $("#infoTable tr").removeClass("selected");
+  $(this).addClass("selected");
+});
+    
 fetchNotifications();
 });
 </script>
-
 </body>
 </html>
