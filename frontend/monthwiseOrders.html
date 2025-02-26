@@ -324,16 +324,12 @@ td:first-child,
 td:nth-child(2) {
   position: sticky;
   z-index: 999;
-  background-color: #eaf6ff; /* Ensures sticky columns are visible */
 }
 
-/* First column stays at 0, second column is placed next to it */
 th:nth-child(2),
 td:nth-child(2) {
-  left: 100px; /* Adjust based on first column width */
+  left: 100px; 
 }
-
-/* Add border for better visibility */
 td:first-child {
   border-right: 3px solid #ddd;
 }
@@ -345,7 +341,6 @@ td:first-child {
   color: #e0e0e0;
   position: sticky;
   left: 0;
-  background-color: #1f2940; 
 }
 
 .dark-mode th:nth-child(2),
