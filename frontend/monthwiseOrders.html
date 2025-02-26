@@ -310,6 +310,55 @@ background-color: #96dce1;
   background-color: #757070 !important;
   outline: 2px solid #000 !important; 
 }
+/* First and Second Columns (Headers) */
+th:first-child,
+th:nth-child(2) {
+  position: sticky;
+  left: 0;
+  z-index: 999;
+  background-color: white; /* Ensures header is visible */
+}
+
+/* First and Second Columns (Table Data) */
+td:first-child,
+td:nth-child(2) {
+  position: sticky;
+  z-index: 999;
+  background-color: #eaf6ff; /* Ensures sticky columns are visible */
+}
+
+/* First column stays at 0, second column is placed next to it */
+th:nth-child(2),
+td:nth-child(2) {
+  left: 100px; /* Adjust based on first column width */
+}
+
+/* Add border for better visibility */
+td:first-child {
+  border-right: 3px solid #ddd;
+}
+.dark-mode th:first-child,
+.dark-mode td:first-child,
+.dark-mode th:nth-child(2),
+.dark-mode td:nth-child(2) {
+  z-index: 999;
+  color: #e0e0e0;
+  position: sticky;
+  left: 0;
+  background-color: #1f2940; 
+}
+
+.dark-mode th:nth-child(2),
+.dark-mode td:nth-child(2) {
+  left: 100px; 
+}
+.table-wrapper {
+  max-height: 80vh; 
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  margin-top: 35px;
+}
 /* for dark mode */
 .dark-mode {
 background-color: #141b2d;
@@ -502,12 +551,6 @@ font-size: 12px;
   font-size: 20px;
 }
 }
-.table-wrapper {
-  max-height: 80vh;
-  overflow-y: auto;
-  margin-top: 35px;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
