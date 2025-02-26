@@ -3437,12 +3437,11 @@ $("#bAddress").val(
 $("#firstName").val(fName);
 $("#lastname").val(lName);
 $("#sAddress").val(
-  data.sAddress && data.sAddress.trim() !== "" 
-    ? data.sAddress 
-    : [data.sAddressStreet, data.sAddressCity, data.sAddressState, data.sAddressZip, data.sAddressAcountry]
-        .filter(Boolean) 
-        .join(", ") 
-      );
+  [data.sAddressStreet, data.sAddressCity, data.sAddressState, data.sAddressZip, data.sAddressAcountry]
+    .filter(Boolean) // Removes empty, null, or undefined values
+    .join(", ") || (data.sAddress && data.sAddress.trim() !== "" ? data.sAddress : "")
+);
+
 $("#attention").val(data.attention);
 $("#email").val(data.email);
 $("#phone").val(data.phone);
