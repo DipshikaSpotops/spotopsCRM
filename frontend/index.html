@@ -808,8 +808,8 @@ $(
 else if (role === "Admin" && firstName === "John") {
   console.log("===");
 // Hide specific reports links for Admin
-$('#submenu-reports .nav-link:contains("Refund Report")').show();
-$('#submenu-reports .nav-link:contains("Collect Refund")').show();
+$('#submenu-reports .nav-link:contains("My Sales Report")').show();
+$("#submenu-dashboards .view-individualOrders-link").show();
 // Hide specific dashboards links for Admin
 }
 else if (role === "Admin") {
