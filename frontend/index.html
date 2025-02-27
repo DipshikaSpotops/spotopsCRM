@@ -809,6 +809,14 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
+else if (role === "Admin" && firstName === "John") {
+// Hide specific reports links for Admin
+$('#submenu-reports .nav-link:contains("My Sales Report")').show();
+$('#submenu-reports .nav-link:contains("Refund Report")').show();
+$('#submenu-reports .nav-link:contains("Collect Refund")').show();
+// Hide specific dashboards links for Admin
+$("#submenu-dashboards .view-individualOrders-link").show();
+}
 
 // Toggle sidebar visibility on smaller screens
 $(".toggle-sidebar").on("click", function () {
