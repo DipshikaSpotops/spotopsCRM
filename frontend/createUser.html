@@ -496,8 +496,12 @@ $('#role').val('Support');
 $('#role').val('');
 }
 });
-
-if (role === "Admin") {
+if (role === "Admin" && firstName === "John") {
+  console.log("===");
+$('#submenu-reports .nav-link:contains("My Sales Report")').show();
+$("#submenu-dashboards .view-individualOrders-link").show();
+}
+else if (role === "Admin") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $('#submenu-dashboards .view-individualOrders-link').hide();
 } else if (team === "Team Mark") {

@@ -559,7 +559,11 @@ $('#submenu-reports .nav-link:contains("Escalation Resolutions")').hide();
 $(
 "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
 ).hide();
-} else if (role === "Admin") {
+} else if (role === "Admin" && firstName === "John") {
+  console.log("===");
+$('#submenu-reports .nav-link:contains("My Sales Report")').show();
+$("#submenu-dashboards .view-individualOrders-link").show();
+}else if (role === "Admin") {
 // Hide specific reports links for Admin
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $('#submenu-reports .nav-link:contains("Refund Report")').show();
