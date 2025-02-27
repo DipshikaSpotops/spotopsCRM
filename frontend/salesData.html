@@ -210,12 +210,12 @@ display: block;
 }
 #userDropdown {
   height: 4vh;
-    z-index: 99;
+    /* z-index: 99; */
     text-align: center;
     background-color: white;
-    width: 14%;
-    margin-left: -5%;
-    margin-top: 2%;
+    width: auto;
+    margin-left: -139%;
+    margin-top: 20%;
     text-align: center;
     border-radius: 20px;
   }
@@ -262,11 +262,11 @@ display: block;
   width: 110%;
     border-radius: 20px;
     border: 1px solid grey;
-    margin: 15% -371%;
+    margin: 13% -38%;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
-    height: 40px;
+    height: 4vh;
     float: left;
 }
 .profile-table {
@@ -384,6 +384,9 @@ color: white;
     margin-top: 1%;
 }
 .topHeads{
+  display: flex;
+}
+.gpAndFilterDIv{
   display: flex;
 }
 .table tbody tr:hover {
@@ -732,6 +735,16 @@ placeholder="Search..."
 />
 </div>
 </div>
+<div class="gpAndFilterDIv">
+  <div id="filterAndTotal">
+    <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
+    <div class="filter-bar">
+    <input id="monthYearPicker" type="month" class="form-control" />
+    <button id="filterButton" class="btn btn-primary">Filter</button>
+    </div>
+    <div id="showTotalOrders">Total Orders This Month-</div>
+    <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+    </div> 
 <div id="gpTotals">
   <div id="totalEstGP">
     <i class="fas fa-chart-line"></i> Total Est GP: <strong>$0</strong>
@@ -745,16 +758,9 @@ placeholder="Search..."
 </div>
 
 </div>
-<!--  controls -->
-<div id="filterAndTotal">
-<!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
-<div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary">Filter</button>
 </div>
-<div id="showTotalOrders">Total Orders This Month-</div>
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-</div> 
+<!--  controls -->
+
 <div id="pagination-controls">
 <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
