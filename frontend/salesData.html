@@ -403,6 +403,11 @@ color: #999999;
     border: none;
     color: white;
 }
+.dark-mode #gpTotals{
+  background-color: #141b2d;
+    border: none;
+    color: white;
+}
 .dark-mode #monthYearPicker{
 background-color: #29638c;
 color: white;
@@ -739,8 +744,8 @@ placeholder="Search..."
 <div id="filterAndTotal">
 <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
 <div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" style="background-color: #35554f;color: white;width: auto;" />
-<button id="filterButton" class="btn btn-primary" style="background-color: #35554f;color: white;border: none;">Filter</button>
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary">Filter</button>
 </div>
 <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
