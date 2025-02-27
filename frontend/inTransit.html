@@ -238,41 +238,7 @@ margin-bottom: 0px;
 .filter-bar button {
 margin-left: 10px;
 }
-/* for dark mode */
-.dark-mode {
-background-color: #121212;
-color: #e0e0e0;
-}
-.dark-mode .navbar, 
-.dark-mode .sidebar {
-background-color: #1f1f1f;
-border-color: #333;
-}
-
-.dark-mode .nav-link,
-.dark-mode .nav-link i {
-color: #b3b3b3 !important;
-}
-
-.dark-mode .nav-link:hover,
-.dark-mode .nav-link.selected {
-background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode .main-content {
-background-color: #121212;
-color: #e0e0e0;
-}
-
-.dark-mode .chart-wrapper,
-.dark-mode .chart-item-monthly {
-background-color: #1f1f1f;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .rate-item {
-background-color: #333;
-}#monthYearPicker{
+#monthYearPicker{
   background-color: #35554f;
     color: white;
     width: auto;
@@ -291,6 +257,20 @@ background-color: #333;
   background-color: #cae8c9;
     border: none;
     color: #61a55e;
+}
+.table-wrapper {
+  max-height: 80vh; 
+  overflow-y: auto;
+}
+.topHeads{
+  display: flex;
+}
+.table tbody tr:hover {
+    background-color: #c0c0c0 !important;
+    cursor: pointer;
+}
+.table tbody tr.selected {
+    background-color: #757070 !important; 
 }
 /* for dark mode */
 .dark-mode {
@@ -1227,6 +1207,38 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
+if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
+ $("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
+} else {
+enableDarkMode();
+}
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
+$("#infoTable").on("click", "tr", function () {
+        $("#infoTable tr").removeClass("selected");
+        $(this).addClass("selected");
+    });
 fetchNotifications();
 });
 </script>
