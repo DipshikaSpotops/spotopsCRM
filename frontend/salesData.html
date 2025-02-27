@@ -131,11 +131,11 @@ flex-shrink: 0;
 margin: 0% 30%;
 }
 #gpTotals {
-    background-color: #35554f;
+  background-color: #35554f;
     color: white;
     padding: 10px;
     border-radius: 7px;
-    margin-right: 13%;
+    margin-right: 33%;
     top: 115px;
     left: 50%;
     z-index: 1;
@@ -144,7 +144,7 @@ margin: 0% 30%;
     gap: 19px;
     width: auto;
     float: right;
-    height: 4vh;
+    height: auto;
     padding: 5px;
 }
 
@@ -201,23 +201,24 @@ display: block;
 }
 
 #filterAndTotal {
-margin-left: 16%;
-display: flex;
+  display: flex;
+    margin-left: 1%;
 }
 #pagination-controls {
-  margin-top: 4%;
-  margin-left: -6%;
+  margin-top: 3%;
+    float: left;
+    margin-left: 0%;
 }
 #userDropdown {
-  height: auto;
+  height: 7vh;
     z-index: 99;
     text-align: center;
     background-color: #1f2940;
-    width: auto;
+    width: 14%;
     margin-left: -5%;
     margin-top: 2%;
     text-align: center;
-    border-radius: 18px;
+    border-radius: 20px;
   }
 @media (max-width: 768px) {
 .sidebar {
@@ -259,14 +260,15 @@ display: block;
 }
 } */
 #searchInput {
-  width: 40%;
-    border-radius: 30px;
+  width: 110%;
+    border-radius: 20px;
     border: 1px solid grey;
-    margin: 1% 28%;
+    margin: 15% -371%;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
     height: 40px;
+    float: left;
 }
 .profile-table {
 width: 50%;
@@ -366,10 +368,6 @@ color: white;
     color: white;
     width: auto;
 }
-#filterAndTotal{
-  display: flex;
-    margin-left: -6%;
-}
 #filterButton {
   background-color: #35554f;
     color: white;
@@ -382,13 +380,12 @@ color: white;
     color: #61a55e;
 }
 .table-wrapper {
-  max-height: 80vh; 
-  overflow-y: auto;
-  margin-top: 2%;
+  max-height: 80vh;
+    overflow-y: auto;
+    margin-top: 6%;
 }
 .topHeads{
   display: flex;
-  margin-top: 1%;
 }
 .table tbody tr:hover {
     background-color: #c0c0c0 !important;
@@ -398,8 +395,9 @@ color: white;
     background-color: #757070 !important; 
 }
 #pagination-controls {
-  margin-top: -2%;
+  margin-top: 3%;
     float: left;
+    margin-left: 1%;
 }
 /* for dark mode */
 .dark-mode {
@@ -543,10 +541,7 @@ scrollbar-color: #29638c #141b2d;
     color: red;
     font-weight: bold;
 }
-.table-wrapper {
-  max-height: 900px; 
-  overflow-y: auto;
-}
+
 #mainHeading {
   text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
 }
@@ -554,10 +549,6 @@ scrollbar-color: #29638c #141b2d;
 #mainHeading {
   font-size: 20px;
 }
-}
-.table-wrapper {
-  max-height: 900px; 
-  overflow-y: auto;
 }
 
 table {
