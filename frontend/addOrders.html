@@ -793,27 +793,6 @@ window.location.href = "login_signup.html";
 
 </select>
 </div>
-<!-- to dynamically add a new part to the dropdown -->
-<button type="button" class="btn btn-primary" id="addNewPartBtn">Add New Part</button>
-<!-- popup to add a new part -->
-<div id="newPartModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add New Part</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <label for="newPartName">Enter Part Name:</label>
-        <input type="text" id="newPartName" class="form-control" placeholder="Enter part name" required>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="saveNewPart">Save</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="year" placeholder="Year" required />
@@ -840,6 +819,28 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 </div>
+<!-- to dynamically add a new part to the dropdown -->
+<button type="button" class="btn btn-primary" id="addNewPartBtn">Add New Part</button>
+<!-- popup to add a new part -->
+<div id="newPartModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add New Part</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label for="newPartName">Enter Part Name:</label>
+        <input type="text" id="newPartName" class="form-control" placeholder="Enter part name" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="saveNewPart">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- price and gp info -->
 <div class="firstRow" id="priceRow">
 <h6 style="text-align: center; margin-top: 1%;">Price and GP Information</h6>
