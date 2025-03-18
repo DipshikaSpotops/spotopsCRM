@@ -359,6 +359,9 @@ background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
 }
+#addNewPartBtn{
+  width: 16%;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -819,7 +822,7 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 <!-- to dynamically add a new part to the dropdown -->
-<button type="button" class="btn btn-primary" id="addNewPartBtn">Add New Part</button>
+<button type="button" id="addNewPartBtn">Add New Part</button>
 <!-- popup to add a new part -->
 <div id="newPartModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
