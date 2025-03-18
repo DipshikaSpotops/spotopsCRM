@@ -1749,6 +1749,7 @@ fetchNotifications();
 // below is the part to add a new part and dynamically add the value to the dropdown list
 document.addEventListener("DOMContentLoaded", function () {
     const partDropdown = document.getElementById("pReq");
+    console.log("preq",partDropdown);
     const newPartModalElement = document.getElementById("newPartModal");
     const newPartModal = new bootstrap.Modal(newPartModalElement);
     const newPartNameInput = document.getElementById("newPartName");
