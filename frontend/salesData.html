@@ -957,19 +957,33 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 }
 
 // Attach change event to the dropdown
+let filteredOrders = []; 
 $("#userDropdown").on("change", function () {
-const selectedAgent = $(this).val();
-if (selectedAgent && selectedAgent !== "All") {
-// Render orders filtered by the selected agent
-renderFilteredOrders(selectedAgent);
-} else {
-// Show all orders
-filteredOrders = []; // Clear the filtered orders
-calculateAndUpdateTotals(allOrders); // Recalculate totals for all orders
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
-renderTableRows(1, allOrders); // Render all orders in the table
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders); // Reset pagination
-}
+    const selectedAgent = $(this).val();
+    
+    if (selectedAgent && selectedAgent !== "All") {
+        // Store filtered orders globally
+        filteredOrders = allOrders.filter(order =>
+            order.salesAgent?.toLowerCase().includes(selectedAgent.toLowerCase())
+        );
+
+        // Update totals dynamically
+        calculateAndUpdateTotals(filteredOrders);
+
+        // Update the total orders dynamically
+        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
+
+        // Render the filtered orders & create pagination
+        renderTableRows(1, filteredOrders);
+        createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+    } else {
+        // Reset to all orders
+        filteredOrders = allOrders; // Ensure it contains all orders again
+        calculateAndUpdateTotals(allOrders);
+        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+        renderTableRows(1, allOrders);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+    }
 });
 
 // Calculate totals at initial load
@@ -1104,17 +1118,11 @@ function createPaginationControls(totalPages, orders) {
   }
 }// Handle page number clicks
 $(document).on("click", ".page-btn", function () {
-  const page = $(this).data("page");
-  currentPage = page;
-
-  // Remove the active-page class from all buttons
-  $(".page-btn").removeClass("active-page");
-
-  // Add the active-page class to the clicked button
-  $(this).addClass("active-page");
-
-  // Render the table rows for the selected page
-  renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
+    currentPage = $(this).data("page");
+    const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
+    renderTableRows(currentPage, ordersToRender);
+    $(".page-btn").removeClass("active-page");
+    $(this).addClass("active-page");
 });
 // Handle page number clicks
 $(".page-btn").off("click").on("click", function () {
