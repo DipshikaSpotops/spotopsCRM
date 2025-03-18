@@ -894,33 +894,51 @@ $(this).addClass("active");
 });
 role = localStorage.getItem("role");
 team = localStorage.getItem("team");
-if (team === "Team Charlie") {
+if (team === "Team Charlie" || role === "Sales") {
+// Hide specific reports links for Team Charlie
 $("#submenu-reports .nav-link")
 .not(':contains("My Sales Report")')
 .hide();
+// Hide specific dashboards links for Team Charlie
 $(
-"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-orders-link,#submenu-dashboards .customer-approved-link,#submenu-dashboards .view-all-ordersSheetMode-link ,#submenu-dashboards .fulfilled-orders ,#submenu-dashboards .escalated-orders,#submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .yard-info-link"
+"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-fulfilled-link,.escalation,.view-ordersSheet-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .refunded-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .escalated-orders, #submenu-dashboards .ongoingEscalated-orders,#submenu-dashboards .yard-located-orders, #submenu-dashboards .sales-data-link, #submenu-dashboards .view-myTasks-link, #submenu-dashboards .view-myTasks-link"
 ).hide();
+// Hide teams and users sections for Team Charlie
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
+$(".nav-item:has(#submenu-invoices)").hide();
 } else if (team === "Team Mark") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
-$("#submenu-dashboards .add-orderS-link, #submenu-dashboards .view-individualOrders-link, .teamB-orders-link").hide();
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link"
+).hide();
 } else if (team === "Team Sussane") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
-$("#submenu-dashboards .add-orderS-link, #submenu-dashboards .view-individualOrders-link, .teamA-orders-link").hide();
-}else if (role === "Admin" && firstName === "John") {
-  console.log("===");
-$('#submenu-reports .nav-link:contains("My Sales Report")').show();
-$("#submenu-dashboards .view-individualOrders-link").show();
-} else if (role === "Admin") {
+$('#submenu-reports .nav-link:contains("Escalation Resolutions")').hide();
+// escalationResolvingTime
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
+).hide();
+
+} 
+// else if (role === "Admin" && firstName === "John") {
+//   console.log("===");
+// // Hide specific reports links for Admin
+// $('#submenu-reports .nav-link:contains("My Sales Report")').show();
+// $("#submenu-dashboards .view-individualOrders-link").show();
+// // Hide specific dashboards links for Admin
+// }
+else if (role === "Admin") {
+  console.log("=D==");
+// Hide specific reports links for Admin
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $('#submenu-reports .nav-link:contains("Refund Report")').show();
 $('#submenu-reports .nav-link:contains("Collect Refund")').show();
+// Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 
