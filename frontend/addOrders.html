@@ -1748,18 +1748,21 @@ fetchNotifications();
 document.addEventListener("DOMContentLoaded", function () {
     const addNewPartBtn = document.getElementById("addNewPartBtn");
     const saveNewPart = document.getElementById("saveNewPart");
-    const newPartModal = new bootstrap.Modal(document.getElementById("newPartModal"));
+    const newPartModalElement = document.getElementById("newPartModal");
+    const newPartModal = new bootstrap.Modal(newPartModalElement);
     const newPartNameInput = document.getElementById("newPartName");
     const partDropdown = document.getElementById("pReq");
+
     // Open Modal on "Add New Part" Button Click
     addNewPartBtn.addEventListener("click", function () {
-        newPartNameInput.value = "";
-        newPartModal.show();
+        newPartNameInput.value = ""; // Clear input field
+        newPartModal.show(); // Open the modal
     });
+
     // Save New Part and Add to Dropdown
     saveNewPart.addEventListener("click", function () {
         const newPartName = newPartNameInput.value.trim();
-      
+        
         if (newPartName) {
             // Check if the part already exists
             const existingOptions = Array.from(partDropdown.options).map(opt => opt.value.toLowerCase());
@@ -1767,14 +1770,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("This part already exists!");
                 return;
             }
+
             // Add new part to the dropdown
             const newOption = document.createElement("option");
             newOption.value = newPartName;
             newOption.textContent = newPartName;
             partDropdown.appendChild(newOption);
+
             // Select the newly added part
             partDropdown.value = newPartName;
-            // Close modal
+
+            // Close modal after saving
             newPartModal.hide();
         } else {
             alert("Please enter a part name.");
