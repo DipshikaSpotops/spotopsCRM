@@ -4308,6 +4308,7 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
 });
 // Save a new part
 app.get("/getParts", async (req, res) => {
+  console.log("getting new parts");
   try {
       const parts = await Part.find().sort({ name: 1 }); // Fetch and sort alphabetically
       res.json(parts);
@@ -4318,6 +4319,7 @@ app.get("/getParts", async (req, res) => {
 
 // Add a new part
 app.post("/addNewPart", async (req, res) => {
+  console.log("adding new part");
   const { name } = req.body;
 
   if (!name) {
