@@ -7,6 +7,8 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 body {
 display: flex;
@@ -759,43 +761,44 @@ window.location.href = "login_signup.html";
 <div class="firstRow" id="partInfo">
 <h6 style="text-align: center; margin-top: 1%;">Part Information</h6>
 <div class="form-row firstFive">
-<div class="form-group col-md-2" class="partNames">
-<select class="form-control" id="pReq" required>
-<option value="ABS Module">ABS Module</option>
-<option value="ABS Pump">ABS Pump</option>
-<option value="Alternator">Alternator</option>
-<option value="Air Pump">Air Pump</option>
-<option value="Brake Booster">Brake Booster</option>
-<option value="Computer Box Not Engine">Computer Box Not Engine</option>
-<option value="Door Glass">Door Glass</option>
-<option value="Engine">Engine</option>
-<option value="Engine Computer">Engine Computer</option>
-<option value="Exhaust Manifold">Exhaust Manifold</option>
-<option value="Fuse Box">Fuse Box</option>
-<option value="GPS Screen">GPS Screen</option>
-<option value="Headlight">Headlight</option>
-<option value="Heater/AC Control">Heater/AC Control</option>
-<option value="Master Cylinder">Master Cylinder</option>
-<option value="Mirror">Mirror</option>
-<option value="Mirror, Door">Mirror,Door</option>
-<option value="Modules">Modules</option>
-<option value="Radio/CD">Radio/CD</option>
-<option value="Rear Axle Assembly">Rear Axle Assembly</option>
-<option value="Seat Belt, Front">Seat Belt, Front</option>
-<option value="Speedometer">Speedometer</option>
-<option value="Spindle">Spindle</option>
-<option value="Starter">Starter</option>
-<option value="Steering Rack/Box/Gear">Steering Rack/Box/Gear</option>
-<option value="Steering Column With Key">Steering Column With Key</option>
-<option value="Third Brake Light (With Camera)">Third Brake Light (With Camera)</option>
-<option value="Transmission">Transmission</option>
-<option value="Transmission Computer">Transmission Computer</option>
-<option value="Window Regulator">Window Regulator</option>
-<option value="Wiper Linkage">Wiper Linkage</option>
-<option value="Window Regulator">Window Regulator</option>
-
-</select>
+  <div class="form-group col-md-2 partNames">
+    <select class="form-control" id="pReq" required>
+        <option value="ABS Module">ABS Module</option>
+        <option value="ABS Pump">ABS Pump</option>
+        <option value="Alternator">Alternator</option>
+        <option value="Air Pump">Air Pump</option>
+        <option value="Brake Booster">Brake Booster</option>
+        <option value="Computer Box Not Engine">Computer Box Not Engine</option>
+        <option value="Door Glass">Door Glass</option>
+        <option value="Engine">Engine</option>
+        <option value="Engine Computer">Engine Computer</option>
+        <option value="Exhaust Manifold">Exhaust Manifold</option>
+        <option value="Fuse Box">Fuse Box</option>
+        <option value="GPS Screen">GPS Screen</option>
+        <option value="Headlight">Headlight</option>
+        <option value="Heater/AC Control">Heater/AC Control</option>
+        <option value="Master Cylinder">Master Cylinder</option>
+        <option value="Mirror">Mirror</option>
+        <option value="Mirror, Door">Mirror,Door</option>
+        <option value="Modules">Modules</option>
+        <option value="Radio/CD">Radio/CD</option>
+        <option value="Rear Axle Assembly">Rear Axle Assembly</option>
+        <option value="Seat Belt, Front">Seat Belt, Front</option>
+        <option value="Speedometer">Speedometer</option>
+        <option value="Spindle">Spindle</option>
+        <option value="Starter">Starter</option>
+        <option value="Steering Rack/Box/Gear">Steering Rack/Box/Gear</option>
+        <option value="Steering Column With Key">Steering Column With Key</option>
+        <option value="Third Brake Light (With Camera)">Third Brake Light (With Camera)</option>
+        <option value="Transmission">Transmission</option>
+        <option value="Transmission Computer">Transmission Computer</option>
+        <option value="Window Regulator">Window Regulator</option>
+        <option value="Wiper Linkage">Wiper Linkage</option>
+        <option value="Window Regulator">Window Regulator</option>
+        <option value="add_new_part">➕ Add New Part</option> <!-- Option to trigger popup -->
+    </select>
 </div>
+
 
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="year" placeholder="Year" required />
@@ -821,27 +824,26 @@ window.location.href = "login_signup.html";
 <input type="text" class="form-control" id="partNo"  placeholder="Part No." />
 </div>
 </div>
-<!-- to dynamically add a new part to the dropdown -->
-<button type="button" id="addNewPartBtn">Add New Part</button>
 <!-- popup to add a new part -->
-<div id="newPartModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add New Part</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+<!-- New Part Modal -->
+<div class="modal fade" id="newPartModal" tabindex="-1" aria-labelledby="newPartModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="newPartModalLabel">Add New Part</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <input type="text" id="newPartName" class="form-control" placeholder="Enter new part name">
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="saveNewPart">Save</button>
+          </div>
       </div>
-      <div class="modal-body">
-        <label for="newPartName">Enter Part Name:</label>
-        <input type="text" id="newPartName" class="form-control" placeholder="Enter part name">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="saveNewPart">Save</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
   </div>
-</div>
 </div>
 
 
@@ -1746,21 +1748,22 @@ $("body").removeClass("modal-active");
 fetchNotifications();
 // below is the part to add a new part and dynamically add the value to the dropdown list
 document.addEventListener("DOMContentLoaded", function () {
-    const addNewPartBtn = document.getElementById("addNewPartBtn");
-    const saveNewPart = document.getElementById("saveNewPart");
+    const partDropdown = document.getElementById("pReq");
     const newPartModalElement = document.getElementById("newPartModal");
     const newPartModal = new bootstrap.Modal(newPartModalElement);
     const newPartNameInput = document.getElementById("newPartName");
-    const partDropdown = document.getElementById("pReq");
+    const saveNewPartBtn = document.getElementById("saveNewPart");
 
-    // Open Modal on "Add New Part" Button Click
-    addNewPartBtn.addEventListener("click", function () {
-        newPartNameInput.value = ""; // Clear input field
-        newPartModal.show(); // Open the modal
+    // Open modal when "Add New Part" is selected
+    partDropdown.addEventListener("change", function () {
+        if (partDropdown.value === "add_new_part") {
+            newPartNameInput.value = ""; // Clear input field
+            newPartModal.show(); // Open modal
+        }
     });
 
-    // Save New Part and Add to Dropdown
-    saveNewPart.addEventListener("click", function () {
+    // Save new part and add to dropdown
+    saveNewPartBtn.addEventListener("click", function () {
         const newPartName = newPartNameInput.value.trim();
         
         if (newPartName) {
@@ -1771,22 +1774,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Add new part to the dropdown
+            // Create new option
             const newOption = document.createElement("option");
             newOption.value = newPartName;
             newOption.textContent = newPartName;
-            partDropdown.appendChild(newOption);
-
-            // Select the newly added part
+            
+            // Add new part before "Add New Part" option
+            partDropdown.insertBefore(newOption, partDropdown.lastElementChild);
+            
+            // Select new part
             partDropdown.value = newPartName;
 
-            // Close modal after saving
+            // Close modal
             newPartModal.hide();
         } else {
             alert("Please enter a part name.");
         }
     });
 });
+
 
 });
 </script>
