@@ -1790,31 +1790,27 @@ loadParts();
     saveNewPartBtn.addEventListener("click", saveNewPart);
     // Load parts from the database
     async function loadParts() {
-    try {
-        const response = await axios.get("https://www.spotops360.com/getParts"); // Axios already returns JSON
-        console.log("partNames", response);
-
-        const parts = response.data; // No need for response.json()
-        const partDropdown = document.getElementById("pReq");
-        partDropdown.innerHTML = ""; // Clear existing options
-
-        // Add parts from database
-        parts.forEach(part => {
-            const option = document.createElement("option");
-            option.value = part.name;
-            option.textContent = part.name;
-            partDropdown.appendChild(option);
-        });
-
-        // Add "Add New Part" option at the end
-        const addNewOption = document.createElement("option");
-        addNewOption.value = "add_new_part";
-        addNewOption.textContent = "➕ Add New Part";
-        partDropdown.appendChild(addNewOption);
-    } catch (error) {
-        console.error("Error loading parts:", error);
+        try {
+          const response = await axios.get("https://www.spotops360.com/getParts");
+            console.log("partNames",response)
+            const parts = await response.json();
+            partDropdown.innerHTML = "";
+            // Add parts from database
+            parts.forEach(part => {
+                const option = document.createElement("option");
+                option.value = part.name;
+                option.textContent = part.name;
+                partDropdown.appendChild(option);
+            });
+            // Add "Add New Part" option at the end
+            const addNewOption = document.createElement("option");
+            addNewOption.value = "add_new_part";
+            addNewOption.textContent = "➕ Add New Part";
+            partDropdown.appendChild(addNewOption);
+        } catch (error) {
+            console.error("Error loading parts:", error);
+        }
     }
-}
 
 });
 </script>
