@@ -4306,17 +4306,6 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
     res.status(500).send("Failed to upload pictures.");
   }
 });
-// Save a new part
-app.get("/getParts", async (req, res) => {
-  console.log("getting new parts");
-  try {
-      const parts = await Part.find().sort({ name: 1 }); 
-      console.log("parts",parts)
-      res.json(parts);
-  } catch (error) {
-      res.status(500).json({ error: "Server error while fetching parts" });
-  }
-});
 
 // Add a new part
 app.post("/addNewPart", async (req, res) => {
@@ -4335,5 +4324,16 @@ app.post("/addNewPart", async (req, res) => {
       res.status(201).json(newPart);
   } catch (error) {
       res.status(500).json({ error: "Server error while adding new part" });
+  }
+});
+// Save a new part
+app.get("/getParts", async (req, res) => {
+  console.log("getting new parts");
+  try {
+      const parts = await Part.find().sort({ name: 1 }); 
+      console.log("parts",parts)
+      res.json(parts);
+  } catch (error) {
+      res.status(500).json({ error: "Server error while fetching parts" });
   }
 });
