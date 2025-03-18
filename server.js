@@ -610,6 +610,16 @@ const imageSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+// partName schema
+const partSchema = new mongoose.Schema({
+  name: {
+      type: String,
+      required: true,
+      unique: true, // Prevent duplicate part names
+      trim: true
+  }
+});
+const Part = mongoose.model("PartName", partSchema);
 const OrderSchema = new mongoose.Schema({
 orderNo: { type: String, unique: true },
 orderDate: { type: Date, required: true },
@@ -4294,5 +4304,37 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
   } catch (error) {
     console.error("Error uploading to S3 or saving to DB:", error);
     res.status(500).send("Failed to upload pictures.");
+  }
+});
+// Save a new part
+app.get("/", async (req, res) => {
+  try {
+      const parts = await Part.find().sort({ name: 1 }); // Fetch and sort alphabetically
+      res.json(parts);
+  } catch (error) {
+      res.status(500).json({ error: "Server error while fetching parts" });
+  }
+});
+
+// Add a new part
+app.post("/", async (req, res) => {
+  const { name } = req.body;
+
+  if (!name) {
+      return res.status(400).json({ error: "Part name is required" });
+  }
+
+  try {
+      const existingPart = await Part.findOne({ name: name.trim() });
+
+      if (existingPart) {
+          return res.status(400).json({ error: "Part already exists" });
+      }
+
+      const newPart = new Part({ name: name.trim() });
+      await newPart.save();
+      res.status(201).json(newPart);
+  } catch (error) {
+      res.status(500).json({ error: "Server error while adding new part" });
   }
 });

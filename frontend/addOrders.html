@@ -1747,8 +1747,8 @@ $("body").removeClass("modal-active");
 });
 fetchNotifications();
 // below is the part to add a new part and dynamically add the value to the dropdown list
+document.addEventListener("DOMContentLoaded", function () {
     const partDropdown = document.getElementById("pReq");
-    console.log("preq",partDropdown);
     const newPartModalElement = document.getElementById("newPartModal");
     const newPartModal = new bootstrap.Modal(newPartModalElement);
     const newPartNameInput = document.getElementById("newPartName");
@@ -1757,40 +1757,63 @@ fetchNotifications();
     // Open modal when "Add New Part" is selected
     partDropdown.addEventListener("change", function () {
         if (partDropdown.value === "add_new_part") {
-            newPartNameInput.value = ""; // Clear input field
-            newPartModal.show(); // Open modal
+            newPartNameInput.value = "";
+            newPartModal.show();
         }
     });
-
-    // Save new part and add to dropdown
-    saveNewPartBtn.addEventListener("click", function () {
+    async function saveNewPart() {
         const newPartName = newPartNameInput.value.trim();
-        
-        if (newPartName) {
-            // Check if the part already exists
-            const existingOptions = Array.from(partDropdown.options).map(opt => opt.value.toLowerCase());
-            if (existingOptions.includes(newPartName.toLowerCase())) {
-                alert("This part already exists!");
+        if (!newPartName) {
+            alert("Please enter a part name.");
+            return;
+        }
+        try {
+            const response = await fetch("/api/parts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: newPartName })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                alert(data.error || "Failed to add part.");
                 return;
             }
-
-            // Create new option
-            const newOption = document.createElement("option");
-            newOption.value = newPartName;
-            newOption.textContent = newPartName;
-            
-            // Add new part before "Add New Part" option
-            partDropdown.insertBefore(newOption, partDropdown.lastElementChild);
-            
-            // Select new part
+            // Reload parts after saving
+            await loadParts();
+            // Select the newly added part
             partDropdown.value = newPartName;
-
-            // Close modal
             newPartModal.hide();
-        } else {
-            alert("Please enter a part name.");
+        } catch (error) {
+            console.error("Error saving new part:", error);
+            alert("Failed to add part.");
         }
-    });
+    }
+    saveNewPartBtn.addEventListener("click", saveNewPart);
+    // Load parts from the database
+    async function loadParts() {
+        try {
+            const response = await fetch("/api/parts"); // Fetch parts from backend
+            const parts = await response.json();
+            partDropdown.innerHTML = "";
+            // Add parts from database
+            parts.forEach(part => {
+                const option = document.createElement("option");
+                option.value = part.name;
+                option.textContent = part.name;
+                partDropdown.appendChild(option);
+            });
+            // Add "Add New Part" option at the end
+            const addNewOption = document.createElement("option");
+            addNewOption.value = "add_new_part";
+            addNewOption.textContent = "➕ Add New Part";
+            partDropdown.appendChild(addNewOption);
+        } catch (error) {
+            console.error("Error loading parts:", error);
+        }
+    }
+    // Load parts when the page loads
+    loadParts();
+});
 
 });
 </script>
