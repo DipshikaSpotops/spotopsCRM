@@ -1097,26 +1097,57 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
+// Function to create pagination controls
 function createPaginationControls(totalPages, orders) {
-  const paginationControls = $("#pagination-controls");
-  paginationControls.empty(); // Clear pagination controls
+    const paginationControls = $("#pagination-controls");
+    paginationControls.empty(); // Clear pagination controls
 
-  if (totalPages > 1) {
-    paginationControls.append(
-      `<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
-    );
+    if (totalPages > 1) {
+        paginationControls.append(
+            `<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
+        );
 
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(
-        `<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
-      );
+        for (let i = 1; i <= totalPages; i++) {
+            paginationControls.append(
+                `<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
+            );
+        }
+
+        paginationControls.append(
+            `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
+        );
     }
+}
 
-    paginationControls.append(
-      `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
-    );
-  }
-}// Handle page number clicks
+// Handle page number clicks
+$(document).on("click", ".page-btn", function () {
+    currentPage = parseInt($(this).data("page"));
+    const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
+    renderTableRows(currentPage, ordersToRender);
+    createPaginationControls(Math.ceil(ordersToRender.length / rowsPerPage), ordersToRender);
+});
+
+// Handle Previous button click
+$(document).on("click", "#prevPage", function () {
+    if (currentPage > 1) {
+        currentPage--;
+        const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
+        renderTableRows(currentPage, ordersToRender);
+        createPaginationControls(Math.ceil(ordersToRender.length / rowsPerPage), ordersToRender);
+    }
+});
+
+// Handle Next button click
+$(document).on("click", "#nextPage", function () {
+    const totalPages = Math.ceil((filteredOrders.length > 0 ? filteredOrders.length : allOrders.length) / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
+        renderTableRows(currentPage, ordersToRender);
+        createPaginationControls(totalPages, ordersToRender);
+    }
+});
+
 $(document).on("click", ".page-btn", function () {
     currentPage = $(this).data("page");
     const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
