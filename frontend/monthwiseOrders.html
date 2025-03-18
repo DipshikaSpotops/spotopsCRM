@@ -1040,18 +1040,18 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-function createPaginationControls(totalPages, orders = allOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
+function createPaginationControls(totalPages) {
+    const paginationControls = $('#pagination-controls');
+    paginationControls.empty(); // Clear existing buttons
 
-if (totalPages > 1) {
-      paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+    if (totalPages > 1) {
+        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
 
-      for (let i = 1; i <= totalPages; i++) {
-        paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
-      }
+        for (let i = 1; i <= totalPages; i++) {
+            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
+        }
 
-      paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
     }
 }
 
@@ -1065,21 +1065,23 @@ $('#pagination-controls').on('click', '.pageNos', function () {
   });
 
 // "Previous" and "Next" button functionality
+// "Previous" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-}
+    if (currentPage > 1) {
+        currentPage--; // Ensure currentPage updates first
+        renderTableRows(currentPage); // Render the new page
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage)); // Refresh pagination buttons
+    }
 });
 
+// "Next" button functionality
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(allOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
-}
+    const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++; // Move to next page
+        renderTableRows(currentPage); // Re-render table
+        createPaginationControls(totalPages); // Update pagination buttons
+    }
 });
 
 // Token fetching logic
