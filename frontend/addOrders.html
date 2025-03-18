@@ -1765,7 +1765,7 @@ fetchNotifications();
             return;
         }
         try {
-            const response = await fetch("https://www.spotops360.com/parts", {
+            const response = await fetch("https://www.spotops360.com/addNewPart", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: newPartName })
@@ -1789,7 +1789,7 @@ fetchNotifications();
     // Load parts from the database
     async function loadParts() {
         try {
-            const response = await fetch("https://www.spotops360.com/parts"); // Fetch parts from backend
+            const response = await fetch("https://www.spotops360.com/getParts"); // Fetch parts from backend
             const parts = await response.json();
             partDropdown.innerHTML = "";
             // Add parts from database
