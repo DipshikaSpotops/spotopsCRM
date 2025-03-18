@@ -1758,7 +1758,7 @@ loadParts();
         if (partDropdown.value === "add_new_part") {
             newPartNameInput.value = "";
             newPartModal.show();
-        }
+        });
     async function saveNewPart() {
         const newPartName = newPartNameInput.value.trim();
         if (!newPartName) {
@@ -1810,8 +1810,6 @@ loadParts();
             console.error("Error loading parts:", error);
         }
     }
-
-});
 
 });
 </script>
