@@ -4322,18 +4322,14 @@ app.get("/getParts", async (req, res) => {
 app.post("/addNewPart", async (req, res) => {
   console.log("adding new part");
   const { name } = req.body;
-
   if (!name) {
       return res.status(400).json({ error: "Part name is required" });
   }
-
   try {
       const existingPart = await Part.findOne({ name: name.trim() });
-
       if (existingPart) {
           return res.status(400).json({ error: "Part already exists" });
       }
-
       const newPart = new Part({ name: name.trim() });
       await newPart.save();
       res.status(201).json(newPart);
