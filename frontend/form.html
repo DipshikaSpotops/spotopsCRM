@@ -2676,6 +2676,19 @@ Save
 </div>
 <script>
 $(document).ready(async function () {
+// to change the main orderStatus to Order Fulfilled when the esc part from yard gets delivered
+document.addEventListener("DOMContentLoaded", function () {
+    const yardShippingStatus = document.getElementById("yardShippingStatus");
+    const orderStatus = document.getElementById("orderStatus"); 
+    if (yardShippingStatus && orderStatus) {
+        yardShippingStatus.addEventListener("change", function () {
+            if (yardShippingStatus.value === "Delivered") {
+                orderStatus.value = "Order Fulfilled";
+            }
+        });
+    }
+});
+
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
