@@ -756,7 +756,7 @@ window.location.href = "login_signup.html";
 <div class="firstRow" id="partInfo">
 <h6 style="text-align: center; margin-top: 1%;">Part Information</h6>
 <div class="form-row firstFive">
-<div class="form-group col-md-2">
+<div class="form-group col-md-2" class="partNames">
 <select class="form-control" id="pReq" required>
 <option value="ABS Module">ABS Module</option>
 <option value="ABS Pump">ABS Pump</option>
@@ -793,6 +793,28 @@ window.location.href = "login_signup.html";
 
 </select>
 </div>
+<!-- to dynamically add a new part to the dropdown -->
+<button type="button" class="btn btn-primary" id="addNewPartBtn">Add New Part</button>
+<!-- popup to add a new part -->
+<div id="newPartModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add New Part</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label for="newPartName">Enter Part Name:</label>
+        <input type="text" id="newPartName" class="form-control" placeholder="Enter part name" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="saveNewPart">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="form-group col-md-2">
 <input type="text" class="form-control" id="year" placeholder="Year" required />
 </div>
@@ -1717,6 +1739,44 @@ $("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
+// below is the part to add a new part and dynamically add the value to the dropdown list
+document.addEventListener("DOMContentLoaded", function () {
+    const addNewPartBtn = document.getElementById("addNewPartBtn");
+    const saveNewPart = document.getElementById("saveNewPart");
+    const newPartModal = new bootstrap.Modal(document.getElementById("newPartModal"));
+    const newPartNameInput = document.getElementById("newPartName");
+    const partDropdown = document.getElementById("pReq");
+    // Open Modal on "Add New Part" Button Click
+    addNewPartBtn.addEventListener("click", function () {
+        newPartNameInput.value = "";
+        newPartModal.show();
+    });
+    // Save New Part and Add to Dropdown
+    saveNewPart.addEventListener("click", function () {
+        const newPartName = newPartNameInput.value.trim();
+      
+        if (newPartName) {
+            // Check if the part already exists
+            const existingOptions = Array.from(partDropdown.options).map(opt => opt.value.toLowerCase());
+            if (existingOptions.includes(newPartName.toLowerCase())) {
+                alert("This part already exists!");
+                return;
+            }
+            // Add new part to the dropdown
+            const newOption = document.createElement("option");
+            newOption.value = newPartName;
+            newOption.textContent = newPartName;
+            partDropdown.appendChild(newOption);
+            // Select the newly added part
+            partDropdown.value = newPartName;
+            // Close modal
+            newPartModal.hide();
+        } else {
+            alert("Please enter a part name.");
+        }
+    });
+});
+
 });
 </script>
 </body>
