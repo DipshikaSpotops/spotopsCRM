@@ -2624,8 +2624,8 @@ pass: "hweg vrnk qyxx gktv",
 var customerName = order.customerName || order.fName;
 const mailOptions = {
 from: "service@50starsautoparts.com",
-// to: `${order.email}`,
-to:`dipsikha.spotopsdigital@gmail.com`,
+to: `${order.email}`,
+// to:`dipsikha.spotopsdigital@gmail.com`,
 bcc:`dipsikha.spotopsdigital@gmail.com`,
 subject: `Tracking Details / Order No. ${req.params.orderNo}`,
 html: `<p>Hi ${customerName},</p>
