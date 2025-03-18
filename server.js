@@ -4310,7 +4310,8 @@ app.post("/uploadToS3", upload.array("pictures"), async (req, res) => {
 app.get("/getParts", async (req, res) => {
   console.log("getting new parts");
   try {
-      const parts = await Part.find().sort({ name: 1 }); // Fetch and sort alphabetically
+      const parts = await Part.find().sort({ name: 1 }); 
+      console.log("parts",parts)
       res.json(parts);
   } catch (error) {
       res.status(500).json({ error: "Server error while fetching parts" });
