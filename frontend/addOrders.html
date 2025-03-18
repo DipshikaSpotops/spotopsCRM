@@ -1746,6 +1746,7 @@ $("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
+loadParts();
 // below is the part to add a new part and dynamically add the value to the dropdown list
     const partDropdown = document.getElementById("pReq");
     const newPartModalElement = document.getElementById("newPartModal");
@@ -1809,8 +1810,7 @@ fetchNotifications();
             console.error("Error loading parts:", error);
         }
     }
-    // Load parts when the page loads
-    loadParts();
+
 });
 
 });
