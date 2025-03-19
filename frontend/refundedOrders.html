@@ -845,7 +845,9 @@ $("#infoTable").append(`
 <td>${item.orderNo}</td>
 <td>${item.soldP}</td>
 <td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
+<td>${
+    (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
+  }</td>
 <td>${item.pReq || item.partName}</td>
 <td>${
   item.additionalInfo && item.additionalInfo.length > 0
