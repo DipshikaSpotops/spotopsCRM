@@ -835,7 +835,7 @@ else if (item.orderStatus === "Refunded" && item.additionalInfo.some(yard => yar
 escalationStyle = 'style="background-color: #5a3286;color:white;"';
 }
 const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 const datetime = item.orderDate;
 const date = new Date(datetime);
 const day = date.getUTCDate();  // Use UTC day
