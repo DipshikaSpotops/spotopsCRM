@@ -434,8 +434,12 @@ daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to 
 }
 if (status !== "Part delivered") {
 const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-const approvedDate = new Date(customerApprovedDate);
+if (!customerApprovedDate || customerApprovedDate.trim() === "") {
+        console.error("Invalid or missing customerApprovedDate:", customerApprovedDate);
+        return; // Skip processing this entry
+    }
 
+    const approvedDate = new Date(customerApprovedDate.replace(/-/g, "/"));
 if (isNaN(approvedDate)) {
 console.error("Invalid customerApprovedDate:", customerApprovedDate);
 } else {
