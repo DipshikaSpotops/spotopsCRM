@@ -1281,40 +1281,7 @@ $("#infoTable").empty(); // Clear the table if no results are found
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
 }
 });
-// Toggle Dark Mode
-if (localStorage.getItem("darkMode") === "true") {
-    enableDarkMode();
-  }
- $("#darkModeIcon").on("click", function () {
-if ($("body").hasClass("dark-mode")) {
-disableDarkMode();
-} else {
-enableDarkMode();
-}
-});
 
-function enableDarkMode() {
-$("body").addClass("dark-mode");
-$(".navbar").addClass("dark-mode");
-$(".sidebar").addClass("dark-mode");
-$("table").addClass("table-dark");
-$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-localStorage.setItem("darkMode", "true");
-}
-
-function disableDarkMode() {
-$("body").removeClass("dark-mode");
-$(".navbar").removeClass("dark-mode");
-$(".sidebar").removeClass("dark-mode");
-$("table").removeClass("table-dark");
-$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-localStorage.setItem("darkMode", "false");
-}
-$(document).on("click", "#infoTable tr", function () {
-  console.log("Row clicked:", $(this).text()); // Debugging
-  $("#infoTable tr").removeClass("selected");
-  $(this).addClass("selected");
-});
     });
 </script>
 </body>
