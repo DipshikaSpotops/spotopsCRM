@@ -1814,11 +1814,11 @@ loadParts();
           axios.get("https://www.spotops360.com/getParts")
     .then(response => {
         console.log("partNames", response.data);
+    var parts = response.data;
     })
     .catch(error => {
         console.error("Error fetching parts:", error);
     });
-    var parts = response.data;
   parts.forEach(part => {
                 const option = document.createElement("option");
                 option.value = part.name;
