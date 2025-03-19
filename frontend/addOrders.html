@@ -1811,12 +1811,15 @@ loadParts();
     // Load parts from the database
     async function loadParts() {
         try {
-          const response = await axios.get("https://www.spotops360.com/getParts");
-            console.log("partNames",response)
-            const parts = await response.json();
-            partDropdown.innerHTML = "";
-            // Add parts from database
-            parts.forEach(part => {
+          axios.get("https://www.spotops360.com/getParts")
+    .then(response => {
+        console.log("partNames", response.data);
+    })
+    .catch(error => {
+        console.error("Error fetching parts:", error);
+    });
+    var parts = response.data;
+  parts.forEach(part => {
                 const option = document.createElement("option");
                 option.value = part.name;
                 option.textContent = part.name;
