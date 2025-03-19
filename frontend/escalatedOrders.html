@@ -256,11 +256,10 @@ color: white;
     border: none;
     color: #61a55e;
 }.table-wrapper {
-  max-height: 80vh; 
+  max-height: 77vh; 
   overflow-y: auto;
   overflow-x: auto;
   position: relative;
-  margin-top: 35px;
 }
 #filterAndTotal{
   display: flex;
@@ -636,7 +635,7 @@ placeholder="Search..."
 </div>
 <!-- pagination controls -->
 <div id="pagination-controls" class="mt-3 mb-3"></div>
-<div id="filterAndTotal" style="display: flex;margin: -2% 0%;">
+<div id="filterAndTotal">
 <div class="filter-bar">
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary">Filter</button>
@@ -646,7 +645,7 @@ placeholder="Search..."
 </div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
 </div> 
-<div class="table-responsive">
+<div class="table-wrapper">
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
