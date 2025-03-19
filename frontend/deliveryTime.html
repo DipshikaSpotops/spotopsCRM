@@ -285,10 +285,9 @@ console.log("month",month,"year",year);
 fetchData(month,year);
 async function fetchData(month,year) {
 try {
-const response = await axios.get(`https://www.spotops360.com/monthly?month=${month}&year=${year}`, {
-headers: { Authorization: `Bearer ${token}` },
+const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
-
 if (response.status !== 200) {
 throw new Error("Failed to fetch yard information");
 }
