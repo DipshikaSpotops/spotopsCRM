@@ -758,38 +758,7 @@ $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
-// for dark mode
-const darkModeToggle = document.getElementById("darkModeIcon");
-// Function to toggle dark mode
-function toggleDarkMode() {
-document.body.classList.toggle("dark-mode");
-const isDarkMode = document.body.classList.contains("dark-mode");
-localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
-updateIcon(isDarkMode);
-}
-// Function to update the icon
-function updateIcon(isDarkMode) {
-darkModeToggle.classList.toggle("fa-moon", !isDarkMode);
-darkModeToggle.classList.toggle("fa-sun", isDarkMode);
-}
-// Check localStorage for dark mode preference
-const savedDarkMode = localStorage.getItem("darkMode");
-if (savedDarkMode === "enabled") {
-document.body.classList.add("dark-mode");
-updateIcon(true);
-} else {
-updateIcon(false);
-}
-// Add click event to toggle dark mode
-darkModeToggle.addEventListener("click", toggleDarkMode);
-// dark mode till here
-const currentPath = window.location.pathname + "?newEntry=true";
-console.log("currentPath",currentPath)
-$(".nav-link").each(function () {
-if (currentPath.includes($(this).attr("href"))) {
-$(this).addClass("active");
-}
-});
+
 // fetch all tasks
 async function fetchTasks() {
   try {
