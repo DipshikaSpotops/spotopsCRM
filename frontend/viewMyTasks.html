@@ -830,29 +830,40 @@ window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
 // for dark mode
-const darkModeToggle = document.getElementById("darkModeIcon");
-// Function to toggle dark mode
-function toggleDarkMode() {
-document.body.classList.toggle("dark-mode");
-const isDarkMode = document.body.classList.contains("dark-mode");
-localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
-updateIcon(isDarkMode);
-}
-// Function to update the icon
-function updateIcon(isDarkMode) {
-darkModeToggle.classList.toggle("fa-moon", !isDarkMode);
-darkModeToggle.classList.toggle("fa-sun", isDarkMode);
-}
-// Check localStorage for dark mode preference
-const savedDarkMode = localStorage.getItem("darkMode");
-if (savedDarkMode === "enabled") {
-document.body.classList.add("dark-mode");
-updateIcon(true);
+// Toggle Dark Mode
+if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
+ $("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
 } else {
-updateIcon(false);
+enableDarkMode();
 }
-// Add click event to toggle dark mode
-darkModeToggle.addEventListener("click", toggleDarkMode);
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
+$(document).on("click", "#infoTable tr", function () {
+  console.log("Row clicked:", $(this).text()); // Debugging
+  $("#infoTable tr").removeClass("selected");
+  $(this).addClass("selected");
+});
 // dark mode till here
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
