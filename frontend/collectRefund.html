@@ -37,7 +37,7 @@ cursor: pointer;
   width: auto;
     border-radius: 30px;
     border: 1px solid grey;
-    margin: 21% -48%;
+    margin: 21% -45%;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
@@ -546,8 +546,9 @@ table {
 }
 #filterAndTotal{
   display: flex;
-    margin-left: 38%;
-    margin-top: -3%;
+  margin-left: 36%;
+  margin-top: -2%;
+
 }
 table thead th {
   position: sticky;
@@ -575,7 +576,7 @@ table thead th {
   margin-top: -2%;
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
+  text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -1579,7 +1580,6 @@ $("#yardInfoTable").on("click", "tr", function () {
         // Add selection to the clicked row
         $(this).addClass("selected");
     });
-    // Toggle Dark Mode
     // Toggle Dark Mode
 if (localStorage.getItem("darkMode") === "true") {
     enableDarkMode();
