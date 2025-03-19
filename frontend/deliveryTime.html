@@ -829,12 +829,32 @@ $("#filterButton").click(async function () {
 </div>
 
 <div class="main-content">
-<h1 style="text-align: center; margin-right: 90px; margin-top: 20px">Delivery Time Report</h1>
-<div class="table-responsive mx-auto" style="max-width: 90%">
-<div style="align-items: center; justify-content: center">
-<input type="text" class="form-control" id="searchInput" placeholder="Search..." />
-</div>
-<table class="table table-bordered mt-4">
+  <div class="topHeads">
+    <h1 id="mainHeading">View Orders- Monthly</h1>
+  
+  <div id="filterAndTotal">
+   <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
+  <div class="filter-bar">
+  <input id="monthYearPicker" type="month" class="form-control" />
+  <button id="filterButton" class="btn btn-primary">Filter</button>
+  </div>
+  <div id="showTotalOrders">Total Orders This Month-</div>
+  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+  </div>
+    <div>
+  <input
+  type="text"
+  class="form-control"
+  id="searchInput"
+  placeholder="Search..."
+  />
+  </div>
+  </div>
+  <div id="pagination-controls">
+    <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
+  </div>
+  <div class="table-wrapper">
+  <table class="table table-bordered mt-4">
 <thead>
 <tr id="tableHeader">
 <th scope="col" class="sortable">Order No <span class="sort-icon">&#9650;</span></th>
@@ -846,6 +866,7 @@ $("#filterButton").click(async function () {
 <!-- Yard information will be appended here -->
 </tbody>
 </table>
+</div>
 </div>
 </div>
 
