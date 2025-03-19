@@ -1357,6 +1357,10 @@ $(document).on("click", "#infoTable tr", function () {
   $(this).addClass("selected");
 });
 fetchNotifications();
+$("#infoTable").on("click", "tr", function () {
+        $("#infoTable tr").removeClass("selected");
+        $(this).addClass("selected");
+    });
 });
 </script>
 
