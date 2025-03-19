@@ -742,7 +742,17 @@ console.log("query",query,page,limit);
     res.status(500).send("An error occurred while searching orders.");
   }
 });
-
+// Save a new part
+app.get("/getParts", async (req, res) => {
+  console.log("getting new parts");
+  try {
+      const parts = await Part.find().sort({ name: 1 }); 
+      console.log("parts",parts)
+      res.json(parts);
+  } catch (error) {
+      res.status(500).json({ error: "Server error while fetching parts" });
+  }
+});
 // orders per page fpr server side pagination
 app.get("/ordersPerPage", async (req, res) => {
   try {
@@ -4326,14 +4336,4 @@ app.post("/addNewPart", async (req, res) => {
       res.status(500).json({ error: "Server error while adding new part" });
   }
 });
-// Save a new part
-app.get("/getParts", async (req, res) => {
-  console.log("getting new parts");
-  try {
-      const parts = await Part.find().sort({ name: 1 }); 
-      console.log("parts",parts)
-      res.json(parts);
-  } catch (error) {
-      res.status(500).json({ error: "Server error while fetching parts" });
-  }
-});
+
