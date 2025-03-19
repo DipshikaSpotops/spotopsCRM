@@ -253,10 +253,39 @@ let currentSort = {
 column: "",
 order: "asc" // ascending by default
 };
+const now = new Date();
+const options = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter = new Intl.DateTimeFormat('en-US', options);
+const parts = formatter.formatToParts(now);
+const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+const date = new Date(formattedDate);
+// Array of month names
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const monthMap = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+May: "05", Jun: "06", Jul: "07", Aug: "08",
+Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+};
+var monthNum = monthMap[month];
 
-async function fetchData() {
+$("#monthYearPicker").val(`${year}-${monthNum}`);
+console.log("month",month,"year",year);
+fetchData(month,year);
+async function fetchData(month,year) {
 try {
-const response = await axios.get("https://www.spotops360.com/yardInfo", {
+const response = await axios.get(`https://www.spotops360.com/monthly?month=${month}&year=${year}`, {
 headers: { Authorization: `Bearer ${token}` },
 });
 
@@ -656,6 +685,14 @@ $("body").removeClass("modal-active");
 });
 fetchNotifications();
 fetchTaskSummary();
+$("#filterButton").click(async function () {
+        const selectedMonthYear = $("#monthYearPicker").val(); 
+        if (selectedMonthYear) {
+            const [year, month] = selectedMonthYear.split("-");
+            await fetchData(month, year);
+        }
+    });
+
 });
 
 </script>
