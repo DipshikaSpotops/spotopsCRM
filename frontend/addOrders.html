@@ -1809,12 +1809,13 @@ loadParts();
     }
     saveNewPartBtn.addEventListener("click", saveNewPart);
     // Load parts from the database
+    var parts;
     async function loadParts() {
         try {
           axios.get("https://www.spotops360.com/getParts")
     .then(response => {
         console.log("partNames", response.data);
-    var parts = response.data;
+     parts = response.data;
     })
     .catch(error => {
         console.error("Error fetching parts:", error);
