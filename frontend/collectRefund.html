@@ -1580,11 +1580,11 @@ $("#yardInfoTable").on("click", "tr", function () {
         $(this).addClass("selected");
     });
     // Toggle Dark Mode
-    if (localStorage.getItem("darkMode") === "true") {
+    // Toggle Dark Mode
+if (localStorage.getItem("darkMode") === "true") {
     enableDarkMode();
   }
-$("#darkModeIcon").on("click", function () {
-  console.log("darkModeIcon  clicked");
+ $("#darkModeIcon").on("click", function () {
 if ($("body").hasClass("dark-mode")) {
 disableDarkMode();
 } else {
@@ -1609,6 +1609,11 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
+$(document).on("click", "#infoTable tr", function () {
+  console.log("Row clicked:", $(this).text()); // Debugging
+  $("#infoTable tr").removeClass("selected");
+  $(this).addClass("selected");
+});
 });
 </script>
 </body>
