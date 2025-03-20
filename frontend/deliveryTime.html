@@ -466,69 +466,120 @@ fetchData(month,year);
 let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
-async function fetchData(month,year) {
-try {
-const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (response.status !== 200) {
-throw new Error("Failed to fetch yard information");
-}
+async function fetchData(month, year) {
+    try {
+      const response = await axios.get(
+        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      );
 
-allOrders = response.data;
-// console.log("month data",allOrders);
-renderTable(allOrders);
-} catch (error) {
-console.error("Error fetching yard information:", error);
-alert("Error fetching yard information: " + error.message);
-}
-}
-// Function to create pagination controls
-function createPaginationControls(totalPages) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); // Clear existing buttons
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch orders");
+      }
+
+      allOrders = response.data;
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      alert("Error fetching orders: " + error.message);
+    }
+  }
+
+  /** 🔹 Render Table Rows for Pagination */
+  function renderTableRows(page) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = allOrders.slice(start, end);
+
+    $("#yardInfoTable").empty();
+
+    paginatedData.forEach((item) => {
+      const formattedOrderDate = formatDate(item.orderDate);
+      $("#yardInfoTable").append(
+        `<tr>
+            <td>${item.orderNo}</td>
+            <td>${formattedOrderDate}</td>
+        </tr>`
+      );
+    });
+  }
+  /** 🔹 Format Date */
+  function formatDate(dateString) {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    const day = date.getUTCDate();
+    const monthNames = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const year = date.getUTCFullYear();
+    return `${day} ${monthNames[date.getUTCMonth()]}, ${year}`;
+  }
+ /** 🔹 Render Table Rows for Pagination */
+ function renderTableRows(page) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = allOrders.slice(start, end);
+
+    $("#yardInfoTable").empty();
+
+    paginatedData.forEach((item) => {
+      const formattedOrderDate = formatDate(item.orderDate);
+      $("#yardInfoTable").append(
+        `<tr>
+            <td>${item.orderNo}</td>
+            <td>${formattedOrderDate}</td>
+        </tr>`
+      );
+    });
+  }
+  /** 🔹 Create Pagination Controls */
+  function createPaginationControls(totalPages) {
+    const paginationControls = $("#pagination-controls");
+    paginationControls.empty();
 
     if (totalPages > 1) {
-        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+      paginationControls.append(
+        `<button class="previousNext" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
+      );
 
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
-        }
+      for (let i = 1; i <= totalPages; i++) {
+        paginationControls.append(
+          `<button class="pageNos btn ${i === currentPage ? "active-page" : ""}" data-page="${i}">${i}</button>`
+        );
+      }
 
-        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+      paginationControls.append(
+        `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>`
+      );
     }
-}
+  }
 
-
-$('#pagination-controls').on('click', '.pageNos', function () {
-    currentPage = $(this).data('page');
-    console.log("pageNo:",currentPage);
-    const searchTerm = $("#searchInput").val().trim();
+  /** 🔹 Handle Pagination Click */
+  $("#pagination-controls").on("click", ".pageNos", function () {
+    currentPage = $(this).data("page");
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   });
 
-// "Previous" and "Next" button functionality
-// "Previous" button functionality
-$('#pagination-controls').on('click', '#prevPage', function () {
+  $("#pagination-controls").on("click", "#prevPage", function () {
     if (currentPage > 1) {
-        currentPage--; // Ensure currentPage updates first
-        renderTableRows(currentPage); // Render the new page
-        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage)); // Refresh pagination buttons
+      currentPage--;
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     }
-});
+  });
 
-// "Next" button functionality
-$('#pagination-controls').on('click', '#nextPage', function () {
+  $("#pagination-controls").on("click", "#nextPage", function () {
     const totalPages = Math.ceil(allOrders.length / rowsPerPage);
     if (currentPage < totalPages) {
-        currentPage++; // Move to next page
-        renderTableRows(currentPage); // Re-render table
-        createPaginationControls(totalPages); // Update pagination buttons
+      currentPage++;
+      renderTableRows(currentPage);
+      createPaginationControls(totalPages);
     }
+  });
 });
-
-
 function getDaySuffix(day) {
 if (day > 3 && day < 21) return 'th';
 switch (day % 10) {
@@ -914,13 +965,15 @@ $("body").removeClass("modal-active");
 fetchNotifications();
 fetchTaskSummary();
 $("#filterButton").click(async function () {
-        const selectedMonthYear = $("#monthYearPicker").val(); 
-        if (selectedMonthYear) {
-            const [year, month] = selectedMonthYear.split("-");
-            await fetchData(month, year);
-        }
-    });
-
+    const selectedMonthYear = $("#monthYearPicker").val(); // Format: YYYY-MM
+    if (selectedMonthYear) {
+      const [year, month] = selectedMonthYear.split("-");
+      currentPage = 1; // Reset to first page on filter
+      await fetchData(month, month);
+      renderTableRows(1);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    }
+  });
 });
 
 </script>
