@@ -491,7 +491,7 @@ async function fetchData(month, year) {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedData = allOrders.slice(start, end);
-console.log("sliced data",paginatedData);
+console.log("sliced data",allOrders);
     const tableHeader = $("#tableHeader");
     $("#yardInfoTable").empty();
 
