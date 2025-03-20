@@ -504,20 +504,28 @@ async function fetchData(month, year) {
       );
     });
   }
-  /** 🔹 Format Date */
-  function formatDate(dateString) {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    const day = date.getUTCDate();
-    const monthNames = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-    const year = date.getUTCFullYear();
-    return `${day} ${monthNames[date.getUTCMonth()]}, ${year}`;
+  async function fetchData(month, year) {
+    try {
+      const response = await axios.get(
+        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch orders");
+      }
+
+      allOrders = response.data;
+      renderTableRows(currentPage);
+      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      alert("Error fetching orders: " + error.message);
+    }
   }
- /** 🔹 Render Table Rows for Pagination */
- function renderTableRows(page) {
+
+  /** 🔹 Render Table Rows for Pagination */
+  function renderTableRows(page) {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedData = allOrders.slice(start, end);
@@ -534,6 +542,20 @@ async function fetchData(month, year) {
       );
     });
   }
+
+  /** 🔹 Format Date */
+  function formatDate(dateString) {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    const day = date.getUTCDate();
+    const monthNames = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const year = date.getUTCFullYear();
+    return `${day} ${monthNames[date.getUTCMonth()]}, ${year}`;
+  }
+
   /** 🔹 Create Pagination Controls */
   function createPaginationControls(totalPages) {
     const paginationControls = $("#pagination-controls");
@@ -579,7 +601,6 @@ async function fetchData(month, year) {
       createPaginationControls(totalPages);
     }
   });
-});
 function getDaySuffix(day) {
 if (day > 3 && day < 21) return 'th';
 switch (day % 10) {
@@ -753,7 +774,7 @@ $(this)
 .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
 });
 
- fetchData();
+await fetchData();
 
 // Sidebar toggle and menu functionality
 $(".toggle-sidebar").on("click", function () {
