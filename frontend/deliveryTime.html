@@ -492,18 +492,103 @@ async function fetchData(month, year) {
     const end = start + rowsPerPage;
     const paginatedData = allOrders.slice(start, end);
 
+    const tableHeader = $("#tableHeader");
     $("#yardInfoTable").empty();
+    let maxYards = 0;
 
+    // Determine max number of yards
     paginatedData.forEach((item) => {
-      const formattedOrderDate = formatDate(item.orderDate);
-      $("#yardInfoTable").append(
-        `<tr>
-            <td>${item.orderNo}</td>
-            <td>${formattedOrderDate}</td>
-        </tr>`
-      );
+        if (item.additionalInfo.length > maxYards) {
+            maxYards = item.additionalInfo.length;
+        }
     });
-  }
+
+    // Update table header dynamically
+    tableHeader.find("th:gt(1)").remove(); // Remove previous yard columns
+    for (let i = 1; i <= maxYards; i++) {
+        tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+    }
+
+    // Populate table rows with paginated data
+    paginatedData.forEach((item) => {
+        let yardInfoHtml = "";
+
+        for (let i = 0; i < maxYards; i++) {
+            if (item.additionalInfo[i]) {
+                let customerApprovedDate = item.customerApprovedDate;
+                let poSentDate = item.additionalInfo[i].poSentDate;
+                let deliveredDate = item.additionalInfo[i].partDeliveredDate;
+                let status = item.additionalInfo[i].status;
+
+                let datePO = "", dateDelivered = "", daysDifference1 = "", daysDifference2 = "";
+
+                const now = new Date();
+
+                // Format PO Sent Date
+                if (poSentDate) {
+                    const poSentDateObj = new Date(poSentDate);
+                    const dayPO = poSentDateObj.getDate();
+                    datePO = poSentDateObj.toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }).replace(dayPO, `${dayPO}${getDaySuffix(dayPO)}`);
+                }
+
+                // Format Delivered Date
+                if (deliveredDate) {
+                    const deliveredDateObj = new Date(deliveredDate);
+                    const dayDelivered = deliveredDateObj.getDate();
+                    dateDelivered = deliveredDateObj.toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }).replace(dayDelivered, `${dayDelivered}${getDaySuffix(dayDelivered)}`);
+
+                    if (poSentDate) {
+                        const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
+                        daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
+                    }
+                }
+
+                // Calculate days since Customer Approved
+                if (status !== "Part delivered") {
+                    const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+                    const approvedDate = new Date(customerApprovedDate);
+
+                    if (!isNaN(approvedDate)) {
+                        const diffTime = Math.abs(dallasTime - approvedDate);
+                        daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
+                    } else {
+                        console.error("Invalid customerApprovedDate:", customerApprovedDate);
+                    }
+                }
+
+                yardInfoHtml += `<td>
+                    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
+                    <br>PO Sent - ${datePO || ""}
+                    ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
+                    ${item.additionalInfo[i].trackingNo ? `<br>${item.additionalInfo[i].trackingNo}` : ""}
+                    ${status ? `<br>${status}` : ""}
+                    ${(status === "Part delivered" || status === "Escalation") && daysDifference1 ? `<br>Delivered in ${daysDifference1} days` : ""}
+                    ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
+                </td>`;
+            } else {
+                yardInfoHtml += "<td></td>";
+            }
+        }
+
+        const formattedOrderDate = formatDate(item.orderDate);
+
+        $("#yardInfoTable").append(
+            `<tr>
+                <td>${item.orderNo}</td>
+                <td>${formattedOrderDate}</td>
+                ${yardInfoHtml}
+            </tr>`
+        );
+    });
+}
   async function fetchData(month, year) {
     try {
       const response = await axios.get(
@@ -609,128 +694,6 @@ case 2: return 'nd';
 case 3: return 'rd';
 default: return 'th';
 }
-}
-
-function renderTable(data) {
-const tableHeader = $("#tableHeader");
-$("#yardInfoTable").empty();
-let maxYards = 0;
-
-data.forEach((item) => {
-if (item.additionalInfo.length > maxYards) {
-maxYards = item.additionalInfo.length;
-}
-});
-
-// Update table header based on the maximum number of yards
-tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
-for (let i = 1; i <= maxYards; i++) {
-tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
-}
-
-// Populate the table rows
-data.forEach((item) => {
-let yardInfoHtml = "";
-
-for (let i = 0; i < maxYards; i++) {
-if (item.additionalInfo[i]) {
-let customerApprovedDate = item.customerApprovedDate;
-let poSentDate = item.additionalInfo[i].poSentDate;
-let deliveredDate = item.additionalInfo[i].partDeliveredDate;
-let status = item.additionalInfo[i].status;
-
-// Initialize formatted dates as empty strings
-let datePO = '';
-let dateDelivered = '';
-let daysDifference1 = '';
-let daysDifference2 = '';
-
-// Get the current date
-const now = new Date();
-
-// Check if poSentDate is defined and valid
-if (poSentDate) {
-const poSentDateObj = new Date(poSentDate);
-const dayPO = poSentDateObj.getDate();
-const dayPOSuffix = getDaySuffix(dayPO);
-datePO = poSentDateObj.toLocaleString('en-US', {
-month: 'short',
-day: 'numeric',
-year: 'numeric'
-}).replace(poSentDateObj.getDate(), `${dayPO}${dayPOSuffix}`);
-}
-
-// Check if deliveredDate is defined and valid
-if (deliveredDate) {
-const deliveredDateObj = new Date(deliveredDate);
-const dayDelivered = deliveredDateObj.getDate();
-const dayDeliveredSuffix = getDaySuffix(dayDelivered);
-dateDelivered = deliveredDateObj.toLocaleString('en-US', {
-month: 'short',
-day: 'numeric',
-year: 'numeric'
-}).replace(deliveredDateObj.getDate(), `${dayDelivered}${dayDeliveredSuffix}`);
-
-// Calculate the difference in days between PO Sent and Delivered
-if (poSentDate) {
-const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
-daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-}
-}
-if (status !== "Part delivered") {
-const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-const approvedDate = new Date(customerApprovedDate);
-
-if (isNaN(approvedDate)) {
-console.error("Invalid customerApprovedDate:", customerApprovedDate);
-} else {
-const diffTime = Math.abs(dallasTime - approvedDate);
-
-// Convert the difference from milliseconds to days
-daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert ms to days
-}
-}
-
-yardInfoHtml += `<td>
-${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
-<br>
-PO Sent - ${datePO || ""}
-${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
-${item.additionalInfo[i].trackingNo ? `<br>${item.additionalInfo[i].trackingNo}` : ""}
-${status ? `<br>${status}` : ""}
-${(status === "Part delivered" || status === "Escalation") && daysDifference1 ? `<br>Delivered in ${daysDifference1} days` : ""}
-${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
-</td>`;
-
-
-} else {
-yardInfoHtml += "<td></td>";
-}
-}
-const datetime = item.orderDate;
-const date = new Date(datetime);
-const day = date.getUTCDate();  // Use UTC day
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const year = date.getUTCFullYear();  // Use UTC year
-
-const suffix = (day) => {
-  if (day > 3 && day < 21) return "th";
-  switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
-  }
-};
-const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-$("#yardInfoTable").append(
-`<tr>
-<td>${item.orderNo}</td>
-<td>${formattedOrderDate}</td>
-${yardInfoHtml}
-</tr>`
-);
-});
 }
 
 function sortTable(column, order) {
