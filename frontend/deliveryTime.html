@@ -458,8 +458,8 @@ throw new Error("Failed to fetch yard information");
 }
 
 allOrders = response.data;
-console.log("month data",data);
-renderTable(data);
+// console.log("month data",allOrders);
+renderTable(allOrders);
 } catch (error) {
 console.error("Error fetching yard information:", error);
 alert("Error fetching yard information: " + error.message);
