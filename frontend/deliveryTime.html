@@ -494,16 +494,17 @@ async function fetchData(month, year) {
 
     const tableHeader = $("#tableHeader");
     $("#yardInfoTable").empty();
+
     let maxYards = 0;
 
-    // Determine max number of yards
+    // Determine the maximum number of yard columns needed
     paginatedData.forEach((item) => {
-        if (item.additionalInfo.length > maxYards) {
+        if (item.additionalInfo && item.additionalInfo.length > maxYards) {
             maxYards = item.additionalInfo.length;
         }
     });
 
-    // Update table header dynamically
+    // Ensure table headers include all required yard columns
     tableHeader.find("th:gt(1)").remove(); // Remove previous yard columns
     for (let i = 1; i <= maxYards; i++) {
         tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
@@ -514,11 +515,13 @@ async function fetchData(month, year) {
         let yardInfoHtml = "";
 
         for (let i = 0; i < maxYards; i++) {
-            if (item.additionalInfo[i]) {
+            if (item.additionalInfo && item.additionalInfo[i]) {
+                let yard = item.additionalInfo[i];
+
                 let customerApprovedDate = item.customerApprovedDate;
-                let poSentDate = item.additionalInfo[i].poSentDate;
-                let deliveredDate = item.additionalInfo[i].partDeliveredDate;
-                let status = item.additionalInfo[i].status;
+                let poSentDate = yard.poSentDate;
+                let deliveredDate = yard.partDeliveredDate;
+                let status = yard.status;
 
                 let datePO = "", dateDelivered = "", daysDifference1 = "", daysDifference2 = "";
 
@@ -565,16 +568,16 @@ async function fetchData(month, year) {
                 }
 
                 yardInfoHtml += `<td>
-                    ${item.additionalInfo[i].yardName || ""} | ${item.additionalInfo[i].phone || ""}
+                    ${yard.yardName || ""} | ${yard.phone || ""}
                     <br>PO Sent - ${datePO || ""}
-                    ${item.additionalInfo[i].paymentStatus ? `<br>${item.additionalInfo[i].paymentStatus}` : ""}
-                    ${item.additionalInfo[i].trackingNo ? `<br>${item.additionalInfo[i].trackingNo}` : ""}
+                    ${yard.paymentStatus ? `<br>${yard.paymentStatus}` : ""}
+                    ${yard.trackingNo ? `<br>${yard.trackingNo}` : ""}
                     ${status ? `<br>${status}` : ""}
                     ${(status === "Part delivered" || status === "Escalation") && daysDifference1 ? `<br>Delivered in ${daysDifference1} days` : ""}
                     ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
                 </td>`;
             } else {
-                yardInfoHtml += "<td></td>";
+                yardInfoHtml += "<td></td>"; // Fill empty yard columns for alignment
             }
         }
 
@@ -589,25 +592,26 @@ async function fetchData(month, year) {
         );
     });
 }
-  async function fetchData(month, year) {
+
+async function fetchData(month, year) {
     try {
-      const response = await axios.get(
-        `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
-      );
+        const response = await axios.get(
+            `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+            { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+        );
 
-      if (response.status !== 200) {
-        throw new Error("Failed to fetch orders");
-      }
+        if (response.status !== 200) {
+            throw new Error("Failed to fetch orders");
+        }
 
-      allOrders = response.data;
-      renderTableRows(currentPage);
-      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+        allOrders = response.data;
+        renderTableRows(currentPage);  // Ensure yard data is loaded
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      alert("Error fetching orders: " + error.message);
+        console.error("Error fetching orders:", error);
+        alert("Error fetching orders: " + error.message);
     }
-  }
+}
 
   /** 🔹 Render Table Rows for Pagination */
   function renderTableRows(page) {
@@ -634,12 +638,23 @@ async function fetchData(month, year) {
     const date = new Date(dateString);
     const day = date.getUTCDate();
     const monthNames = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
     const year = date.getUTCFullYear();
-    return `${day} ${monthNames[date.getUTCMonth()]}, ${year}`;
-  }
+    return `${day}${getDaySuffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+}
+
+function getDaySuffix(day) {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+    }
+}
+
 
   /** 🔹 Create Pagination Controls */
   function createPaginationControls(totalPages) {
@@ -686,15 +701,7 @@ async function fetchData(month, year) {
       createPaginationControls(totalPages);
     }
   });
-function getDaySuffix(day) {
-if (day > 3 && day < 21) return 'th';
-switch (day % 10) {
-case 1: return 'st';
-case 2: return 'nd';
-case 3: return 'rd';
-default: return 'th';
-}
-}
+
 
 function sortTable(column, order) {
 const tbody = $("#yardInfoTable");
