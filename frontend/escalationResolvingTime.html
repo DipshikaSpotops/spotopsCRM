@@ -951,13 +951,29 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
                     : resolution === "Cancellation"
                     ? "Cancellation"
                     : item.orderStatus;
-                    const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
-                    const escStartDateOnly = escStartDate.split(" ")[0] + " " + escStartDate.split(" ")[1] + " " + escStartDate.split(" ")[2];
+                    const datetime = item.orderDate;
+// const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
+// console.log(dateOnly);
+const date = new Date(datetime);
+const day = date.getUTCDate();  // Use UTC day
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const year = date.getUTCFullYear();  // Use UTC year
+
+const suffix = (day) => {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+};
+const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;                    const escStartDateOnly = escStartDate.split(" ")[0] + " " + escStartDate.split(" ")[1] + " " + escStartDate.split(" ")[2];
                     const resolutionDateOnly = escEndDate.split(" ")[0] + " " + escEndDate.split(" ")[1] + " " + escEndDate.split(" ")[2];
 
                     $("#infoTable").append(`
                     <tr>
-                        <td>${dateOnly}</td>
+                        <td>${formattedOrderDate}</td>
                         <td>${item.orderNo}</td>
                         <td>${yard}</td>
                         <td>${escStartDateOnly}</td>
