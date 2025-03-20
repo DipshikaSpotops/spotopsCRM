@@ -14,8 +14,11 @@ rel="stylesheet"
 />
 <style>
 body {
-display: flex;
+  display: flex;
+overflow: hidden;
 flex-direction: column;
+background-color: #eaf6ff;
+text-align: center;
 }
 #logoImg {
 height: auto;
@@ -556,7 +559,7 @@ window.location.href = "login_signup.html";
       <div class="filter-bar" style="margin-right: 20px;">
         <input id="monthYearPicker" type="month" class="form-control" />
       </div>
-      <button id="filterButton" class="btn btn-primary" style="background-color: black; border: none; margin-right: 20px;">
+      <button id="filterButton" class="btn btn-primary">
         Filter
       </button>
       <div id="showTotalOrders">Total Orders This Month -</div>
