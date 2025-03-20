@@ -283,6 +283,7 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 console.log("month",month,"year",year);
 fetchData(month,year);
+
 async function fetchData(month,year) {
 try {
 const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
@@ -300,6 +301,51 @@ console.error("Error fetching yard information:", error);
 alert("Error fetching yard information: " + error.message);
 }
 }
+// Function to create pagination controls
+function createPaginationControls(totalPages) {
+    const paginationControls = $('#pagination-controls');
+    paginationControls.empty(); // Clear existing buttons
+
+    if (totalPages > 1) {
+        paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`);
+        }
+
+        paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    }
+}
+
+
+$('#pagination-controls').on('click', '.pageNos', function () {
+    currentPage = $(this).data('page');
+    console.log("pageNo:",currentPage);
+    const searchTerm = $("#searchInput").val().trim();
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  });
+
+// "Previous" and "Next" button functionality
+// "Previous" button functionality
+$('#pagination-controls').on('click', '#prevPage', function () {
+    if (currentPage > 1) {
+        currentPage--; // Ensure currentPage updates first
+        renderTableRows(currentPage); // Render the new page
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage)); // Refresh pagination buttons
+    }
+});
+
+// "Next" button functionality
+$('#pagination-controls').on('click', '#nextPage', function () {
+    const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++; // Move to next page
+        renderTableRows(currentPage); // Re-render table
+        createPaginationControls(totalPages); // Update pagination buttons
+    }
+});
+
 
 function getDaySuffix(day) {
 if (day > 3 && day < 21) return 'th';
