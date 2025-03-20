@@ -514,17 +514,17 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
   position: relative;
 }
 
-th:first-child, td:first-child {
-  min-width: 120px; /* Adjust this based on your content */
-  max-width: 120px;
-  width: 120px;
+th:first-child {
   position: sticky;
   left: 0;
   z-index: 999;
-  background-color: #eaf6ff;
+}
+td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 999;
   border-right: 3px solid #ddd;
-  background: #eaf6ff; /* Ensure it's not transparent */
-  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  background-color: #eaf6ff;
 }
 
 .dark-mode th:first-child,
