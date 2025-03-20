@@ -166,14 +166,6 @@ background-color: white;
 color: black;
 border: none;
 }
-.previousNext{
-background-color: black;
-color: white;
-border: none;
-padding: 10px;
-border-radius: 10px;
-text-align: center;
-}
 #showTotalOrders{
 border: 1px solid #c0c0c0;
 text-align: center;
@@ -329,6 +321,15 @@ background-color: #96dce1;
 }
 .topHeads{
   display: flex;
+}
+.previousNext{
+/* background-color: black; */
+color: white;
+border: none;
+padding: 10px;
+border-radius: 10px;
+text-align: center;
+background-color: #35554f;
 }
 table thead th {
   position: sticky;
@@ -541,20 +542,28 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <!-- <div id="purchases-content"> -->
-<h1 style="text-align: center; margin-right: 92px; margin-top: 20px">PO Report</h1>
-<div style="align-items: center; justify-content: center">
-<input type="text" class="form-control" id="searchInput" placeholder="Search..."/>
-</div>
-<!-- <div class="table-responsive mx-auto" style="max-width: 90%"> -->
-<div id="pagination-controls" class="mt-3 mb-3"></div>
-<div id="filterAndTotal" style="display: flex;">
-<div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
-</div>
-<!-- <div id="showTotalOrders">Total Spent This Month-</div> -->
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-</div>  
+  <div class="topHeads">
+    <h1 id="mainHeading">View Orders- Monthly</h1>
+  
+  <div id="filterAndTotal">
+   <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
+  <div class="filter-bar">
+  <input id="monthYearPicker" type="month" class="form-control" />
+  <button id="filterButton" class="btn btn-primary">Filter</button>
+  </div>
+  <div id="showTotalOrders">Total Orders This Month-</div>
+  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+  </div>
+    <div>
+  <input
+  type="text"
+  class="form-control"
+  id="searchInput"
+  placeholder="Search..."
+  />
+  </div>
+  </div>
+  <div class="table-wrapper"> 
 <table class="table table-bordered mt-4">
 <thead>
 <tr id="tableHeader" style="background-color: #f2f2f2">
@@ -571,7 +580,7 @@ window.location.href = "login_signup.html";
 </tr>
 </tfoot>
 </table>
-<!-- </div> -->
+</div>
 </div>
 
 <div id="profile-content" class="d-none">
