@@ -71,7 +71,7 @@ border-bottom: 1px solid #e0e0e0;
 /* background-color: black; */
 background: linear-gradient(160deg, #101a18, #80cbbc);
 position: fixed;
-z-index: 1;
+z-index: 999;
 top: 0;
 left: 0;
 overflow-x: hidden;
@@ -580,7 +580,7 @@ console.log("sliced data",allOrders);
                 yardInfoHtml += "<td></td>"; // Fill empty yard columns for alignment
             }
         }
-
+`${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`
         const formattedOrderDate = item.orderDate;
 
         $("#yardInfoTable").append(
