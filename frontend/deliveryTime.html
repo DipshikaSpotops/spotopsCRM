@@ -81,6 +81,7 @@ height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
 text-align: left;
+scrollbar-color: white white;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -419,6 +420,40 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
+});
+ // Toggle Dark Mode
+ if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
+ $("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
+} else {
+enableDarkMode();
+}
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
+$(document).on("click", "#infoTable tr", function () {
+  console.log("Row clicked:", $(this).text()); // Debugging
+  $("#infoTable tr").removeClass("selected");
+  $(this).addClass("selected");
 });
 const firstName = localStorage.getItem("firstName");
 if (!firstName) {
@@ -964,40 +999,7 @@ $("#filterButton").click(async function () {
       createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     }
   });
-  // Toggle Dark Mode
-if (localStorage.getItem("darkMode") === "true") {
-    enableDarkMode();
-  }
- $("#darkModeIcon").on("click", function () {
-if ($("body").hasClass("dark-mode")) {
-disableDarkMode();
-} else {
-enableDarkMode();
-}
-});
-
-function enableDarkMode() {
-$("body").addClass("dark-mode");
-$(".navbar").addClass("dark-mode");
-$(".sidebar").addClass("dark-mode");
-$("table").addClass("table-dark");
-$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-localStorage.setItem("darkMode", "true");
-}
-
-function disableDarkMode() {
-$("body").removeClass("dark-mode");
-$(".navbar").removeClass("dark-mode");
-$(".sidebar").removeClass("dark-mode");
-$("table").removeClass("table-dark");
-$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-localStorage.setItem("darkMode", "false");
-}
-$(document).on("click", "#infoTable tr", function () {
-  console.log("Row clicked:", $(this).text()); // Debugging
-  $("#infoTable tr").removeClass("selected");
-  $(this).addClass("selected");
-});
+ 
 });
 
 </script>
