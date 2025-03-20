@@ -184,7 +184,7 @@ border: none;
 }
 #filterAndTotal{
   display: flex;
-  margin-left: 40%;
+  margin-left: 7%;
 }
 /* for dark mode */
 .dark-mode {
@@ -329,6 +329,15 @@ padding: 10px;
 border-radius: 10px;
 text-align: center;
 background-color: #35554f;
+}
+.table tbody tr:hover {
+  background-color: #c0c0c0 !important; 
+  cursor: pointer;
+}
+
+.table tbody tr.selected {
+  background-color: #757070 !important;
+  outline: 2px solid #000 !important; 
 }
 table thead th {
   position: sticky;
@@ -1341,6 +1350,41 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
+// Toggle Dark Mode
+if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
+ $("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
+} else {
+enableDarkMode();
+}
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
+$(document).on("click", "#infoTable tr", function () {
+  console.log("Row clicked:", $(this).text()); // Debugging
+  $("#infoTable tr").removeClass("selected");
+  $(this).addClass("selected");
+});
+    
 fetchNotifications();
 });
 </script>
