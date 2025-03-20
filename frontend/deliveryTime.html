@@ -2134,7 +2134,7 @@ async function fetchData(month, year) {
     $("#yardInfoTable").empty();
 
     paginatedData.forEach((item) => {
-      const formattedOrderDate = formatDate(item.orderDate);
+      const formattedOrderDate = item.orderDate;
       $("#yardInfoTable").append(
         `<tr>
             <td>${item.orderNo}</td>
@@ -2143,29 +2143,6 @@ async function fetchData(month, year) {
       );
     });
   }
-
-  /** 🔹 Format Date */
-  function formatDate(dateString) {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    const day = date.getUTCDate();
-    const monthNames = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-    const year = date.getUTCFullYear();
-    return `${day}${getDaySuffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-}
-
-function getDaySuffix(day) {
-    if (day > 3 && day < 21) return "th";
-    switch (day % 10) {
-        case 1: return "st";
-        case 2: return "nd";
-        case 3: return "rd";
-        default: return "th";
-    }
-}
 
 
   /** 🔹 Create Pagination Controls */
