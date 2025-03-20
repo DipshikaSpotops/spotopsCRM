@@ -553,19 +553,10 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <!-- <div id="purchases-content"> -->
-<div class="topHeads">
-  <h1 id="mainHeading">View Orders- Monthly</h1>
-
-<div id="filterAndTotal">
- <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
-<div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary">Filter</button>
-</div>
-<div id="showTotalOrders">Total Orders This Month-</div>
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-</div>
-  <div>
+<h1 style="text-align: center; margin-right: 92px; margin-top: 20px">
+Purchases
+</h1>
+<div style="align-items: center; justify-content: center">
 <input
 type="text"
 class="form-control"
@@ -573,7 +564,23 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
+<!-- <div class="table-responsive mx-auto" style="max-width: 90%"> -->
+<div id="pagination-controls" class="mt-3 mb-3"></div>
+<div id="filterAndTotal" style="display: flex;">
+<div class="filter-bar">
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
+<div id="showTotalOrders">Total Spent This Month-</div>
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+</div>  
+<table class="table table-bordered mt-4">
+<thead>
+<tr id="tableHeader" style="background-color: #f2f2f2">
+<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#x25B2;</span></th>
+<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderDate">Order Date <span class="sort-icon onlyNumber">&#x25B2;</span></th>
+</tr>
+</thead>
 <tbody id="yardInfoTable" style="text-align: center">
 <!-- Yard information will be appended here -->
 </tbody>
