@@ -883,112 +883,6 @@ sortTable(index, type);
 }
 });
 
-// Function to render rows based on the page
-function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedData = allOrders.slice(start, end);
-console.log("sliced data",allOrders);
-    const tableHeader = $("#tableHeader");
-    $("#yardInfoTable").empty();
-
-    let maxYards = 0;
-
-    // Determine the maximum number of yard columns needed
-    paginatedData.forEach((item) => {
-        if (item.additionalInfo && item.additionalInfo.length > maxYards) {
-            maxYards = item.additionalInfo.length;
-        }
-    });
-
-    // Ensure table headers include all required yard columns
-    tableHeader.find("th:gt(1)").remove(); // Remove previous yard columns
-    for (let i = 1; i <= maxYards; i++) {
-        tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
-    }
-
-    // Populate table rows with paginated data
-    paginatedData.forEach((item) => {
-        let yardInfoHtml = "";
-
-        for (let i = 0; i < maxYards; i++) {
-            if (item.additionalInfo && item.additionalInfo[i]) {
-                let yard = item.additionalInfo[i];
-
-                let customerApprovedDate = item.customerApprovedDate;
-                let poSentDate = yard.poSentDate;
-                let deliveredDate = yard.partDeliveredDate;
-                let status = yard.status;
-
-                let datePO = "", dateDelivered = "", daysDifference1 = "", daysDifference2 = "";
-
-                const now = new Date();
-
-                // Format PO Sent Date
-                if (poSentDate) {
-                    const poSentDateObj = new Date(poSentDate);
-                    const dayPO = poSentDateObj.getDate();
-                    datePO = poSentDateObj.toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                    }).replace(dayPO, `${dayPO}${getDaySuffix(dayPO)}`);
-                }
-
-                // Format Delivered Date
-                if (deliveredDate) {
-                    const deliveredDateObj = new Date(deliveredDate);
-                    const dayDelivered = deliveredDateObj.getDate();
-                    dateDelivered = deliveredDateObj.toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                    }).replace(dayDelivered, `${dayDelivered}${getDaySuffix(dayDelivered)}`);
-
-                    if (poSentDate) {
-                        const diffTime = Math.abs(deliveredDateObj - new Date(poSentDate));
-                        daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
-                    }
-                }
-
-                // Calculate days since Customer Approved
-                if (status !== "Part delivered") {
-                    const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-                    const approvedDate = new Date(customerApprovedDate);
-
-                    if (!isNaN(approvedDate)) {
-                        const diffTime = Math.abs(dallasTime - approvedDate);
-                        daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
-                    } else {
-                        console.error("Invalid customerApprovedDate:", customerApprovedDate);
-                    }
-                }
-
-                yardInfoHtml += `<td>
-                    ${yard.yardName || ""} | ${yard.phone || ""}
-                    <br>PO Sent - ${datePO || ""}
-                    ${yard.paymentStatus ? `<br>${yard.paymentStatus}` : ""}
-                    ${yard.trackingNo ? `<br>${yard.trackingNo}` : ""}
-                    ${status ? `<br>${status}` : ""}
-                    ${(status === "Part delivered" || status === "Escalation") && daysDifference1 ? `<br>Delivered in ${daysDifference1} days` : ""}
-                    ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
-                </td>`;
-            } else {
-                yardInfoHtml += "<td></td>"; // Fill empty yard columns for alignment
-            }
-        }
-
-        const formattedOrderDate = formatDate(item.orderDate);
-
-        $("#yardInfoTable").append(
-            `<tr>
-                <td>${item.orderNo}</td>
-                <td>${formattedOrderDate}</td>
-                ${yardInfoHtml}
-            </tr>`
-        );
-    });
-}
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
@@ -2125,24 +2019,6 @@ async function fetchData(month, year) {
     }
 }
 
-  /** 🔹 Render Table Rows for Pagination */
-  function renderTableRows(page) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedData = allOrders.slice(start, end);
-
-    $("#yardInfoTable").empty();
-
-    paginatedData.forEach((item) => {
-      const formattedOrderDate = item.orderDate;
-      $("#yardInfoTable").append(
-        `<tr>
-            <td>${item.orderNo}</td>
-            <td>${formattedOrderDate}</td>
-        </tr>`
-      );
-    });
-  }
 
   /** 🔹 Format Date */
   function formatDate(dateString) {
