@@ -163,6 +163,8 @@ content: ' ▼';
   max-height: 80vh; 
   overflow-y: auto;
   overflow-x: auto;
+  position: relative;
+  margin-top: 35px;
 }
 #mainHeading {
   text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
@@ -1041,10 +1043,8 @@ $("#filterButton").click(async function () {
 
 <div class="main-content">
   <div class="topHeads">
-    <h1 id="mainHeading">View Orders- Monthly</h1>
-  
+    <h1 id="mainHeading">Delivery Time Report</h1>
   <div id="filterAndTotal">
-   <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
   <div class="filter-bar">
   <input id="monthYearPicker" type="month" class="form-control" />
   <button id="filterButton" class="btn btn-primary">Filter</button>
