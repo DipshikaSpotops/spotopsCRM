@@ -1011,7 +1011,7 @@ $("#infoTable").on("click", ".approve-btn", async function () {
 });
 // Add click handler for the OK button
 $("#okButton").off("click").on("click", async function () {
-const orderNo = $(this).data("orderNo"); // Get the order number from the button's data attribute
+const orderNo = $(this).data("orderNo"); 
 
 // Remove modal and blur
 $("#myModal").modal("hide");

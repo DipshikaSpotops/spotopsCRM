@@ -3606,7 +3606,7 @@ let historyEntry = "";
 if (custRefundDate && custRefundedAmount) {
 historyEntry = 'Order status changed to Refunded';
 }
-else if (cancelledDate && custRefAmount) {
+else if (cancelledDate && custRefundedAmount) {
 historyEntry = 'Order Cancelled';
 }
 
