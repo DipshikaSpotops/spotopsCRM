@@ -411,7 +411,7 @@ overflow: hidden;
 .table-wrapper {
   max-height: 80vh;
   overflow-y: auto;
-  margin-top: 35px;
+  margin-top: 12px;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -740,7 +740,7 @@ $('#infoTable').empty();
 ordersForPage.forEach((item) => {
 const team = localStorage.getItem('team');
 const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 const yardlength = item.additionalInfo.length;
 const datetime = item.orderDate;
 const date = new Date(datetime);
