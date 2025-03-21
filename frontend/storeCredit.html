@@ -671,7 +671,7 @@ function renderTableRows(page, orders = allOrders) {
     return info.storeCredit !== null && info.storeCredit !== undefined && !isNaN(info.storeCredit);
   });
 });
-
+console.log("filteredOrders",filteredOrders);
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = filteredOrders.slice(start, end);
@@ -1136,4 +1136,3 @@ $("#filterButton").click(async function () {
 
 </body>
 </html>
-what is wrong with the above html, i am not able to get the details / data 
