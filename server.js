@@ -826,6 +826,22 @@ console.log("placed",month,year);
     res.status(500).json({ message: "Server error", error });
   }
 });
+// for only store credits
+app.get('/orders/storeCredits', async (req, res) => {
+  try {
+console.log("store credits");
+    const orders = await Order.find({
+      additionalInfo: {
+        $elemMatch: { storeCredit: { $exists: true, $ne: null } }
+      }
+    })    
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching placed orders for specified month and year:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 // for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
   try {

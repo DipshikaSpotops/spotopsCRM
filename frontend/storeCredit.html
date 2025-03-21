@@ -799,7 +799,7 @@ token = localStorage.getItem("token");
 
 try {
 const [ordersResponse] = await Promise.all([
-axios.get("https://www.spotops360.com/orders", {
+axios.get("https://www.spotops360.com/orders/storeCredits", {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 })
 ]);
