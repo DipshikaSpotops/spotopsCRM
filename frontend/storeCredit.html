@@ -456,18 +456,31 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Store Credits</h1>
-<div>
-<input
-type="text"
-class="form-control"
-id="searchInput"
-placeholder="Search..."
-/>
-</div>
-<!-- pagination controls -->
+  <div class="topHeads">
+    <h1 id="mainHeading">Card Not Charged</h1>
+  
+  <div id="filterAndTotal">
+   <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
+  <div class="filter-bar">
+  <input id="monthYearPicker" type="month" class="form-control" />
+  <button id="filterButton" class="btn btn-primary">Filter</button>
+  </div>
+  <div id="showTotalOrders">Total Spent This Month-</div>
+  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+  </div>
+    <div>
+  <input
+  type="text"
+  class="form-control"
+  id="searchInput"
+  placeholder="Search..."
+  />
+  </div>
+  </div>
+<!-- <div class="table-responsive mx-auto" style="max-width: 90%"> -->
 <div id="pagination-controls" class="mt-3 mb-3"></div>
-<div class="table-responsive">
+
+<div class="table-wrapper">
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
@@ -648,8 +661,9 @@ sortTable(index, type);
 }
 });
 // Function to render rows based on the page
+let filteredOrders = [];
 function renderTableRows(page, orders = allOrders) {
-    const filteredOrders = orders.filter((item) => {
+   filteredOrders = orders.filter((item) => {
   const InfoArray = item.additionalInfo;
   if (!InfoArray || InfoArray.length === 0) return false;
 
@@ -734,15 +748,19 @@ return `${processButton}`;
 
 
 // Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, filteredOrders = filteredOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); 
-if (totalPages > 1) {
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
-}
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
+function createPaginationControls(totalPages, orders) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty(); 
+
+  if (totalPages > 1) {
+    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+    }
+
+    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+  }
 }
 
 // Event listener for pagination buttons
@@ -1118,3 +1136,4 @@ $("#filterButton").click(async function () {
 
 </body>
 </html>
+what is wrong with the above html, i am not able to get the details / data 
