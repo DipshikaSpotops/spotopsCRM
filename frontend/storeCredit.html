@@ -456,31 +456,18 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
 <div class="container-fluid mt-2">
-  <div class="topHeads">
-    <h1 id="mainHeading">Store Credits</h1>
-  
-  <div id="filterAndTotal">
-   <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
-  <div class="filter-bar">
-  <input id="monthYearPicker" type="month" class="form-control" />
-  <button id="filterButton" class="btn btn-primary">Filter</button>
-  </div>
-  <div id="showTotalOrders">Total Spent This Month-</div>
-  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-  </div>
-    <div>
-  <input
-  type="text"
-  class="form-control"
-  id="searchInput"
-  placeholder="Search..."
-  />
-  </div>
-  </div>
-<!-- <div class="table-responsive mx-auto" style="max-width: 90%"> -->
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Store Credits</h1>
+<div>
+<input
+type="text"
+class="form-control"
+id="searchInput"
+placeholder="Search..."
+/>
+</div>
+<!-- pagination controls -->
 <div id="pagination-controls" class="mt-3 mb-3"></div>
-
-<div class="table-wrapper">
+<div class="table-responsive">
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
@@ -661,9 +648,8 @@ sortTable(index, type);
 }
 });
 // Function to render rows based on the page
-let filteredOrders = [];
 function renderTableRows(page, orders = allOrders) {
-   filteredOrders = orders.filter((item) => {
+    const filteredOrders = orders.filter((item) => {
   const InfoArray = item.additionalInfo;
   if (!InfoArray || InfoArray.length === 0) return false;
 
@@ -671,7 +657,7 @@ function renderTableRows(page, orders = allOrders) {
     return info.storeCredit !== null && info.storeCredit !== undefined && !isNaN(info.storeCredit);
   });
 });
-console.log("filteredOrders",filteredOrders);
+
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = filteredOrders.slice(start, end);
@@ -748,19 +734,15 @@ return `${processButton}`;
 
 
 // Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, orders) {
-  const paginationControls = $('#pagination-controls');
-  paginationControls.empty(); 
-
-  if (totalPages > 1) {
-    paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
-    }
-
-    paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-  }
+function createPaginationControls(totalPages, filteredOrders = filteredOrders) {
+const paginationControls = $('#pagination-controls');
+paginationControls.empty(); 
+if (totalPages > 1) {
+for (let i = 1; i <= totalPages; i++) {
+paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+}
+paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+}
 }
 
 // Event listener for pagination buttons
@@ -815,21 +797,12 @@ await fetchToken();
 token = localStorage.getItem("token");
 }
 
-const monthMap = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-May: "05", Jun: "06", Jul: "07", Aug: "08",
-Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-};
-var monthNum = monthMap[month];
-
-$("#monthYearPicker").val(`${year}-${monthNum}`);
-await fetchData(month, year);
-async function fetchData(month,year){
 try {
-  const ordersResponse = await axios.get(
-            `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
+const [ordersResponse] = await Promise.all([
+axios.get("https://www.spotops360.com/orders", {
+headers: token ? { Authorization: `Bearer ${token}` } : {},
+})
+]);
 if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
@@ -851,7 +824,7 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 } catch (error) {
 console.error("Error fetching orders:", error);
 }
-}
+
 
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
@@ -1122,15 +1095,6 @@ $("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
-$("#filterButton").click(async function () {
-    const monthYear = $("#monthYearPicker").val();
-    const [year, monthNumber] = monthYear.split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = months[parseInt(monthNumber, 10) - 1];
-    await fetchData(month, year);
-    currentPage = 1; 
-    
-});
 });
 </script>
 
