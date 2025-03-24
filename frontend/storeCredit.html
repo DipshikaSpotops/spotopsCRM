@@ -700,6 +700,26 @@ window.location.href = "login_signup.html";
     </div>
   </div>
 </div>
+<!-- Modal for Used For -->
+<div class="modal fade" id="usedForModal" tabindex="-1" role="dialog" aria-labelledby="usedForModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="usedForModalLabel">Store Credit Usage Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- The message will be inserted here by JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 </div>
 </div>
@@ -945,7 +965,8 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 function generateActions(item) {
   const processButton = `<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>`;
   const useButton = `<button class="btn btn-primary btn-sm user-btn" data-id="${item.orderNo}">Use</button>`;
-  return `${processButton} ${useButton}`;
+  const usedForButton = `<button class="btn btn-sm usedForButton-btn" data-id="${item.orderNo}">Used For</button>`;
+  return `${processButton} ${useButton}${usedForButton}`;
 }
 
 
@@ -1349,7 +1370,7 @@ $(document).on("click", "#infoTable tr", function () {
 let usedCredits = []; 
 let totalStoreCredit = 500;
 $('#infoTable').on('click', '.user-btn', function () {
-    const orderNoUsingCredit = $(this).data('id'); // Get order number from the row
+    const orderNoUsingCredit = $(this).data('id'); 
     $('#userModal').modal('show');
     
     // Clear previous inputs
@@ -1365,6 +1386,22 @@ $('#infoTable').on('click', '.user-btn', function () {
             $('#partialAmountDiv').hide(); // Hide input for partial amount
         }
     });
+    $('#infoTable').on('click', '.usedForButton-btn', function () {
+  const orderNo = $(this).data('id'); 
+  const order = allOrders.find(o => o.orderNo === orderNo);
+  
+  if (!order) {
+    alert('Order not found!');
+    return;
+  }
+
+  const usedForData = order.additionalInfo
+    .flatMap(info => info.storeCreditUsedFor)  
+    .map(data => `OrderNo: ${data.orderNo}, Amount: $${data.amount}`);  
+  const usedForMessage = usedForData.length > 0 ? usedForData.join('<br>') : 'No store credits used for this order.';
+  $('#usedForModal').html(usedForMessage); 
+  $('#usedForModal').modal('show');  
+});
 
     $('#submitUsage').on('click', async function () {
   const usageType = $('input[name="usageType"]:checked').val();
