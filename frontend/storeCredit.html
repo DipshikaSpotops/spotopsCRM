@@ -20,6 +20,13 @@ flex-direction: column;
 background-color: #eaf6ff;
 text-align: center;
 }
+.table-wrapper {
+  max-height: 80vh; 
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  margin-top: 35px;
+}
 /* btn pagination */
 .pageNos{
 background-color: white;
@@ -643,7 +650,7 @@ window.location.href = "login_signup.html";
   />
   </div>
   </div>
-<div class="table-responsive">
+<div class="table-wrapper">
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
