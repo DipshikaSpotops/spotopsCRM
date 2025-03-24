@@ -447,6 +447,13 @@ background: rgba(0, 0, 0, 0.5);
 body.modal-active {
 overflow: hidden; 
 }
+#storeCreditMOdal {
+  margin-top: 76%;
+  margin-left: 24%;
+}
+#radioForFull_Part {
+  display: flex;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -619,7 +626,7 @@ window.location.href = "login_signup.html";
 <!-- Modal for User actions -->
 <div id="userModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content" id="storeCreditModal">
       <div class="modal-header">
         <h5 class="modal-title">Use Store Credit</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -628,9 +635,10 @@ window.location.href = "login_signup.html";
       </div>
       <div class="modal-body">
         <label>Choose Usage Type:</label><br>
+        <div id="radioForFull_Part">
         <input type="radio" name="usageType" value="full"> Use in full<br>
         <input type="radio" name="usageType" value="partial"> Use partially<br>
-
+      </div>
         <div id="partialAmountDiv" style="display:none;">
           <label for="partialAmount">Enter Amount:</label>
           <input type="number" id="partialAmount" class="form-control" />
@@ -1331,8 +1339,10 @@ $('#infoTable').on('click', '.user-btn', function () {
 
             // Handle success (e.g., update UI)
             alert('Store credit successfully updated!');
+            $('#userModal').modal('hide');
         } catch (error) {
             alert('Error updating store credit!');
+            $('#userModal').modal('hide');
             console.error(error);
         }
     });
