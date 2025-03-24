@@ -1479,8 +1479,12 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
 
     // Handle success (e.g., update UI)
     alert('Store credit successfully updated!');
+    $('#userModal').modal('show');
+    window.location.reload();
   } catch (error) {
     alert('Error updating store credit!');
+    $('#userModal').modal('show');
+    window.location.reload();
     console.error(error);
   }
 });
