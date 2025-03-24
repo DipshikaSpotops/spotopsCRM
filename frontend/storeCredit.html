@@ -481,9 +481,53 @@ overflow: hidden;
     color: #38696c;
 }
 .usedForButton-btn{
-  background-color: #96dce1;
+  background-color: #45a392;
     border: none;
-    color: #28858a;
+    color: #e6ffff;
+}
+/* Add styles for Used For button modal */
+#usedForModal .modal-content {
+  background-color: #f4f6f9;
+  color: #333;
+  border-radius: 8px;
+}
+
+#usedForModal .modal-header {
+  background-color: #45a392;
+  color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+#usedForModal .modal-body {
+  padding: 20px;
+}
+
+#usedForModal .modal-footer {
+  background-color: #f4f6f9;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+#usedForModal .btn-secondary {
+  background-color: #d1e7e0;
+  color: #333;
+  border-radius: 4px;
+  padding: 8px 16px;
+}
+
+#usedForModal .btn-secondary:hover {
+  background-color: #c0d9cd;
+}
+
+#usedForModal .btn-primary {
+  background-color: #38696c;
+  color: #fff;
+  border-radius: 4px;
+}
+
+#usedForModal .btn-primary:hover {
+  background-color: #307a68;
 }
 table thead th {
   position: sticky;
@@ -716,7 +760,7 @@ window.location.href = "login_signup.html";
         </button>
       </div>
       <div class="modal-body">
-        <!-- The message will be inserted here by JavaScript -->
+        <!-- The message will be inserted here -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1391,8 +1435,12 @@ $('#infoTable').on('click', '.user-btn', function () {
             $('#partialAmountDiv').hide(); // Hide input for partial amount
         }
     });
-    $('#infoTable').on('click', '.usedForButton-btn', function () {
-  const orderNo = $(this).data('id'); 
+ 
+    // Display the Used For modal with order credit usage details
+$('#infoTable').on('click', '.usedForButton-btn', function () {
+  const orderNo = $(this).data('id');  // Get the order number for which the store credit was used
+  
+  // Find the order from allOrders that matches the clicked orderNo
   const order = allOrders.find(o => o.orderNo === orderNo);
   
   if (!order) {
@@ -1400,12 +1448,17 @@ $('#infoTable').on('click', '.user-btn', function () {
     return;
   }
 
+  // Get the storeCreditUsedFor data for the clicked order
   const usedForData = order.additionalInfo
-    .flatMap(info => info.storeCreditUsedFor)  
-    .map(data => `OrderNo: ${data.orderNo}, Amount: $${data.amount}`);  
+    .flatMap(info => info.storeCreditUsedFor)  // Flatten the storeCreditUsedFor arrays
+    .map(data => `OrderNo: ${data.orderNo}, Amount: $${data.amount}`);  // Format the output
+
+  // Create a message to display the store credit usage details
   const usedForMessage = usedForData.length > 0 ? usedForData.join('<br>') : 'No store credits used for this order.';
-  $('#usedForModal').html(usedForMessage); 
-  $('#usedForModal').modal('show');  
+
+  // Display the message in the modal
+  $('#usedForModal .modal-body').html(usedForMessage);  // Update the HTML of the modal body
+  $('#usedForModal').modal('show');  // Show the modal
 });
 
     $('#submitUsage').on('click', async function () {
