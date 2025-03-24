@@ -490,6 +490,8 @@ overflow: hidden;
   background-color: #f4f6f9;
   color: #333;
   border-radius: 8px;
+  margin-top: 85%;
+    margin-left: 12%;
 }
 
 #usedForModal .modal-header {
@@ -507,6 +509,7 @@ overflow: hidden;
   background-color: #f4f6f9;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  justify-content: center;
 }
 
 #usedForModal .btn-secondary {
@@ -749,6 +752,9 @@ window.location.href = "login_signup.html";
     </div>
   </div>
 </div>
+
+
+</div>
 <!-- Modal for Used For -->
 <div class="modal fade" id="usedForModal" tabindex="-1" role="dialog" aria-labelledby="usedForModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -769,7 +775,6 @@ window.location.href = "login_signup.html";
   </div>
 </div>
 
-</div>
 </div>
 </div>
 <script>
@@ -1451,7 +1456,7 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
   // Get the storeCreditUsedFor data for the clicked order
   const usedForData = order.additionalInfo
     .flatMap(info => info.storeCreditUsedFor)  // Flatten the storeCreditUsedFor arrays
-    .map(data => `OrderNo: ${data.orderNo}, Amount: $${data.amount}`);  // Format the output
+    .map(data => `Order No: ${data.orderNo}    Amount: $${data.amount}`);  // Format the output
 
   // Create a message to display the store credit usage details
   const usedForMessage = usedForData.length > 0 ? usedForData.join('<br>') : 'No store credits used for this order.';
