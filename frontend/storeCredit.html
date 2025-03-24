@@ -1370,8 +1370,8 @@ $('#infoTable').on('click', '.user-btn', function () {
   const usageType = $('input[name="usageType"]:checked').val();
   const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
   const orderNoUsedFor = $('#orderNo').val();  // This is the order number for which the credit is being used
-  const orderNo = $('#orderNoUsedFor').val();  // The order number from which credit is being used
-  
+  const orderNo = orderNoUsingCredit;  // The order number from which credit is being used
+  console.log("orderNoUsingCredit",orderNoUsingCredit)
   if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
     alert('Invalid amount for partial use!');
     return;
