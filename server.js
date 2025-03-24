@@ -846,7 +846,7 @@ console.log("store credits");
 app.patch('/orders/:orderNo/storeCredits', async (req, res) => {
   const { orderNo } = req.params;
   const { usageType, amountUsed } = req.body;
-
+  console.log("orderNo",orderNo);
   try {
     const order = await Order.findOne({ orderNo });
 
