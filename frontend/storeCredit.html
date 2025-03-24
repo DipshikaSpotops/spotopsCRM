@@ -1440,7 +1440,7 @@ $('#infoTable').on('click', '.user-btn', function () {
             $('#partialAmountDiv').hide(); // Hide input for partial amount
         }
     });
- 
+  });
     // Display the Used For modal with order credit usage details
 $('#infoTable').on('click', '.usedForButton-btn', function () {
   const orderNo = $(this).data('id');  // Get the order number for which the store credit was used
@@ -1465,7 +1465,7 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
   $('#usedForModal .modal-body').html(usedForMessage);  // Update the HTML of the modal body
   $('#usedForModal').modal('show');  // Show the modal
 });
-});
+
     $('#submitUsage').on('click', async function () {
   const usageType = $('input[name="usageType"]:checked').val();
   const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
