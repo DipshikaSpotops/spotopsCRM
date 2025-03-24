@@ -862,21 +862,20 @@ app.patch('/orders/:orderNo/storeCredits', async (req, res) => {
     }
 
     let newStoreCredit = lastInfo.storeCredit;
-
+console.log("new store credit", newStoreCredit);
     if (usageType === 'full') {
-      newStoreCredit = 0;  // Use the entire store credit
+      newStoreCredit = 0; 
     } else if (usageType === 'partial') {
       if (amountUsed <= 0 || amountUsed > lastInfo.storeCredit) {
         return res.status(400).json({ message: 'Invalid partial amount' });
       }
       newStoreCredit = lastInfo.storeCredit - amountUsed;
+      console.log("in partial",newStoreCredit);
     } else {
       return res.status(400).json({ message: 'Invalid usage type' });
     }
-
-    // Update the store credit in the order
     lastInfo.storeCredit = newStoreCredit;
-
+console.log("updated new credit",newStoreCredit);
     await order.save();
 
     res.status(200).json({ message: 'Store credit updated', order });
