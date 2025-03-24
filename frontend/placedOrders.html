@@ -32,7 +32,7 @@ text-align: center;
 }
 #filterAndTotal {
   display: flex;
-    margin-left: 41%;
+    margin-left: 39%;
     margin-top: -2%;
 }
 .navbar {
@@ -615,6 +615,7 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
+<button id="downloadCsv" class="btn btn-primary">Download CSV</button>
 </div>
 <div id="filterAndTotal">
 <div class="filter-bar">
@@ -1515,6 +1516,28 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
+$("#downloadCsv").on("click", function () {
+  const table = $("#infoTable");
+  let csvContent = "Order Date, Order No., Agent Name, Customer Info, Shipping Info, Sale Info, Part Info, Order Status\n";
+
+  // Loop through each row of the table
+  table.find("tr").each(function () {
+    const row = $(this);
+    const rowData = [];
+    row.find("td").each(function () {
+      rowData.push($(this).text().trim());
+    });
+    csvContent += rowData.join(",") + "\n";
+  });
+  const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+  const downloadLink = document.createElement("a");
+  downloadLink.setAttribute("href", encodedUri);
+  downloadLink.setAttribute("download", "placed_orders.csv");
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+});
+
 });
 </script>
 </body>
