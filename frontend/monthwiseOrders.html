@@ -310,7 +310,7 @@ background-color: #96dce1;
   outline: 2px solid #000 !important; 
 }
 /* First and Second Columns (Headers) */
-th:first-child,
+/* th:first-child,
 th:nth-child(2) {
   position: sticky;
   left: 0;
@@ -318,7 +318,7 @@ th:nth-child(2) {
 }
 
 /* First and Second Columns (Table Data) */
-td:first-child,
+/* td:first-child,
 td:nth-child(2) {
   position: sticky;
   z-index: 999;
@@ -344,7 +344,7 @@ td:first-child {
 .dark-mode th:nth-child(2),
 .dark-mode td:nth-child(2) {
   left: 100px; 
-}
+} */
 .table-wrapper {
   max-height: 80vh; 
   overflow-y: auto;
@@ -918,7 +918,7 @@ const editButton = (team === "Team Mark" || team === "Team Sussane")
 
 const actions = `
 ${editButton}
-<button class="btn btn-primary btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+<button class="btn btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 // <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
 
 // const sendInvoice = `
