@@ -851,7 +851,7 @@ const orders = await Order.find({
 app.patch('/orders/:orderNo/storeCredits', async (req, res) => {
   const { orderNo } = req.params;
   const { usageType, amountUsed } = req.body;
-console.log("orderNo for which storeCredit value should be updated","orderNoUsedFor",req.body.orderNoUsedFor);
+console.log("orderNo for which storeCredit value should be updated",orderNo,"orderNoUsedFor",req.body.orderNoUsedFor);
   try {
     // Find the order and update the store credit and add to storeCreditUsedFor
     const updatedOrder = await Order.findOneAndUpdate(
