@@ -1465,7 +1465,7 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
   $('#usedForModal .modal-body').html(usedForMessage);  // Update the HTML of the modal body
   $('#usedForModal').modal('show');  // Show the modal
 });
-
+});
     $('#submitUsage').on('click', async function () {
   const usageType = $('input[name="usageType"]:checked').val();
   const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
@@ -1491,7 +1491,7 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
     console.error(error);
   }
 });
-});
+
   function updateUsedCreditsDisplay() {
     // Display the used order numbers and amounts
     const usedList = usedCredits.map(item => `<li>Order No: ${item.orderNo} | Amount Used: $${item.amountUsed}</li>`).join('');
