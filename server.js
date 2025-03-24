@@ -830,11 +830,10 @@ console.log("placed",month,year);
 app.get('/orders/storeCredits', async (req, res) => {
   try {
 console.log("store credits");
-    const orders = await Order.find({
-      additionalInfo: {
-        $elemMatch: { storeCredit: { $exists: true, $ne: null } }
-      }
-    })    
+const orders = await Order.find({
+  "additionalInfo.storeCredit": { $exists: true, $gt: 0 } // Checks if storeCredit is greater than 0
+});
+
 
     res.json(orders);
   } catch (error) {
