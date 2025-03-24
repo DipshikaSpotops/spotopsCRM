@@ -1423,9 +1423,8 @@ $(document).on("click", "#infoTable tr", function () {
 // for using store credit
 let usedCredits = []; 
 let totalStoreCredit = 500;
-var orderNoUsingCredit;
 $('#infoTable').on('click', '.user-btn', function () {
-     orderNoUsingCredit = $(this).data('id'); 
+    const orderNoUsingCredit = $(this).data('id'); 
     $('#userModal').modal('show');
     
     // Clear previous inputs
