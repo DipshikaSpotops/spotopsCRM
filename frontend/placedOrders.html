@@ -32,7 +32,7 @@ text-align: center;
 }
 #filterAndTotal {
   display: flex;
-    margin-left: 39%;
+    margin-left: 36%;
     margin-top: -2%;
 }
 .navbar {
@@ -1527,15 +1527,20 @@ $("#downloadCsv").on("click", function () {
   const table = $("#infoTable");
   let csvContent = "Order Date, Order No., Agent Name, Customer Info, Shipping Info, Sale Info, Part Info, Order Status\n";
 
-  // Loop through each row of the table
+  // Loop through each row of the table, skipping the first column (Actions)
   table.find("tr").each(function () {
     const row = $(this);
     const rowData = [];
-    row.find("td").each(function () {
-      rowData.push($(this).text().trim());
+    row.find("td").each(function (index) {
+      // Skip the first column (Actions)
+      if (index !== 0) {
+        rowData.push($(this).text().trim());
+      }
     });
     csvContent += rowData.join(",") + "\n";
   });
+
+  // Create a download link and trigger the download
   const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
   const downloadLink = document.createElement("a");
   downloadLink.setAttribute("href", encodedUri);
