@@ -1296,7 +1296,7 @@ $(document).on("click", "#infoTable tr", function () {
 let usedCredits = []; 
 let totalStoreCredit = 500;
 $('#infoTable').on('click', '.user-btn', function () {
-    const orderNo = $(this).data('id');
+    const orderNoUsingCredit = $(this).data('id'); // Get order number from the row
     $('#userModal').modal('show');
     
     // Clear previous inputs
@@ -1306,36 +1306,36 @@ $('#infoTable').on('click', '.user-btn', function () {
     
     // Set up event listeners for radio buttons
     $('input[name="usageType"]').change(function () {
-      if ($(this).val() === 'partial') {
-        $('#partialAmountDiv').show(); // Show input for partial amount
-      } else {
-        $('#partialAmountDiv').hide(); // Hide input for partial amount
-      }
+        if ($(this).val() === 'partial') {
+            $('#partialAmountDiv').show(); // Show input for partial amount
+        } else {
+            $('#partialAmountDiv').hide(); // Hide input for partial amount
+        }
     });
 
-    // Example of sending a PATCH request to update store credit
-$('#submitUsage').on('click', async function () {
-  const usageType = $('input[name="usageType"]:checked').val();
-  const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
-  const orderNo = $('#orderNo').val();
+    $('#submitUsage').off('click').on('click', async function () {
+        const usageType = $('input[name="usageType"]:checked').val();
+        const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
+        const orderNoFromWhichCreditIsBeingUsed = orderNoUsingCredit; // Pass the correct orderNo
 
-  if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
-    alert('Invalid amount for partial use!');
-    return;
-  }
+        if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
+            alert('Invalid amount for partial use!');
+            return;
+        }
 
-  try {
-    const response = await axios.patch(`/orders/${orderNo}/storeCredits`, {
-      usageType: usageType,
-      amountUsed: amount,
+        try {
+            const response = await axios.patch(`/orders/${orderNoFromWhichCreditIsBeingUsed}/storeCredits`, {
+                usageType: usageType,
+                amountUsed: amount,
+            });
+
+            // Handle success (e.g., update UI)
+            alert('Store credit successfully updated!');
+        } catch (error) {
+            alert('Error updating store credit!');
+            console.error(error);
+        }
     });
-
-    // Handle success (e.g., update UI)
-    alert('Store credit successfully updated!');
-  } catch (error) {
-    alert('Error updating store credit!');
-    console.error(error);
-  }
 });
 
   });
