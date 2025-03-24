@@ -1443,34 +1443,26 @@ $('#infoTable').on('click', '.user-btn', function () {
   });
     // Display the Used For modal with order credit usage details
 $('#infoTable').on('click', '.usedForButton-btn', function () {
-  const orderNo = $(this).data('id');  // Get the order number for which the store credit was used
-  
-  // Find the order from allOrders that matches the clicked orderNo
+  const orderNo = $(this).data('id');  
   const order = allOrders.find(o => o.orderNo === orderNo);
   
   if (!order) {
     alert('Order not found!');
     return;
   }
-
-  // Get the storeCreditUsedFor data for the clicked order
   const usedForData = order.additionalInfo
-    .flatMap(info => info.storeCreditUsedFor)  // Flatten the storeCreditUsedFor arrays
-    .map(data => `Order No: ${data.orderNo}    Amount: $${data.amount}`);  // Format the output
-
-  // Create a message to display the store credit usage details
+    .flatMap(info => info.storeCreditUsedFor)  
+    .map(data => `Order No: ${data.orderNo}    Amount: $${data.amount}`);  
   const usedForMessage = usedForData.length > 0 ? usedForData.join('<br>') : 'No store credits used for this order.';
-
-  // Display the message in the modal
-  $('#usedForModal .modal-body').html(usedForMessage);  // Update the HTML of the modal body
-  $('#usedForModal').modal('show');  // Show the modal
+  $('#usedForModal .modal-body').html(usedForMessage);
+  $('#usedForModal').modal('show');  
 });
 
     $('#submitUsage').on('click', async function () {
   const usageType = $('input[name="usageType"]:checked').val();
   const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
   const orderNoUsedFor = $('#orderNo').val();  // This is the order number for which the credit is being used
-  const orderNo = orderNoUsingCredit;  // The order number from which credit is being used
+  const orderNo = $(this).data('id');  // The order number from which credit is being used
   console.log("orderNoUsingCredit",orderNoUsingCredit)
   if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
     alert('Invalid amount for partial use!');
