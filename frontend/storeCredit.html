@@ -1384,7 +1384,7 @@ $('#infoTable').on('click', '.user-btn', function () {
     console.error(error);
   }
 });
-
+});
   function updateUsedCreditsDisplay() {
     // Display the used order numbers and amounts
     const usedList = usedCredits.map(item => `<li>Order No: ${item.orderNo} | Amount Used: $${item.amountUsed}</li>`).join('');
