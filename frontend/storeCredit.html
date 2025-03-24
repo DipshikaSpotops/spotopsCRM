@@ -747,7 +747,7 @@ window.location.href = "login_signup.html";
         </div>
       <div class="modal-footer" id="storeCreditButtons">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="submitUsage" class="btn btn-primary">Submit</button>
+        <button type=`button" id="submitUsage" class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div>
@@ -1423,8 +1423,9 @@ $(document).on("click", "#infoTable tr", function () {
 // for using store credit
 let usedCredits = []; 
 let totalStoreCredit = 500;
+var orderNoUsingCredit;
 $('#infoTable').on('click', '.user-btn', function () {
-    const orderNoUsingCredit = $(this).data('id'); 
+     orderNoUsingCredit = $(this).data('id'); 
     $('#userModal').modal('show');
     
     // Clear previous inputs
@@ -1442,7 +1443,7 @@ $('#infoTable').on('click', '.user-btn', function () {
     });
   });
     // Display the Used For modal with order credit usage details
-$('#infoTable').on('click', '.usedForButton-btn', function () {
+$('#infoTable').on('click', '.usedForBusedForButtonutton-btn', function () {
   const orderNo = $(this).data('id');  
   const order = allOrders.find(o => o.orderNo === orderNo);
   
@@ -1462,8 +1463,8 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
   const usageType = $('input[name="usageType"]:checked').val();
   const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
   const orderNoUsedFor = $('#orderNo').val();  // This is the order number for which the credit is being used
-  const orderNo = $(this).data('id');  // The order number from which credit is being used
-  console.log("orderNoUsingCredit",orderNo)
+  const orderNo = orderNoUsingCredit;  // The order number from which credit is being used
+  console.log("orderNoUsingCredit",orderNoUsingCredit)
   if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
     alert('Invalid amount for partial use!');
     return;
