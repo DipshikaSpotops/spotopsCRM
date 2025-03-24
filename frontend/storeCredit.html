@@ -1359,31 +1359,30 @@ $('#infoTable').on('click', '.user-btn', function () {
         }
     });
 
-    $('#submitUsage').off('click').on('click', async function () {
-        const usageType = $('input[name="usageType"]:checked').val();
-        const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
-        const orderNoFromWhichCreditIsBeingUsed = orderNoUsingCredit; // Pass the correct orderNo
+    $('#submitUsage').on('click', async function () {
+  const usageType = $('input[name="usageType"]:checked').val();
+  const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
+  const orderNoUsedFor = $('#orderNo').val();  // This is the order number for which the credit is being used
+  const orderNo = $('#orderNoUsedFor').val();  // The order number from which credit is being used
+  
+  if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
+    alert('Invalid amount for partial use!');
+    return;
+  }
 
-        if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
-            alert('Invalid amount for partial use!');
-            return;
-        }
-
-        try {
-            const response = await axios.patch(`/orders/${orderNoFromWhichCreditIsBeingUsed}/storeCredits`, {
-                usageType: usageType,
-                amountUsed: amount,
-            });
-
-            // Handle success (e.g., update UI)
-            alert('Store credit successfully updated!');
-            $('#userModal').modal('hide');
-        } catch (error) {
-            alert('Error updating store credit!');
-            $('#userModal').modal('hide');
-            console.error(error);
-        }
+  try {
+    const response = await axios.patch(`/orders/${orderNo}/storeCredits`, {
+      usageType: usageType,
+      amountUsed: amount,
+      orderNoUsedFor: orderNoUsedFor,  // Send the orderNo from which the credit is being used
     });
+
+    // Handle success (e.g., update UI)
+    alert('Store credit successfully updated!');
+  } catch (error) {
+    alert('Error updating store credit!');
+    console.error(error);
+  }
 });
 
   function updateUsedCreditsDisplay() {

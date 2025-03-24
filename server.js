@@ -436,6 +436,12 @@ cardChargedDate: String,
 refundStatus:String,
 refundedAmount: Number,
 storeCredit: Number,
+storeCreditUsedFor: [
+  {
+    orderNo: String,  // The order from which the credit is being used
+    amount: Number,    // The amount of credit being used
+  },
+],
 refundedDate:String,
 collectRefundCheckbox: String,
 refundToCollect: Number,
@@ -845,43 +851,36 @@ const orders = await Order.find({
 app.patch('/orders/:orderNo/storeCredits', async (req, res) => {
   const { orderNo } = req.params;
   const { usageType, amountUsed } = req.body;
-  console.log("orderNo",orderNo);
+
   try {
-    const order = await Order.findOne({ orderNo });
+    // Find the order and update the store credit and add to storeCreditUsedFor
+    const updatedOrder = await Order.findOneAndUpdate(
+      { "additionalInfo.storeCredit": { $gt: 0 }, "orderNo": orderNo },  // Find the order where storeCredit > 0
+      {
+        $push: {  // Push to storeCreditUsedFor
+          "additionalInfo.$.storeCreditUsedFor": {
+            orderNo: req.body.orderNoUsedFor,  // This is the orderNo from which the credit is being used
+            amount: amountUsed,
+          },
+        },
+        $inc: {  // Decrement the store credit by the used amount
+          "additionalInfo.$.storeCredit": -amountUsed,
+        },
+      },
+      { new: true }
+    );
 
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found or no store credit left!" });
     }
 
-    // Find the last additional info entry (assuming it's the most recent)
-    const lastInfo = order.additionalInfo[order.additionalInfo.length - 1];
-
-    if (!lastInfo) {
-      return res.status(400).json({ message: 'No store credit info available' });
-    }
-
-    let newStoreCredit = lastInfo.storeCredit;
-console.log("new store credit", newStoreCredit);
-    if (usageType === 'full') {
-      newStoreCredit = 0; 
-    } else if (usageType === 'partial') {
-      if (amountUsed <= 0 || amountUsed > lastInfo.storeCredit) {
-        return res.status(400).json({ message: 'Invalid partial amount' });
-      }
-      newStoreCredit = lastInfo.storeCredit - amountUsed;
-      console.log("in partial",newStoreCredit);
-    } else {
-      return res.status(400).json({ message: 'Invalid usage type' });
-    }
-    lastInfo.storeCredit = newStoreCredit;
-console.log("updated new credit",newStoreCredit);
-    await order.save();
-
-    res.status(200).json({ message: 'Store credit updated', order });
+    res.json(updatedOrder);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating store credit' });
+    console.error("Error updating store credit:", error);
+    res.status(500).json({ message: "Error updating store credit", error });
   }
 });
+
 // for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
   try {
