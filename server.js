@@ -842,6 +842,48 @@ console.log("store credits");
     res.status(500).json({ message: "Server error", error });
   }
 });
+// Endpoint to update store credit for a specific order
+app.patch('/orders/:orderNo/storeCredits', async (req, res) => {
+  const { orderNo } = req.params;
+  const { usageType, amountUsed } = req.body;
+
+  try {
+    const order = await Order.findOne({ orderNo });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Find the last additional info entry (assuming it's the most recent)
+    const lastInfo = order.additionalInfo[order.additionalInfo.length - 1];
+
+    if (!lastInfo) {
+      return res.status(400).json({ message: 'No store credit info available' });
+    }
+
+    let newStoreCredit = lastInfo.storeCredit;
+
+    if (usageType === 'full') {
+      newStoreCredit = 0;  // Use the entire store credit
+    } else if (usageType === 'partial') {
+      if (amountUsed <= 0 || amountUsed > lastInfo.storeCredit) {
+        return res.status(400).json({ message: 'Invalid partial amount' });
+      }
+      newStoreCredit = lastInfo.storeCredit - amountUsed;
+    } else {
+      return res.status(400).json({ message: 'Invalid usage type' });
+    }
+
+    // Update the store credit in the order
+    lastInfo.storeCredit = newStoreCredit;
+
+    await order.save();
+
+    res.status(200).json({ message: 'Store credit updated', order });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating store credit' });
+  }
+});
 // for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
   try {

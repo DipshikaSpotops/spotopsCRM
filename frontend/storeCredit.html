@@ -1313,35 +1313,31 @@ $('#infoTable').on('click', '.user-btn', function () {
       }
     });
 
-    $('#submitUsage').off('click').on('click', function () {
-      const usageType = $('input[name="usageType"]:checked').val();
-      const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
-      const orderNo = $('#orderNo').val();
+    // Example of sending a PATCH request to update store credit
+$('#submitUsage').on('click', async function () {
+  const usageType = $('input[name="usageType"]:checked').val();
+  const amount = usageType === 'partial' ? parseFloat($('#partialAmount').val()) : totalStoreCredit;
+  const orderNo = $('#orderNo').val();
 
-      if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
-        alert('Invalid amount for partial use!');
-        return;
-      }
+  if (usageType === 'partial' && (isNaN(amount) || amount <= 0 || amount > totalStoreCredit)) {
+    alert('Invalid amount for partial use!');
+    return;
+  }
 
-      // Update the store credit based on usage type
-      if (usageType === 'full') {
-        totalStoreCredit = 0; // Fully used
-      } else if (usageType === 'partial') {
-        totalStoreCredit -= amount; // Deduct partial amount
-      }
-
-      // Store the used credit information
-      usedCredits.push({ orderNo, amountUsed: amount });
-
-      // Update the UI and data
-      updateUsedCreditsDisplay();
-      $('#userModal').modal('hide');
-
-      // Disable or remove the button if the credit is fully used
-      if (totalStoreCredit === 0) {
-        $(`[data-id="${orderNo}"]`).prop('disabled', true).text('Used');
-      }
+  try {
+    const response = await axios.patch(`/orders/${orderNo}/storeCredits`, {
+      usageType: usageType,
+      amountUsed: amount,
     });
+
+    // Handle success (e.g., update UI)
+    alert('Store credit successfully updated!');
+  } catch (error) {
+    alert('Error updating store credit!');
+    console.error(error);
+  }
+});
+
   });
 
   function updateUsedCreditsDisplay() {
