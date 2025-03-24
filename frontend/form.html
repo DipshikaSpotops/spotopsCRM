@@ -2702,6 +2702,7 @@ var refundedAmount;
 var salePrice;
 var actualGp;
 var salesTax;
+var currentOrderStatus;
 // current datetime - US Central time
 const now = new Date();
 const options = {
@@ -2744,12 +2745,17 @@ cancelledRefundAmount = data.cancelledRefAmount || data.custRefAmount || data.cu
 salePrice = data.soldP;
 actualGp = data.actualGP;
 salesTax = data.salestax;
+currentOrderStatus = data.orderStatus;
 // console.log("orderDate",orderPlacedDate)
 })
 .catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
 $("#orderStatus").on("change", function () {
 const newOrderStatus = $(this).val();
+console.log("currentOrderStatus",currentOrderStatus);
+if (["Dispute", "Refunded", "Order Cancelled"].includes(currentOrderStatus)) {
+    const userConfirmed = confirm(`The order status previously was in ${currentOrderStatus}. Do you still want to change the status to "${newOrderStatus}"?`);
+}
 console.log("Order Status changed to:", newOrderStatus);
 if (newOrderStatus == "Dispute") { 
 $(".disputedRefAmount").val(cancelledRefundAmount)
