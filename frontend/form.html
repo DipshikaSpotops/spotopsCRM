@@ -2754,7 +2754,7 @@ $("#orderStatus").on("change", function () {
 const newOrderStatus = $(this).val();
 console.log("currentOrderStatus",currentOrderStatus);
 if (["Dispute", "Refunded", "Order Cancelled"].includes(currentOrderStatus)) {
-    const userConfirmed = confirm(`The order status previously was in ${currentOrderStatus}. Do you still want to change the status to "${newOrderStatus}"?`);
+    const userConfirmed = confirm(`The order status previously was in ${currentOrderStatus}. Do you still want to change the status to ${newOrderStatus}?`);
 }
 console.log("Order Status changed to:", newOrderStatus);
 if (newOrderStatus == "Dispute") { 
