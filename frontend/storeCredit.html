@@ -176,6 +176,7 @@ border-radius: 4px;
 /* overflow-x: auto; */
 display: block;
 width: 82vw; 
+text-align: center;
 }
 table.table td.actions {
 display: flex;
@@ -470,6 +471,17 @@ overflow: hidden;
   background-color: #96dce1;
     border: none;
     color: #38696c;
+}
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #35554f; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
