@@ -156,13 +156,11 @@ display: block;
   text-align: center; 
   color: #023f42;
   white-space: nowrap;
-  margin-left: 27%;
-  margin-top: 2%;
 }
 #filterAndTotal {
   display: flex;
-    margin-left: 38%;
-    margin-top: -2%;
+  margin-left: 30%;
+  margin-top: -1%;
 }
 @media (max-width: 320px) {
 #mainHeading {
@@ -595,7 +593,7 @@ window.location.href = "login_signup.html";
 <!-- <div id="placed-order-content"> -->
   <div class="topHeads">
 <h1 id="mainHeading">
-Customer Approved Orders
+Customer Approved
 </h1>
 <div style="align-items: center; justify-content: center">
 <input
@@ -611,7 +609,7 @@ placeholder="Search..."
     <input id="monthYearPicker" type="month"/>
     <button id="filterButton" class="btn btn-primary">Filter</button>
   </div>
-  <div id="showTotalOrders">Total Customer Approved Orders This Month-</div>
+  <div id="showTotalOrders">No of Customer Approved Orders-</div>
   <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
   </div>
   <div class="table-wrapper">
@@ -943,7 +941,7 @@ throw new Error("Failed to fetch orders");
 var data = response.data;
 var totalOrders = data.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Customer Approved Orders This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `No of Customer Approved Orders- ${totalOrders}`;
 // console.log("dataL",data.length);
 data = sortOrdersByOrderNoDesc(data);
 renderOrders(data);
@@ -1071,7 +1069,7 @@ allOrders = ordersResponse.data;
 // console.log("allorders at filter btn",allOrders);4
 allOrders = ordersResponse.data;
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Customer Approved Orders This Month- ${allOrdersLength}`;
+document.getElementById("showTotalOrders").innerHTML = `No of Customer Approved Orders- ${allOrdersLength}`;
 renderOrders(allOrders);
 } catch (error) {
 console.error("Error fetching current month's orders:", error);

@@ -650,7 +650,7 @@ placeholder="Search..."
 <input id="monthYearPicker" type="month" class="form-control"  />
 <button id="filterButton" class="btn btn-primary" >Filter</button>
 <!-- </div> -->
-<div id="showTotalOrders">Total Placed Orders This Month-</div>
+<div id="showTotalOrders">No of Placed Orders-</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
 <div class="table-wrapper">
@@ -1025,7 +1025,7 @@ throw new Error("Failed to fetch orders");
 var data = response.data;
 var totalOrders = data.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Placed Orders This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `No of Placed Orders- ${totalOrders}`;
 data = sortOrdersByOrderNoDesc(data);
 
 renderOrders(data);
@@ -1291,7 +1291,7 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 // console.log("allorders at filter btn",allOrders);
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Placed Orders This Month- ${allOrdersLength}`;
+document.getElementById("showTotalOrders").innerHTML = `No of Placed Orders- ${allOrdersLength}`;
 renderOrders(allOrders);
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
