@@ -2738,7 +2738,7 @@ res.status(500).json({ message: "Server error", error });
 app.post("/orders/sendDownloadedNotification", async (req, res) => {
   console.log("send tracking info");
   try {
-  const { path } = req.body;
+  const { path,firstName } = req.body;
   console.log("path", path);
   const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -2753,15 +2753,13 @@ app.post("/orders/sendDownloadedNotification", async (req, res) => {
   to:`dipsikha.spotopsdigital@gmail.com`,
   bcc:`dipsikha.spotopsdigital@gmail.com`,
   subject: `Notification On Downloads / Order No. ${req.params.orderNo}`,
-  html: `<p>Hi ${customerName},</p>
-  <p>This email is regarding the order you placed with <b>50 Stars Auto Parts</b>, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
-  <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website, you may check again if you do not find the ETA.</p>
-  <p>Please call us if you have any questions.</p>
-  <p>${shipperName} - ${trackingNo}</p>
-  <p>ETA(YYYY-MM-DD) - ${eta}</p>
-  <p>Link - <a href="${link}">${link}</a></p>
+  html: `<p>Hi D,</p>
+  <p>This email is to inform you that a csv file has been downloaded from the ${path} page.</p>
+  <p>Below are the details:</p>
+  <p>Page Name: ${path}</p>
+  <p>Downloaded By: ${firstName}</p>
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  <p>CRM<br>50 STARS AUTO PARTS<br></p>`,
   attachments: [{
   filename: 'logo.png',
   path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
