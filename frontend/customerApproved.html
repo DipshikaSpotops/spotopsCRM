@@ -276,7 +276,10 @@ box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
     color: white;
 }
 #monthYearPicker {
-  background-color: #35554f;color: white;
+  background-color: #35554f;
+    color: white;
+    width: auto;
+    text-align: center;
 }
 #filterButton {
   background-color: #35554f;border: none;color: white;
@@ -610,10 +613,10 @@ placeholder="Search..."
 </button>
 </div>
 <div id="filterAndTotal">
-  <div class="filter-bar">
-    <input id="monthYearPicker" type="month"/>
-    <button id="filterButton" class="btn btn-primary">Filter</button>
-  </div>
+  <!-- <div class="filter-bar"> -->
+  <input id="monthYearPicker" type="month" class="form-control"  />
+  <button id="filterButton" class="btn btn-primary" >Filter</button>
+  <!-- </div> -->
   <div id="showTotalOrders">No of Customer Approved Orders-</div>
   <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
   </div>
