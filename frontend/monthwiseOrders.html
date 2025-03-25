@@ -1020,9 +1020,9 @@ yardRefundAmount;
 }
 });
 
-const spMinusTax = item.soldP - item.salestax;
+const spMinusTax = (parseFloat(item.soldP) || 0) - (parseFloat(item.salestax) || 0);
 const custRefundedAmount = item.custRefundedAmount || 0;
-const subtractRefund = spMinusTax - custRefundedAmount || 0;
+const subtractRefund = (parseFloat(spMinusTax) || 0) - (parseFloat(custRefundedAmount) || 0);
 const currentGP = subtractRefund - totalYardSpent;
 console.log("===","subtractRefund",subtractRefund,subtractRefund,totalYardSpent);
 console.log("currentGP", item.soldP, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
