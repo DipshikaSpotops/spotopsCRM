@@ -1022,7 +1022,7 @@ yardRefundAmount;
 console.log("item",item)
 var soldprice = item.soldP;
 var sTax = item.spMinusTax;
-const spMinusTax = parseFloat(soldprice) - parseFloat(sTax);
+const spMinusTax = (parseFloat(item.soldP) || 0) - (parseFloat(item.salestax) || 0);
 const custRefundedAmount = item.custRefundedAmount || 0;
 const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
