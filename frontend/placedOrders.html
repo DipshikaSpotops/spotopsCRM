@@ -862,6 +862,11 @@ const role = localStorage.getItem("role");
 const team = localStorage.getItem("team");
 let token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
+if (role === 'Admin') {
+    $("#downloadCsv").show();
+  } else {
+    $("#downloadCsv").hide();
+  }
 if (firstName) {
 $("#user-name").text(firstName);
 }
