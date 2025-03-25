@@ -2734,6 +2734,57 @@ console.error("Server error:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+// to send notification on csv downloads on a particular page
+app.post("/orders/sendDownloadedNotification", async (req, res) => {
+  console.log("send tracking info");
+  try {
+  const { path } = req.body;
+  console.log("path", path);
+  const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+  user: "service@50starsautoparts.com",
+  pass: "hweg vrnk qyxx gktv",
+  },
+  });
+  const mailOptions = {
+  from: "service@50starsautoparts.com",
+  // to: `${order.email}`,
+  to:`dipsikha.spotopsdigital@gmail.com`,
+  bcc:`dipsikha.spotopsdigital@gmail.com`,
+  subject: `Notification On Downloads / Order No. ${req.params.orderNo}`,
+  html: `<p>Hi ${customerName},</p>
+  <p>This email is regarding the order you placed with <b>50 Stars Auto Parts</b>, and we have attached the tracking information in the same email along with a link that will take you directly to the tracking page.</p>
+  <p>If the ETA is not updated in the system, it may take 24 hours to reflect on the tracking website, you may check again if you do not find the ETA.</p>
+  <p>Please call us if you have any questions.</p>
+  <p>${shipperName} - ${trackingNo}</p>
+  <p>ETA(YYYY-MM-DD) - ${eta}</p>
+  <p>Link - <a href="${link}">${link}</a></p>
+  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 666-7770<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  attachments: [{
+  filename: 'logo.png',
+  path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+  cid: 'logo' 
+  }]
+  };
+  
+  console.log("mail", mailOptions);
+  transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+  console.error("Error sending mail:", error);
+  res.status(500).json({ message: `Error sending mail: ${error.message}` });
+  } else {
+  console.log("Email sent successfully:", info.response);
+  res.json({ message: `Email sent successfully` });
+  }
+  });
+  } catch (error) {
+  console.error("Server error:", error);
+  res.status(500).json({ message: "Server error", error });
+  }
+  });
+
 // to send rma(refund) email for customer shipping
 app.post("/orders/sendReturnEmailCustomerShipping/:orderNo", async (req, res) => {
 var yardIndex = req.query.yardIndex;

@@ -1572,11 +1572,12 @@ $("#downloadCsv").on("click", function () {
   downloadLink.click();
   document.body.removeChild(downloadLink);
   console.log("currentPath",currentPath);
+  var h1Text = $("#mainHeading").text().trim();
+console.log(h1Text,"firstName",firstName); 
+
   const data = {
-currentPath: currentPath,
-eta: eta,
-shipperName: shipperName,
-link: link,
+path: h1Text,
+firstName:firstName
 };
 
 fetch(`https://www.spotops360.com/orders/sendDownloadedNotification`, {
