@@ -2750,12 +2750,12 @@ app.post("/orders/sendDownloadedNotification", async (req, res) => {
   const mailOptions = {
   from: "service@50starsautoparts.com",
   // to: `${order.email}`,
-  to:`dipsikha.spotopsdigital@gmail.com`,
+  to:`spotops.digital@gmail.com`,
   bcc:`dipsikha.spotopsdigital@gmail.com`,
-  subject: `Notification On Downloads / Order No. ${req.params.orderNo}`,
-  html: `<p>Hi D,</p>
+  subject: `Notification On Downloads`,
+  html: `<p>Hi Charlie/Shankar/Vinutha,</p>
   <p>This email is to inform you that a csv file has been downloaded from the ${path} page.</p>
-  <p>Below are the details:</p>
+  <p>Have a check on the details below:</p>
   <p>Page Name: ${path}</p>
   <p>Downloaded By: ${firstName}</p>
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
