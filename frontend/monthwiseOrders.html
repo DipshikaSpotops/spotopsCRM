@@ -1024,7 +1024,7 @@ const spMinusTax = item.soldP - item.salestax;
 const custRefundedAmount = item.custRefundedAmount || 0;
 const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
-console.log("===",subtractRefund,totalYardSpent);
+console.log("===","subtractRefund",subtractRefund,subtractRefund,totalYardSpent);
 console.log("currentGP", spMinusTax, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
 return `$${currentGP.toFixed(2)}`;
 })()
