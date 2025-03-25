@@ -455,12 +455,23 @@ table thead th {
     display: flex;
   }
   #downloadCsv {
-    margin-left: 71%;
-    background-color: #35554f;
-    color: white;
-    height: 3vh;
-    margin-top: 2.4%;
-  }
+  margin-left: 71%;
+  background-color: #35554f;
+  color: white;
+  height: 3vh;
+  margin-top: 2.4%;
+  padding: 10px 20px; /* Add padding for spacing */
+  border-radius: 5px;
+  display: flex;
+  align-items: center; /* Align icon vertically in the center */
+  justify-content: center; /* Center the icon horizontally */
+  font-size: 20px; /* Adjust the size of the icon */
+}
+
+#downloadCsv i {
+  font-size: 18px; 
+}
+
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -625,8 +636,9 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<button id="downloadCsv" class="btn">Download CSV</button>
-</div>
+<button id="downloadCsv" class="btn">
+  <i class="fas fa-download"></i>  <!-- This is the download icon -->
+</button></div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
 <input id="monthYearPicker" type="month" class="form-control"  />
@@ -1557,3 +1569,4 @@ $("#downloadCsv").on("click", function () {
 </script>
 </body>
 </html>
+
