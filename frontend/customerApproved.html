@@ -1327,34 +1327,42 @@ $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
 fetchNotifications();
-$("#downloadCsv").click(function() {
-    const rows = [];
-    $("table th").each(function(index) {
-        if (index !== 0) { // Skip "Actions" column
-            rows.push($(this).text().trim());
+$("#downloadCsv").on("click", function () {
+  const table = $("#infoTable");
+  let csvContent = "Order Date, Order No., Agent Name, Customer Info, Shipping Info, Sale Info, Part Info, Order Status\n";
+  
+  // Loop through each row of the table, excluding the "Actions" column
+  table.find("tr").each(function () {
+    const row = $(this);
+    const rowData = [];
+    
+    // Loop through each cell in the row
+    row.find("td").each(function (index) {
+      if (index !== 0) { // Skip the "Actions" column
+        let cellText = $(this).text().trim();
+        
+        // If the cell contains a comma or new line, wrap it in quotes
+        if (cellText.includes(",") || cellText.includes("\n")) {
+          cellText = `"${cellText.replace(/"/g, '""')}"`;  
         }
-    });
-    const tableData = [];
-    $("table tbody tr").each(function() {
-        const rowData = [];
-        $(this).find("td").each(function(index) {
-            if (index !== 0) { // Skip "Actions" column
-                rowData.push($(this).text().trim());
-            }
-        });
-        tableData.push(rowData);
-    });
-    let csv = rows.join(",") + "\n";
-    tableData.forEach(function(row) {
-        csv += row.join(",") + "\n";
+        rowData.push(cellText);
+      }
     });
 
-    // Create a temporary link element to trigger the download
-    const link = document.createElement("a");
-    link.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-    link.download = "customer_approved_orders.csv";
-    link.click();
+    // Join row data and add to CSV content
+    csvContent += rowData.join(",") + "\n"; 
+  });
+
+  // Create a download link and trigger the download
+  const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+  const downloadLink = document.createElement("a");
+  downloadLink.setAttribute("href", encodedUri);
+  downloadLink.setAttribute("download", "customer_approved_orders.csv");
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
 });
+
 });
 </script>
 </body>
