@@ -1548,17 +1548,25 @@ $("#downloadCsv").on("click", function () {
   const table = $("#infoTable");
   let csvContent = "Order Date, Order No., Agent Name, Customer Info, Shipping Info, Sale Info, Part Info, Order Status\n";
 
-  // Loop through each row of the table, skipping the first column (Actions)
+  // Loop through each row of the table, excluding the Actions column
   table.find("tr").each(function () {
     const row = $(this);
     const rowData = [];
     row.find("td").each(function (index) {
-      // Skip the first column (Actions)
+      // Skip the Actions column (index 0)
       if (index !== 0) {
-        rowData.push($(this).text().trim());
+        let cellText = $(this).text().trim();
+        
+        // Handle multi-line cell data, adding quotes if necessary
+        if (cellText.includes(",") || cellText.includes("\n")) {
+          // If the cell contains a comma or new line, wrap it in quotes
+          cellText = `"${cellText.replace(/"/g, '""')}"`;  // Escape quotes by doubling them
+        }
+
+        rowData.push(cellText);
       }
     });
-    csvContent += rowData.join(",") + "\n";
+    csvContent += rowData.join(",") + "\n"; // Join data with commas and add new row
   });
 
   // Create a download link and trigger the download
