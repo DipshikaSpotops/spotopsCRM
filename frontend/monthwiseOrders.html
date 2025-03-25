@@ -963,8 +963,8 @@ const spMinusTax = soldprice - sTax;
 const custRefundedAmount = item.custRefundedAmount || 0;
 const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
-console.log("===","subtractRefund",soldprice,sTax,subtractRefund,subtractRefund,totalYardSpent);
-console.log("currentGP", item.soldP, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
+console.log("===","subtractRefund",soldprice,sTax,subtractRefund,subtractRefund);
+console.log("currentGP", item.soldP, custRefundedAmount, subtractRefund, currentGP);
 $("#infoTable").append(`
 <tr>
 <td>${formattedOrderDate}</td>
