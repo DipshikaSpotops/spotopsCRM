@@ -1021,13 +1021,13 @@ yardRefundAmount;
 });
 console.log("item",item)
 var soldprice = item.soldP;
-var sTax = item.salestax;
+var sTax = item.spMinusTax;
 const spMinusTax = soldprice - sTax;
 const custRefundedAmount = item.custRefundedAmount || 0;
 const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
 console.log("===","subtractRefund",soldprice,sTax,subtractRefund,subtractRefund,totalYardSpent);
-console.log("currentGP", item.soldP, item.salestax, subtractRefund, currentGP, totalYardSpent);
+console.log("currentGP", item.soldP, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
 return `$${currentGP.toFixed(2)}`;
 })()
 : ""
