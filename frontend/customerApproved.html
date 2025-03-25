@@ -1327,7 +1327,34 @@ $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
 fetchNotifications();
+$("#downloadCsv").click(function() {
+    const rows = [];
+    $("table th").each(function(index) {
+        if (index !== 0) { // Skip "Actions" column
+            rows.push($(this).text().trim());
+        }
+    });
+    const tableData = [];
+    $("table tbody tr").each(function() {
+        const rowData = [];
+        $(this).find("td").each(function(index) {
+            if (index !== 0) { // Skip "Actions" column
+                rowData.push($(this).text().trim());
+            }
+        });
+        tableData.push(rowData);
+    });
+    let csv = rows.join(",") + "\n";
+    tableData.forEach(function(row) {
+        csv += row.join(",") + "\n";
+    });
 
+    // Create a temporary link element to trigger the download
+    const link = document.createElement("a");
+    link.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+    link.download = "customer_approved_orders.csv";
+    link.click();
+});
 });
 </script>
 </body>
