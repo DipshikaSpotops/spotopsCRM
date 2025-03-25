@@ -1020,8 +1020,8 @@ yardRefundAmount;
 }
 });
 
-const spMinusTax = item.soldP - item.salestax;
-const custRefundedAmount = item.custRefundedAmount || 0;
+const spMinusTax = info.soldP - info.salestax;
+const custRefundedAmount = info.custRefundedAmount || 0;
 const subtractRefund = spMinusTax - custRefundedAmount || 0;
 const currentGP = subtractRefund - totalYardSpent;
 console.log("===","subtractRefund",subtractRefund,subtractRefund,totalYardSpent);
