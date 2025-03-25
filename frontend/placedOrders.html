@@ -453,6 +453,7 @@ table thead th {
   .topHeads {
     display: flex;
     margin-top: 2%;
+    margin-bottom: 1%;
   }
   #downloadCsv {
   background-color: #35554f;
@@ -626,18 +627,23 @@ window.location.href = "login_signup.html";
 <div class="main-content">
 <div id="placed-order-content" style="overflow-x: auto;">
   <div class="topHeads">
+    <div>
 <h1 id="mainHeading">
 Placed Orders
 </h1>
+</div>
+<div>
 <input
 type="text"
 class="form-control"
 id="searchInput"
 placeholder="Search..."
 />
+</div>
 <button id="downloadCsv" class="btn">
   <i class="fas fa-download"></i>  <!-- This is the download icon -->
-</button></div>
+</button>
+</div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
 <input id="monthYearPicker" type="month" class="form-control"  />
