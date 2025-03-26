@@ -131,9 +131,9 @@ cursor: pointer;
 
 @media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-100%);
-    width: 70%;
-  }
+transform: translateX(-100%);
+width:38%;
+}
 
   .sidebar.show {
     transform: translateX(0);
@@ -446,6 +446,9 @@ width: 100%;
 height: 100%;
 background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
 /* z-index: 999; Places it just below the modal div */
+}
+body.no-scroll {
+  overflow: hidden; /* Disable scrolling */
 }
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
@@ -825,8 +828,18 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 
 // Toggle sidebar visibility on smaller screens
 $(".toggle-sidebar").on("click", function () {
-$("#offcanvasSidebar").toggleClass("show");
+  $("#offcanvasSidebar").toggleClass("show");
+
+  // Toggle the body's class to control the background shadow and scrolling behavior
+  if ($("#offcanvasSidebar").hasClass("show")) {
+    $("body").addClass("no-scroll");
+    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
+  } else {
+    $("body").removeClass("no-scroll");
+    $(".modal-overlay").remove(); // Remove the shadow overlay
+  }
 });
+
 
 $(".nav-link").on("click", function () {
 $(".nav-link").removeClass("active selected");

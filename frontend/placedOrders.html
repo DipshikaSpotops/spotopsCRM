@@ -223,6 +223,9 @@ height: 100%;
 background: rgba(0, 0, 0, 0.5); 
 /* z-index: 999; */
 }
+body.no-scroll {
+  overflow: hidden; /* Disable scrolling */
+}
 body.modal-active {
 overflow: hidden; 
 }
@@ -941,7 +944,16 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 
 $(".toggle-sidebar").on("click", function () {
-$("#offcanvasSidebar").toggleClass("show");
+  $("#offcanvasSidebar").toggleClass("show");
+
+  // Toggle the body's class to control the background shadow and scrolling behavior
+  if ($("#offcanvasSidebar").hasClass("show")) {
+    $("body").addClass("no-scroll");
+    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
+  } else {
+    $("body").removeClass("no-scroll");
+    $(".modal-overlay").remove(); // Remove the shadow overlay
+  }
 });
 
 $(".nav-link").on("click", function (event) {
