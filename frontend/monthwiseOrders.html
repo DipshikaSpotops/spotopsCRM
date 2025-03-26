@@ -1604,6 +1604,7 @@ $("#infoTable tr").each(function () {
     $("#infoTable tr").each(function () {
       const row = $(this);
       const rowData = [];
+      console.log("row data".rowData)
       row.find("td").each(function () {
         let cellText = $(this).text().trim();
         if (cellText.includes(",") || cellText.includes("\n")) {
