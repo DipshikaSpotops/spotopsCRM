@@ -1579,26 +1579,6 @@ $("#downloadCsv").on("click", function () {
   console.log("currentPath",currentPath);
   var h1Text = $("#mainHeading").text().trim();
 console.log(h1Text,"firstName",firstName); 
-
-  const data = {
-path: h1Text,
-firstName:firstName
-};
-
-fetch(`https://www.spotops360.com/orders/sendDownloadedNotification`, {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(data),
-})
-.then((response) => response.json())
-.then((result) => {
-console.log("Success:", result);
-})
-.catch((error) => {
-console.error("Error:", error);
-});
 });
 
 });

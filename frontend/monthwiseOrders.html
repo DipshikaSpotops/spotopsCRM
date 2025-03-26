@@ -1583,6 +1583,55 @@ $(document).on("click", "#infoTable tr", function () {
 });
     
 fetchNotifications();
+$("#downloadCsv").on("click", function () {
+  const table = $("#infoTable");
+  let csvContent = "Order Date, Order No., Agent Name, Customer Info, Part Info, Yard, Order Status, Sale Price, Est GP, Current GP, Actual GP, Escalation Status\n"; 
+  table.find("tr").each(function () {
+    const row = $(this);
+    const rowData = [];
+
+    row.find("td").each(function (index) {
+      let cellText = $(this).text().trim();
+
+      if (index === 0) {  
+        rowData.push(cellText);
+      } else if (index === 1) {  
+        rowData.push(cellText);
+      } else if (index === 2) {  
+        rowData.push(cellText);
+      } else if (index === 3) {  
+        rowData.push(cellText);
+      } else if (index === 4) {  
+        rowData.push(cellText);
+      } else if (index === 5) {  
+        rowData.push(cellText);
+      } else if (index === 6) {  
+        rowData.push(cellText);
+      } else if (index === 7) {  
+        rowData.push(cellText);
+      } else if (index === 8) {  
+        rowData.push(cellText);
+      } else if (index === 9) {  
+        rowData.push(cellText);
+      } else if (index === 10) {  
+        rowData.push(cellText);
+      } else if (index === 11) {  
+        rowData.push(cellText);
+      }
+    });
+    if (rowData.length > 0) {
+      csvContent += rowData.join(",") + "\n";
+    }
+  });
+  const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+  const downloadLink = document.createElement("a");
+  downloadLink.setAttribute("href", encodedUri);
+  downloadLink.setAttribute("download", "order_data.csv");  // File name
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+});
+
 });
 </script>
 </body>
