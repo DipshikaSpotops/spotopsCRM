@@ -1602,7 +1602,7 @@ $("#infoTable tr").each(function () {
 
     // Function to collect rows for the current page
     async function collectPageRows(page) {
-        // Fetch data for this page
+        // Render the table rows for the current page
         renderTableRows(page, allOrders); // Assuming renderTableRows handles rendering for the current page
 
         // Collect the rows for this page
@@ -1643,7 +1643,6 @@ $("#infoTable tr").each(function () {
 
     console.log("CSV download triggered!");
 });
-
 
 fetchNotifications();
 });
