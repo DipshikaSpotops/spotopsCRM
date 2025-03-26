@@ -4033,7 +4033,8 @@ window.location.reload();
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-$("#editYardPopup").show();
+// $("#editYardPopup").show();
+$("#editYardPopup").modal("show");
 yardIndex = $(this).data("yard-index");
 $("#editYardInfo").data("yard-index", yardIndex);
 $("#yardIndexEdit").val(yardIndex);
