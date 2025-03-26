@@ -3897,8 +3897,7 @@ alert("Error fetching yard information");
 
 $("#closeCardCharged").on("click", function () {
   $('#cardCharged').hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
+window.location.reload();
 });
 
 
