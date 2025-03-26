@@ -1330,13 +1330,20 @@ fetchNotifications();
 $("#downloadCsv").on("click", function () {
   const table = $("#infoTable");
   let csvContent = "Order Date, Order No., Agent Name, Customer Info, Shipping Info, Sale Info, Part Info, Order Status\n";
+  
+  // Debugging: log the table HTML to confirm rows are populated
+  console.log("Table HTML:", table.html());
+  
   // Loop through each row of the table, excluding the Actions column
   table.find("tr").each(function () {
     const row = $(this);
     const rowData = [];
-    console.log("rowData",rowData);
+    
+    // Log row text for debugging
+    console.log("Row Text:", row.text());
+    
     row.find("td").each(function (index) {
-      if (index !== 0) {
+      if (index !== 0) {  // Skip the first column (if necessary)
         let cellText = $(this).text().trim();
         if (cellText.includes(",") || cellText.includes("\n")) {
           // If the cell contains a comma or new line, wrap it in quotes
@@ -1345,9 +1352,20 @@ $("#downloadCsv").on("click", function () {
         rowData.push(cellText);
       }
     });
-    csvContent += rowData.join(",") + "\n"; 
+
+    // Log the rowData to see what's being added
+    console.log("rowData:", rowData);
+
+    // Add rowData to csvContent if it's not empty
+    if (rowData.length > 0) {
+      csvContent += rowData.join(",") + "\n"; 
+    }
   });
-  // download link and trigger the download
+
+  // Debugging: Log final CSV content before download
+  console.log("CSV Content:", csvContent);
+
+  // Download the CSV
   const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
   const downloadLink = document.createElement("a");
   downloadLink.setAttribute("href", encodedUri);
@@ -1355,10 +1373,8 @@ $("#downloadCsv").on("click", function () {
   document.body.appendChild(downloadLink);
   downloadLink.click();
   document.body.removeChild(downloadLink);
-  console.log("currentPath",currentPath);
-  var h1Text = $("#mainHeading").text().trim();
-console.log(h1Text,"firstName",firstName); 
 });
+
 
 });
 </script>
