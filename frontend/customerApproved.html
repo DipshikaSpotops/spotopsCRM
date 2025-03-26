@@ -1334,6 +1334,7 @@ $("#downloadCsv").on("click", function () {
   table.find("tr").each(function () {
     const row = $(this);
     const rowData = [];
+    console.log("rowData",rowData);
     row.find("td").each(function (index) {
       if (index !== 0) {
         let cellText = $(this).text().trim();
