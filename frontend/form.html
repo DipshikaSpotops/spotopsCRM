@@ -3896,10 +3896,9 @@ alert("Error fetching yard information");
 });
 
 $("#closeCardCharged").on("click", function () {
-    $("#cardCharged").fadeOut();
-        $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
-        $(".mainDiv").removeClass("blur");
+  $('#cardCharged').hide();
+$(".modal-overlay").remove();
+$("body").removeClass("modal-active");
 });
 
 
