@@ -3745,7 +3745,7 @@ selectedYardIndex = $(this).data('yard-index');
 console.log("refund collected part",selectedYardIndex);
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-$("#refundCollect").fadeIn(); 
+$("#refundCollect").modal("show"); 
 // $(".mainDiv").addClass("blur");
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
