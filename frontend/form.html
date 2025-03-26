@@ -6485,7 +6485,8 @@ function displayUploadedFiles(uploadedFiles, orderNo) {
   document.getElementById("uploadedFilesContainer").style.display = "block";
 }
 
-async function loadParts() {
+
+    async function loadParts() {
     try {
         const response = await axios.get("https://www.spotops360.com/getParts");
         console.log("partNames", response.data);
@@ -6496,36 +6497,12 @@ async function loadParts() {
 
         const parts = response.data;
         const partDropdown = document.getElementById("pReq");
-        // Clear existing options before adding new ones
         partDropdown.innerHTML = "";
-
-        // Pre-populate the dropdown with default options (if required)
-        const defaultOptions = [
-            "ABS Module", "ABS Pump", "Alternator", "Air Pump", "Brake Booster", "Computer Box Not Engine", 
-            "Door Glass", "Engine", "Engine Computer", "Exhaust Manifold", "Fuse Box", "GPS Screen", 
-            "Headlight", "Heater/AC Control", "Master Cylinder", "Mirror", "Mirror, Door", "Modules", 
-            "Radio/CD", "Rear Axle Assembly", "Seat Belt, Front", "Speedometer", "Spindle", "Starter", 
-            "Steering Rack/Box/Gear", "Steering Column With Key", "Third Brake Light (With Camera)", 
-            "Transmission", "Transmission Computer", "Window Regulator", "Wiper Linkage"
-        ];
-
-        defaultOptions.forEach(partName => {
-            const option = document.createElement("option");
-            option.value = partName;
-            option.textContent = partName;
-            partDropdown.appendChild(option);
-        });
-
-        // Add new parts fetched from the API
         parts.forEach(part => {
-            // Check if part already exists in the dropdown
-            const existingOption = Array.from(partDropdown.options).find(option => option.value === part.name);
-            if (!existingOption) { // If the part is not already in the list
-                const option = document.createElement("option");
-                option.value = part.name;
-                option.textContent = part.name;
-                partDropdown.appendChild(option);
-            }
+            const option = document.createElement("option");
+            option.value = part.name;
+            option.textContent = part.name;
+            partDropdown.appendChild(option);
         });
 
         // Add "Add New Part" option at the end
