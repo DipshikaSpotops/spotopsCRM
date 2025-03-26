@@ -1593,69 +1593,57 @@ $("#infoTable tr").each(function () {
 });
 
   $("#downloadCsv").on("click", async function () {
-  let csvContent = "Order Date, Order No., Agent Name, Customer Info, Part Info, Yard, Order Status, Sale Price, Est GP, Current GP, Actual GP, Escalation Status\n";
+    let csvContent = "Order Date, Order No., Agent Name, Customer Info, Part Info, Yard, Order Status, Sale Price, Est GP, Current GP, Actual GP, Escalation Status\n";
   
-  // Number of rows per page
-  const rowsPerPage = 25;
-  let currentPage = 1; // Track current page
-  let totalPages = Math.ceil(allOrders.length / rowsPerPage); // Calculate the total pages
-  
-  // Function to collect rows for the current page
-  async function collectPageRows(page) {
-    // Fetch data for this page
-    renderTableRows(page, allOrders); // Assuming renderTableRows handles rendering for the current page
+    // Number of rows per page
+    const rowsPerPage = 25;
+    let currentPage = 1; // Track current page
+    let totalPages = Math.ceil(allOrders.length / rowsPerPage); // Calculate the total pages
 
-    // Collect the rows for this page
-    let pageRows = [];
-    $("#infoTable tr").each(function () {
-      const row = $(this);
-      const rowData = [];
-      console.log("row data".rowData)
-      row.find("td").each(function () {
-        let cellText = $(this).text().trim();
-        if (cellText.includes(",") || cellText.includes("\n")) {
-          // If the cell contains a comma or new line, wrap it in quotes
-          cellText = `"${cellText.replace(/"/g, '""')}"`;  
-        }
-        rowData.push(cellText);
-      });
-      if (rowData.length > 0) {
-        pageRows.push(rowData.join(","));
-      }
-    });
+    // Function to collect rows for the current page
+    async function collectPageRows(page) {
+        // Fetch data for this page
+        renderTableRows(page, allOrders); // Assuming renderTableRows handles rendering for the current page
 
-    return pageRows;
-  }
+        // Collect the rows for this page
+        let pageRows = [];
+        $("#infoTable tr").each(function () {
+            const row = $(this);
+            const rowData = [];
+            row.find("td").each(function () {
+                let cellText = $(this).text().trim();
+                if (cellText.includes(",") || cellText.includes("\n")) {
+                    // If the cell contains a comma or new line, wrap it in quotes
+                    cellText = `"${cellText.replace(/"/g, '""')}"`;  
+                }
+                rowData.push(cellText);
+            });
+            if (rowData.length > 0) {
+                pageRows.push(rowData.join(","));
+            }
+        });
 
-  // Loop through all pages and collect rows
-  for (let page = 1; page <= totalPages; page++) {
-    const pageRows = await collectPageRows(page); // Collect rows for the current page
-    csvContent += pageRows.join("\n") + "\n"; // Add the collected rows to the CSV content
-  }
+        return pageRows;
+    }
 
-  // Create a download link and trigger the download
-  const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
-  const downloadLink = document.createElement("a");
-  downloadLink.setAttribute("href", encodedUri);
-  downloadLink.setAttribute("download", "orders.csv");  // Set the filename
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
+    // Loop through all pages and collect rows
+    for (let page = 1; page <= totalPages; page++) {
+        const pageRows = await collectPageRows(page); // Collect rows for the current page
+        csvContent += pageRows.join("\n") + "\n"; // Add the collected rows to the CSV content
+    }
 
-  console.log("CSV download triggered!");
+    // Create a download link and trigger the download
+    const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+    const downloadLink = document.createElement("a");
+    downloadLink.setAttribute("href", encodedUri);
+    downloadLink.setAttribute("download", "orders.csv");  // Set the filename
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+
+    console.log("CSV download triggered!");
 });
-$(".toggle-sidebar").on("click", function () {
-  $("#offcanvasSidebar").toggleClass("show");
 
-  // Toggle the body's class to control the background shadow and scrolling behavior
-  if ($("#offcanvasSidebar").hasClass("show")) {
-    $("body").addClass("no-scroll");
-    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
-  } else {
-    $("body").removeClass("no-scroll");
-    $(".modal-overlay").remove(); // Remove the shadow overlay
-  }
-});
 
 fetchNotifications();
 });
