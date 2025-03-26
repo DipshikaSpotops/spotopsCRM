@@ -1585,26 +1585,41 @@ $("#downloadCsv").on("click", function () {
   const table = $("#infoTable");
   let csvContent = "Order Date, Order No., Agent Name, Customer Info, Part Info, Yard, Order Status, Sale Price, Est GP, Current GP, Actual GP, Escalation Status\n";
 
-  // Loop through each row of the table
-  table.find("tr").each(function () {
-    const row = $(this);
-    const rowData = [];
+  // Function to collect all rows (even if they are on different pages)
+  function getAllRows() {
+    let allRows = [];
+    
+    // Check for the number of pages, assuming there is a pagination control
+    const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+    
+    for (let page = 1; page <= totalPages; page++) {
+      // Simulate rendering the rows for the current page
+      renderTableRows(page, allOrders);  // Assuming `renderTableRows` dynamically renders rows for the given page number
+      
+      // Get the rows of the current page
+      table.find("tr").each(function () {
+        const row = $(this);
+        const rowData = [];
+        row.find("td").each(function () {
+          let cellText = $(this).text().trim();
+          // If the cell contains a comma or new line, wrap it in quotes
+          if (cellText.includes(",") || cellText.includes("\n")) {
+            cellText = `"${cellText.replace(/"/g, '""')}"`;  
+          }
+          rowData.push(cellText);
+        });
+        allRows.push(rowData.join(","));
+      });
+    }
 
-    row.find("td").each(function (index) {
-      let cellText = $(this).text().trim();
+    return allRows;
+  }
 
-      // If the cell contains a comma or new line, wrap it in quotes
-      if (cellText.includes(",") || cellText.includes("\n")) {
-        cellText = `"${cellText.replace(/"/g, '""')}"`;  
-      }
+  // Get all the rows across all pages
+  const allRows = getAllRows();
 
-      // Add the cell text to the rowData
-      rowData.push(cellText);
-    });
-
-    // Add the row data as a new line in the CSV content
-    csvContent += rowData.join(",") + "\n"; 
-  });
+  // Join all rows together with new lines
+  csvContent += allRows.join("\n");
 
   // Create a download link and trigger the download
   const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
