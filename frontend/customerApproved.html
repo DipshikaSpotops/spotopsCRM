@@ -1327,7 +1327,7 @@ $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
 fetchNotifications();
-$("#downloadCsv").on("click", function () {
+$$("#downloadCsv").on("click", function () {
   const table = $("#infoTable");
   let csvContent = "Order Date, Order No., Agent Name, Customer Info, Shipping Info, Sale Info, Part Info, Order Status\n";
   
@@ -1335,15 +1335,18 @@ $("#downloadCsv").on("click", function () {
   table.find("tr").each(function () {
     const row = $(this);
     
-    // Skip the header row or any other unwanted rows (such as empty ones)
+    // Skip the header row or any empty rows (such as header rows or empty tr elements)
     if (row.hasClass('header') || row.children('td').length === 0) return;
     
     const rowData = [];
     
     row.find("td").each(function (index) {
+      // Skip the "Actions" column (assuming it's the last column)
+      if (index === row.find("td").length - 1) return; // Skip last column (Actions)
+      
       let cellText = $(this).text().trim();
       
-      // Skip if cell is empty
+      // Skip if the cell is empty
       if (!cellText) return;
       
       // If the cell contains a comma or newline, wrap it in quotes
@@ -1372,7 +1375,6 @@ $("#downloadCsv").on("click", function () {
   // Debugging the generated CSV content
   console.log("Generated CSV Content:", csvContent);
 });
-
 
 
 });
