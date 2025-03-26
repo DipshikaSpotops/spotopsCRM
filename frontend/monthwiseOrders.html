@@ -1581,51 +1581,47 @@ $(document).on("click", "#infoTable tr", function () {
   $("#infoTable tr").removeClass("selected");
   $(this).addClass("selected");
 });
-    
-fetchNotifications();
 $("#downloadCsv").on("click", function () {
   const table = $("#infoTable");
   let csvContent = "Order Date, Order No., Agent Name, Customer Info, Part Info, Yard, Order Status, Sale Price, Est GP, Current GP, Actual GP, Escalation Status\n";
 
-  // Loop through each row of the table, excluding the Actions column
+  // Loop through each row of the table
   table.find("tr").each(function () {
     const row = $(this);
     const rowData = [];
 
     row.find("td").each(function (index) {
-      // Exclude the first column (index 0) as it's for Order Date, which we include below
-      if (index !== 0) {
-        let cellText = $(this).text().trim();
-        
-        // Wrap cells with commas or new lines in quotes
-        if (cellText.includes(",") || cellText.includes("\n")) {
-          cellText = `"${cellText.replace(/"/g, '""')}"`;  
-        }
+      let cellText = $(this).text().trim();
 
-        // Push cell text to rowData
-        rowData.push(cellText);
+      // If the cell contains a comma or new line, wrap it in quotes
+      if (cellText.includes(",") || cellText.includes("\n")) {
+        cellText = `"${cellText.replace(/"/g, '""')}"`;  
       }
+
+      // Add the cell text to the rowData
+      rowData.push(cellText);
     });
 
-    // Add the row data as a line in the CSV content
+    // Add the row data as a new line in the CSV content
     csvContent += rowData.join(",") + "\n"; 
   });
 
-  // Create the download link and trigger the download
+  // Create a download link and trigger the download
   const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
   const downloadLink = document.createElement("a");
   downloadLink.setAttribute("href", encodedUri);
-  downloadLink.setAttribute("download", "placed_orders.csv");  // Set download file name
+  downloadLink.setAttribute("download", "orders.csv");  // Set the filename
   document.body.appendChild(downloadLink);
   downloadLink.click();
   document.body.removeChild(downloadLink);
 
-  // Optional debug logs
+  // Optional log messages for debugging
   console.log("CSV download triggered!");
   var h1Text = $("#mainHeading").text().trim();
   console.log("Page Heading:", h1Text);
 });
-
+  
+fetchNotifications();
 });
 </script>
 </body>
