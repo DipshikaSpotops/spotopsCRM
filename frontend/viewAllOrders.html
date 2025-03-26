@@ -843,7 +843,7 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
 
     // Page number display: Page X of Y
     paginationControls.append(`
-      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+      <span class="page-info">Page ${currentPage || 1} of ${totalPages}</span>
     `);
 
     // Right arrow for "Next" page
