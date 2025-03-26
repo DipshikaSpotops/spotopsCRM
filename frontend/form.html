@@ -3895,6 +3895,12 @@ alert("Error fetching yard information");
 }
 });
 
+$("#closeCardCharged").on("click", function () {
+    $("#cardCharged").fadeOut();
+        $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+        $(".mainDiv").removeClass("blur");
+});
 
 
 $("#closeRefundCollected").on("click", function () {
@@ -5428,12 +5434,6 @@ $(this).addClass("active");
 });
 $('#crossBtnEditYard').on('click', function(e) {
 $('#editYardPopup').hide();
-$(".modal-overlay").remove();
-// $(".mainDiv").removeClass("blur");
-$("body").removeClass("modal-active");
-});
-$('#closeCardCharged').on('click', function(e) {
-$('#cardCharged').hide();
 $(".modal-overlay").remove();
 // $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
