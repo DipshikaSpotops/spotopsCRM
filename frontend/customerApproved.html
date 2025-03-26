@@ -1335,19 +1335,16 @@ $("#downloadCsv").on("click", function () {
   table.find("tr").each(function () {
     const row = $(this);
     
-    // Skip the header row or any empty rows (such as header rows or empty tr elements)
-    if (row.hasClass('header') || row.children('td').length === 0) return;
+    // Skip empty rows or header row if any
+    if (row.find("td").length === 0) return;  // Skip rows with no data (empty rows)
     
     const rowData = [];
     
     row.find("td").each(function (index) {
-      // Skip the "Actions" column (assuming it's the last column)
-      if (index === row.find("td").length - 1) return; // Skip last column (Actions)
+      // Skip the first column (Actions column)
+      if (index === 0) return; // Skip first column (Actions)
       
       let cellText = $(this).text().trim();
-      
-      // Skip if the cell is empty
-      if (!cellText) return;
       
       // If the cell contains a comma or newline, wrap it in quotes
       if (cellText.includes(",") || cellText.includes("\n")) {
@@ -1375,7 +1372,6 @@ $("#downloadCsv").on("click", function () {
   // Debugging the generated CSV content
   console.log("Generated CSV Content:", csvContent);
 });
-
 
 });
 </script>
