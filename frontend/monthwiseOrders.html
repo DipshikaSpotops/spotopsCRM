@@ -1581,7 +1581,12 @@ $(document).on("click", "#infoTable tr", function () {
   $("#infoTable tr").removeClass("selected");
   $(this).addClass("selected");
 });
-$("#downloadCsv").on("click", async function () {
+$("#infoTable tr").each(function () {
+  const row = $(this);
+  console.log(row.text()); // Debugging: print out the content of each row
+});
+
+  $("#downloadCsv").on("click", async function () {
   let csvContent = "Order Date, Order No., Agent Name, Customer Info, Part Info, Yard, Order Status, Sale Price, Est GP, Current GP, Actual GP, Escalation Status\n";
   
   // Number of rows per page
