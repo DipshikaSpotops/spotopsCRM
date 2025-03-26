@@ -1318,7 +1318,16 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
-
+$(".toggle-sidebar").on("click", function () {
+  $("#offcanvasSidebar").toggleClass("show");
+  if ($("#offcanvasSidebar").hasClass("show")) {
+    $("body").addClass("no-scroll");
+    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
+  } else {
+    $("body").removeClass("no-scroll");
+    $(".modal-overlay").remove(); // Remove the shadow overlay
+  }
+});
 });
 </script>
 
