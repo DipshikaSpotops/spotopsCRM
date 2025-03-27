@@ -1002,42 +1002,39 @@ return `${trackingNo}`;
 // Pagination function
 function createPaginationControls(totalPages) {
   const paginationControls = $('#pagination-controls');
-  paginationControls.empty(); // Clear existing buttons
+  paginationControls.empty();
 
   if (totalPages > 1) {
-    // Left arrow for "Previous" page
     paginationControls.append(`
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
-    // Page number display: Page X of Y
     paginationControls.append(`
       <span class="page-info">Page ${currentPage} of ${totalPages}</span>
     `);
 
-    // Right arrow for "Next" page
     paginationControls.append(`
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
 }
-
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
     renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
   }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
     renderTableRows(currentPage);
     createPaginationControls(totalPages);
   }
 });
+
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 const filteredOrders = sortedData.filter(order => {
