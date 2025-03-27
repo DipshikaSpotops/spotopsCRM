@@ -446,8 +446,8 @@ table thead th {
   white-space: nowrap;
 }
 #filterAndTotal{
-  display: flex;
-    margin-left: 16%;
+  display: flex; 
+  margin-left: 3%;
     margin-top: 0%;
 }
 .topHeads {
@@ -586,8 +586,8 @@ placeholder="Search..."
 </div>
 <div style="display: flex;margin: 2% -3%;gap: 26px;">
   <div id="showTotalOrders">Total Orders- </div>
-  <div id="showTotalEstGP">Total EstGP- </div>
-  <div id="showTotalActualGP">Total Actual- </div>
+  <div id="showTotalEstGP">Est GP- </div>
+  <div id="showTotalActualGP">Actual GP- </div>
   <div id="showCancellationRate">Cancellation Rate-</div>
   </div>
 <div class="table-wrapper">
@@ -928,8 +928,8 @@ let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + tota
 // Update the cancellation rate div
 document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
 document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
-document.getElementById("showTotalEstGP").innerHTML = `Total Est GP- ${totalGrossProfit.toFixed(2)}`;
-document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP- ${totalActualGP.toFixed(2)}`;
+document.getElementById("showTotalEstGP").innerHTML = `Est GP- ${totalGrossProfit.toFixed(2)}`;
+document.getElementById("showTotalActualGP").innerHTML = `Actual GP- ${totalActualGP.toFixed(2)}`;
 sortedData = sortOrdersByOrderNoDesc(filteredData);
 // console.log("sortedData",sortedData);
 renderTableRows(currentPage, sortedData); 
@@ -1147,8 +1147,8 @@ console.log("rate",totalCancelled,totalRefunded,totalDisputed,totalOrders);
 let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100 : 0;
 
 document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
-document.getElementById("showTotalEstGP").innerHTML = `Total Est GP- ${totalGrossProfit.toFixed(2)}`;
-document.getElementById("showTotalActualGP").innerHTML = `Total Actual GP- ${totalActualGP.toFixed(2)}`;
+document.getElementById("showTotalEstGP").innerHTML = `Est GP- ${totalGrossProfit.toFixed(2)}`;
+document.getElementById("showTotalActualGP").innerHTML = `Actual GP- ${totalActualGP.toFixed(2)}`;
 document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
 // Render the new filtered data
 renderTableRows(1, sortedData);
