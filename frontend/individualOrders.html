@@ -447,6 +447,12 @@ table thead th {
   display: flex;
   margin-right: 100%;
 }
+#mainHeading {
+  text-align: center; 
+  color: #023f42;
+  white-space: nowrap;
+  margin-left: 0%;
+}
 @media (max-width: 768px) {
   .topHeads{
   margin-top: 6%;
@@ -543,16 +549,20 @@ window.location.href = "login_signup.html";
 
 <div class="main-content">
   <div class="topHeads">
-    <h1 class="fixed-header" style="text-align: center; margin-right: 34%;">My Orders</h1>
     <div>
-    <input
-    type="text"
-    class="form-control"
-    id="searchInput"
-    placeholder="Search..."
-    />
-    </div>
-    </div>
+<h1 id="mainHeading">
+My Orders
+</h1>
+</div>
+<div>
+<input
+type="text"
+class="form-control"
+id="searchInput"
+placeholder="Search..."
+/>
+</div>
+</div>
 <!-- pagination controls -->
 <div id="pagination-controls" class="mt-3 mb-3"></div>
 <div id="filterAndTotal">
