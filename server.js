@@ -1206,6 +1206,7 @@ app.get('/orders/monthly', async (req, res) => {
         grossProfit: 1,
         salestax: 1,
         actualGP: 1,
+        phone,
         email: 1,
         fName: 1,
         lName: 1,
