@@ -1015,7 +1015,7 @@ ${item.year} ${item.make} ${item.model}
 <td>${  
 item.additionalInfo && item.additionalInfo.length > 0
 ? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} | ${info.phone}<br> ${info.status} Stock No.: ${info.stockNo || ""}<br> Part price: $${info.partPrice} ${info.shippingDetails || ""} Others: $${info.others || 0}<br>  ${info.paymentStatus || ""} Refunds: ${info.refundedAmount || 0}`)
+.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} | ${info.phone}<br> Status: <b>${info.status}</b> | Stock No.: ${info.stockNo || ""}<br> Part price: $${info.partPrice} ${info.shippingDetails || ""} Others: $${info.others || 0}<br>  ${info.paymentStatus || ""} Refunds: ${info.refundedAmount || 0}`)
 
 .join("<br>")
 : ""
