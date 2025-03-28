@@ -2340,7 +2340,7 @@ app.put("/orders/:orderNo/cancelShipment", async (req, res) => {
   return res.status(404).json({ message: "Order not found" });
   }
   order.orderStatus = "Yard Processing";
-  order.additionalInfo[yardIndex].trackingNo[0] =  " ";
+  order.additionalInfo[yardIndex - 1].trackingNo[0] =  " ";
   order.orderHistory.push(
   `Shipment cancelled: TR: ${trNo} by ${firstName} on ${formattedDateTime}`
   );
