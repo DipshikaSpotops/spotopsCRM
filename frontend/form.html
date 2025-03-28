@@ -3337,6 +3337,8 @@ if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
 return;
 }
 const yardData = data.additionalInfo[yardIndex - 1];
+// Set the yardIndex dynamically when you're creating or showing the button
+$("#cancelShipment").attr("data-yard-index", yardIndex);
 // Check payment status and apply color
 if (yardData.paymentStatus === "Card charged" && yardData.refundStatus === "Refund collected") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025','border': 'none'});
