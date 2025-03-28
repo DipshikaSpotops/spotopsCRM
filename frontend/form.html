@@ -6484,10 +6484,12 @@ $("#cancelShipment").on("click", function () {
       }
       yardData.trackingNo[0] = ""; 
       yardData.status = "Yard PO Sent";
+      const trNo = $("#trackingNoEdit").val();
+      console.log("trNo",trNo);
       const updatedOrder = {
         ...data,
         additionalInfo: [...data.additionalInfo],
-        trackingNo: data.trackingNo,
+        trackingNo: trNo,
         firstName: firstName,
         yardIndex: yardIndex
       };
