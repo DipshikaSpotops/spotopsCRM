@@ -1308,6 +1308,14 @@ scrollbar-color: #29638c #141b2d;
       bottom: 60px;
     }
   }
+  #sendEmailButton {
+    background-color: #172422
+  }
+  #cancelShipment {
+    background-color: #ff914d;
+    border: 1px solid black;
+    color: black;
+  }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -6456,6 +6464,52 @@ function displayUploadedFiles(uploadedFiles, orderNo) {
 
   document.getElementById("uploadedFilesContainer").style.display = "block";
 }
+$("#cancelShipment").on("click", function () {
+  console.log("orderNo",orderNo);
+  fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (!data || !data.additionalInfo) {
+        console.error("Order data or additionalInfo not found.");
+        return;
+      }
+      const yardIndex = $(this).data("yard-index");
+      console.log("yardIndex",yardIndex);
+      const yardData = data.additionalInfo[yardIndex - 1];
+      if (!yardData) {
+        console.error("Yard data not found.");
+        return;
+      }
+      yardData.trackingNo[0] = ""; 
+      yardData.status = "Yard PO Sent";
+      const updatedOrder = {
+        ...data,
+        additionalInfo: [...data.additionalInfo],
+        trackingNo: data.trackingNo,
+        firstName: firstName,
+        yardIndex: yardIndex
+      };
+      console.log("dataa",updatedOrder);
+      fetch(`https://www.spotops360.com/orders/${orderNo}/cancelShipment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedOrder), 
+      })
+        .then((response) => response.json())
+        .then((responseData) => {
+          console.log("Order updated successfully", responseData);
+        })
+        .catch((error) => {
+          console.error("Error updating order:", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Error fetching order data:", error);
+    });
+});
+
 });
 
 </script>

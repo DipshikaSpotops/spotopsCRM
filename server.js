@@ -1928,7 +1928,6 @@ res.status(500).json({ message: "Server error", error });
 // edit yard details
 app.put("/orders/:orderNo/editYardDetails/:yardIndex", async (req, res) => {
     console.log("Updating editAdditionalInfo");
-  
     const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
     const date = new Date(centralTime);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -2312,6 +2311,51 @@ console.error("Error updating order:", err);
 res.status(500).json({ message: "Error updating order", error: err.message });
 }
 });
+// cancel shipment
+app.put("/orders/:orderNo/cancelShipment", async (req, res) => {
+  console.log("Received request to cancel shipment:", req.params);
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+  console.log('US Central Time:', centralTime);
+  const date = new Date(centralTime);
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const formattedDate = `${day} ${month}, ${year}`;
+  const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+  const firstName = req.body.firstName;
+  const trNo = req.body.trackingNo;
+  const additionalInfo = req.body.additionalInfo;
+  const yardIndex = req.body.yardIndex;
+  console.log("body",firstName,trNo,additionalInfo,"yardIndex",yardIndex);
+  try {
+  const orderNo = req.params.orderNo;
+  console.log("Order No to cancel shipment:", orderNo);
+  const order = await Order.findOne({ orderNo });
+  console.log("Order found:", order);
+  if (!order) {
+  console.log("Order not found with orderNo:", orderNo);
+  return res.status(404).json({ message: "Order not found" });
+  }
+  order.orderStatus = "Yard Processing";
+  order.additionalInfo[yardIndex].trackingNo[0] =  " ";
+  order.orderHistory.push(
+  `Shipment cancelled: TR: ${trNo} by ${firstName} on ${formattedDateTime}`
+  );
+  
+  // Save the updated order
+  await order.save();
+  console.log("Order status updated");
+  
+  res.json({ message: "Order cancelled successfully" });
+  
+  } catch (err) {
+  console.error("Error updating order:", err);
+  res.status(500).json({ message: "Error updating order", error: err.message });
+  }
+  });
 
 // app.delete("/orders/:orderNo", async (req, res) => {
 // console.log("Received request to delete order:", req.params);
