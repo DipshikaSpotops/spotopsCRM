@@ -4360,7 +4360,7 @@ $("#saveEsc").on("click", async function () {
             updatedData.escRetTrackingDate = currentDateTime;
             console.log("Setting escRetTrackingDate for the first time:", currentDateTime);
         }
-        window.location.reload();
+        
     } else {
         console.log("escRetTrackingDate is already set, skipping update.");
     }
@@ -4425,7 +4425,7 @@ $("#saveEsc").on("click", async function () {
 
                 const reimbursementData = await reimbursementResponse.json();
                 console.log("Order and Yard status updated successfully:", reimbursementData);
-
+window.location.reload();
                 if (reimbursementData.orderHistory) {
                     updateOrderHistory(reimbursementData.orderHistory);
                 }
@@ -4456,6 +4456,7 @@ $("#saveEsc").on("click", async function () {
         console.error("Error saving Yard Index information", error);
         alert("Error saving Yard Index information.");
     }
+    window.location.reload();
 });
 
 
