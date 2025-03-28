@@ -88,7 +88,7 @@ margin-top: 30px;
 transition: margin-left 0.3s ease;
 }
 .submenu {
-display: block; /* Show all submenus by default */
+display: block;
 }
 .nav-item > .submenu {
 padding-left: 20px;
@@ -1185,13 +1185,9 @@ function initializeMonthlySalesProgressChart(labels, data) {
 // Call the main function to fetch and display data for the three months
 function updateMonthlyChart(index, monthName, orders) {
   const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
-
-  // Destroy the previous chart instance if it exists
   if (chartInstances[index]) {
     chartInstances[index].destroy();
   }
-
-  // Function to check dark mode and set colors accordingly
   const isDarkMode = document.body.classList.contains("dark-mode");
   const colors = {
     backgroundColors: isDarkMode
@@ -1201,7 +1197,6 @@ function updateMonthlyChart(index, monthName, orders) {
     legendColor: isDarkMode ? "#FFFFFF" : "#000000",
     titleColor: isDarkMode ? "#FFFFFF" : "#000000",
   };
-
   const statusLabels = [
     "Placed",
     "Customer Approved",

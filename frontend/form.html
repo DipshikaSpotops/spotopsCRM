@@ -4360,6 +4360,7 @@ $("#saveEsc").on("click", async function () {
             updatedData.escRetTrackingDate = currentDateTime;
             console.log("Setting escRetTrackingDate for the first time:", currentDateTime);
         }
+        window.location.reload();
     } else {
         console.log("escRetTrackingDate is already set, skipping update.");
     }
