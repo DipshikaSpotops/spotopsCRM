@@ -6503,6 +6503,9 @@ $("#cancelShipment").on("click", function () {
       })
         .then((response) => response.json())
         .then((responseData) => {
+          alert("Shipment Cancelled");
+          $("#editYardPopup").hide();
+          window.location.reload();
           console.log("Order updated successfully", responseData);
         })
         .catch((error) => {

@@ -2341,6 +2341,8 @@ app.put("/orders/:orderNo/cancelShipment", async (req, res) => {
   }
   order.orderStatus = "Yard Processing";
   order.additionalInfo[yardIndex - 1].trackingNo[0] =  " ";
+  order.additionalInfo[yardIndex - 1].status =  "Yard PO Sent";
+  order.additionalInfo[yardIndex - 1].poSentDate =  " ";
   order.orderHistory.push(
   `Shipment cancelled: TR: ${trNo} by ${firstName} on ${formattedDateTime}`
   );
