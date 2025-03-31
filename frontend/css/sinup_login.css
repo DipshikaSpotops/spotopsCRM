@@ -238,7 +238,7 @@ style.css:body {
     }
     .form.signup{
         width: 86%;
-        margin-top: 2%;
+        margin-top: -2%;
     }
     #wrapper.toggled #sidebar-wrapper {
         margin-left: 0;
