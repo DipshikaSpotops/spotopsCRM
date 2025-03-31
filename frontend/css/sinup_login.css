@@ -244,9 +244,9 @@ style.css:body {
         margin-left: 15rem;
     }
 }
-
+/* 
 /* Fixing mobile responsiveness */
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
     .container {
         flex-direction: column;
         padding: 20px;
@@ -299,7 +299,7 @@ style.css:body {
         height: 18px;
         width: 18px;
     }
-}
+} */
 
 /* Optional: even tighter for very small screens */
 /* @media (min-width: 576px) and (max-width: 767.98px) {
@@ -317,4 +317,4 @@ style.css:body {
     .form.login{
         width: 5%;
     }
-} */
+} */ 
