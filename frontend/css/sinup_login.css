@@ -254,7 +254,7 @@ style.css:body {
     .field input{
         padding: 10px;
     }
-    .form {
+    form {
         gap: 10px;
     }
 }
