@@ -794,22 +794,6 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 
-
-// Toggle sidebar visibility on smaller screens
-$(".toggle-sidebar").on("click", function () {
-  $("#offcanvasSidebar").toggleClass("show");
-
-  // Toggle the body's class to control the background shadow and scrolling behavior
-  if ($("#offcanvasSidebar").hasClass("show")) {
-    $("body").addClass("no-scroll");
-    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
-  } else {
-    $("body").removeClass("no-scroll");
-    $(".modal-overlay").remove(); // Remove the shadow overlay
-  }
-});
-
-
 $(".nav-link").on("click", function () {
 $(".nav-link").removeClass("active selected");
 $(this).addClass("selected");
