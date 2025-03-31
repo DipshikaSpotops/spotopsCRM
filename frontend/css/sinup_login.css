@@ -228,11 +228,13 @@ style.css:body {
     margin-left: 0;
 }
 
-@media (min-width: 768px) {
+@media only screen and(max-width: 768px) {
     #wrapper {
         margin-left: 15rem;
     }
-
+    .form login{
+        width:5%;
+    }
     #wrapper.toggled #sidebar-wrapper {
         margin-left: 0;
     }
