@@ -228,11 +228,11 @@ style.css:body {
     margin-left: 0;
 }
 
-@media only screen and(max-width: 768px) {
+@media only screen and (max-width: 768px) {
     #wrapper {
         margin-left: 15rem;
     }
-    .form login{
+    .form.login{
         width:5%;
     }
     #wrapper.toggled #sidebar-wrapper {
@@ -244,3 +244,70 @@ style.css:body {
     }
 }
 
+/* Fixing mobile responsiveness */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 20px;
+        row-gap: 20px;
+        height: auto;
+    }
+
+    .form {
+        width: 100%;
+        max-width: 90%;
+        position: static;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form .field {
+        height: auto;
+    }
+
+    .field input,
+    .field button {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .eye-icon {
+        font-size: 16px;
+        right: 8px;
+    }
+
+    header {
+        font-size: 24px;
+    }
+
+    .form-link span,
+    .form-link a {
+        font-size: 13px;
+    }
+
+    .line::before {
+        font-size: 12px;
+        padding: 0 10px;
+    }
+
+    .media-options a {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    img.google-img {
+        height: 18px;
+        width: 18px;
+    }
+}
+
+/* Optional: even tighter for very small screens */
+@media screen and (max-width: 400px) {
+    .form {
+        padding: 15px;
+    }
+
+    .field input,
+    .field button {
+        font-size: 13px;
+    }
+}
