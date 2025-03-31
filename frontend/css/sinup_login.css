@@ -301,13 +301,19 @@ style.css:body {
 }
 
 /* Optional: even tighter for very small screens */
-@media screen and (max-width: 400px) {
-    .form {
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .form.login {
         padding: 15px;
+        width: 10%;
     }
 
     .field input,
     .field button {
         font-size: 13px;
+    }
+}
+@media (max-width: 575.98px) { 
+    .form.login{
+        width: 5%;
     }
 }
