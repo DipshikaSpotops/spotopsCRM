@@ -250,6 +250,9 @@ style.css:body {
     #wrapper.toggled #page-content-wrapper {
         margin-left: 15rem;
     }
+    .field input{
+        padding: 10px;
+    }
 }
 /* 
 /* Fixing mobile responsiveness */
