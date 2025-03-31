@@ -232,7 +232,7 @@ style.css:body {
     #wrapper {
         margin-left: 15rem;
     }
-    .form.login{
+    .form.login .form.signup{
         width: 86%;
         margin-top: 0%;
     }
