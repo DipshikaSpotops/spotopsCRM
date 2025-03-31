@@ -239,6 +239,7 @@ style.css:body {
     .form.signup{
         width: 86%;
         margin-top: -18%;
+        height: 70%;
     }
     #wrapper.toggled #sidebar-wrapper {
         margin-left: 0;
@@ -252,6 +253,9 @@ style.css:body {
     }
     .field input{
         padding: 10px;
+    }
+    .form {
+        gap: 10px;
     }
 }
 /* 
