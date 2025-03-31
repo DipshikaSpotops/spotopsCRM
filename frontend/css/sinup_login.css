@@ -239,7 +239,9 @@ style.css:body {
     #wrapper.toggled #sidebar-wrapper {
         margin-left: 0;
     }
-
+    .container{
+        overflow: hidden;
+    }
     #wrapper.toggled #page-content-wrapper {
         margin-left: 15rem;
     }
