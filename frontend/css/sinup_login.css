@@ -234,7 +234,7 @@ style.css:body {
     }
     .form.login{
         width: 86%;
-        margin-top: 57%;
+        margin-top: 0%;
     }
     #wrapper.toggled #sidebar-wrapper {
         margin-left: 0;
