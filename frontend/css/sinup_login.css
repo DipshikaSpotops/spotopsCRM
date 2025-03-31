@@ -228,7 +228,7 @@ style.css:body {
     margin-left: 0;
 }
 
-@media only screen and(max-width: 768px) {
+@media(min-width: 768px) {
     #wrapper {
         margin-left: 15rem;
     }
