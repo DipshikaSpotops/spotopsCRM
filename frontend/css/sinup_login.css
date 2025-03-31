@@ -233,7 +233,8 @@ style.css:body {
         margin-left: 15rem;
     }
     .form.login{
-        width:5%;
+        width: 86%;
+        margin-top: 57%;
     }
     #wrapper.toggled #sidebar-wrapper {
         margin-left: 0;
@@ -301,7 +302,7 @@ style.css:body {
 }
 
 /* Optional: even tighter for very small screens */
-@media (min-width: 576px) and (max-width: 767.98px) {
+/* @media (min-width: 576px) and (max-width: 767.98px) {
     .form.login {
         padding: 15px;
         width: 10%;
@@ -316,4 +317,4 @@ style.css:body {
     .form.login{
         width: 5%;
     }
-}
+} */
