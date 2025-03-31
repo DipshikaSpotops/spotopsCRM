@@ -241,6 +241,7 @@ style.css:body {
     }
     .container{
         overflow: hidden;
+        position: fixed;
     }
     #wrapper.toggled #page-content-wrapper {
         margin-left: 15rem;
