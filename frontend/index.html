@@ -425,6 +425,9 @@ display: block;
 transform: translateX(-100%);
 width:38%;
 }
+.sidebar.show {
+transform: translateX(0);
+}
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -798,6 +801,16 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 
+$(".toggle-sidebar").on("click", function () {
+  $("#offcanvasSidebar").toggleClass("show");
+  if ($("#offcanvasSidebar").hasClass("show")) {
+    $("body").addClass("no-scroll");
+    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
+  } else {
+    $("body").removeClass("no-scroll");
+    $(".modal-overlay").remove(); // Remove the shadow overlay
+  }
+});
 $(".nav-link").on("click", function () {
 $(".nav-link").removeClass("active selected");
 $(this).addClass("selected");
@@ -1447,16 +1460,7 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
-$(".toggle-sidebar").on("click", function () {
-  $("#offcanvasSidebar").toggleClass("show");
-  if ($("#offcanvasSidebar").hasClass("show")) {
-    $("body").addClass("no-scroll");
-    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
-  } else {
-    $("body").removeClass("no-scroll");
-    $(".modal-overlay").remove(); // Remove the shadow overlay
-  }
-});
+
 fetchNotifications();
 });
 </script>
