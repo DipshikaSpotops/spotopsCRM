@@ -576,7 +576,11 @@ window.location.href = "login_signup.html";
 <div class="main-content">
 <div class="container-fluid mt-2">
   <div class="topHeads">
-<h1 class="fixed-header">Yard Located Orders </h1>
+    <div>
+<h1 id="mainHeading">
+Yard Located Orders
+</h1>
+</div>
 <div>
 <input
 type="text"
@@ -585,19 +589,10 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
+<button id="downloadCsv" class="btn">
+  <i class="fas fa-download"></i>  <!-- This is the download icon -->
+</button>
 </div>
- <!-- pagination controls -->
- <div id="pagination-controls" class="mt-3 mb-3"></div>
- <div id="filterAndTotal">
-<div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary">Filter</button>
-</div>
-<div style="display: flex;margin: 0% 1%;">
-<div id="showTotalOrders">Total Orders This Month-</div>
-</div>
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
-</div> 
 <div class="table-wrapper">
 <table class="table table-bordered mt-4">
 <thead>
