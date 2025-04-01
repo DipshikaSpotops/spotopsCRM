@@ -36,7 +36,7 @@ const upload = multer({
   storage: multer.memoryStorage(),
 });
 app.use(cors({
-origin: 'https://spotops360.com', // Replace with your frontend's domain
+origin: 'https://spotops360.com',
 methods: 'GET,POST,PUT,DELETE,OPTIONS',
 credentials: true
 }));
