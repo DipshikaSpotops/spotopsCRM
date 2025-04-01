@@ -256,6 +256,23 @@ padding: 5px;
   height: 3vh;
   margin-left: 1%;
 }
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #35554f; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+#mainHeading {
+  text-align: center; 
+  color: #023f42;
+  white-space: nowrap;
+  margin-left: 0%;
+}
 /* for dark mode */
 .dark-mode {
 background-color: #141b2d;
@@ -642,9 +659,6 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<button id="downloadCsv" class="btn">
-  <i class="fas fa-download"></i>  <!-- This is the download icon -->
-</button>
 </div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
