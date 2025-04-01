@@ -618,12 +618,8 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-  <div class="topHeads">
-    <div>
-<h1 id="mainHeading">
-View Orders
-</h1>
-</div>
+<div class="container-fluid mt-2">
+<h1 class="fixed-header" style="text-align: center; margin-right: 34%;">Tracking Report- Monthly</h1>
 <div>
 <input
 type="text"
@@ -632,22 +628,17 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<button id="downloadCsv" class="btn">
-  <i class="fas fa-download"></i>  <!-- This is the download icon -->
-</button>
+<!-- pagination controls -->
+<div id="pagination-controls" class="mt-3 mb-3"></div>
+<div id="filterAndTotal" style="display: flex;">
+<div class="filter-bar">
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
 </div>
-<div id="filterAndTotal">
-<!-- <div class="filter-bar"> -->
-<input id="monthYearPicker" type="month" class="form-control"  />
-<button id="filterButton" class="btn btn-primary" >Filter</button>
-<!-- </div> -->
-<div id="showTotalOrders">Total Orders This Month-</div>
-<div id="pagination-controls">
-  <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
-</div>
+<!-- <div id="showTotalOrders">Total Orders This Month-</div> -->
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
-<div class="table-wrapper">
+
 <table class="table table-bordered mt-4">
 <thead>
 <tr>
@@ -667,7 +658,7 @@ placeholder="Search..."
 </table>
 <!-- Pagination Controls (also at the bottom for convenience) -->
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
-</div>
+<!-- </div> -->
 
 </div>
 <script>
@@ -1512,54 +1503,6 @@ $(document).on("click", function (event) {
     notificationDropdown.hide();
     $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
-  }
-});
-// Toggle Dark Mode
-if (localStorage.getItem("darkMode") === "true") {
-    enableDarkMode();
-  }
- $("#darkModeIcon").on("click", function () {
-if ($("body").hasClass("dark-mode")) {
-disableDarkMode();
-} else {
-enableDarkMode();
-}
-});
-
-function enableDarkMode() {
-$("body").addClass("dark-mode");
-$(".navbar").addClass("dark-mode");
-$(".sidebar").addClass("dark-mode");
-$("table").addClass("table-dark");
-$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-localStorage.setItem("darkMode", "true");
-}
-
-function disableDarkMode() {
-$("body").removeClass("dark-mode");
-$(".navbar").removeClass("dark-mode");
-$(".sidebar").removeClass("dark-mode");
-$("table").removeClass("table-dark");
-$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-localStorage.setItem("darkMode", "false");
-}
-$(document).on("click", "#infoTable tr", function () {
-  console.log("Row clicked:", $(this).text()); // Debugging
-  $("#infoTable tr").removeClass("selected");
-  $(this).addClass("selected");
-});
-$("#infoTable tr").each(function () {
-  const row = $(this);
-  console.log(row.text()); // Debugging: print out the content of each row
-});
-$(".toggle-sidebar").on("click", function () {
-  $("#offcanvasSidebar").toggleClass("show");
-  if ($("#offcanvasSidebar").hasClass("show")) {
-    $("body").addClass("no-scroll");
-    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
-  } else {
-    $("body").removeClass("no-scroll");
-    $(".modal-overlay").remove(); // Remove the shadow overlay
   }
 });
 fetchNotifications();
