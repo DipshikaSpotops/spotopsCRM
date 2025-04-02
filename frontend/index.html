@@ -417,12 +417,23 @@ body.no-scroll {
 body.modal-active {
 overflow: hidden; /* Prevents background scrolling when modal is active */
 }
-
+h3 {
+text-align:center;
+}
 @media (max-width: 768px){
   .toggle-sidebar {
 display: block;
 margin-right: 1%;
 }
+.charts-container-monthly {
+    flex-direction: column;
+  }
+  h3 {
+    font-size: 12px;
+    margin-left: -30%;
+    text-decoration-line: underline;
+}
+  }
 .sidebar {
 transform: translateX(-100%);
 width:38%;
@@ -621,7 +632,7 @@ window.location.href = "login_signup.html";
 
 
 <div class="chart-container" style="margin: 0% 2%;">
-<h3 style="text-align:center;">Monthly Orders Overview (Last 3 Months)</h3>
+<h3>Monthly Orders Overview (Last 3 Months)</h3>
 <div class="charts-container-monthly">
 <div class="chart-item-monthly">
 <h4 id="month-name-1" style="text-align: center;"></h4>
