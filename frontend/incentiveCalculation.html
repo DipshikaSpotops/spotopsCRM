@@ -569,7 +569,7 @@ window.location.href = "login_signup.html";
         
         <!-- Second Table -->
         <div class="section">
-            <h2 class="section-title">Quarterly Incentive Calculations</h2>
+            <h2 class="section-title" id="prevMonth1"></h2>
             <table>
                 <thead>
                     <tr>
@@ -608,7 +608,7 @@ window.location.href = "login_signup.html";
         
         <!-- Third Table -->
         <div class="section">
-            <h2 class="section-title">Annual Performance Summary</h2>
+            <h2 class="section-title" id="prevMonth2"></h2>
             <table>
                 <thead>
                     <tr>
@@ -744,14 +744,21 @@ const currentMonthIndex = currentDallasDate.getMonth();
 const currentYear = currentDallasDate.getFullYear();
 const currentMonth = months[currentMonthIndex];
 const prevMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
-const prevYear = (currentMonthIndex === 0) ? currentYear - 1 : currentYear;
 const prevMonth = months[prevMonthIndex];
 const nextMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
 const nextYear = (currentMonthIndex === 11) ? currentYear + 1 : currentYear;
 const nextMonth = months[nextMonthIndex];
-console.log("Current Month:", currentMonth);
+// prev mon eg currently its apr, i want feb
+const prevMonthIndex1 = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 2;
+const prevMonth1 = months[prevMonthIndex];
+// prev mon eg currently its apr, i want jan
+const prevMonthIndex2 = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 3;
+const prevMonth2 = months[prevMonthIndex];
+console.log("Current Month:", currentMonth,"prevMonth1",prevMonth1,"prevMonth2",prevMonth2);
 // monthIncentive
 document.getElementById("monthIncentive").innerHTML = `Incentive for ${prevMonth} ${currentYear}`;
+document.getElementById("prevMonth1").innerHTML = `Incentive for ${currentMonth} ${currentYear}`;
+document.getElementById("prevMonth2").innerHTML = `Incentive for ${prevMonth} ${currentYear}`;
 console.log("Previous Month:", prevMonth);
 console.log("Next Month:", nextMonth);
 const currentTime = Date.now();
