@@ -22,17 +22,25 @@ text-align: center;
 }
 /* btn pagination */
 .pageNos{
-background-color: white;
-color: black;
-border: none;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 0 5px;
 }
 .previousNext{
-background-color: #35554f;
-color: white;
-border: none;
-padding: 10px;
-border-radius: 10px;
-text-align: center;
+  background-color: #35554f;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+}
+.previousNext:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 /* btn pagination till here */
 #logoImg {
@@ -1097,71 +1105,44 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-// Function to create pagination controls
-function createPaginationControls(totalPages, orders) {
-    const paginationControls = $("#pagination-controls");
-    paginationControls.empty(); // Clear pagination controls
+function createPaginationControls(totalPages) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty(); // Clear existing buttons
 
-    if (totalPages > 1) {
-        paginationControls.append(
-            `<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`
-        );
+  if (totalPages > 1) {
+    // Left arrow for "Previous" page
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
 
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(
-                `<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`
-            );
-        }
+    // Page number display: Page X of Y
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
 
-        paginationControls.append(
-            `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`
-        );
-    }
+    // Right arrow for "Next" page
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);
+  }
 }
 
-// Handle page number clicks
-$(document).on("click", ".page-btn", function () {
-    currentPage = parseInt($(this).data("page"));
-    const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
-    renderTableRows(currentPage, ordersToRender);
-    createPaginationControls(Math.ceil(ordersToRender.length / rowsPerPage), ordersToRender);
+$('#pagination-controls').on('click', '#prevPage', function () {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  }
 });
 
-// Handle Previous button click
-$(document).on("click", "#prevPage", function () {
-    if (currentPage > 1) {
-        currentPage--;
-        const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
-        renderTableRows(currentPage, ordersToRender);
-        createPaginationControls(Math.ceil(ordersToRender.length / rowsPerPage), ordersToRender);
-    }
+$('#pagination-controls').on('click', '#nextPage', function () {
+  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage);
+    createPaginationControls(totalPages);
+  }
 });
-
-// Handle Next button click
-$(document).on("click", "#nextPage", function () {
-    const totalPages = Math.ceil((filteredOrders.length > 0 ? filteredOrders.length : allOrders.length) / rowsPerPage);
-    if (currentPage < totalPages) {
-        currentPage++;
-        const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
-        renderTableRows(currentPage, ordersToRender);
-        createPaginationControls(totalPages, ordersToRender);
-    }
-});
-
-$(document).on("click", ".page-btn", function () {
-    currentPage = $(this).data("page");
-    const ordersToRender = filteredOrders.length > 0 ? filteredOrders : allOrders;
-    renderTableRows(currentPage, ordersToRender);
-    $(".page-btn").removeClass("active-page");
-    $(this).addClass("active-page");
-});
-// Handle page number clicks
-$(".page-btn").off("click").on("click", function () {
-const page = $(this).data("page");
-currentPage = page;
-renderTableRows(currentPage, allOrders.length > 0 ? allOrders : allOrders);
-});
-
 // Token fetching logic
 var token;
 async function fetchToken() {
