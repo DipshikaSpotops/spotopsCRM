@@ -166,55 +166,13 @@ margin: 0% 30%;
   overflow-x: auto;
 } */
 
-
-@media (max-width: 768px) {
-  #showTotalOrders{
-    margin: 0% 30%;
-  }
-.sidebar {
-transform: translateX(-100%);
-width: 70%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-padding: 10px;
-}
-.toggle-sidebar {
-display: block;
-}
-#filterAndTotal {
-  margin-top: 1%;
-  margin-left: 20%;
-    }
-    #searchInput {
-        width: 80%;
-        margin: 10px;
-    }
-    .filter-bar{
-      width: 23%;
-    }
-    #pagination-controls{
-    margin-top: 20%;
-    }
-    .table-wrapper {
-      overflow-x: auto; 
-    }
-
-    table {
-      min-width: 800px;
-    }
-}
-
 #filterAndTotal {
   display: flex;
     margin-left: 1%;
 }
 #pagination-controls {
-  margin-top: 3%;
-  margin-left: -72%;
+  margin-top: -0.6%;
+    margin-left: 17%;
 }
 #userDropdown {
   height: 4vh;
@@ -227,22 +185,6 @@ display: block;
     text-align: center;
     border-radius: 20px;
   }
-@media (max-width: 768px) {
-.sidebar {
-  width: 17%;
-  z-index: 2;}
-.main-content {
-margin-left: 0;
-}
-.fixed-header {
-margin: 0;
-padding: 10px;
-}
-
-/* .table-wrapper {
-overflow-x: auto;
-} */
-}
 
 table.table tbody tr:nth-child(odd) {
 background-color: #f9f9f9;
@@ -250,22 +192,6 @@ background-color: #f9f9f9;
 table.table tbody tr:hover {
 background-color: #f1f1f1;
 }
-
-/* @media (max-width: 768px) {
-.sidebar {
-transform: translateX(-100%);
-width: 70%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
-} */
 #searchInput {
   width: 110%;
     border-radius: 20px;
@@ -397,7 +323,7 @@ color: white;
   display: flex;
   gap: 32%;
   margin-left: 1%;
-  margin-top: -2%;
+  margin-top: 1%;
 }
 .table tbody tr:hover {
     background-color: #c0c0c0 !important;
@@ -560,11 +486,6 @@ scrollbar-color: #29638c #141b2d;
 #mainHeading {
   text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
 }
-@media (max-width: 320px) {
-#mainHeading {
-  font-size: 20px;
-}
-}
 
 table {
   width: 100%;
@@ -583,6 +504,61 @@ table thead th {
   white-space: nowrap;
 }
 
+@media (max-width: 768px) {
+  #showTotalOrders{
+    margin: 0% 30%;
+  }
+.sidebar {
+transform: translateX(-100%);
+width: 70%;
+}
+.sidebar.show {
+transform: translateX(0);
+}
+.main-content {
+margin-left: 0;
+padding: 10px;
+}
+.toggle-sidebar {
+display: block;
+}
+#filterAndTotal {
+  margin-top: 1%;
+  margin-left: 20%;
+    }
+    #searchInput {
+        width: 80%;
+        margin: 10px;
+    }
+    .filter-bar{
+      width: 23%;
+    }
+    #pagination-controls{
+    margin-top: 20%;
+    }
+    .table-wrapper {
+      overflow-x: auto; 
+    }
+
+    table {
+      min-width: 800px;
+    }
+    .sidebar {
+  width: 17%;
+  z-index: 2;}
+.main-content {
+margin-left: 0;
+}
+.fixed-header {
+margin: 0;
+padding: 10px;
+}
+}
+@media (max-width: 320px) {
+#mainHeading {
+  font-size: 20px;
+}
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
