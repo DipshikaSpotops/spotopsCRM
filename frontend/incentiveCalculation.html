@@ -757,8 +757,8 @@ const prevMonth2 = months[prevMonthIndex];
 console.log("Current Month:", currentMonth,"prevMonth1",prevMonth1,"prevMonth2",prevMonth2);
 // monthIncentive
 document.getElementById("monthIncentive").innerHTML = `Incentive for ${prevMonth} ${currentYear}`;
-document.getElementById("prevMonth1").innerHTML = `Incentive for ${currentMonth} ${currentYear}`;
-document.getElementById("prevMonth2").innerHTML = `Incentive for ${prevMonth} ${currentYear}`;
+document.getElementById("prevMonth1").innerHTML = `Incentive for ${prevMonth1} ${currentYear}`;
+document.getElementById("prevMonth2").innerHTML = `Incentive for ${prevMonth2} ${currentYear}`;
 console.log("Previous Month:", prevMonth);
 console.log("Next Month:", nextMonth);
 const currentTime = Date.now();
