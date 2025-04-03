@@ -155,6 +155,7 @@ h1 {
             max-width: 500px;
             position: relative;
             margin: 0 auto;
+            display: none;
         }
         #closeCardCharged {
             background: none;
@@ -3817,7 +3818,7 @@ $('#yardInfoContainer').on('click', '.cardcharged', function () {
 selectedYardIndex = $(this).data('yard-index');
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");
-$("#cardCharged").modal("show"); // Show the #cardCharged div with a fade-in effect
+$("#cardCharged").show()
 // $(".mainDiv").addClass("blur");
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
