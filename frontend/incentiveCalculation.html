@@ -531,7 +531,7 @@ window.location.href = "login_signup.html";
         <!-- First Table -->
         <div class="section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2 class="section-title" style="margin-bottom: 0; border-bottom: none;">Curre</h2>
+                <h2 class="section-title" style="margin-bottom: 0; border-bottom: none;">Current</h2>
                 <button onclick="addNewAgent()" style="background-color: #4CAF50; margin-bottom: 15px;">New Sales Agent</button>
             </div>
             <div style="border-bottom: 2px solid #3498db; margin-bottom: 15px;"></div>
@@ -734,6 +734,14 @@ console.log("ready function");
 $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+  const currentDallasDate = new Date(now);
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[currentDallasDate.getMonth()];
+  const year = currentDallasDate.getFullYear();
+ console.log("month",month);
+
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -797,13 +805,6 @@ $(
 ).hide();
 
 } 
-// else if (role === "Admin" && firstName === "John") {
-//   console.log("===");
-// // Hide specific reports links for Admin
-// $('#submenu-reports .nav-link:contains("My Sales Report")').show();
-// $("#submenu-dashboards .view-individualOrders-link").show();
-// // Hide specific dashboards links for Admin
-// }
 else if (role === "Admin") {
   console.log("=D==");
 // Hide specific reports links for Admin
@@ -818,10 +819,10 @@ $(".toggle-sidebar").on("click", function () {
   $("#offcanvasSidebar").toggleClass("show");
   if ($("#offcanvasSidebar").hasClass("show")) {
     $("body").addClass("no-scroll");
-    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
+    $("body").append('<div class="modal-overlay"></div>'); 
   } else {
     $("body").removeClass("no-scroll");
-    $(".modal-overlay").remove(); // Remove the shadow overlay
+    $(".modal-overlay").remove(); 
   }
 });
 $(".nav-link").on("click", function () {
@@ -1053,10 +1054,6 @@ $("body").removeClass("modal-active");
 });
 
 fetchNotifications();
-// ====
-const curdate = new Date();
-const curmonth = curdate.getMonth() + 1;
-console.log(curmonth)
 
 });
 </script>
