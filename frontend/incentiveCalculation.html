@@ -531,7 +531,7 @@ window.location.href = "login_signup.html";
         <!-- First Table -->
         <div class="section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2 class="section-title" style="margin-bottom: 0; border-bottom: none;">Current</h2>
+                <h2 class="section-title" id="monthIncentive" style="margin-bottom: 0; border-bottom: none;">Incentive for- </h2>
                 <button onclick="addNewAgent()" style="background-color: #4CAF50; margin-bottom: 15px;">New Sales Agent</button>
             </div>
             <div style="border-bottom: 2px solid #3498db; margin-bottom: 15px;"></div>
@@ -742,10 +742,7 @@ const months = ["January", "February", "March", "April", "May", "June",
 
 const currentMonthIndex = currentDallasDate.getMonth();
 const currentYear = currentDallasDate.getFullYear();
-
 const currentMonth = months[currentMonthIndex];
-
-// Get previous month and adjust year if needed
 const prevMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
 const prevYear = (currentMonthIndex === 0) ? currentYear - 1 : currentYear;
 const prevMonth = months[prevMonthIndex];
@@ -753,6 +750,8 @@ const nextMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
 const nextYear = (currentMonthIndex === 11) ? currentYear + 1 : currentYear;
 const nextMonth = months[nextMonthIndex];
 console.log("Current Month:", currentMonth);
+// monthIncentive
+
 console.log("Previous Month:", prevMonth);
 console.log("Next Month:", nextMonth);
 const currentTime = Date.now();
