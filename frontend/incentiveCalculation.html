@@ -751,7 +751,7 @@ const nextYear = (currentMonthIndex === 11) ? currentYear + 1 : currentYear;
 const nextMonth = months[nextMonthIndex];
 console.log("Current Month:", currentMonth);
 // monthIncentive
-
+document.getElementById("monthIncentive").innerHTML = `Incentive for ${prevMonth} ${currentYear}`;
 console.log("Previous Month:", prevMonth);
 console.log("Next Month:", nextMonth);
 const currentTime = Date.now();
