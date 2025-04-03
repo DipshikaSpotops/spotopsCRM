@@ -127,7 +127,7 @@ background-color: #c0c0c0;
 text-align: center;
 padding: 10px;
 }
-#cardCharged, #refundCollect {
+#refundCollect {
 display: none; /* Initially hidden */
 position: fixed; /* Fixed position relative to the viewport */
 top: 50%; /* Center vertically */
@@ -140,15 +140,82 @@ box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 z-index: 1050; 
 width: 40%;
 }
+h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #333;
+        }
+#cardCharged {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            margin: 0 auto;
+        }
+        #closeCardCharged {
+            background: none;
+            border: none;
+            font-size: 24px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.3s;
+        }
+        #closeCardCharged:hover {
+            color: #333;
+        }
 
 #cardCharged label, 
 #cardCharged select {
-display: block;
-width: 71%;
-margin-bottom: 16px;
-border-radius: 18px;
+  display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
 }
-
+.paymentStatus {
+            text-align: center;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #c0c0c0;
+            border-radius: 18px;
+            font-size: 16px;
+            color: #333;
+            background-color: white;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        #cardChargedDate {
+            border: 1px solid #c0c0c0;
+            color: #333;
+            height: 45px;
+            border-radius: 18px;
+            text-align: center;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #cardChargedSbmit {
+            background-color: #ff914d;
+            border-radius: 20px;
+            border: 1px solid black;
+            color: black;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 25px auto 0;
+            transition: background-color 0.3s;
+        }
+        #cardChargedSbmit:hover {
+            background-color: #ff7d2e;
+        }
 
 #closeRefundCollected {
 float: right;
@@ -208,25 +275,6 @@ margin-top: 15px;
 background-color: #0056b3;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-#refundCollect {
-width: 95%;
-}
-
-#paymentStatusRefund,
-#paymentStatusSelect {
-width: 100%;
-display: block;
-margin-bottom: 10px;
-}
-
-#refundedAmountContainer,
-#storeCreditContainer,
-#collectRefundContainer {
-margin-top: 10px;
-}
-}
 
 #editYardPopup {
 display: block;
@@ -290,18 +338,7 @@ width: 40%;
 }
 }
 
-@media screen and (max-width: 768px) {
-#submitComments {
-width: 50%; 
-}
-}
 
-@media screen and (max-width: 480px) {
-#submitComments {
-width: 60%; 
-height: 5vh;
-}
-}
 
 
 .btn {
@@ -805,37 +842,6 @@ font-size: 1.5rem;
 font-weight: bold;
 }
 
-@media (max-width: 768px) {
-.sidebar {
-width: 100%;
-height: auto;
-position: relative;
-}
-
-.navbar {
-flex-direction: column;
-align-items: flex-start;
-}
-
-.toggle-btn,
-.close-btn {
-left: 10px;
-}
-select.form-control,
-input.form-control {
-width: 90%;
-margin: auto;
-}
-
-.sidebar.hide {
-transform: translateX(-100%);
-}
-
-.sidebar.show {
-transform: translateX(0);
-}
-}
-
 .horizontal-sidebar {
 display: flex;
 flex-direction: row;
@@ -1279,10 +1285,21 @@ scrollbar-color: #29638c #141b2d;
     padding: 10px;
     border-radius: 10px;
   }
-
-  /* Responsive Design */
-  @media screen and (max-width: 768px) {
-    .floating-icon {
+  #sendEmailButton {
+    background-color: #172422
+  }
+  #cancelShipment {
+    background-color: #ff914d;
+    border: 1px solid black;
+    color: black;
+  }
+  @media (max-width: 768px) {
+.sidebar {
+width: 100%;
+height: auto;
+position: relative;
+}
+.floating-icon {
       width: 50px;
       height: 50px;
       font-size: 20px;
@@ -1293,9 +1310,56 @@ scrollbar-color: #29638c #141b2d;
       font-size: 12px;
       bottom: 70px;
     }
-  }
+h1 {
+                font-size: 1.5rem;
+            }
+#submitComments {
+width: 50%; 
+}
+#refundCollect {
+width: 95%;
+}
 
-  @media screen and (max-width: 480px) {
+#paymentStatusRefund,
+#paymentStatusSelect {
+width: 100%;
+display: block;
+margin-bottom: 10px;
+}
+
+#refundedAmountContainer,
+#storeCreditContainer,
+#collectRefundContainer {
+margin-top: 10px;
+}
+.navbar {
+flex-direction: column;
+align-items: flex-start;
+}
+
+.toggle-btn,
+.close-btn {
+left: 10px;
+}
+select.form-control,
+input.form-control {
+width: 90%;
+margin: auto;
+}
+
+.sidebar.hide {
+transform: translateX(-100%);
+}
+
+.sidebar.show {
+transform: translateX(0);
+}
+}
+@media screen and (max-width: 480px) {
+    #submitComments {
+width: 60%; 
+height: 5vh;
+}
     .floating-icon {
       width: 40px;
       height: 40px;
@@ -1307,14 +1371,23 @@ scrollbar-color: #29638c #141b2d;
       font-size: 10px;
       bottom: 60px;
     }
-  }
-  #sendEmailButton {
-    background-color: #172422
-  }
-  #cancelShipment {
-    background-color: #ff914d;
-    border: 1px solid black;
-    color: black;
+    #cardCharged {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            #cardChargedSbmit {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
   }
 </style>
 
@@ -2221,20 +2294,25 @@ Save
 </div>
 <!-- edit yard details ends here -->
 <!-- card charged div starts here -->
-<div id="cardCharged" style="height: 30vh;">
-<button id="closeCardCharged" style="float: right; background: none; border: none; font-size: 20px;">&times;</button>
-<h1 style="text-align: center;">Card charged details</h1>
-<label for="paymentStatusCard">Card Charged:</label>
-<select class="form-control paymentStatus" style="text-align: center;width: 100%;">
-<option value="">Choose</option>
-<option value="Card charged">Charged</option>
-<option value="Card not charged">Not charged</option>
-</select>
-<div>
-<label>Card charged date:</label>
-<input type="date" id="cardChargedDate" placeholder="Card charged date" style="border: 1px solid #c0c0c0;color: grey;height: 3vh;border-radius: 18px;text-align: center;width: 100%;text-align: center;">
-</div>
-<button id="cardChargedSbmit" style="background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;margin-left: 42%;margin-top: 6%;">Submit</button>
+<div id="cardCharged">
+  <button id="closeCardCharged">&times;</button>
+  <h1>Card charged details</h1>
+  
+  <div class="form-group">
+      <label for="paymentStatusCard">Card Charged:</label>
+      <select class="form-control paymentStatus" id="paymentStatusCard">
+          <option value="">Choose</option>
+          <option value="Card charged">Charged</option>
+          <option value="Card not charged">Not charged</option>
+      </select>
+  </div>
+  
+  <div class="form-group">
+      <label for="cardChargedDate">Card charged date:</label>
+      <input type="date" id="cardChargedDate" placeholder="Card charged date">
+  </div>
+  
+  <button id="cardChargedSbmit">Submit</button>
 </div>
 <!-- card charged div ends here -->
 <!-- refund  div starts here -->
