@@ -736,25 +736,25 @@ $("#viewAlltasks").on("click", function () {
 });
 const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
 const currentDallasDate = new Date(now);
-
 const months = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
-
 const currentMonthIndex = currentDallasDate.getMonth();
 const currentYear = currentDallasDate.getFullYear();
 const currentMonth = months[currentMonthIndex];
-const prevMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
+// One month ago
+const prevMonthIndex = (currentMonthIndex - 1 + 12) % 12;
 const prevMonth = months[prevMonthIndex];
-const nextMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
+// Two months ago
+const prevMonthIndex1 = (currentMonthIndex - 2 + 12) % 12;
+const prevMonth1 = months[prevMonthIndex1];
+// Three months ago
+const prevMonthIndex2 = (currentMonthIndex - 3 + 12) % 12;
+const prevMonth2 = months[prevMonthIndex2];
+// One month ahead
+const nextMonthIndex = (currentMonthIndex + 1) % 12;
 const nextYear = (currentMonthIndex === 11) ? currentYear + 1 : currentYear;
 const nextMonth = months[nextMonthIndex];
-// prev mon eg currently its apr, i want feb
-const prevMonthIndex1 = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 2;
-const prevMonth1 = months[prevMonthIndex];
-// prev mon eg currently its apr, i want jan
-const prevMonthIndex2 = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 3;
-const prevMonth2 = months[prevMonthIndex];
-console.log("Current Month:", currentMonth,"prevMonth1",prevMonth1,"prevMonth2",prevMonth2);
+
 // monthIncentive
 document.getElementById("monthIncentive").innerHTML = `Incentive for ${prevMonth} ${currentYear}`;
 document.getElementById("prevMonth1").innerHTML = `Incentive for ${prevMonth1} ${currentYear}`;
