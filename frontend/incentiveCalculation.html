@@ -734,15 +734,27 @@ console.log("ready function");
 $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
-const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-  const currentDallasDate = new Date(now);
+cconst now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+const currentDallasDate = new Date(now);
 
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const month = months[currentDallasDate.getMonth()];
-  const year = currentDallasDate.getFullYear();
- console.log("month",month);
+const months = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
 
-// Get the current time and the login timestamp
+const currentMonthIndex = currentDallasDate.getMonth();
+const currentYear = currentDallasDate.getFullYear();
+
+const currentMonth = months[currentMonthIndex];
+
+// Get previous month and adjust year if needed
+const prevMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
+const prevYear = (currentMonthIndex === 0) ? currentYear - 1 : currentYear;
+const prevMonth = months[prevMonthIndex];
+const nextMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
+const nextYear = (currentMonthIndex === 11) ? currentYear + 1 : currentYear;
+const nextMonth = months[nextMonthIndex];
+console.log("Current Month:", currentMonth);
+console.log("Previous Month:", prevMonth);
+console.log("Next Month:", nextMonth);
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
 if (loginTimestamp) {
