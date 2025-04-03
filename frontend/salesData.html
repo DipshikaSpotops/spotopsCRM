@@ -735,16 +735,18 @@ placeholder="Search..."
 />
 </div>
 </div>
+<div id="filterAndTotal">
+  <!-- <div class="filter-bar"> -->
+  <input id="monthYearPicker" type="month" class="form-control"  />
+  <button id="filterButton" class="btn btn-primary" >Filter</button>
+  <!-- </div> -->
+  <div id="showTotalOrders">Total Orders This Month-</div>
+  <div id="pagination-controls">
+    <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
+  </div>
+  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+  </div>
 <div class="gpAndFilterDIv">
-  <div id="filterAndTotal">
-    <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
-    <div class="filter-bar">
-    <input id="monthYearPicker" type="month" class="form-control" />
-    <button id="filterButton" class="btn btn-primary">Filter</button>
-    </div>
-    <div id="showTotalOrders">Total Orders This Month-</div>
-    <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
-    </div> 
 <div id="gpTotals">
   <div id="totalEstGP">
     <i class="fas fa-chart-line"></i> Total Est GP: <strong>$0</strong>
