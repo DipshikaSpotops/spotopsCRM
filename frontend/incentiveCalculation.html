@@ -826,7 +826,7 @@ try {
       };
     }
 
-    agentTotals[agent].salePrice += parseFloat(order.salePrice || 0);
+    agentTotals[agent].salePrice += parseFloat(order.soldP || 0);
     agentTotals[agent].salestax += parseFloat(order.salestax || 0);
     agentTotals[agent].costP += parseFloat(order.costP || 0);
     agentTotals[agent].shippingFee += parseFloat(order.shippingFee || 0);
