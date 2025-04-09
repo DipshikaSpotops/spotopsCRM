@@ -779,45 +779,64 @@ console.log("Next Month:", nextMonth);
 
 
 // data for the last month(incentive to be processed this month)
+// === Updated Incentive Table Calculation ===
 try {
-  const orderRes = await axios.get("https://www.spotops360.com/orders");
-  const orders = orderRes.data;
-
   const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-  const prevMonth = (currentMonth - 1 + 12) % 12;
-  const prevMonthYear = prevMonth === 11 ? currentYear - 1 : currentYear;
+  const options = {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  };
+  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const parts = formatter.formatToParts(now);
+  const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+  const date = new Date(formattedDate);
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const currentMonthIndex = date.getMonth(); // 0-based
+  const currentYear = date.getFullYear();
+  const prevMonthIndex = (currentMonthIndex - 1 + 12) % 12;
+  const prevMonth = months[prevMonthIndex];
+  const prevMonthYear = prevMonthIndex === 11 ? currentYear - 1 : currentYear;
+
+  // Fetch orders for the previous month
+  const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${prevMonth}&year=${prevMonthYear}`);
+  const orders = response.data;
 
   const agentTotals = {};
 
-  // Filter orders for previous month
-  orders.forEach((order) => {
-    const orderDate = new Date(order.date);
-    const month = orderDate.getMonth();
-    const year = orderDate.getFullYear();
-
-    if (month === prevMonth && year === prevMonthYear) {
-      const agent = order.salesAgent;
-      if (!agentTotals[agent]) {
-        agentTotals[agent] = { totalGp: 0, actualGp: 0 };
-      }
-      agentTotals[agent].totalGp += parseFloat(order.estimatedGp || 0);
-      agentTotals[agent].actualGp += parseFloat(order.actualGp || 0);
+  orders.forEach(order => {
+    const agent = order.salesAgent;
+    if (!agentTotals[agent]) {
+      agentTotals[agent] = { totalGp: 0, actualGp: 0 };
     }
+    agentTotals[agent].totalGp += parseFloat(order.estimatedGp || 0);
+    agentTotals[agent].actualGp += parseFloat(order.actualGp || 0);
   });
 
-  // Update the table
+  // Get current date for lock check
   const today = new Date();
-  const nextMonth15 = new Date(currentYear, currentMonth + 1, 15); // 15th of next month
+  const nextMonth15 = new Date(currentYear, currentMonthIndex + 1, 15);
 
-  document.querySelectorAll(".salesAgent").forEach((td) => {
+  // Update the table
+  document.querySelectorAll(".salesAgent").forEach(td => {
     const agent = td.textContent.trim();
-    const row = td.parentElement;
+const row = td.parentElement;
 
-    const totalGP = agentTotals[agent]?.totalGp || 0;
-    const actualGP = agentTotals[agent]?.actualGp || 0;
+const salePrice = agentTotals[agent]?.salePrice || 0;
+const salestax = agentTotals[agent]?.salestax || 0;
+const costP = agentTotals[agent]?.costP || 0;
+const shippingFee = agentTotals[agent]?.shippingFee || 0;
 
+const totalGP = salePrice - salestax - costP - shippingFee;
+const actualGP = agentTotals[agent]?.actualGp || 0;
     row.querySelector(".totalGP").textContent = totalGP.toFixed(2);
     row.querySelector(".actualGP").textContent = actualGP.toFixed(2);
 
@@ -825,9 +844,11 @@ try {
       row.querySelector(".locked").textContent = actualGP.toFixed(2);
     }
   });
+
 } catch (err) {
-  console.error("Failed to fetch or calculate incentive data:", err);
+  console.error("Error calculating incentive table:", err);
 }
+
 
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
