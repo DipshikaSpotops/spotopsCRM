@@ -838,7 +838,6 @@ try {
   const today = new Date();
   const nextMonth15 = new Date(currentYear, currentMonthIndex , 9);
   console.log("nextMonth15",nextMonth15);
-  // Fill table
   document.querySelectorAll(".salesAgent").forEach(td => {
     const agent = td.textContent.trim();
     const row = td.parentElement;
@@ -853,8 +852,8 @@ try {
 
     row.querySelector(".totalGP").textContent = totalGP.toFixed(2);
     row.querySelector(".actualGP").textContent = actualGP.toFixed(2);
-
-    if (today == nextMonth15) {
+console.log("today",today,"nextMonth15",nextMonth15);
+    if (today === nextMonth15) {
   row.querySelector(".locked").textContent = actualGP.toFixed(2);
 
   // Send to backend for storage in monthlyLockedGP collection
