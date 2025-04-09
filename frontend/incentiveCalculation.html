@@ -840,7 +840,7 @@ try {
   console.log("Agent Totals:", agentTotals);
 
   const today = new Date();
-  const nextMonth15 = new Date(currentYear, currentMonthIndex , 9);
+  const nextMonth15 = new Date(currentYear, currentMonthIndex ,10);
   console.log("nextMonth15",nextMonth15);
   document.querySelectorAll(".salesAgent").forEach(td => {
     const agent = td.textContent.trim();
@@ -862,7 +862,7 @@ const isTodayLockDay =
   today.getMonth() === nextMonth15.getMonth() &&
   today.getFullYear() === nextMonth15.getFullYear();
   console.log("today",today,"nextMonth15",isTodayLockDay);
-    if (isTodayLockDay) {
+  if (isTodayLockDay) {
   row.querySelector(".locked").textContent = actualGP.toFixed(2);
 
   // Send to backend for storage in monthlyLockedGP collection

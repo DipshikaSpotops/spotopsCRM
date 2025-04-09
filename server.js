@@ -691,27 +691,10 @@ images: [imageSchema],
 });
 
 const Order = mongoose.model("Order", OrderSchema);
-const monthlyLockedGPSchema = new mongoose.Schema({
-  salesAgent: {
-    type: String,
-    required: true,
-  },
-  month: {
-    type: String, 
-    required: true,
-  },
-  year: {
-    type: Number,
-    required: true,
-  },
-  lockedActualGp: {
-    type: Number,
-    required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  }
+const MonthlyLockedGPSchema = new mongoose.Schema({
+  salesAgent: { type: String, required: true, unique: true },
+  lockedMonths: [LockedMonthSchema],
+  updatedAt: { type: Date, default: Date.now }
 });
 const MonthlyLockedGP = mongoose.model("lockedActualGp", monthlyLockedGPSchema);
 app.get("/orders", async (req, res) => {
@@ -726,12 +709,32 @@ app.post('/lockedGP', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const filter = { salesAgent, month, year };
-    const update = { lockedActualGp, timestamp: new Date() };
-    const options = { upsert: true, new: true };
+    const existing = await MonthlyLockedGP.findOne({ salesAgent });
 
-    const saved = await MonthlyLockedGP.findOneAndUpdate(filter, update, options);
-    res.json({ message: 'Locked GP saved/updated', data: saved });
+    if (existing) {
+      // Check if month already exists in array
+      const alreadyExists = existing.lockedMonths.find(
+        entry => entry.month === month && entry.year === year
+      );
+
+      if (alreadyExists) {
+        return res.status(200).json({ message: 'Month already locked' });
+      }
+
+      // Push new month entry
+      existing.lockedMonths.push({ month, year, lockedActualGp });
+      existing.updatedAt = new Date();
+      await existing.save();
+      return res.status(200).json({ message: 'Month added', data: existing });
+    } else {
+      // Create new document
+      const newEntry = new MonthlyLockedGP({
+        salesAgent,
+        lockedMonths: [{ month, year, lockedActualGp }]
+      });
+      await newEntry.save();
+      return res.status(201).json({ message: 'New agent created', data: newEntry });
+    }
   } catch (err) {
     console.error('Error saving locked GP:', err);
     res.status(500).json({ error: 'Internal Server Error' });
