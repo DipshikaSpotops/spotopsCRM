@@ -830,7 +830,7 @@ try {
     agentTotals[agent].salestax += parseFloat(order.salestax || 0);
     agentTotals[agent].costP += parseFloat(order.costP || 0);
     agentTotals[agent].shippingFee += parseFloat(order.shippingFee || 0);
-    agentTotals[agent].actualGp += parseFloat(order.actualGp || 0);
+    agentTotals[agent].actualGp += parseFloat(order.actualGP || 0);
   });
 
   console.log("Agent Totals:", agentTotals);
