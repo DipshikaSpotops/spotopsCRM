@@ -832,13 +832,13 @@ try {
     console.log("agentTable",agentTable);
 const row = td.parentElement;
 
-const salePrice = agentTotals[agent]?.salePrice || 0;
-const salestax = agentTotals[agent]?.salestax || 0;
-const costP = agentTotals[agent]?.costP || 0;
-const shippingFee = agentTotals[agent]?.shippingFee || 0;
+const salePrice = agentTotals[agentTable]?.salePrice || 0;
+const salestax = agentTotals[agentTable]?.salestax || 0;
+const costP = agentTotals[agentTable]?.costP || 0;
+const shippingFee = agentTotals[agentTable]?.shippingFee || 0;
 
 const totalGP = salePrice - salestax - costP - shippingFee;
-const actualGP = agentTotals[agent]?.actualGp || 0;
+const actualGP = agentTotals[agentTable]?.actualGp || 0;
     row.querySelector(".totalGP").textContent = totalGP.toFixed(2);
     row.querySelector(".actualGP").textContent = actualGP.toFixed(2);
 
