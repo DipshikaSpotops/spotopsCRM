@@ -852,8 +852,13 @@ try {
 
     row.querySelector(".totalGP").textContent = totalGP.toFixed(2);
     row.querySelector(".actualGP").textContent = actualGP.toFixed(2);
-console.log("today",today,"nextMonth15",nextMonth15);
-    if (today === nextMonth15) {
+
+const isTodayLockDay =
+  today.getDate() === nextMonth15.getDate() &&
+  today.getMonth() === nextMonth15.getMonth() &&
+  today.getFullYear() === nextMonth15.getFullYear();
+  console.log("today",today,"nextMonth15",isTodayLockDay);
+    if (isTodayLockDay) {
   row.querySelector(".locked").textContent = actualGP.toFixed(2);
 
   // Send to backend for storage in monthlyLockedGP collection
