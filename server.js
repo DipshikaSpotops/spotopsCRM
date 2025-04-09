@@ -691,10 +691,51 @@ images: [imageSchema],
 });
 
 const Order = mongoose.model("Order", OrderSchema);
-
+const monthlyLockedGPSchema = new mongoose.Schema({
+  salesAgent: {
+    type: String,
+    required: true,
+  },
+  month: {
+    type: String, 
+    required: true,
+  },
+  year: {
+    type: Number,
+    required: true,
+  },
+  lockedActualGp: {
+    type: Number,
+    required: true,
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  }
+});
+const MonthlyLockedGP = mongoose.model("lockedActualGp", monthlyLockedGPSchema);
 app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
 res.json(orders);
+});
+app.post('/lockedGP', async (req, res) => {
+  try {
+    const { salesAgent, month, year, lockedActualGp } = req.body;
+
+    if (!salesAgent || !month || !year || lockedActualGp == null) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const filter = { salesAgent, month, year };
+    const update = { lockedActualGp, timestamp: new Date() };
+    const options = { upsert: true, new: true };
+
+    const saved = await MonthlyLockedGP.findOneAndUpdate(filter, update, options);
+    res.json({ message: 'Locked GP saved/updated', data: saved });
+  } catch (err) {
+    console.error('Error saving locked GP:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 // Search Orders API
 app.get("/searchOrders", async (req, res) => {
