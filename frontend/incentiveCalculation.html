@@ -776,6 +776,59 @@ document.getElementById("prevMonth1").innerHTML = `Incentive for ${prevMonth1} $
 document.getElementById("prevMonth2").innerHTML = `Incentive for ${prevMonth2} ${currentYear}`;
 console.log("Previous Month:", prevMonth);
 console.log("Next Month:", nextMonth);
+
+
+// data for the last month(incentive to be processed this month)
+try {
+  const orderRes = await axios.get("https://www.spotops360.com/orders");
+  const orders = orderRes.data;
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  const prevMonth = (currentMonth - 1 + 12) % 12;
+  const prevMonthYear = prevMonth === 11 ? currentYear - 1 : currentYear;
+
+  const agentTotals = {};
+
+  // Filter orders for previous month
+  orders.forEach((order) => {
+    const orderDate = new Date(order.date);
+    const month = orderDate.getMonth();
+    const year = orderDate.getFullYear();
+
+    if (month === prevMonth && year === prevMonthYear) {
+      const agent = order.salesAgent;
+      if (!agentTotals[agent]) {
+        agentTotals[agent] = { totalGp: 0, actualGp: 0 };
+      }
+      agentTotals[agent].totalGp += parseFloat(order.estimatedGp || 0);
+      agentTotals[agent].actualGp += parseFloat(order.actualGp || 0);
+    }
+  });
+
+  // Update the table
+  const today = new Date();
+  const nextMonth15 = new Date(currentYear, currentMonth + 1, 15); // 15th of next month
+
+  document.querySelectorAll(".salesAgent").forEach((td) => {
+    const agent = td.textContent.trim();
+    const row = td.parentElement;
+
+    const totalGP = agentTotals[agent]?.totalGp || 0;
+    const actualGP = agentTotals[agent]?.actualGp || 0;
+
+    row.querySelector(".totalGP").textContent = totalGP.toFixed(2);
+    row.querySelector(".actualGP").textContent = actualGP.toFixed(2);
+
+    if (today >= nextMonth15) {
+      row.querySelector(".locked").textContent = actualGP.toFixed(2);
+    }
+  });
+} catch (err) {
+  console.error("Failed to fetch or calculate incentive data:", err);
+}
+
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
 if (loginTimestamp) {
