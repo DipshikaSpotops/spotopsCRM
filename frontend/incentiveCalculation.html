@@ -814,6 +814,7 @@ try {
 
   orders.forEach(order => {
     const agent = order.salesAgent;
+    console.log("salesAgent",agent);
     if (!agentTotals[agent]) {
       agentTotals[agent] = { totalGp: 0, actualGp: 0 };
     }
