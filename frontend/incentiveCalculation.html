@@ -828,7 +828,8 @@ try {
 
   // Update the table
   document.querySelectorAll(".salesAgent").forEach(td => {
-    const agent = td.textContent.trim();
+    const agentTable = td.textContent.trim();
+    console.log("agentTable",agentTable);
 const row = td.parentElement;
 
 const salePrice = agentTotals[agent]?.salePrice || 0;
