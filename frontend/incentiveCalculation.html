@@ -803,13 +803,13 @@ try {
   const currentMonthIndex = date.getMonth(); // 0-based
   const currentYear = date.getFullYear();
   const prevMonthIndex = (currentMonthIndex - 1 + 12) % 12;
-  const prevMonth = months[prevMonthIndex];
+  const prevMonth1 = months[prevMonthIndex];
   const prevMonthYear = prevMonthIndex === 11 ? currentYear - 1 : currentYear;
-
+  console.log("Prev Month:", prevMonth1, prevMonthYear);
   // Fetch orders for the previous month
-  const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${prevMonth}&year=${prevMonthYear}`);
+  const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${prevMonth1}&year=${prevMonthYear}`);
   const orders = response.data;
-
+  console.log("Fetched Orders:", response.data);
   const agentTotals = {};
 
   orders.forEach(order => {
