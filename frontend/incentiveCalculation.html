@@ -779,7 +779,6 @@ console.log("Next Month:", nextMonth);
 
 
 // data for the last month(incentive to be processed this month)
-// === Updated Incentive Table Calculation ===
 try {
   const now = new Date();
   const options = {
@@ -800,45 +799,58 @@ try {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  const currentMonthIndex = date.getMonth(); // 0-based
+  const currentMonthIndex = date.getMonth();
   const currentYear = date.getFullYear();
   const prevMonthIndex = (currentMonthIndex - 1 + 12) % 12;
   const prevMonth1 = months[prevMonthIndex];
   const prevMonthYear = prevMonthIndex === 11 ? currentYear - 1 : currentYear;
   console.log("Prev Month:", prevMonth1, prevMonthYear);
-  // Fetch orders for the previous month
+
+  // Fetch orders for previous month
   const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${prevMonth1}&year=${prevMonthYear}`);
   const orders = response.data;
-  console.log("Fetched Orders:", response.data);
+  console.log("Fetched Orders:", orders);
+
   const agentTotals = {};
 
+  // Aggregate fields for each agent
   orders.forEach(order => {
     const agent = order.salesAgent;
-    console.log("salesAgent",agent);
     if (!agentTotals[agent]) {
-      agentTotals[agent] = { totalGp: 0, actualGp: 0 };
+      agentTotals[agent] = {
+        salePrice: 0,
+        salestax: 0,
+        costP: 0,
+        shippingFee: 0,
+        actualGp: 0
+      };
     }
-    agentTotals[agent].totalGp += parseFloat(order.estimatedGp || 0);
+
+    agentTotals[agent].salePrice += parseFloat(order.salePrice || 0);
+    agentTotals[agent].salestax += parseFloat(order.salestax || 0);
+    agentTotals[agent].costP += parseFloat(order.costP || 0);
+    agentTotals[agent].shippingFee += parseFloat(order.shippingFee || 0);
     agentTotals[agent].actualGp += parseFloat(order.actualGp || 0);
   });
 
-  // Get current date for lock check
+  console.log("Agent Totals:", agentTotals);
+
   const today = new Date();
   const nextMonth15 = new Date(currentYear, currentMonthIndex + 1, 15);
 
-  // Update the table
+  // Fill table
   document.querySelectorAll(".salesAgent").forEach(td => {
-    const agentTable = td.textContent.trim();
-    console.log("agentTable",agentTable);
-const row = td.parentElement;
+    const agent = td.textContent.trim();
+    const row = td.parentElement;
 
-const salePrice = agentTotals[agentTable]?.salePrice || 0;
-const salestax = agentTotals[agentTable]?.salestax || 0;
-const costP = agentTotals[agentTable]?.costP || 0;
-const shippingFee = agentTotals[agentTable]?.shippingFee || 0;
+    const salePrice = agentTotals[agent]?.salePrice || 0;
+    const salestax = agentTotals[agent]?.salestax || 0;
+    const costP = agentTotals[agent]?.costP || 0;
+    const shippingFee = agentTotals[agent]?.shippingFee || 0;
+    const actualGP = agentTotals[agent]?.actualGp || 0;
 
-const totalGP = salePrice - salestax - costP - shippingFee;
-const actualGP = agentTotals[agentTable]?.actualGp || 0;
+    const totalGP = salePrice - salestax - costP - shippingFee;
+
     row.querySelector(".totalGP").textContent = totalGP.toFixed(2);
     row.querySelector(".actualGP").textContent = actualGP.toFixed(2);
 
@@ -850,6 +862,7 @@ const actualGP = agentTotals[agentTable]?.actualGp || 0;
 } catch (err) {
   console.error("Error calculating incentive table:", err);
 }
+
 
 
 const currentTime = Date.now();
