@@ -866,12 +866,12 @@ const isTodayLockDay =
   row.querySelector(".locked").textContent = actualGP.toFixed(2);
   // Send to backend for storage in monthlyLockedGP collection
   axios.post("https://www.spotops360.com/lockedGP", {
-    salesAgent: agentTable,
-    month: prevMonth1,         // From earlier logic
-    year: prevMonthYear,       // Also already defined
+    salesAgent: agent,
+    month: prevMonth1,         
+    year: prevMonthYear,      
     lockedActualGp: actualGP
   }).then(response => {
-    console.log(`Locked GP for ${agentTable} saved:`, response.data);
+    console.log(`Locked GP for ${agent} saved:`, response.data);
   }).catch(error => {
     console.error(`Error saving locked GP for ${agentTable}:`, error);
   });
