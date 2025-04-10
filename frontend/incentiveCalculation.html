@@ -842,7 +842,7 @@ try {
   const today = new Date();
   const nextMonth15 = new Date(currentYear, currentMonthIndex ,10);
   console.log("nextMonth15",nextMonth15);
-  const lockedRes =  axios.get(`https://www.spotops360.com/lockedGP?month=${prevMonth1}&year=${prevMonthYear}`);
+  const lockedRes =  axios.get(`https://www.spotops360.com/getLockedGP?month=${prevMonth1}&year=${prevMonthYear}`);
   const lockedAgents = lockedRes.data;
   console.log("lockedAgents",lockedAgents) 
   document.querySelectorAll(".salesAgent").forEach(td => {
