@@ -749,17 +749,16 @@ app.post('/lockedGP', async (req, res) => {
 app.get('/getLockedGP', async (req, res) => {
   console.log("//getLockedGP");
   try {
-    const { month, year } = req.query;
-    console.log(month, year);
-    if (!month || !year) {
-      return res.status(400).json({ error: 'Month and year are required' });
+    const doc = await MonthlyLockedGP.findOne({ month, year: Number(year) });
+
+    if (!doc || !doc.lockedAgents) {
+      return res.status(404).json([]); 
     }
-    const record = await MonthlyLockedGP.findOne({ month, year });
-    if (!record) return res.json([]); 
-    res.json(); 
-  } catch (err) {
-    console.error("Error fetching locked GP:", err);
-    res.status(500).json({ error: 'Server error' });
+
+    return res.json(doc.lockedAgents); 
+  } catch (error) {
+    console.error("Error fetching locked GP:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 // Search Orders API
