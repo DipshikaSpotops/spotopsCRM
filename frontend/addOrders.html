@@ -235,6 +235,15 @@ h2 {
     height: 3vh;
     background-color: white !important;
 }
+#programmingRequired{
+  display: flex;
+    align-items: center;
+    border: 1px solid #c0c0c0 !important;
+    border-radius: 5px;
+    color: #6e5e5e;
+    height: 3vh;
+    background-color: white !important;
+}
 /* Dark Mode Styles */
 /* for dark mode */
 .dark-mode {
@@ -891,7 +900,8 @@ window.location.href = "login_signup.html";
   </div>
   </div>  
 </div>
-<div class="form-row firstFive">
+<div class="form-row firstFive" style="margin-top: -3.4%;
+    height: 4vh;">
   <div class="form-group col-md-2">
   <div class="input-group">
     <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />  
@@ -914,7 +924,10 @@ window.location.href = "login_signup.html";
     <label for="dsCall" style="margin-right: 10px;">DS Call</label>
     <input type="checkbox" class="dsCall" style="width: 30px;height: 23px;">
   </div>
-  
+  <div class="form-group col-md-2" id="programmingRequired">
+    <label for="programmingRequired" style="margin-right: 10px;">Programming Required</label>
+    <input type="checkbox" class="programmingRequired" style="width: 30px;height: 23px;">
+  </div>
   </div>
 
 
@@ -1183,6 +1196,7 @@ $("#notes").val(`${onlyNotes}`);
 $("#sBusinessName").val(data.businessName);
 $("#dsCall").prop("checked", data.dsCall === "true");
 $("#expeditorNot").prop("checked", data.expediteShipping === "true");
+$("#programmingRequired").prop("checked", data.programmingRequired === "true");
 // data.additionalInfo.forEach((info, index) => {
 // addYardButton(index + 1, `Yard ${index + 1}`);
 // });
@@ -1270,6 +1284,7 @@ const newEntry = urlParams.get("newEntry");
                 dsCall: $("#dsCall").prop("checked") ? true : false,
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
                 businessName: $("#sBusinessName").val(),
+                programmingRequired: $("#programmingRequired").prop("checked") ? true : false, 
             };
 
             fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
@@ -1328,6 +1343,7 @@ const newEntry = urlParams.get("newEntry");
                 dsCall: $("#dsCall").prop("checked") ? true : false,
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
                 businessName: $("#sBusinessName").val(),
+                programmingRequired: $("#programmingRequired").prop("checked") ? true : false,
             };
 
             fetch(`https://www.spotops360.com/orders/${orderNo}`, {
