@@ -572,7 +572,7 @@ notes: [String],
 isCancelled: { type: Boolean, default: false },
 actualGP:Number,
 dsCall: String,
-programmingRequired: Sting,
+programmingRequired: String,
 expediteShipping: String,
 qty: Number,
 });
