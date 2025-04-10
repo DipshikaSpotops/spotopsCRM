@@ -691,12 +691,19 @@ images: [imageSchema],
 });
 
 const Order = mongoose.model("Order", OrderSchema);
+const LockedAgentSchema = new mongoose.Schema({
+  salesAgent: { type: String, required: true },
+  lockedActualGp: { type: Number, required: true }
+});
+
 const MonthlyLockedGPSchema = new mongoose.Schema({
-  salesAgent: { type: String, required: true, unique: true },
-  lockedMonths: [LockedMonthSchema],
+  month: { type: String, required: true },
+  year: { type: Number, required: true },
+  lockedAgents: [LockedAgentSchema],
   updatedAt: { type: Date, default: Date.now }
 });
-const MonthlyLockedGP = mongoose.model("lockedActualGp", monthlyLockedGPSchema);
+
+const MonthlyLockedGP = mongoose.model('MonthlyLockedGP', MonthlyLockedGPSchema);
 app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
 res.json(orders);
@@ -709,32 +716,30 @@ app.post('/lockedGP', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const existing = await MonthlyLockedGP.findOne({ salesAgent });
+    const doc = await MonthlyLockedGP.findOne({ month, year });
 
-    if (existing) {
-      // Check if month already exists in array
-      const alreadyExists = existing.lockedMonths.find(
-        entry => entry.month === month && entry.year === year
-      );
+    if (doc) {
+      const existingAgent = doc.lockedAgents.find(agent => agent.salesAgent === salesAgent);
 
-      if (alreadyExists) {
-        return res.status(200).json({ message: 'Month already locked' });
+      if (existingAgent) {
+        existingAgent.lockedActualGp = lockedActualGp;
+      } else {
+        doc.lockedAgents.push({ salesAgent, lockedActualGp });
       }
 
-      // Push new month entry
-      existing.lockedMonths.push({ month, year, lockedActualGp });
-      existing.updatedAt = new Date();
-      await existing.save();
-      return res.status(200).json({ message: 'Month added', data: existing });
+      doc.updatedAt = new Date();
+      await doc.save();
+      res.json({ message: 'Locked GP updated', data: doc });
     } else {
-      // Create new document
-      const newEntry = new MonthlyLockedGP({
-        salesAgent,
-        lockedMonths: [{ month, year, lockedActualGp }]
+      const newDoc = new MonthlyLockedGP({
+        month,
+        year,
+        lockedAgents: [{ salesAgent, lockedActualGp }]
       });
-      await newEntry.save();
-      return res.status(201).json({ message: 'New agent created', data: newEntry });
+      await newDoc.save();
+      res.json({ message: 'Locked GP saved for new month', data: newDoc });
     }
+
   } catch (err) {
     console.error('Error saving locked GP:', err);
     res.status(500).json({ error: 'Internal Server Error' });
