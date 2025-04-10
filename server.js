@@ -748,6 +748,7 @@ app.post('/lockedGP', async (req, res) => {
 });
 app.get('/getLockedGP', async (req, res) => {
   console.log("//getLockedGP");
+  const { month, year } = req.body;
   try {
     const doc = await MonthlyLockedGP.findOne({ month, year: Number(year) });
 
