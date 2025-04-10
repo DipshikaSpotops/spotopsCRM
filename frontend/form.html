@@ -5740,7 +5740,7 @@ body: JSON.stringify(updatedInfo),
 if (response.ok) {
 alert("Label voided successfully, and status updated to 'Yard PO Sent'.");
 $("#editYardPopup").hide();
-$(".modal-overlay").remove();
+window.location.reload();
 // $(".mainDiv").removeClass("blur");
 $("body").removeClass("modal-active");
 $("#divTrackingEdit input, #divTrackingEdit select").val(""); // Reset input fields

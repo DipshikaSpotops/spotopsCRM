@@ -863,7 +863,6 @@ const isTodayLockDay =
   today.getFullYear() === nextMonth15.getFullYear();
   console.log("today",today,"nextMonth15",isTodayLockDay);
   if (isTodayLockDay) {
-  row.querySelector(".locked").textContent = actualGP.toFixed(2);
   // Send to backend for storage in monthlyLockedGP collection
   axios.post("https://www.spotops360.com/lockedGP", {
     salesAgent: agent,
@@ -1195,7 +1194,28 @@ $("body").removeClass("modal-active");
 });
 
 fetchNotifications();
+// to get the locked gp foe each salesAGent from monthlyloackedGPS collection:
+// Fetch locked GP data for the previous month
+const lockedResponse = await axios.get(`https://www.spotops360.com/lockedGP?month=${prevMonth1}&year=${prevMonthYear}`);
+const lockedData = lockedResponse.data || [];
 
+console.log("Fetched Locked GP Data:", lockedData);
+
+// Create a map from salesAgent to lockedActualGp
+const lockedMap = {};
+lockedData.forEach(entry => {
+  lockedMap[entry.salesAgent] = entry.lockedActualGp;
+});
+
+// Fill the 'Lock GP' column with lockedActualGp if it exists
+document.querySelectorAll(".salesAgent").forEach(td => {
+  const agent = td.textContent.trim();
+  const row = td.parentElement;
+
+  if (lockedMap[agent] !== undefined) {
+    row.querySelector(".locked").textContent = lockedMap[agent].toFixed(2);
+  }
+});
 });
 </script>
 </body>
