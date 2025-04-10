@@ -756,7 +756,7 @@ app.get('/getLockedGP', async (req, res) => {
     }
     const record = await MonthlyLockedGP.findOne({ month, year });
     if (!record) return res.json([]); 
-    res.json(record.lockedAgents); 
+    res.json(); 
   } catch (err) {
     console.error("Error fetching locked GP:", err);
     res.status(500).json({ error: 'Server error' });
