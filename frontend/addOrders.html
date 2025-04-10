@@ -921,14 +921,16 @@ window.location.href = "login_signup.html";
       <input type="text" class="form-control" id="notes" rows="2" required placeholder="Order Notes" style="width: 66%;"></input>
     </div>
     </div> 
-  <div class="form-group col-md-2" id="dsCall">
-    <label for="dsCall" style="margin-right: 10px;">DS Call</label>
-    <input type="checkbox" class="dsCall" style="width: 30px;height: 23px;margin-top: -1.5%;">
-  </div>
-  <div class="form-group col-md-2" id="programmingRequired">
-    <label for="programmingRequired" style="margin-right: 10px;">Programming Required</label>
-    <input type="checkbox" class="programmingRequired" style="width: 30px;height: 23px;margin-top: -1.5%;">
-  </div>
+    <div class="form-group col-md-2" id="dsCall">
+      <label for="dsCallCheckbox" style="margin-right: 10px;">DS Call</label>
+      <input type="checkbox" id="dsCallCheckbox" class="dsCall" style="width: 30px;height: 23px;margin-top: -1.5%;">
+    </div>
+  
+    <div class="form-group col-md-2" id="programmingRequired">
+      <label for="programmingRequiredCheckbox" style="margin-right: 10px;">Programming Required</label>
+      <input type="checkbox" id="programmingRequiredCheckbox" class="programmingRequired" style="width: 30px;height: 23px;margin-top: -1.5%;">
+    </div>
+    
   </div>
 
 
@@ -1195,9 +1197,9 @@ $("#partNo").val(data.partNo);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
 $("#sBusinessName").val(data.businessName);
-$("#dsCall").prop("checked", data.dsCall === "true");
+$("#dsCallCheckbox").prop("checked", data.dsCall === "true");
 $("#expeditorNot").prop("checked", data.expediteShipping === "true");
-$("#programmingRequired").prop("checked", data.programmingRequired === "true");
+$("#programmingRequiredCheckbox").prop("checked", data.programmingRequired === "true");
 // data.additionalInfo.forEach((info, index) => {
 // addYardButton(index + 1, `Yard ${index + 1}`);
 // });
@@ -1282,10 +1284,10 @@ const newEntry = urlParams.get("newEntry");
                 partNo: $("#partNo").val(),
                 last4digits: $("#issueOrder").val(),
                 notes: $("#notes").val(),
-                dsCall: $("#dsCall").prop("checked") ? true : false,
+                dsCall: $("#dsCallCheckbox").prop("checked") ? true : false,
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
                 businessName: $("#sBusinessName").val(),
-                programmingRequired: $("#programmingRequired").prop("checked") ? true : false, 
+                programmingRequired: $("#programmingRequiredCheckbox").prop("checked") ? true : false, 
             };
 
             fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
@@ -1341,10 +1343,10 @@ const newEntry = urlParams.get("newEntry");
                 partNo: $("#partNo").val(),
                 last4digits: $("#issueOrder").val(),
                 notes: $("#notes").val(),
-                dsCall: $("#dsCall").prop("checked") ? true : false,
+                dsCall: $("#dsCallCheckbox").prop("checked") ? true : false,
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
                 businessName: $("#sBusinessName").val(),
-                programmingRequired: $("#programmingRequired").prop("checked") ? true : false,
+                programmingRequired: $("#programmingRequiredCheckbox").prop("checked") ? true : false,
             };
 
             fetch(`https://www.spotops360.com/orders/${orderNo}`, {
