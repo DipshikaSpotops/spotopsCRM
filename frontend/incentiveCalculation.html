@@ -869,9 +869,10 @@ const isTodayLockDay =
   if (match) {
     row.querySelector(".locked").textContent = match.lockedActualGp.toFixed(2);
   } else {
-    row.querySelector(".locked").textContent = ''; // Empty if not found
+    row.querySelector(".locked").textContent = ''; 
   }
-
+  const differenceAmount = Math.abs(actualGP - lockedGpValue);
+  row.querySelector(".difference").textContent = differenceAmount.toFixed(2);
   if (isTodayLockDay) {
   // Send to backend for storage in monthlyLockedGP collection
   axios.post("https://www.spotops360.com/lockedGP", {
