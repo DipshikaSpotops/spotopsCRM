@@ -747,9 +747,10 @@ app.post('/lockedGP', async (req, res) => {
   }
 });
 app.get('/getLockedGP', async (req, res) => {
+  console.log("//getLockedGP");
   try {
     const { month, year } = req.query;
-
+    console.log(month, year);
     if (!month || !year) {
       return res.status(400).json({ error: 'Month and year are required' });
     }
