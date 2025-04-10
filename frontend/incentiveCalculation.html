@@ -865,10 +865,11 @@ const isTodayLockDay =
   today.getMonth() === nextMonth15.getMonth() &&
   today.getFullYear() === nextMonth15.getFullYear();
   console.log("today",today,"nextMonth15",isTodayLockDay);
-    const lockedEntry = lockedAgents.find(a => a.salesAgent === agent);
-    if (lockedEntry) {
-      row.querySelector(".locked").textContent = lockedEntry.lockedActualGp.toFixed(2);
-    } else {
+  const match = lockedAgents.find(item => item.salesAgent === agent);
+      if (match) {
+        row.querySelector(".locked").textContent = match.lockedActualGp.toFixed(2);
+      }
+    else {
       row.querySelector(".locked").textContent = ''; // Leave empty if not found
     }
 
