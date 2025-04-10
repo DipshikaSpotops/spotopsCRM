@@ -709,9 +709,10 @@ const orders = await Order.find({});
 res.json(orders);
 });
 app.post('/lockedGP', async (req, res) => {
+  console.log("//lockedGP");
   try {
     const { salesAgent, month, year, lockedActualGp } = req.body;
-
+    console.log(salesAgent, month, year, lockedActualGp);
     if (!salesAgent || !month || !year || lockedActualGp == null) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
