@@ -842,6 +842,9 @@ try {
   const today = new Date();
   const nextMonth15 = new Date(currentYear, currentMonthIndex ,10);
   console.log("nextMonth15",nextMonth15);
+  const lockedRes =  axios.get(`https://www.spotops360.com/lockedGP?month=${prevMonth1}&year=${prevMonthYear}`);
+  const lockedAgents = lockedRes.data;
+  console.log("lockedAgents",lockedAgents) 
   document.querySelectorAll(".salesAgent").forEach(td => {
     const agent = td.textContent.trim();
     const row = td.parentElement;
@@ -862,22 +865,13 @@ const isTodayLockDay =
   today.getMonth() === nextMonth15.getMonth() &&
   today.getFullYear() === nextMonth15.getFullYear();
   console.log("today",today,"nextMonth15",isTodayLockDay);
-  const lockedRes = axios.get(`https://www.spotops360.com/getLockedGP?month=${prevMonth1}&year=${prevMonthYear}`);
-  const lockedAgents = lockedRes.data; // This is an array of { salesAgent, lockedActualGp }
-
-  // Loop through each row in the first table
-  document.querySelectorAll(".salesAgent").forEach(td => {
-    const agent = td.textContent.trim();
-    const row = td.parentElement;
-
     const lockedEntry = lockedAgents.find(a => a.salesAgent === agent);
-
     if (lockedEntry) {
       row.querySelector(".locked").textContent = lockedEntry.lockedActualGp.toFixed(2);
     } else {
-      row.querySelector(".locked").textContent = ''; 
+      row.querySelector(".locked").textContent = ''; // Leave empty if not found
     }
-  });
+
   if (isTodayLockDay) {
   // Send to backend for storage in monthlyLockedGP collection
   axios.post("https://www.spotops360.com/lockedGP", {
