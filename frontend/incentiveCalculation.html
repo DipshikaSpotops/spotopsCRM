@@ -858,8 +858,8 @@ try {
 
     const totalGP = salePrice - salestax - costP - shippingFee;
 
-    row.querySelector(".totalGP").textContent = totalGP.toFixed(2);
-    row.querySelector(".actualGP").textContent = actualGP.toFixed(2);
+    row.querySelector(".totalGP").textContent = `${$totalGP.toFixed(2)}`;
+    row.querySelector(".actualGP").textContent = `$${actualGP.toFixed(2)}`;
 
 const isTodayLockDay =
   today.getDate() === nextMonth15.getDate() &&
@@ -871,12 +871,12 @@ const isTodayLockDay =
 
 if (match) {
   lockedGpValue = match.lockedActualGp;
-    row.querySelector(".locked").textContent = match.lockedActualGp.toFixed(2);
+    row.querySelector(".locked").textContent = `$${match.lockedActualGp.toFixed(2)}`;
   } else {
     row.querySelector(".locked").textContent = ''; 
   }
   const differenceAmount = Math.abs(actualGP - lockedGpValue);
-  row.querySelector(".difference").textContent = differenceAmount.toFixed(2);
+  row.querySelector(".difference").textContent = `$${differenceAmount.toFixed(2)}`;
   if (isTodayLockDay) {
   // Send to backend for storage in monthlyLockedGP collection
   axios.post("https://www.spotops360.com/lockedGP", {
