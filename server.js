@@ -746,6 +746,21 @@ app.post('/lockedGP', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+app.get('/getLockedGP', async (req, res) => {
+  try {
+    const { month, year } = req.query;
+
+    if (!month || !year) {
+      return res.status(400).json({ error: 'Month and year are required' });
+    }
+    const record = await MonthlyLockedGP.findOne({ month, year });
+    if (!record) return res.json([]); 
+    res.json(record.lockedAgents); 
+  } catch (err) {
+    console.error("Error fetching locked GP:", err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 // Search Orders API
 app.get("/searchOrders", async (req, res) => {
   console.log("SearchPrdfer")
