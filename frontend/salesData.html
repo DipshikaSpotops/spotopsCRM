@@ -977,7 +977,7 @@ $("#userDropdown").on("change", function () {
 calculateAndUpdateTotals(allOrders);
 
 // Function to render rows based on the page
-function renderTableRows(page, orders) {
+function renderTableRows(page, orders= allOrders) {
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
@@ -1109,17 +1109,17 @@ function createPaginationControls(totalPages) {
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    renderTableRows(currentPage, filteredOrders.length ? filteredOrders : allOrders);
+    createPaginationControls(Math.ceil((filteredOrders.length ? filteredOrders.length : allOrders.length) / rowsPerPage), filteredOrders.length ? filteredOrders : allOrders);
   }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+  const totalPages = Math.ceil((filteredOrders.length ? filteredOrders.length : allOrders.length) / rowsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
-    renderTableRows(currentPage);
-    createPaginationControls(totalPages);
+    renderTableRows(currentPage, filteredOrders.length ? filteredOrders : allOrders);
+    createPaginationControls(totalPages, filteredOrders.length ? filteredOrders : allOrders);
   }
 });
 // Token fetching logic
