@@ -977,7 +977,7 @@ $("#userDropdown").on("change", function () {
 calculateAndUpdateTotals(allOrders);
 
 // Function to render rows based on the page
-function renderTableRows(page, orders) {
+function renderTableRows(page, orders= allOrders) {
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = orders.slice(start, end);
