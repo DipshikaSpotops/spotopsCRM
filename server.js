@@ -760,7 +760,7 @@ app.get('/getLockedGP', async (req, res) => {
     const doc = await MonthlyLockedGP.findOne({ month, year });
 
     if (!doc || !doc.lockedAgents) {
-      return res.status(404).json([]); 
+      return res.status(200).json([]); 
     }
 
     return res.json(doc.lockedAgents); 
