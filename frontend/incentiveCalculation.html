@@ -666,7 +666,7 @@ $("#viewAlltasks").on("click", function () {
 });
 const agentList = ["David", "John", "Mark", "Michael"];
 const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-const currentDallasDate = new Date(now);
+const date = new Date(now);
 const months = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
 
@@ -731,7 +731,7 @@ if (date.getDate() >= 15) {
       }
     });
   }
-  
+
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
 if (loginTimestamp) {
