@@ -4174,7 +4174,7 @@ currentYardData
 alert("Wrong status selected, please select an appropriate option");
 return; 
 }
-if (status === "Yard PO Sent" && currentYardData.poSentDate !== "") {
+if (status === "Yard PO Sent" && currentYardData.poSentDate) {
 alert("Wrong status selected, please select an appropriate option");
 return; 
 }
@@ -6495,7 +6495,6 @@ $("#cancelShipment").on("click", function () {
       }
       yardData.trackingNo[0] = ""; 
       yardData.status = "Yard PO Sent";
-      yardData.poSentDate = "";
       const trNo = $("#trackingNoEdit").val();
       console.log("trNo",trNo);
       const updatedOrder = {
