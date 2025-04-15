@@ -526,151 +526,61 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-    <div class="container">
-        <h1>Sales Incentive Calculation</h1>
-        
-        <!-- First Table -->
-        <div class="section">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h2 class="section-title" id="monthIncentive" style="margin-bottom: 0; border-bottom: none;">Incentive for- </h2>
-            </div>
-            <div style="border-bottom: 2px solid #3498db; margin-bottom: 15px;"></div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sales Agent</th>
-                        <th>Total Est GP</th>
-                        <th>Actual GP</th>
-                        <th>Lock GP</th>
-                        <th>Difference Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="salesAgent">David</td>
-                        <td class="totalGP"></td>
-                        <td class="actualGP"></td>
-                        <td class="locked"></td>
-                        <td class="difference"></td>
-                    </tr>
-                    <tr>
-                        <td class="salesAgent">John</td>
-                        <td class="totalGP"></td>
-                        <td class="actualGP"></td>
-                        <td class="locked"></td>
-                        <td class="difference"></td>
-                    </tr>
-                    <tr>
-                        <td class="salesAgent">Mark</td>
-                        <td class="totalGP"></td>
-                        <td class="actualGP"></td>
-                        <td class="locked"></td>
-                        <td class="difference"></td>
-                    </tr>
-                    <tr>
-                        <td class="salesAgent">Michael</td>
-                        <td class="totalGP"></td>
-                        <td class="actualGP"></td>
-                        <td class="locked"></td>
-                        <td class="difference"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Second Table -->
-        <div class="section">
-            <h2 class="section-title" id="prevMonth1"></h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sales Agent</th>
-                        <th>Total Est GP</th>
-                        <th>Actual GP</th>
-                        <th>Lock GP</th>
-                        <th>Difference Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>David</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>John</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Mark</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Michael</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Third Table -->
-        <div class="section">
-            <h2 class="section-title" id="prevMonth2"></h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sales Agent</th>
-                        <th>Total Est GP</th>
-                        <th>Actual GP</th>
-                        <th>Lock GP</th>
-                        <th>Difference Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>David</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>John</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                    <tr class="warning">
-                        <td>Mark</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Michael</td>
-                        <td></td>
-                        <td></td>
-                        <td class="locked"></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="container">
+    <h1>Sales Incentive Calculation</h1>
+
+    <!-- Dynamic Month Labels -->
+    <div class="section">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="section-title" id="monthIncentive" style="margin-bottom: 0; border-bottom: none;">Incentive for- </h2>
+      </div>
+      <div style="border-bottom: 2px solid #3498db; margin-bottom: 15px;"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Sales Agent</th>
+            <th>Total Est GP</th>
+            <th>Actual GP</th>
+            <th>Lock GP</th>
+            <th>Difference Amount</th>
+          </tr>
+        </thead>
+        <tbody id="firstTableBody"></tbody>
+      </table>
     </div>
 
+    <div class="section">
+      <h2 class="section-title" id="prevMonth1"></h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sales Agent</th>
+            <th>Total Est GP</th>
+            <th>Actual GP</th>
+            <th>Lock GP</th>
+            <th>Difference Amount</th>
+          </tr>
+        </thead>
+        <tbody id="secondTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title" id="prevMonth2"></h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sales Agent</th>
+            <th>Total Est GP</th>
+            <th>Actual GP</th>
+            <th>Lock GP</th>
+            <th>Difference Amount</th>
+          </tr>
+        </thead>
+        <tbody id="thirdTableBody"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- Profile Modal -->
@@ -754,150 +664,74 @@ console.log("ready function");
 $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+const agentList = ["David", "John", "Mark", "Michael"];
 const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
 const currentDallasDate = new Date(now);
 const months = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
-const currentMonthIndex = currentDallasDate.getMonth();
-const currentYear = currentDallasDate.getFullYear();
-const currentMonth = months[currentMonthIndex];
-// One month ago
-const prevMonthIndex = (currentMonthIndex - 1 + 12) % 12;
-const prevMonth = months[prevMonthIndex];
-// Two months ago
-const prevMonthIndex1 = (currentMonthIndex - 2 + 12) % 12;
-const prevMonth1 = months[prevMonthIndex1];
-// Three months ago
-const prevMonthIndex2 = (currentMonthIndex - 3 + 12) % 12;
-const prevMonth2 = months[prevMonthIndex2];
-// One month ahead
-const nextMonthIndex = (currentMonthIndex + 1) % 12;
-const nextYear = (currentMonthIndex === 11) ? currentYear + 1 : currentYear;
-const nextMonth = months[nextMonthIndex];
 
-// monthIncentive
-document.getElementById("monthIncentive").innerHTML = `Incentive for ${prevMonth} ${currentYear}`;
-document.getElementById("prevMonth1").innerHTML = `Incentive for ${prevMonth1} ${currentYear}`;
-document.getElementById("prevMonth2").innerHTML = `Incentive for ${prevMonth2} ${currentYear}`;
-console.log("Previous Month:", prevMonth);
-console.log("Next Month:", nextMonth);
-
-
-// data for the last month(incentive to be processed this month)
-try {
-  const now = new Date();
-  const options = {
-    timeZone: 'America/Chicago',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  };
-  const formatter = new Intl.DateTimeFormat('en-US', options);
-  const parts = formatter.formatToParts(now);
-  const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-  const date = new Date(formattedDate);
-
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  const currentMonthIndex = date.getMonth();
-  const currentYear = date.getFullYear();
-  const prevMonthIndex = (currentMonthIndex - 1 + 12) % 12;
-  const prevMonth1 = months[prevMonthIndex];
-  const prevMonthYear = prevMonthIndex === 11 ? currentYear - 1 : currentYear;
-  console.log("Prev Month:", prevMonth1, prevMonthYear);
-
-  // Fetch orders for previous month
-  const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${prevMonth1}&year=${prevMonthYear}`);
-  const orders = response.data;
-  console.log("Fetched Orders:", orders);
-
-  const agentTotals = {};
-
-  // Aggregate fields for each agent
-  orders.forEach(order => {
-    const agent = order.salesAgent;
-    if (!agentTotals[agent]) {
-      agentTotals[agent] = {
-        salePrice: 0,
-        salestax: 0,
-        costP: 0,
-        shippingFee: 0,
-        actualGP: 0
-      };
-    }
-
-    agentTotals[agent].salePrice += parseFloat(order.soldP || 0);
-    agentTotals[agent].salestax += parseFloat(order.salestax || 0);
-    agentTotals[agent].costP += parseFloat(order.costP || 0);
-    agentTotals[agent].shippingFee += parseFloat(order.shippingFee || 0);
-    agentTotals[agent].actualGP += parseFloat(order.actualGP || 0);
-  });
-
-  console.log("Agent Totals:", agentTotals);
-
-  const today = new Date();
-  const nextMonth15 = new Date(currentYear, currentMonthIndex ,15);
-  console.log("nextMonth15",nextMonth15);
-  const lockedRes =  await axios.get(`https://www.spotops360.com/getLockedGP?month=${prevMonth1}&year=${prevMonthYear}`);
-  const lockedAgents = lockedRes.data;
-  console.log("lockedAgents",lockedAgents) 
-  document.querySelectorAll(".salesAgent").forEach(td => {
-    const agent = td.textContent.trim();
-    const row = td.parentElement;
-
-    const salePrice = agentTotals[agent]?.salePrice || 0;
-    const salestax = agentTotals[agent]?.salestax || 0;
-    const costP = agentTotals[agent]?.costP || 0;
-    const shippingFee = agentTotals[agent]?.shippingFee || 0;
-    const actualGP = agentTotals[agent]?.actualGP || 0;
-
-    const totalGP = salePrice - salestax - costP - shippingFee;
-
-    row.querySelector(".totalGP").textContent = `$${totalGP.toFixed(2)}`;
-    row.querySelector(".actualGP").textContent = `$${actualGP.toFixed(2)}`;
-
-const isTodayLockDay =
-  today.getDate() === nextMonth15.getDate() &&
-  today.getMonth() === nextMonth15.getMonth() &&
-  today.getFullYear() === nextMonth15.getFullYear();
-  console.log("today",today,"nextMonth15",isTodayLockDay);
-  const match = lockedAgents.find(item => item.salesAgent === agent);
-  let lockedGpValue = 0;
-
-if (match) {
-  lockedGpValue = match.lockedActualGp;
-    row.querySelector(".locked").textContent = `$${match.lockedActualGp.toFixed(2)}`;
+let displayLabels = [], monthIndices = [], displayYear = date.getFullYear();
+if (date.getDate() >= 15) {
+    let base = (date.getMonth() - 1 + 12) % 12;
+    for (let i = 0; i < 3; i++) monthIndices.push((base - i + 12) % 12);
   } else {
-    row.querySelector(".locked").textContent = ''; 
+    let base = (date.getMonth() - 2 + 12) % 12;
+    for (let i = 0; i < 3; i++) monthIndices.push((base - i + 12) % 12);
   }
-  const differenceAmount = Math.abs(actualGP - lockedGpValue);
-  row.querySelector(".difference").textContent = `$${differenceAmount.toFixed(2)}`;
-  if (isTodayLockDay) {
-  // Send to backend for storage in monthlyLockedGP collection
-  axios.post("https://www.spotops360.com/lockedGP", {
-    salesAgent: agent,
-    month: prevMonth1,         
-    year: prevMonthYear,      
-    lockedActualGp: actualGP
-  }).then(response => {
-    console.log(`Locked GP for ${agent} saved:`, response.data);
-  }).catch(error => {
-    console.error(`Error saving locked GP for ${agent}:`, error);
-  });
-}
-  });
 
-} catch (err) {
-  console.error("Error calculating incentive table:", err);
-}
+  displayLabels = monthIndices.map(i => `${months[i]} ${i > date.getMonth() ? displayYear - 1 : displayYear}`);
 
+  $("#monthIncentive").text(`Incentive for ${displayLabels[0]}`);
+  $("#prevMonth1").text(`Incentive for ${displayLabels[1]}`);
+  $("#prevMonth2").text(`Incentive for ${displayLabels[2]}`);
+  const monthMap = ["firstTableBody", "secondTableBody", "thirdTableBody"];
 
+  for (let i = 0; i < 3; i++) {
+    const [month, year] = displayLabels[i].split(" ");
+    const ordersRes = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month.substring(0, 3)}&year=${year}`);
+    const lockedRes = await axios.get(`https://www.spotops360.com/getLockedGP?month=${month.substring(0, 3)}&year=${year}`);
+    const agentTotals = {}, orders = ordersRes.data, lockedAgents = lockedRes.data;
 
+    orders.forEach(o => {
+      const a = o.salesAgent;
+      if (!agentTotals[a]) agentTotals[a] = { salePrice: 0, salestax: 0, costP: 0, shippingFee: 0, actualGP: 0 };
+      agentTotals[a].salePrice += +o.soldP || 0;
+      agentTotals[a].salestax += +o.salestax || 0;
+      agentTotals[a].costP += +o.costP || 0;
+      agentTotals[a].shippingFee += +o.shippingFee || 0;
+      agentTotals[a].actualGP += +o.actualGP || 0;
+    });
+
+    const isLockDay = (i === 0 && date.getDate() === 15);
+    agentList.forEach(agent => {
+      const totals = agentTotals[agent] || { salePrice: 0, salestax: 0, costP: 0, shippingFee: 0, actualGP: 0 };
+      const totalGP = totals.salePrice - totals.salestax - totals.costP - totals.shippingFee;
+      const actualGP = totals.actualGP;
+      const locked = lockedAgents.find(e => e.salesAgent === agent)?.lockedActualGp;
+      const lockedVal = locked || 0;
+      const diff = Math.abs(actualGP - lockedVal);
+
+      const row = `<tr>
+        <td class="salesAgent">${agent}</td>
+        <td class="totalGP">$${totalGP.toFixed(2)}</td>
+        <td class="actualGP">$${actualGP.toFixed(2)}</td>
+        <td class="locked">${locked ? `$${locked.toFixed(2)}` : ""}</td>
+        <td class="difference">$${diff.toFixed(2)}</td>
+      </tr>`;
+      $(`#${monthMap[i]}`).append(row);
+
+      if (isLockDay && !locked) {
+        axios.post("https://www.spotops360.com/lockedGP", {
+          salesAgent: agent,
+          month: month.substring(0, 3),
+          year,
+          lockedActualGp: actualGP
+        }).then(r => console.log(`Locked GP for ${agent}`, r.data))
+          .catch(e => console.error(`Error locking ${agent}`, e));
+      }
+    });
+  }
+  
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
 if (loginTimestamp) {
