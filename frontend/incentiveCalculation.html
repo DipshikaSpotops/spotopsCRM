@@ -709,8 +709,10 @@ if (date.getDate() >= 15) {
       const actualGP = totals.actualGP;
       const locked = lockedAgents.find(e => e.salesAgent === agent)?.lockedActualGp;
       const lockedVal = locked || 0;
-      const diff = Math.abs(actualGP - lockedVal);
-
+      let diff = 0;
+      if(lockedVal){
+       diff = Math.abs(actualGP - lockedVal);
+      }
       const row = `<tr>
         <td class="salesAgent">${agent}</td>
         <td class="totalGP">$${totalGP.toFixed(2)}</td>
