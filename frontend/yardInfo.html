@@ -883,9 +883,8 @@ function renderTableRows(page, orders = allOrders) {
 // Function to create pagination controls
 function createPaginationControls(totalPages) {
   const paginationControls = $('#pagination-controls');
-  console.log("pages",totalPages);
-  paginationControls.empty(); // Clear existing buttons
-
+  console.log("pages",totalPages,"currentPage",currentPage);
+  paginationControls.empty(); 
   if (totalPages > 1) {
     // Left arrow for "Previous" page
     paginationControls.append(`
