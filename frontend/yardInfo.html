@@ -643,7 +643,7 @@ placeholder="Search..."
 <!-- </div> -->
 <div id="showTotalOrders">Total Orders This Month-</div>
 <div id="pagination-controls-bottom" class="mt-3 mb-3"></div>
-<!-- <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div> -->
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
 <div class="table-wrapper">
 <table class="table table-bordered mt-4">
@@ -786,128 +786,114 @@ sortTable(index, type);
 
 
 function renderTableRows(page, orders = allOrders) {
-// Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
-const filteredOrders = orders.filter(item => {
-return (item.orderStatus === "Yard Processing");
-});
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = filteredOrders.slice(start, end);
-$('#infoTable').empty(); 
-ordersForPage.forEach((item) => {
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
-}
-const team = localStorage.getItem('team');
-const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-const date = new Date(datetime);
-const day = date.getUTCDate();  // Use UTC day
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const year = date.getUTCFullYear();  // Use UTC year
+  const filteredOrders = orders.filter(item => item.orderStatus === "Yard Processing");
+  
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const ordersForPage = filteredOrders.slice(start, end);
 
-const suffix = (day) => {
-  if (day > 3 && day < 21) return "th";
-  switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
+  $('#infoTable').empty();
+
+  if (filteredOrders.length === 0) {
+    $("#infoTable").append(`<tr><td colspan="9">No 'Yard Processing' orders found.</td></tr>`);
+    $("#pagination-controls").empty(); // Clear pagination if no results
+    return;
   }
-};
-const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-$("#infoTable").append(`
-<tr>
-<td>${formattedOrderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>${
-    (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
-  }</td>
-<td>${item.pReq || item.partName}</td>
-<td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
-<td>${item.orderStatus}</td>
-<td>
-${
-item.additionalInfo && item.additionalInfo.length > 0
-? (() => {
-  let totalYardSpent = 0;
-  item.additionalInfo.forEach(info => {
-    const yardPP = parseFloat(info.partPrice) || 0;
-    const yardOSorYS = info.shippingDetails || '';
-    let shippingValueYard = 0;
-    if (yardOSorYS.includes("Own shipping")) {
-      shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-    } else if (yardOSorYS.includes("Yard shipping")) {
-      shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-    }
-    const yardOthers = parseFloat(info.others) || 0;
-    const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
-    const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
-    const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
-    const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
 
-    // Only calculate if the conditions are met
-    if (
-      info.status !== "PO cancelled" || 
-      (info.status === "PO cancelled" && info.paymentStatus === "Card charged")
-    ) {
-      totalYardSpent +=
-        yardPP +
-        shippingValueYard +
-        yardOthers +
-        escOwnShipReturn +
-        escOwnShipReplacement +
-        yardOwnShippingReplacement -
-        yardRefundAmount;
+  ordersForPage.forEach((item) => {
+    const escalationStatus = item.additionalInfo &&
+      item.additionalInfo[0] &&
+      item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+    let escalationStyle = '';
+    if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+      escalationStyle = 'style="background-color: lightgreen;"';
     }
+
+    const yardlength = item.additionalInfo.length;
+    const date = new Date(item.orderDate);
+    const day = date.getUTCDate();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const year = date.getUTCFullYear();
+    const suffix = (day) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    };
+    const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+
+    const actions = `
+      <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${
+        item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""
+      }>View</button>`;
+
+    $("#infoTable").append(`
+      <tr ${escalationStyle}>
+        <td>${formattedOrderDate}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
+        <td>${
+          (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
+        }</td>
+        <td>${item.pReq || item.partName}</td>
+        <td>${item.additionalInfo && yardlength > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+        <td>${item.orderStatus}</td>
+        <td>${
+          item.additionalInfo && item.additionalInfo.length > 0
+            ? (() => {
+                let totalYardSpent = 0;
+                item.additionalInfo.forEach(info => {
+                  const yardPP = parseFloat(info.partPrice) || 0;
+                  const shippingStr = info.shippingDetails || '';
+                  let shippingVal = 0;
+                  if (shippingStr.includes(":")) {
+                    shippingVal = parseFloat(shippingStr.split(":")[1].trim()) || 0;
+                  }
+                  const yardOthers = parseFloat(info.others) || 0;
+                  const escReturn = parseFloat(info.custOwnShippingReturn) || 0;
+                  const escReplace = parseFloat(info.custOwnShipReplacement) || 0;
+                  const yardOwnShip = parseFloat(info.yardOwnShipping) || 0;
+                  const refund = parseFloat(info.refundedAmount) || 0;
+
+                  if (info.status !== "PO cancelled" || (info.status === "PO cancelled" && info.paymentStatus === "Card charged")) {
+                    totalYardSpent += yardPP + shippingVal + yardOthers + escReturn + escReplace + yardOwnShip - refund;
+                  }
+                });
+
+                const spMinusTax = item.soldP - item.salestax;
+                const custRefund = item.custRefundedAmount || 0;
+                const currentGP = spMinusTax - custRefund - totalYardSpent;
+                return `$${currentGP.toFixed(2)}`;
+              })()
+            : ""
+        }</td>
+        <td>${actions}</td>
+      </tr>
+    `);
   });
 
-  const spMinusTax = item.soldP - item.salestax;
-  const custRefundedAmount = item.custRefundedAmount || 0;
-  const subtractRefund = spMinusTax - custRefundedAmount || 0;
-  const currentGP = subtractRefund - totalYardSpent;
-  console.log("currentGP", spMinusTax, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
-  return `$${currentGP.toFixed(2)}`;
-})()
-: ""
+  // Ensure correct pagination is shown for filtered data
+  createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders.length);
 }
-</td>
-<td>${actions}</td>
-</tr>
-`);
-});
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-}
+
 
 // Function to create pagination controls
-function createPaginationControls(totalPages) {
+function createPaginationControls(totalPages, totalItems) {
   const paginationControls = $('#pagination-controls');
-  paginationControls.empty(); // Clear existing buttons
+  paginationControls.empty();
 
-  if (totalPages > 1) {
-    // Left arrow for "Previous" page
-    paginationControls.append(`
-      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
-    `);
+  if (totalItems <= rowsPerPage) return; // Only show pagination if needed
 
-    // Page number display: Page X of Y
-    paginationControls.append(`
-      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
-    `);
-
-    // Right arrow for "Next" page
-    paginationControls.append(`
-      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
-    `);
-  }
+  paginationControls.append(`
+    <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+  `);
 }
+
 
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
