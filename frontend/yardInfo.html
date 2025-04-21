@@ -881,19 +881,27 @@ function renderTableRows(page, orders = allOrders) {
 
 
 // Function to create pagination controls
-function createPaginationControls(totalPages, totalItems) {
+function createPaginationControls(totalPages) {
   const paginationControls = $('#pagination-controls');
-  paginationControls.empty();
+  paginationControls.empty(); // Clear existing buttons
 
-  if (totalItems <= rowsPerPage) return; // Only show pagination if needed
+  if (totalPages > 1) {
+    // Left arrow for "Previous" page
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
 
-  paginationControls.append(`
-    <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
-    <span class="page-info">Page ${currentPage} of ${totalPages}</span>
-    <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
-  `);
+    // Page number display: Page X of Y
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
+
+    // Right arrow for "Next" page
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);
+  }
 }
-
 
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
@@ -911,7 +919,6 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     createPaginationControls(totalPages);
   }
 });
-
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
 $("#user-name").text(firstName);
