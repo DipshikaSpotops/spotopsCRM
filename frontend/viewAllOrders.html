@@ -895,28 +895,28 @@ await fetchToken();
 token = localStorage.getItem("token");
 }
 
-// Fetch orders and apply pagination
-try {
-const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-axios.get("https://www.spotops360.com/orders", {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-})
-]);
+// // Fetch orders and apply pagination
+// try {
+// const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+// axios.get("https://www.spotops360.com/orders", {
+// headers: token ? { Authorization: `Bearer ${token}` } : {},
+// })
+// ]);
 
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch orders");
-}
+// if (ordersResponse.status !== 200) {
+// throw new Error("Failed to fetch orders");
+// }
 
-var orders = ordersResponse.data;
-allOrders = orders;
+// var orders = ordersResponse.data;
+// allOrders = orders;
 
-// Sort and render the orders
-allOrders = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(allOrders);
-createPaginationControls(Math.ceil(allOrders.length / 25));
-} catch (error) {
-console.error("Error fetching orders:", error);
-}
+// // Sort and render the orders
+// allOrders = sortOrdersByOrderNoDesc(allOrders);
+// renderTableRows(allOrders);
+// createPaginationControls(Math.ceil(allOrders.length / 25));
+// } catch (error) {
+// console.error("Error fetching orders:", error);
+// }
 
 // Filtering functionality
 // $("#searchInput").on("keyup", function () {
