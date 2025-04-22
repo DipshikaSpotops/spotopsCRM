@@ -833,48 +833,40 @@ app.get("/getParts", async (req, res) => {
   }
 });
 // orders per page fpr server side pagination
-app.get("/ordersPerPage", async (req, res) => {
+app.get('/ordersPerPage', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 25;
-    const searchTerm = req.query.searchTerm || "";
+    const searchTerm = req.query.searchTerm?.toLowerCase() || '';
 
-    // MongoDB query with search
-    const query = searchTerm
-      ? {
-          $or: [
-            { orderNo: { $regex: searchTerm, $options: "i" } },
-            { customerName: { $regex: searchTerm, $options: "i" } },
-            { email: { $regex: searchTerm, $options: "i" } },
-            { phone: { $regex: searchTerm, $options: "i" } },
-            { "additionalInfo.yardName": { $regex: searchTerm, $options: "i" } }, 
-            { "additionalInfo.trackingNo": { $regex: searchTerm, $options: "i" } },
-            { make: { $regex: searchTerm, $options: "i" } },
-            { model: { $regex: searchTerm, $options: "i" } },
-          ],
-        }
-      : {};
+    const query = {};
 
-    // Count total documents matching the search
-    const totalOrders = await Order.countDocuments(query);
+    if (searchTerm) {
+      query.$or = [
+        { orderNo: { $regex: searchTerm, $options: "i" } },
+        { customerName: { $regex: searchTerm, $options: "i" } },
+        { salesAgent: { $regex: searchTerm, $options: "i" } },
+        { phone: { $regex: searchTerm, $options: "i" } },
+        { email: { $regex: searchTerm, $options: "i" } },
+        { make: { $regex: searchTerm, $options: "i" } },
+        { model: { $regex: searchTerm, $options: "i" } },
+        { "additionalInfo.yardName": { $regex: searchTerm, $options: "i" } },
+        { "additionalInfo.trackingNo": { $regex: searchTerm, $options: "i" } },
+      ];
+    }
 
-    // Calculate the number of documents to skip
-    const skip = (page - 1) * limit;
+    const totalCount = await OrderModel.countDocuments(query);
+    const orders = await OrderModel.find(query)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ createdAt: -1 }); // Optional sorting
 
-    // Find matching orders with pagination
-    const orders = await Order.find(query)
-      .sort({ _id: -1 }) // Fetch latest orders first
-      .skip(skip)
-      .limit(limit);
+    const totalPages = Math.ceil(totalCount / limit);
 
-    res.json({
-      orders,
-      totalPages: Math.ceil(totalOrders / limit),
-      currentPage: page,
-    });
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(200).json({ orders, totalPages });
+  } catch (err) {
+    console.error("Error fetching paginated orders:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

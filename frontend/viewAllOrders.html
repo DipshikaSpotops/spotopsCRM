@@ -612,13 +612,14 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
-$("#searchInput").on(
-  "keyup",function () {
-    const searchTerm = $(this).val().trim();
-    console.log("searchTerm",searchTerm)
-    currentPage = 1;  // Reset to the first page
-    fetchOrders(currentPage, searchTerm);  // Fetch based on search
- // Debounce by 300ms
+let debounceTimer;
+$("#searchInput").on("input", function () {
+  clearTimeout(debounceTimer);
+  const searchTerm = $(this).val().trim();
+  debounceTimer = setTimeout(() => {
+    currentPage = 1;
+    fetchOrders(currentPage, searchTerm);
+  }, 300);
 });
 let allOrders = [];
 
@@ -766,21 +767,19 @@ let totalPages = 1 ;
 var allDOrders;
  // Function to fetch orders with pagination
  async function fetchOrders(page = 1, searchTerm = "") {
-    try {
-      const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
-        params: { page, limit: rowsPerPage, searchTerm },
-      });
+  try {
+    const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
+      params: { page, limit: rowsPerPage, searchTerm }
+    });
 
-      const { orders, totalPages: total } = response.data;
-      totalPages = total;
-      allDOrders = orders;
-      console.log("allDOrders",allDOrders);
-      renderTableRows(orders);
-      createPaginationControls(totalPages, page);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
+    const { orders, totalPages: total } = response.data;
+    totalPages = total;
+    renderTableRows(orders);
+    createPaginationControls(totalPages, page);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
   }
+}
 
   // Function to render table rows
   function renderTableRows(orders) {
@@ -861,17 +860,19 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
 $('#pagination-controls').on('click', '#nextPage', function () {
   if (currentPage < totalPages) {
     currentPage++;
-    fetchOrders(currentPage);
+    const searchTerm = $("#searchInput").val().trim();
+    fetchOrders(currentPage, searchTerm);
   }
 });
 
-// Handle Previous Page Button Click
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
-    fetchOrders(currentPage);
+    const searchTerm = $("#searchInput").val().trim();
+    fetchOrders(currentPage, searchTerm);
   }
 });
+
   // Initial fetch
   fetchOrders(currentPage);
 
