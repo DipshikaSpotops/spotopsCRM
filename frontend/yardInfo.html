@@ -1014,7 +1014,8 @@ return (
 (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) ||
+(info.status && String(info.statua).toLowerCase().includes(value))  
 )) ||
 (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value))
@@ -1122,7 +1123,7 @@ throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total In Transit Orders This Month- ${allOrdersLength}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${allOrdersLength}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
