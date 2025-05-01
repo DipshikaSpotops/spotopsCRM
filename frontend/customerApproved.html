@@ -952,11 +952,17 @@ $("#profileModal").modal("show");
 });
 
 $("#searchInput").on("keyup", function () {
-let value = $(this).val().toLowerCase();
-$("#infoTable tr").filter(function () {
-$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+  let value = $(this).val().toLowerCase();
+  let visibleCount = 0;
+
+  $("#infoTable tr").filter(function () {
+    const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+    $(this).toggle(isMatch);
+    if (isMatch) visibleCount++;
+  });
+  $("#showTotalOrders").text(`Total Orders - ${visibleCount}`);
 });
-});
+
 // Highlight active link based on current URL
 const currentPath = window.location.pathname;
 $(".nav-link").each(function () {
