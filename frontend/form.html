@@ -1530,6 +1530,16 @@ window.location.href = "login_signup.html";
 <input type="number" class="form-control" id="warranty" />
 </div>
 </div>
+<div class="form-row">
+<div class="form-group col-md-6">
+  <label for="vin">VIN No.</label>
+  <input type="text" class="form-control" id="vin" required />
+  </div>
+  <div class="form-group col-md-6">
+    <label for="partNo">Part No.</label>
+    <input type="text" class="form-control" id="vin" required />
+    </div>
+</div>
 </div>
 <div class="form-group">
 <div class="pricenGp" style="border: 1px solid grey">
@@ -1611,10 +1621,6 @@ window.location.href = "login_signup.html";
 <option value="Refunded">Refunded</option>
 <option value="Voided">Voided</option>
 </select>
-</div>
-<div class="form-group col-md-6">
-<label for="vin">VIN No.</label>
-<input type="text" class="form-control" id="vin" required />
 </div>
 </div>
 <div class="form-row">
@@ -3442,6 +3448,7 @@ orderHistoryList.append(listItem);
 });
 }
 var vinNo = document.getElementById("vin").value;
+var partNo = document.getElementById("partNo").value;
 // console.log("vin");
 if (orderNo) {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
@@ -3492,6 +3499,7 @@ $("#salestax").val(data.salestax);
 $("#grossProfit").val(data.grossProfit);
 $("#orderStatus").val(data.orderStatus);
 $("#vin").val(data.vin);
+$("#partNo").val(data.partNo);
 $("#issueOrder").val(data.last4digits);
 $("#notes").val(`${onlyNotes}`);
 data.additionalInfo.forEach((info, index) => {
@@ -3548,6 +3556,7 @@ salestax: $("#salestax").val(),
 grossProfit: $("#grossProfit").val(),
 orderStatus: $("#orderStatus").val(),
 vin: document.getElementById("vin").value,
+partNo: document.getElementById("partNo").value,
 last4digits: $("#issueOrder").val(),
 notes: $("#notes").val(),
 firstName: firstName,
@@ -3602,6 +3611,7 @@ Model: ${data.model}
 Part required: ${data.pReq}
 Desc: ${data.desc}
 VIN: ${data.vin}
+Part No : ${data.partNo}
 Warranty: ${data.warranty}`;
 });
 
