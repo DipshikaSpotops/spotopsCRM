@@ -1215,71 +1215,69 @@ console.error("Error fetching current month's orders:", error);
 }
 
 $("#searchInput").on("keyup", function () {
-const value = $(this).val().toLowerCase();
-const filteredOrders = allOrders.filter(order => {
-const basicSearch = (
-(order.soldP && String(order.soldP).toLowerCase().includes(value)) || // Converting soldP to string
-(order.grossProfit && String(order.grossProfit).toLowerCase().includes(value)) || 
-(order.actualGP && String(order.actualGP).toLowerCase().includes(value)) || 
-(order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-(order.bAddressStreet && order.bAddressStreet.toLowerCase().includes(value)) ||
-(order.bAddressCity && order.bAddressCity.toLowerCase().includes(value)) ||
-(order.bAddressState && order.bAddressState.toLowerCase().includes(value)) ||
-(order.bAddressZip && order.bAddressZip.toLowerCase().includes(value)) ||
-(order.bAddressAcountry && order.bAddressAcountry.toLowerCase().includes(value)) ||
-(order.sAddressStreet && order.sAddressStreet.toLowerCase().includes(value)) ||
-(order.sAddressState && order.sAddressState.toLowerCase().includes(value)) ||
-(order.sAddressZip && order.sAddressZip.toLowerCase().includes(value)) ||
-(order.sAddressAcountry && order.sAddressAcountry.toLowerCase().includes(value)) ||
-(order.attention && order.attention.toLowerCase().includes(value)) ||
-(order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-(order.customerName && order.customerName.toLowerCase().includes(value)) ||
-(order.fName && order.fName.toLowerCase().includes(value)) ||
-(order.lName && order.lName.toLowerCase().includes(value)) ||
-(order.bName && order.bName.toLowerCase().includes(value)) ||
-(order.bAddress && order.bAddress.toLowerCase().includes(value)) ||
-(order.sAddress && order.sAddress.toLowerCase().includes(value)) ||
-((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-(order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-(order.email && order.email.toLowerCase().includes(value)) ||
-(order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) 
-)) ||
-(order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
-(order.make && order.make.toLowerCase().includes(value)) ||    // Added make
-(order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
-(order.model && order.model.toLowerCase().includes(value))     // Added model
-);
+  const value = $(this).val().toLowerCase();
+  const filteredOrders = allOrders.filter(order => {
+    const basicSearch = (
+      (order.soldP && String(order.soldP).toLowerCase().includes(value)) ||
+      (order.grossProfit && String(order.grossProfit).toLowerCase().includes(value)) || 
+      (order.actualGP && String(order.actualGP).toLowerCase().includes(value)) || 
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.bAddressStreet && order.bAddressStreet.toLowerCase().includes(value)) ||
+      (order.bAddressCity && order.bAddressCity.toLowerCase().includes(value)) ||
+      (order.bAddressState && order.bAddressState.toLowerCase().includes(value)) ||
+      (order.bAddressZip && order.bAddressZip.toLowerCase().includes(value)) ||
+      (order.bAddressAcountry && order.bAddressAcountry.toLowerCase().includes(value)) ||
+      (order.sAddressStreet && order.sAddressStreet.toLowerCase().includes(value)) ||
+      (order.sAddressState && order.sAddressState.toLowerCase().includes(value)) ||
+      (order.sAddressZip && order.sAddressZip.toLowerCase().includes(value)) ||
+      (order.sAddressAcountry && order.sAddressAcountry.toLowerCase().includes(value)) ||
+      (order.attention && order.attention.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      (order.fName && order.fName.toLowerCase().includes(value)) ||
+      (order.lName && order.lName.toLowerCase().includes(value)) ||
+      (order.bName && order.bName.toLowerCase().includes(value)) ||
+      (order.bAddress && order.bAddress.toLowerCase().includes(value)) ||
+      (order.sAddress && order.sAddress.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value)) ||
+      (order.additionalInfo && order.additionalInfo.some(info =>
+        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
+      )) ||
+      (order.phone && order.phone.toLowerCase().includes(value)) ||
+      (order.make && order.make.toLowerCase().includes(value)) ||
+      (order.year && order.year.toString().toLowerCase().includes(value)) ||
+      (order.model && order.model.toLowerCase().includes(value))
+    );
 
-// Check if any yard detail (including stockNo) matches the search term
-const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
-const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
-return (
-yardLabel.includes(value) || 
-(info.yardName && info.yardName.toLowerCase().includes(value)) ||
-(info.phone && String(info.phone).toLowerCase().includes(value)) || 
-(info.email && info.email.toLowerCase().includes(value)) || 
-(info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-(info.status && info.status.toLowerCase().includes(value)) ||
-(info.shippingDetails && info.shippingDetails.toLowerCase().includes(value)) ||
-(info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
-);
-});
+    const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
+      const yardLabel = `yard ${index + 1}`;
+      return (
+        yardLabel.includes(value) ||
+        (info.yardName && info.yardName.toLowerCase().includes(value)) ||
+        (info.phone && String(info.phone).toLowerCase().includes(value)) ||
+        (info.email && info.email.toLowerCase().includes(value)) ||
+        (info.escTicked && info.escTicked.toLowerCase().includes(value)) ||
+        (info.status && info.status.toLowerCase().includes(value)) ||
+        (info.shippingDetails && info.shippingDetails.toLowerCase().includes(value)) ||
+        (info.stockNo && info.stockNo.toLowerCase().includes(value))
+      );
+    });
 
-// Return true if any of the basic fields or yard details match the search term
-return basicSearch || yardSearch;
-});
+    return basicSearch || yardSearch;
+  });
 
-// If a search is active, display the filtered results, otherwise reset to the full dataset
-if (filteredOrders.length > 0 || value === "") {
-renderTableRows(1, filteredOrders); // Render the first page of filtered results
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-} else {
-$("#infoTable").empty(); // Clear the table if no results are found
-$("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-}
+  if (filteredOrders.length > 0 || value === "") {
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`; 
+    renderTableRows(1, filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  } else {
+    $("#infoTable").empty();
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders - 0`;
+  }
 });
 
 
