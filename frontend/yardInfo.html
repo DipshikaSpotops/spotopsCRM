@@ -986,7 +986,7 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${totalOrders.length}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
