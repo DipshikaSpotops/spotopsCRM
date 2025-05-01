@@ -1015,7 +1015,7 @@ return (
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.additionalInfo && order.additionalInfo.some(info => 
 (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) ||
-(info.status && String(info.statua).toLowerCase().includes(value))  
+(info.status && String(info.status).toLowerCase().includes(value))  
 )) ||
 (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value))
