@@ -986,7 +986,7 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${totalOrders.length}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -1023,13 +1023,13 @@ $("#searchInput").on("keyup", function () {
   });
 
   if (filteredOrders.length > 0 || value === "") {
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`; // ✅ UPDATE
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`; 
     renderTableRows(1, filteredOrders);
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
   } else {
     $("#infoTable").empty();
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders - 0`; // ✅ Handle 0 results
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders - 0`; 
   }
 });
 
