@@ -1245,7 +1245,7 @@ const basicSearch = (
 (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
 (order.email && order.email.toLowerCase().includes(value)) ||
 (order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) 
 )) ||
 (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
 (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
@@ -1263,6 +1263,7 @@ yardLabel.includes(value) ||
 (info.email && info.email.toLowerCase().includes(value)) || 
 (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
 (info.status && info.status.toLowerCase().includes(value)) ||
+(info.shippingDetails && info.shippingDetails.toLowerCase().includes(value)) ||
 (info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
 );
 });
