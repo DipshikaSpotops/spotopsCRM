@@ -1064,35 +1064,43 @@ console.error("Error fetching current month's orders:", error);
 }
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
-const value = $(this).val().toLowerCase();
+  const value = $(this).val().toLowerCase();
 
-// Filter the entire allOrders dataset based on the search term
-const filteredOrders = allOrders.filter(order => {
-return (
-(order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-(order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-(order.customerName && order.customerName.toLowerCase().includes(value)) ||
-((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-(order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
-(order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-(order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
-)) ||
-(order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
-(order.email && order.email.toLowerCase().includes(value))
-);
+  // Filter the entire allOrders dataset based on the search term
+  const filteredOrders = allOrders.filter(order => {
+    return (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 &&
+        order.additionalInfo[order.additionalInfo.length - 1].yardName &&
+        order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.additionalInfo && order.additionalInfo.some(info =>
+        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
+      )) ||
+      (order.additionalInfo.length > 0 &&
+        order.additionalInfo[0].escTicked &&
+        order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
+    );
+  });
+
+  // Update the Total Orders count
+  document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`;
+
+  // Render results or show "no results" message
+  if (filteredOrders.length > 0 || value === "") {
+    renderTableRows(1, filteredOrders); // First page of filtered results
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  } else {
+    $("#infoTable").empty(); // Clear the table if no results are found
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+  }
 });
 
-// If a search is active, display the filtered results, otherwise reset to the full dataset
-if (filteredOrders.length > 0 || value === "") {
-renderTableRows(1, filteredOrders); // Render the first page of filtered results
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-} else {
-$("#infoTable").empty(); // Clear the table if no results are found
-$("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-}
-});
 
 
 // Sort orders by Order No in descending order
