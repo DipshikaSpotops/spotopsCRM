@@ -1096,7 +1096,7 @@ $("#searchInput").on("keyup", function () {
     renderTableRows(1, filteredOrders); // First page of filtered results
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
   } else {
-    $("#infoTable").empty(); // Clear the table if no results are found
+    $("#infoTable").empty(); 
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
   }
 });
