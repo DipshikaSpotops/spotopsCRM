@@ -160,8 +160,8 @@ display: block;
     background-size: 20px 20px;
     padding-left: 35px;
     height: 40px;
-    margin-top: 8%;
-    margin-left: -50%;
+    margin-top: 2%;
+    margin-left: 3%;
 }
 .profile-table {
 width: 50%;
@@ -868,14 +868,19 @@ const paginationControls = $('#pagination-controls');
 paginationControls.empty(); // Clear pagination controls
 
 if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+  paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
 
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'btn-success' : 'btn-secondary'} page-btn" data-page="${i}">${i}</button>`);
-}
+    // Page number display: Page X of Y
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
 
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
+    // Right arrow for "Next" page
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);}
 }
 
 // Event listener for pagination buttons
