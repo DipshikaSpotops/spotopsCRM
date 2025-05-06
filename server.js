@@ -1286,6 +1286,10 @@ app.get('/orders/monthly', async (req, res) => {
         year: 1,
         make: 1,
         model: 1,
+        vin: 1,
+        partNo: 1,
+        desc: 1,
+        warranty: 1,
       }
     );
     console.log('fetchOrders');
