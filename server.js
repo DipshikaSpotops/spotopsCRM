@@ -834,7 +834,7 @@ app.get("/getParts", async (req, res) => {
 });
 // orders per page fpr server side pagination
 app.get('/ordersPerPage', async (req, res) => {
-  console.log("ordersPerPage");
+  console.log("ordersPerPage")
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 25;
@@ -856,11 +856,11 @@ app.get('/ordersPerPage', async (req, res) => {
       ];      
     }
 
-    const totalCount = await OrderModel.countDocuments(query);
-    const orders = await OrderModel.find(query)
+    const totalCount = await Order.countDocuments(query);
+    const orders = await Order.find(query)
       .skip((page - 1) * limit)
       .limit(limit)
-      .sort({ createdAt: -1 }); // Optional sorting
+      .sort({ createdAt: -1 }); 
 
     const totalPages = Math.ceil(totalCount / limit);
 
