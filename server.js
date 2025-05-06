@@ -850,9 +850,9 @@ app.get('/ordersPerPage', async (req, res) => {
         { email: { $regex: searchTerm, $options: "i" } },
         { make: { $regex: searchTerm, $options: "i" } },
         { model: { $regex: searchTerm, $options: "i" } },
-        { "additionalInfo.yardName": { $regex: searchTerm, $options: "i" } },
-        { "additionalInfo.trackingNo": { $regex: searchTerm, $options: "i" } },
-      ];
+        { additionalInfo: { $elemMatch: { yardName: { $regex: searchTerm, $options: "i" } } } },
+        { additionalInfo: { $elemMatch: { trackingNo: { $regex: searchTerm, $options: "i" } } } }
+      ];      
     }
 
     const totalCount = await OrderModel.countDocuments(query);
