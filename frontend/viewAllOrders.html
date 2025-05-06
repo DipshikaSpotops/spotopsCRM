@@ -419,16 +419,7 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 </script>
-<script>
-  (function() {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-    if (isDarkMode) {
-      enableDarkMode()
-    } else {
-      disableDarkMode()
-    }
-  })();
-</script>
+
 </head>
 <body>
   <div class="navbar">
@@ -1333,6 +1324,14 @@ enableDarkMode();
 }
 });
 
+(function() {
+    const isDarkMode = localStorage.getItem("darkMode") === "true";
+    if (isDarkMode) {
+      enableDarkMode()
+    } else {
+      disableDarkMode()
+    }
+  })();
 function enableDarkMode() {
 $("body").addClass("dark-mode");
 $(".navbar").addClass("dark-mode");
