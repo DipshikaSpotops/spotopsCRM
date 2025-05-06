@@ -834,6 +834,7 @@ app.get("/getParts", async (req, res) => {
 });
 // orders per page fpr server side pagination
 app.get('/ordersPerPage', async (req, res) => {
+  console.log("ordersPerPage");
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 25;
