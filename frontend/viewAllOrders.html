@@ -762,6 +762,7 @@ var allDOrders;
     const response = await axios.get("https://www.spotops360.com/ordersPerPage", {
       params: { page, limit: rowsPerPage, searchTerm }
     });
+    console.log(":rrrr",response);
 
     const { orders, totalPages: total } = response.data;
     totalPages = total;
