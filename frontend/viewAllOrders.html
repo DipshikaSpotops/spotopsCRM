@@ -817,8 +817,25 @@ var allDOrders;
           <td>${formattedOrderDate}</td>
           <td>${item.orderNo}</td>
           <td>${item.salesAgent}</td>
-          <td>${(item.fName && item.lName) ? `${item.fName} ${item.lName}` : (item.customerName || "")}</td>
-          <td>${item.pReq || item.partName}<br> <b>Make</b>: ${item.make}<br> <b>Model</b>: ${item.model}<br> <b>Year</b>: ${item.year}</td>
+          <td>
+  Customer Name: 
+  ${
+    (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
+  }<br>
+${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
+${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
+Phone: ${item.phone} | Email: ${item.email}
+</td>
+          </td>               
+<td>Year: ${item.year}</br>
+Make: ${item.make}</br>
+Model: ${item.model}</br>
+Part Description: ${item.desc}</br>
+Part No: ${item.partNo}</br>
+VIN: ${item.vin}</br>
+Warranty: ${item.warranty} days</br>
+${item.programmingRequired === true ? `Programming required: ${item.programmingRequired}</br>` : ""}
+</td>
           <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""} <br> Part price: $${info.partPrice} | $${info.shippingDetails} | Others: $${info.others || 0}`).join("<br>") : ""}</td>
           <td>${item.orderStatus}</td>
           <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>

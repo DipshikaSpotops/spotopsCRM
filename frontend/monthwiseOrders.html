@@ -1023,6 +1023,13 @@ Phone: ${item.phone} | Email: ${item.email}
 
 <td>Part required: ${item.pReq || item.partName}<br>
 ${item.year} ${item.make} ${item.model}
+Part Description: ${item.desc}</br>
+Part No: ${item.partNo}</br>
+VIN: ${item.vin}</br>
+Warranty: ${item.warranty} days</br>
+${item.programmingRequired === true ? `Programming required: ${item.programmingRequired}</br>` : ""}
+</td>   
+
 </td>
 <td>${  
 item.additionalInfo && item.additionalInfo.length > 0
