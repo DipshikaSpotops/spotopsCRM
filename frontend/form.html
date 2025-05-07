@@ -3655,9 +3655,14 @@ return;
 
 // Display the sale notes
 const notes = data.notes;
-const saleNoteDiv = $("#saleNote");
-const noteHtml = `<p>${notes}</p>`;
+const programmingCostQuoted = data.programmingCostQuoted;
+const noteHtml = `
+  <p><strong>Sale Note:</strong> ${saleNote}</p>
+  <br>
+  <p><strong>Programming Cost:</strong> $${programmingCostQuoted}</p>
+`;
 saleNoteDiv.append(noteHtml);
+
 })
 .catch((error) => {
 console.error("Error fetching sale notes:", error);
