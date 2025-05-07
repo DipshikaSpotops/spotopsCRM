@@ -822,6 +822,7 @@ var allDOrders;
 
     const { orders, totalPages: total } = response.data;
     totalPages = total;
+    orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
     renderTableRows(orders);
     createPaginationControls(totalPages, page);
   } catch (error) {
