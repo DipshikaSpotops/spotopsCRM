@@ -3656,9 +3656,14 @@ return;
 // Display the sale notes
 const notes = data.notes;
 const programmingCostQuoted = data.programmingCostQuoted;
-console.log("programmingCostQuoted",programmingCostQuoted)
-saleNoteDiv.append(`<p><strong>Sale Note:</strong> ${saleNote}</p><br>`);
-saleNoteDiv.append(`<p><strong>Programming Cost:</strong> $${programmingCostQuoted}</p>`);
+const noteHtml = `
+  <div>
+    <p><strong>Sale Note:</strong> ${saleNote}</p>
+    <p><strong>Programming Cost:</strong> $${programmingCostQuoted}</p>
+  </div>
+`;
+
+saleNoteDiv.append($(noteHtml));
 
 
 })
