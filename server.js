@@ -131,6 +131,7 @@ orderHistory,
 expediteShipping,
 dsCall,
 programmingRequired,
+programmingCostQuoted
 } = req.body;
 
 const newOrder = new Order({
@@ -179,6 +180,7 @@ orderHistory,
 expediteShipping,
 dsCall,
 programmingRequired,
+programmingCostQuoted
 });
 
 // Increment the order count and assign the team
@@ -298,6 +300,7 @@ notes,
 expediteShipping,
 dsCall,
 programmingRequired,
+programmingCostQuoted,
 qty
 } = req.body;
 
@@ -345,6 +348,7 @@ notes,
 expediteShipping,
 dsCall,
 programmingRequired,
+programmingCostQuoted,
 qty,
 });
 await newBill.save();
@@ -573,6 +577,7 @@ isCancelled: { type: Boolean, default: false },
 actualGP:Number,
 dsCall: String,
 programmingRequired: String,
+programmingCostQuoted: String,
 expediteShipping: String,
 qty: Number,
 });
@@ -693,6 +698,7 @@ cancellationReason:String,
 expediteShipping: String, 
 dsCall: String,
 programmingRequired: String,
+programmingCostQuoted: String,
 images: [imageSchema],
 });
 

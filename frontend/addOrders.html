@@ -933,11 +933,12 @@ window.location.href = "login_signup.html";
       <label for="dsCallCheckbox" style="margin-right: 10px;">DS Call</label>
       <input type="checkbox" id="dsCallCheckbox" class="dsCall" style="width: 30px;height: 23px;margin-top: -1.5%;">
     </div>
-  
     <div class="form-group col-md-2" id="programmingRequired">
       <label for="programmingRequiredCheckbox" style="margin-right: 10px;">Programming Required</label>
       <input type="checkbox" id="programmingRequiredCheckbox" class="programmingRequired" style="width: 30px;height: 23px;margin-top: -1.5%;">
+          <input type="number" id="programmingCostQuoted" placeholder="Enter cost" class="form-control mt-2" style="display: none;" />
     </div>
+    
     
   </div>
 
@@ -1151,6 +1152,10 @@ orderHistoryList.append(listItem);
 const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
 if (orderNo) {
+  $("#programmingCostQuoted").val(data.programmingCostQuoted || "");
+if (data.programmingRequired === "true") {
+  $("#programmingCostQuoted").show();
+}
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
@@ -1208,6 +1213,7 @@ $("#sBusinessName").val(data.businessName);
 $("#dsCallCheckbox").prop("checked", data.dsCall === "true");
 $("#expeditorNot").prop("checked", data.expediteShipping === "true");
 $("#programmingRequiredCheckbox").prop("checked", data.programmingRequired === "true");
+$("#programmingCostQuoted").val(data.programmingCostQuoted),
 // data.additionalInfo.forEach((info, index) => {
 // addYardButton(index + 1, `Yard ${index + 1}`);
 // });
@@ -1296,6 +1302,7 @@ const newEntry = urlParams.get("newEntry");
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
                 businessName: $("#sBusinessName").val(),
                 programmingRequired: $("#programmingRequiredCheckbox").prop("checked") ? true : false, 
+                programmingCostQuoted: $("#programmingCostQuoted").val(),
             };
 
             fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
@@ -1355,6 +1362,7 @@ const newEntry = urlParams.get("newEntry");
                 expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
                 businessName: $("#sBusinessName").val(),
                 programmingRequired: $("#programmingRequiredCheckbox").prop("checked") ? true : false,
+                programmingCostQuoted: $("#programmingCostQuoted").val(),
             };
 
             fetch(`https://www.spotops360.com/orders/${orderNo}`, {
@@ -1867,6 +1875,14 @@ loadParts();
         console.error("Error loading parts:", error);
     }
 }
+// Show/hide programming cost input based on checkbox
+$("#programmingRequiredCheckbox").on("change", function () {
+  if ($(this).is(":checked")) {
+    $("#programmingCostQuoted").show();
+  } else {
+    $("#programmingCostQuoted").hide().val("");
+  }
+});
 
 });
 </script>
