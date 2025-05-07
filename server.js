@@ -860,7 +860,7 @@ app.get('/ordersPerPage', async (req, res) => {
     const orders = await Order.find(query)
       .skip((page - 1) * limit)
       .limit(limit)
-      .sort({ createdAt: -1 }); 
+      .sort({ orderDate: -1 }); 
 
     const totalPages = Math.ceil(totalCount / limit);
 
