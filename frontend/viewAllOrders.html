@@ -409,6 +409,28 @@ table thead th {
 .table tbody tr.selected {
     background-color: #757070 !important; 
 }
+/* Sticky column styles */
+.sticky-col {
+  position: sticky;
+  background: white; /* fallback for light mode */
+  z-index: 9;
+}
+
+.first-col {
+  left: 0;
+  z-index: 11; /* above .second-col and .thead */
+}
+
+.second-col {
+  left: 100px; /* Adjust this to the actual width of your first column */
+  z-index: 10;
+}
+
+/* Adjust for dark mode */
+.dark-mode .sticky-col {
+  background: #2c3e50; /* match your dark mode table background */
+  color: white;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -571,8 +593,8 @@ placeholder="Search..."
 <table class="table table-bordered mt-4">
   <thead>
     <tr>
-      <th style="cursor: pointer" scope="col">Order Date</th>
-      <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+      <th style="cursor: pointer" scope="col" class="sticky-col first-col">Order Date</th>
+      <th style="cursor: pointer" scope="col" class="sticky-col second-col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
       <th style="cursor: pointer" scope="col">Part Req <span class="aToZ">&#9650;</span></th>
@@ -806,8 +828,8 @@ var allDOrders;
 
       $("#infoTable").append(`
         <tr>
-          <td>${formattedOrderDate}</td>
-          <td>${item.orderNo}</td>
+          <td class="sticky-col first-col">${formattedOrderDate}</td>
+          <td class="sticky-col second-col">${item.orderNo}</td>
           <td>${item.salesAgent}</td>
           <td>
   Customer Name: 
