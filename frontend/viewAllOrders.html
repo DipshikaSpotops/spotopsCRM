@@ -414,11 +414,14 @@ table thead th {
   position: sticky;
   background: white; /* fallback for light mode */
   z-index: 9;
+  white-space: nowrap;
 }
 
 .first-col {
-  left: 0;
-  z-index: 11; /* above .second-col and .thead */
+  left: 120px; /* must match .first-col's width */
+  z-index: 10;
+  min-width: 150px;
+  max-width: 150px;
 }
 
 .second-col {
