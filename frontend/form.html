@@ -3657,12 +3657,9 @@ return;
 const notes = data.notes;
 const programmingCostQuoted = data.programmingCostQuoted;
 console.log("programmingCostQuoted",programmingCostQuoted)
-const noteHtml = `
-  <p><strong>Sale Note:</strong> ${saleNote}</p>
-  <br>
-  <p><strong>Programming Cost:</strong> $${programmingCostQuoted}</p>
-`;
-saleNoteDiv.append(noteHtml);
+saleNoteDiv.append(`<p><strong>Sale Note:</strong> ${saleNote}</p><br>`);
+saleNoteDiv.append(`<p><strong>Programming Cost:</strong> $${programmingCostQuoted}</p>`);
+
 
 })
 .catch((error) => {
