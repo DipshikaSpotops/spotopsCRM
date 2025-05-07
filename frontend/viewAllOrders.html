@@ -423,20 +423,22 @@ table thead th {
   position: sticky;
   left: 0;
   background: #eaf6ff;
-  border-right: 1px solid #ccc;
   z-index: 20;
+  min-width: 120px;
+  max-width: 120px;
   box-sizing: border-box;
+  box-shadow: 2px 0 5px -2px rgba(0,0,0,0.2); /* Right shadow */
 }
 
 .second-col {
   position: sticky;
-  left: 116px;
+  left: 120px; /* must match .first-col width */
   background: #eaf6ff;
-  border-right: 1px solid #ccc;
   z-index: 19;
   min-width: 150px;
   max-width: 150px;
   box-sizing: border-box;
+  box-shadow: 2px 0 5px -2px rgba(0,0,0,0.2); /* Right shadow */
 }
 /* Sticky header columns (for <th>) */
   th.sticky-col.first-col {
