@@ -420,18 +420,22 @@ table thead th {
   background: #35554f;
 }
 .first-col {
+  position: sticky;
   left: 0;
-  z-index: 11;
   background: #eaf6ff;
+  border-right: 1px solid #ccc;
+  z-index: 20;
   box-sizing: border-box;
 }
 
 .second-col {
-  left: 116px; 
-  z-index: 11;
+  position: sticky;
+  left: 116px;
+  background: #eaf6ff;
+  border-right: 1px solid #ccc;
+  z-index: 19;
   min-width: 150px;
   max-width: 150px;
-  background: #eaf6ff;
   box-sizing: border-box;
 }
 /* Sticky header columns (for <th>) */
