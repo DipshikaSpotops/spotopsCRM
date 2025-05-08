@@ -1027,7 +1027,9 @@ Part Description: ${item.desc}</br>
 Part No: ${item.partNo}</br>
 VIN: ${item.vin}</br>
 Warranty: ${item.warranty} days</br>
-${item.programmingRequired === true ? `Programming required: ${item.programmingRequired}</br>` : ""}
+${item.programmingRequired !== undefined 
+  ? `Programming required: ${item.programmingRequired === "true" ? "Yes" : "No"}<br>` 
+  : ""}
 </td>   
 
 </td>
