@@ -659,10 +659,18 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+const savedSearch = localStorage.getItem("viewAllOrdersSearch");
+if (savedSearch) {
+  $("#searchInput").val(savedSearch);
+  fetchOrders(currentPage, savedSearch);
+} else {
+  fetchOrders(currentPage);
+}
 let debounceTimer;
 $("#searchInput").on("input", function () {
   clearTimeout(debounceTimer);
   const searchTerm = $(this).val().trim();
+  localStorage.setItem("viewAllOrdersSearch", searchTerm); // Save to localStorage
   debounceTimer = setTimeout(() => {
     currentPage = 1;
     fetchOrders(currentPage, searchTerm);
@@ -1422,3 +1430,4 @@ $(".toggle-sidebar").on("click", function () {
 
 </body>
 </html>
+
