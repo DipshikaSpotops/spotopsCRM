@@ -659,13 +659,8 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
-const savedSearch = localStorage.getItem("viewAllOrdersSearch");
-if (savedSearch) {
-  $("#searchInput").val(savedSearch);
-  fetchOrders(currentPage, savedSearch);
-} else {
-  fetchOrders(currentPage);
-}
+
+
 let debounceTimer;
 $("#searchInput").on("input", function () {
   clearTimeout(debounceTimer);
@@ -800,6 +795,13 @@ sortTable(index, type);
 });
 const rowsPerPage = 25;
 let currentPage = 1;
+const savedSearch = localStorage.getItem("viewAllOrdersSearch");
+if (savedSearch) {
+  $("#searchInput").val(savedSearch);
+  fetchOrders(currentPage, savedSearch);
+} else {
+  fetchOrders(currentPage);
+}
 // Debounce to avoid too many API calls
 function debounce(func, delay) {
   let timer;
