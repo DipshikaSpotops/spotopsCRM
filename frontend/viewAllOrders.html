@@ -885,17 +885,18 @@ ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
 ${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
 Phone: ${item.phone} | Email: ${item.email}
 </td>
-          </td>               
-<td>Year: ${item.year}</br>
-Make: ${item.make}</br>
-Model: ${item.model}</br>
-Part Description: ${item.desc}</br>
-Part No: ${item.partNo}</br>
-VIN: ${item.vin}</br>
-Warranty: ${item.warranty} days</br>
-${item.programmingRequired !== undefined 
-  ? `Programming required: ${item.programmingRequired === "true" ? "Yes" : "No"}<br>` 
-  : ""}
+<td>
+  Part required: ${item.pReq || item.partName}<br>
+  ${item.year} ${item.make} ${item.model}<br>
+  Part Description: ${item.desc}<br>
+  Part No: ${item.partNo}<br>
+  VIN: ${item.vin}<br>
+  Warranty: ${item.warranty} days<br>
+  Programming required: ${
+    item.programmingRequired === true || item.programmingRequired === "true"
+      ? `Yes ($${item.programmingCostQuoted})`
+      : "No"
+  }<br>
 </td>
           <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""} <br> Part price: $${info.partPrice} | $${info.shippingDetails} | Others: $${info.others || 0}`).join("<br>") : ""}</td>
           <td>${item.orderStatus}</td>
