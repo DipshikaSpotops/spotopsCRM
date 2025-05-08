@@ -1297,6 +1297,8 @@ app.get('/orders/monthly', async (req, res) => {
         partNo: 1,
         desc: 1,
         warranty: 1,
+        programmingCostQuoted: 1,
+        programmingRequired: 1,
       }
     );
     console.log('fetchOrders');
