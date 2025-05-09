@@ -1004,7 +1004,7 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Ongoing Escalations This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Ongoing Escalations- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -1188,7 +1188,7 @@ throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Ongoing Escalations Orders This Month- ${allOrdersLength}`;
+document.getElementById("showTotalOrders").innerHTML = `Ongoing Escalations- ${allOrdersLength}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
