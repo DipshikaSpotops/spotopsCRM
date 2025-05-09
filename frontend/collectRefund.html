@@ -1110,7 +1110,7 @@ function renderTable(page, data = yardOrders) {
                         ${additionalInfo.yardName || ""}<br>
                         ${additionalInfo.partPrice ? ` | Part Price: ${additionalInfo.partPrice}` : ""}
                         ${shippingDetails ? ` | ${shippingDetails}` : ""}<br>
-                        ${additionalInfo.status ? ` | Status: ${additionalInfo.status}` : ""}
+                        ${additionalInfo.status ? `  Status: ${additionalInfo.status}` : ""}
                     </td>`;
                 } else {
                     yardInfoHtml += "<td></td>";
