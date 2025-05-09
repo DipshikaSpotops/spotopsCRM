@@ -673,6 +673,20 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+// Restore saved month if it exists
+const savedMonth = localStorage.getItem("selectedMonth");
+if (savedMonth && /^\d{4}-\d{2}$/.test(savedMonth)) {
+    $("#monthYearPicker").val(savedMonth);
+    $("#filterButton").trigger("click");
+}
+
+// Restore search value and apply it
+const savedSearch = localStorage.getItem("searchValue");
+if (savedSearch) {
+    $("#searchInput").val(savedSearch);
+    $("#searchInput").trigger("keyup");
+}
+
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
@@ -1042,13 +1056,24 @@ return orderNoB - orderNoA;
 }
 $("#infoTable").on("click", ".edit-btn", function () {
 const id = $(this).data("id");
+const selectedMonth = $("#monthYearPicker").val();
+    const searchValue = $("#searchInput").val();
+    localStorage.setItem("selectedMonth", selectedMonth);
+    localStorage.setItem("searchValue", searchValue);
 window.location.href = `form.html?orderNo=${id}`;
 });
 
 $("#infoTable").on("click", ".process-btn", function () {
-const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}&process=true`;
+    const id = $(this).data("id");
+    const selectedMonth = $("#monthYearPicker").val();
+    const searchValue = $("#searchInput").val();
+
+    localStorage.setItem("selectedMonth", selectedMonth);
+    localStorage.setItem("searchValue", searchValue);
+
+    window.location.href = `form.html?orderNo=${id}&process=true`;
 });
+
 
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
@@ -1107,6 +1132,8 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 $("#filterButton").click(async function () {
+  const newMonth = $("#monthYearPicker").val();
+    localStorage.setItem("selectedMonth", newMonth);
 $("body").append('<div class="modal-overlay"></div>');
 $("body").addClass("modal-active");    
 $("#loadingMessage").show();
