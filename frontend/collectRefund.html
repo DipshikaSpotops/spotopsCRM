@@ -37,7 +37,7 @@ cursor: pointer;
   width: auto;
     border-radius: 30px;
     border: 1px solid grey;
-    margin: 21% -45%;
+    margin: 19% -51%;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
@@ -549,9 +549,8 @@ table {
 }
 #filterAndTotal{
   display: flex;
-  margin-left: 36%;
-  margin-top: -2%;
-
+    margin-left: 10.2%;
+    margin-top: -3%;
 }
 table thead th {
   position: sticky;
@@ -575,7 +574,7 @@ table thead th {
 }
 .topHeads{
   display: flex;
-  margin-left: 30%;
+  margin-left: -2%;
   margin-top: -2%;
 }
 #mainHeading {
@@ -1108,9 +1107,9 @@ function renderTable(page, data = yardOrders) {
                     totalOveralls += overAllwithRefund;
 
                     yardInfoHtml += `<td>
-                        ${additionalInfo.yardName || ""}
+                        ${additionalInfo.yardName || ""}<br>
                         ${additionalInfo.partPrice ? ` | Part Price: ${additionalInfo.partPrice}` : ""}
-                        ${shippingDetails ? ` | ${shippingDetails}` : ""}
+                        ${shippingDetails ? ` | ${shippingDetails}` : ""}<br>
                         ${additionalInfo.status ? ` | Status: ${additionalInfo.status}` : ""}
                     </td>`;
                 } else {
