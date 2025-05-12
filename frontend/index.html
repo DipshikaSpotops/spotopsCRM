@@ -115,6 +115,54 @@ color: white;
 font-size: 24px;
 cursor: pointer;
 }
+.vin-decoder-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #f1eae6;
+  margin-top: 10px;
+}
+
+.vin-decoder-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vin-decoder-form .input-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.vin-decoder-form input[type="text"] {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color: #eee;
+  width: 200px;
+  max-width: 100%;
+}
+
+.vin-decoder-form button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  background-color: #35554f;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.vin-decoder-form button:hover {
+  background-color: #2a4642;
+}
 @media (max-width: 1200px) {
   .sidebar {
     width: 20%;
@@ -143,6 +191,19 @@ cursor: pointer;
   .chart-wrapper {
     width: 100%;
     margin: 10px 0;
+  }
+  .vin-decoder-form {
+    font-size: 12px;
+  }
+
+  .vin-decoder-form input[type="text"],
+  .vin-decoder-form button {
+    width: 100%;
+  }
+
+  .vin-decoder-form .input-group {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -485,8 +546,16 @@ window.location.href = "login_signup.html";
       <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
       </a>   
       </div>
-      <div style="font-family: Arial; font-weight: bold; font-size: 12px;"> <form name="decode" id="decode" action="//www.decodethis.com/vin_decoded.aspx"> <span style="color: #f1eae6;">Decode Any Car VIN Here</span><br /> <input id="vin" type="text" value="" name="vin" size="13" style="border: solid 1px gray; background-color: #eee;margin-top: 1%;"/> <input type="submit" value="Go!" /><br /> <span  style="font-size: 10px; color: #9e2f13;"> <a href="//www.decodethis.com"></a></span> </form></div>              
-    <div class="toggle-sidebar">
+      <div class="vin-decoder-form">
+        <form name="decode" action="//www.decodethis.com/vin_decoded.aspx" method="GET" target="_blank">
+          <label for="vin">Decode Any Car VIN Here:</label>
+          <div class="input-group">
+            <input type="text" id="vin" name="vin" placeholder="Enter VIN" required />
+            <button type="submit">Go!</button>
+          </div>
+        </form>
+      </div>
+          <div class="toggle-sidebar">
     <i class="fas fa-bars"></i>
     </div>
     
