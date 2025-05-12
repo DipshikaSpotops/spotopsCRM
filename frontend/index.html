@@ -550,15 +550,7 @@ window.location.href = "login_signup.html";
           <div class="toggle-sidebar">
     <i class="fas fa-bars"></i>
     </div>
-    <div class="vin-decoder-form">
-      <form name="decode" action="//www.decodethis.com/vin_decoded.aspx" method="GET" target="_blank">
-        <label for="vin">Decode Any Car VIN Here:</label>
-        <div class="input-group">
-          <input type="text" id="vin" name="vin" placeholder="Enter VIN" required />
-          <button type="submit">Go!</button>
-        </div>
-      </form>
-    </div>
+  
     <div class="user-info dropdown" style="display: flex;">
     <span style="white-space: nowrap;margin-left: -14%;">Welcome <span id="user-name"></span></span>
     <!-- for dark mode -->
@@ -593,6 +585,15 @@ window.location.href = "login_signup.html";
 <div class="sidebar" id="offcanvasSidebar">
 <div class="offcanvas-body">
 <nav class="nav flex-column">
+  <div class="vin-decoder-form">
+    <form name="decode" action="//www.decodethis.com/vin_decoded.aspx" method="GET" target="_blank">
+      <label for="vin">Decode Any Car VIN Here:</label>
+      <div class="input-group">
+        <input type="text" id="vin" name="vin" placeholder="Enter VIN" required />
+        <button type="submit">Go!</button>
+      </div>
+    </form>
+  </div>
 <div class="nav-item dashboards">
 <a class="nav-link menu" href="#" id="default-link">
 <i class="fas fa-home"></i> Dashboards
