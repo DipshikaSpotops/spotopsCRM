@@ -654,6 +654,7 @@ placeholder="Search..."
 <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
+<th scope="col">Last Comment</th>
 <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Current GP<span class="sort-icon onlyNumber">&#9650;</span></th>
 <th style="cursor: pointer" scope="col">Actions</th>
@@ -837,6 +838,19 @@ function renderTableRows(page, orders = allOrders) {
       }
     };
     const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+// Get logged-in user's firstName
+const userFirstName = localStorage.getItem("firstName") || "";
+
+// Extract last supportNote by this user
+let myLastNote = "";
+if (Array.isArray(item.supportNotes)) {
+  const notesByUser = item.supportNotes.filter(note => 
+    typeof note === "string" && note.trim().startsWith(userFirstName)
+  );
+  if (notesByUser.length > 0) {
+    myLastNote = notesByUser[notesByUser.length - 1]; // Last note by the user
+  }
+}
 
     const actions = `
       <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${
@@ -853,6 +867,7 @@ function renderTableRows(page, orders = allOrders) {
         }</td>
         <td>${item.pReq || item.partName}</td>
         <td>${item.additionalInfo && yardlength > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
+        <td>${myLastNote}</td>
         <td>${item.orderStatus}</td>
         <td>${
           item.additionalInfo && item.additionalInfo.length > 0
