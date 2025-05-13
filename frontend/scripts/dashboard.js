@@ -241,7 +241,7 @@ const totalOrdersData = Array(todayDate).fill(0);
               backgroundColor: colors.totalOrdersBg,
               borderColor: colors.totalOrdersColor,
               pointBackgroundColor: colors.totalOrdersColor,
-              pointBorderColor: "#fff",
+              pointBorderColor: colors.totalOrdersColor,
               data: totalOrdersData,
               fill: true,
               tension: 0, // <-- remove smooth curves
