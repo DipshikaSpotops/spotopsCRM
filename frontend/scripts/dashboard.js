@@ -155,13 +155,13 @@ function getChartColors() {
   const isDarkMode = document.body.classList.contains("dark-mode");
 
   return {
-    totalOrdersColor: isDarkMode ? "#c1627e" : "rgba(255, 99, 132, 1)", 
+    totalOrdersColor: isDarkMode ? "#c1627e" : "#006666", 
     actualGPColor: isDarkMode ? "#6a74fb" : "rgba(54, 162, 235, 1)", 
-    totalOrdersBg: isDarkMode ? "rgba(255, 193, 7, 0.2)" : "rgba(255, 99, 132, 0.2)",
+    totalOrdersBg: isDarkMode ? "white" : "white",
     actualGPBg: isDarkMode ? "#29638c" : "rgba(54, 162, 235, 0.2)",
 
     axisColor: isDarkMode ? "#FFFFFF" : "#555555",
-    gridColor: isDarkMode ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)", 
+    gridColor: isDarkMode ? "white" : "white", 
     legendColor: isDarkMode ? "#FFFFFF" : "#000000", 
 
     // Monthly chart colors
@@ -285,7 +285,7 @@ async function fetchDailyOrders() {
                 labels: {
                   color: colors.legendColor,
                   boxWidth: 20,
-                  padding: 20 // Adds space between chart and legend
+                  padding: 20 
                 }
               }
               ,
