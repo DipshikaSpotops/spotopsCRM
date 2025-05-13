@@ -208,7 +208,7 @@ const totalOrdersData = Array(todayDate).fill(0);
       );
       const orderDay = orderDateInDallas.getDate() - 1;
 
-      if (orderDay >= 0 && orderDay < daysInMonth) {
+      if (orderDay >= 0 && orderDay < todayDate) {
         totalOrdersData[orderDay] += 1;
         totalGPData[orderDay] += order.actualGP || 0;
       }
