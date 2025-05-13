@@ -3,7 +3,7 @@ body {
     overflow-x: hidden;
     flex-direction: column;
     color: #101010;
-    background-color: #eaf6ff;
+    background-color: #f5f5f5;
     /* background-color: #eaf6ff; */
     /* background: linear-gradient(360deg, #253f53, #578087); */
     height: 100vh;
@@ -216,7 +216,7 @@ cursor: pointer;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  background-color: #045a8529;
+  background-color: #ffffff;;
 }
 
 .rates-container {
