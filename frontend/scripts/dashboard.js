@@ -172,7 +172,7 @@ function getChartColors() {
     pieChartLegendColor: isDarkMode ? "#FFFFFF" : "#555555",
 
     // Bar chart colors for Monthly Sales Progress Chart
-    monthlySalesBgColor: isDarkMode ? "#696ffb" : "rgba(54, 162, 235, 0.2)", // Yellow for dark mode, Blue for light
+    monthlySalesBgColor: isDarkMode ? "#696ffb" : "#006666", 
     monthlySalesBorderColor: isDarkMode ? "#FFC107" : "black",
     monthlySalesTitleColor: isDarkMode ? "#FFFFFF" : "#555555"
   };
