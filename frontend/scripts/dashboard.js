@@ -274,7 +274,7 @@ async function fetchDailyOrders() {
             title: { display: true, text: "Actual GP", color: colors.axisColor },
             ticks: { color: colors.axisColor },
             grid: { color: colors.gridColor },
-            min: 0, // Prevent negative values
+            min: -5, 
           },
         },
         plugins: {
