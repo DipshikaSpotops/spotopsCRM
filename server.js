@@ -41,6 +41,7 @@ methods: 'GET,POST,PUT,DELETE,OPTIONS',
 credentials: true
 }));
 // to handle unknown paths
+app.use(express.static(path.join(__dirname, '../frontend')));
 app.use((req, res, next) => {
 try {
 decodeURIComponent(req.path);
