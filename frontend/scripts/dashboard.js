@@ -248,17 +248,17 @@ async function fetchDailyOrders() {
               tension: 0, // <-- remove smooth curves
               stepped: true // <-- ADD THIS LINE for step look
             },
-            {
-              label: "Actual GP",
-              backgroundColor: colors.actualGPBg,
-              borderColor: colors.actualGPColor,
-              pointBackgroundColor: colors.actualGPColor,
-              pointBorderColor: "#fff",
-              data: totalGPData,
-              fill: true,
-              tension: 0, // <-- remove smooth curves
-              stepped: true // <-- ADD THIS LINE for step look
-            }
+            // {
+            //   label: "Actual GP",
+            //   backgroundColor: colors.actualGPBg,
+            //   borderColor: colors.actualGPColor,
+            //   pointBackgroundColor: colors.actualGPColor,
+            //   pointBorderColor: "#fff",
+            //   data: totalGPData,
+            //   fill: true,
+            //   tension: 0, // <-- remove smooth curves
+            //   stepped: true // <-- ADD THIS LINE for step look
+            // }
           ]
         },
       
