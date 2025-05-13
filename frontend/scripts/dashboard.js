@@ -245,7 +245,13 @@ const totalOrdersData = Array(todayDate).fill(0);
               data: totalOrdersData,
               fill: true,
               tension: 0, // <-- remove smooth curves
-              stepped: true // <-- ADD THIS LINE for step look
+              stepped: true ,
+              pointBackgroundColor: "#fff",
+                pointBorderWidth: 2,
+                pointHoverBorderWidth: 3,
+                pointRadius: 5,
+                fill: true,
+                tension: 0.4,
             },
             // {
             //   label: "Actual GP",
@@ -292,7 +298,31 @@ const totalOrdersData = Array(todayDate).fill(0);
             display: true,
             color: colors.axisColor,
           },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const label = context.dataset.label || '';
+                const value = context.parsed.y;
+                return `${label}: $${value}`;
+              }
+            },
+            backgroundColor: '#fff',
+            titleColor: '#000',
+            bodyColor: '#000',
+            borderColor: '#ccc',
+            borderWidth: 1,
+            titleFont: { weight: 'bold' },
+            bodyFont: { weight: 'bold' },
+          },
         },
+        interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            mode: 'index',
+            intersect: false,
+          },          
       },
     });
 
