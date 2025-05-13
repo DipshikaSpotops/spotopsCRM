@@ -200,7 +200,7 @@ async function fetchDailyOrders() {
     const todayDate = currentDallasDate.getDate();
 const labels = Array.from({ length: todayDate }, (_, i) => `${i + 1}`);
 const totalOrdersData = Array(todayDate).fill(0);
-    const totalGPData = Array(daysInMonth).fill(0);
+    // const totalGPData = Array(daysInMonth).fill(0);
 
     orders.forEach(order => {
       const orderDateInDallas = new Date(
@@ -210,7 +210,7 @@ const totalOrdersData = Array(todayDate).fill(0);
 
       if (orderDay >= 0 && orderDay < todayDate) {
         totalOrdersData[orderDay] += 1;
-        totalGPData[orderDay] += order.actualGP || 0;
+        // totalGPData[orderDay] += order.actualGP || 0;
       }
     });
 
