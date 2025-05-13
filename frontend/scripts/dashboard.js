@@ -233,32 +233,34 @@ async function fetchDailyOrders() {
 
     // Create new chart
     dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Total Orders",
-            backgroundColor: colors.totalOrdersBg,
-            borderColor: colors.totalOrdersColor,
-            pointBackgroundColor: colors.totalOrdersColor,
-            pointBorderColor: "#fff",
-            data: totalOrdersData,
-            fill: true,
-            tension: 0.4,
-          },
-          {
-            label: "Actual GP",
-            backgroundColor: colors.actualGPBg,
-            borderColor: colors.actualGPColor,
-            pointBackgroundColor: colors.actualGPColor,
-            pointBorderColor: "#fff",
-            data: totalGPData,
-            fill: true,
-            tension: 0.4,
-          },
-        ],
-      },
+        type: "line", // change to stepLine style via options
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Total Orders",
+              backgroundColor: colors.totalOrdersBg,
+              borderColor: colors.totalOrdersColor,
+              pointBackgroundColor: colors.totalOrdersColor,
+              pointBorderColor: "#fff",
+              data: totalOrdersData,
+              fill: true,
+              tension: 0, // <-- remove smooth curves
+              stepped: true // <-- ADD THIS LINE for step look
+            },
+            {
+              label: "Actual GP",
+              backgroundColor: colors.actualGPBg,
+              borderColor: colors.actualGPColor,
+              pointBackgroundColor: colors.actualGPColor,
+              pointBorderColor: "#fff",
+              data: totalGPData,
+              fill: true,
+              tension: 0, // <-- remove smooth curves
+              stepped: true // <-- ADD THIS LINE for step look
+            }
+          ]
+        },      
       options: {
         responsive: true,
         scales: {
@@ -269,7 +271,7 @@ async function fetchDailyOrders() {
           },
           y: {
             title: { display: true, text: "Actual GP", color: colors.axisColor },
-            ticks: { color: colors.axisColor },
+            ticks: { color: colors.axisColor,maxTicksLimit: 6, },
             grid: { color: colors.gridColor },
             min: 0, // Prevent negative values
           },
