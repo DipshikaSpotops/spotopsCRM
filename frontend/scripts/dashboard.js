@@ -238,25 +238,30 @@ async function fetchDailyOrders() {
           labels: labels,
           datasets: [
             {
-                label: "Total Orders",
-                type: "bar", // ⬅️ change this to BAR to make it distinct
-                backgroundColor: colors.totalOrdersColor,
-                data: totalOrdersData,
-                yAxisID: "y", // default axis
-              },
-              {
-                label: "Actual GP",
-                type: "line", // ⬅️ keep as line
-                borderColor: colors.actualGPColor,
-                backgroundColor: colors.actualGPBg,
-                data: totalGPData,
-                fill: true,
-                stepped: true, // optional
-                tension: 0,    // no curve
-                yAxisID: "y1", // ⬅️ separate axis
-              }
+              label: "Total Orders",
+              backgroundColor: colors.totalOrdersBg,
+              borderColor: colors.totalOrdersColor,
+              pointBackgroundColor: colors.totalOrdersColor,
+              pointBorderColor: "#fff",
+              data: totalOrdersData,
+              fill: true,
+              tension: 0, // <-- remove smooth curves
+              stepped: true // <-- ADD THIS LINE for step look
+            },
+            {
+              label: "Actual GP",
+              backgroundColor: colors.actualGPBg,
+              borderColor: colors.actualGPColor,
+              pointBackgroundColor: colors.actualGPColor,
+              pointBorderColor: "#fff",
+              data: totalGPData,
+              fill: true,
+              tension: 0, // <-- remove smooth curves
+              stepped: true // <-- ADD THIS LINE for step look
+            }
           ]
-        },      
+        },
+      
       options: {
         responsive: true,
         scales: {
@@ -267,7 +272,7 @@ async function fetchDailyOrders() {
           },
           y: {
             title: { display: true, text: "Actual GP", color: colors.axisColor },
-            ticks: { color: colors.axisColor,maxTicksLimit: 6, },
+            ticks: { color: colors.axisColor },
             grid: { color: colors.gridColor },
             min: 0, // Prevent negative values
           },
