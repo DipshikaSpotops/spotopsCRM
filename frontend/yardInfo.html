@@ -871,7 +871,7 @@ if (Array.isArray(item.supportNotes)) {
         <td>${item.pReq || item.partName}</td>
         <td>
   ${item.additionalInfo && yardlength > 0
-    ? `${item.additionalInfo[yardlength - 1].yardName} - ${item.additionalInfo[yardlength - 1].status}`
+    ? `${item.additionalInfo[yardlength - 1].yardName} - <b>${item.additionalInfo[yardlength - 1].status}</b>`
     : ""}
 </td>
         <td>${myLastNote}</td>
