@@ -197,9 +197,9 @@ async function fetchDailyOrders() {
       return;
     }
 
-    const daysInMonth = new Date(year, currentDallasDate.getMonth() + 1, 0).getDate();
-    const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
-    const totalOrdersData = Array(daysInMonth).fill(0);
+    const todayDate = currentDallasDate.getDate();
+const labels = Array.from({ length: todayDate }, (_, i) => `${i + 1}`);
+const totalOrdersData = Array(todayDate).fill(0);
     const totalGPData = Array(daysInMonth).fill(0);
 
     orders.forEach(order => {
