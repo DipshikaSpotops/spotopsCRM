@@ -215,7 +215,6 @@ const totalOrdersData = Array(todayDate).fill(0);
     });
 
     console.log("Total Orders Data (daily):", totalOrdersData);
-    console.log("Total GP Data (daily):", totalGPData);
 
     const ctx = document.getElementById("dailyOrdersChart");
     if (!ctx) {
