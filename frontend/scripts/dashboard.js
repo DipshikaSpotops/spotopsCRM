@@ -278,11 +278,17 @@ async function fetchDailyOrders() {
           },
         },
         plugins: {
-          legend: {
-            labels: {
-              color: colors.legendColor,
-            },
-          },
+            legend: {
+                display: true,
+                position: 'top',
+                align: 'center',
+                labels: {
+                  color: colors.legendColor,
+                  boxWidth: 20,
+                  padding: 20 // Adds space between chart and legend
+                }
+              }
+              ,
           title: {
             display: true,
             color: colors.axisColor,
