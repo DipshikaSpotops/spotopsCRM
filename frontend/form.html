@@ -2020,6 +2020,9 @@ style="margin-right: 94px;margin-top: -9px;"
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="zipYard" placeholder="Enter Zipcode" required>
 </div>
+<div class="form-group col-md-4">
+  <input type="date" class="form-control" id="expShippingDate" placeholder="Enter Zipcode" required>
+  </div>
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
@@ -3507,6 +3510,7 @@ Agent Name: ${yardData.agentName}<br>
 Part Price: $${yardData.partPrice}<br>
 ${yardData.stockNo ? `Stock No: ${yardData.stockNo || ""}<br>` : ""}
 Warranty: ${yardData.warranty} days<br>
+Expected Shipping Date: ${yardData.expectedShippingDate}
 ${yardData.shippingDetails ? `Shipping Method: ${yardData.shippingDetails}<br>` : ""}
 ${yardData.others ? `Others: ${yardData.others}<br>` : ""}
 </td>
@@ -4649,6 +4653,7 @@ $("#addressYard"),
 $("#cityYard"),
 $("#stateYard"),
 $("#zipYard"),
+$("#shippingMethod"),
 $("#partPrice")
 ];
 
@@ -4716,6 +4721,7 @@ street: $("#addressYard").val(),
 city: $("#cityYard").val(),
 state: $("#stateYard").val(),
 zipcode: $("#zipYard").val(),
+expShippingDate: $("expShippingDate").val(),
 address: $("#addressYard").val() + " " + $("#cityYard").val() + " " + $("#stateYard").val() + " " + $("#zipYard").val(),
 country: $("#countryYard").val(),
 partPrice: $("#partPrice").val(),
