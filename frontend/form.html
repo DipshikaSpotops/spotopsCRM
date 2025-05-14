@@ -1924,6 +1924,9 @@ style="margin-right: 94px;margin-top: -9px;"
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="faxNoYard" placeholder="Enter Fax No." >
 </div>
+<div class="form-group col-md-4">
+  <input type="text" class="form-control" id="expShipDate" placeholder="Exp Shipping" >
+  </div>
 </div>
 <div class="form-row" style="margin: 4% 10% 1% 10%;width: 88%;">
 <div class="form-group col-md-4">
@@ -2020,9 +2023,6 @@ style="margin-right: 94px;margin-top: -9px;"
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="zipYard" placeholder="Enter Zipcode" required>
 </div>
-<div class="form-group col-md-4">
-  <input type="date" class="form-control" id="expEShippingDate" placeholder="Exp Shipping" style="color: grey;" required>
-  </div>
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
@@ -2291,9 +2291,6 @@ Save
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="editZip" placeholder="Enter Zipcode" />
 </div>
-<div class="form-group col-md-4">
-  <input type="date" class="form-control" id="editExpShipping" placeholder="Exp Shipping Date" />
-  </div>
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
@@ -3513,7 +3510,6 @@ Agent Name: ${yardData.agentName}<br>
 Part Price: $${yardData.partPrice}<br>
 ${yardData.stockNo ? `Stock No: ${yardData.stockNo || ""}<br>` : ""}
 Warranty: ${yardData.warranty} days<br>
-Expected Shipping Date: ${yardData.expectedShippingDate}
 ${yardData.shippingDetails ? `Shipping Method: ${yardData.shippingDetails}<br>` : ""}
 ${yardData.others ? `Others: ${yardData.others}<br>` : ""}
 </td>
@@ -4656,9 +4652,7 @@ $("#addressYard"),
 $("#cityYard"),
 $("#stateYard"),
 $("#zipYard"),
-$("#shippingMethod"),
-$("#partPrice"),
-$("#expEShippingDate")
+$("#partPrice")
 ];
 
 console.log("Selected state:", $("#state").val(), $("#phoneYard").val());
@@ -4712,8 +4706,7 @@ console.error("Error updating order status:", error);
 $(".mainDiv").removeClass("blur");  // Ensure the background blur is removed
 $("#yardModal").hide();  // Hide the modal after submission
 $("#refund").val("Yard located").change();  // Change refund status
-console.log("expEShippingDate field:", $("#expEShippingDate").length);  
-console.log("expEShippingDate val:", $("#expEShippingDate").val());     
+
 const data222 = {
 yardName: $("#yardName").val(),
 agentName: $("#agentName").val(),
@@ -4726,7 +4719,6 @@ street: $("#addressYard").val(),
 city: $("#cityYard").val(),
 state: $("#stateYard").val(),
 zipcode: $("#zipYard").val(),
-expShippingDate: $("#expEShippingDate").val(),
 address: $("#addressYard").val() + " " + $("#cityYard").val() + " " + $("#stateYard").val() + " " + $("#zipYard").val(),
 country: $("#countryYard").val(),
 partPrice: $("#partPrice").val(),
@@ -4735,6 +4727,7 @@ shippingDetails: `${$("#ownShipping").val() ? `Own shipping: ${$("#ownShipping")
 // shippingDetails: $("#ownShipping").val() ? `Own shipping: ${$("#ownShipping").val()}` : `Yard shipping: ${$("#yardShipping").val()}`,
 others: $("#others").val(),
 faxNo: $('#faxNoYard').val(),
+expShipDate: $("#expShipDate").val(),
 warranty: $("#warr").val(),
 stockNo: $("#stockNo").val(),
 };
