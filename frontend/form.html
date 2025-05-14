@@ -2021,7 +2021,7 @@ style="margin-right: 94px;margin-top: -9px;"
 <input type="text" class="form-control" id="zipYard" placeholder="Enter Zipcode" required>
 </div>
 <div class="form-group col-md-4">
-  <input type="date" class="form-control" id="expShippingDate" placeholder="Exp Shipping" style="color: grey;" required>
+  <input type="date" class="form-control" id="expEShippingDate" placeholder="Exp Shipping" style="color: grey;" required>
   </div>
 </div>
 <div class="form-row addNewId">
@@ -2291,6 +2291,9 @@ Save
 <div class="form-group col-md-4">
 <input type="text" class="form-control" id="editZip" placeholder="Enter Zipcode" />
 </div>
+<div class="form-group col-md-4">
+  <input type="date" class="form-control" id="editExpShipping" placeholder="Exp Shipping Date" />
+  </div>
 </div>
 <div class="form-row addNewId">
 <div class="form-group col-md-4">
@@ -4655,7 +4658,7 @@ $("#stateYard"),
 $("#zipYard"),
 $("#shippingMethod"),
 $("#partPrice"),
-$("#expShippingDate")
+$("#expEShippingDate")
 ];
 
 console.log("Selected state:", $("#state").val(), $("#phoneYard").val());
@@ -4722,7 +4725,7 @@ street: $("#addressYard").val(),
 city: $("#cityYard").val(),
 state: $("#stateYard").val(),
 zipcode: $("#zipYard").val(),
-expShippingDate: $("#expShippingDate").val(),
+expShippingDate: $("#expEShippingDate").val(),
 address: $("#addressYard").val() + " " + $("#cityYard").val() + " " + $("#stateYard").val() + " " + $("#zipYard").val(),
 country: $("#countryYard").val(),
 partPrice: $("#partPrice").val(),
