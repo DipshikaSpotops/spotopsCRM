@@ -207,27 +207,20 @@ const totalOrdersData = Array(todayDate).fill(0);
         new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
       );
       const orderDay = orderDateInDallas.getDate() - 1;
-
       if (orderDay >= 0 && orderDay < todayDate) {
         totalOrdersData[orderDay] += 1;
-        // totalGPData[orderDay] += order.actualGP || 0;
       }
     });
-
     console.log("Total Orders Data (daily):", totalOrdersData);
-
     const ctx = document.getElementById("dailyOrdersChart");
     if (!ctx) {
       console.error("dailyOrdersChart element not found.");
       return;
     }
-
-    // Destroy the previous chart instance if it exists
+    // Destroying the previous chart instance if it exists
     if (dailyOrdersChartInstance) {
       dailyOrdersChartInstance.destroy();
     }
-
-    // Get correct colors based on the mode
     const colors = getChartColors();
 
     // Create new chart
@@ -303,7 +296,7 @@ const totalOrdersData = Array(todayDate).fill(0);
               label: function(context) {
                 const label = context.dataset.label || '';
                 const value = context.parsed.y;
-                return `${label}: $${value}`;
+                return `${label}: ${value}`;
               }
             },
             backgroundColor: '#fff',
