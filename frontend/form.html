@@ -1290,19 +1290,7 @@ scrollbar-color: #29638c #141b2d;
   }
 
   /* Responsive Design */
-  @media screen and (max-width: 768px) {
-    .floating-icon {
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
-      bottom: 15px;
-      right: 15px;
-    }
-    .floating-icon-tooltip {
-      font-size: 12px;
-      bottom: 70px;
-    }
-  }
+ 
 
   @media screen and (max-width: 480px) {
     .floating-icon {
@@ -1324,6 +1312,104 @@ scrollbar-color: #29638c #141b2d;
     background-color: #ff914d;
     border: 1px solid black;
     color: black;
+  }
+  .escalation-wrapper {
+  padding: 1rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.escalation-wrapper label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+.escalation-wrapper input,
+.escalation-wrapper select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  border: 1px solid #c0c0c0;
+  box-sizing: border-box;
+}
+
+/* BUTTONS */
+.escalation-wrapper button {
+  margin-top: 1rem;
+  width: auto;
+  max-width: 100%;
+}
+
+/* FLEX CONTAINERS */
+.replacement-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.replacement-column {
+  flex: 1;
+  min-width: 280px;
+}
+
+/* Flex rows for labels and fields */
+.escalation-wrapper .flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flex-row > div {
+  flex: 1 1 300px;
+}
+
+/* HIDE ELEMENTS AS NEEDED */
+#replacementOwnShip,
+#yardShippingValue,
+#customerShippingValueReturn {
+  display: none;
+}
+
+/* BUTTON ALIGNMENT */
+.escalation-wrapper .btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+}
+
+/* MODAL BUTTON AREA */
+.escalation-wrapper .modal-footer {
+  text-align: right;
+  margin-top: 2rem;
+}
+@media screen and (max-width: 768px) {
+    .replacement-container {
+    flex-direction: column;
+  }
+
+  .flex-row {
+    flex-direction: column;
+  }
+
+  .escalation-wrapper label {
+    white-space: normal;
+  }
+
+  .btn {
+    width: 100%;
+  }
+    .floating-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      bottom: 15px;
+      right: 15px;
+    }
+    .floating-icon-tooltip {
+      font-size: 12px;
+      bottom: 70px;
+    }
   }
 </style>
 
@@ -2357,7 +2443,7 @@ Save
 </div>
 <!-- // escalation part for yard status ends here -->
 <!-- esc part for yard button -->
-<div id="escRMA">
+<div id="escRMA" class="escalation-wrapper">
 <label for="reason" style="white-space: nowrap;">Escalation Process:</label>
 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 <span id="crossEsc" aria-hidden="true">&times;</span>
