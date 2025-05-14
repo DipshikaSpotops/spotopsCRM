@@ -4712,7 +4712,8 @@ console.error("Error updating order status:", error);
 $(".mainDiv").removeClass("blur");  // Ensure the background blur is removed
 $("#yardModal").hide();  // Hide the modal after submission
 $("#refund").val("Yard located").change();  // Change refund status
-
+console.log("expEShippingDate field:", $("#expEShippingDate").length);  
+console.log("expEShippingDate val:", $("#expEShippingDate").val());     
 const data222 = {
 yardName: $("#yardName").val(),
 agentName: $("#agentName").val(),
