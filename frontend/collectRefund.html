@@ -1088,7 +1088,7 @@ function renderTable(page, data = yardOrders) {
                     let shippingDetails = additionalInfo.shippingDetails;
                     let shippingCharge = 0;
                     let refunds = parseFloat(additionalInfo.refundedAmount || 0);
-                    console.log("refunds",refunds);
+                    console.log("refunds",orderNo,refunds);
                     let toBeRefunded = parseFloat(additionalInfo.refundToCollect || 0);
 
                     if (shippingDetails) {
