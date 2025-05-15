@@ -148,13 +148,9 @@ margin-left: 5px;
 cursor: pointer;
 }
 .filter-bar {
-display: flex;
-justify-content: flex-end;
-align-items: center;
-gap: 10px;
-margin-bottom: 10px;
-width: 8%;
-margin: 0% 4%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .filter-bar button {
 margin-left: 10px;
@@ -550,8 +546,11 @@ table {
 }
 #filterAndTotal{
   display: flex;
-    margin-left: 1.2%;
-    margin-top: -2%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 20px;
+  gap: 10px;
 }
 table thead th {
   position: sticky;
@@ -575,8 +574,23 @@ table thead th {
 }
 .topHeads{
   display: flex;
-  margin-left: -2%;
-  margin-top: -2%;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-top: 20px;
+}
+.topHeads h1 {
+  flex: 1;
+  text-align: left;
+  margin: 0;
+  font-size: 1.8rem;
+  white-space: nowrap;
+}
+.topHeads #searchInput {
+  flex: 1;
+  max-width: 300px;
+  margin: 0;
 }
 #mainHeading {
   text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;
@@ -721,26 +735,23 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-    <div class="fixed-header">
-      <div class="topHeads">
-      <h1 id="mainHeading">Collect Refund</h1>
-      <div style="align-items: center; justify-content: center">
-        <input
-          type="text"
-          class="form-control"
-          id="searchInput"
-          placeholder="Search..."
-        />
-      </div>
-      </div>
-      <div id="filterAndTotal">
-        <div class="filter-bar">
-          <input id="monthYearPicker" type="month" class="form-control"  />
-  <button id="filterButton" class="btn btn-primary">Filter</button>
-        </div>
-        <div id="showTotalOrders">Total Refunds This Month-</div>
-      </div>
+  <div class="topHeads">
+    <h1 id="mainHeading">Collect Refund</h1>
+    <input
+      type="text"
+      class="form-control"
+      id="searchInput"
+      placeholder="Search..."
+    />
+  </div>
+  
+  <div id="filterAndTotal">
+    <div class="filter-bar">
+      <input id="monthYearPicker" type="month" class="form-control" />
+      <button id="filterButton" class="btn btn-primary">Filter</button>
     </div>
+    <div id="showTotalOrders">Total Refunds This Month-</div>
+  </div>  
     <div class="table-wrapper">
       <table class="table table-bordered mt-4">
         <thead>
@@ -933,20 +944,23 @@ let yardData = [];
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
 
-    if (lastVisitedPage && document.referrer.includes("form.html")) {
-        let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
-        let savedPage = sessionStorage.getItem("currentPage");
+if (lastVisitedPage && document.referrer.includes("form.html")) {
+    let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
+    let savedPage = sessionStorage.getItem("currentPage");
+    let savedSearch = sessionStorage.getItem("searchValue"); // 🔥 Make sure to add this line
 
-        if (savedMonthYear) {
-            $("#monthYearPicker").val(savedMonthYear); // Restore month filter
-        }
+    if (savedMonthYear) $("#monthYearPicker").val(savedMonthYear);
+    if (savedPage) currentPage = parseInt(savedPage);
 
-        if (savedPage) {
-            currentPage = parseInt(savedPage); // Restore page
-        }
+    if (savedSearch) {
+        $("#searchInput").val(savedSearch); // 🔥 Restore search value
+        setTimeout(() => {
+            $("#searchInput").trigger("keyup"); // 🔥 Apply search filter
+        }, 200); // Ensure DOM is ready
+    }
 
-        sessionStorage.removeItem("lastVisitedPage"); // Clear after restoring
-    } else {
+    sessionStorage.removeItem("lastVisitedPage");
+} else {
         // If coming from another menu, set it to the current month
         const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
         const date = new Date(now);
@@ -1007,7 +1021,12 @@ alert("Failed to fetch data");
 $("#loadingMessage").hide();
 }
 }
-
+setTimeout(() => {
+    const restoredSearch = $("#searchInput").val();
+    if (restoredSearch) {
+        $("#searchInput").trigger("keyup");
+    }
+}, 300);
 
 
 
@@ -1186,6 +1205,11 @@ const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()
 
 $("#yardInfoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
+// Save session data
+sessionStorage.setItem("lastVisitedPage", "collectRefund");
+    sessionStorage.setItem("currentPage", currentPage);
+    sessionStorage.setItem("selectedMonthYear", $("#monthYearPicker").val());
+    sessionStorage.setItem("searchValue", $("#searchInput").val());
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
@@ -1619,3 +1643,4 @@ $(document).on("click", "#infoTable tr", function () {
 </script>
 </body>
 </html>
+
