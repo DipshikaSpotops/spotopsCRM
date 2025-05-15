@@ -348,20 +348,34 @@ $("#viewAlltasks").on("click", function () {
               };
   
               fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
-                  method: "POST",
-                  headers: {
-                      "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(newOrderData),
-              })
-                  .then((response) => {
-                      alert(`Order ${orderNoInput} has been successfully created.`);
-                      window.location.reload();
-                  })
-                  .catch((error) => {
-                      console.error("Error saving new order:", error);
-                      alert("An error occurred while saving the order. Please try again.");
-                  });
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newOrderData),
+            })
+            .then(async (response) => {
+                if (response.status === 409) {
+                    throw new Error("Order number already exists.");
+                }
+            
+                if (!response.ok) {
+                    // Attempt to get the error message from the server response
+                    const errorData = await response.json().catch(() => ({}));
+                    const message = errorData.message || `Unexpected error: ${response.status}`;
+                    throw new Error(message);
+                }
+            
+                return response.json(); // all good!
+            })
+            .then((data) => {
+                alert(`Order ${orderNoInput} has been successfully created.`);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Order creation error:", error);
+                alert(`Failed to create order: ${error.message}`);
+            });            
           } else {
               // Update an existing order
               const updatedOrderData = {
