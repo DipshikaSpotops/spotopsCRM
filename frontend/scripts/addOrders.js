@@ -1,4 +1,3 @@
-$(document).ready(async function () {   
 $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
@@ -925,5 +924,4 @@ $("#programmingRequiredCheckbox").on("change", function () {
   } else {
     $("#programmingCostQuoted").hide().val("");
   }
-});
 });
