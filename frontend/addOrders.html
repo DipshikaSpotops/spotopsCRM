@@ -1160,13 +1160,13 @@ orderHistoryList.append(listItem);
 const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
 if (orderNo) {
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => response.json())
+.then((data) => {
   $("#programmingCostQuoted").val(data.programmingCostQuoted || "");
 if (data.programmingRequired === "true") {
   $("#programmingCostQuoted").show();
 }
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then((response) => response.json())
-.then((data) => {
 // document.getElementById("estPP").textContent += data.costP;
 var customerNameE = data.customerName;
 const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
