@@ -153,14 +153,15 @@ $("#viewAlltasks").on("click", function () {
     const quoted = parseFloat($("#soldP").val()) || 0;
     const yardPrice = parseFloat($("#costP").val()) || 0;
     const shipping = parseFloat($("#shippingFee").val()) || 0;
+
     const salesTax = 0.05 * quoted;
-    console.log("quoted",quoted,yardPrice,shipping,salesTax)
     const grossProfit = quoted - yardPrice - shipping - salesTax;
+
     $("#salestax").val(salesTax.toFixed(2));
     $("#grossProfit").val(grossProfit.toFixed(2));
-  }
-  
-  $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
+}
+
+$("#soldP, #costP, #shippingFee").on("input", calculateProfit);
   
   
   // Function to extract the highest order number from a collection
@@ -201,6 +202,11 @@ $("#viewAlltasks").on("click", function () {
   if (data.programmingRequired === "true") {
     $("#programmingCostQuoted").show();
   }
+
+  $("#soldP").val(data.soldP);
+  $("#costP").val(data.costP);
+  $("#shippingFee").val(data.shippingFee);
+  calculateProfit();
   // document.getElementById("estPP").textContent += data.costP;
   var customerNameE = data.customerName;
   const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
