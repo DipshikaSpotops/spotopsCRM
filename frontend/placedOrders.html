@@ -232,22 +232,17 @@ placeholder="Search..."
 
 <!-- Approve Modal popup -->
 <div
-class="modal modalPopup"
-id="myModal"
-tabindex="-1"
-role="dialog"
-aria-labelledby="myModalLabel"
-style="display: none;white-space: nowrap;"
+  class="modal modalPopup"
+  id="myModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
 >
-<!-- <h6 style="margin: 0; text-align: center;">Order Approval</h6> -->
-<button type="button" id="closeApproved" style="position: absolute; right: 0; background: none; border: none; font-size: 20px;">&times;</button>
-<p style="margin-top: 8%;">Do you want to approve this order?</p>
-<button type="button" class="btn btn-primary" id="okButton">
-Yes
-</button>
-
-
+  <button type="button" id="closeApproved">&times;</button>
+  <p>Do you want to approve this order?</p>
+  <button type="button" class="btn btn-primary" id="okButton">Yes</button>
 </div>
+
 <!-- cancel popup -->
 <div id="cancellingOrder" style="display: none; flex-direction: column; gap: 20px;margin-top: 4%;">
 <div style="display: flex; justify-content: center; align-items: center; position: relative;">
