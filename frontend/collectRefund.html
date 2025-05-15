@@ -123,21 +123,7 @@ color: white;
 font-size: 24px;
 cursor: pointer;
 }
-@media (max-width: 768px) {
-.sidebar {
-transform: translateX(-100%);
-width: 70%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
-}
+
 table.table td{
 white-space: nowrap;
 overflow: hidden;
@@ -509,11 +495,7 @@ td:first-child {
 #mainHeading {
   text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
 }
-@media (max-width: 320px) {
-#mainHeading {
-  font-size: 20px;
-}
-}
+
 
 
 table {
@@ -552,6 +534,29 @@ table thead th {
 }
 #mainHeading {
   text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;
+}
+@media (max-width: 768px) {
+  #filterAndTotal{
+    margin-left: 28%;
+  }
+.sidebar {
+transform: translateX(-100%);
+width: 70%;
+}
+.sidebar.show {
+transform: translateX(0);
+}
+.main-content {
+margin-left: 0;
+}
+.toggle-sidebar {
+display: block;
+}
+}
+@media (max-width: 320px) {
+#mainHeading {
+  font-size: 20px;
+}
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
