@@ -134,13 +134,10 @@ margin-left: 5px;
 cursor: pointer;
 }
 .filter-bar {
-display: flex;
-justify-content: flex-end;
-align-items: center;
-gap: 10px;
-margin-bottom: 10px;
-width: 8%;
-margin: 0% 4%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
 }
 .filter-bar button {
 margin-left: 10px;
@@ -164,15 +161,12 @@ border-radius: 10px;
 text-align: center;
 }
 #showTotalOrders{
-border: 1px solid #c0c0c0;
-text-align: center;
-height: auto;
-width: auto;
-border-radius: 8px;
-margin: 1% -3%;
-background-color: #35554f;
-padding: 5px;
-color:white;
+  background-color: #35554f;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: bold;
+  white-space: nowrap;
 }
 /* Horizontal scroll container for the table */
 .table-responsive {
@@ -291,7 +285,7 @@ text-align: center;
 #monthYearPicker{
   background-color: #35554f;
     color: white;
-    width: auto;
+    min-width: 180px;
 }
 #filterButton {
   background-color: #35554f;
@@ -504,8 +498,11 @@ table {
 }
 #filterAndTotal{
   display: flex;
-  margin-left: 3%;
-    margin-top: -2%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 1rem;
+  gap: 1rem;
 }
 table thead th {
   position: sticky;
@@ -536,8 +533,17 @@ table thead th {
   text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;
 }
 @media (max-width: 768px) {
-  #filterAndTotal{
-    margin-left: 28%;
+  #filterAndTotal {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-bar {
+    justify-content: flex-start;
+  }
+
+  #showTotalOrders {
+    margin-top: 10px;
   }
 .sidebar {
 transform: translateX(-100%);
@@ -712,11 +718,11 @@ window.location.href = "login_signup.html";
       </div>
       <div id="filterAndTotal">
         <div class="filter-bar">
-          <input id="monthYearPicker" type="month" class="form-control"  />
-  <button id="filterButton" class="btn btn-primary">Filter</button>
+          <input id="monthYearPicker" type="month" class="form-control" />
+          <button id="filterButton" class="btn btn-primary">Filter</button>
         </div>
-        <div id="showTotalOrders">Total Refunds This Month-</div>
-      </div>
+        <div id="showTotalOrders">Total Refund To Collect - $1234.56</div>
+      </div>      
     </div>
     <div class="table-wrapper">
       <table class="table table-bordered mt-4">
