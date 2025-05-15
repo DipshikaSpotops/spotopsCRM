@@ -258,65 +258,7 @@ body {
   vertical-align: middle;
   flex-shrink: 0;
 }
-/* Dark background overlay */
-#modalOverlay {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Dim background */
-    z-index: 1000;
-  }
-  
-  /* Centered modal */
-  #myModal.modalPopup {
-    display: none; /* Hide initially */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 90%;
-    width: 300px;
-    background-color: white;
-    padding: 20px 15px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    z-index: 1001;
-    white-space: normal;
-  }
-  
-  #myModal p {
-    margin-bottom: 15px;
-    font-size: 16px;
-  }
-  
-  #myModal #closeApproved {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
-  #okButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  #okButton:hover {
-    background-color: #0056b3;
-  }  
+
 #filterButton,
 #showTotalOrders,
 #monthYearPicker {
