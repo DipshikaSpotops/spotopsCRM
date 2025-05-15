@@ -258,7 +258,12 @@ body {
   vertical-align: middle;
   flex-shrink: 0;
 }
-
+#closeApproved{
+    position: absolute; right: 0; background: none; border: none; font-size: 20px;
+}
+#closeApproved p{
+    margin-top: 8%;
+}
 #filterButton,
 #showTotalOrders,
 #monthYearPicker {
