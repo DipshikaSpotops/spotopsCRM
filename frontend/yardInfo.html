@@ -1156,64 +1156,63 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-$("#filterButton").click(async function () {
-  const newMonth = $("#monthYearPicker").val();
-    localStorage.setItem("selectedMonth", newMonth);
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-  
+$("#filterButton").click(async function () {
+  const selectedMonthYear = $("#monthYearPicker").val();
+  localStorage.setItem("selectedMonth", selectedMonthYear);
+
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
+
+  const [year, monthNumber] = selectedMonthYear.split("-");
+  const month = months[parseInt(monthNumber, 10) - 1];
+
+  const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
+
   if (lastVisitedPage && document.referrer.includes("form.html")) {
-      let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
-      let savedPage = sessionStorage.getItem("currentPage");
-      let savedSearch = sessionStorage.getItem("searchValue"); // 🔥 Make sure to add this line
-  
-      if (savedMonthYear) $("#monthYearPicker").val(savedMonthYear);
-      if (savedPage) currentPage = parseInt(savedPage);
-  
-      if (savedSearch) {
-          $("#searchInput").val(savedSearch); // 🔥 Restore search value
-          setTimeout(() => {
-              $("#searchInput").trigger("keyup"); // 🔥 Apply search filter
-          }, 200); // Ensure DOM is ready
+    const savedMonthYear = sessionStorage.getItem("selectedMonthYear");
+    const savedPage = sessionStorage.getItem("currentPage");
+    const savedSearch = sessionStorage.getItem("searchValue");
+
+    if (savedMonthYear) $("#monthYearPicker").val(savedMonthYear);
+    if (savedPage) currentPage = parseInt(savedPage);
+    if (savedSearch) {
+      $("#searchInput").val(savedSearch);
+      setTimeout(() => {
+        $("#searchInput").trigger("keyup");
+      }, 200);
+    }
+
+    sessionStorage.removeItem("lastVisitedPage");
+  }
+
+  try {
+    const ordersResponse = await axios.get(
+      `https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       }
-  
-      sessionStorage.removeItem("lastVisitedPage");
-  } else {
-          // If coming from another menu, set it to the current month
-          const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-          const date = new Date(now);
-          const month = months[date.getMonth()];
-          const year = date.getFullYear();
-          $("#monthYearPicker").val(`${year}-${String(date.getMonth() + 1).padStart(2, "0")}`);
-      }
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
+    );
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch current month's orders");
+    }
+
+    allOrders = ordersResponse.data;
+    const total = allOrders.length;
+    $("#showTotalOrders").text(`Total Orders - ${total}`);
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  } catch (error) {
+    console.error("Error fetching current month's orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
+
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
