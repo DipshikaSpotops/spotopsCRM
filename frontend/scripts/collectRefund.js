@@ -1,3 +1,4 @@
+(async function () {
 $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
@@ -838,3 +839,5 @@ $("#viewAlltasks").on("click", function () {
     $("#infoTable tr").removeClass("selected");
     $(this).addClass("selected");
   });
+
+})();
