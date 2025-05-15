@@ -148,9 +148,13 @@ margin-left: 5px;
 cursor: pointer;
 }
 .filter-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+display: flex;
+justify-content: flex-end;
+align-items: center;
+gap: 10px;
+margin-bottom: 10px;
+width: 8%;
+margin: 0% 4%;
 }
 .filter-bar button {
 margin-left: 10px;
@@ -546,11 +550,8 @@ table {
 }
 #filterAndTotal{
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 20px;
-  gap: 10px;
+    margin-left: 1.2%;
+    margin-top: -2%;
 }
 table thead th {
   position: sticky;
@@ -574,23 +575,8 @@ table thead th {
 }
 .topHeads{
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 0 20px;
-  margin-top: 20px;
-}
-.topHeads h1 {
-  flex: 1;
-  text-align: left;
-  margin: 0;
-  font-size: 1.8rem;
-  white-space: nowrap;
-}
-.topHeads #searchInput {
-  flex: 1;
-  max-width: 300px;
-  margin: 0;
+  margin-left: -2%;
+  margin-top: -2%;
 }
 #mainHeading {
   text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;
@@ -735,23 +721,26 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-  <div class="topHeads">
-    <h1 id="mainHeading">Collect Refund</h1>
-    <input
-      type="text"
-      class="form-control"
-      id="searchInput"
-      placeholder="Search..."
-    />
-  </div>
-  
-  <div id="filterAndTotal">
-    <div class="filter-bar">
-      <input id="monthYearPicker" type="month" class="form-control" />
-      <button id="filterButton" class="btn btn-primary">Filter</button>
+    <div class="fixed-header">
+      <div class="topHeads">
+      <h1 id="mainHeading">Collect Refund</h1>
+      <div style="align-items: center; justify-content: center">
+        <input
+          type="text"
+          class="form-control"
+          id="searchInput"
+          placeholder="Search..."
+        />
+      </div>
+      </div>
+      <div id="filterAndTotal">
+        <div class="filter-bar">
+          <input id="monthYearPicker" type="month" class="form-control"  />
+  <button id="filterButton" class="btn btn-primary">Filter</button>
+        </div>
+        <div id="showTotalOrders">Total Refunds This Month-</div>
+      </div>
     </div>
-    <div id="showTotalOrders">Total Refunds This Month-</div>
-  </div>  
     <div class="table-wrapper">
       <table class="table table-bordered mt-4">
         <thead>
