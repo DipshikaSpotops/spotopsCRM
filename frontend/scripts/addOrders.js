@@ -153,13 +153,16 @@ $("#viewAlltasks").on("click", function () {
     const quoted = parseFloat($("#soldP").val()) || 0;
     const yardPrice = parseFloat($("#costP").val()) || 0;
     const shipping = parseFloat($("#shippingFee").val()) || 0;
-
+  
+    console.log("Quoted:", quoted, "Yard:", yardPrice, "Shipping:", shipping);
+  
     const salesTax = 0.05 * quoted;
     const grossProfit = quoted - yardPrice - shipping - salesTax;
-
+  
     $("#salestax").val(salesTax.toFixed(2));
     $("#grossProfit").val(grossProfit.toFixed(2));
-}
+  }
+  
 
 $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
   
@@ -203,10 +206,6 @@ $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
     $("#programmingCostQuoted").show();
   }
 
-  $("#soldP").val(data.soldP);
-  $("#costP").val(data.costP);
-  $("#shippingFee").val(data.shippingFee);
-  calculateProfit();
   // document.getElementById("estPP").textContent += data.costP;
   var customerNameE = data.customerName;
   const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
@@ -269,6 +268,7 @@ $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
   // $("#trackingInfoContainer").html(data.trackingInfo);
   // }
   updateOrderHistory(data.orderHistory);
+  calculateProfit();
   partDesc = `
   Year: ${data.year}
   Make: ${data.make}
