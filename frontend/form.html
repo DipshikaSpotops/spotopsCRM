@@ -4318,13 +4318,10 @@ if (status === "PO cancelled" && currentYardData.poCancelledDate) {
 alert("Wrong status selected, please select an appropriate option");
 return; 
 }
-const partShippedDate = (currentYardData.partShippedDate || "").trim();
-
-if (status === "Part shipped" && partShippedDate !== "") {
-    alert("Wrong status selected, please select an appropriate option");
-    return;
+if (status === "Part shipped" && currentYardData.partShippedDate !== "") {
+alert("Wrong status selected, please select an appropriate option");
+return;
 }
-
 // if (status === "Part delivered" && currentYardData.deliveredDate) {
 // alert("Wrong status selected, please select an appropriate option");
 // return;
