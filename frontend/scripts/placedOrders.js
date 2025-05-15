@@ -1,4 +1,5 @@
-$("#viewAlltasks").on("click", function () {
+$(document).ready(async function () {
+    $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
   let sortOrder = {
@@ -842,4 +843,4 @@ $("#viewAlltasks").on("click", function () {
     var h1Text = $("#mainHeading").text().trim();
   console.log(h1Text,"firstName",firstName); 
   });
-  
+});
