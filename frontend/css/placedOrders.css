@@ -123,31 +123,7 @@ body {
         margin-bottom: 1%;
         margin-top: 2%;
       }
-    @media (max-width: 768px) {
-    .sidebar {
-    transform: translateX(-100%);
-    width:38%;
-    }
-    .topHeads{
-      margin-top: 6%;
-    }
-    .sidebar.show {
-    transform: translateX(0);
-    }
-    .main-content {
-    margin-left: 0;
-    }
-    .toggle-sidebar {
-    display: block;
-    }
-    .table-wrapper {
-          overflow-x: auto; /* Enable horizontal scroll for smaller screens */
-        }
     
-        table {
-          min-width: 800px;
-        }
-    }
     .profile-table {
     width: 50%;
     margin: 20px auto;
@@ -270,6 +246,28 @@ body {
       height: 3vh;
       margin-left: 1%;
     }
+    .approve-btn,
+.cancel-btn {
+  min-width: 80px;         
+  height: 36px;            
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  text-align: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.table td:first-child {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+  }
+  button {
+    box-sizing: border-box;
+  }  
     .approve-btn {
       background-color: #35554f;
         border: none;
@@ -278,6 +276,15 @@ body {
     .cancel-btn {
       background-color: #c40505; border: none; color: white;
     }
+    .approve-btn:hover {
+        background-color: #287a5d;
+        cursor: pointer;
+      }
+      
+      .cancel-btn:hover {
+        background-color: #a30000;
+        cursor: pointer;
+      }      
     /* for dark mode */
     .dark-mode {
     background-color: #141b2d;
@@ -411,11 +418,7 @@ body {
       white-space: nowrap;
       margin-left: 0%;
     }
-    @media (max-width: 320px) {
-    #mainHeading {
-      font-size: 20px;
-    }
-    }
+   
     .table-wrapper {
       max-height: 82vh;
         overflow-y: auto;
@@ -470,3 +473,34 @@ body {
     .table tbody tr:hover {
       background-color: #f1f1f1;
     }
+
+    @media (max-width: 768px) {
+        .sidebar {
+        transform: translateX(-100%);
+        width:38%;
+        }
+        .topHeads{
+          margin-top: 6%;
+        }
+        .sidebar.show {
+        transform: translateX(0);
+        }
+        .main-content {
+        margin-left: 0;
+        }
+        .toggle-sidebar {
+        display: block;
+        }
+        .table-wrapper {
+              overflow-x: auto; 
+            }
+        
+            table {
+              min-width: 800px;
+            }
+        }
+    @media (max-width: 320px) {
+        #mainHeading {
+          font-size: 20px;
+        }
+        }

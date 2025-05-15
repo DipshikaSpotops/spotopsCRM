@@ -4318,7 +4318,7 @@ if (status === "PO cancelled" && currentYardData.poCancelledDate) {
 alert("Wrong status selected, please select an appropriate option");
 return; 
 }
-if (status === "Part shipped" && currentYardData.partShippedDate) {
+if (status === "Part shipped" && currentYardData.partShippedDate !== "") {
 alert("Wrong status selected, please select an appropriate option");
 return;
 }
