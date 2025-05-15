@@ -148,15 +148,14 @@ $("#viewAlltasks").on("click", function () {
   if (lastVisitedPage && document.referrer.includes("form.html")) {
       let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
       let savedPage = sessionStorage.getItem("currentPage");
-      let savedSearch = sessionStorage.getItem("searchValue"); // 🔥 Make sure to add this line
-  
+      let savedSearch = sessionStorage.getItem("searchValue"); 
       if (savedMonthYear) $("#monthYearPicker").val(savedMonthYear);
       if (savedPage) currentPage = parseInt(savedPage);
   
       if (savedSearch) {
-          $("#searchInput").val(savedSearch); // 🔥 Restore search value
+          $("#searchInput").val(savedSearch);
           setTimeout(() => {
-              $("#searchInput").trigger("keyup"); // 🔥 Apply search filter
+              $("#searchInput").trigger("keyup"); 
           }, 200); // Ensure DOM is ready
       }
   

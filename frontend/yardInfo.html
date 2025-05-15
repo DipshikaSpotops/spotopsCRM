@@ -1089,7 +1089,10 @@ $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
     const selectedMonth = $("#monthYearPicker").val();
     const searchValue = $("#searchInput").val();
-
+    sessionStorage.setItem("lastVisitedPage", "collectRefund");
+      sessionStorage.setItem("currentPage", currentPage);
+      sessionStorage.setItem("selectedMonthYear", $("#monthYearPicker").val());
+      sessionStorage.setItem("searchValue", $("#searchInput").val());
     localStorage.setItem("selectedMonth", selectedMonth);
     localStorage.setItem("searchValue", searchValue);
 
@@ -1161,6 +1164,32 @@ $("body").addClass("modal-active");
 $("#loadingMessage").show();
 
 const monthYear = $("#monthYearPicker").val(); 
+const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
+  
+  if (lastVisitedPage && document.referrer.includes("form.html")) {
+      let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
+      let savedPage = sessionStorage.getItem("currentPage");
+      let savedSearch = sessionStorage.getItem("searchValue"); // 🔥 Make sure to add this line
+  
+      if (savedMonthYear) $("#monthYearPicker").val(savedMonthYear);
+      if (savedPage) currentPage = parseInt(savedPage);
+  
+      if (savedSearch) {
+          $("#searchInput").val(savedSearch); // 🔥 Restore search value
+          setTimeout(() => {
+              $("#searchInput").trigger("keyup"); // 🔥 Apply search filter
+          }, 200); // Ensure DOM is ready
+      }
+  
+      sessionStorage.removeItem("lastVisitedPage");
+  } else {
+          // If coming from another menu, set it to the current month
+          const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+          const date = new Date(now);
+          const month = months[date.getMonth()];
+          const year = date.getFullYear();
+          $("#monthYearPicker").val(`${year}-${String(date.getMonth() + 1).padStart(2, "0")}`);
+      }
 const [year, monthNumber] = monthYear.split("-");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month = months[parseInt(monthNumber, 10) - 1];
