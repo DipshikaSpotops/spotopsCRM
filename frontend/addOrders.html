@@ -213,6 +213,7 @@ h2 {
 }
 #expediteS {
   display: flex;
+  
   background-color:white;
     align-items: center;
     border: 1px solid #c0c0c0;
@@ -222,7 +223,299 @@ h2 {
 }
 #expediteS, #dsCall, #programmingRequired {
   display: flex;
-  align-items: center;
+ ```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Order Entry</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      display: flex;
+      overflow-x: hidden;
+      flex-direction: column;
+      color: #333333;
+      background-color: #eaf6ff;
+    }
+    #logoImg {
+      height: auto;
+      width: 150px;
+      margin: -16px 6px;
+    }
+    .navbar .user-info span {
+      margin-right: 10px;
+      color: #101a18;
+    }
+    .navbar .user-icon {
+      color: #101a18;
+      cursor: pointer;
+    }
+    .navbar {
+      color: white;
+      background: linear-gradient(160deg, #101a18, #80cbbc);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 2;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .sidebar {
+      background: linear-gradient(160deg, #101a18, #80cbbc);
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+      width: 13%;
+      height: 100vh;
+      padding: 50px 0px;
+      transition: transform 0.3s ease;
+      scrollbar-color: white white;
+    }
+    .sidebar .nav-link {
+      color: #ffffff;
+      cursor: pointer;
+    }
+    .sidebar .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .sidebar .nav-link.active,
+    .sidebar .nav-link.selected {
+      background-color: rgba(255, 255, 255, 0.2);
+      cursor: default;
+      border: none;
+    }
+    #orderNo {
+      text-align: center;
+      height: 4vh;
+      border: 1px solid #248287;
+      border-radius: 10px;
+      margin: 1% 37.7%;
+    }
+    .main-content {
+      width: 100%;
+      flex-grow: 1;
+      padding: 20px;
+      margin-left: 0%;
+      margin-top: 5%;
+      transition: margin-left 0.3s ease;
+    }
+    .submenu {
+      display: block;
+    }
+    .nav-item > .submenu {
+      padding-left: 20px;
+    }
+    .nav-item .nav-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-item .nav-link i {
+      margin-right: 10px;
+    }
+    .chevron-icon {
+      margin-left: auto;
+      cursor: pointer;
+    }
+    .submenu .nav-link {
+      display: block;
+      margin-left: 20px;
+    }
+    .toggle-sidebar {
+      display: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 70%;
+      }
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+      .toggle-sidebar {
+        display: block;
+      }
+    }
+    /* Specific styles for the New Order Entry page */
+    #addoBtn {
+      margin: 0% 38.1%;
+      background: linear-gradient(160deg, #101a18, #80cbbc);
+      color: white;
+    }
+    #addoBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+    }
+    #newOrderForm {
+      margin: -2% 0% -2% 12%;
+    }
+    .firstRow {
+      border: 1px solid #248287;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #023f42;
+    }
+    .firstRow input {
+      border: 1px solid #c8d8c9;
+    }
+    #sState {
+      border: 1px solid #c8d8c9;
+    }
+    .firstFive {
+      margin: 0% 0% 0% -1%;
+      width: 122%;
+      height: 8vh;
+    }
+    .firstSix {
+      margin: 0% 0% 0% -1%;
+      width: 102%;
+      height: 8vh;
+    }
+    .priceRow {
+      padding: 14px;
+      border: 1px solid #c0c0c0;
+      border-radius: 10px;
+      width: 115%;
+      margin: -4% -19%;
+      height: 20vh;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-control[readonly] {
+      background-color: #e9ecef;
+    }
+    #below {
+      margin: -4%;
+    }
+    #salesAgent {
+      margin: 12% 58%;
+      border-radius: 10px;
+      height: 5vh;
+      text-align: center;
+      color: black;
+      background-color: grey;
+      border: none;
+      display: none;
+    }
+    #orderDate {
+      margin: 12% 66%;
+      width: 90%;
+      border-radius: 10px;
+      color: grey;
+      height: 5vh;
+      text-align: center;
+      background-color: black;
+      display: none;
+    }
+    h2 {
+      text-align: center;
+      margin-top: -2%;
+      text-decoration-line: underline;
+      color: #023f42;
+    }
+    #expediteS {
+      display: flex;
+      background-color: white;
+      align-items: center;
+      border: 1px solid #c0c0c0;
+      border-radius: 5px;
+      color: #6e5e5e;
+      height: 3vh;
+    }
+    #expediteS,
+    #dsCall,
+    #programmingRequired {
+      display: flex;
+      align-items: center;
+    }
+    #darkModeIcon {
+      cursor: pointer;
+      color: #101a18;
+      font-size: 20px;
+    }
+    #notificationIcon {
+      cursor: pointer;
+      position: relative;
+      color: #101a18;
+      margin-left: -19%;
+      font-size: x-large;
+    }
+    #dsCall {
+      display: flex;
+      align-items: center;
+      border: 1px solid #c0c0c0 !important;
+      border-radius: 5px;
+      color: #6e5e5e;
+      height: 3vh;
+      background-color: white !important;
+    }
+    #programmingRequired {
+      display: flex;
+      align-items: center;
+      border: 1px solid #c0c0c0 !important;
+      border-radius: 5px;
+      color: #6e5e5e;
+      height: 3vh;
+      background-color: white !important;
+      margin-left: 0.2%;
+    }
+    .dollars {
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+    }
+    /* Dark Mode Styles */
+    /* for dark mode */
+    .dark-mode {
+      background-color: #141b2d;
+      color: #999999;
+    }
+    .dark-mode h2 {
+      color: #999999;
+    }
+    .dark-mode .firstRow {
+      color: white;
+      border: 1px solid #484b4b;
+      background-color: #2c3e50;
+      border: 5px solid #1b1b37;
+    }
+    .dark-mode #addoBtn {
+      background-color: #2c3e50;
+    }
+    .dark-mode #expediteS {
+      background-color: #676e77;
+      border: 1px solid black;
+      color: #2f2f2f;
+    }
+    .dark-mode .form-control {
+      border: 1px solid black;
+      background-color: #676e77;
+    }
+    .dark-mode .dollars {
+      border: none;
+      background-color: #c2c0c0;
+    }
+    .dark-mode #orderNo align-items: center;
 }
 #darkModeIcon {
   cursor: pointer;
@@ -550,8 +843,8 @@ window.location.href = "login_signup.html";
 </div>
 <form id="newOrderForm">
 <div class="main-content">
-  <div class="card p-3 mb-4">
-    <h5>Customer Info</h5>
+  <div class="firstRow" id="customer">
+    <h6 style="text-align: center; margin-top: 1%;">Customer Info</h6>
     <div class="form-row">
       <div class="form-group col-md-3">
         <label for="firstName">First Name</label>
