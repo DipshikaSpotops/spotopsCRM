@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>New Order Entry</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -116,7 +117,21 @@ color: white;
 font-size: 24px;
 cursor: pointer;
 }
-
+@media (max-width: 768px) {
+.sidebar {
+transform: translateX(-100%);
+width: 70%;
+}
+.sidebar.show {
+transform: translateX(0);
+}
+.main-content {
+margin-left: 0;
+}
+.toggle-sidebar {
+display: block;
+}
+}
 /* Specific styles for the New Order Entry page */
 #addoBtn {
 margin: 0% 38.1%;
@@ -373,38 +388,6 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     margin-top: 0% !important;
     width: 101%;
     margin-bottom: 3%
-}
-.desktop-force .sidebar {
-  transform: translateX(0) !important;
-  width: 13% !important;
-}
-.desktop-force .main-content {
-  margin-left: 13% !important;
-}
-
-@media (min-width: 1024px) {
-  .sidebar {
-    transform: translateX(0) !important;
-    width: 13% !important;
-  }
-  .main-content {
-    margin-left: 13% !important;
-  }
-}
-@media (max-width: 768px) {
-.sidebar {
-transform: translateX(-100%);
-width: 70%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -984,9 +967,6 @@ $(document).ready(function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
-if (window.innerWidth >= 1024) {
-  document.body.classList.add('desktop-force');
-}
 // to prefill the stae and the city 
 $("#bZip").on("keyup", function() {
 console.log("BZIP","==");
