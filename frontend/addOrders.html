@@ -1878,7 +1878,7 @@ location.reload();
 
 
 // Event listener for "Same as Billing Address" checkbox
-$("input[type='checkbox'][value='Same as Billing Adress']").on("change", function () {
+$("#sameasBA").on("change",function () {
 if ($(this).is(":checked")) {
 // Copy the values from billing address fields to shipping address fields
 $("#sAddress").val($("#bAddress").val());
