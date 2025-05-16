@@ -683,11 +683,6 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     width: 101%;
     margin-bottom: 3%
 }
-@media (max-width: 576px) {
-  .form-group {
-    margin-bottom: 1rem;
-  }
-}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -1181,9 +1176,10 @@ window.location.href = "login_signup.html";
 <div class="firstRow" id="priceRow">
   <h6 style="text-align: center; margin-top: 1%;">Price and GP Information</h6>
 
-  <!-- First Row -->
+  <!-- First Row: 5 columns -->
   <div class="form-row">
-    <div class="form-group col-sm-6 col-md-2">
+    <!-- Sale Price -->
+    <div class="form-group col-md-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -1192,7 +1188,8 @@ window.location.href = "login_signup.html";
       </div>
     </div>
 
-    <div class="form-group col-sm-6 col-md-2">
+    <!-- Est. Yard Price -->
+    <div class="form-group col-md-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -1201,7 +1198,8 @@ window.location.href = "login_signup.html";
       </div>
     </div>
 
-    <div class="form-group col-sm-6 col-md-2">
+    <!-- Est. Shipping -->
+    <div class="form-group col-md-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -1210,14 +1208,14 @@ window.location.href = "login_signup.html";
       </div>
     </div>
 
-    <div class="form-group col-sm-6 col-md-3 d-flex align-items-center">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="expeditorNot" />
-        <label class="form-check-label ml-2" for="expeditorNot">Expedite Shipping</label>
-      </div>
+    <!-- Expedite Shipping Checkbox -->
+    <div class="form-group col-md-2" id="expediteS">
+      <label for="expeditorNot" style="margin-right: 10px;">Expedite Shipping</label>
+      <input type="checkbox" id="expeditorNot" style="width: 30px; height: 23px;">
     </div>
 
-    <div class="form-group col-sm-6 col-md-3">
+    <!-- Sales Tax -->
+    <div class="form-group col-md-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">%</span>
@@ -1227,13 +1225,15 @@ window.location.href = "login_signup.html";
     </div>
   </div>
 
-  <!-- Second Row -->
-  <div class="form-row mt-2">
-    <div class="form-group col-sm-6 col-md-2">
+  <!-- Second Row: 5 columns -->
+  <div class="form-row mt-3">
+    <!-- Last 4 Digits -->
+    <div class="form-group col-md-2">
       <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
     </div>
 
-    <div class="form-group col-sm-6 col-md-2">
+    <!-- Estimated GP -->
+    <div class="form-group col-md-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -1242,33 +1242,31 @@ window.location.href = "login_signup.html";
       </div>
     </div>
 
-    <div class="form-group col-sm-6 col-md-3">
+    <!-- Order Notes -->
+    <div class="form-group col-md-2">
       <input type="text" class="form-control" id="notes" required placeholder="Order Notes" />
     </div>
 
-    <div class="form-group col-sm-6 col-md-2 d-flex align-items-center">
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="dsCallCheckbox">
-        <label class="form-check-label ml-2" for="dsCallCheckbox">DS Call</label>
-      </div>
+    <!-- DS Call -->
+    <div class="form-group col-md-2" id="dsCall">
+      <label for="dsCallCheckbox" style="margin-right: 10px;">DS Call</label>
+      <input type="checkbox" id="dsCallCheckbox" class="dsCall" style="width: 30px; height: 23px;">
     </div>
 
-    <div class="form-group col-sm-6 col-md-3 d-flex align-items-center">
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="programmingRequiredCheckbox">
-        <label class="form-check-label ml-2" for="programmingRequiredCheckbox">Programming Required</label>
-      </div>
+    <!-- Programming Required -->
+    <div class="form-group col-md-2" id="programmingRequired">
+      <label for="programmingRequiredCheckbox" style="margin-right: 10px;">Programming Required</label>
+      <input type="checkbox" id="programmingRequiredCheckbox" class="programmingRequired" style="width: 30px; height: 23px;">
     </div>
   </div>
 
-  <!-- Conditional Programming Cost -->
+  <!-- Optional Programming Cost Input (shown conditionally) -->
   <div class="form-row mt-2">
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
       <input type="number" id="programmingCostQuoted" placeholder="Enter cost" class="form-control" style="display: none;" />
     </div>
   </div>
 </div>
-
 
 <!-- price and gp info till here -->
 <div id="below">
