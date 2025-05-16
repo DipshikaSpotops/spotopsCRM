@@ -85,7 +85,7 @@ margin: 1% 37.7%;
 width: 100%;
 flex-grow: 1;
 padding: 20px;
-margin-left: 4%;
+margin-left: 0%;
 margin-top: 5%;
 transition: margin-left 0.3s ease;
 }
@@ -304,14 +304,7 @@ h2 {
       border-radius: 10px;
       margin: 1% 37.7%;
     }
-    .main-content {
-      width: 100%;
-      flex-grow: 1;
-      padding: 20px;
-      margin-left: 0%;
-      margin-top: 5%;
-      transition: margin-left 0.3s ease;
-    }
+  
     .submenu {
       display: block;
     }
@@ -369,11 +362,13 @@ h2 {
       margin: -2% 0% -2% 12%;
     }
     .firstRow {
-      border: 1px solid #248287;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
       color: #023f42;
+    margin-bottom: 2%;
+    min-height: 230px;
+    padding: 1rem;
+    border: 1px solid #248287;
+    border-radius: 10px;
+    background-color: #eaf6ff;
     }
     .firstRow input {
       border: 1px solid #c8d8c9;
@@ -961,11 +956,10 @@ window.location.href = "login_signup.html";
     </div>
   
     <!-- Row 2: 1 Full-Width Column -->
-    <div class="form-row">
-      <div class="form-group col-md-12">
-        <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required />
-      </div>
+    <div class="form-group col-md-2">
+      <input type="text" class="form-control" id="bZip" placeholder="Zip Code" required/>
     </div>
+
   </div>
   
   <div class="firstRow" id="shipping">
