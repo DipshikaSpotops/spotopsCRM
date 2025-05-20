@@ -337,7 +337,7 @@ function toggleDarkMode() {
   darkModeToggle.classList.toggle("fa-sun", isDarkMode);
   fetchDailyOrders();
   updateDoughnutChart(doughnutMonthIndex);
-  initializeMonthlySalesProgressChart(latestMonthLabels, latestMonthlyGPData); 
+  drawBarChart(labels, data);
 }
 
 // Check stored preference and apply dark mode if needed
