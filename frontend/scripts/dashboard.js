@@ -325,6 +325,40 @@ const totalOrdersData = Array(todayDate).fill(0);
   }
 }
 
+let monthLabelsGlobal = [];
+let monthlyGPDataGlobal = [];
+
+async function fetchAndDisplayThreeMonthsData() {
+  monthLabelsGlobal = [];
+  monthlyGPDataGlobal = [];
+
+  const now = new Date();
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  for (let i = 2; i >= 0; i--) {
+    const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthStr = months[pastDate.getMonth()];
+    const year = pastDate.getFullYear();
+    const label = `${monthStr} ${year}`;
+
+    try {
+      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: { month: monthStr, year }
+      });
+
+      if (response.status === 200) {
+        const orders = response.data;
+        const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
+        monthLabelsGlobal.push(label);
+        monthlyGPDataGlobal.push(totalGP);
+      }
+    } catch (error) {
+      console.error(`Error fetching monthly GP data for ${label}`, error);
+    }
+  }
+
+  initializeMonthlySalesProgressChart(monthLabelsGlobal, monthlyGPDataGlobal);
+}
 
 const darkModeToggle = document.getElementById("darkModeIcon");
 
