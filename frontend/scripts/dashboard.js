@@ -393,43 +393,47 @@ let isNavigating = false; // Prevent rapid multiple clicks
 
 let latestMonthLabels = [];
 let latestMonthlyGPData = [];
+
 async function fetchAndDisplayThreeMonthsData() {
-  const monthlyGPData = [];
   const monthLabels = [];
+  const monthlyGPData = [];
 
   try {
     const now = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 2; i >= 0; i--) {
       const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthStr = months[pastDate.getMonth()];
       const year = pastDate.getFullYear();
 
-      monthLabels.unshift(`${monthStr} ${year}`);
+      monthLabels.push(`${monthStr} ${year}`);
 
-      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-        params: { month: monthStr, year },
+      const response = await axios.get("https://www.spotops360.com/orders/monthly", {
+        params: { month: monthStr, year }
       });
 
       if (response.status === 200) {
         const orders = response.data;
         const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
-        monthlyGPData.unshift(totalGP);
-        updateMonthlyChart(i + 1, `${monthStr} ${year}`, orders);
+        monthlyGPData.push(totalGP);
+
+        updateMonthlyChart(3 - i, `${monthStr} ${year}`, orders); // you already have this function
       }
     }
+
+    // Cache labels and data for later reuse (like in dark mode)
     latestMonthLabels = monthLabels;
     latestMonthlyGPData = monthlyGPData;
 
-    initializeMonthlySalesProgressChart(monthLabels, monthlyGPData);
-  } catch (error) {
-    console.error("Error fetching monthly data:", error);
+    drawBarChart(monthLabels, monthlyGPData); // <== New universal draw function
+  } catch (err) {
+    console.error("Error fetching and displaying 3-month data:", err);
   }
 }
 
 // Function to initialize the Monthly Sales Progress Chart
-let monthlySalesProgressChartInstance = null;
+// let monthlySalesProgressChartInstance = null;
 
 function initializeMonthlySalesProgressChart(labels, data) {
   const colors = getChartColors();
