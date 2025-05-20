@@ -392,6 +392,8 @@ if (savedDarkMode === "true") {
 darkModeToggle.addEventListener("click", toggleDarkMode);
 
 fetchDailyOrders();
+await fetchAndDisplayThreeMonthsData();
+
 
 // monthly overview report start here
 
