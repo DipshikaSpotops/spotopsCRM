@@ -176,43 +176,37 @@ window.location.href = "login_signup.html";
   <!-- <div class="downloadButton">
     <img id="downloadBtn" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/downloadBtn.png" alt="Download"/>
   </div> -->
-<div class="chart-container">
-<!-- First row: Two charts -->
-<div class="chart-item">
- 
-  <div class="charts-container" style="display: flex;">
-    
-    <div class="chart-wrapper">
-      <h4 style="text-align: center;">Daily Orders (This Month)</h4>
+  <div class="chart-grid">
+    <div class="chart-box" id="dailyOrdersBox">
+      <!-- Daily Orders Chart -->
       <canvas id="dailyOrdersChart"></canvas>
     </div>
-    <!-- New chart wrapper for monthly sales progress -->
-   
-    <div class="chart-wrapper">
-      <h4 style="text-align: center;">Monthly Progress</h4>
+  
+    <div class="chart-box" id="monthlyProgressBox">
+      <!-- Monthly Progress Chart -->
       <canvas id="monthlySalesProgressChart"></canvas>
     </div>
-  </div>
-</div>
-
-<div class="chart-row">
-  <div class="chart-box">
-    <!-- Your doughnut chart block here -->
-    <h3 style="text-align:center;">Monthly Orders' Overview</h3>
-    <div style="text-align:center; margin-bottom: 10px;">
-      <button id="prevMonthBtn" class="btn btn-sm btn-secondary">←</button>
-      <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
-      <button id="nextMonthBtn" class="btn btn-sm btn-secondary">→</button>
+  
+    <div class="chart-box" id="doughnutBox">
+      <h3 style="text-align:center;">Monthly Orders' Overview</h3>
+  
+      <div class="month-nav">
+        <button id="prevMonthBtn" class="btn btn-sm btn-secondary">←</button>
+        <span id="monthDisplay"></span>
+        <button id="nextMonthBtn" class="btn btn-sm btn-secondary">→</button>
+      </div>
+  
+      <div class="month-picker">
+        <input type="month" id="customMonth" />
+        <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
+      </div>
+  
+      <canvas id="monthlyDoughnutChart"></canvas>
+  
+      <div id="monthlyRates" class="rates-container"></div>
     </div>
-    <div style="text-align:center; margin-bottom: 15px;">
-      <input type="month" id="customMonth" style="padding: 5px;" />
-      <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
-    </div>
-    <canvas id="monthlyDoughnutChart"></canvas>
-    <div id="monthlyRates" class="rates-container" style="text-align: center; margin-top: 10px;"></div>
   </div>
-</div>
-
+  
 <!-- Second row: Two charts
 <div class="chart-item">
 <h4>Salesperson Performance</h4>
