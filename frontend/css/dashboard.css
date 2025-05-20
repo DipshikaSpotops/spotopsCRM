@@ -148,48 +148,11 @@ cursor: pointer;
 .vin-decoder-form button:hover {
   background-color: #2a4642;
 }
-  .chart-box {
-    background-color: #fbfcfd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 48%; /* Matches side-by-side layout */
-    min-width: 400px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  }
-  
-  .chart-container {
-    margin: 2% auto;
-    max-width: 1200px;
-    padding: 10px;
-  }
-  
-  /* Row for two charts side by side */
-  .charts-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .chart-box {
-    flex: 1 1 48%;
-    background-color: #fbfcfd;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    min-width: 300px;
-  }
-  
-  /* Full width doughnut below */
-  .doughnut-box {
-    margin-top: 30px;
-    background-color: #fbfcfd;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  }
-  
- 
+#doughnut {
+  background-color: #fbfcfd;
+  border-radius: 10px;
+  padding: 10px;
+}
 @media (max-width: 1200px) {
   .sidebar {
     width: 20%;
