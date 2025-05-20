@@ -339,7 +339,8 @@ function toggleDarkMode() {
 
   // Re-fetch chart with correct colors
   fetchDailyOrders();
-  initializeMonthlySalesProgressChart();
+  fetchAndDisplayThreeMonthsData();
+  initializeMonthlySalesProgressChart(monthLabelsGlobal, monthlyGPDataGlobal);
 }
 
 // Check stored preference and apply dark mode if needed
