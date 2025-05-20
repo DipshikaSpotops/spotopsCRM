@@ -196,23 +196,25 @@ window.location.href = "login_signup.html";
 </div>
 
 
-<div class="chart-container" style="text-align: center; margin-top: 40px;">
-  <h3>Monthly Order Breakdown</h3>
-  <h5 id="doughnutMonthTitle">Showing: <span id="monthDisplay">May 2025</span></h5>
-  <canvas id="monthlyDoughnutChart" width="400" height="400"></canvas>
-
-  <div style="margin-top: 15px;">
-    <button class="btn btn-outline-primary btn-sm" id="prevMonthBtn">← Previous</button>
-    <button class="btn btn-outline-primary btn-sm" id="nextMonthBtn">Next →</button>
-  </div>
-
-  <div style="margin-top: 15px;">
-    <label for="customMonth">Jump to:</label>
-    <input type="month" id="customMonth" />
-    <button class="btn btn-outline-success btn-sm" id="goToMonthBtn">Go</button>
-  </div>
-
-  <div id="monthlyRates" style="margin-top: 25px;"></div>
+<div class="chart-container" style="margin: 0% 2%;">
+<h3>Monthly Orders Overview (Last 3 Months)</h3>
+<div class="charts-container-monthly">
+<div class="chart-item-monthly">
+<h4 id="month-name-1" style="text-align: center;"></h4>
+<canvas id="chart-month-1" style="margin:0% 19%;"></canvas>
+<div id="rates-month-1" class="rates-container"></div> <!-- Rates container -->
+</div>
+<div class="chart-item-monthly">
+<h4 id="month-name-2" style="text-align: center;"></h4>
+<canvas id="chart-month-2" style="margin:0% 19%;"></canvas>
+<div id="rates-month-2" class="rates-container"></div> <!-- Rates container -->
+</div>
+<div class="chart-item-monthly">
+<h4 id="month-name-3" style="text-align: center;"></h4>
+<canvas id="chart-month-3" style="margin:0% 19%;"></canvas>
+<div id="rates-month-3" class="rates-container"></div> <!-- Rates container -->
+</div>
+</div>
 </div>
 
 
