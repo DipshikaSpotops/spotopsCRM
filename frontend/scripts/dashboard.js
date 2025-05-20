@@ -1,5 +1,12 @@
 $(document).ready(async function () {
 console.log("ready function");
+async function initDashboard() {
+  await fetchDailyOrders();
+  await fetchAndDisplayThreeMonthsData();
+  await preloadLastThreeMonths();
+}
+await initDashboard();
+
 $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
@@ -138,17 +145,7 @@ $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
-// for rendering charts
-// Fetch and render data for each chart
-async function fetchAndRenderCharts() {
-await fetchDailyOrders();
-await fetchLatestThreeMonthsOrders();
-// await fetchSalespersonPerformance();
-// await fetchYearlyProgress();
-}
 
-// Fetch daily orders and display them in a chart
-// Global variable to track the daily orders chart
 let dailyOrdersChartInstance = null;
 
 function getChartColors() {
@@ -327,6 +324,7 @@ const totalOrdersData = Array(todayDate).fill(0);
 
 let monthLabelsGlobal = [];
 let monthlyGPDataGlobal = [];
+let monthlySalesProgressChartInstance = null;
 
 async function fetchAndDisplayThreeMonthsData() {
   monthLabelsGlobal = [];
@@ -361,7 +359,6 @@ async function fetchAndDisplayThreeMonthsData() {
 }
 
 const darkModeToggle = document.getElementById("darkModeIcon");
-
 function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
   const isDarkMode = document.body.classList.contains("dark-mode");
@@ -393,12 +390,11 @@ darkModeToggle.addEventListener("click", toggleDarkMode);
 
 fetchDailyOrders();
 await fetchAndDisplayThreeMonthsData();
-
+await preloadLastThreeMonths();
 
 // monthly overview report start here
 
 // Function to initialize the Monthly Sales Progress Chart
-let monthlySalesProgressChartInstance = null;
 
 function initializeMonthlySalesProgressChart(labels, data) {
   const colors = getChartColors();
