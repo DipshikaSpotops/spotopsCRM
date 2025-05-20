@@ -433,64 +433,52 @@ async function fetchAndDisplayThreeMonthsData() {
 }
 
 // Function to initialize the Monthly Sales Progress Chart
-// let monthlySalesProgressChartInstance = null;
+let monthlySalesProgressChartInstance = null;
 
-function initializeMonthlySalesProgressChart(labels, data) {
+function drawBarChart(labels, data) {
   const colors = getChartColors();
-  const ctx = document
-    .getElementById("monthlySalesProgressChart")
-    .getContext("2d");
+  const ctx = document.getElementById("monthlySalesProgressChart").getContext("2d");
 
-  // Destroy the previous chart instance if it exists
   if (monthlySalesProgressChartInstance) {
     monthlySalesProgressChartInstance.destroy();
   }
 
-  // Create a new chart
   monthlySalesProgressChartInstance = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Monthly Sales Progress (Total Actual GP)",
-          color: colors.axisColor,
-          data: data,
-          backgroundColor: colors.monthlySalesBgColor,
-          // borderColor: "black",
-          borderWidth: 1,
-          fill: true
-        },
-      ],
+      labels,
+      datasets: [{
+        label: "Monthly Sales Progress (Total Actual GP)",
+        data,
+        backgroundColor: colors.monthlySalesBgColor,
+        borderWidth: 1
+      }]
     },
     options: {
-      
       responsive: true,
-        scales: {
-          x: {
-            title: { display: true, text: "Month", color: colors.axisColor },
-            ticks: { color: colors.axisColor },
-            grid: { color: colors.gridColor },
-          },
-          y: {
-            title: { display: true, text: "Actual GP", color: colors.axisColor },
-            ticks: { color: colors.axisColor },
-            grid: { color: colors.gridColor },
-            min: 0, // Prevent negative values
-          },
+      scales: {
+        x: {
+          title: { display: true, text: "Month", color: colors.axisColor },
+          ticks: { color: colors.axisColor },
+          grid: { color: colors.gridColor }
         },
-        plugins: {
-          legend: {
-            labels: {
-              color: colors.legendColor,
-            },
-          },
-          title: {
-            display: true,
-            color: colors.axisColor,
-          },
+        y: {
+          title: { display: true, text: "Actual GP", color: colors.axisColor },
+          ticks: { color: colors.axisColor },
+          grid: { color: colors.gridColor },
+          min: 0
+        }
+      },
+      plugins: {
+        legend: {
+          labels: { color: colors.legendColor }
         },
-    },
+        title: {
+          display: true,
+          color: colors.axisColor
+        }
+      }
+    }
   });
 }
 let doughnutChartInstance = null;
