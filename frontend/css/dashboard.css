@@ -148,6 +148,11 @@ cursor: pointer;
 .vin-decoder-form button:hover {
   background-color: #2a4642;
 }
+#doughnut {
+  background-color: #fbfcfd;
+  border-radius: 10px;
+  padding: 10px;
+}
 @media (max-width: 1200px) {
   .sidebar {
     width: 20%;
