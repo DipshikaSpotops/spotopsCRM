@@ -333,14 +333,13 @@ function toggleDarkMode() {
   const isDarkMode = document.body.classList.contains("dark-mode");
   localStorage.setItem("darkMode", isDarkMode ? "true" : "false");
 
-  // Change icon
   darkModeToggle.classList.toggle("fa-moon", !isDarkMode);
   darkModeToggle.classList.toggle("fa-sun", isDarkMode);
 
-  // Re-fetch chart with correct colors
   fetchDailyOrders();
-  fetchAndDisplayThreeMonthsData();
-  initializeMonthlySalesProgressChart();
+
+  // Use global cached values when re-rendering chart
+  initializeMonthlySalesProgressChart(monthLabelsGlobal, monthlyGPDataGlobal);
 }
 
 // Check stored preference and apply dark mode if needed
@@ -398,9 +397,11 @@ let isNavigating = false; // Prevent rapid multiple clicks
 
 
 
+let monthlyGPDataGlobal = [];
+let monthLabelsGlobal = [];
 async function fetchAndDisplayThreeMonthsData() {
-  const monthlyGPData = []; 
-  const monthLabels = [];   
+  monthlyGPDataGlobal = [];  // clear before refilling
+  monthLabelsGlobal = [];
 
   const now = new Date();
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -411,18 +412,7 @@ async function fetchAndDisplayThreeMonthsData() {
     const year = pastDate.getFullYear();
     const label = `${monthStr} ${year}`;
 
-    monthLabels.unshift(label); // chronological order
-
-    let cached = allFetchedMonthlyData.find(item => item.label === label);
-    const cacheValid = cached && (Date.now() - cached.fetchedAt < 5 * 60 * 1000); // 5 min cache
-
-    if (cacheValid) {
-      console.log(`Using cached data for ${label}`);
-      updateMonthlyChart(i + 1, label, cached.orders);
-      const totalGP = cached.orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
-      monthlyGPData.unshift(totalGP);
-      continue;
-    }
+    monthLabelsGlobal.unshift(label);
 
     try {
       const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
@@ -431,29 +421,16 @@ async function fetchAndDisplayThreeMonthsData() {
 
       if (response.status === 200) {
         const orders = response.data;
-
-        // Update chart and GP
         updateMonthlyChart(i + 1, label, orders);
         const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
-        monthlyGPData.unshift(totalGP);
-
-        // Update cache
-        const indexInCache = allFetchedMonthlyData.findIndex(item => item.label === label);
-        if (indexInCache > -1) {
-          allFetchedMonthlyData[indexInCache] = { label, orders, fetchedAt: Date.now() };
-        } else {
-          allFetchedMonthlyData.push({ label, orders, fetchedAt: Date.now() });
-        }
-      } else {
-        console.error(`Failed to fetch data for ${label}`);
+        monthlyGPDataGlobal.unshift(totalGP);
       }
     } catch (error) {
       console.error(`Error fetching data for ${label}`, error);
     }
   }
 
-  // Draw sales progress bar chart
-  initializeMonthlySalesProgressChart(monthLabels, monthlyGPData);
+  initializeMonthlySalesProgressChart(monthLabelsGlobal, monthlyGPDataGlobal);
 }
 
 // Function to initialize the Monthly Sales Progress Chart
