@@ -1,12 +1,5 @@
 $(document).ready(async function () {
 console.log("ready function");
-async function initDashboard() {
-  await fetchDailyOrders();
-  await fetchAndDisplayThreeMonthsData();
-  await preloadLastThreeMonths();
-}
-await initDashboard();
-
 $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
@@ -145,7 +138,17 @@ $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
+// for rendering charts
+// Fetch and render data for each chart
+async function fetchAndRenderCharts() {
+await fetchDailyOrders();
+await fetchLatestThreeMonthsOrders();
+// await fetchSalespersonPerformance();
+// await fetchYearlyProgress();
+}
 
+// Fetch daily orders and display them in a chart
+// Global variable to track the daily orders chart
 let dailyOrdersChartInstance = null;
 
 function getChartColors() {
@@ -322,43 +325,9 @@ const totalOrdersData = Array(todayDate).fill(0);
   }
 }
 
-let monthLabelsGlobal = [];
-let monthlyGPDataGlobal = [];
-let monthlySalesProgressChartInstance = null;
-
-async function fetchAndDisplayThreeMonthsData() {
-  monthLabelsGlobal = [];
-  monthlyGPDataGlobal = [];
-
-  const now = new Date();
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  for (let i = 2; i >= 0; i--) {
-    const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const monthStr = months[pastDate.getMonth()];
-    const year = pastDate.getFullYear();
-    const label = `${monthStr} ${year}`;
-
-    try {
-      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-        params: { month: monthStr, year }
-      });
-
-      if (response.status === 200) {
-        const orders = response.data;
-        const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
-        monthLabelsGlobal.push(label);
-        monthlyGPDataGlobal.push(totalGP);
-      }
-    } catch (error) {
-      console.error(`Error fetching monthly GP data for ${label}`, error);
-    }
-  }
-
-  initializeMonthlySalesProgressChart(monthLabelsGlobal, monthlyGPDataGlobal);
-}
 
 const darkModeToggle = document.getElementById("darkModeIcon");
+
 function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
   const isDarkMode = document.body.classList.contains("dark-mode");
@@ -371,7 +340,7 @@ function toggleDarkMode() {
   // Re-fetch chart with correct colors
   fetchDailyOrders();
   fetchAndDisplayThreeMonthsData();
-  initializeMonthlySalesProgressChart(monthLabelsGlobal, monthlyGPDataGlobal);
+  initializeMonthlySalesProgressChart();
 }
 
 // Check stored preference and apply dark mode if needed
@@ -389,12 +358,95 @@ if (savedDarkMode === "true") {
 darkModeToggle.addEventListener("click", toggleDarkMode);
 
 fetchDailyOrders();
-await fetchAndDisplayThreeMonthsData();
-await preloadLastThreeMonths();
 
 // monthly overview report start here
+let chartInstances = {}; // Store chart instances by month
+let cachedOrders = {}; // Store cached orders data
+let isNavigating = false; // Prevent rapid multiple clicks
+
+// function getLastThreeMonths() {
+// const now = new Date();
+// const months = [];
+// for (let i = 2; i >= 0; i--) {
+// const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+// months.push({
+// name: date.toLocaleString("default", { month: "long" }),
+// number: date.getMonth() + 1,
+// year: date.getFullYear(),
+// });
+// }
+// return months;
+// }
+
+// const lastThreeMonths = getLastThreeMonths();
+// let currentMonthIndex = 0;
+
+// // generateCarouselContent();
+// // preloadOrders(); // Fetch all orders once on load
+
+// // Generate carousel content
+// async function renderAllMonthlyCharts() {
+// const lastThreeMonths = getLastThreeMonths();
+
+// // Loop through each month and render its chart
+// for (let i = 0; i < lastThreeMonths.length; i++) {
+// const month = lastThreeMonths[i];
+// const orders = await fetchMonthlyOrders(month);
+// updateMonthlyChart(i + 1, month.name, orders);
+// }
+// }
+
+
+
+
+async function fetchAndDisplayThreeMonthsData() {
+  const monthlyGPData = []; // Store GP data for each of the last three months
+  const monthLabels = [];   // Store month names for chart labels
+
+  try {
+    const now = new Date();
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    // Loop through the current and last two months
+    for (let i = 0; i < 3; i++) {
+      const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthStr = months[pastDate.getMonth()];
+      const year = pastDate.getFullYear();
+
+      monthLabels.unshift(`${monthStr} ${year}`);
+
+      // Fetch and render each month’s data
+      try {
+        const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+          params: { month: monthStr, year },
+        });
+
+        if (response.status === 200) {
+          const orders = response.data;
+          const monthName = `${monthStr} ${year}`;
+          updateMonthlyChart(i + 1, monthName, orders);
+
+          // Calculate the total GP for the month and add it to the array
+          const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
+          monthlyGPData.unshift(totalGP); // Add the GP data in reverse order for chronological display
+        } else {
+          console.error(`Failed to fetch orders for ${monthStr} ${year}`);
+        }
+      } catch (error) {
+        console.error(`Error fetching orders for ${monthStr} ${year}`, error);
+      }
+    }
+
+    // Now initialize the Monthly Sales Progress Chart with GP data
+    initializeMonthlySalesProgressChart(monthLabels, monthlyGPData);
+
+  } catch (error) {
+    console.error("Error setting up the date or fetching monthly data:", error);
+  }
+}
 
 // Function to initialize the Monthly Sales Progress Chart
+let monthlySalesProgressChartInstance = null;
 
 function initializeMonthlySalesProgressChart(labels, data) {
   const colors = getChartColors();
@@ -454,150 +506,111 @@ function initializeMonthlySalesProgressChart(labels, data) {
     },
   });
 }
-// =================== NEW SINGLE DOUGHNUT CHART LOGIC ===================
-
-let doughnutChartInstance = null;
-let allFetchedMonthlyData = [];
-let doughnutMonthIndex = 0;
-
-function getLastThreeMonths() {
-  const now = new Date();
-  const months = [];
-  for (let i = 2; i >= 0; i--) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push({
-      label: date.toLocaleString("default", { month: "long", year: "numeric" }),
-      month: date.toLocaleString("default", { month: "short" }),
-      year: date.getFullYear()
-    });
+// Call the main function to fetch and display data for the three months
+function updateMonthlyChart(index, monthName, orders) {
+  const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
+  if (chartInstances[index]) {
+    chartInstances[index].destroy();
   }
-  return months;
-}
-
-async function fetchMonthlyOrders(month, year) {
-  try {
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-      params: { month, year },
-    });
-    return response.data;
-  } catch (err) {
-    console.error("Error fetching monthly data:", err);
-    return [];
-  }
-}
-
-function updateDoughnutChart(monthIndex) {
-  const monthData = allFetchedMonthlyData[monthIndex];
-  if (!monthData) return;
-
-  const { label, orders } = monthData;
-  document.getElementById("monthDisplay").innerText = label;
-
+  const isDarkMode = document.body.classList.contains("dark-mode");
+  const colors = {
+    backgroundColors: isDarkMode
+      ? ["#8B5CF6", "#A78BFA", "#6366F1", "#60A5FA", "#22D3EE", "#34D399", "#F87171", "#FACC15", "#E879F9"]
+      : ["#d5f0c0", "#ffe5a0", "#97d8fb", "#c3d5fa", "#f8aaa8", "#a7cf90", "#dd412b", "#5a3286", "#e6cff2"],
+    borderColor: isDarkMode ? "#B3B3B3" : "#C0C0C0",
+    legendColor: isDarkMode ? "#FFFFFF" : "#000000",
+    titleColor: isDarkMode ? "#FFFFFF" : "#000000",
+  };
   const statusLabels = [
-    "Placed", "Customer Approved", "Yard Processing", "In Transit",
-    "Escalation", "Order Fulfilled", "Order Cancelled", "Refunded", "Dispute"
+    "Placed",
+    "Customer Approved",
+    "Yard Processing",
+    "In Transit",
+    "Escalation",
+    "Order Fulfilled",
+    "Order Cancelled",
+    "Refunded",
+    "Dispute",
   ];
 
-  const statusCounts = statusLabels.map(status =>
-    orders.filter(order => order.orderStatus === status).length
+  const statusCounts = statusLabels.map((status) =>
+    orders.filter((order) => order.orderStatus === status).length
   );
 
+  // Calculate the required metrics
   const totalOrders = orders.length;
-  const totalFulfilled = orders.filter(o => o.orderStatus === "Order Fulfilled").length;
-  const totalEscalated = orders.filter(o => o.orderStatus === "Escalation").length;
-  const totalCancelled = orders.filter(o =>
-    ["Order Cancelled", "Refunded", "Dispute"].includes(o.orderStatus)).length;
+  const totalFulfilled = orders.filter((order) => order.orderStatus === "Order Fulfilled").length;
+  const totalEscalated = orders.filter((order) => order.orderStatus === "Escalation").length;
+  const totalCancelled = orders.filter((order) => order.orderStatus === "Order Cancelled").length;
+  const totalRefunded = orders.filter((order) => order.orderStatus === "Refunded").length;
+  const totalDisputed = orders.filter((order) => order.orderStatus === "Dispute").length
 
-  const successRate = totalOrders ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
-  const escalationRate = totalOrders ? ((totalEscalated / totalOrders) * 100).toFixed(2) : 0;
-  const cancellationRate = totalOrders ? ((totalCancelled / totalOrders) * 100).toFixed(2) : 0;
+  // Compute rates
+  const successRate = totalOrders > 0 ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
+  const escalationRate = totalOrders > 0 ? ((totalEscalated / totalOrders) * 100).toFixed(2) : 0;
+  const cancellationRate = totalOrders > 0 ? (((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100).toFixed(2) : 0;
 
-  const ctx = document.getElementById("monthlyDoughnutChart").getContext("2d");
-
-  if (doughnutChartInstance) doughnutChartInstance.destroy();
-
-  const colors = getChartColors();
-
-  doughnutChartInstance = new Chart(ctx, {
+  // Create and store the new chart
+  chartInstances[index] = new Chart(ctx, {
     type: "doughnut",
     data: {
       labels: statusLabels,
-      datasets: [{
-        data: statusCounts,
-        backgroundColor: colors.pieChartBgColors,
-        borderColor: colors.pieChartBorderColor,
-        borderWidth: 1
-      }]
+      datasets: [
+        {
+          label: `Order Status Distribution for ${monthName}`,
+          data: statusCounts,
+          backgroundColor: colors.backgroundColors,
+          borderColor: colors.borderColor,
+          borderWidth: 1,
+          hoverOffset: 4,
+        },
+      ],
     },
     options: {
       responsive: true,
       plugins: {
         legend: {
-          labels: { color: colors.pieChartLegendColor },
-          position: "right"
+          labels: {
+            color: colors.legendColor, // Legend text color
+          },
+          position: "right",
         },
         title: {
           display: true,
-          text: `Order Status Distribution for ${label}`,
-          color: colors.pieChartLegendColor
-        }
-      }
-    }
+          text: `Order Status Distribution for ${monthName}`,
+          color: colors.titleColor, // Chart title color
+        },
+      },
+    },
   });
 
-  // Update metrics
-  document.getElementById("monthlyRates").innerHTML = `
-    <div class="rate-item rate-success">✅ Success Rate: ${successRate}%</div>
-    <div class="rate-item rate-escalation">⚠️ Escalation Rate: ${escalationRate}%</div>
-    <div class="rate-item rate-cancellation">🗑️ Cancellation Rate: ${cancellationRate}%</div>
-    <div class="rate-item total-orders">🛒 Total Orders: ${totalOrders}</div>
+  // Set the month name in the header
+  document.getElementById(`month-name-${index}`).innerText = monthName;
+
+  // Update the summary metrics below each chart
+  document.getElementById(`rates-month-${index}`).innerHTML = `
+    <div class="rate-item rate-success">
+      <span><i class="fas fa-check-circle"></i> Success Rate:</span>
+      <strong>${successRate}%</strong>
+    </div>
+    <div class="rate-item rate-escalation">
+      <span><i class="fas fa-exclamation-triangle"></i> Escalation Rate:</span>
+      <strong>${escalationRate}%</strong>
+    </div>
+    <div class="rate-item rate-cancellation">
+      <span><i class="fas fa-times-circle"></i> Cancellation Rate:</span>
+      <strong>${cancellationRate}%</strong>
+    </div>
+    <div class="rate-item total-orders">
+      <span><i class="fas fa-shopping-cart"></i> Total Orders:</span>
+      <strong>${totalOrders}</strong>
+    </div>
   `;
 }
 
-async function preloadLastThreeMonths() {
-  const lastThree = getLastThreeMonths();
-  allFetchedMonthlyData = [];
-  for (let month of lastThree) {
-    const orders = await fetchMonthlyOrders(month.month, month.year);
-    allFetchedMonthlyData.push({ label: month.label, orders });
-  }
-  doughnutMonthIndex = allFetchedMonthlyData.length - 1; // Latest month
-  updateDoughnutChart(doughnutMonthIndex);
-}
-
-document.getElementById("prevMonthBtn").addEventListener("click", () => {
-  if (doughnutMonthIndex > 0) {
-    doughnutMonthIndex--;
-    updateDoughnutChart(doughnutMonthIndex);
-  }
-});
-
-document.getElementById("nextMonthBtn").addEventListener("click", () => {
-  if (doughnutMonthIndex < allFetchedMonthlyData.length - 1) {
-    doughnutMonthIndex++;
-    updateDoughnutChart(doughnutMonthIndex);
-  }
-});
-
-document.getElementById("goToMonthBtn").addEventListener("click", async () => {
-  const monthInput = document.getElementById("customMonth").value;
-  if (!monthInput) return;
-
-  const [year, monthNum] = monthInput.split("-");
-  const date = new Date(year, monthNum - 1);
-  const monthShort = date.toLocaleString("default", { month: "short" });
-  const label = date.toLocaleString("default", { month: "long", year: "numeric" });
-
-  const orders = await fetchMonthlyOrders(monthShort, parseInt(year));
-  allFetchedMonthlyData.push({ label, orders });
-  doughnutMonthIndex = allFetchedMonthlyData.length - 1;
-  updateDoughnutChart(doughnutMonthIndex);
-});
-
-// Initial Load
-preloadLastThreeMonths();
 
 
+fetchAndDisplayThreeMonthsData();
 // for dark mode
 // Add click event to toggle dark mode
 darkModeToggle.addEventListener("click", toggleDarkMode);
@@ -768,4 +781,3 @@ $("body").removeClass("modal-active");
 
 fetchNotifications();
 });
-
