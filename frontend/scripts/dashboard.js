@@ -337,7 +337,7 @@ function toggleDarkMode() {
   darkModeToggle.classList.toggle("fa-sun", isDarkMode);
   fetchDailyOrders();
   updateDoughnutChart(doughnutMonthIndex);
-  drawBarChart(labels, data);
+  drawBarChart(latestMonthLabels, latestMonthlyGPData);
 }
 
 // Check stored preference and apply dark mode if needed
@@ -351,7 +351,7 @@ if (savedDarkMode === "true") {
   darkModeToggle.classList.remove("fa-sun");
 }
 fetchDailyOrders();
-
+fetchAndDisplayThreeMonthsData();
 // monthly overview report start here
 let chartInstances = {}; // Store chart instances by month
 let cachedOrders = {}; // Store cached orders data
