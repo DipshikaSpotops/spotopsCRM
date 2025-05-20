@@ -552,7 +552,7 @@ function updateMonthlyChart(index, monthName, orders) {
 
   // Create and store the new chart
   chartInstances[index] = new Chart(ctx, {
-    type: "dough",
+    type: "doughnut",
     data: {
       labels: statusLabels,
       datasets: [
