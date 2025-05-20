@@ -160,35 +160,32 @@ cursor: pointer;
   .chart-container {
     margin: 2% auto;
     max-width: 1200px;
+    padding: 10px;
   }
   
-  /* Row with 2 charts side by side */
-  .charts-container {
+  /* Row for two charts side by side */
+  .charts-row {
     display: flex;
+    gap: 20px;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 20px;
   }
   
-  .chart-wrapper {
+  .chart-box {
     flex: 1 1 48%;
     background-color: #fbfcfd;
-    border-radius: 10px;
     padding: 20px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
     min-width: 300px;
   }
   
-  /* Doughnut chart should match the width of the above row */
-  .chart-row {
+  /* Full width doughnut below */
+  .doughnut-box {
     margin-top: 30px;
-  }
-  
-  .chart-box {
-    width: 100%;
     background-color: #fbfcfd;
-    border-radius: 10px;
     padding: 20px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
   }
   
