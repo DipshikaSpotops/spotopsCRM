@@ -418,7 +418,7 @@ async function fetchAndDisplayThreeMonthsData() {
         const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
         monthlyGPData.push(totalGP);
 
-        updateMonthlyChart(3 - i, `${monthStr} ${year}`, orders); // you already have this function
+        // updateMonthlyChart(3 - i, `${monthStr} ${year}`, orders); // you already have this function
       }
     }
 
