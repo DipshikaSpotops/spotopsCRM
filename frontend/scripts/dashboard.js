@@ -406,7 +406,7 @@ async function fetchAndDisplayThreeMonthsData() {
       const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthStr = months[pastDate.getMonth()];
       const year = pastDate.getFullYear();
-
+      $("#customMonth").val(`${monthStr},${year}`);
       monthLabels.push(`${monthStr} ${year}`);
 
       const response = await axios.get("https://www.spotops360.com/orders/monthly", {
