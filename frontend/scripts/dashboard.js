@@ -401,12 +401,13 @@ async function fetchAndDisplayThreeMonthsData() {
   try {
     const now = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+    const currentMonthValue = now.toISOString().slice(0, 7); // format: YYYY-MM
+    document.getElementById("customMonth").value = currentMonthValue;
     for (let i = 2; i >= 0; i--) {
       const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthStr = months[pastDate.getMonth()];
       const year = pastDate.getFullYear();
-      $("#customMonth").val(`${year},${monthStr}`);
+      // $("#customMonth").val(`${year},${monthStr}`);
       monthLabels.push(`${monthStr} ${year}`);
 
       const response = await axios.get("https://www.spotops360.com/orders/monthly", {
