@@ -333,14 +333,11 @@ function toggleDarkMode() {
   const isDarkMode = document.body.classList.contains("dark-mode");
   localStorage.setItem("darkMode", isDarkMode ? "true" : "false");
 
-  // Change icon
   darkModeToggle.classList.toggle("fa-moon", !isDarkMode);
   darkModeToggle.classList.toggle("fa-sun", isDarkMode);
-
-  // Re-fetch chart with correct colors
   fetchDailyOrders();
-  fetchAndDisplayThreeMonthsData();
-  initializeMonthlySalesProgressChart();
+  updateDoughnutChart(doughnutMonthIndex);
+  initializeMonthlySalesProgressChart(latestMonthLabels, latestMonthlyGPData); 
 }
 
 // Check stored preference and apply dark mode if needed
@@ -394,16 +391,16 @@ let isNavigating = false; // Prevent rapid multiple clicks
 
 
 
-
+let latestMonthLabels = [];
+let latestMonthlyGPData = [];
 async function fetchAndDisplayThreeMonthsData() {
-  const monthlyGPData = []; // Store GP data for each of the last three months
-  const monthLabels = [];   // Store month names for chart labels
+  const monthlyGPData = [];
+  const monthLabels = [];
 
   try {
     const now = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    
-    // Loop through the current and last two months
+
     for (let i = 0; i < 3; i++) {
       const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthStr = months[pastDate.getMonth()];
@@ -411,33 +408,23 @@ async function fetchAndDisplayThreeMonthsData() {
 
       monthLabels.unshift(`${monthStr} ${year}`);
 
-      // Fetch and render each month’s data
-      try {
-        const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-          params: { month: monthStr, year },
-        });
+      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: { month: monthStr, year },
+      });
 
-        if (response.status === 200) {
-          const orders = response.data;
-          const monthName = `${monthStr} ${year}`;
-          updateMonthlyChart(i + 1, monthName, orders);
-
-          // Calculate the total GP for the month and add it to the array
-          const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
-          monthlyGPData.unshift(totalGP); // Add the GP data in reverse order for chronological display
-        } else {
-          console.error(`Failed to fetch orders for ${monthStr} ${year}`);
-        }
-      } catch (error) {
-        console.error(`Error fetching orders for ${monthStr} ${year}`, error);
+      if (response.status === 200) {
+        const orders = response.data;
+        const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
+        monthlyGPData.unshift(totalGP);
+        updateMonthlyChart(i + 1, `${monthStr} ${year}`, orders);
       }
     }
+    latestMonthLabels = monthLabels;
+    latestMonthlyGPData = monthlyGPData;
 
-    // Now initialize the Monthly Sales Progress Chart with GP data
     initializeMonthlySalesProgressChart(monthLabels, monthlyGPData);
-
   } catch (error) {
-    console.error("Error setting up the date or fetching monthly data:", error);
+    console.error("Error fetching monthly data:", error);
   }
 }
 
