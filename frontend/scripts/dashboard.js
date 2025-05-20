@@ -353,10 +353,6 @@ if (savedDarkMode === "true") {
   darkModeToggle.classList.add("fa-moon");
   darkModeToggle.classList.remove("fa-sun");
 }
-
-// Event listener for dark mode toggle
-darkModeToggle.addEventListener("click", toggleDarkMode);
-
 fetchDailyOrders();
 
 // monthly overview report start here
@@ -506,111 +502,148 @@ function initializeMonthlySalesProgressChart(labels, data) {
     },
   });
 }
-// Call the main function to fetch and display data for the three months
-function updateMonthlyChart(index, monthName, orders) {
-  const ctx = document.getElementById(`chart-month-${index}`).getContext("2d");
-  if (chartInstances[index]) {
-    chartInstances[index].destroy();
+let doughnutChartInstance = null;
+let allFetchedMonthlyData = [];
+let doughnutMonthIndex = 0;
+
+function getLastThreeMonths() {
+  const now = new Date();
+  const months = [];
+  for (let i = 2; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({
+      label: date.toLocaleString("default", { month: "long", year: "numeric" }),
+      month: date.toLocaleString("default", { month: "short" }),
+      year: date.getFullYear()
+    });
   }
-  const isDarkMode = document.body.classList.contains("dark-mode");
-  const colors = {
-    backgroundColors: isDarkMode
-      ? ["#8B5CF6", "#A78BFA", "#6366F1", "#60A5FA", "#22D3EE", "#34D399", "#F87171", "#FACC15", "#E879F9"]
-      : ["#d5f0c0", "#ffe5a0", "#97d8fb", "#c3d5fa", "#f8aaa8", "#a7cf90", "#dd412b", "#5a3286", "#e6cff2"],
-    borderColor: isDarkMode ? "#B3B3B3" : "#C0C0C0",
-    legendColor: isDarkMode ? "#FFFFFF" : "#000000",
-    titleColor: isDarkMode ? "#FFFFFF" : "#000000",
-  };
+  return months;
+}
+
+async function fetchMonthlyOrders(month, year) {
+  try {
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month, year },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching monthly data:", err);
+    return [];
+  }
+}
+
+function updateDoughnutChart(monthIndex) {
+  const monthData = allFetchedMonthlyData[monthIndex];
+  if (!monthData) return;
+
+  const { label, orders } = monthData;
+  document.getElementById("monthDisplay").innerText = label;
+
   const statusLabels = [
-    "Placed",
-    "Customer Approved",
-    "Yard Processing",
-    "In Transit",
-    "Escalation",
-    "Order Fulfilled",
-    "Order Cancelled",
-    "Refunded",
-    "Dispute",
+    "Placed", "Customer Approved", "Yard Processing", "In Transit",
+    "Escalation", "Order Fulfilled", "Order Cancelled", "Refunded", "Dispute"
   ];
 
-  const statusCounts = statusLabels.map((status) =>
-    orders.filter((order) => order.orderStatus === status).length
+  const statusCounts = statusLabels.map(status =>
+    orders.filter(order => order.orderStatus === status).length
   );
 
-  // Calculate the required metrics
   const totalOrders = orders.length;
-  const totalFulfilled = orders.filter((order) => order.orderStatus === "Order Fulfilled").length;
-  const totalEscalated = orders.filter((order) => order.orderStatus === "Escalation").length;
-  const totalCancelled = orders.filter((order) => order.orderStatus === "Order Cancelled").length;
-  const totalRefunded = orders.filter((order) => order.orderStatus === "Refunded").length;
-  const totalDisputed = orders.filter((order) => order.orderStatus === "Dispute").length
+  const totalFulfilled = orders.filter(o => o.orderStatus === "Order Fulfilled").length;
+  const totalEscalated = orders.filter(o => o.orderStatus === "Escalation").length;
+  const totalCancelled = orders.filter(o =>
+    ["Order Cancelled", "Refunded", "Dispute"].includes(o.orderStatus)).length;
 
-  // Compute rates
-  const successRate = totalOrders > 0 ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
-  const escalationRate = totalOrders > 0 ? ((totalEscalated / totalOrders) * 100).toFixed(2) : 0;
-  const cancellationRate = totalOrders > 0 ? (((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100).toFixed(2) : 0;
+  const successRate = totalOrders ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
+  const escalationRate = totalOrders ? ((totalEscalated / totalOrders) * 100).toFixed(2) : 0;
+  const cancellationRate = totalOrders ? ((totalCancelled / totalOrders) * 100).toFixed(2) : 0;
 
-  // Create and store the new chart
-  chartInstances[index] = new Chart(ctx, {
+  const ctx = document.getElementById("monthlyDoughnutChart").getContext("2d");
+
+  if (doughnutChartInstance) doughnutChartInstance.destroy();
+
+  const colors = getChartColors();
+
+  doughnutChartInstance = new Chart(ctx, {
     type: "doughnut",
     data: {
       labels: statusLabels,
-      datasets: [
-        {
-          label: `Order Status Distribution for ${monthName}`,
-          data: statusCounts,
-          backgroundColor: colors.backgroundColors,
-          borderColor: colors.borderColor,
-          borderWidth: 1,
-          hoverOffset: 4,
-        },
-      ],
+      datasets: [{
+        data: statusCounts,
+        backgroundColor: colors.pieChartBgColors,
+        borderColor: colors.pieChartBorderColor,
+        borderWidth: 1
+      }]
     },
     options: {
       responsive: true,
       plugins: {
         legend: {
-          labels: {
-            color: colors.legendColor, // Legend text color
-          },
-          position: "right",
+          labels: { color: colors.pieChartLegendColor },
+          position: "right"
         },
         title: {
           display: true,
-          text: `Order Status Distribution for ${monthName}`,
-          color: colors.titleColor, // Chart title color
-        },
-      },
-    },
+          text: `Order Status Distribution for ${label}`,
+          color: colors.pieChartLegendColor
+        }
+      }
+    }
   });
 
-  // Set the month name in the header
-  document.getElementById(`month-name-${index}`).innerText = monthName;
-
-  // Update the summary metrics below each chart
-  document.getElementById(`rates-month-${index}`).innerHTML = `
-    <div class="rate-item rate-success">
-      <span><i class="fas fa-check-circle"></i> Success Rate:</span>
-      <strong>${successRate}%</strong>
-    </div>
-    <div class="rate-item rate-escalation">
-      <span><i class="fas fa-exclamation-triangle"></i> Escalation Rate:</span>
-      <strong>${escalationRate}%</strong>
-    </div>
-    <div class="rate-item rate-cancellation">
-      <span><i class="fas fa-times-circle"></i> Cancellation Rate:</span>
-      <strong>${cancellationRate}%</strong>
-    </div>
-    <div class="rate-item total-orders">
-      <span><i class="fas fa-shopping-cart"></i> Total Orders:</span>
-      <strong>${totalOrders}</strong>
-    </div>
+  // Update metrics
+  document.getElementById("monthlyRates").innerHTML = `
+    <div class="rate-item rate-success">✅ Success Rate: ${successRate}%</div>
+    <div class="rate-item rate-escalation">⚠️ Escalation Rate: ${escalationRate}%</div>
+    <div class="rate-item rate-cancellation">🗑️ Cancellation Rate: ${cancellationRate}%</div>
+    <div class="rate-item total-orders">🛒 Total Orders: ${totalOrders}</div>
   `;
 }
 
+async function preloadLastThreeMonths() {
+  const lastThree = getLastThreeMonths();
+  allFetchedMonthlyData = [];
+  for (let month of lastThree) {
+    const orders = await fetchMonthlyOrders(month.month, month.year);
+    allFetchedMonthlyData.push({ label: month.label, orders });
+  }
+  doughnutMonthIndex = allFetchedMonthlyData.length - 1; // Latest month
+  updateDoughnutChart(doughnutMonthIndex);
+}
 
+// Event listeners
+document.getElementById("prevMonthBtn").addEventListener("click", () => {
+  if (doughnutMonthIndex > 0) {
+    doughnutMonthIndex--;
+    updateDoughnutChart(doughnutMonthIndex);
+  }
+});
 
-fetchAndDisplayThreeMonthsData();
+document.getElementById("nextMonthBtn").addEventListener("click", () => {
+  if (doughnutMonthIndex < allFetchedMonthlyData.length - 1) {
+    doughnutMonthIndex++;
+    updateDoughnutChart(doughnutMonthIndex);
+  }
+});
+
+document.getElementById("goToMonthBtn").addEventListener("click", async () => {
+  const monthInput = document.getElementById("customMonth").value;
+  if (!monthInput) return;
+
+  const [year, monthNum] = monthInput.split("-");
+  const date = new Date(year, monthNum - 1);
+  const monthShort = date.toLocaleString("default", { month: "short" });
+  const label = date.toLocaleString("default", { month: "long", year: "numeric" });
+
+  const orders = await fetchMonthlyOrders(monthShort, parseInt(year));
+  allFetchedMonthlyData.push({ label, orders });
+  doughnutMonthIndex = allFetchedMonthlyData.length - 1;
+  updateDoughnutChart(doughnutMonthIndex);
+});
+
+// Initial call
+preloadLastThreeMonths();
+
 // for dark mode
 // Add click event to toggle dark mode
 darkModeToggle.addEventListener("click", toggleDarkMode);
