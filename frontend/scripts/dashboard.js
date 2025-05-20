@@ -398,51 +398,62 @@ let isNavigating = false; // Prevent rapid multiple clicks
 
 
 
-
 async function fetchAndDisplayThreeMonthsData() {
-  const monthlyGPData = []; // Store GP data for each of the last three months
-  const monthLabels = [];   // Store month names for chart labels
+  const monthlyGPData = []; 
+  const monthLabels = [];   
 
-  try {
-    const now = new Date();
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    
-    // Loop through the current and last two months
-    for (let i = 0; i < 3; i++) {
-      const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthStr = months[pastDate.getMonth()];
-      const year = pastDate.getFullYear();
+  const now = new Date();
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-      monthLabels.unshift(`${monthStr} ${year}`);
+  for (let i = 0; i < 3; i++) {
+    const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthStr = months[pastDate.getMonth()];
+    const year = pastDate.getFullYear();
+    const label = `${monthStr} ${year}`;
 
-      // Fetch and render each month’s data
-      try {
-        const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-          params: { month: monthStr, year },
-        });
+    monthLabels.unshift(label); // chronological order
 
-        if (response.status === 200) {
-          const orders = response.data;
-          const monthName = `${monthStr} ${year}`;
-          updateMonthlyChart(i + 1, monthName, orders);
+    let cached = allFetchedMonthlyData.find(item => item.label === label);
+    const cacheValid = cached && (Date.now() - cached.fetchedAt < 5 * 60 * 1000); // 5 min cache
 
-          // Calculate the total GP for the month and add it to the array
-          const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
-          monthlyGPData.unshift(totalGP); // Add the GP data in reverse order for chronological display
-        } else {
-          console.error(`Failed to fetch orders for ${monthStr} ${year}`);
-        }
-      } catch (error) {
-        console.error(`Error fetching orders for ${monthStr} ${year}`, error);
-      }
+    if (cacheValid) {
+      console.log(`Using cached data for ${label}`);
+      updateMonthlyChart(i + 1, label, cached.orders);
+      const totalGP = cached.orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
+      monthlyGPData.unshift(totalGP);
+      continue;
     }
 
-    // Now initialize the Monthly Sales Progress Chart with GP data
-    initializeMonthlySalesProgressChart(monthLabels, monthlyGPData);
+    try {
+      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: { month: monthStr, year },
+      });
 
-  } catch (error) {
-    console.error("Error setting up the date or fetching monthly data:", error);
+      if (response.status === 200) {
+        const orders = response.data;
+
+        // Update chart and GP
+        updateMonthlyChart(i + 1, label, orders);
+        const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
+        monthlyGPData.unshift(totalGP);
+
+        // Update cache
+        const indexInCache = allFetchedMonthlyData.findIndex(item => item.label === label);
+        if (indexInCache > -1) {
+          allFetchedMonthlyData[indexInCache] = { label, orders, fetchedAt: Date.now() };
+        } else {
+          allFetchedMonthlyData.push({ label, orders, fetchedAt: Date.now() });
+        }
+      } else {
+        console.error(`Failed to fetch data for ${label}`);
+      }
+    } catch (error) {
+      console.error(`Error fetching data for ${label}`, error);
+    }
   }
+
+  // Draw sales progress bar chart
+  initializeMonthlySalesProgressChart(monthLabels, monthlyGPData);
 }
 
 // Function to initialize the Monthly Sales Progress Chart
@@ -551,6 +562,9 @@ function updateMonthlyChart(index, monthName, orders) {
   const cancellationRate = totalOrders > 0 ? (((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100).toFixed(2) : 0;
 
   // Create and store the new chart
+  let doughnutChartInstance = null;
+let allFetchedMonthlyData = []; 
+let doughnutMonthIndex = 0;
   chartInstances[index] = new Chart(ctx, {
     type: "doughnut",
     data: {
