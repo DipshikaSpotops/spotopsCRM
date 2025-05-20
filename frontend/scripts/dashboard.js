@@ -142,6 +142,7 @@ window.location.href = "login_signup.html";
 // Fetch and render data for each chart
 async function fetchAndRenderCharts() {
 await fetchDailyOrders();
+await fetchAndDisplayThreeMonthsData();
 await fetchLatestThreeMonthsOrders();
 // await fetchSalespersonPerformance();
 // await fetchYearlyProgress();
