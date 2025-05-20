@@ -154,7 +154,8 @@ cursor: pointer;
   }
 
   .main-content {
-    margin-left: 20%;
+    margin-left: 1%;
+    margin-top: -3%;
   }
 
   .charts-container {
