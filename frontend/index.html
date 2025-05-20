@@ -195,37 +195,23 @@ window.location.href = "login_signup.html";
   </div>
 </div>
 
-<div class="chart-container container mt-4">
-  <!-- Month navigation -->
-  <div class="mb-3">
-    <button id="prevMonthBtn" class="btn btn-sm btn-secondary">←</button>
-    <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
-    <button id="nextMonthBtn" class="btn btn-sm btn-secondary">→</button>
-  </div>
-
-  <!-- Horizontal layout for charts -->
-  <div class="row">
-    <!-- Left: Doughnut Chart -->
-    <div class="col-md-4" style="    background-color: #fbfcfd;
-    /* width: 95%; */
-    margin-left: -17%;
-">
-      <canvas id="monthlyDoughnutChart" style="max-width: 100%; height: auto;"></canvas>
-      <div id="monthlyRates" class="rates-container mt-3"></div>
+<div class="chart-row">
+  <div class="chart-box">
+    <!-- Your doughnut chart block here -->
+    <h3 style="text-align:center;">Monthly Orders' Overview</h3>
+    <div style="text-align:center; margin-bottom: 10px;">
+      <button id="prevMonthBtn" class="btn btn-sm btn-secondary">←</button>
+      <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
+      <button id="nextMonthBtn" class="btn btn-sm btn-secondary">→</button>
     </div>
-    <div class="mb-4">
+    <div style="text-align:center; margin-bottom: 15px;">
       <input type="month" id="customMonth" style="padding: 5px;" />
       <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
     </div>
-    <!-- Right: You can put anything here now -->
-    <div class="col-md-8">
-      <!-- Example: Placeholder for bar chart or summary cards -->
-      <canvas id="monthlySalesProgressChart"></canvas>
-    </div>
+    <canvas id="monthlyDoughnutChart"></canvas>
+    <div id="monthlyRates" class="rates-container" style="text-align: center; margin-top: 10px;"></div>
   </div>
 </div>
-
-
 
 <!-- Second row: Two charts
 <div class="chart-item">
