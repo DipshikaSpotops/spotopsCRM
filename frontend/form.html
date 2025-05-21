@@ -4075,7 +4075,6 @@ $('#cardCharged').hide();
 $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
 const paymentStatus = $(".paymentStatus").val();
-
 const cardChargedDate = $("#cardChargedDate").val();
 localStorage.setItem('paymentStatus', paymentStatus);
 // console.log('Payment status saved to localStorage:', localStorage.getItem('paymentStatus')); 
@@ -4087,7 +4086,7 @@ $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '
 const data1 = {
 paymentStatus: paymentStatus,
 cardChargedDate: cardChargedDate };
-
+console.log("Sending update:", data1);
 
 const updateOrder = (url) => {
 return fetch(url, {
