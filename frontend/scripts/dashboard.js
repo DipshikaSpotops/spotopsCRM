@@ -573,10 +573,10 @@ function updateDoughnutChart(monthIndex) {
 
   // Update metrics
   document.getElementById("monthlyRates").innerHTML = `
-    <div class="rate-item rate-success">✅ Success Rate: ${successRate}%</div>
-    <div class="rate-item rate-escalation">⚠️ Escalation Rate: ${escalationRate}%</div>
-    <div class="rate-item rate-cancellation">🗑️ Cancellation Rate: ${cancellationRate}%</div>
-    <div class="rate-item total-orders">🛒 Total Orders: ${totalOrders}</div>
+    <div class="rate-item rate-success">Success Rate: ${successRate}%</div>
+    <div class="rate-item rate-escalation">Escalation Rate: ${escalationRate}%</div>
+    <div class="rate-item rate-cancellation">Cancellation Rate: ${cancellationRate}%</div>
+    <div class="rate-item total-orders">Total Orders: ${totalOrders}</div>
   `;
 }
 
