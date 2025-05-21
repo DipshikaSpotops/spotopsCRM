@@ -2921,7 +2921,7 @@ let label;
 if (parseInt(yardIndex) === 1) {
   label = "the package";
 } else {
-  label = `Part ${yardIndex}`;
+  label = `part ${yardIndex}`;
 }
 if (retAddress && typeof retAddress === 'string') {
 var [firstPart = '', remainingPart = ''] = retAddress.split(/,(.+)/);
@@ -2960,7 +2960,8 @@ html: `<p>Dear ${customerName},</p>
 <p>To facilitate the return of merchandise, please follow these steps:<br></p>
 <p>Package the item(s) securely to prevent damage during transit.<br></p>
 
-<p>Ship ${label} you received to the following address:<br>
+<p>Ship ${label} that you received to the following address:<br>
+
 <b>${firstPart}<br></b>
 <b>${remainingPart}</b>
 </p>
@@ -3110,7 +3111,7 @@ let yardIndex = req.query.yardIndex;
 if (parseInt(yardIndex) === 1) {
   label = "the part";
 } else {
-  label = `part ${yardIndex}`;
+  label = `the part ${yardIndex}`;
 }
 const retAddress = req.query.retAddress;
 try {
@@ -3137,7 +3138,7 @@ subject:`Return Process For Order No. ${req.params.orderNo}`,
 html: `<p>Dear ${customerName},</p>
 <p>We understand that sometimes products may not meet your expectations or requirements, and we want to ensure that you have a smooth and hassle-free return process.</p>
 <p>To facilitate the return of merchandise, please follow these steps:</p>
-<p>Package ${label} that you received securely to prevent damage during transit.</p>
+<p>Pack ${label} that you received securely to prevent damage during transit.</p>
 <p>Please ship the package using the shipping label below to ensure its safe arrival.</p>
 <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
 <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
