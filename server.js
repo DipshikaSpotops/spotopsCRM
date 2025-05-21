@@ -2921,7 +2921,7 @@ if (retAddress && typeof retAddress === 'string') {
 var [firstPart = '', remainingPart = ''] = retAddress.split(/,(.+)/);
 firstPart = firstPart.trim(); 
 remainingPart = remainingPart.trim();
-console.log("First Part:", firstPart);
+console.log("First Part:", firstPart,"yardIndex",yardIndex);
 console.log("Remaining Part:", remainingPart);
 } else {
 console.error("Invalid retAddress: Ensure it's a non-empty string.");
