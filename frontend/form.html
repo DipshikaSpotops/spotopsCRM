@@ -128,7 +128,7 @@ background-color: #c0c0c0;
 text-align: center;
 padding: 10px;
 }
-#cardCharged, #refundCollect {
+#refundCollect {
 display: none; /* Initially hidden */
 position: fixed; /* Fixed position relative to the viewport */
 top: 50%; /* Center vertically */
@@ -141,22 +141,60 @@ box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 z-index: 1050; 
 width: 40%;
 }
+#cardCharged {
+display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 25px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1050;
+  width: 90%;
+  max-width: 500px; /* Limits size on desktop */
+  box-sizing: border-box;
+}
+#cardCharged h1 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
 #cardChargedSbmit{
   background-color: #ff914d;
-    border-radius: 20px;
-    border: 1px solid black;
-    color: black;
-    margin-left: 35%;
-    margin-top: 6%;
+  border-radius: 20px;
+  border: 1px solid black;
+  color: black;
+  padding: 10px 20px;
+  font-weight: bold;
+  display: block;
+  margin: 20px auto 0 auto;
 }
-#cardCharged label, 
-#cardCharged select {
-display: block;
-width: 71%;
-margin-bottom: 16px;
-border-radius: 18px;
+#closeCardCharged {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }
-
+#cardCharged label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+#cardCharged select,
+#cardCharged input[type="date"] {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-radius: 18px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 1rem;
+}
 
 #closeRefundCollected {
 float: right;
@@ -301,12 +339,6 @@ width: 40%;
 }
 
 
-@media screen and (max-width: 480px) {
-#submitComments {
-width: 60%; 
-height: 5vh;
-}
-}
 
 
 .btn {
@@ -1422,6 +1454,26 @@ scrollbar-color: #29638c #141b2d;
       bottom: 70px;
     }
   }
+  
+@media screen and (max-width: 480px) {
+#submitComments {
+width: 60%; 
+height: 5vh;
+}
+#cardCharged {
+    width: 90%;
+    padding: 20px 15px;
+  }
+
+  #cardCharged h1 {
+    font-size: 1.25rem;
+  }
+
+  #cardChargedSbmit {
+    font-size: 0.95rem;
+    padding: 8px 16px;
+  }
+}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
