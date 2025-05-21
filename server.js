@@ -2960,10 +2960,9 @@ html: `<p>Dear ${customerName},</p>
 <p>To facilitate the return of merchandise, please follow these steps:<br></p>
 <p>Package the item(s) securely to prevent damage during transit.<br></p>
 
-<p>Ship ${label} that you received to the following address:<br>
-
-<b>${firstPart}<br></b>
-<b>${remainingPart}</b>
+<p>Ship ${label} that you received to the following address:<br></p>
+<p><b>${firstPart}<br></b>
+<b>${remainingPart}</b></p>
 </p>
 <p>Once we receive the returned merchandise, our team will inspect it to ensure it meets our return policy criteria. Upon approval, we will process your refund or exchange according to your preference.</p>
 <p>If you have any questions or need further assistance with the return process, please feel free to reach out.</p>
