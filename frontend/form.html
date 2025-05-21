@@ -5128,7 +5128,7 @@ eta: $("#yardTrackingETA").val(),
 shipperName: $("#yardShipper").val(),
 link: $("#yardTrackingLink").val(),
 };
-// console.log("RMA return",yardIndex)
+console.log("RMA return",yardIndex)
 if(escProcess === "Return" && retShippingMethod === "Customer shipping"){
 fetch(`https://www.spotops360.com/orders/sendReturnEmailCustomerShipping/${orderNo}?yardIndex=${yardIndex}&retAddress=${retAddress}`, {
 method: "POST",
