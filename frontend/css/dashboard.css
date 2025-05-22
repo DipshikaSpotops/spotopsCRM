@@ -167,6 +167,25 @@ cursor: pointer;
 .charts-container {
   display: flex;
 }
+#doughnutCharts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.doughnut-wrapper {
+  flex: 1 1 300px;
+  max-width: 420px;
+  min-width: 250px;
+  margin: auto;
+  #monthlyRates {
+    flex: 1 1 300px;
+    min-width: 250px;
+    max-width: 420px;
+  }
+}
 #monthlyDoughnutChart {
   max-width: 400px;
   max-height: 400px;

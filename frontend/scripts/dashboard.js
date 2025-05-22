@@ -317,8 +317,8 @@ const totalOrdersData = Array(todayDate).fill(0);
           },          
       },
     });
-    return { orders, currentDallasDate };
     console.log("Chart rendered successfully.");
+    return { orders, currentDallasDate };
   } catch (error) {
     console.error("Error fetching daily orders:", error);
   }
