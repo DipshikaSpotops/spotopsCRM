@@ -198,13 +198,14 @@ window.location.href = "login_signup.html";
         <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
         <button id="nextMonthBtn" class="btn btn-sm btn-secondary">→</button>
       </div>
-      <div id="doughnutCharts">
-      <div class="doughnut-wrapper" style="max-width: 420px; margin: auto;">
-        <canvas id="monthlyDoughnutChart"></canvas>
-        <div id="monthlyRates" class="rates-container mt-3"></div>
-      </div>
-            <div id="monthlyRates" class="rates-container mt-3"></div>
-    </div>
+      <div id="doughnutCharts" style="display: flex; justify-content: center; gap: 20px;">
+        <div class="doughnut-wrapper" style="max-width: 420px;">
+          <canvas id="monthlyDoughnutChart"></canvas>
+          <div class="rates-container mt-3" id="monthlyRates1"></div>
+        </div>
+      
+        <div class="rates-container mt-3" id="monthlyRates2"></div>
+      </div>      
             <div style="text-align:center; margin-bottom: 15px;">
               <input type="month" id="customMonth" style="padding: 5px;" />
               <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
