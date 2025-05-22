@@ -167,7 +167,7 @@ function getChartColors() {
     // Monthly chart colors
     pieChartBgColors: isDarkMode
       ? ["#8B5CF6", "#A78BFA", "#6366F1", "#60A5FA", "#22D3EE", "#34D399", "#F87171", "#FACC15", "#E879F9"]
-      : ["#006666", "#ffe5a0", "#1c80b6", "#7887a4", "#b27473", "#60978c", "#780914", "#5a3286", "#e6cff2"],
+      : ["#006666", "#ffe5a0", "#1c80b6", "#7887a4", "#b27473", "#60978c", "#780914", "#5a3286", "#9251b4"],
     pieChartBorderColor: isDarkMode ? "#B3B3B3" : "#C0C0C0",
     pieChartLegendColor: isDarkMode ? "#FFFFFF" : "#555555",
 
