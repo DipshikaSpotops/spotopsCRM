@@ -840,9 +840,9 @@ $(document).on("click", function (event) {
     $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
   }
-  await fetchAndRenderCharts()
+  
 });
 
 fetchNotifications();
-
+await fetchAndRenderCharts()
 });
