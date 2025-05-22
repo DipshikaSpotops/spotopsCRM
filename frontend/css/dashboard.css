@@ -256,7 +256,9 @@ cursor: pointer;
   border-radius: 10px;
   background: #fbfcfd;
 }
-
+#prevMonthBtn, #nextMonthBtn, #goToMonthBtn {
+  background-color: #3c6059;
+}
 .rate-item {
   flex: 1 1 200px;
   min-width: 120px;
