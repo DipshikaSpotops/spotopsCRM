@@ -238,7 +238,7 @@ const totalOrdersData = Array(todayDate).fill(0);
               fill: true,
               tension: 0, // <-- remove smooth curves
               stepped: true ,
-              pointBackgroundColor: "#fff",
+              // pointBackgroundColor: "#fff",
                 pointBorderWidth: 2,
                 pointHoverBorderWidth: 3,
                 pointRadius: 5,
@@ -347,18 +347,35 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     dailyGPGroups[key] += gp;
   });
 
-  const topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0];
-  const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
+  let topAgentToday = null;
+  if (Object.keys(topAgents).length > 0) {
+    topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0];
+  }
+    const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
 
-  document.getElementById("topAgentBox").innerHTML = `
-    <strong>Top Sales Agent Today:</strong> ${topAgentToday ? topAgentToday[0] : "N/A"} <br>
-    <strong>GP:</strong> $${topAgentToday ? topAgentToday[1].toFixed(2) : "0.00"}
-  `;
-
-  document.getElementById("bestDayBox").innerHTML = `
-    <strong>Best Sales Day:</strong> ${bestDay ? bestDay[0] : "N/A"} <br>
-    <strong>Total GP:</strong> $${bestDay ? bestDay[1].toFixed(2) : "0.00"}
-  `;
+    document.getElementById("topAgentBox").innerHTML = topAgentToday
+    ? `
+      <div class="text-center p-2">
+        <h5 class="text-primary">Top Sales Agent Today</h5>
+        <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
+      </div>`
+    : `
+      <div class="text-center p-2 text-muted">
+        <h5>No Sales Made Today</h5>
+      </div>
+    `;
+  
+  document.getElementById("bestDayBox").innerHTML = bestDay
+    ? `
+      <div class="text-center p-2">
+        <h5 class="text-info">Best Sales Day</h5>
+        <p><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
+      </div>`
+    : `
+      <div class="text-center p-2 text-muted">
+        <h5>No Best Day Data</h5>
+      </div>
+    `;  
 }
 
 const darkModeToggle = document.getElementById("darkModeIcon");
@@ -823,8 +840,9 @@ $(document).on("click", function (event) {
     $(".modal-overlay").remove();
 $("body").removeClass("modal-active");
   }
+  await fetchAndRenderCharts()
 });
 
 fetchNotifications();
-await fetchAndRenderCharts()
+
 });
