@@ -248,12 +248,11 @@ cursor: pointer;
 }
 
 .rates-container {
-  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   margin-top: 20px;
-  padding: 10px;
+  padding: 100px;
   border-radius: 10px;
   background: linear-gradient(135deg, #e6f7ff, #ffffff);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
