@@ -392,24 +392,35 @@ width: 30%;
 text-align: center;
 padding: 10px;
 border-radius: 5px;
+white-space: nowrap;
+  width: auto;
+  border-color: #c6cfc2;
+  background-color: #f6ffed;
+  color: grey;
 }
 
 .rate-success {
-    border-color: #52c41a;
+  border-color: #52c41a;
   background-color: #f6ffed;
   color: #389e0d;
+  white-space: nowrap;
+  width: auto;
 }
 
 .rate-escalation {
   border-color: #faad14;
   background-color: #fffbe6;
   color: #d48806;
+  white-space: nowrap;
+  width: auto;
 }
 
 .rate-cancellation {
   border-color: #f5222d;
   background-color: #fff1f0;
   color: #a8071a;
+  white-space: nowrap;
+  width: auto;
 }
 /* canvas {
 width: 100% !important;
