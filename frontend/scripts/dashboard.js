@@ -143,7 +143,7 @@ window.location.href = "login_signup.html";
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
-  await fetchLatestThreeMonthsOrders();
+  await fetchAndDisplayThreeMonthsData();
 }
 
 // Fetch daily orders and display them in a chart
