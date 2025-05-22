@@ -334,7 +334,7 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     );
     const key = `${orderDate.getFullYear()}-${orderDate.getMonth() + 1}-${orderDate.getDate()}`;
     const agent = order.salesAgent || "Unknown";
-    const gp = order.actualGP || 0;
+    const gp = order.grossProfit || 0;
 
     // Count today's sales per agent
     if (orderDate.toDateString() === currentDallasDate.toDateString()) {
