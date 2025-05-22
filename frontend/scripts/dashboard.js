@@ -385,8 +385,6 @@ if (savedDarkMode === "true") {
   darkModeToggle.classList.add("fa-moon");
   darkModeToggle.classList.remove("fa-sun");
 }
-fetchDailyOrders();
-fetchAndDisplayThreeMonthsData();
 // monthly overview report start here
 let chartInstances = {}; // Store chart instances by month
 let cachedOrders = {}; // Store cached orders data
@@ -828,4 +826,5 @@ $("body").removeClass("modal-active");
 });
 
 fetchNotifications();
+await fetchAndRenderCharts()
 });
