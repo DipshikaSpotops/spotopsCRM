@@ -141,10 +141,9 @@ window.location.href = "login_signup.html";
 // for rendering charts
 // Fetch and render data for each chart
 async function fetchAndRenderCharts() {
-await fetchDailyOrders();
-await fetchLatestThreeMonthsOrders();
-// await fetchSalespersonPerformance();
-// await fetchYearlyProgress();
+  const { orders, currentDallasDate } = await fetchDailyOrders();
+  await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
+  await fetchLatestThreeMonthsOrders();
 }
 
 // Fetch daily orders and display them in a chart
@@ -318,13 +317,49 @@ const totalOrdersData = Array(todayDate).fill(0);
           },          
       },
     });
-
+    return { orders, currentDallasDate };
     console.log("Chart rendered successfully.");
   } catch (error) {
     console.error("Error fetching daily orders:", error);
   }
 }
 
+async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
+  const topAgents = {};
+  const dailyGPGroups = {};
+
+  orders.forEach(order => {
+    const orderDate = new Date(
+      new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
+    );
+    const key = `${orderDate.getFullYear()}-${orderDate.getMonth() + 1}-${orderDate.getDate()}`;
+    const agent = order.salesAgent || "Unknown";
+    const gp = order.actualGP || 0;
+
+    // Count today's sales per agent
+    if (orderDate.toDateString() === currentDallasDate.toDateString()) {
+      if (!topAgents[agent]) topAgents[agent] = 0;
+      topAgents[agent] += gp;
+    }
+
+    // Sum GP for each day
+    if (!dailyGPGroups[key]) dailyGPGroups[key] = 0;
+    dailyGPGroups[key] += gp;
+  });
+
+  const topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0];
+  const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
+
+  document.getElementById("topAgentBox").innerHTML = `
+    <strong>Top Sales Agent Today:</strong> ${topAgentToday ? topAgentToday[0] : "N/A"} <br>
+    <strong>GP:</strong> $${topAgentToday ? topAgentToday[1].toFixed(2) : "0.00"}
+  `;
+
+  document.getElementById("bestDayBox").innerHTML = `
+    <strong>Best Sales Day:</strong> ${bestDay ? bestDay[0] : "N/A"} <br>
+    <strong>Total GP:</strong> $${bestDay ? bestDay[1].toFixed(2) : "0.00"}
+  `;
+}
 
 const darkModeToggle = document.getElementById("darkModeIcon");
 
