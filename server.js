@@ -1301,6 +1301,9 @@ app.get('/orders/monthly', async (req, res) => {
         warranty: 1,
         programmingCostQuoted: 1,
         programmingRequired: 1,
+        cancelledDate: 1,
+        custRefundDate: 1,
+        custRefAmount: 1,
       }
     );
     console.log('fetchOrders');
