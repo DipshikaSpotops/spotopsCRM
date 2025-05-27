@@ -471,6 +471,7 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
 function analyzeMonthlyReimbursements(orders, currentDallasDate) {
   const currentMonth = currentDallasDate.getMonth();
   const currentYear = currentDallasDate.getFullYear();
+  console.log("for reimbursements",orders);
   let totalReimbursed = 0;
 
   orders.forEach(order => {
