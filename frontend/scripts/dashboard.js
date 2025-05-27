@@ -406,9 +406,6 @@ async function fetchAllOrders() {
 }
 
 function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
-  const monthsMap = {};
-
-  // ✅ Use numeric month/year (0-indexed month)
   const numericMonth = currentDallasDate.getMonth();
   const numericYear = currentDallasDate.getFullYear();
 
@@ -416,15 +413,17 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
   let refunded = 0;
   let totalRefundAmount = 0;
 
+  const cancelledOrdersThisMonth = [];
+  const refundedOrdersThisMonth = [];
+
+  console.log(`📅 Checking for cancellations/refunds in: ${numericMonth} (${currentDallasDate.toLocaleString('default', { month: 'long' })}) ${numericYear}`);
+
   orders.forEach(order => {
     const cancelledDateStr = cleanDateString(order.cancelledDate);
     const refundDateStr = cleanDateString(order.custRefundDate);
     const refundAmount = parseFloat(order.custRefAmount) || 0;
 
-    console.log("ORDER NO:", order.orderNo, "cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
-    console.log("📆 Current Month:", numericMonth, "Year:", numericYear); 
-
-    // ✅ CANCELLED section
+    // ✅ CANCELLED
     if (cancelledDateStr) {
       const parsed = cleanDateString(cancelledDateStr);
       const cancelledDate = new Date(parsed);
@@ -433,24 +432,14 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
         const cancelledMonth = cancelledDate.getMonth();
         const cancelledYear = cancelledDate.getFullYear();
 
-        console.log("🧼 Cleaned:", parsed, "| 🕰️ Parsed:", cancelledDate);
-        console.log(`🔍 Comparing → Cancelled Month: ${cancelledMonth} vs Selected: ${numericMonth}, Year: ${cancelledYear} vs ${numericYear}`);
-
-        const sameMonth = cancelledMonth === numericMonth;
-        const sameYear = cancelledYear === numericYear;
-
-        if (sameMonth && sameYear) {
-          console.log("✅ Counted CANCELLED:", order.orderNo);
+        if (cancelledMonth === numericMonth && cancelledYear === numericYear) {
           cancelled += 1;
-        } else {
-          console.log("❌ Skipped CANCELLED:", order.orderNo, "| Date:", cancelledDateStr);
+          cancelledOrdersThisMonth.push(order.orderNo);
         }
-      } else {
-        console.log("❌ Invalid CANCELLED DATE:", cancelledDateStr);
       }
     }
 
-    // ✅ REFUNDED section
+    // 💸 REFUNDED
     if (refundDateStr) {
       const parsedRefund = cleanDateString(refundDateStr);
       const refundDate = new Date(parsedRefund);
@@ -462,12 +451,17 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
         if (refundMonth === numericMonth && refundYear === numericYear) {
           refunded += 1;
           totalRefundAmount += refundAmount;
+          refundedOrdersThisMonth.push(order.orderNo);
         }
       }
     }
   });
 
-  // 🔑 Final display
+  // ✅ Final Logging Summary
+  console.log("✅ Cancelled Orders This Month:", cancelledOrdersThisMonth);
+  console.log("💸 Refunded Orders This Month:", refundedOrdersThisMonth);
+  console.log(`📊 Final Tally → Cancelled: ${cancelled}, Refunded: ${refunded}, Amount: $${totalRefundAmount.toFixed(2)}`);
+
   document.getElementById("monthlyCancelRefundBox").innerHTML = `
     <div class="text-center p-2">
       <h5 class="text-warning" style="color: #ffffff !important;">Monthly Cancellations & Refunds</h5>
