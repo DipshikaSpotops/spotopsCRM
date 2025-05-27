@@ -142,8 +142,9 @@ window.location.href = "login_signup.html";
 // Fetch and render data for each chart
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
+  const allOrders = await fetchAllOrders();
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
-  await analyzeMonthlyCancelRefunds(orders, currentDallasDate);
+  await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
 }
 
@@ -381,6 +382,16 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
 function cleanDateString(dateStr) {
   if (!dateStr) return null;
   return dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+}
+async function fetchAllOrders() {
+  try {
+    const response = await axios.get("https://www.spotops360.com/orders");
+    console.log(response.data.length);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all orders:", error);
+    return [];
+  }
 }
 
 function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
