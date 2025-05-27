@@ -179,13 +179,13 @@ function getChartColors() {
   };
 }
 
-
+let month;
 async function fetchDailyOrders() {
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[currentDallasDate.getMonth()];
+ month = months[currentDallasDate.getMonth()];
   const year = currentDallasDate.getFullYear();
 
   try {
@@ -404,7 +404,7 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
 
     // console.log("looking for cancel & refunds", order);
     console.log("ORDER NO:",order.orderNo,"cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
-
+    console.log("current month",month); 
     if (cancelledDateStr) {
       const cancelledDate = new Date(cancelledDateStr);
       if (!isNaN(cancelledDate)) {
