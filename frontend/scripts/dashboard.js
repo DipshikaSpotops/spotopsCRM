@@ -382,11 +382,11 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
   const monthsMap = {};
 
   orders.forEach(order => {
-    // Extracting and parsing dates safely
+    console.log("looking for cancel & refunds",order)
     const cancelledDateStr = order.cancelledDate;
     const refundDateStr = order.custRefundDate;
     const refundAmount = parseFloat(order.custRefAmount) || 0;
-
+   console.log("cancelledDateStr:",cancelledDateStr,"refundDateStr:",refundDateStr,"refundAmount:",refundAmount)
     if (cancelledDateStr) {
       const cancelledDate = new Date(cancelledDateStr);
       const key = `${cancelledDate.getFullYear()}-${cancelledDate.getMonth()}`;
@@ -402,8 +402,6 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
       monthsMap[key].refundAmount += refundAmount;
     }
   });
-
-  // Build HTML for the latest month
   const latestKey = `${currentDallasDate.getFullYear()}-${currentDallasDate.getMonth()}`;
   const data = monthsMap[latestKey] || { cancelled: 0, refunded: 0, refundAmount: 0 };
 
