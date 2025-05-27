@@ -405,7 +405,7 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
 
     // console.log("looking for cancel & refunds", order);
     console.log("ORDER NO:",order.orderNo,"cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
-    console.log("current month",month); 
+    console.log("current month",month,"year:",year); 
     if (cancelledDateStr) {
       const cancelledDate = new Date(cancelledDateStr);
       const sameMonth = cancelledDate.getMonth() === month && cancelledDate.getFullYear() === year;
