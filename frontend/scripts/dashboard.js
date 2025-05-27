@@ -482,7 +482,7 @@ function analyzeMonthlyReimbursements(orders, currentDallasDate) {
 
     // Look for "escalationProcess: Reimbursement" in orderHistory
     const reimbursementEntry = order.orderHistory.find(entry =>
-      entry.includes("escalationProcess: Reimbursement")
+      entry.includes("Reimbursement")
     );
 
     if (reimbursementEntry) {
