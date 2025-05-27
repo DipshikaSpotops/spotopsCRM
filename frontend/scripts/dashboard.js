@@ -378,30 +378,42 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
       </div>
     `;  
 }
+function cleanDateString(dateStr) {
+  if (!dateStr) return null;
+  return dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+}
+
 function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
   const monthsMap = {};
 
   orders.forEach(order => {
-    console.log("looking for cancel & refunds",order)
-    const cancelledDateStr = order.cancelledDate;
-    const refundDateStr = order.custRefundDate;
+    const cancelledDateStr = cleanDateString(order.cancelledDate);
+    const refundDateStr = cleanDateString(order.custRefundDate);
     const refundAmount = parseFloat(order.custRefAmount) || 0;
-   console.log("cancelledDateStr:",cancelledDateStr,"refundDateStr:",refundDateStr,"refundAmount:",refundAmount)
+
+    console.log("looking for cancel & refunds", order);
+    console.log("cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
+
     if (cancelledDateStr) {
       const cancelledDate = new Date(cancelledDateStr);
-      const key = `${cancelledDate.getFullYear()}-${cancelledDate.getMonth()}`;
-      monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
-      monthsMap[key].cancelled += 1;
+      if (!isNaN(cancelledDate)) {
+        const key = `${cancelledDate.getFullYear()}-${cancelledDate.getMonth()}`;
+        monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
+        monthsMap[key].cancelled += 1;
+      }
     }
 
     if (refundDateStr) {
       const refundDate = new Date(refundDateStr);
-      const key = `${refundDate.getFullYear()}-${refundDate.getMonth()}`;
-      monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
-      monthsMap[key].refunded += 1;
-      monthsMap[key].refundAmount += refundAmount;
+      if (!isNaN(refundDate)) {
+        const key = `${refundDate.getFullYear()}-${refundDate.getMonth()}`;
+        monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
+        monthsMap[key].refunded += 1;
+        monthsMap[key].refundAmount += refundAmount;
+      }
     }
   });
+
   const latestKey = `${currentDallasDate.getFullYear()}-${currentDallasDate.getMonth()}`;
   const data = monthsMap[latestKey] || { cancelled: 0, refunded: 0, refundAmount: 0 };
 
