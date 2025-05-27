@@ -144,8 +144,8 @@ async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
   const allOrders = await fetchAllOrders();
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
-  await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
+  await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
 }
 
 // Fetch daily orders and display them in a chart
