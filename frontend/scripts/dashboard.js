@@ -358,7 +358,7 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     ? `
       <div class="text-center p-2">
         <h5 class="text-primary" style="    color: #ffffff !important;">Top Sales Agent Today</h5>
-        <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
+        <p style="color: #00000!important;"><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
       </div>`
     : `
       <div class="text-center p-2 text-muted">
@@ -369,8 +369,8 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
   document.getElementById("bestDayBox").innerHTML = bestDay
     ? `
       <div class="text-center p-2">
-        <h5 class="text-info">Best Sales Day</h5>
-        <p><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
+        <h5 class="text-info" style="color: #000000 !important;">Best Sales Day</h5>
+        <p style="color: #ffffff !important;"><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
       </div>`
     : `
       <div class="text-center p-2 text-muted">
