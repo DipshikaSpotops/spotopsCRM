@@ -180,13 +180,14 @@ function getChartColors() {
 }
 
 let month;
+let year;
 async function fetchDailyOrders() {
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
  month = months[currentDallasDate.getMonth()];
-  const year = currentDallasDate.getFullYear();
+ year = currentDallasDate.getFullYear();
 
   try {
     console.log(`Fetching data for ${month} ${year}`);
@@ -407,12 +408,16 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
     console.log("current month",month); 
     if (cancelledDateStr) {
       const cancelledDate = new Date(cancelledDateStr);
-      if (!isNaN(cancelledDate)) {
-        const key = `${cancelledDate.getFullYear()}-${cancelledDate.getMonth()}`;
-        monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
-        monthsMap[key].cancelled += 1;
+      const sameMonth = cancelledDate.getMonth() === month && cancelledDate.getFullYear() === year;
+    
+      if (!isNaN(cancelledDate) && sameMonth) {
+        console.log("Counted CANCELLED:", order.orderNo, "→", cancelledDateStr);
+        cancelled += 1;
+      } else {
+        console.log("Skipped CANCELLED:", order.orderNo, "→", cancelledDateStr);
       }
     }
+    
 
     if (refundDateStr) {
       const refundDate = new Date(refundDateStr);
