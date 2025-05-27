@@ -405,16 +405,15 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
 
     // console.log("looking for cancel & refunds", order);
     console.log("ORDER NO:",order.orderNo,"cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
-    console.log("current month",month,cancelledDateStr.getMonth(),"year:",year,cancelledDateStr.getFullYear()); 
+    console.log("current month",month,"year:",year); 
     if (cancelledDateStr) {
-      const cancelledDate = new Date(cancelledDateStr);
-      const sameMonth = cancelledDate.getMonth() === month && cancelledDate.getFullYear() === year;
+      const parsed = cleanDateString(cancelledDateStr);
+      const cancelledDate = new Date(parsed);
     
-      if (!isNaN(cancelledDate) && sameMonth) {
-        console.log("Counted CANCELLED:", order.orderNo, "→", cancelledDateStr);
+      if (!isNaN(cancelledDate) &&
+          cancelledDate.getMonth() === month &&
+          cancelledDate.getFullYear() === year) {
         cancelled += 1;
-      } else {
-        console.log("Skipped CANCELLED:", order.orderNo, "→", cancelledDateStr);
       }
     }
     
