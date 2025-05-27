@@ -356,7 +356,7 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     document.getElementById("topAgentBox").innerHTML = topAgentToday
     ? `
       <div class="text-center p-2">
-        <h5 class="text-primary">Top Sales Agent Today</h5>
+        <h5 class="text-primary" style="    color: #ffffff !important;">Top Sales Agent Today</h5>
         <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
       </div>`
     : `
