@@ -146,6 +146,7 @@ async function fetchAndRenderCharts() {
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
   await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
+  await analyzeMonthlyReimbursements(allOrders, currentDallasDate);
 }
 
 // Fetch daily orders and display them in a chart
@@ -438,8 +439,6 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
         }
       }
     }
-
-    // 💸 REFUNDED
     if (refundDateStr) {
       const parsedRefund = cleanDateString(refundDateStr);
       const refundDate = new Date(parsedRefund);
@@ -468,6 +467,59 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
       <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
     </div>
   `;
+}
+function analyzeMonthlyReimbursements(orders, currentDallasDate) {
+  const currentMonth = currentDallasDate.getMonth();
+  const currentYear = currentDallasDate.getFullYear();
+  let totalReimbursed = 0;
+
+  orders.forEach(order => {
+    if (!order.orderHistory || !Array.isArray(order.orderHistory)) return;
+    if (!order.additionalInfo || !Array.isArray(order.additionalInfo)) return;
+
+    // Look for reimbursement event in history
+    const reimbursementEntry = order.orderHistory.find(entry =>
+      entry.includes("escalationProcess: Reimbursement")
+    );
+
+    if (reimbursementEntry) {
+      // Extract date from string like:
+      // "Escalation Process for Yard 1: Process- escalationProcess: Reimbursement -> Return updated by Erica on 28 Apr, 2025 16:35"
+      const match = reimbursementEntry.match(/on (\d{1,2}) (\w+), (\d{4})/);
+      if (match) {
+        const [_, day, monthStr, yearStr] = match;
+        const dateStr = `${monthStr} ${day}, ${yearStr}`;
+        const reimbursementDate = new Date(dateStr);
+        
+        if (!isNaN(reimbursementDate)) {
+          const rMonth = reimbursementDate.getMonth();
+          const rYear = reimbursementDate.getFullYear();
+
+          if (rMonth === currentMonth && rYear === currentYear) {
+            // Sum reimbursementAmounts
+            order.additionalInfo.forEach(info => {
+              const amt = parseFloat(info.reimbursementAmount);
+              if (!isNaN(amt)) {
+                totalReimbursed += amt;
+              }
+            });
+          }
+        }
+      }
+    }
+  });
+
+  // Append right below the monthlyCancelRefundBox
+  const box = document.createElement("div");
+  box.style.textAlign = "center";
+  box.style.padding = "10px";
+  box.style.backgroundColor = "#9dbfc9";
+  box.innerHTML = `
+    <h5 class="text-success" style="color: #ffffff !important;">Monthly Reimbursements</h5>
+    <p><strong>Total Reimbursed Amount:</strong> $${totalReimbursed.toFixed(2)}</p>
+  `;
+
+  document.getElementById("monthlyCancelRefundBox").insertAdjacentElement("afterend", box);
 }
 
 
