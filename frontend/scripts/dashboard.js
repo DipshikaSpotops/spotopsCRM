@@ -408,28 +408,37 @@ async function fetchAllOrders() {
 function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
   const monthsMap = {};
 
+  // ✅ Use numeric month/year (0-indexed month)
+  const numericMonth = currentDallasDate.getMonth();
+  const numericYear = currentDallasDate.getFullYear();
+
+  let cancelled = 0;
+  let refunded = 0;
+  let totalRefundAmount = 0;
+
   orders.forEach(order => {
     const cancelledDateStr = cleanDateString(order.cancelledDate);
     const refundDateStr = cleanDateString(order.custRefundDate);
     const refundAmount = parseFloat(order.custRefAmount) || 0;
 
-    // console.log("looking for cancel & refunds", order);
-    console.log("ORDER NO:",order.orderNo,"cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
-    console.log("current month",month,"year:",year); 
+    console.log("ORDER NO:", order.orderNo, "cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
+    console.log("📆 Current Month:", numericMonth, "Year:", numericYear); 
+
+    // ✅ CANCELLED section
     if (cancelledDateStr) {
       const parsed = cleanDateString(cancelledDateStr);
       const cancelledDate = new Date(parsed);
-    
+
       if (!isNaN(cancelledDate)) {
         const cancelledMonth = cancelledDate.getMonth();
         const cancelledYear = cancelledDate.getFullYear();
-    
+
         console.log("🧼 Cleaned:", parsed, "| 🕰️ Parsed:", cancelledDate);
-        console.log(`🔍 Comparing → Cancelled Month: ${cancelledMonth} vs Selected: ${month}, Year: ${cancelledYear} vs ${year}`);
-    
-        const sameMonth = cancelledMonth === month;
-        const sameYear = cancelledYear === year;
-    
+        console.log(`🔍 Comparing → Cancelled Month: ${cancelledMonth} vs Selected: ${numericMonth}, Year: ${cancelledYear} vs ${numericYear}`);
+
+        const sameMonth = cancelledMonth === numericMonth;
+        const sameYear = cancelledYear === numericYear;
+
         if (sameMonth && sameYear) {
           console.log("✅ Counted CANCELLED:", order.orderNo);
           cancelled += 1;
@@ -440,33 +449,35 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
         console.log("❌ Invalid CANCELLED DATE:", cancelledDateStr);
       }
     }
-    
-    
-    
 
+    // ✅ REFUNDED section
     if (refundDateStr) {
-      const refundDate = new Date(refundDateStr);
+      const parsedRefund = cleanDateString(refundDateStr);
+      const refundDate = new Date(parsedRefund);
+
       if (!isNaN(refundDate)) {
-        const key = `${refundDate.getFullYear()}-${refundDate.getMonth()}`;
-        monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
-        monthsMap[key].refunded += 1;
-        monthsMap[key].refundAmount += refundAmount;
+        const refundMonth = refundDate.getMonth();
+        const refundYear = refundDate.getFullYear();
+
+        if (refundMonth === numericMonth && refundYear === numericYear) {
+          refunded += 1;
+          totalRefundAmount += refundAmount;
+        }
       }
     }
   });
 
-  const latestKey = `${currentDallasDate.getFullYear()}-${currentDallasDate.getMonth()}`;
-  const data = monthsMap[latestKey] || { cancelled: 0, refunded: 0, refundAmount: 0 };
-
+  // 🔑 Final display
   document.getElementById("monthlyCancelRefundBox").innerHTML = `
     <div class="text-center p-2">
       <h5 class="text-warning" style="color: #ffffff !important;">Monthly Cancellations & Refunds</h5>
-      <p><strong>Cancelled Orders:</strong> ${data.cancelled}</p>
-      <p><strong>Refunded Orders:</strong> ${data.refunded}</p>
-      <p><strong>Total Refund Amount:</strong> $${data.refundAmount.toFixed(2)}</p>
+      <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
+      <p><strong>Refunded Orders:</strong> ${refunded}</p>
+      <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
     </div>
   `;
 }
+
 
 const darkModeToggle = document.getElementById("darkModeIcon");
 
