@@ -416,7 +416,7 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
   const cancelledOrdersThisMonth = [];
   const refundedOrdersThisMonth = [];
 
-  console.log(`📅 Checking for cancellations/refunds in: ${numericMonth} (${currentDallasDate.toLocaleString('default', { month: 'long' })}) ${numericYear}`);
+  console.log(`📅 Matching orders for: ${currentDallasDate.toLocaleString('default', { month: 'long' })} ${numericYear}`);
 
   orders.forEach(order => {
     const cancelledDateStr = cleanDateString(order.cancelledDate);
@@ -451,16 +451,14 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
         if (refundMonth === numericMonth && refundYear === numericYear) {
           refunded += 1;
           totalRefundAmount += refundAmount;
-          refundedOrdersThisMonth.push(order.orderNo);
+          refundedOrdersThisMonth.push(`${order.orderNo} ($${refundAmount.toFixed(2)})`);
         }
       }
     }
   });
-
-  // ✅ Final Logging Summary
   console.log("Cancelled Orders This Month:", cancelledOrdersThisMonth);
-  console.log("Refunded Orders This Month:", refundedOrdersThisMonth);
-  console.log(`Final Tally → Cancelled: ${cancelled}, Refunded: ${refunded}, Amount: $${totalRefundAmount.toFixed(2)}`);
+  console.log("Refunded Orders This Month (with amount):", refundedOrdersThisMonth);
+  console.log(`Totals → Cancelled: ${cancelled}, Refunded: ${refunded}, Refund Amount: $${totalRefundAmount.toFixed(2)}`);
 
   document.getElementById("monthlyCancelRefundBox").innerHTML = `
     <div class="text-center p-2">
@@ -471,6 +469,7 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
     </div>
   `;
 }
+
 
 
 const darkModeToggle = document.getElementById("darkModeIcon");
