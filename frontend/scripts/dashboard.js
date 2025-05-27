@@ -468,39 +468,50 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
     </div>
   `;
 }
+
 function analyzeMonthlyReimbursements(orders, currentDallasDate) {
   const currentMonth = currentDallasDate.getMonth();
   const currentYear = currentDallasDate.getFullYear();
-  console.log("for reimbursements",orders);
+
   let totalReimbursed = 0;
+  let reimbursedOrderCount = 0;
+  const reimbursedOrdersDetails = [];
 
   orders.forEach(order => {
-    if (!order.orderHistory || !Array.isArray(order.orderHistory)) return;
-    if (!order.additionalInfo || !Array.isArray(order.additionalInfo)) return;
+    if (!Array.isArray(order.orderHistory) || !Array.isArray(order.additionalInfo)) return;
+
+    // Look for "escalationProcess: Reimbursement" in orderHistory
     const reimbursementEntry = order.orderHistory.find(entry =>
-      entry.includes("Reimbursement")
+      entry.includes("escalationProcess: Reimbursement")
     );
 
     if (reimbursementEntry) {
-      // Extract date from string like:
-      // "Escalation Process for Yard 1: Process- escalationProcess: Reimbursement -> Return updated by Erica on 28 Apr, 2025 16:35"
       const match = reimbursementEntry.match(/on (\d{1,2}) (\w+), (\d{4})/);
       if (match) {
         const [_, day, monthStr, yearStr] = match;
-        const dateStr = `${monthStr} ${day}, ${yearStr}`;
-        const reimbursementDate = new Date(dateStr);
-        
-        if (!isNaN(reimbursementDate)) {
-          const rMonth = reimbursementDate.getMonth();
-          const rYear = reimbursementDate.getFullYear();
+        const reimbursementDate = new Date(`${monthStr} ${day}, ${yearStr}`);
 
-          if (rMonth === currentMonth && rYear === currentYear) {
-            // Sum reimbursementAmounts
-            order.additionalInfo.forEach(info => {
-              const amt = parseFloat(info.reimbursementAmount);
-              if (!isNaN(amt)) {
-                totalReimbursed += amt;
-              }
+        if (
+          !isNaN(reimbursementDate) &&
+          reimbursementDate.getMonth() === currentMonth &&
+          reimbursementDate.getFullYear() === currentYear
+        ) {
+          // Sum reimbursementAmount(s)
+          let orderReimbursementTotal = 0;
+
+          order.additionalInfo.forEach(info => {
+            const amt = parseFloat(info.reimbursementAmount);
+            if (!isNaN(amt)) {
+              totalReimbursed += amt;
+              orderReimbursementTotal += amt;
+            }
+          });
+
+          if (orderReimbursementTotal > 0) {
+            reimbursedOrderCount += 1;
+            reimbursedOrdersDetails.push({
+              orderNo: order.orderNo || "(unknown)",
+              amount: orderReimbursementTotal.toFixed(2),
             });
           }
         }
@@ -508,16 +519,24 @@ function analyzeMonthlyReimbursements(orders, currentDallasDate) {
     }
   });
 
-  // Append right below the monthlyCancelRefundBox
+  // Log each order reimbursement
+  console.log("🧾 Orders Reimbursed This Month:");
+  reimbursedOrdersDetails.forEach(detail =>
+    console.log(`Order: ${detail.orderNo} | Reimbursed: $${detail.amount}`)
+  );
+  console.log(`Total Reimbursed Orders: ${reimbursedOrderCount}`);
+  console.log(`Total Reimbursed Amount: $${totalReimbursed.toFixed(2)}`);
+
+  // Append to UI
   const box = document.createElement("div");
   box.style.textAlign = "center";
   box.style.padding = "10px";
   box.style.backgroundColor = "#9dbfc9";
   box.innerHTML = `
     <h5 class="text-success" style="color: #ffffff !important;">Monthly Reimbursements</h5>
+    <p><strong>Reimbursed Orders:</strong> ${reimbursedOrderCount}</p>
     <p><strong>Total Reimbursed Amount:</strong> $${totalReimbursed.toFixed(2)}</p>
   `;
-
   document.getElementById("monthlyCancelRefundBox").insertAdjacentElement("afterend", box);
 }
 
