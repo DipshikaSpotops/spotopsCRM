@@ -392,7 +392,7 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
     const refundAmount = parseFloat(order.custRefAmount) || 0;
 
     // console.log("looking for cancel & refunds", order);
-    console.log("cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
+    console.log("ORDER NO:",order.orderNo,"cancelledDateStr:", cancelledDateStr, "refundDateStr:", refundDateStr, "refundAmount:", refundAmount);
 
     if (cancelledDateStr) {
       const cancelledDate = new Date(cancelledDateStr);
