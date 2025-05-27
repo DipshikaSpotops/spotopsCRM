@@ -382,7 +382,17 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
 }
 function cleanDateString(dateStr) {
   if (!dateStr) return null;
-  return dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+
+  // Remove ordinal suffixes
+  let cleaned = dateStr.replace(/\b(\d{1,2})(st|nd|rd|th)\b/, '$1');
+
+  // Convert "22 May, 2025 9:54" → "May 22, 2025 9:54"
+  const dateRegex = /^(\d{1,2}) (\w+), (\d{4}) (.+)$/;
+  if (dateRegex.test(cleaned)) {
+    cleaned = cleaned.replace(dateRegex, "$2 $1, $3 $4");
+  }
+
+  return cleaned;
 }
 async function fetchAllOrders() {
   try {
