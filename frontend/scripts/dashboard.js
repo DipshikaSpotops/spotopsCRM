@@ -458,9 +458,9 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
   });
 
   // ✅ Final Logging Summary
-  console.log("✅ Cancelled Orders This Month:", cancelledOrdersThisMonth);
-  console.log("💸 Refunded Orders This Month:", refundedOrdersThisMonth);
-  console.log(`📊 Final Tally → Cancelled: ${cancelled}, Refunded: ${refunded}, Amount: $${totalRefundAmount.toFixed(2)}`);
+  console.log("Cancelled Orders This Month:", cancelledOrdersThisMonth);
+  console.log("Refunded Orders This Month:", refundedOrdersThisMonth);
+  console.log(`Final Tally → Cancelled: ${cancelled}, Refunded: ${refunded}, Amount: $${totalRefundAmount.toFixed(2)}`);
 
   document.getElementById("monthlyCancelRefundBox").innerHTML = `
     <div class="text-center p-2">
