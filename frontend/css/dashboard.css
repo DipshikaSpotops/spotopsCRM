@@ -169,8 +169,8 @@ cursor: pointer;
 }
 #doughnutCharts {
   display: flex;
-  /* flex-wrap: wrap;
-  justify-content: center; */
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   width: 100%;
 }
@@ -180,13 +180,12 @@ cursor: pointer;
   max-width: 420px;
   min-width: 250px;
   margin: auto;
-}
   #monthlyRates {
     flex: 1 1 300px;
     min-width: 250px;
     max-width: 420px;
   }
-
+}
 #monthlyDoughnutChart {
   max-width: 400px;
   max-height: 400px;
@@ -195,26 +194,6 @@ cursor: pointer;
   margin: 0 auto;
   display: block;
 }
-.monthly-overview-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 20px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.overview-chart-section,
-.insights-section {
-  flex: 1 1 48%;
-  max-width: 48%;
-  background: #fdfeffd4;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
 @media (max-width: 1200px) {
   .sidebar {
     width: 20%;
@@ -231,13 +210,7 @@ cursor: pointer;
   }
 }
 
-@media (max-width: 992px) {
-  .overview-chart-section,
-  .insights-section {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
-}
+
 @media (max-width: 576px) {
   .navbar .user-info span {
     font-size: 14px;
