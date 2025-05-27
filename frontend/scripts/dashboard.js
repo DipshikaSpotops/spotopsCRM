@@ -477,10 +477,8 @@ function analyzeMonthlyReimbursements(orders, currentDallasDate) {
   orders.forEach(order => {
     if (!order.orderHistory || !Array.isArray(order.orderHistory)) return;
     if (!order.additionalInfo || !Array.isArray(order.additionalInfo)) return;
-
-    // Look for reimbursement event in history
     const reimbursementEntry = order.orderHistory.find(entry =>
-      entry.includes("escalationProcess: Reimbursement")
+      entry.includes("Reimbursement")
     );
 
     if (reimbursementEntry) {
