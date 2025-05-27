@@ -143,6 +143,7 @@ window.location.href = "login_signup.html";
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
+  await analyzeMonthlyCancelRefunds(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
 }
 
@@ -376,6 +377,44 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
         <h5>No Best Day Data</h5>
       </div>
     `;  
+}
+function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
+  const monthsMap = {};
+
+  orders.forEach(order => {
+    // Extracting and parsing dates safely
+    const cancelledDateStr = order.cancelledDate;
+    const refundDateStr = order.custRefundDate;
+    const refundAmount = parseFloat(order.custRefAmount) || 0;
+
+    if (cancelledDateStr) {
+      const cancelledDate = new Date(cancelledDateStr);
+      const key = `${cancelledDate.getFullYear()}-${cancelledDate.getMonth()}`;
+      monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
+      monthsMap[key].cancelled += 1;
+    }
+
+    if (refundDateStr) {
+      const refundDate = new Date(refundDateStr);
+      const key = `${refundDate.getFullYear()}-${refundDate.getMonth()}`;
+      monthsMap[key] = monthsMap[key] || { cancelled: 0, refunded: 0, refundAmount: 0 };
+      monthsMap[key].refunded += 1;
+      monthsMap[key].refundAmount += refundAmount;
+    }
+  });
+
+  // Build HTML for the latest month
+  const latestKey = `${currentDallasDate.getFullYear()}-${currentDallasDate.getMonth()}`;
+  const data = monthsMap[latestKey] || { cancelled: 0, refunded: 0, refundAmount: 0 };
+
+  document.getElementById("monthlyCancelRefundBox").innerHTML = `
+    <div class="text-center p-2">
+      <h5 class="text-warning" style="color: #ffffff;">Monthly Cancellations & Refunds</h5>
+      <p><strong>Cancelled Orders:</strong> ${data.cancelled}</p>
+      <p><strong>Refunded Orders:</strong> ${data.refunded}</p>
+      <p><strong>Total Refund Amount:</strong> $${data.refundAmount.toFixed(2)}</p>
+    </div>
+  `;
 }
 
 const darkModeToggle = document.getElementById("darkModeIcon");
