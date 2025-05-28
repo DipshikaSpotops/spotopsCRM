@@ -140,6 +140,20 @@ window.location.href = "login_signup.html";
 });
 // for rendering charts
 // Fetch and render data for each chart
+async function fetchCancelledOrders(month, year) {
+  const res = await axios.get("https://www.spotops360.com/orders/cancelled-by-date", {
+    params: { month, year }
+  });
+  return res.data;
+}
+
+async function fetchRefundedOrders(month, year) {
+  const res = await axios.get("https://www.spotops360.com/orders/refunded-by-date", {
+    params: { month, year }
+  });
+  return res.data;
+}
+
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
   const allOrders = await fetchAllOrders();
