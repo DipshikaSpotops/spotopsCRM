@@ -577,14 +577,40 @@ $(document).ready(async function () {
   $(".modal-overlay").remove();
   $("body").removeClass("modal-active");
   });
+  function convertToISO(dateStr) {
+  // Remove ordinal suffixes (st, nd, rd, th)
+  const cleaned = dateStr.replace(/(\d+)(st|nd|rd|th)/g, "$1");
+
+  // Replace with format JavaScript Date can parse
+  // Convert "28 May, 2025 14:26" to "May 28, 2025 14:26"
+  const match = cleaned.match(/(\d{1,2}) (\w+), (\d{4}) (\d{1,2}:\d{2})/);
+  if (!match) {
+    console.error("❌ Unrecognized date format:", dateStr);
+    return null;
+  }
+
+  const formatted = `${match[2]} ${match[1]}, ${match[3]} ${match[4]}`;
+  const date = new Date(formatted);
+
+  if (isNaN(date)) {
+    console.error("Invalid date object:", formatted);
+    return null;
+  }
+
+  return date.toISOString(); // Returns in "2025-05-28T14:26:00.000Z"
+}
+
   $("#cancelledRefundSubmit").on("click", function () {
   $("#cancellingOrder").fadeOut();
-  const rawDate = $("#cancelledDate").val(); // e.g., "2025-05-08 09:16"
-const convertdate = new Date(rawDate); // assumes input type="datetime-local" or similar
-const cancelledDate = convertdate.toISOString(); // "2025-05-08T09:16:00.000Z"
-console.log("date",cancelledDate);
-  // const cancelledDate = $("#cancelledDate").val();
+ 
+  const userInput = $("#cancelledDate").val();
+const cancelledDate = convertToISO(userInput);
+if (cancelledDate) {
+  console.log("ISO Date:", cancelledDate);
+  // Now you can send `isoDate` to backend or insert it into your DB
+}
   const cancelledRefAmount = $(".cancelledRefAmount").val();
+  
   // const orderNo = urlParams.get("orderNo");
   const reason = $("#reasonCancel").val();
   
