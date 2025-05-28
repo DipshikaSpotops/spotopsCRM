@@ -151,7 +151,7 @@ function convertMonthToNumber(monthName) {
 let numberMonth = convertMonthToNumber(month);
 
 async function fetchCancelledOrders(month=numberMonth, year) {
-  console.log("month in cancelled",month);
+  console.log("month in cancelled",numberMonth);
   const res = await axios.get("https://www.spotops360.com/orders/cancelled-by-date", {
     params: { month, year }
   });
@@ -160,7 +160,7 @@ async function fetchCancelledOrders(month=numberMonth, year) {
 }
 
 async function fetchRefundedOrders(month=numberMonth, year) {
-  console.log("month in refunds",month);
+  console.log("month in refunds",numberMonth);
   const res = await axios.get("https://www.spotops360.com/orders/refunded-by-date", {
     params: { month, year }
   });
