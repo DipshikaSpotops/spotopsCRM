@@ -144,6 +144,7 @@ async function fetchCancelledOrders(month, year) {
   const res = await axios.get("https://www.spotops360.com/orders/cancelled-by-date", {
     params: { month, year }
   });
+  console.log("cancelled",res.data);
   return res.data;
 }
 
@@ -151,6 +152,7 @@ async function fetchRefundedOrders(month, year) {
   const res = await axios.get("https://www.spotops360.com/orders/refunded-by-date", {
     params: { month, year }
   });
+  console.log("refunded",res.data);
   return res.data;
 }
 
