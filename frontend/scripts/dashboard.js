@@ -156,13 +156,14 @@ async function fetchRefundedOrders(month, year) {
 
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
-  const allOrders = await fetchAllOrders();
+  // const allOrders = await fetchAllOrders();
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
   const cancelledOrders = await fetchCancelledOrders(month, year);
  const refundedOrders = await fetchRefundedOrders(month, year);
-  await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
-  await analyzeMonthlyReimbursements(allOrders, currentDallasDate);
+ analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders);
+  // await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
+  // await analyzeMonthlyReimbursements(allOrders, currentDallasDate);
 }
 
 // Fetch daily orders and display them in a chart
@@ -413,16 +414,16 @@ function cleanDateString(dateStr) {
 
   return cleaned;
 }
-async function fetchAllOrders() {
-  try {
-    const response = await axios.get("https://www.spotops360.com/orders");
-    console.log(response.data.length);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching all orders:", error);
-    return [];
-  }
-}
+// async function fetchAllOrders() {
+//   try {
+//     const response = await axios.get("https://www.spotops360.com/orders");
+//     console.log(response.data.length);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching all orders:", error);
+//     return [];
+//   }
+// }
 
 function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
   const cancelled = cancelledOrders.length;
