@@ -409,6 +409,7 @@ $(document).ready(async function () {
   case 3: return "rd";
   default: return "th";
   }
+  
   };
   var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
   console.log("dates",currentDateTime,orderPlacedDate)
@@ -578,8 +579,11 @@ $(document).ready(async function () {
   });
   $("#cancelledRefundSubmit").on("click", function () {
   $("#cancellingOrder").fadeOut();
-  
-  const cancelledDate = $("#cancelledDate").val();
+  const rawDate = $("#cancelledDate").val(); // e.g., "2025-05-08 09:16"
+const convertdate = new Date(rawDate); // assumes input type="datetime-local" or similar
+const cancelledDate = convertdate.toISOString(); // "2025-05-08T09:16:00.000Z"
+console.log("date",cancelledDate);
+  // const cancelledDate = $("#cancelledDate").val();
   const cancelledRefAmount = $(".cancelledRefAmount").val();
   // const orderNo = urlParams.get("orderNo");
   const reason = $("#reasonCancel").val();
