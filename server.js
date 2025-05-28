@@ -1251,6 +1251,9 @@ app.get("/orders/refunded-by-date", async (req, res) => {
     console.log("normalizedMonth:",normalizedMonth);
     const startDate = new Date(`${year}-${normalizedMonth}`);
     const endDate = new Date(startDate);
+    console.log("startDate:", startDate.toISOString());
+console.log("endDate:", endDate.toISOString());
+
     endDate.setMonth(endDate.getMonth() + 1);
 
     const orders = await Order.find({
