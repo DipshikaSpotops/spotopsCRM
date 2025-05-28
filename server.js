@@ -1206,7 +1206,8 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
     };
 
     const normalizedMonth = monthMap[month] || month.padStart(2, "0");
-    const startDate = new Date(`${year}-${normalizedMonth}-01`);
+    console.log("normalizedMonth:",normalizedMonth);
+    const startDate = new Date(`${year}-${normalizedMonth}`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
@@ -1247,7 +1248,8 @@ app.get("/orders/refunded-by-date", async (req, res) => {
     };
 
     const normalizedMonth = monthMap[month] || month.padStart(2, "0");
-    const startDate = new Date(`${year}-${normalizedMonth}-01`);
+    onsole.log("normalizedMonth:",normalizedMonth);
+    const startDate = new Date(`${year}-${normalizedMonth}`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
