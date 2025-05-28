@@ -150,19 +150,19 @@ function convertMonthToNumber(monthName) {
 }
 let numberMonth = convertMonthToNumber(month);
 
-async function fetchCancelledOrders(month=numberMonth, year) {
-  console.log("month in cancelled",numberMonth);
+async function fetchCancelledOrders(month, year) {
+  const numericMonth = convertMonthToNumber(month);
   const res = await axios.get("https://www.spotops360.com/orders/cancelled-by-date", {
-    params: { month, year }
+    params: { numericMonth, year }
   });
   console.log("cancelled",res.data);
   return res.data;
 }
 
-async function fetchRefundedOrders(month=numberMonth, year) {
-  console.log("month in refunds",numberMonth);
+async function fetchRefundedOrders(month, year) {
+    const numericMonth = convertMonthToNumber(month);
   const res = await axios.get("https://www.spotops360.com/orders/refunded-by-date", {
-    params: { month, year }
+    params: { numericMonth, year }
   });
   console.log("refunded",res.data);
   return res.data;
