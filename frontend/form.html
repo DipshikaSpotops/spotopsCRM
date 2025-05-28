@@ -3092,7 +3092,7 @@ var firstname = localStorage.getItem("firstName");
 const userInput = $("#cancelledDate").val();
 const cancelledDate = convertToISO(userInput);
 if (cancelledDate) {
-  console.log("ISO Date:", custRefundDate);
+  console.log("ISO Date:", cancelledDate);
   // Now you can send `isoDate` to backend or insert it into your DB
 }
 const custRefAmount = $(".cancelledRefAmount").val();
