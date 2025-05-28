@@ -1184,23 +1184,25 @@ res.status(500).json({ message: "Server error", error });
 app.get("/orders/cancelled-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("cancelled","month:",month,"year:",year)
+    console.log("cancelled-by-date", "month:", month, "year:", year);
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
-
-    const startDate = new Date(`${year}-${month}`);
+    const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
-
-    const orders = await Order.find({
-      cancelledDate: {
-        $gte: startDate,
-        $lt: endDate
-      }
+    const allOrders = await Order.find({ cancelledDate: { $exists: true } });
+    const cleanDate = (str) => {
+      if (!str) return null;
+      const noOrdinal = str.replace(/\b(\d{1,2})(st|nd|rd|th)\b/, '$1');
+      const formatted = noOrdinal.replace(/^(\d{1,2}) (\w+), (\d{4}) (.+)$/, "$2 $1, $3 $4");
+      return new Date(formatted);
+    };
+    const filteredOrders = allOrders.filter(order => {
+      const date = cleanDate(order.cancelledDate);
+      return date >= startDate && date < endDate;
     });
-
-    res.json(orders);
+    res.json(filteredOrders);
   } catch (error) {
     console.error("Error fetching cancelled-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
@@ -1209,30 +1211,36 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
 app.get("/orders/refunded-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("refunded","month:",month,"year:",year)
+    console.log("refunded-by-date", "month:", month, "year:", year);
 
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}`);
+    const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
-    const orders = await Order.find({
-      custRefundDate: {
-        $gte: startDate,
-        $lt: endDate
-      }
+    const allOrders = await Order.find({ custRefundDate: { $exists: true } });
+
+    const cleanDate = (str) => {
+      if (!str) return null;
+      const noOrdinal = str.replace(/\b(\d{1,2})(st|nd|rd|th)\b/, '$1');
+      const formatted = noOrdinal.replace(/^(\d{1,2}) (\w+), (\d{4}) (.+)$/, "$2 $1, $3 $4");
+      return new Date(formatted);
+    };
+
+    const filteredOrders = allOrders.filter(order => {
+      const date = cleanDate(order.custRefundDate);
+      return date >= startDate && date < endDate;
     });
 
-    res.json(orders);
+    res.json(filteredOrders);
   } catch (error) {
     console.error("Error fetching refunded-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
-
 // for disputes
 app.get("/orders/disputes", async (req, res) => {
   try {
