@@ -168,35 +168,24 @@ cursor: pointer;
   display: flex;
 }
 #doughnutCharts {
- display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-  width: 100%;
-  margin-top: 20px;
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
 }
 
 .doughnut-wrapper {
-  flex: 1 1 350px;
-  max-width: 400px;
-  margin: auto;
+  flex: 1 1 300px;
+    max-width: 420px;
+    min-width: 250px;
+    margin: auto;
 }
   #monthlyRates {
-flex: 1 1 250px;
-  max-width: 250px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-start;
+    flex: 1 1 300px;
+    min-width: 250px;
+    max-width: 420px;
   }
-#monthlyRates .rate-item {
-  width: 100%;
-  max-width: 240px;
-  text-align: center;
-}
 
 #monthlyDoughnutChart {
   max-width: 400px;
