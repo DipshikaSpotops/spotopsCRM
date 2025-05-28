@@ -1248,7 +1248,7 @@ app.get("/orders/refunded-by-date", async (req, res) => {
     };
 
     const normalizedMonth = monthMap[month] || month.padStart(2, "0");
-    onsole.log("normalizedMonth:",normalizedMonth);
+    console.log("normalizedMonth:",normalizedMonth);
     const startDate = new Date(`${year}-${normalizedMonth}`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
