@@ -2996,11 +2996,38 @@ alert("Failed to update dispute information.");
 });
 // for dispute till here
 //for custRefund
+  function convertToISO(dateStr) {
+  // Remove ordinal suffixes (st, nd, rd, th)
+  const cleaned = dateStr.replace(/(\d+)(st|nd|rd|th)/g, "$1");
+
+  // Replace with format JavaScript Date can parse
+  // Convert "28 May, 2025 14:26" to "May 28, 2025 14:26"
+  const match = cleaned.match(/(\d{1,2}) (\w+), (\d{4}) (\d{1,2}:\d{2})/);
+  if (!match) {
+    console.error("❌ Unrecognized date format:", dateStr);
+    return null;
+  }
+
+  const formatted = `${match[2]} ${match[1]}, ${match[3]} ${match[4]}`;
+  const date = new Date(formatted);
+
+  if (isNaN(date)) {
+    console.error("Invalid date object:", formatted);
+    return null;
+  }
+
+  return date.toISOString(); // Returns in "2025-05-28T14:26:00.000Z"
+}
 $(".custRefundSubmit").on("click", function () {
 var firstname = localStorage.getItem("firstName");
 $(".custRefundSubmit").prop("disabled", true).css("filter", "blur(2px)");
-// Existing code to fade out the modal and get form values
-const custRefundDate = $(".refundedDate").val();
+
+const userInput = $(".refundedDate").val();
+const custRefundDate = convertToISO(userInput);
+if (custRefundDate) {
+  console.log("ISO Date:", custRefundDate);
+  // Now you can send `isoDate` to backend or insert it into your DB
+}
 const custRefundedAmount = $(".custRefundedAmount").val();
 const orderNo = urlParams.get("orderNo");
 
@@ -3062,7 +3089,12 @@ $("#cancellingOrder").fadeOut();
 // $(".modal-overlay").remove();
 // $("body").removeClass("modal-active");
 var firstname = localStorage.getItem("firstName");
-const cancelledDate = $("#cancelledDate").val();
+const userInput = $("#cancelledDate").val();
+const cancelledDate = convertToISO(userInput);
+if (cancelledDate) {
+  console.log("ISO Date:", custRefundDate);
+  // Now you can send `isoDate` to backend or insert it into your DB
+}
 const custRefAmount = $(".cancelledRefAmount").val();
 const orderNo = urlParams.get("orderNo");
 const reason = $("#reasonCancel").val();
