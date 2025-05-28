@@ -1184,12 +1184,12 @@ res.status(500).json({ message: "Server error", error });
 app.get("/orders/cancelled-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("cancelled","month:",month,"year:",year)
+
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}`);
+    const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
@@ -1202,20 +1202,20 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    console.error("Error fetching cancelled-by-date orders:", error);
+    console.error("❌ Error fetching cancelled-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 app.get("/orders/refunded-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("refunded","month:",month,"year:",year)
 
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}`);
+    const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
@@ -1228,10 +1228,11 @@ app.get("/orders/refunded-by-date", async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    console.error("Error fetching refunded-by-date orders:", error);
+    console.error("❌ Error fetching refunded-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 app.get("/migrate-dates", async (req, res) => {
   try {
     const orders = await Order.find({
