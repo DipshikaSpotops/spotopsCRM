@@ -155,21 +155,7 @@ async function fetchRefundedOrders(month, year) {
   console.log("refunded",res.data);
   return res.data;
 }
-async function handleMigrateDate(){
-  if (!window.confirm("Are you absolutely sure you want to run the migration? This will modify order dates.")) return;
 
-  try {
-    const response = await fetch("/migrate-dates", {
-      method: "GET"
-    });
-
-    const text = await response.text();
-    alert( text);
-  } catch (error) {
-    console.error("Migration failed", error);
-    alert("Migration failed. Check console.");
-  }
-};
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
   // const allOrders = await fetchAllOrders();
@@ -455,12 +441,12 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
   console.log(`Totals → Cancelled: ${cancelled}, Refunded: ${refunded}, Refund Amount: $${totalRefundAmount.toFixed(2)}`);
 
   document.getElementById("monthlyCancelRefundBox").innerHTML = `
-    <div class="text-center p-2">
-      <h5 class="text-warning" style="color: #ffffff !important;">Monthly Cancellations & Refunds</h5>
-      <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
-      <p><strong>Refunded Orders:</strong> ${refunded}</p>
-      <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
-        <button id="runMigrationBtn"
+  <div class="text-center p-2">
+    <h5 class="text-warning" style="color: #ffffff !important;">Monthly Cancellations & Refunds</h5>
+    <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
+    <p><strong>Refunded Orders:</strong> ${refunded}</p>
+    <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
+    <button id="runMigrationBtn"
       style="
         background-color: #d9534f;
         color: white;
@@ -473,19 +459,22 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
     >
       Run Date Migration
     </button>
-    </div>
-  `;
-  document.getElementById("runMigrationBtn").onclick = async function handleMigrateDates() {
+  </div>
+`;
+
+// Now attach the function
+document.getElementById("runMigrationBtn").onclick = async function handleMigrateDates() {
   if (!window.confirm("Are you sure you want to run the date migration?")) return;
 
   try {
-    const response = await fetch("/admin/migrate-dates");
+    const response = await fetch("/migrate-dates");
     const result = await response.text();
-    alert( result);
+    alert(result);
   } catch (err) {
     console.error("Migration failed", err);
     alert("Migration failed. Check console.");
   }
+};
 }
 
 
@@ -1026,7 +1015,21 @@ $("body").removeClass("modal-active");
   }
   
 });
+const handleMigrateDates = async () => {
+  if (!window.confirm("Are you absolutely sure you want to run the migration? This will modify order dates.")) return;
 
+  try {
+    const response = await fetch("/admin/migrate-dates", {
+      method: "GET"
+    });
+
+    const text = await response.text();
+    alert("✅ " + text);
+  } catch (error) {
+    console.error("Migration failed", error);
+    alert("❌ Migration failed. Check console.");
+  }
+};
 
 fetchNotifications();
 await fetchAndRenderCharts()
