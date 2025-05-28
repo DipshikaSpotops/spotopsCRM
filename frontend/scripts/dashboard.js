@@ -444,19 +444,6 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
     <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
     <p><strong>Refunded Orders:</strong> ${refunded}</p>
     <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
-    <button id="runMigrationBtn"
-      style="
-        background-color: #d9534f;
-        color: white;
-        padding: 10px 16px;
-        border: none;
-        border-radius: 5px;
-        margin: 20px 0;
-        cursor: pointer;
-      "
-    >
-      Run Date Migration
-    </button>
   </div>
 `;
 
