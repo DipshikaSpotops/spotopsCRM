@@ -1184,25 +1184,23 @@ res.status(500).json({ message: "Server error", error });
 app.get("/orders/cancelled-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("cancelled-by-date", "month:", month, "year:", year);
+    console.log("cancelled","month:",month,"year:",year)
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
-    const startDate = new Date(`${year}-${month}-01`);
+
+    const startDate = new Date(`${year}-${month}`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
-    const allOrders = await Order.find({ cancelledDate: { $exists: true } });
-    const cleanDate = (str) => {
-      if (!str) return null;
-      const noOrdinal = str.replace(/\b(\d{1,2})(st|nd|rd|th)\b/, '$1');
-      const formatted = noOrdinal.replace(/^(\d{1,2}) (\w+), (\d{4}) (.+)$/, "$2 $1, $3 $4");
-      return new Date(formatted);
-    };
-    const filteredOrders = allOrders.filter(order => {
-      const date = cleanDate(order.cancelledDate);
-      return date >= startDate && date < endDate;
+
+    const orders = await Order.find({
+      cancelledDate: {
+        $gte: startDate,
+        $lt: endDate
+      }
     });
-    res.json(filteredOrders);
+
+    res.json(orders);
   } catch (error) {
     console.error("Error fetching cancelled-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
@@ -1211,17 +1209,39 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
 app.get("/orders/refunded-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("refunded-by-date", "month:", month, "year:", year);
+    console.log("refunded","month:",month,"year:",year)
 
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}-01`);
+    const startDate = new Date(`${year}-${month}`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
-    const allOrders = await Order.find({ custRefundDate: { $exists: true } });
+    const orders = await Order.find({
+      custRefundDate: {
+        $gte: startDate,
+        $lt: endDate
+      }
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching refunded-by-date orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+app.get("/migrate-dates", async (req, res) => {
+  try {
+    const orders = await Order.find({
+      $or: [
+        { cancelledDate: { $type: "string" } },
+        { custRefundDate: { $type: "string" } }
+      ]
+    });
+
+    let updated = 0;
 
     const cleanDate = (str) => {
       if (!str) return null;
@@ -1230,17 +1250,38 @@ app.get("/orders/refunded-by-date", async (req, res) => {
       return new Date(formatted);
     };
 
-    const filteredOrders = allOrders.filter(order => {
-      const date = cleanDate(order.custRefundDate);
-      return date >= startDate && date < endDate;
-    });
+    for (const order of orders) {
+      let updatedThis = false;
 
-    res.json(filteredOrders);
+      if (typeof order.cancelledDate === "string") {
+        const parsed = cleanDate(order.cancelledDate);
+        if (!isNaN(parsed)) {
+          order.cancelledDate = parsed;
+          updatedThis = true;
+        }
+      }
+
+      if (typeof order.custRefundDate === "string") {
+        const parsed = cleanDate(order.custRefundDate);
+        if (!isNaN(parsed)) {
+          order.custRefundDate = parsed;
+          updatedThis = true;
+        }
+      }
+
+      if (updatedThis) {
+        await order.save();
+        updated++;
+      }
+    }
+
+    res.send(`✅ Migration completed. Updated ${updated} orders.`);
   } catch (error) {
-    console.error("Error fetching refunded-by-date orders:", error);
-    res.status(500).json({ message: "Server error", error });
+    console.error("Migration failed:", error);
+    res.status(500).json({ message: "Migration error", error });
   }
 });
+
 // for disputes
 app.get("/orders/disputes", async (req, res) => {
   try {

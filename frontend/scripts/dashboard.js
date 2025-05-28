@@ -446,6 +446,21 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
       <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
       <p><strong>Refunded Orders:</strong> ${refunded}</p>
       <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
+      <button
+  onClick={handleMigrateDates}
+  style={{
+    backgroundColor: '#d9534f',
+    color: 'white',
+    padding: '10px 16px',
+    border: 'none',
+    borderRadius: '5px',
+    margin: '20px 0',
+    cursor: 'pointer'
+  }}
+>
+  Run Date Migration
+</button>
+
     </div>
   `;
 }
@@ -988,6 +1003,21 @@ $("body").removeClass("modal-active");
   }
   
 });
+const handleMigrateDates = async () => {
+  if (!window.confirm("Are you absolutely sure you want to run the migration? This will modify order dates.")) return;
+
+  try {
+    const response = await fetch("/migrate-dates", {
+      method: "GET"
+    });
+
+    const text = await response.text();
+    alert( text);
+  } catch (error) {
+    console.error("Migration failed", error);
+    alert("Migration failed. Check console.");
+  }
+};
 
 fetchNotifications();
 await fetchAndRenderCharts()
