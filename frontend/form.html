@@ -3851,17 +3851,20 @@ return;
 
 // Display the sale notes
 const programmingRequired = data.programmingRequired;
+const expediteShipping = data.expediteShipping;
 const notes = data.notes;
 const programmingCostQuoted = data.programmingCostQuoted;
 const saleNoteDiv = $("#saleNote"); // jQuery selector
 
 const programmingRequiredText = programmingRequired ? "Yes" : "No";
+const expediteShippingText = expediteShipping ? "Yes" : "No";
 
 const noteHtml = `
   <div>
     <p><strong>Sale Note:</strong> ${notes}</p>
     <p><strong>Programming Required:</strong> ${programmingRequiredText || ""}</p>
     <p><strong>Programming Cost:</strong> $${programmingCostQuoted}</p>
+    <p><strong>Programming Cost:</strong> $${expediteShipping || ""}</p>
   </div>
 `;
 
