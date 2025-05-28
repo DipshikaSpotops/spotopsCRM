@@ -1189,7 +1189,7 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}-01`);
+    const startDate = new Date(`${year}-${month}`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
@@ -1215,7 +1215,7 @@ app.get("/orders/refunded-by-date", async (req, res) => {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}-01`);
+    const startDate = new Date(`${year}-${month}`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
