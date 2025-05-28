@@ -169,31 +169,30 @@ cursor: pointer;
 }
 #doughnutCharts {
   display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
 }
 
 .doughnut-wrapper {
   flex: 1 1 300px;
-    max-width: 420px;
-    min-width: 250px;
-    margin: auto;
-}
+  max-width: 420px;
+  min-width: 250px;
+  margin: auto;
   #monthlyRates {
     flex: 1 1 300px;
     min-width: 250px;
     max-width: 420px;
   }
-
+}
 #monthlyDoughnutChart {
   max-width: 400px;
-    max-height: 400px;
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-    display: block;
+  max-height: 400px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
 }
 @media (max-width: 1200px) {
   .sidebar {
