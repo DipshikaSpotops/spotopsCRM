@@ -691,9 +691,9 @@ supportNotes:[String],
 disputedDate: String ,  
 disputeReason: String,
 custRefAmount: String,
-custRefundDate: String,
+custRefundDate: Date,
 custRefundedAmount: Number,
-cancelledDate: String,
+cancelledDate: Date,
 mainOrderDeliveredDate: String,
 cancelledRefAmount: Number,
 cancellationReason:String,
@@ -1241,44 +1241,38 @@ app.get("/migrate-dates", async (req, res) => {
       ]
     });
 
-    let updated = 0;
-
-    const cleanDate = (str) => {
-      if (!str) return null;
-      const noOrdinal = str.replace(/\b(\d{1,2})(st|nd|rd|th)\b/, '$1');
-      const formatted = noOrdinal.replace(/^(\d{1,2}) (\w+), (\d{4}) (.+)$/, "$2 $1, $3 $4");
-      return new Date(formatted);
-    };
+    let updatedCount = 0;
 
     for (const order of orders) {
-      let updatedThis = false;
+      let updated = false;
 
+      // Clean and convert
       if (typeof order.cancelledDate === "string") {
-        const parsed = cleanDate(order.cancelledDate);
-        if (!isNaN(parsed)) {
-          order.cancelledDate = parsed;
-          updatedThis = true;
+        const date = new Date(order.cancelledDate.replace(/(\d+)(st|nd|rd|th)/, "$1"));
+        if (!isNaN(date)) {
+          order.cancelledDate = date;
+          updated = true;
         }
       }
 
       if (typeof order.custRefundDate === "string") {
-        const parsed = cleanDate(order.custRefundDate);
-        if (!isNaN(parsed)) {
-          order.custRefundDate = parsed;
-          updatedThis = true;
+        const date = new Date(order.custRefundDate.replace(/(\d+)(st|nd|rd|th)/, "$1"));
+        if (!isNaN(date)) {
+          order.custRefundDate = date;
+          updated = true;
         }
       }
 
-      if (updatedThis) {
+      if (updated) {
         await order.save();
-        updated++;
+        updatedCount++;
       }
     }
 
-    res.send(`✅ Migration completed. Updated ${updated} orders.`);
+    res.send(`✅ Migration complete. Updated ${updatedCount} orders.`);
   } catch (error) {
     console.error("Migration failed:", error);
-    res.status(500).json({ message: "Migration error", error });
+    res.status(500).send("❌ Migration failed.");
   }
 });
 
