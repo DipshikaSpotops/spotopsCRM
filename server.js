@@ -1189,7 +1189,24 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}`);
+    // Support both numeric and string month formats
+    const monthMap = {
+      Jan: "01", January: "01",
+      Feb: "02", February: "02",
+      Mar: "03", March: "03",
+      Apr: "04", April: "04",
+      May: "05",
+      Jun: "06", June: "06",
+      Jul: "07", July: "07",
+      Aug: "08", August: "08",
+      Sep: "09", September: "09",
+      Oct: "10", October: "10",
+      Nov: "11", November: "11",
+      Dec: "12", December: "12"
+    };
+
+    const normalizedMonth = monthMap[month] || month.padStart(2, "0");
+    const startDate = new Date(`${year}-${normalizedMonth}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
@@ -1202,20 +1219,35 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    console.error("❌ Error fetching cancelled-by-date orders:", error);
+    console.error(" Error fetching cancelled-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
-
 app.get("/orders/refunded-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-     console.log("refunded","month:",month,"year:",year)
+
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
 
-    const startDate = new Date(`${year}-${month}`);
+    const monthMap = {
+      Jan: "01", January: "01",
+      Feb: "02", February: "02",
+      Mar: "03", March: "03",
+      Apr: "04", April: "04",
+      May: "05",
+      Jun: "06", June: "06",
+      Jul: "07", July: "07",
+      Aug: "08", August: "08",
+      Sep: "09", September: "09",
+      Oct: "10", October: "10",
+      Nov: "11", November: "11",
+      Dec: "12", December: "12"
+    };
+
+    const normalizedMonth = monthMap[month] || month.padStart(2, "0");
+    const startDate = new Date(`${year}-${normalizedMonth}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
@@ -1228,10 +1260,11 @@ app.get("/orders/refunded-by-date", async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    console.error("❌ Error fetching refunded-by-date orders:", error);
+    console.error("Error fetching refunded-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 app.get("/migrate-dates", async (req, res) => {
   try {

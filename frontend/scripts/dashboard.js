@@ -140,29 +140,17 @@ window.location.href = "login_signup.html";
 });
 // for rendering charts
 // Fetch and render data for each chart
-function convertMonthToNumber(monthName) {
-  const months = {
-    January: "01", February: "02", March: "03", April: "04",
-    May: "05", June: "06", July: "07", August: "08",
-    September: "09", October: "10", November: "11", December: "12"
-  };
-  return months[monthName];
-}
-let numberMonth = convertMonthToNumber(month);
-
 async function fetchCancelledOrders(month, year) {
-  const numericMonth = convertMonthToNumber(month);
   const res = await axios.get("https://www.spotops360.com/orders/cancelled-by-date", {
-    params: { numericMonth, year }
+    params: { month, year }
   });
   console.log("cancelled",res.data);
   return res.data;
 }
 
 async function fetchRefundedOrders(month, year) {
-    const numericMonth = convertMonthToNumber(month);
   const res = await axios.get("https://www.spotops360.com/orders/refunded-by-date", {
-    params: { numericMonth, year }
+    params: { month, year }
   });
   console.log("refunded",res.data);
   return res.data;
