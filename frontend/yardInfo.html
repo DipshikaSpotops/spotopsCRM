@@ -871,9 +871,13 @@ if (Array.isArray(item.supportNotes)) {
         <td>${item.pReq || item.partName}</td>
         <td>
   ${item.additionalInfo && yardlength > 0
-    ? `${item.additionalInfo[yardlength - 1].yardName}<br> <b>${item.additionalInfo[yardlength - 1].status}</b> <br> <b>Expected Shipping Date: ${item.additionalInfo[yardlength - 1].expShipDate || ""}</b> `
+    ? `${item.additionalInfo[yardlength - 1].yardName}<br> 
+       <b>${item.additionalInfo[yardlength - 1].status}</b> <br> 
+       <b>Expected Shipping Date: ${item.additionalInfo[yardlength - 1].expShipDate || ""}</b><br>
+       <b>Expedite Shipping: ${item.expediteShipping === "true" ? "Yes" : "No"}</b>`
     : ""}
 </td>
+
         <td>${myLastNote}</td>
         <td>${item.orderStatus}</td>
         <td>${
@@ -1054,7 +1058,8 @@ $("#searchInput").on("keyup", function () {
         (info.status && String(info.status).toLowerCase().includes(value))  
       )) ||
       (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
-      (order.email && order.email.toLowerCase().includes(value))
+      (order.email && order.email.toLowerCase().includes(value)) ||
+      (order.expediteShipping && order.expediteShipping.toLowerCase().includes(value))
     );
   });
 
