@@ -392,8 +392,6 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     ? `
       <div class="text-center p-2">
         <h5 class="text-info" style="color: #000000 !important;">Best Sales Day</h5>
-        // PUT WHO MADW THE BEST
-        // WHOSE ORDERS GOT CANCELLED MAXIMUM IN A MONTH
         <p style="color: #ffffff !important;"><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
       </div>`
     : `
