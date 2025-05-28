@@ -155,7 +155,21 @@ async function fetchRefundedOrders(month, year) {
   console.log("refunded",res.data);
   return res.data;
 }
+async function handleMigrateDate(){
+  if (!window.confirm("Are you absolutely sure you want to run the migration? This will modify order dates.")) return;
 
+  try {
+    const response = await fetch("/migrate-dates", {
+      method: "GET"
+    });
+
+    const text = await response.text();
+    alert( text);
+  } catch (error) {
+    console.error("Migration failed", error);
+    alert("Migration failed. Check console.");
+  }
+};
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
   // const allOrders = await fetchAllOrders();
@@ -446,23 +460,32 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
       <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
       <p><strong>Refunded Orders:</strong> ${refunded}</p>
       <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
-      <button
-  onClick={handleMigrateDates}
-  style={{
-    backgroundColor: '#d9534f',
-    color: 'white',
-    padding: '10px 16px',
-    border: 'none',
-    borderRadius: '5px',
-    margin: '20px 0',
-    cursor: 'pointer'
-  }}
->
-  Run Date Migration
-</button>
-
+        <button id="runMigrationBtn"
+      style="
+        background-color: #d9534f;
+        color: white;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 5px;
+        margin: 20px 0;
+        cursor: pointer;
+      "
+    >
+      Run Date Migration
+    </button>
     </div>
   `;
+  document.getElementById("runMigrationBtn").onclick = async function handleMigrateDates() {
+  if (!window.confirm("Are you sure you want to run the date migration?")) return;
+
+  try {
+    const response = await fetch("/admin/migrate-dates");
+    const result = await response.text();
+    alert( result);
+  } catch (err) {
+    console.error("Migration failed", err);
+    alert("Migration failed. Check console.");
+  }
 }
 
 
@@ -1003,21 +1026,7 @@ $("body").removeClass("modal-active");
   }
   
 });
-const handleMigrateDates = async () => {
-  if (!window.confirm("Are you absolutely sure you want to run the migration? This will modify order dates.")) return;
 
-  try {
-    const response = await fetch("/migrate-dates", {
-      method: "GET"
-    });
-
-    const text = await response.text();
-    alert( text);
-  } catch (error) {
-    console.error("Migration failed", error);
-    alert("Migration failed. Check console.");
-  }
-};
 
 fetchNotifications();
 await fetchAndRenderCharts()
