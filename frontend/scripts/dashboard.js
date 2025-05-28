@@ -145,6 +145,8 @@ async function fetchAndRenderCharts() {
   const allOrders = await fetchAllOrders();
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
+  const cancelledOrders = await fetchCancelledOrders(month, year);
+ const refundedOrders = await fetchRefundedOrders(month, year);
   await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
   await analyzeMonthlyReimbursements(allOrders, currentDallasDate);
 }
@@ -373,6 +375,8 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     ? `
       <div class="text-center p-2">
         <h5 class="text-info" style="color: #000000 !important;">Best Sales Day</h5>
+        // PUT WHO MADW THE BEST
+        // WHOSE ORDERS GOT CANCELLED MAXIMUM IN A MONTH
         <p style="color: #ffffff !important;"><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
       </div>`
     : `
@@ -406,57 +410,17 @@ async function fetchAllOrders() {
   }
 }
 
-function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
-  const numericMonth = currentDallasDate.getMonth();
-  const numericYear = currentDallasDate.getFullYear();
+function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
+  const cancelled = cancelledOrders.length;
+  const refunded = refundedOrders.length;
+  const totalRefundAmount = refundedOrders.reduce((sum, order) => {
+    const amt = parseFloat(order.custRefAmount || 0);
+    return sum + (isNaN(amt) ? 0 : amt);
+  }, 0);
 
-  let cancelled = 0;
-  let refunded = 0;
-  let totalRefundAmount = 0;
-
-  const cancelledOrdersThisMonth = [];
-  const refundedOrdersThisMonth = [];
-
-  console.log(`📅 Matching orders for: ${currentDallasDate.toLocaleString('default', { month: 'long' })} ${numericYear}`);
-
-  orders.forEach(order => {
-    const cancelledDateStr = cleanDateString(order.cancelledDate);
-    const refundDateStr = cleanDateString(order.custRefundDate);
-    const refundAmount = parseFloat(order.custRefAmount) || 0;
-
-    // ✅ CANCELLED
-    if (cancelledDateStr) {
-      const parsed = cleanDateString(cancelledDateStr);
-      const cancelledDate = new Date(parsed);
-
-      if (!isNaN(cancelledDate)) {
-        const cancelledMonth = cancelledDate.getMonth();
-        const cancelledYear = cancelledDate.getFullYear();
-
-        if (cancelledMonth === numericMonth && cancelledYear === numericYear) {
-          cancelled += 1;
-          cancelledOrdersThisMonth.push(order.orderNo);
-        }
-      }
-    }
-    if (refundDateStr) {
-      const parsedRefund = cleanDateString(refundDateStr);
-      const refundDate = new Date(parsedRefund);
-
-      if (!isNaN(refundDate)) {
-        const refundMonth = refundDate.getMonth();
-        const refundYear = refundDate.getFullYear();
-
-        if (refundMonth === numericMonth && refundYear === numericYear) {
-          refunded += 1;
-          totalRefundAmount += refundAmount;
-          refundedOrdersThisMonth.push(`${order.orderNo} ($${refundAmount.toFixed(2)})`);
-        }
-      }
-    }
-  });
-  console.log("Cancelled Orders This Month:", cancelledOrdersThisMonth);
-  console.log("Refunded Orders This Month (with amount):", refundedOrdersThisMonth);
+  console.log("Cancelled Orders This Month:", cancelledOrders.map(o => o.orderNo));
+  console.log("Refunded Orders This Month (with amount):", refundedOrders.map(o =>
+    `${o.orderNo} ($${(parseFloat(o.custRefAmount || 0)).toFixed(2)})`));
   console.log(`Totals → Cancelled: ${cancelled}, Refunded: ${refunded}, Refund Amount: $${totalRefundAmount.toFixed(2)}`);
 
   document.getElementById("monthlyCancelRefundBox").innerHTML = `
@@ -468,6 +432,7 @@ function analyzeMonthlyCancelRefunds(orders, currentDallasDate) {
     </div>
   `;
 }
+
 
 function analyzeMonthlyReimbursements(orders, currentDallasDate) {
   const currentMonth = currentDallasDate.getMonth();

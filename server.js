@@ -1181,6 +1181,57 @@ console.error("Error fetching cancelled orders:", error);
 res.status(500).json({ message: "Server error", error });
 }  
 });
+app.get("/orders/cancelled-by-date", async (req, res) => {
+  try {
+    const { month, year } = req.query;
+
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const orders = await Order.find({
+      cancelledDate: {
+        $gte: startDate,
+        $lt: endDate
+      }
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching cancelled-by-date orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+app.get("/orders/refunded-by-date", async (req, res) => {
+  try {
+    const { month, year } = req.query;
+
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const orders = await Order.find({
+      custRefundDate: {
+        $gte: startDate,
+        $lt: endDate
+      }
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching refunded-by-date orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 // for disputes
 app.get("/orders/disputes", async (req, res) => {
   try {
