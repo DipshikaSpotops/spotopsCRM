@@ -1184,7 +1184,7 @@ res.status(500).json({ message: "Server error", error });
 app.get("/orders/cancelled-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("cancelled","month:",month,"year:",year)
+
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
@@ -1210,8 +1210,7 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
 app.get("/orders/refunded-by-date", async (req, res) => {
   try {
     const { month, year } = req.query;
-    console.log("refunded","month:",month,"year:",year)
- if (!month || !year) {
+     console.log("refunded","month:",month,"year:",year)
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
