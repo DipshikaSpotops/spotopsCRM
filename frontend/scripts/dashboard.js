@@ -162,9 +162,13 @@ async function fetchAndRenderCharts() {
   updateSummaryCards(orders);
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
-  const cancelledOrders = await fetchCancelledOrders(month, year);
- const refundedOrders = await fetchRefundedOrders(month, year);
- analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders);
+  const [cancelledOrders, refundedOrders] = await Promise.all([
+  fetchCancelledOrders(month, year),
+  fetchRefundedOrders(month, year)
+]);
+setTimeout(() => {
+  analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders);
+}, 100);
   // await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
   // await analyzeMonthlyReimbursements(allOrders, currentDallasDate);
 }
@@ -625,16 +629,12 @@ async function fetchAndDisplayThreeMonthsData() {
         const orders = response.data;
         const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
         monthlyGPData.push(totalGP);
-
-        // updateMonthlyChart(3 - i, `${monthStr} ${year}`, orders); // you already have this function
       }
     }
-
-    // Cache labels and data for later reuse (like in dark mode)
     latestMonthLabels = monthLabels;
     latestMonthlyGPData = monthlyGPData;
 
-    drawBarChart(monthLabels, monthlyGPData); // <== New universal draw function
+    drawBarChart(monthLabels, monthlyGPData); 
   } catch (err) {
     console.error("Error fetching and displaying 3-month data:", err);
   }
