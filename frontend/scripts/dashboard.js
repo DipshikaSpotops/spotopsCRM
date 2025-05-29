@@ -438,8 +438,8 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
     return sum + (isNaN(amt) ? 0 : amt);
   }, 0);
 
-  console.log("Cancelled Orders This Month:", cancelledOrders.map(o => o.orderNo));
-  console.log("Refunded Orders This Month (with amount):", refundedOrders.map(o =>
+console.log(`Cancelled Orders This Month: ${cancelledOrders.length}`);
+console.log(`Refunded Orders This Month: ${refundedOrders.length}`);
     `${o.orderNo} ($${(parseFloat(o.custRefAmount || 0)).toFixed(2)})`));
   console.log(`Totals → Cancelled: ${cancelled}, Refunded: ${refunded}, Refund Amount: $${totalRefundAmount.toFixed(2)}`);
 
