@@ -1076,7 +1076,7 @@ function createPaginationControls() {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty();
 
-  const totalPages = Math.ceil(sortedData.length / rowsPerPage); // ✅ Add this line
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
 
   if (totalPages > 1) {
     // Previous button
@@ -1104,7 +1104,7 @@ function createPaginationControls() {
     if (currentPage > 1) {
       currentPage--;
       renderTableRows(currentPage, sortedData);
-      createPaginationControls(); // no need to pass anything anymore
+      createPaginationControls(); // <- This re-renders and resets the highlight
     }
   });
 
