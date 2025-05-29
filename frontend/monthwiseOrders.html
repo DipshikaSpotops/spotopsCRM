@@ -1371,35 +1371,41 @@ async function fetchOrdersForSelectedMonth(monthYear) {
 
   try {
     while (true) {
+      console.log(`🔄 Fetching page ${page}...`);
+
       const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
         params: { month, year, page, limit },
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       const { orders, totalCount: total } = response.data;
+      console.log(`Got ${orders.length} orders on page ${page}`);
+      console.log(`Total orders from server: ${total}`);
 
       if (!orders.length) break;
 
       allOrdersCombined.push(...orders);
       totalCount = total;
 
-      if (allOrdersCombined.length >= total) break;
+      if (allOrdersCombined.length >= totalCount) {
+        console.log("All orders fetched!");
+        break;
+      }
 
       page++;
     }
 
-    allOrders = allOrdersCombined; // this is your global variable
+    allOrders = allOrdersCombined;
     document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
 
     renderTableRows(1, allOrders);
     createPaginationControls(Math.ceil(allOrders.length / 25));
   } catch (error) {
-    console.error("Error fetching all orders:", error);
+    console.error("Error fetching orders:", error);
   }
 
   $("#loadingMessage").hide();
 }
-
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
