@@ -213,7 +213,7 @@ async function fetchDailyOrders() {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
  month = months[currentDallasDate.getMonth()];
  year = currentDallasDate.getFullYear();
-
+console.log("month",month,"year",year);
   try {
     console.log(`Fetching data for ${month} ${year}`);
 const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
