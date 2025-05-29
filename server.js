@@ -1389,22 +1389,28 @@ res.status(500).json({ message: "Server error", error });
 // });
 app.get('/orders/monthly', async (req, res) => {
   try {
-    const { month, year } = req.query;
+    const { month, year, page = 1, limit = 25 } = req.query;
+
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
-    // Construct the start and end date for the range
+
     const startDate = new Date(`${year}-${month}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
-    // Fetch orders from the database
-    console.log('fetchOrders');
+
+    const pageNumber = parseInt(page);
+    const pageLimit = parseInt(limit);
+    const skip = (pageNumber - 1) * pageLimit;
+
+    // Count total orders matching the date range
+    const totalCount = await Order.countDocuments({
+      orderDate: { $gte: startDate, $lt: endDate }
+    });
+
     const orders = await Order.find(
       {
-        orderDate: {
-          $gte: startDate,
-          $lt: endDate,
-        },
+        orderDate: { $gte: startDate, $lt: endDate }
       },
       {
         orderNo: 1,
@@ -1441,11 +1447,14 @@ app.get('/orders/monthly', async (req, res) => {
         programmingRequired: 1,
         cancelledDate: 1,
         custRefundDate: 1,
-        custRefAmount: 1,
+        custRefAmount: 1
       }
-    );
-    console.log('fetchOrders');
-    res.json(orders);
+    )
+    .skip(skip)
+    .limit(pageLimit)
+    .sort({ orderDate: -1 });
+
+    return res.json({ orders, totalCount });
   } catch (error) {
     console.error("Error fetching orders for specified month and year:", error);
     res.status(500).json({ message: "Server error", error });

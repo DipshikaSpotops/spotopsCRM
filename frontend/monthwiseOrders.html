@@ -957,150 +957,122 @@ sortTable(index, type);
 
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = orders.slice(start, end);
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const ordersForPage = orders.slice(start, end);
 
-$('#infoTable').empty(); // Clear the table
-ordersForPage.forEach((item) => {
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+  const tbody = $("#infoTable");
+  tbody.empty(); // Clear old rows
 
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const suffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  ordersForPage.forEach((item) => {
+    const date = new Date(item.orderDate);
+    const formattedDate = `${date.getUTCDate()}${suffix(date.getUTCDate())} ${monthNames[date.getUTCMonth()]}, ${date.getUTCFullYear()}`;
+
+    const escalationStatus = item.additionalInfo?.[0]?.escTicked === "Yes" ? "Yes" : "";
+    const escalationStyle = (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") 
+                            ? 'style="background-color: lightgreen;"' 
+                            : "";
+
+    const yardInfo = item.additionalInfo?.map((info, index) => `
+      <b>Yard ${index + 1}</b>: ${info.yardName}<br>
+      ${info.email} | ${info.phone}<br>
+      Status: <b>${info.status}</b> | Stock No.: ${info.stockNo || ""}<br>
+      Part price: $${info.partPrice} ${info.shippingDetails || ""} Others: $${info.others || 0}<br>
+      ${info.paymentStatus || ""} Refunds: ${info.refundedAmount || 0}
+    `).join("<br>") || "";
+
+    const editButton = (team === "Team Mark" || team === "Team Sussane")
+      ? ""
+      : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
+
+    const processBtnDisabled = ["Placed", "Customer approved"].includes(item.orderStatus) ? "disabled" : "";
+
+    const currentGP = calculateCurrentGP(item);
+
+    const customerName = item.fName && item.lName 
+      ? `${item.fName} ${item.lName}` 
+      : item.customerName || "";
+
+    const partRequired = item.pReq || item.partName;
+    const programmingRequired = (item.programmingRequired === true || item.programmingRequired === "true")
+      ? `Yes ($${item.programmingCostQuoted})` : "No";
+
+    const rowHTML = `
+      <tr>
+        <td>${formattedDate}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
+        <td>
+          Customer Name: ${customerName}<br>
+          ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
+          ${item.sAddress || ""} ${item.sAddressStreet || ""},<br>
+          ${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>
+          ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
+          Phone: ${item.phone} | Email: ${item.email}
+        </td>
+        <td>
+          Part required: ${partRequired}<br>
+          ${item.year} ${item.make} ${item.model}<br>
+          Part Description: ${item.desc}<br>
+          Part No: ${item.partNo}<br>
+          VIN: ${item.vin}<br>
+          Warranty: ${item.warranty} days<br>
+          Programming required: ${programmingRequired}
+        </td>
+        <td>${yardInfo}</td>
+        <td>${item.orderStatus}</td>
+        <td>$${item.soldP}</td>
+        <td>$${item.grossProfit}</td>
+        <td>$${currentGP.toFixed(2)}</td>
+        <td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
+        <td ${escalationStyle}>${escalationStatus}</td>
+        <td>
+          ${editButton}
+          <button class="btn btn-sm process-btn" data-id="${item.orderNo}" ${processBtnDisabled}>View</button>
+        </td>
+      </tr>
+    `;
+
+    tbody.append(rowHTML);
+  });
 }
-team = localStorage.getItem('team');
-// console.log("team",team);
-const editButton = (team === "Team Mark" || team === "Team Sussane")
-? "" // Hide the edit button
-: `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
+function calculateCurrentGP(item) {
+  let totalYardSpent = 0;
 
+  (item.additionalInfo || []).forEach(info => {
+    const yardPP = parseFloat(info.partPrice) || 0;
+    const shippingValue = (info.shippingDetails?.match(/:\s*(\d+(\.\d+)?)/) || [])[1] || 0;
+    const others = parseFloat(info.others) || 0;
+    const refunded = parseFloat(info.refundedAmount) || 0;
+    const escReturn = parseFloat(info.custOwnShippingReturn) || 0;
+    const escReplace = parseFloat(info.custOwnShipReplacement) || 0;
+    const yardReplace = parseFloat(info.yardOwnShipping) || 0;
 
-const actions = `
-${editButton}
-<button class="btn btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-// <button class="btn btn-danger btn-sm cancel-btn" data-id="${item.orderNo}" style="background-color: #fcdfda; border: none; color: #72504a" ${item.orderStatus === "Order Cancelled" ? "disabled" : ""}>Cancel</button>
+    const include = info.status !== "PO cancelled" || (info.status === "PO cancelled" && info.paymentStatus === "Card charged");
+    if (include) {
+      totalYardSpent += yardPP + parseFloat(shippingValue) + others + escReturn + escReplace + yardReplace - refunded;
+    }
+  });
 
-// const sendInvoice = `
-// <button class="btn btn-warning btn-sm send-invoice-btn" data-id="${item.orderNo}" style="background-color: #343668; border: none; color: white">Send Invoice</button>
-// `;
+  const spMinusTax = (parseFloat(item.soldP) || 0) - (parseFloat(item.salestax) || 0);
+  const refund = parseFloat(item.custRefundedAmount) || 0;
 
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
-// const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
-// console.log(dateOnly);
-const date = new Date(datetime);
-const day = date.getUTCDate();  // Use UTC day
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const year = date.getUTCFullYear();  // Use UTC year
-
-const suffix = (day) => {
-  if (day > 3 && day < 21) return "th";
-  switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
-  }
-};
-const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-$("#infoTable").append(`
-<tr>
-<td>${formattedOrderDate}</td>
-<td>${item.orderNo}</td>
-<td>${item.salesAgent}</td>
-<td>
-  Customer Name: 
-  ${
-    (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
-  }<br>
-${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
-${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
-Phone: ${item.phone} | Email: ${item.email}
-</td>
-<td>
-  Part required: ${item.pReq || item.partName}<br>
-  ${item.year} ${item.make} ${item.model}<br>
-  Part Description: ${item.desc}<br>
-  Part No: ${item.partNo}<br>
-  VIN: ${item.vin}<br>
-  Warranty: ${item.warranty} days<br>
-  Programming required: ${
-    item.programmingRequired === true || item.programmingRequired === "true"
-      ? `Yes ($${item.programmingCostQuoted})`
-      : "No"
-  }<br>
-</td>
-</td>
-<td>${  
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} | ${info.phone}<br> Status: <b>${info.status}</b> | Stock No.: ${info.stockNo || ""}<br> Part price: $${info.partPrice} ${info.shippingDetails || ""} Others: $${info.others || 0}<br>  ${info.paymentStatus || ""} Refunds: ${info.refundedAmount || 0}`)
-
-.join("<br>")
-: ""
-}</td>
-<td>${item.orderStatus}</td>
-<td>$${item.soldP}</td>
-<td>$${item.grossProfit}</td>
-<td>
-${
-item.additionalInfo && item.additionalInfo.length > 0
-? (() => {
-let totalYardSpent = 0;
-item.additionalInfo.forEach(info => {
-const yardPP = parseFloat(info.partPrice) || 0;
-const yardOSorYS = info.shippingDetails || '';
-let shippingValueYard = 0;
-if (yardOSorYS.includes("Own shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-} else if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
+  return spMinusTax - refund - totalYardSpent;
 }
-const yardOthers = parseFloat(info.others) || 0;
-const escOwnShipReturn = parseFloat(info.custOwnShippingReturn) || 0;
-const escOwnShipReplacement = parseFloat(info.custOwnShipReplacement) || 0;
-const yardOwnShippingReplacement = parseFloat(info.yardOwnShipping) || 0;
-const yardRefundAmount = parseFloat(info.refundedAmount) || 0;
 
-// Only calculate if the conditions are met
-if (
-info.status !== "PO cancelled" || 
-(info.status === "PO cancelled" && info.paymentStatus === "Card charged")
-) {
-totalYardSpent +=
-yardPP +
-shippingValueYard +
-yardOthers +
-escOwnShipReturn +
-escOwnShipReplacement +
-yardOwnShippingReplacement -
-yardRefundAmount;
-}
-});
-console.log("item",item)
-var soldprice = item.soldP;
-var sTax = item.spMinusTax;
-const spMinusTax = (parseFloat(item.soldP) || 0) - (parseFloat(item.salestax) || 0);
-const custRefundedAmount = item.custRefundedAmount || 0;
-const subtractRefund = spMinusTax - custRefundedAmount || 0;
-const currentGP = subtractRefund - totalYardSpent;
-console.log("===","subtractRefund",spMinusTax,sTax,subtractRefund,subtractRefund,totalYardSpent);
-console.log("currentGP", item.soldP, custRefundedAmount, subtractRefund, currentGP, totalYardSpent);
-return `$${currentGP.toFixed(2)}`;
-})()
-: ""
-}
-</td>
-<td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
-<td ${escalationStyle}>${escalationStatus}</td>
-<td>${actions}</td>
-</tr>
-`);
-});
-}
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
@@ -1213,7 +1185,7 @@ allOrders = ordersResponse.data;
 const ordersWithMultipleAdditionalInfo = allOrders
   .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
   .map(order => order.orderNo);
-console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
+// console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
@@ -1388,25 +1360,28 @@ $("#filterButton").click(async function () {
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
 
-async function fetchOrdersForSelectedMonth(monthYear) {
-    const [year, month] = monthYear.split("-");
-    try {
-        const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+async function fetchOrdersForSelectedMonth(monthYear, page = 1) {
+  const [year, month] = monthYear.split("-");
+  const limit = 25;
 
-        if (ordersResponse.status !== 200) {
-            throw new Error("Failed to fetch current month's orders");
-        }
+  try {
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month, year, page, limit },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
 
-        allOrders = ordersResponse.data;
-        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrders.length}`;
-        renderTableRows(1, allOrders);
-        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    if (response.status !== 200) throw new Error("Failed to fetch paginated orders");
 
-    } catch (error) {
-        console.error("Error fetching current month's orders:", error);
-    }
+    const { orders, totalCount } = response.data;
+    allOrders = orders;
+    currentPage = page;
+
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
+    renderTableRows(currentPage, allOrders);
+    createPaginationControls(Math.ceil(totalCount / limit));
+  } catch (err) {
+    console.error("Error fetching paginated orders:", err);
+  }
 }
 
 $("#logoutLink").click(function () {
