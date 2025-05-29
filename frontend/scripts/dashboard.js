@@ -142,18 +142,20 @@ window.location.href = "login_signup.html";
 // Fetch and render data for each chart
 async function fetchCancelledOrders(month, year) {
   const res = await axios.get("https://www.spotops360.com/orders/cancelled-by-date", {
-    params: { month, year }
+    params: { month, year, limit: 1000 } // Fetch up to 1000 cancelled orders
   });
-  // console.log("cancelled",res.data);
-  return res.data;
+
+  // Return only the orders array
+  return res.data.orders || [];
 }
 
 async function fetchRefundedOrders(month, year) {
   const res = await axios.get("https://www.spotops360.com/orders/refunded-by-date", {
-    params: { month, year }
+    params: { month, year, limit: 1000 } // Fetch up to 1000 refunded orders
   });
-  // console.log("refunded",res.data);
-  return res.data;
+
+  // Return only the orders array
+  return res.data.orders || [];
 }
 
 async function fetchAndRenderCharts() {
@@ -217,10 +219,10 @@ console.log("month",month,"year",year);
   try {
     console.log(`Fetching data for ${month} ${year}`);
 const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-  params: { month, year },
+  params: { month, year, limit: 1000 },
 });
 
-const orders = response.data.orders || [];
+const { orders } = response.data;
     if (!orders || !Array.isArray(orders)) {
       console.error("Invalid orders data.");
       return;
@@ -615,23 +617,32 @@ async function fetchAndDisplayThreeMonthsData() {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const currentMonthValue = now.toISOString().slice(0, 7); // format: YYYY-MM
     document.getElementById("customMonth").value = currentMonthValue;
+
     for (let i = 2; i >= 0; i--) {
       const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthStr = months[pastDate.getMonth()];
       const year = pastDate.getFullYear();
-      // $("#customMonth").val(`${year},${monthStr}`);
+
       monthLabels.push(`${monthStr} ${year}`);
 
       const response = await axios.get("https://www.spotops360.com/orders/monthly", {
-        params: { month: monthStr, year }
+        params: {
+          month: monthStr,
+          year,
+          limit: 1000, // Request up to 1000 orders for that month
+        }
       });
 
       if (response.status === 200) {
-const orders = response.data.orders || [];
+        const orders = response.data.orders || [];
         const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
         monthlyGPData.push(totalGP);
+      } else {
+        console.warn(`Failed to fetch data for ${monthStr} ${year}`);
+        monthlyGPData.push(0);
       }
     }
+
     latestMonthLabels = monthLabels;
     latestMonthlyGPData = monthlyGPData;
 
