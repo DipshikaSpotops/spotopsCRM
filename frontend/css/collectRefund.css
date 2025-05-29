@@ -515,6 +515,19 @@ body {
     #mainHeading {
       text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;
     }
+    #mainHeading,
+#searchInput,
+#filterButton,
+#monthYearPicker,
+#showTotalOrders {
+  flex-shrink: 0;
+  min-width: fit-content;
+}
+.topHeads,
+#filterAndTotal {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
     @media (max-width: 768px) {
       #filterAndTotal {
         flex-direction: column;
@@ -529,14 +542,16 @@ body {
         margin-top: 10px;
       }
     .sidebar {
+       width: 13%;
     transform: translateX(-100%);
-    width: 70%;
+    /* width: 70%; */
     }
     .sidebar.show {
     transform: translateX(0);
     }
     .main-content {
-    margin-left: 0;
+   margin-left: 13%;
+    width: calc(100% - 13%);
     }
     .toggle-sidebar {
     display: block;
