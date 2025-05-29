@@ -681,9 +681,9 @@ async function fetchOrdersByPage(page) {
   const monthYear = $("#monthYearPicker").val();
   const [year, monthNumber] = monthYear.split("-");
   try {
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}&page=${page}&limit=${rowsPerPage}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}`, {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
     const { orders, totalCount } = response.data;
     totalCount = response.data.totalCount;
     sortedData = sortOrdersByOrderNoDesc(orders);
