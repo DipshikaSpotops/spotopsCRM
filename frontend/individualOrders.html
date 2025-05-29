@@ -967,9 +967,6 @@ $("#monthYearPicker").val(`${year}-${monthNum}`);
 // Fetch orders specific to the logged-in salesperson
 try {
 await fetchOrdersByPage();
-if (response.status !== 200) {
-throw new Error("Failed to fetch orders");
-}
 
 var data = response.data;
 const filteredData = data.orders;
@@ -1099,27 +1096,34 @@ function createPaginationControls(totalPages) {
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
-
-  // Add click handlers
-  $('#prevPage').on('click', function () {
-    if (currentPage > 1) {
-      fetchOrdersByPage(currentPage - 1);
-    }
-  });
-
-  $('#nextPage').on('click', function () {
-    if (currentPage < totalPages) {
-      fetchOrdersByPage(currentPage + 1);
-    }
-  });
-
-  $('.pageNos').on('click', function () {
-    const selectedPage = parseInt($(this).attr('data-page'));
-    if (selectedPage !== currentPage) {
-      fetchOrdersByPage(selectedPage);
-    }
-  });
 }
+  // Add click handlers
+ $('#prevPage').on('click', function () {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTableRows(currentPage, sortedData);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+  }
+});
+
+$('#nextPage').on('click', function () {
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage, sortedData);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+  }
+});
+
+$('.pageNos').on('click', function () {
+  const selectedPage = parseInt($(this).attr('data-page'));
+  if (selectedPage !== currentPage) {
+    currentPage = selectedPage;
+    renderTableRows(currentPage, sortedData);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+  }
+});
+
+
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 const filteredOrders = sortedData.filter(order => {
