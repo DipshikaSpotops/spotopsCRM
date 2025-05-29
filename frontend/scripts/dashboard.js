@@ -216,9 +216,11 @@ async function fetchDailyOrders() {
 
   try {
     console.log(`Fetching data for ${month} ${year}`);
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`);
-    const orders = response.data;
+const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+  params: { month, year },
+});
 
+const orders = response.data.orders || [];
     if (!orders || !Array.isArray(orders)) {
       console.error("Invalid orders data.");
       return;
@@ -625,7 +627,7 @@ async function fetchAndDisplayThreeMonthsData() {
       });
 
       if (response.status === 200) {
-        const orders = response.data;
+const orders = response.data.orders || [];
         const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
         monthlyGPData.push(totalGP);
       }
@@ -711,7 +713,8 @@ async function fetchMonthlyOrders(month, year) {
     const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
       params: { month, year },
     });
-    return response.data;
+    return response.data.orders || [];
+
   } catch (err) {
     console.error("Error fetching monthly data:", err);
     return [];
