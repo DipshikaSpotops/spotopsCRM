@@ -166,6 +166,7 @@ cursor: pointer;
 }
 .charts-container {
   display: flex;
+  margin-top: -1%;
 }
 #doughnutCharts {
   display: flex;
@@ -539,6 +540,22 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 }
 h3 {
 text-align:center;
+}
+.summary-card {
+  background-color: #eaf6ff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+.summary-card h5 {
+  font-size: 16px;
+  color: #333;
+}
+.summary-value {
+  font-size: 22px;
+  font-weight: bold;
+  color: #006666;
 }
 @media (max-width: 768px){
   .toggle-sidebar {

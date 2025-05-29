@@ -159,6 +159,7 @@ async function fetchRefundedOrders(month, year) {
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
   // const allOrders = await fetchAllOrders();
+  updateSummaryCards(orders);
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
   const cancelledOrders = await fetchCancelledOrders(month, year);
@@ -988,6 +989,52 @@ $("body").addClass("modal-active");
   }
 });
 
+function updateSummaryCards(orders) {
+  let totalSales = 0;
+  let totalGrossProfit = 0;
+  let totalActualGP = 0;
+  let totalPurchases = 0;
+
+  orders.forEach(order => {
+    // Sales (soldP)
+    const soldP = parseFloat(order.soldP) || 0;
+    totalSales += soldP;
+
+    // Gross Profit
+    const gp = parseFloat(order.grossProfit) || 0;
+    totalGrossProfit += gp;
+
+    // Actual GP (only if present)
+    if (order.actualGP !== undefined && !isNaN(order.actualGP)) {
+      totalActualGP += parseFloat(order.actualGP);
+    }
+
+    // Purchases
+    if (Array.isArray(order.additionalInfo)) {
+      order.additionalInfo.forEach(info => {
+        const partPrice = parseFloat(info.partPrice) || 0;
+
+        // Parse shipping value (e.g., "Own shipping: 20")
+        let shipping = 0;
+        const shippingStr = info.shippingDetails || "";
+        const shippingMatch = shippingStr.match(/(\d+(\.\d+)?)/);
+        if (shippingMatch) {
+          shipping = parseFloat(shippingMatch[1]);
+        }
+
+        const others = parseFloat(info.others) || 0;
+        totalPurchases += partPrice + shipping + others;
+      });
+    }
+  });
+
+  // Update the UI
+  document.getElementById("salesTotal").innerText = `$${totalSales.toFixed(2)}`;
+  document.getElementById("grossProfitTotal").innerText = `$${totalGrossProfit.toFixed(2)}`;
+  document.getElementById("actualGPTotal").innerText = `$${totalActualGP.toFixed(2)}`;
+  document.getElementById("purchaseTotal").innerText = `$${totalPurchases.toFixed(2)}`;
+}
+
 // Close dropdown when clicking outside
 $(document).on("click", function (event) {
   if (
@@ -1012,7 +1059,7 @@ const handleMigrateDates = async () => {
     alert("✅ " + text);
   } catch (error) {
     console.error("Migration failed", error);
-    alert("❌ Migration failed. Check console.");
+    alert("Migration failed. Check console.");
   }
 };
 
