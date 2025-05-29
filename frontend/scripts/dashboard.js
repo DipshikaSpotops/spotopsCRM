@@ -447,20 +447,18 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
     <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
   </div>
 `;
+// document.getElementById("runMigrationBtn").onclick = async function handleMigrateDates() {
+//   if (!window.confirm("Are you sure you want to run the date migration?")) return;
 
-// Now attach the function
-document.getElementById("runMigrationBtn").onclick = async function handleMigrateDates() {
-  if (!window.confirm("Are you sure you want to run the date migration?")) return;
-
-  try {
-    const response = await fetch("/migrate-dates");
-    const result = await response.text();
-    alert(result);
-  } catch (err) {
-    console.error("Migration failed", err);
-    alert("Migration failed. Check console.");
-  }
-};
+//   try {
+//     const response = await fetch("/migrate-dates");
+//     const result = await response.text();
+//     alert(result);
+//   } catch (err) {
+//     console.error("Migration failed", err);
+//     alert("Migration failed. Check console.");
+//   }
+// };
 }
 
 
@@ -1056,7 +1054,7 @@ const handleMigrateDates = async () => {
     });
 
     const text = await response.text();
-    alert("✅ " + text);
+    alert(text);
   } catch (error) {
     console.error("Migration failed", error);
     alert("Migration failed. Check console.");
