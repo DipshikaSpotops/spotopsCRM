@@ -676,6 +676,22 @@ return 0;
 return orderBNum - orderANum; 
 });
 }
+async function fetchOrdersByPage(page) {
+  const monthYear = $("#monthYearPicker").val();
+  const [year, monthNumber] = monthYear.split("-");
+  try {
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}&page=${page}&limit=${rowsPerPage}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    const { orders, totalCount } = response.data;
+    sortedData = sortOrdersByOrderNoDesc(orders);
+    currentPage = page;
+    renderTableRows(currentPage, sortedData);
+    createPaginationControls(Math.ceil(totalCount / rowsPerPage));
+  } catch (error) {
+    console.error("Error fetching paginated orders:", error);
+  }
+}
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
@@ -893,8 +909,8 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 // Fetch orders specific to the logged-in salesperson
 try {
-const response = await axios.get(`https://www.spotops360.com/orders/salesPersonWise?firstName=${firstName}&month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
+const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNum}&year=${year}&page=${currentPage}&limit=${rowsPerPage}`, {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 
 
@@ -1026,18 +1042,15 @@ function createPaginationControls(totalPages) {
 }
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
-    currentPage--;
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+fetchOrdersByPage(currentPage - 1);
   }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
   const totalPages = Math.ceil(sortedData.length / rowsPerPage);
   if (currentPage < totalPages) {
-    currentPage++;
-    renderTableRows(currentPage);
-    createPaginationControls(totalPages);
+  fetchOrdersByPage(currentPage + 1);
+
   }
 });
 
@@ -1113,7 +1126,7 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const month = months[parseInt(monthNumber, 10) - 1];
 
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/salesPersonWise?firstName=${firstName}&month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}&page=${currentPage}&limit=${rowsPerPage}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 
@@ -1122,8 +1135,8 @@ throw new Error("Failed to fetch orders");
 }
 
 // Update both allOrders and sortedData with the new filtered data
-allOrders = ordersResponse.data;
-sortedData = sortOrdersByOrderNoDesc(allOrders); // Sort the fetched data if needed
+const { orders, totalCount } = ordersResponse.data;
+sortedData = sortOrdersByOrderNoDesc(orders);
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders);
 let totalGrossProfit = 0; // Total gross profit for current page
