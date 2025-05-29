@@ -1072,9 +1072,11 @@ return `${trackingNo}`;
 }
 
 // Pagination function
-function createPaginationControls(totalPages) {
+function createPaginationControls() {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty();
+
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage); // ✅ Add this line
 
   if (totalPages > 1) {
     // Previous button
@@ -1096,32 +1098,33 @@ function createPaginationControls(totalPages) {
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
+
+  // Click handlers
+  $('#prevPage').on('click', function () {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTableRows(currentPage, sortedData);
+      createPaginationControls(); // no need to pass anything anymore
+    }
+  });
+
+  $('#nextPage').on('click', function () {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderTableRows(currentPage, sortedData);
+      createPaginationControls();
+    }
+  });
+
+  $('.pageNos').on('click', function () {
+    const selectedPage = parseInt($(this).attr('data-page'));
+    if (selectedPage !== currentPage) {
+      currentPage = selectedPage;
+      renderTableRows(currentPage, sortedData);
+      createPaginationControls();
+    }
+  });
 }
-  // Add click handlers
- $('#prevPage').on('click', function () {
-  if (currentPage > 1) {
-    currentPage--;
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-  }
-});
-
-$('#nextPage').on('click', function () {
-  if (currentPage < totalPages) {
-    currentPage++;
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-  }
-});
-
-$('.pageNos').on('click', function () {
-  const selectedPage = parseInt($(this).attr('data-page'));
-  if (selectedPage !== currentPage) {
-    currentPage = selectedPage;
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-  }
-});
 
 
 $("#searchInput").on("keyup", function () {
