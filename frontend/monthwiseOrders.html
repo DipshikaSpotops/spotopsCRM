@@ -1181,7 +1181,7 @@ throw new Error("Failed to fetch current month's orders");
 }
 
 
-allOrders = ordersResponse.data;
+allOrders = ordersResponse.data.orders;
 const ordersWithMultipleAdditionalInfo = allOrders
   .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
   .map(order => order.orderNo);
@@ -1190,7 +1190,7 @@ var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage);
+renderTableRows(currentPage, allOrders);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
