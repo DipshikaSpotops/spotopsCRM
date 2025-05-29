@@ -439,8 +439,7 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
   }, 0);
 
 console.log(`Cancelled Orders This Month: ${cancelledOrders.length}`);
-console.log(`Refunded Orders This Month: ${refundedOrders.length}`);
-    `${o.orderNo} ($${(parseFloat(o.custRefAmount || 0)).toFixed(2)})`));
+console.log(`Refunded Orders This Month: ${cancelledOrders.length}`);
   console.log(`Totals → Cancelled: ${cancelled}, Refunded: ${refunded}, Refund Amount: $${totalRefundAmount.toFixed(2)}`);
 
   document.getElementById("monthlyCancelRefundBox").innerHTML = `
@@ -463,7 +462,7 @@ console.log(`Refunded Orders This Month: ${refundedOrders.length}`);
 //     alert("Migration failed. Check console.");
 //   }
 // };
-
+}
 
 
 function analyzeMonthlyReimbursements(orders, currentDallasDate) {
