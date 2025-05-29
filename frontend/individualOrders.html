@@ -919,7 +919,7 @@ throw new Error("Failed to fetch orders");
 }
 
 var data = response.data;
-const filteredData = data;
+const filteredData = data.orders;
 var totalOrders = filteredData.length;
 console.log("totalOrders",totalOrders);
 let totalGrossProfit = 0; // Total gross profit for current page
@@ -1137,7 +1137,7 @@ throw new Error("Failed to fetch orders");
 // Update both allOrders and sortedData with the new filtered data
 const { orders, totalCount } = ordersResponse.data;
 sortedData = sortOrdersByOrderNoDesc(orders);
-var totalOrders = allOrders.length;
+var totalOrders = orders.length;
 console.log("totalOrders",totalOrders);
 let totalGrossProfit = 0; // Total gross profit for current page
 let totalEstGP = 0; // Total estGP for all orders
