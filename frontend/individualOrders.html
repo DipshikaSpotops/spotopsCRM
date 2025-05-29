@@ -676,6 +676,7 @@ return 0;
 return orderBNum - orderANum; 
 });
 }
+let totalCount = 0;
 async function fetchOrdersByPage(page) {
   const monthYear = $("#monthYearPicker").val();
   const [year, monthNumber] = monthYear.split("-");
@@ -684,6 +685,7 @@ async function fetchOrdersByPage(page) {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     const { orders, totalCount } = response.data;
+    totalCount = response.data.totalCount;
     sortedData = sortOrdersByOrderNoDesc(orders);
     currentPage = page;
     renderTableRows(currentPage, sortedData);
@@ -1047,7 +1049,7 @@ fetchOrdersByPage(currentPage - 1);
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
+const totalPages = Math.ceil(totalCount / rowsPerPage);
   if (currentPage < totalPages) {
   fetchOrdersByPage(currentPage + 1);
 
