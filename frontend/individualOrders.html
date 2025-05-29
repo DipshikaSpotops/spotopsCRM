@@ -1029,33 +1029,46 @@ function createPaginationControls(totalPages) {
   paginationControls.empty();
 
   if (totalPages > 1) {
+    // Previous button
     paginationControls.append(`
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
-    paginationControls.append(`
-      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
-    `);
+    // Page number buttons
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(`
+        <button class="pageNos ${i === currentPage ? 'active-page' : ''}" data-page="${i}">
+          ${i}
+        </button>
+      `);
+    }
 
+    // Next button
     paginationControls.append(`
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
+
+  // Add click handlers
+  $('#prevPage').on('click', function () {
+    if (currentPage > 1) {
+      fetchOrdersByPage(currentPage - 1);
+    }
+  });
+
+  $('#nextPage').on('click', function () {
+    if (currentPage < totalPages) {
+      fetchOrdersByPage(currentPage + 1);
+    }
+  });
+
+  $('.pageNos').on('click', function () {
+    const selectedPage = parseInt($(this).attr('data-page'));
+    if (selectedPage !== currentPage) {
+      fetchOrdersByPage(selectedPage);
+    }
+  });
 }
-$('#pagination-controls').on('click', '#prevPage', function () {
-  if (currentPage > 1) {
-fetchOrdersByPage(currentPage - 1);
-  }
-});
-
-$('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(totalCount / rowsPerPage);
-  if (currentPage < totalPages) {
-  fetchOrdersByPage(currentPage + 1);
-
-  }
-});
-
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
 const filteredOrders = sortedData.filter(order => {
