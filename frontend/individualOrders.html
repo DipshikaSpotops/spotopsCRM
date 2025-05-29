@@ -677,23 +677,78 @@ return orderBNum - orderANum;
 });
 }
 let totalCount = 0;
-async function fetchOrdersByPage(page) {
+
+async function fetchOrdersByPage() {
   const monthYear = $("#monthYearPicker").val();
   const [year, monthNumber] = monthYear.split("-");
+  const loggedInUser = localStorage.getItem("firstName");
+  let allOrders = [];
+  let page = 1;
+  let hasMore = true;
+
   try {
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}`, {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-    const { orders, totalCount } = response.data;
-    totalCount = response.data.totalCount;
-    sortedData = sortOrdersByOrderNoDesc(orders);
-    currentPage = page;
+    while (hasMore) {
+      const response = await axios.get(
+        `https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}&page=${page}&limit=25`,
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+
+      const { orders } = response.data;
+
+      if (!orders || orders.length === 0) {
+        hasMore = false;
+      } else {
+        allOrders = [...allOrders, ...orders];
+        page++;
+      }
+    }
+
+    // 👇 Filter by salesAgent matching the logged-in user
+    const filteredOrders = allOrders.filter(
+      (order) => order.salesAgent && order.salesAgent.trim().toLowerCase() === loggedInUser.trim().toLowerCase()
+    );
+
+    sortedData = sortOrdersByOrderNoDesc(filteredOrders);
+    currentPage = 1;
     renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(totalCount / rowsPerPage));
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+
+    // Update counts
+    updateOrderStats(filteredOrders);
   } catch (error) {
-    console.error("Error fetching paginated orders:", error);
+    console.error("Error fetching all orders:", error);
   }
 }
+function updateOrderStats(filteredData) {
+  let totalGrossProfit = 0;
+  let totalActualGP = 0;
+  let totalCancelled = 0;
+  let totalRefunded = 0;
+  let totalDisputed = 0;
+
+  filteredData.forEach((item) => {
+    const estGP = item.grossProfit || 0;
+    const actualGP = item.actualGP || 0;
+    totalActualGP += actualGP;
+    totalGrossProfit += estGP;
+    if (item.orderStatus === "Order Cancelled") totalCancelled++;
+    else if (item.orderStatus === "Refunded") totalRefunded++;
+    else if (item.orderStatus === "Dispute") totalDisputed++;
+  });
+
+  const cancellationRate =
+    filteredData.length > 0
+      ? ((totalCancelled + totalRefunded + totalDisputed) / filteredData.length) * 100
+      : 0;
+
+  document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${filteredData.length}`;
+  document.getElementById("showTotalEstGP").innerHTML = `Est GP- ${totalGrossProfit.toFixed(2)}`;
+  document.getElementById("showTotalActualGP").innerHTML = `Actual GP- ${totalActualGP.toFixed(2)}`;
+  document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
+}
+
 let sortOrder = {
 orderDate: "asc",
 orderNo: "asc",
@@ -911,11 +966,7 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 // Fetch orders specific to the logged-in salesperson
 try {
-const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNum}&year=${year}&page=${currentPage}&limit=${rowsPerPage}`, {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-
-
+await fetchOrdersByPage();
 if (response.status !== 200) {
 throw new Error("Failed to fetch orders");
 }
