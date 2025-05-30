@@ -1474,7 +1474,10 @@ app.get('/salespersonWiseOrders', async (req, res) => {
 
     const pageNumber = parseInt(page, 10);
     const pageLimit = parseInt(limit, 10);
-    const skip = (pageNumber - 1) * pageLimit;
+
+    // 🧠 Allow fetching all if limit is 0
+    const applyPagination = pageLimit > 0;
+    const skip = applyPagination ? (pageNumber - 1) * pageLimit : 0;
 
     const filter = {
       orderDate: { $gte: startDate, $lt: endDate },
@@ -1483,7 +1486,7 @@ app.get('/salespersonWiseOrders', async (req, res) => {
 
     const totalCount = await Order.countDocuments(filter);
 
-    const orders = await Order.find(filter, {
+    let query = Order.find(filter, {
       orderNo: 1,
       orderDate: 1,
       salesAgent: 1,
@@ -1519,10 +1522,13 @@ app.get('/salespersonWiseOrders', async (req, res) => {
       cancelledDate: 1,
       custRefundDate: 1,
       custRefAmount: 1
-    })
-      .skip(skip)
-      .limit(pageLimit)
-      .sort({ orderDate: -1 });
+    }).sort({ orderDate: -1 });
+
+    if (applyPagination) {
+      query = query.skip(skip).limit(pageLimit);
+    }
+
+    const orders = await query.exec();
 
     return res.json({ orders, totalCount });
   } catch (error) {

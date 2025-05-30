@@ -683,32 +683,44 @@ async function fetchOrdersByPage(page = 1) {
   const [year, monthNumber] = monthYear.split("-");
   const loggedInUser = localStorage.getItem("firstName");
 
+  // 👇 NEW: Check if "fetch all" is selected
+  const isFetchAll = $("#fetchAllToggle").is(":checked");
+  const effectiveLimit = isFetchAll ? 0 : rowsPerPage;
+
   try {
-    
-const response = await axios.get(
-  `https://www.spotops360.com/salespersonWiseOrders`,
-  {
-    params: {
-      month: monthNumber,
-      year: year,
-      page: page,
-      limit: rowsPerPage,
-      salesAgent: loggedInUser,
-    },
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  }
-);
+    const response = await axios.get(
+      `https://www.spotops360.com/salespersonWiseOrders`,
+      {
+        params: {
+          month: monthNumber,
+          year: year,
+          page: page,
+          limit: effectiveLimit,
+          salesAgent: loggedInUser,
+        },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      }
+    );
+
     const { orders, totalCount } = response.data;
     sortedData = sortOrdersByOrderNoDesc(orders);
-currentPage = page;
+    currentPage = page;
 
     renderTableRows(sortedData);
-    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+    
+    // 👇 NEW: Only show pagination if NOT fetching all
+    if (!isFetchAll) {
+      createPaginationControls(Math.ceil(totalCount / rowsPerPage));
+    } else {
+      $("#pagination-controls").empty(); // Clear pagination
+    }
+
     updateOrderStats(orders);
   } catch (error) {
     console.error("Error fetching paginated orders:", error);
   }
 }
+
 
 function updateOrderStats(filteredData) {
   let totalGrossProfit = 0;
