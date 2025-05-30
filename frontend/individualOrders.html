@@ -965,49 +965,49 @@ var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 // Fetch orders specific to the logged-in salesperson
-try {
-await fetchOrdersByPage();
+// try {
+// await fetchOrdersByPage();
 
-var data = response.data;
-const filteredData = data.orders;
-var totalOrders = filteredData.length;
-console.log("totalOrders",totalOrders);
-let totalGrossProfit = 0; // Total gross profit for current page
-let totalEstGP = 0; // Total estGP for all orders
-let totalActualGP = 0;
-let totalCancelled = 0;
-let totalRefunded = 0;
-let totalDisputed = 0;
-filteredData.forEach((item) => {
-const estGP = item.grossProfit || 0;
-const actualGP = item.actualGP || 0;
-totalActualGP += actualGP;
-totalGrossProfit += estGP;
-if (item.orderStatus === "Order Cancelled") {
-        totalCancelled++;
-    } else if (item.orderStatus === "Refunded") {
-        totalRefunded++;
-    }
-    else if (item.orderStatus === "Dispute") {
-        totalDisputed++;
-    }
-// totalEstGP += estGP;
-})
-let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100 : 0;
+// var data = response.data;
+// const filteredData = data.orders;
+// var totalOrders = filteredData.length;
+// console.log("totalOrders",totalOrders);
+// let totalGrossProfit = 0; // Total gross profit for current page
+// let totalEstGP = 0; // Total estGP for all orders
+// let totalActualGP = 0;
+// let totalCancelled = 0;
+// let totalRefunded = 0;
+// let totalDisputed = 0;
+// filteredData.forEach((item) => {
+// const estGP = item.grossProfit || 0;
+// const actualGP = item.actualGP || 0;
+// totalActualGP += actualGP;
+// totalGrossProfit += estGP;
+// if (item.orderStatus === "Order Cancelled") {
+//         totalCancelled++;
+//     } else if (item.orderStatus === "Refunded") {
+//         totalRefunded++;
+//     }
+//     else if (item.orderStatus === "Dispute") {
+//         totalDisputed++;
+//     }
+// // totalEstGP += estGP;
+// })
+// let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100 : 0;
 
-// Update the cancellation rate div
-document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
-document.getElementById("showTotalEstGP").innerHTML = `Est GP- ${totalGrossProfit.toFixed(2)}`;
-document.getElementById("showTotalActualGP").innerHTML = `Actual GP- ${totalActualGP.toFixed(2)}`;
-sortedData = sortOrdersByOrderNoDesc(filteredData);
-// console.log("sortedData",sortedData);
-renderTableRows(currentPage, sortedData); 
+// // Update the cancellation rate div
+// document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
+// document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
+// document.getElementById("showTotalEstGP").innerHTML = `Est GP- ${totalGrossProfit.toFixed(2)}`;
+// document.getElementById("showTotalActualGP").innerHTML = `Actual GP- ${totalActualGP.toFixed(2)}`;
+// sortedData = sortOrdersByOrderNoDesc(filteredData);
+// // console.log("sortedData",sortedData);
+// renderTableRows(currentPage, sortedData); 
 
-createPaginationControls(Math.ceil(sortedData.length / rowsPerPage)); 
-} catch (error) {
-console.error("Error fetching orders:", error);
-}
+// createPaginationControls(Math.ceil(sortedData.length / rowsPerPage)); 
+// } catch (error) {
+// console.error("Error fetching orders:", error);
+// }
 
 // Function to render table rows based on page
 function renderTableRows(page, data = sortedData) {
