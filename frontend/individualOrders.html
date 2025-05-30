@@ -684,27 +684,28 @@ async function fetchOrdersByPage(page = 1) {
   const loggedInUser = localStorage.getItem("firstName");
 
   try {
-    
-const response = await axios.get(
-  `https://www.spotops360.com/salespersonWiseOrders`,
-  {
-    params: {
-      month: monthNumber,
-      year: year,
-      page: page,
-      limit: rowsPerPage,
-      salesAgent: loggedInUser,
-    },
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  }
-);
-    const { orders, totalCount } = response.data;
-    sortedData = sortOrdersByOrderNoDesc(orders);
-currentPage = page;
+    const response = await axios.get(
+      `https://www.spotops360.com/salespersonWiseOrders`,
+      {
+        params: {
+          month: monthNumber,
+          year: year,
+          page: page,
+          limit: rowsPerPage,
+          salesAgent: loggedInUser,
+        },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      }
+    );
 
-    renderTableRows(currentPage, sortedData);
+    const { orders, totalCount } = response.data;
+
+    sortedData = sortOrdersByOrderNoDesc(orders); // Sort the 25 directly
+    currentPage = page;
+
+    renderTableRows(sortedData); // 💥 No slicing here
     createPaginationControls(Math.ceil(totalCount / rowsPerPage));
-    updateOrderStats(orders);
+    updateOrderStats(sortedData); // Stats for current page
   } catch (error) {
     console.error("Error fetching paginated orders:", error);
   }
