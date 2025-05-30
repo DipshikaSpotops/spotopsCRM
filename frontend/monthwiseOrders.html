@@ -569,31 +569,31 @@ var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 console.log("month",month,"year",year);
-//orders for the current month
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
+// //orders for the current month
+// try {
+// const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+// headers: token ? { Authorization: `Bearer ${token}` } : {},
+// });
 
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
+// if (ordersResponse.status !== 200) {
+// throw new Error("Failed to fetch current month's orders");
+// }
 
 
-allOrders = ordersResponse.data.orders;
-const ordersWithMultipleAdditionalInfo = allOrders
-  .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
-  .map(order => order.orderNo);
-// console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
-var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage, allOrders);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-}
+// allOrders = ordersResponse.data.orders;
+// const ordersWithMultipleAdditionalInfo = allOrders
+//   .filter(order => order.additionalInfo && order.additionalInfo.length > 1)
+//   .map(order => order.orderNo);
+// // console.log("OrderNos with additionalInfo length > 1:", ordersWithMultipleAdditionalInfo);
+// var totalOrders = allOrders.length;
+// console.log("totalOrders",totalOrders)
+// document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+// sortedData = sortOrdersByOrderNoDesc(allOrders);
+// renderTableRows(currentPage, allOrders);
+// createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+// } catch (error) {
+// console.error("Error fetching current month's orders:", error);
+// }
 
 $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
@@ -750,9 +750,16 @@ $("#filterButton").click(async function () {
 // On page load, check for previously selected month/year
     const savedMonthYear = localStorage.getItem('selectedMonthYear');
     if (savedMonthYear) {
-        $("#monthYearPicker").val(savedMonthYear);
-        fetchOrdersForSelectedMonth(savedMonthYear);  // Automatically fetch orders
-    }
+    $("#monthYearPicker").val(savedMonthYear);
+    await fetchOrdersForSelectedMonth(savedMonthYear); // ✅ will fetch ALL pages
+} else {
+    const now = new Date();
+    const month = now.toLocaleString("default", { month: "2-digit" });
+    const year = now.getFullYear();
+    const defaultMonthYear = `${year}-${month}`;
+    $("#monthYearPicker").val(defaultMonthYear);
+    await fetchOrdersForSelectedMonth(defaultMonthYear); // ✅ fallback fetch
+}
     const savedPage = localStorage.getItem('currentPage');
     currentPage = savedPage ? parseInt(savedPage) : 1;
     renderTableRows(currentPage);
