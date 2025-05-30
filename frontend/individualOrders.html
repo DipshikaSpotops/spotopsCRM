@@ -704,7 +704,7 @@ currentPage = page;
 
     renderTableRows(currentPage, sortedData);
     createPaginationControls(Math.ceil(totalCount / rowsPerPage));
-    updateOrderStats(filteredOrders);
+    updateOrderStats(orders);
   } catch (error) {
     console.error("Error fetching paginated orders:", error);
   }
