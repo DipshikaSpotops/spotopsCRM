@@ -684,28 +684,23 @@ async function fetchOrdersByPage(page = 1) {
   const loggedInUser = localStorage.getItem("firstName");
 
   try {
-    const response = await axios.get(
-      `https://www.spotops360.com/orders/monthly`,
-      {
-        params: {
-          month: monthNumber,
-          year: year,
-          page: page,
-          limit: rowsPerPage,
-        },
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      }
-    );
-
+    
+const response = await axios.get(
+  `https://www.spotops360.com/salespersonWiseOrders`,
+  {
+    params: {
+      month: monthNumber,
+      year: year,
+      page: page,
+      limit: rowsPerPage,
+      salesAgent: loggedInUser,
+    },
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  }
+);
     const { orders, totalCount } = response.data;
-
-    // ✅ Filter only this salesperson's orders
-    const filteredOrders = orders.filter(
-      (order) => order.salesAgent?.trim().toLowerCase() === loggedInUser?.trim().toLowerCase()
-    );
-
-    sortedData = sortOrdersByOrderNoDesc(filteredOrders);
-    currentPage = page;
+    sortedData = sortOrdersByOrderNoDesc(orders);
+currentPage = page;
 
     renderTableRows(currentPage, sortedData);
     createPaginationControls(Math.ceil(totalCount / rowsPerPage));
@@ -1184,8 +1179,15 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const month = months[parseInt(monthNumber, 10) - 1];
 
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}&page=${currentPage}&limit=${rowsPerPage}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
+const ordersResponse = await axios.get(`https://www.spotops360.com/salespersonWiseOrders`, {
+  params: {
+    month: monthNumber,
+    year: year,
+    page: currentPage,
+    limit: rowsPerPage,
+    salesAgent: firstName, // or loggedInUser
+  },
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 
 if (ordersResponse.status !== 200) {
