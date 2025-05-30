@@ -765,7 +765,7 @@ async function fetchOrdersForSelectedMonth(monthYear) {
   let allOrdersCombined = [];
   let page = 1;
   const limit = 25;
-  let totalCount = null;  // ✅ declare once
+  let totalCount = null;
 
   try {
     while (true) {
@@ -775,19 +775,24 @@ async function fetchOrdersForSelectedMonth(monthYear) {
       });
 
       const { orders, totalCount: total } = response.data;
+      console.log(`Page ${page} — Fetched: ${orders.length} orders`);
+
       if (!orders.length) break;
 
       allOrdersCombined.push(...orders);
 
       if (totalCount === null) totalCount = total;
-      if (allOrdersCombined.length >= totalCount) break;
+
+      if (allOrdersCombined.length >= totalCount) {
+        console.log("All orders fetched:", allOrdersCombined.length);
+        break;
+      }
 
       page++;
     }
 
     allOrders = allOrdersCombined;
     document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
-
     renderTableRows(1, allOrders);
     createPaginationControls(Math.ceil(allOrders.length / 25));
   } catch (error) {
@@ -796,6 +801,7 @@ async function fetchOrdersForSelectedMonth(monthYear) {
 
   $("#loadingMessage").hide();
 }
+
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
