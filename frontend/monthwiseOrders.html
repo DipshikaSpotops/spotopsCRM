@@ -769,34 +769,35 @@ async function fetchOrdersForSelectedMonth(monthYear) {
   const [year, month] = monthYear.split("-");
   $("#loadingMessage").show();
 
-  let allOrdersCombined = [];
-  let page = 1;
   const limit = 25;
-  let totalCount = null;
+  let allOrdersCombined = [];
 
   try {
-    while (true) {
-      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-        params: { month, year, page, limit },
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+    // Step 1: Fetch first page
+    const firstResponse = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month, year, page: 1, limit },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
 
-      const { orders, totalCount: total } = response.data;
-      console.log(`Page ${page} — Fetched: ${orders.length} orders`);
+    allOrdersCombined.push(...firstResponse.data.orders);
+    const totalCount = firstResponse.data.totalCount;
+    const totalPages = Math.ceil(totalCount / limit);
 
-      if (!orders.length) break;
-
-      allOrdersCombined.push(...orders);
-
-      if (totalCount === null) totalCount = total;
-
-      if (allOrdersCombined.length >= totalCount) {
-        console.log("All orders fetched:", allOrdersCombined.length);
-        break;
-      }
-
-      page++;
+    // Step 2: Fetch remaining pages in parallel
+    const promises = [];
+    for (let p = 2; p <= totalPages; p++) {
+      promises.push(
+        axios.get(`https://www.spotops360.com/orders/monthly`, {
+          params: { month, year, page: p, limit },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
+      );
     }
+
+    const responses = await Promise.all(promises);
+    responses.forEach(res => {
+      allOrdersCombined.push(...res.data.orders);
+    });
 
     allOrders = allOrdersCombined;
     document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
