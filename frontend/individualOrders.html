@@ -678,49 +678,43 @@ return orderBNum - orderANum;
 }
 let totalCount = 0;
 
-async function fetchOrdersByPage() {
+async function fetchOrdersByPage(page = 1) {
   const monthYear = $("#monthYearPicker").val();
   const [year, monthNumber] = monthYear.split("-");
   const loggedInUser = localStorage.getItem("firstName");
-  let allOrders = [];
-  let page = 1;
-  let hasMore = true;
 
   try {
-    while (hasMore) {
-      const response = await axios.get(
-        `https://www.spotops360.com/orders/monthly?month=${monthNumber}&year=${year}&page=${page}&limit=25`,
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
-      );
-
-      const { orders } = response.data;
-
-      if (!orders || orders.length === 0) {
-        hasMore = false;
-      } else {
-        allOrders = [...allOrders, ...orders];
-        page++;
+    const response = await axios.get(
+      `https://www.spotops360.com/orders/monthly`,
+      {
+        params: {
+          month: monthNumber,
+          year: year,
+          page: page,
+          limit: rowsPerPage,
+        },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       }
-    }
+    );
 
-    // 👇 Filter by salesAgent matching the logged-in user
-    const filteredOrders = allOrders.filter(
-      (order) => order.salesAgent && order.salesAgent.trim().toLowerCase() === loggedInUser.trim().toLowerCase()
+    const { orders, totalCount } = response.data;
+
+    // ✅ Filter only this salesperson's orders
+    const filteredOrders = orders.filter(
+      (order) => order.salesAgent?.trim().toLowerCase() === loggedInUser?.trim().toLowerCase()
     );
 
     sortedData = sortOrdersByOrderNoDesc(filteredOrders);
-    currentPage = 1;
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+    currentPage = page;
 
-    // Update counts
+    renderTableRows(currentPage, sortedData);
+    createPaginationControls(Math.ceil(totalCount / rowsPerPage));
     updateOrderStats(filteredOrders);
   } catch (error) {
-    console.error("Error fetching all orders:", error);
+    console.error("Error fetching paginated orders:", error);
   }
 }
+
 function updateOrderStats(filteredData) {
   let totalGrossProfit = 0;
   let totalActualGP = 0;
@@ -966,7 +960,7 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 // Fetch orders specific to the logged-in salesperson
 try {
-await fetchOrdersByPage();
+await fetchOrdersByPage(1);
 
 var data = response.data;
 const filteredData = data.orders;
@@ -1099,31 +1093,22 @@ function createPaginationControls() {
     `);
   }
 
-  // Click handlers
   $('#prevPage').on('click', function () {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTableRows(currentPage, sortedData);
-      createPaginationControls(); // <- This re-renders and resets the highlight
-    }
-  });
+  if (currentPage > 1) {
+    fetchOrdersByPage(currentPage - 1);
+  }
+});
 
-  $('#nextPage').on('click', function () {
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderTableRows(currentPage, sortedData);
-      createPaginationControls();
-    }
-  });
+$('#nextPage').on('click', function () {
+  fetchOrdersByPage(currentPage + 1);
+});
 
-  $('.pageNos').on('click', function () {
-    const selectedPage = parseInt($(this).attr('data-page'));
-    if (selectedPage !== currentPage) {
-      currentPage = selectedPage;
-      renderTableRows(currentPage, sortedData);
-      createPaginationControls();
-    }
-  });
+$('.pageNos').on('click', function () {
+  const selectedPage = parseInt($(this).attr('data-page'));
+  if (selectedPage !== currentPage) {
+    fetchOrdersByPage(selectedPage);
+  }
+});
 }
 
 
