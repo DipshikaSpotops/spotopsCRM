@@ -702,8 +702,8 @@ const response = await axios.get(
     sortedData = sortOrdersByOrderNoDesc(orders);
 currentPage = page;
 
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(totalCount / rowsPerPage));
+    renderTableRows(sortedData);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
     updateOrderStats(orders);
   } catch (error) {
     console.error("Error fetching paginated orders:", error);
@@ -999,67 +999,51 @@ console.error("Error fetching orders:", error);
 }
 
 // Function to render table rows based on page
-function renderTableRows(page, data = sortedData) {
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = data.slice(start, end);
-$("#infoTable").empty(); 
-let totalGrossProfit = 0;
-let totalEstGP = 0;
-ordersForPage.forEach((item) => {
-const estGrossP = item.grossProfit || 0;
-totalGrossProfit += estGrossP;// for current page
-totalEstGP += estGrossP; //for all orders
-console.log("gps",totalGrossProfit,totalEstGP);
-const datetime = item.orderDate;
-const date = new Date(datetime);
-const day = date.getUTCDate();  // Use UTC day
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const year = date.getUTCFullYear();  // Use UTC year
+function renderTableRows(data) {
+  $("#infoTable").empty();
 
-const suffix = (day) => {
-  if (day > 3 && day < 21) return "th";
-  switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
-  }
-};
-const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-const actions = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
-$("#infoTable").append(`
-<tr>
-<td>${formattedOrderDate}</td>
-<td>${item.orderNo}</td>
-<td>
-${
-(item.fName && item.lName)
-? `${item.fName} ${item.lName}`
-: (item.customerName || "")
-}
-</td>
-<td>${item.pReq || item.partName}</td>
-<td>$${item.soldP}</td>
-<td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
-<td>$${item.grossProfit ? item.grossProfit.toFixed(2) : 0}</td>
-<td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info,index) => {
-const trackingNo = info.trackingNo || "";
-return `${trackingNo}`;
-})
-.join("<br>")
-: ""
-}</td>
-<td>${item.orderStatus}</td>
-<td>${actions}</td>
-</tr>
-`);
-});
-}
+  data.forEach((item) => {
+    const estGrossP = item.grossProfit || 0;
+    const actualGP = item.actualGP || 0;
 
+    const datetime = item.orderDate;
+    const date = new Date(datetime);
+    const day = date.getUTCDate();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const year = date.getUTCFullYear();
+
+    const suffix = (day) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    };
+    const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+    const actions = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
+
+    $("#infoTable").append(`
+      <tr>
+        <td>${formattedOrderDate}</td>
+        <td>${item.orderNo}</td>
+        <td>${item.fName ? `${item.fName} ${item.lName}` : item.customerName || ""}</td>
+        <td>${item.pReq || item.partName}</td>
+        <td>$${item.soldP}</td>
+        <td>$${actualGP.toFixed(2)}</td>
+        <td>$${estGrossP.toFixed(2)}</td>
+        <td>${
+          item.additionalInfo?.length
+            ? item.additionalInfo.map(info => info.trackingNo || "").join("<br>")
+            : ""
+        }</td>
+        <td>${item.orderStatus}</td>
+        <td>${actions}</td>
+      </tr>
+    `);
+  });
+}
 // Pagination function
 function createPaginationControls() {
   const paginationControls = $('#pagination-controls');
