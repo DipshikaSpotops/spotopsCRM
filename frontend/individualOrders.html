@@ -1185,7 +1185,7 @@ document.getElementById("showTotalEstGP").innerHTML = `Est GP- ${totalGrossProfi
 document.getElementById("showTotalActualGP").innerHTML = `Actual GP- ${totalActualGP.toFixed(2)}`;
 document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
 // Render the new filtered data
-renderTableRows(1, sortedData);
+renderTableRows(sortedData);
 createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
 
 } catch (error) {
