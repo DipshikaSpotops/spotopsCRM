@@ -682,8 +682,6 @@ async function fetchOrdersByPage(page = 1) {
   const monthYear = $("#monthYearPicker").val();
   const [year, monthNumber] = monthYear.split("-");
   const loggedInUser = localStorage.getItem("firstName");
-
-  // 👇 NEW: Check if "fetch all" is selected
   const isFetchAll = $("#fetchAllToggle").is(":checked");
   const effectiveLimit = isFetchAll ? 0 : rowsPerPage;
 
@@ -707,11 +705,8 @@ totalCount = fetchedCount;
     sortedData = sortOrdersByOrderNoDesc(orders);
     currentPage = page;
 
-    renderTableRows(sortedData);
-    
-    // 👇 NEW: Only show pagination if NOT fetching all
-    if (!isFetchAll) {
-      createPaginationControls(Math.ceil(totalCount / rowsPerPage));
+renderTableRows(currentPage, sortedData);        if (!isFetchAll) {
+createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
     } else {
       $("#pagination-controls").empty(); // Clear pagination
     }
