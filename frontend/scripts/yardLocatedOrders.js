@@ -308,6 +308,7 @@ const teamAgentsMap = {
   Shankar: ["Mark", "John"],
   Vinutha: ["Michael", "David"],
 };
+var team = localStorage.getItem("team");
 console.log("team",team);
 if (team in teamAgentsMap) {
   allOrder = allOrder.filter(order =>
