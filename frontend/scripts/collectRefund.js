@@ -454,16 +454,16 @@ createPaginationControls(totalPages);
   }
   });
   // Filter by month and year
-  $("#filterButton").click(async function () {
+ $("#filterButton").click(async function () {
   const monthYear = $("#monthYearPicker").val(); 
   const [year, monthNumber] = monthYear.split("-");
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const month = months[parseInt(monthNumber, 10) - 1];
-  await fetchYardInfo(month, year);
-  currentPage = 1;
-  renderTable(currentPage);
-  createPaginationControls(Math.ceil(yardOrders.length / 25));
-  });
+
+  currentPage = 1; // Reset to page 1
+  await fetchYardInfo(month, year, currentPage, rowsPerPage); // Pass paging info
+});
+
   
   
   const firstName = localStorage.getItem("firstName");
