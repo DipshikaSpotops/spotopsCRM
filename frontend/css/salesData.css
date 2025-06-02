@@ -288,7 +288,7 @@ overflow: hidden;
     margin-top: 1%;
     gap: 10px;
   margin-left: 0%;
-  margin-top: 1%;
+  margin-top: -1%;
   flex-wrap: wrap;
 }
 #filterButton {
@@ -320,7 +320,7 @@ overflow: hidden;
 }
 .topHeads{
   display: flex;
-  margin-top: 0%;
+  margin-top: 1%;
 }
 .gpAndFilterDIv{
   display: flex;
@@ -528,7 +528,7 @@ display: block;
 #filterAndTotal {
   margin-top: 1%;
   margin-left: 20%;
-  margin-top: -1%;
+  margin-top: 0%;
     }
     #searchInput {
         width: 80%;
