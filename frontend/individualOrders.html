@@ -974,7 +974,7 @@ try {
 }
 
 // Function to render table rows based on page
-function renderTableRows(data) {
+function renderTableRows(page,data) {
   $("#infoTable").empty();
 
   // Only show current page slice
@@ -1025,7 +1025,7 @@ function renderTableRows(data) {
   });
 }
 // Pagination function
-function createPaginationControls(totalPages) {
+function createPaginationControls(totalPages, dataToRender) {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty();
 
@@ -1034,34 +1034,33 @@ function createPaginationControls(totalPages) {
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(`
-        <button class="pageNos ${i === currentPage ? 'active-page' : ''}" data-page="${i}">
-          ${i}
-        </button>
-      `);
-    }
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
 
     paginationControls.append(`
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
 
+  // Hook up handlers here
   $('#prevPage').on('click', function () {
-    if (currentPage > 1) fetchOrdersByPage(currentPage - 1);
+    if (currentPage > 1) {
+      currentPage--;
+      renderTableRows(currentPage, dataToRender);
+      createPaginationControls(totalPages, dataToRender);
+    }
   });
 
   $('#nextPage').on('click', function () {
-    if (currentPage < totalPages) fetchOrdersByPage(currentPage + 1);
-  });
-
-  $('.pageNos').on('click', function () {
-    const selectedPage = parseInt($(this).attr('data-page'));
-    if (selectedPage !== currentPage) {
-      fetchOrdersByPage(selectedPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderTableRows(currentPage, dataToRender);
+      createPaginationControls(totalPages, dataToRender);
     }
   });
 }
+
 
 
 $("#searchInput").on("keyup", function () {
@@ -1085,8 +1084,8 @@ return (
 
 // If a search is active, display the filtered results, otherwise reset to the full dataset
 if (filteredOrders.length > 0 || value === "") {
-renderTableRows(1, filteredOrders); // Render the first page of filtered results
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+renderTableRows(currentPage, sortedData);
+createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
 } else {
 $("#infoTable").empty(); // Clear the table if no results are found
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
