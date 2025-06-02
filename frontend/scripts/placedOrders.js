@@ -557,7 +557,7 @@ const teamAgentsMap = {
   Shankar: ["Mark", "John"],
   Vinutha: ["Michael", "David"],
 };
-
+console.log("team",team)
 if (team in teamAgentsMap) {
   allOrders = allOrders.filter(order =>
     teamAgentsMap[team].includes(order.salesAgent)
