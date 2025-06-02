@@ -711,7 +711,7 @@ totalCount = fetchedCount;
     
     // 👇 NEW: Only show pagination if NOT fetching all
     if (!isFetchAll) {
-      createPaginationControls();
+      createPaginationControls(Math.ceil(totalCount / rowsPerPage));
     } else {
       $("#pagination-controls").empty(); // Clear pagination
     }
@@ -1025,11 +1025,9 @@ function renderTableRows(data) {
   });
 }
 // Pagination function
-function createPaginationControls() {
+function createPaginationControls(totalPages) {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty();
-
-  const totalPages = Math.ceil(totalCount / rowsPerPage); // ✅ use full count
 
   if (totalPages > 1) {
     paginationControls.append(`
