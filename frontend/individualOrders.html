@@ -1036,6 +1036,7 @@ function createPaginationControls(totalPages, dataToRender) {
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
+}
  $('#pagination-controls').off('click').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
@@ -1052,7 +1053,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     createPaginationControls(totalPages, sortedData);
   }
 });
-}
+
 
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
