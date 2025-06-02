@@ -1023,15 +1023,13 @@ function createPaginationControls() {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty();
 
-  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
+  const totalPages = Math.ceil(totalCount / rowsPerPage); // ✅ use full count
 
   if (totalPages > 1) {
-    // Previous button
     paginationControls.append(`
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
-    // Page number buttons
     for (let i = 1; i <= totalPages; i++) {
       paginationControls.append(`
         <button class="pageNos ${i === currentPage ? 'active-page' : ''}" data-page="${i}">
@@ -1040,28 +1038,25 @@ function createPaginationControls() {
       `);
     }
 
-    // Next button
     paginationControls.append(`
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
 
   $('#prevPage').on('click', function () {
-  if (currentPage > 1) {
-    fetchOrdersByPage(currentPage - 1);
-  }
-});
+    if (currentPage > 1) fetchOrdersByPage(currentPage - 1);
+  });
 
-$('#nextPage').on('click', function () {
-  fetchOrdersByPage(currentPage + 1);
-});
+  $('#nextPage').on('click', function () {
+    if (currentPage < totalPages) fetchOrdersByPage(currentPage + 1);
+  });
 
-$('.pageNos').on('click', function () {
-  const selectedPage = parseInt($(this).attr('data-page'));
-  if (selectedPage !== currentPage) {
-    fetchOrdersByPage(selectedPage);
-  }
-});
+  $('.pageNos').on('click', function () {
+    const selectedPage = parseInt($(this).attr('data-page'));
+    if (selectedPage !== currentPage) {
+      fetchOrdersByPage(selectedPage);
+    }
+  });
 }
 
 
