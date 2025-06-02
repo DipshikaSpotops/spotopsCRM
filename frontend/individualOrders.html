@@ -1179,9 +1179,8 @@ const ordersResponse = await axios.get(`https://www.spotops360.com/salespersonWi
   params: {
     month: monthNumber,
     year: year,
-    page: currentPage,
-    limit: rowsPerPage,
-    salesAgent: firstName, // or loggedInUser
+    limit: "all", 
+    salesAgent: firstName,
   },
   headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
@@ -1201,7 +1200,7 @@ let totalActualGP = 0;
 let totalCancelled = 0;
 let totalRefunded = 0;
 let totalDisputed = 0;
-allOrders.forEach((item) => {
+orders.forEach((item) => {
 const estGP = item.grossProfit || 0;
 const actualGP = item.actualGP || 0;
 totalActualGP += actualGP;
