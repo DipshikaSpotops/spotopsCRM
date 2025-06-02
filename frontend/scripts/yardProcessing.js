@@ -356,7 +356,7 @@ const teamAgentsMap = {
   Shankar: ["Mark", "John"],
   Vinutha: ["Michael", "David"],
 };
-
+var team = localStorage.getItem("team");
 if (team in teamAgentsMap) {
   allOrders = allOrders.filter(order =>
     teamAgentsMap[team].includes(order.salesAgent)
@@ -547,7 +547,7 @@ $("#filterButton").click(async function () {
   Shankar: ["Mark", "John"],
   Vinutha: ["Michael", "David"],
 };
-
+var team = localStorage.getItem("team");
 if (team in teamAgentsMap) {
   allOrders = allOrders.filter(order =>
     teamAgentsMap[team].includes(order.salesAgent)
