@@ -170,7 +170,7 @@ $("#viewAlltasks").on("click", function () {
       }
   
       const [year, monthNumber] = $("#monthYearPicker").val().split("-");
-      const month = months[parseInt(monthNumber, 10) - 1];
+const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
   await fetchYardInfo(month, year);
   // Fetch yard info data for a specific month and 
   async function fetchYardInfo(month, year) {
@@ -457,11 +457,10 @@ createPaginationControls(totalPages);
  $("#filterButton").click(async function () {
   const monthYear = $("#monthYearPicker").val(); 
   const [year, monthNumber] = monthYear.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[parseInt(monthNumber, 10) - 1];
+  const month = String(parseInt(monthNumber, 10)).padStart(2, "0"); // ✅ Correct format
 
-  currentPage = 1; // Reset to page 1
-  await fetchYardInfo(month, year, currentPage, rowsPerPage); // Pass paging info
+  currentPage = 1;
+  await fetchYardInfo(month, year, currentPage, rowsPerPage);
 });
 
   
