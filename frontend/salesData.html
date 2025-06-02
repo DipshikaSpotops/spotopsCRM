@@ -1209,7 +1209,7 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 
-allOrders = ordersResponse.data;
+allOrders = ordersResponse.data.orders;
 document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
 
 // Calculate totals and render the first page
@@ -1384,7 +1384,7 @@ $("#filterButton").click(async function () {
         }
 
         // Update the orders and display them
-        allOrders = ordersResponse.data;
+        allOrders = ordersResponse.data.orders;
         document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
 
         // Recalculate totals and update them
