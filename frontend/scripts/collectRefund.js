@@ -178,12 +178,7 @@ const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
   $("#loadingMessage").show();
   const response = await axios.get("https://www.spotops360.com/orders/monthly", {
   headers: { Authorization: `Bearer ${token}` },
-params: {
-  month,
-  year,
-  page: currentPage,
-  limit: rowsPerPage
-}
+  params: { month, year, limit: "all" } // 👈 Important!
 });
 
   if (response.status !== 200) throw new Error("Failed to fetch data");
@@ -438,7 +433,7 @@ createPaginationControls(totalPages);
   $('#pagination-controls').on('click', '.page-btn', function () {
   const page = $(this).data('page');
   currentPage = page;
-fetchYardInfo(month, year, currentPage, rowsPerPage);
+  renderTable(currentPage);
   createPaginationControls(Math.ceil(yardOrders.length / 25));
   });
   
@@ -446,7 +441,7 @@ fetchYardInfo(month, year, currentPage, rowsPerPage);
   $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
   currentPage--;
-fetchYardInfo(month, year, currentPage, rowsPerPage);
+  renderTable(currentPage);
   createPaginationControls(Math.ceil(yardOrders.length / 25));
   }
   });
@@ -455,7 +450,7 @@ fetchYardInfo(month, year, currentPage, rowsPerPage);
   const totalPages = Math.ceil(yardOrders.length / 25);
   if (currentPage < totalPages) {
   currentPage++;
-fetchYardInfo(month, year, currentPage, rowsPerPage);
+  renderTable(currentPage);
   createPaginationControls(totalPages);
   }
   });
@@ -466,7 +461,8 @@ $("#filterButton").click(async function () {
   const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
 
   currentPage = 1;
-  $("#loadingMessage").show(); 
+  $("#loadingMessage").show(); // 👈 show loading immediately
+
   await fetchYardInfo(month, year, currentPage, rowsPerPage);
 
   $("#loadingMessage").hide(); 
