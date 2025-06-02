@@ -1025,38 +1025,33 @@ function createPaginationControls(totalPages, dataToRender) {
   paginationControls.empty(); // Clear existing buttons
 
   if (totalPages > 1) {
-    // Left arrow for "Previous" page
     paginationControls.append(`
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
-
-    // Page number display: Page X of Y
     paginationControls.append(`
       <span class="page-info">Page ${currentPage} of ${totalPages}</span>
     `);
 
-    // Right arrow for "Next" page
     paginationControls.append(`
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
+ $('#pagination-controls').off('click').on('click', '#prevPage', function () {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTableRows(currentPage, sortedData);
+    createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
+  }
+});
 
-  // Add event handlers directly inside the function to ensure it always uses the correct data
-  $('#prevPage').on('click', function () {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTableRows(currentPage, dataToRender);
-      createPaginationControls(totalPages, dataToRender);
-    }
-  });
-
-  $('#nextPage').on('click', function () {
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderTableRows(currentPage, dataToRender);
-      createPaginationControls(totalPages, dataToRender);
-    }
-  });
+$('#pagination-controls').on('click', '#nextPage', function () {
+  const totalPages = Math.ceil(totalCount / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage, sortedData);
+    createPaginationControls(totalPages, sortedData);
+  }
+});
 }
 
 $("#searchInput").on("keyup", function () {
