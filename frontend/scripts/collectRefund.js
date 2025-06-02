@@ -176,10 +176,11 @@ const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
   async function fetchYardInfo(month, year) {
   try {
   $("#loadingMessage").show();
-  const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+  const response = await axios.get("https://www.spotops360.com/orders/monthly", {
   headers: { Authorization: `Bearer ${token}` },
-  });
-  
+  params: { month, year, limit: "all" } // 👈 Important!
+});
+
   if (response.status !== 200) throw new Error("Failed to fetch data");
   
   // Apply filter logic based on `additionalInfo`
