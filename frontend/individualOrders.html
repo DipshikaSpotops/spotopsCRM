@@ -1037,20 +1037,20 @@ function createPaginationControls(totalPages, dataToRender) {
     `);
   }
 }
- $('#pagination-controls').on('click', '#prevPage', function () {
+$('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
   }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  const totalPages = Math.ceil(totalCount / rowsPerPage);
+  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
-    renderTableRows(currentPage, sortedData);
-    createPaginationControls(totalPages, sortedData);
+    renderTableRows(currentPage);
+    createPaginationControls(totalPages);
   }
 });
 
