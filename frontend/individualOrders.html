@@ -976,7 +976,12 @@ try {
 function renderTableRows(data) {
   $("#infoTable").empty();
 
-  data.forEach((item) => {
+  // Only show current page slice
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedData = data.slice(start, end);
+
+  paginatedData.forEach((item) => {
     const estGrossP = item.grossProfit || 0;
     const actualGP = item.actualGP || 0;
 
