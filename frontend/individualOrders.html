@@ -711,7 +711,7 @@ totalCount = fetchedCount;
     
     // 👇 NEW: Only show pagination if NOT fetching all
     if (!isFetchAll) {
-      createPaginationControls(Math.ceil(totalCount / rowsPerPage));
+      createPaginationControls();
     } else {
       $("#pagination-controls").empty(); // Clear pagination
     }
