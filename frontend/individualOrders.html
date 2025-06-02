@@ -1040,7 +1040,7 @@ function createPaginationControls(totalPages, dataToRender) {
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
-    renderTableRows(currentPage);
+    renderTableRows(currentPage,sortedData);
     createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
   }
 });
@@ -1049,7 +1049,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   const totalPages = Math.ceil(sortedData.length / rowsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
-    renderTableRows(currentPage);
+    renderTableRows(currentPage,sortedData);
     createPaginationControls(totalPages);
   }
 });
@@ -1082,7 +1082,6 @@ $("#infoTable").empty(); // Clear the table if no results are found
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
 }
 });
-
 $(".toggle-btn").on("click", function () {
 $("#offcanvasSidebar").toggleClass("show");
 });
