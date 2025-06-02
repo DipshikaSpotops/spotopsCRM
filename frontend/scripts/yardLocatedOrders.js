@@ -317,7 +317,7 @@ if (team in teamAgentsMap) {
 var totalOrders = allOrder.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Yard Located Orders This Month- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
+sortedData = sortOrdersByOrderNoDesc(allOrder);
 allOrders = allOrder; 
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
