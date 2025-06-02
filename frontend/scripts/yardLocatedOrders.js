@@ -296,7 +296,7 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 var orders = ordersResponse.data;
-allOrders = orders.filter((item) => {
+var allOrder = orders.filter((item) => {
 const poInfoArray = item.additionalInfo;
 if (!poInfoArray || poInfoArray.length === 0) return false;
 return poInfoArray.some((info) => {
@@ -310,11 +310,11 @@ const teamAgentsMap = {
 };
 
 if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
+  allOrder = allOrder.filter(order =>
     teamAgentsMap[team].includes(order.salesAgent)
   );
 }
-var totalOrders = allOrders.length;
+var totalOrders = allOrder.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Yard Located Orders This Month- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
