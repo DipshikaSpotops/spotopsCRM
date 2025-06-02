@@ -708,7 +708,7 @@ totalCount = fetchedCount;
 renderTableRows(currentPage, sortedData);        if (!isFetchAll) {
 createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
     } else {
-      $("#pagination-controls").empty(); // Clear pagination
+      $("#pagination-controls").empty();
     }
 
     updateOrderStats(orders);
@@ -1022,23 +1022,26 @@ function renderTableRows(page,data) {
 // Pagination function
 function createPaginationControls(totalPages, dataToRender) {
   const paginationControls = $('#pagination-controls');
-  paginationControls.empty();
+  paginationControls.empty(); // Clear existing buttons
 
   if (totalPages > 1) {
+    // Left arrow for "Previous" page
     paginationControls.append(`
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
+    // Page number display: Page X of Y
     paginationControls.append(`
       <span class="page-info">Page ${currentPage} of ${totalPages}</span>
     `);
 
+    // Right arrow for "Next" page
     paginationControls.append(`
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
     `);
   }
 
-  // Hook up handlers here
+  // Add event handlers directly inside the function to ensure it always uses the correct data
   $('#prevPage').on('click', function () {
     if (currentPage > 1) {
       currentPage--;
@@ -1055,8 +1058,6 @@ function createPaginationControls(totalPages, dataToRender) {
     }
   });
 }
-
-
 
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
