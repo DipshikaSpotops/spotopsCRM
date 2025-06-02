@@ -553,14 +553,13 @@ $(document).ready(async function () {
   throw new Error("Failed to fetch current month's orders");
   }
   allOrders = ordersResponse.data;
-  const teamAgentsMap = {
+const teamAgentsMap = {
   Shankar: ["Mark", "John"],
   Vinutha: ["Michael", "David"],
-  // etc.
 };
 
 if (team in teamAgentsMap) {
-  allOrders = allOrdersCombined.filter(order =>
+  allOrders = allOrders.filter(order =>
     teamAgentsMap[team].includes(order.salesAgent)
   );
 }
