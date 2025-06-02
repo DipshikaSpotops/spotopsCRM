@@ -183,11 +183,10 @@ $("#viewAlltasks").on("click", function () {
   if (response.status !== 200) throw new Error("Failed to fetch data");
   
   // Apply filter logic based on `additionalInfo`
-  yardOrders = response.data.filter(order =>
-  order.additionalInfo.some(info =>
-  (info.collectRefundCheckbox === "Ticked")
-  )
-  );
+  const allOrders = response.data.orders || [];
+yardOrders = allOrders.filter(order =>
+  order.additionalInfo.some(info => info.collectRefundCheckbox === "Ticked")
+);
   
   let totalSpend = 0;
   yardOrders.forEach(order => {
@@ -213,7 +212,8 @@ $("#viewAlltasks").on("click", function () {
   console.log("Total spend across all orders:", totalSpend);
   console.log("yardOrders with calculated spends", yardOrders);
   renderTable(currentPage, yardOrders);
-  createPaginationControls(Math.ceil(yardOrders.length / 25));
+const totalPages = Math.ceil((response.data.totalCount || 0) / rowsPerPage);
+createPaginationControls(totalPages);
   } catch (error) {
   console.error("Error fetching yard info:", error);
   alert("Failed to fetch data");
