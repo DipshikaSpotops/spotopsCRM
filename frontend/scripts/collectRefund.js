@@ -178,7 +178,12 @@ const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
   $("#loadingMessage").show();
   const response = await axios.get("https://www.spotops360.com/orders/monthly", {
   headers: { Authorization: `Bearer ${token}` },
-  params: { month, year, limit: "all" } // 👈 Important!
+params: {
+  month,
+  year,
+  page: currentPage,
+  limit: rowsPerPage
+}
 });
 
   if (response.status !== 200) throw new Error("Failed to fetch data");
@@ -433,7 +438,7 @@ createPaginationControls(totalPages);
   $('#pagination-controls').on('click', '.page-btn', function () {
   const page = $(this).data('page');
   currentPage = page;
-  renderTable(currentPage);
+fetchYardInfo(month, year, currentPage, rowsPerPage);
   createPaginationControls(Math.ceil(yardOrders.length / 25));
   });
   
@@ -441,7 +446,7 @@ createPaginationControls(totalPages);
   $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
   currentPage--;
-  renderTable(currentPage);
+fetchYardInfo(month, year, currentPage, rowsPerPage);
   createPaginationControls(Math.ceil(yardOrders.length / 25));
   }
   });
@@ -450,18 +455,21 @@ createPaginationControls(totalPages);
   const totalPages = Math.ceil(yardOrders.length / 25);
   if (currentPage < totalPages) {
   currentPage++;
-  renderTable(currentPage);
+fetchYardInfo(month, year, currentPage, rowsPerPage);
   createPaginationControls(totalPages);
   }
   });
   // Filter by month and year
- $("#filterButton").click(async function () {
-  const monthYear = $("#monthYearPicker").val(); 
+$("#filterButton").click(async function () {
+  const monthYear = $("#monthYearPicker").val();
   const [year, monthNumber] = monthYear.split("-");
-  const month = String(parseInt(monthNumber, 10)).padStart(2, "0"); // ✅ Correct format
+  const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
 
   currentPage = 1;
+  $("#loadingMessage").show(); 
   await fetchYardInfo(month, year, currentPage, rowsPerPage);
+
+  $("#loadingMessage").hide(); 
 });
 
   
