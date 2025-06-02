@@ -251,7 +251,18 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
   background-color: #35554f;color: white;width: auto;
 }
 #filterButton{
-  background-color: #35554f;color: white;width: auto;border: none;height: 3vh;
+  background-color: #35554f;color: white;width: auto;border: none;
+}
+#monthYearPicker,
+#filterButton {
+  height: 40px; /* or any consistent value */
+  line-height: 1.5;
+  padding: 6px 12px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 .edit-btn{
   background-color: #96dce1;
@@ -449,6 +460,10 @@ table thead th {
   display: flex; 
   margin-left: 0%;
     margin-top: 1%;
+    gap: 10px;
+  margin-left: 0%;
+  margin-top: 1%;
+  flex-wrap: wrap;
 }
 #pagination-controls {
   margin-top: -0.3%;
