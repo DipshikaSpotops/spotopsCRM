@@ -810,7 +810,7 @@ if (team in teamAgentsMap) {
 }
     allOrders = allOrdersCombined;
 
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${allOrders.length}`;
     renderTableRows(1, allOrders);
     createPaginationControls(Math.ceil(allOrders.length / 25));
   } catch (error) {
