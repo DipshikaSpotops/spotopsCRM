@@ -1374,9 +1374,12 @@ $("#filterButton").click(async function () {
     const month = months[parseInt(monthNumber, 10) - 1];
 
     try {
-        const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+        const ordersResponse = await axios.get(
+  `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&limit=all`,
+  {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  }
+);
 
         if (ordersResponse.status !== 200) {
             throw new Error("Failed to fetch filtered orders");
