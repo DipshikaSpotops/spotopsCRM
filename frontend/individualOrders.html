@@ -702,7 +702,8 @@ async function fetchOrdersByPage(page = 1) {
       }
     );
 
-    const { orders, totalCount } = response.data;
+const { orders, totalCount: fetchedCount } = response.data;
+totalCount = fetchedCount; 
     sortedData = sortOrdersByOrderNoDesc(orders);
     currentPage = page;
 
