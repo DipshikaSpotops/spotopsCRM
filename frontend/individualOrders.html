@@ -1037,7 +1037,7 @@ function createPaginationControls(totalPages, dataToRender) {
     `);
   }
 }
- $('#pagination-controls').off('click').on('click', '#prevPage', function () {
+ $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
     renderTableRows(currentPage, sortedData);
@@ -1053,7 +1053,6 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     createPaginationControls(totalPages, sortedData);
   }
 });
-
 
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
