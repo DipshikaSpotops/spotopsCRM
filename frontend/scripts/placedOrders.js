@@ -553,6 +553,17 @@ $(document).ready(async function () {
   throw new Error("Failed to fetch current month's orders");
   }
   allOrders = ordersResponse.data;
+  const teamAgentsMap = {
+  Shankar: ["Mark", "John"],
+  Vinutha: ["Michael", "David"],
+  // etc.
+};
+
+if (team in teamAgentsMap) {
+  allOrders = allOrdersCombined.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
   // console.log("allorders at filter btn",allOrders);
   var allOrdersLength = allOrders.length;
   document.getElementById("showTotalOrders").innerHTML = `No of Placed Orders- ${allOrdersLength}`;
