@@ -185,14 +185,14 @@ $("#viewAlltasks").on("click", function () {
   }
 });
   
-  if (response.status !== 200) throw new Error("Failed to fetch data");
-  
-  // Apply filter logic based on `additionalInfo`
-  yardOrders = response.data.filter(order =>
+ const allOrders = response.data.orders || [];
+
+yardOrders = allOrders.filter(order =>
   order.additionalInfo.some(info =>
-  (info.collectRefundCheckbox === "Ticked")
+    info.collectRefundCheckbox === "Ticked"
   )
-  );
+);
+
   
   let totalSpend = 0;
   yardOrders.forEach(order => {
