@@ -284,12 +284,23 @@ $(document).ready(async function () {
   }
   
   var data = response.data;
-  var totalOrders = data.length;
+  var allOrder = data;
+const teamAgentsMap = {
+  Shankar: ["Mark", "John"],
+  Vinutha: ["Michael", "David"],
+};
+console.log("team",team)
+if (team in teamAgentsMap) {
+  allOrder = allOrder.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
+  var totalOrders = allOrder.length;
   console.log("totalOrders",totalOrders)
   document.getElementById("showTotalOrders").innerHTML = `No of Placed Orders- ${totalOrders}`;
-  data = sortOrdersByOrderNoDesc(data);
+  allOrder = sortOrdersByOrderNoDesc(allOrder);
   
-  renderOrders(data);
+  renderOrders(allOrder);
   } catch (error) {
   console.error("Error fetching orders:", error);
   }
