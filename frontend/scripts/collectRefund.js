@@ -176,9 +176,14 @@ $("#viewAlltasks").on("click", function () {
   async function fetchYardInfo(month, year) {
   try {
   $("#loadingMessage").show();
-  const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
+  const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
   headers: { Authorization: `Bearer ${token}` },
-  });
+  params: {
+    month,
+    year,
+    limit: "all"
+  }
+});
   
   if (response.status !== 200) throw new Error("Failed to fetch data");
   
