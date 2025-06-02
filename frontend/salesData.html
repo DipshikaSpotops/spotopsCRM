@@ -1199,12 +1199,11 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 try {
 const ordersResponse = await axios.get(
-`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-{
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-}
+  `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&limit=all`,
+  {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  }
 );
-
 if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
