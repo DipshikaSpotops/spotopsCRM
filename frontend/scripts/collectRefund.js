@@ -170,24 +170,24 @@ $("#viewAlltasks").on("click", function () {
       }
   
       const [year, monthNumber] = $("#monthYearPicker").val().split("-");
-const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
+      const month = months[parseInt(monthNumber, 10) - 1];
   await fetchYardInfo(month, year);
   // Fetch yard info data for a specific month and 
   async function fetchYardInfo(month, year) {
   try {
   $("#loadingMessage").show();
-  const response = await axios.get("https://www.spotops360.com/orders/monthly", {
+  const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
   headers: { Authorization: `Bearer ${token}` },
-  params: { month, year, limit: "all" } // 👈 Important!
-});
-
+  });
+  
   if (response.status !== 200) throw new Error("Failed to fetch data");
   
   // Apply filter logic based on `additionalInfo`
-  const allOrders = response.data.orders || [];
-yardOrders = allOrders.filter(order =>
-  order.additionalInfo.some(info => info.collectRefundCheckbox === "Ticked")
-);
+  yardOrders = response.data.filter(order =>
+  order.additionalInfo.some(info =>
+  (info.collectRefundCheckbox === "Ticked")
+  )
+  );
   
   let totalSpend = 0;
   yardOrders.forEach(order => {
@@ -213,8 +213,7 @@ yardOrders = allOrders.filter(order =>
   console.log("Total spend across all orders:", totalSpend);
   console.log("yardOrders with calculated spends", yardOrders);
   renderTable(currentPage, yardOrders);
-const totalPages = Math.ceil((response.data.totalCount || 0) / rowsPerPage);
-createPaginationControls(totalPages);
+  createPaginationControls(Math.ceil(yardOrders.length / 25));
   } catch (error) {
   console.error("Error fetching yard info:", error);
   alert("Failed to fetch data");
@@ -455,19 +454,16 @@ createPaginationControls(totalPages);
   }
   });
   // Filter by month and year
-$("#filterButton").click(async function () {
-  const monthYear = $("#monthYearPicker").val();
+  $("#filterButton").click(async function () {
+  const monthYear = $("#monthYearPicker").val(); 
   const [year, monthNumber] = monthYear.split("-");
-  const month = String(parseInt(monthNumber, 10)).padStart(2, "0");
-
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+  await fetchYardInfo(month, year);
   currentPage = 1;
-  $("#loadingMessage").show(); // 👈 show loading immediately
-
-  await fetchYardInfo(month, year, currentPage, rowsPerPage);
-
-  $("#loadingMessage").hide(); 
-});
-
+  renderTable(currentPage);
+  createPaginationControls(Math.ceil(yardOrders.length / 25));
+  });
   
   
   const firstName = localStorage.getItem("firstName");
