@@ -369,10 +369,9 @@ const newEntry = urlParams.get("newEntry");
            orderNo: orderNoInput,
     orderDate: $("#orderDate").val(),
     salesAgent: $("#salesAgent").val(),
-    fName: $("#firstName").val(),           // ✅ Added
-    lName: $("#lastName").val(),            // ✅ Added
+    fName: $("#firstName").val(),           
+    lName: $("#lastName").val(),            
     customerName: `${$("#firstName").val()} ${$("#lastName").val()}`, // Optional if used
-
     bAddressStreet: $("#bAddress").val(),
     bAddressCity: $("#bCity").val(),
     bAddressState: $("#bState").val(),
@@ -447,7 +446,6 @@ const newEntry = urlParams.get("newEntry");
       });
         }
     });
-
   function getFormattedOrderDate() {
     const now = new Date();
     const options = {
