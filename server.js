@@ -1387,85 +1387,8 @@ res.status(500).json({ message: "Server error", error });
 //   mongoose.connection.close();  
 // }
 // });
-app.get('/orders/monthly', async (req, res) => {
-  try {
-    let { month, year, page, limit } = req.query;
 
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
 
-    // Format limit and page
-    page = parseInt(page) || 1;
-    limit = limit === "all" ? "all" : parseInt(limit) || 25;
-    let skip = 0;
-
-    if (limit !== "all") {
-      skip = (page - 1) * limit;
-    }
-
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);
-
-    const filter = {
-      orderDate: { $gte: startDate, $lt: endDate }
-    };
-
-    // Count total documents regardless of pagination
-    const totalCount = await Order.countDocuments(filter);
-
-    // Build query
-    let query = Order.find(filter, {
-      orderNo: 1,
-      orderDate: 1,
-      salesAgent: 1,
-      customerName: 1,
-      pReq: 1,
-      additionalInfo: 1,
-      orderStatus: 1,
-      soldP: 1,
-      costP: 1,
-      shippingFee: 1,
-      grossProfit: 1,
-      salestax: 1,
-      actualGP: 1,
-      phone: 1,
-      email: 1,
-      fName: 1,
-      lName: 1,
-      attention: 1,
-      sAddressStreet: 1,
-      sAddressCity: 1,
-      sAddressState: 1,
-      sAddressZip: 1,
-      sAddressAcountry: 1,
-      year: 1,
-      make: 1,
-      model: 1,
-      vin: 1,
-      partNo: 1,
-      desc: 1,
-      warranty: 1,
-      programmingCostQuoted: 1,
-      programmingRequired: 1,
-      cancelledDate: 1,
-      custRefundDate: 1,
-      custRefAmount: 1
-    }).sort({ orderDate: -1 });
-
-    if (limit !== "all") {
-      query = query.skip(skip).limit(limit);
-    }
-
-    const orders = await query;
-
-    return res.json({ orders, totalCount });
-  } catch (error) {
-    console.error("Error fetching orders for specified month and year:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
-});
 
 app.get('/salespersonWiseOrders', async (req, res) => {
   try {

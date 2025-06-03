@@ -167,22 +167,18 @@ function renderTableRows(page, orders = allOrders) {
     const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
 // Get logged-in user's firstName
 const userFirstName = localStorage.getItem("firstName") || "";
-
-// Extract last supportNote by this user
 let myLastNote = "";
-if (Array.isArray(item.supportNotes)) {
-  const notesByUser = item.supportNotes.filter(note => 
-    typeof note === "string" && note.trim().startsWith(userFirstName)
-  );
-  if (notesByUser.length > 0) {
-  const rawNote = notesByUser[notesByUser.length - 1];
-  const words = rawNote.split(" ");
-  myLastNote = words.reduce((acc, word, idx) => {
-    return acc + word + ((idx + 1) % 5 === 0 ? "<br>" : " ");
-  }, "").trim();
-}
-}
 
+if (Array.isArray(item.supportNotes) && item.supportNotes.length > 0) {
+  const rawNote = item.supportNotes[item.supportNotes.length - 1];
+
+  if (typeof rawNote === "string" && rawNote.trim()) {
+    const words = rawNote.trim().split(/\s+/); 
+    myLastNote = words.reduce((acc, word, idx) => {
+      return acc + word + ((idx + 1) % 5 === 0 ? "<br>" : " ");
+    }, "").trim();
+  }
+}
     const actions = `
       <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${
         item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""
