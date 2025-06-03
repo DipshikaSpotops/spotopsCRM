@@ -975,15 +975,16 @@ $("body").removeClass("modal-active");
 fetchNotifications();
 fetchTaskSummary();
 $("#filterButton").click(async function () {
-  const selectedMonthYear = $("#monthYearPicker").val(); // Format: YYYY-MM
+  console.log("Filter button clicked!"); 
+  const selectedMonthYear = $("#monthYearPicker").val();
   if (selectedMonthYear) {
     const [year, month] = selectedMonthYear.split("-");
-    currentPage = 1; // Reset to first page on filter
-    $("#loadingMessage").show(); // <-- Show loading indicator
-    await fetchData(month, year); // <-- Corrected this line
+    currentPage = 1;
+    $("#loadingMessage").show(); // Should be visible now
+    await fetchData(month, year);
     renderTableRows(1);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-    $("#loadingMessage").hide(); // <-- Hide it after work is done
+    $("#loadingMessage").hide();
   }
 });
  
