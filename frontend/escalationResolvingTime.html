@@ -147,16 +147,14 @@ display: block;
 }
 }
 #searchInput {
-width: 40%;
-border-radius: 30px;
-border: 1px solid grey;
-margin: 0% 28%;
-background: white
-url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png)
-5px center no-repeat;
-background-size: 20px 20px;
-padding-left: 35px;
-height: 40px;
+ width: auto;
+        border-radius: 30px;
+        border: 1px solid grey;
+        margin: 19% -51%;
+        background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
+        background-size: 20px 20px;
+        padding-left: 35px;
+        height: 40px;
 }
 .profile-table {
 width: 50%;
@@ -392,7 +390,9 @@ background-color: #96dce1;
 }
 .topHeads{
   display: flex;
-}
+  margin-left: -3%;
+  margin-top: -1%;
+    }
 .table tbody tr:hover {
   background-color: #c0c0c0 !important; 
   cursor: pointer;
@@ -601,7 +601,12 @@ window.location.href = "login_signup.html";
 </div>
 <div class="main-content">
 <div class="container-fluid mt-2">
-<h1 class="fixed-header" style="text-align: center; margin-right: 34%;margin: 1%;">Escalation Resolutions</h1>
+<div class="topHeads">
+    <div>
+<h1 id="mainHeading">
+Escalation Resolution
+</h1>
+</div>
 <div>
 <input
 type="text"
@@ -610,18 +615,21 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<!-- pagination controls -->
-<!-- <div id="pagination-controls" class="mt-3 mb-3"></div> -->
+<button id="downloadCsv" class="btn">
+  <i class="fas fa-download"></i>  <!-- This is the download icon -->
+</button>
+</div>
 <div id="filterAndTotal">
-<div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary">Filter</button>
+<!-- <div class="filter-bar"> -->
+<input id="monthYearPicker" type="month" class="form-control"  />
+<button id="filterButton" class="btn btn-primary" >Filter</button>
+<!-- </div> -->
+<div id="showTotalOrders">Total Orders This Month-</div>
+<div id="pagination-controls">
+  <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
-<div style="display: flex;margin: 2% -2%;;">
-<div id="showTotalOrders">Total Resolved Orders This Month-</div>
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
-</div> 
 <div class="table-responsive">
 <table class="table table-bordered mt-4">
 <thead style="text-align: center;">
