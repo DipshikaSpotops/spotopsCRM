@@ -165,7 +165,26 @@ const suffix = (day) => {
   }
 };
 const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-        const custRefundDatedateOnly = item.custRefundDate.split(" ")[0] + " " + item.custRefundDate.split(" ")[1] + " " + item.custRefundDate.split(" ")[2];
+        const custRefundDatedateOnly = item.custRefundDate;
+        const dateObj = new Date(custRefundDatedateOnly);
+
+// Format to "8th May, 2025"
+const day = dateObj.getUTCDate();
+const month = dateObj.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
+const year = dateObj.getUTCFullYear();
+
+const getDaySuffix = (d) => {
+  if (d > 3 && d < 21) return 'th';
+  switch (d % 10) {
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
+  }
+};
+
+const formattedDate = `${day}${getDaySuffix(day)} ${month}, ${year}`;
+console.log(formattedDate); 
 $("#infoTable").append(`
 <tr>
 <td>${formattedOrderDate}</td>
@@ -224,7 +243,7 @@ return parts[1]?.split(" on ")[0] || "Unknown";
 .join(", ") || ""
 }
 </td>
-<td>${custRefundDatedateOnly}</td>
+<td>${formattedDate}</td>
 <td>${item.custRefAmount || item.custRefundedAmount}</td>
 <td>${item.orderStatus}</td>
 <td>
@@ -368,6 +387,17 @@ const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
         }
 
         allOrders = ordersResponse.data;
+        var team = localStorage.getItem("team");
+const teamAgentsMap = {
+  Shankar: ["Mark", "John"],
+  Vinutha: ["Michael", "David"],
+};
+
+if (team in teamAgentsMap) {
+  allOrders = allOrders.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
         document.getElementById("showTotalOrders").innerHTML = `Total Refunded Orders This Month- ${allOrders.length}`;
 
         renderTableRows(currentPage);
@@ -515,6 +545,17 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
+var team = localStorage.getItem("team");
+const teamAgentsMap = {
+  Shankar: ["Mark", "John"],
+  Vinutha: ["Michael", "David"],
+};
+
+if (team in teamAgentsMap) {
+  allOrders = allOrders.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
 var allOrdersLength = allOrders.length;
 document.getElementById("showTotalOrders").innerHTML = `Total Refunded Orders This Month- ${allOrdersLength}`;
 renderTableRows(currentPage);
