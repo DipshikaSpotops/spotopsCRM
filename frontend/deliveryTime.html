@@ -599,13 +599,13 @@ console.log("sliced data",allOrders);
                 if (status !== "Part delivered") {
                     const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
                     const approvedDate = new Date(customerApprovedDate);
-
                     if (!isNaN(approvedDate)) {
-                        const diffTime = Math.abs(dallasTime - approvedDate);
-                        daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
+                      const diffTime = Math.abs(dallasTime - approvedDate);
+                      daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     } else {
-                        console.error("Invalid customerApprovedDate:", customerApprovedDate);
+                      console.error("Invalid customerApprovedDate:", customerApprovedDate);
                     }
+
                 }
 
                 yardInfoHtml += `<td>
