@@ -610,7 +610,7 @@ console.log("sliced data",allOrders);
 
                 yardInfoHtml += `<td>
                     ${yard.yardName || ""} | ${yard.phone || ""}
-                    <br>PO Sent - ${datePO || ""}
+                    <br>PO Sent - ${yard.poSentDate || ""}
                     ${yard.paymentStatus ? `<br>${yard.paymentStatus}` : ""}
                     ${yard.trackingNo ? `<br>${yard.trackingNo}` : ""}
                     ${status ? `<br>${status}` : ""}
@@ -618,7 +618,7 @@ console.log("sliced data",allOrders);
                     ${daysDifference2 ? `<br>${daysDifference2} days since Customer Approved` : ""}
                 </td>`;
             } else {
-                yardInfoHtml += "<td></td>"; // Fill empty yard columns for alignment
+                yardInfoHtml += "<td></td>"; 
             }
         }
 // `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`
