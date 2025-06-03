@@ -421,8 +421,8 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-$(document).ready(async function () {
-  $("#viewAlltasks").on("click", function () {
+$(document).ready(function () {
+  (async function initPage() {  $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
  // Toggle Dark Mode
@@ -816,6 +816,19 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+$("#filterButton").click(async function () {
+  console.log("Filter button clicked!"); 
+  const selectedMonthYear = $("#monthYearPicker").val();
+  if (selectedMonthYear) {
+    const [year, month] = selectedMonthYear.split("-");
+    currentPage = 1;
+    $("#loadingMessage").show(); // Should be visible now
+    await fetchData(month, year);
+    renderTableRows(1);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    $("#loadingMessage").hide();
+  }
+});
 // notification
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
@@ -974,20 +987,8 @@ $("body").removeClass("modal-active");
 });
 fetchNotifications();
 fetchTaskSummary();
-$("#filterButton").click(async function () {
-  console.log("Filter button clicked!"); 
-  const selectedMonthYear = $("#monthYearPicker").val();
-  if (selectedMonthYear) {
-    const [year, month] = selectedMonthYear.split("-");
-    currentPage = 1;
-    $("#loadingMessage").show(); // Should be visible now
-    await fetchData(month, year);
-    renderTableRows(1);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-    $("#loadingMessage").hide();
-  }
-});
- 
+
+  })();
 });
 
 </script>
