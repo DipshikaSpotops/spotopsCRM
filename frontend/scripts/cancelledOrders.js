@@ -223,7 +223,7 @@ return parts[1]?.split(" on ")[0] || "Unknown";
 }
 </td>
 <td>${cancelleddateOnly}</td>
-<td>${item.custRefAmount || item.cancelledRefAmount}</td>
+<td>${item.custRefAmount || item.cancelledRefAmount || ""}</td>
 <td>${item.cancellationReason}</td>
 <td>${item.orderStatus}</td>
 <td>
