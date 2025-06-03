@@ -395,7 +395,7 @@ background-color: #96dce1;
 .topHeads{
   display: flex;
     margin-bottom: 1%;
-    margin-top: -2%;
+    margin-top: -1%;
 }
 table thead th {
   position: sticky;

@@ -301,6 +301,17 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
+var team = localStorage.getItem("team");
+const teamAgentsMap = {
+  Shankar: ["Mark", "John"],
+  Vinutha: ["Michael", "David"],
+};
+
+if (team in teamAgentsMap) {
+  allOrders = allOrders.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Fulfilled Orders- ${totalOrders}`;
@@ -430,6 +441,17 @@ if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
 }
 allOrders = ordersResponse.data;
+var team = localStorage.getItem("team");
+const teamAgentsMap = {
+  Shankar: ["Mark", "John"],
+  Vinutha: ["Michael", "David"],
+};
+
+if (team in teamAgentsMap) {
+  allOrders = allOrders.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
 var allOrdersLength = allOrders.length;
 document.getElementById("showTotalOrders").innerHTML = `Total Fulfilled Orders- ${allOrdersLength}`;
 renderTableRows(currentPage);
