@@ -371,6 +371,8 @@ const newEntry = urlParams.get("newEntry");
           orderDate: $("#orderDate").val(),
           salesAgent: $("#salesAgent").val(),
           customerName: customerName,
+          fName: $("#firstName").val(),
+          lName: $("#lastName").val(),
           bAddressStreet: $("#bAddress").val(),
           bAddressCity: $("#bCity").val(),
           bAddressState: $("#bState").val(),
