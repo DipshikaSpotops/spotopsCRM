@@ -191,12 +191,13 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 }
 
 // Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, filteredOrders = allOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
-
-if (totalPages > 1) {
-  paginationControls.append(`
+function createPaginationControls(totalPages) {
+  const paginationControls = $('#pagination-controls');
+  console.log("pages",totalPages,"currentPage",currentPage);
+  paginationControls.empty(); 
+  if (totalPages > 1) {
+    // Left arrow for "Previous" page
+    paginationControls.append(`
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
@@ -208,29 +209,25 @@ if (totalPages > 1) {
     // Right arrow for "Next" page
     paginationControls.append(`
       <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
-    `);}
+    `);
+  }
 }
-
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage); // Use the filtered orders
-});
 
 $('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage); // Use the filtered orders
-}
+  if (currentPage > 1) {
+    currentPage--;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage); // Use the filtered orders
-}
+  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage);
+    createPaginationControls(totalPages);
+  }
 });
 
 
