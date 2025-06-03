@@ -510,7 +510,7 @@ body {
     .topHeads{
       display: flex;
       margin-left: -3%;
-      margin-top: -2%;
+      margin-top: -1%;
     }
     #mainHeading {
       text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;

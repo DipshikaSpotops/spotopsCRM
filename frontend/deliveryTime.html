@@ -516,7 +516,9 @@ async function fetchData(month, year) {
         throw new Error("Failed to fetch orders");
       }
 
-      allOrders = response.data;
+      allOrders = response.data.orders;
+      const totalCount = response.data.totalCount;
+$("#showTotalOrders").text(`Total Orders This Month - ${totalCount}`);
       renderTableRows(currentPage);
       createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     } catch (error) {
@@ -660,7 +662,9 @@ async function fetchData(month, year) {
             throw new Error("Failed to fetch orders");
         }
 
-        allOrders = response.data;
+        allOrders = response.data.orders;
+        const totalCount = response.data.totalCount;
+$("#showTotalOrders").text(`Total Orders This Month - ${totalCount}`);
         renderTableRows(currentPage);  // Ensure yard data is loaded
         createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     } catch (error) {
