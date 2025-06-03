@@ -651,29 +651,6 @@ const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()
     });
 }
 
-async function fetchData(month, year) {
-    try {
-        const response = await axios.get(
-            `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-            { headers: token ? { Authorization: `Bearer ${token}` } : {} }
-        );
-
-        if (response.status !== 200) {
-            throw new Error("Failed to fetch orders");
-        }
-
-        allOrders = response.data.orders;
-        const totalCount = response.data.totalCount;
-$("#showTotalOrders").text(`Total Orders This Month - ${totalCount}`);
-        renderTableRows(currentPage);  // Ensure yard data is loaded
-        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-    } catch (error) {
-        console.error("Error fetching orders:", error);
-        alert("Error fetching orders: " + error.message);
-    }
-}
-
-
   /** 🔹 Format Date */
   function formatDate(dateString) {
     if (!dateString) return "N/A";
@@ -998,15 +975,17 @@ $("body").removeClass("modal-active");
 fetchNotifications();
 fetchTaskSummary();
 $("#filterButton").click(async function () {
-    const selectedMonthYear = $("#monthYearPicker").val(); // Format: YYYY-MM
-    if (selectedMonthYear) {
-      const [year, month] = selectedMonthYear.split("-");
-      currentPage = 1; // Reset to first page on filter
-      await fetchData(month, month);
-      renderTableRows(1);
-      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-    }
-  });
+  const selectedMonthYear = $("#monthYearPicker").val(); // Format: YYYY-MM
+  if (selectedMonthYear) {
+    const [year, month] = selectedMonthYear.split("-");
+    currentPage = 1; // Reset to first page on filter
+    $("#loadingMessage").show(); // <-- Show loading indicator
+    await fetchData(month, year); // <-- Corrected this line
+    renderTableRows(1);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    $("#loadingMessage").hide(); // <-- Hide it after work is done
+  }
+});
  
 });
 
