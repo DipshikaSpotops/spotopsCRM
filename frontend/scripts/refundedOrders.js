@@ -166,12 +166,13 @@ const suffix = (day) => {
 };
 const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
         const custRefundDatedateOnly = item.custRefundDate;
-        const dateObj = new Date(custRefundDatedateOnly);
+const dateObj = new Date(custRefundDatedateOnly);
 
-// Format to "8th May, 2025"
 const day1 = dateObj.getUTCDate();
 const month1 = dateObj.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
 const year1 = dateObj.getUTCFullYear();
+const hours = String(dateObj.getUTCHours()).padStart(2, '0');
+const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
 
 const getDaySuffix = (d) => {
   if (d > 3 && d < 21) return 'th';
@@ -183,7 +184,7 @@ const getDaySuffix = (d) => {
   }
 };
 
-const formattedDate = `${day1}${getDaySuffix(day1)} ${month1}, ${year1}`;
+const formattedDate = `${day1}${getDaySuffix(day1)} ${month1}, ${year1} ${hours}:${minutes}`;
 console.log(formattedDate); 
 $("#infoTable").append(`
 <tr>
@@ -244,7 +245,7 @@ return parts[1]?.split(" on ")[0] || "Unknown";
 }
 </td>
 <td>${formattedDate}</td>
-<td>${item.custRefAmount || item.custRefundedAmount}</td>
+<td>$${item.custRefAmount || item.custRefundedAmount || ""}</td>
 <td>${item.orderStatus}</td>
 <td>
 ${
