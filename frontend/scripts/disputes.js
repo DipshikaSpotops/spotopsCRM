@@ -203,12 +203,12 @@ const yardSpendTotal =
             custOwnShipReplacement;
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
-Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
-Esc spending: ${escSpending}<br>
+Part price: $${partPrice} | ${shippingDetails} <br>
+Others: $${others} |Esc spending: $${escSpending}<br>
 Status: ${info.status} ${info.paymentStatus} ${
-  info.paymentStatus === "Card charged" ? `Yard Spend: ${yardSpendTotal}` : ""
+  info.paymentStatus === "Card charged" ? `Yard Spend: $${yardSpendTotal}` : ""
 }<br>
-Yard refund: ${refundedAmount}
+Yard refund: $${refundedAmount}
 `;
 })
 .join("<br>")

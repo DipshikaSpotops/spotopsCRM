@@ -190,7 +190,7 @@ $("#infoTable").append(`
 <tr>
 <td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
-<td>${item.soldP}</td>
+<td>$${item.soldP}</td>
 <td>${item.salesAgent}</td>
 <td>${
     (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
@@ -224,8 +224,8 @@ $("#infoTable").append(`
           const shippingDetails = info.shippingDetails || "";
           return `
             <b>Yard ${index + 1}</b>: ${yardName}<br> 
-            Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
-            Esc spending: ${escSpending}<br>
+            Part price: $${partPrice} | ${shippingDetails} <br>
+            Others: $${others} | Esc spending: ${escSpending}<br>
             Yard Spend: $${yardSpendTotal.toFixed(2)}<br>
             Yard refund: $${refundedAmount}
           `;
