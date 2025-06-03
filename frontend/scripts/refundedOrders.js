@@ -169,9 +169,9 @@ const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()
         const dateObj = new Date(custRefundDatedateOnly);
 
 // Format to "8th May, 2025"
-const day = dateObj.getUTCDate();
-const month = dateObj.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
-const year = dateObj.getUTCFullYear();
+const day1 = dateObj.getUTCDate();
+const month1 = dateObj.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
+const year1 = dateObj.getUTCFullYear();
 
 const getDaySuffix = (d) => {
   if (d > 3 && d < 21) return 'th';
@@ -183,7 +183,7 @@ const getDaySuffix = (d) => {
   }
 };
 
-const formattedDate = `${day}${getDaySuffix(day)} ${month}, ${year}`;
+const formattedDate = `${day1}${getDaySuffix(day1)} ${month1}, ${year1}`;
 console.log(formattedDate); 
 $("#infoTable").append(`
 <tr>
