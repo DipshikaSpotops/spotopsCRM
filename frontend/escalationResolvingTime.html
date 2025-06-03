@@ -256,8 +256,8 @@ display: flex;
   margin-left: 0%;
   margin-top: 1%;
   gap: 10px;
-  margin-left: 0%;
-  margin-top: 1%;
+margin-left: -1%;
+    margin-top: -1%;
   flex-wrap: wrap;
 }
 /* for dark mode */
@@ -641,7 +641,7 @@ placeholder="Search..."
 </div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
-<div class="table-responsive">
+<div class="table-wrapper">
 <table class="table table-bordered mt-4">
 <thead style="text-align: center;">
     <tr>
@@ -891,7 +891,7 @@ console.log(`Final yardLogs for orderNo: ${item.orderNo}`, yardLogs);
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const ordersForPage = resolvedOrders.slice(start, end);
-    document.getElementById("showTotalOrders").innerHTML = `Total Resolved Orders This Month- ${resolvedOrders.length + 1}`;
+    document.getElementById("showTotalOrders").innerHTML = `Total Resolved Orders This Month- ${resolvedOrders.length}`;
     $('#infoTable').empty(); // Clear the table
     console.log(`Total resolved orders: ${resolvedOrders.length}`);
 
