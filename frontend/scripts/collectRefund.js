@@ -1,5 +1,5 @@
-// $(document).ready(() => {
-//     (async function () {
+$(document).ready(() => {
+    (async function () {
 $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
@@ -844,3 +844,6 @@ yardOrders = allOrders.filter(order =>
     $("#infoTable tr").removeClass("selected");
     $(this).addClass("selected");
   });
+
+})();
+});
