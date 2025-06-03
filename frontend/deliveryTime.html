@@ -594,19 +594,20 @@ console.log("sliced data",allOrders);
                         daysDifference1 = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
                     }
                 }
-
-                // Calculate days since Customer Approved
                 if (status !== "Part delivered") {
-                    const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-                    const approvedDate = new Date(customerApprovedDate);
-                    if (!isNaN(approvedDate)) {
-                      const diffTime = Math.abs(dallasTime - approvedDate);
-                      daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    } else {
-                      console.error("Invalid customerApprovedDate:", customerApprovedDate);
-                    }
+  const dallasTime = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
 
-                }
+  if (customerApprovedDate) {
+    const approvedDate = new Date(customerApprovedDate);
+    if (!isNaN(approvedDate)) {
+      const diffTime = Math.abs(dallasTime - approvedDate);
+      daysDifference2 = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    } else {
+      console.warn(`Invalid format for customerApprovedDate: ${customerApprovedDate}`);
+    }
+  } else {
+    console.warn(`Missing customerApprovedDate for orderNo: ${item.orderNo}`);
+  }
 
                 yardInfoHtml += `<td>
                     ${yard.yardName || ""} | ${yard.phone || ""}
