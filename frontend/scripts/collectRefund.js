@@ -207,55 +207,55 @@ $("#viewAlltasks").on("click", function () {
 }
 
   // Fetch yard info data for a specific month and 
-  async function fetchYardInfo(month, year) {
+async function fetchYardInfo(month, year) {
   try {
-  $("#loadingMessage").show();
-   const allOrders = await fetchAllMonthlyOrders({
-  month,
-  year,
-  token,
-  filterBy: "collectRefund"
-});
-  console.log("orders in collect refund",response);
-yardOrders = allOrders.filter(order =>
-  order.additionalInfo.some(info =>
-    info.collectRefundCheckbox === "Ticked"
-  )
-);
+    $("#loadingMessage").show();
+    const limit = 25;
 
-  
-  let totalSpend = 0;
-  yardOrders.forEach(order => {
-  let orderSpend = 0;
-  order.additionalInfo.forEach(info => {
-  // if (info.paymentStatus === "Card charged") {
-  const shippingCost = info.shippingDetails
-  ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0
-  : 0;
-  const partPrice = parseFloat(info.partPrice || 0);
-  const others = parseFloat(info.others || 0);
-  const refundedAmount = parseFloat(info.refundedAmount || 0);
-  
-  const itemSpend = partPrice + others + shippingCost;
-  console.log("iem",itemSpend);
-  orderSpend += itemSpend;
-  // }
-  });
-  order.totalSpend = orderSpend;
-  totalSpend += orderSpend;
-  });
-  
-  console.log("Total spend across all orders:", totalSpend);
-  console.log("yardOrders with calculated spends", yardOrders);
-  renderTable(currentPage, yardOrders);
-  createPaginationControls(Math.ceil(yardOrders.length / 25));
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month, year, page: 1, limit },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    console.log("orders in collect refund", response);
+    const allOrders = response.data.orders; // ✅ only declare once
+
+    yardOrders = allOrders.filter(order =>
+      order.additionalInfo.some(info =>
+        info.collectRefundCheckbox === "Ticked"
+      )
+    );
+
+    let totalSpend = 0;
+    yardOrders.forEach(order => {
+      let orderSpend = 0;
+      order.additionalInfo.forEach(info => {
+        const shippingCost = info.shippingDetails
+          ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0
+          : 0;
+        const partPrice = parseFloat(info.partPrice || 0);
+        const others = parseFloat(info.others || 0);
+        const refundedAmount = parseFloat(info.refundedAmount || 0);
+
+        const itemSpend = partPrice + others + shippingCost;
+        console.log("item", itemSpend);
+        orderSpend += itemSpend;
+      });
+      order.totalSpend = orderSpend;
+      totalSpend += orderSpend;
+    });
+
+    console.log("Total spend across all orders:", totalSpend);
+    console.log("yardOrders with calculated spends", yardOrders);
+    renderTable(currentPage, yardOrders);
+    createPaginationControls(Math.ceil(yardOrders.length / 25));
   } catch (error) {
-  console.error("Error fetching yard info:", error);
-  alert("Failed to fetch data");
+    console.error("Error fetching yard info:", error);
+    alert("Failed to fetch data");
   } finally {
-  $("#loadingMessage").hide();
+    $("#loadingMessage").hide();
   }
-  }
+}
   setTimeout(() => {
       const restoredSearch = $("#searchInput").val();
       if (restoredSearch) {
