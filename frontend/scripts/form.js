@@ -3932,7 +3932,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   });
   
   const yard = order.additionalInfo[i];
-  const shippingDetail = yard.additionalInfo[i].shippingDetails || '';
+  const shippingDetail = order.additionalInfo[i].shippingDetails || '';
   let shipping = 0;
   if (shippingDetail.includes('Yard shipping')) {
     const match = shippingDetail.match(/Yard shipping:\s*(\d+)/);
