@@ -265,8 +265,8 @@ margin-top: 10px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 600px;
+    width: 100%;
+    max-width: 974px;
     max-height: 90vh;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -404,14 +404,15 @@ text-align: center;
     resize: vertical;
 }
 .submitYardNotes {
-    margin-top: 12px;
-    padding: 10px 16px;
+    align-self: flex-end;
+    padding: 8px 16px;
     background-color: #007bff;
     border: none;
     color: white;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
+    margin-right: 4px;
 }
 #submitYardNotes:hover {
     background-color: #0056b3;
@@ -421,6 +422,7 @@ text-align: center;
     flex-direction: column;
     align-items: flex-end;
     gap: 10px;
+    margin-top: 10px;
 }
 /* textarea#notes {
 height: 150px;
