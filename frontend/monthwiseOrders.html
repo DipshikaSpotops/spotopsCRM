@@ -782,7 +782,7 @@ async function fetchOrdersForSelectedMonth(monthYear,page = 1) {
 };
 console.log("team",team)
 if (team in teamAgentsMap) {
-  allOrdersCombined = allOrdersCombined.filter(order =>
+  allOrders = allOrders.filter(order =>
     teamAgentsMap[team].includes(order.salesAgent)
   );
 }
