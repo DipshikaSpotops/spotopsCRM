@@ -784,7 +784,7 @@ headers: { Authorization: `Bearer ${token}` },
 });
 
 if (response.status !== 200) throw new Error("Failed to fetch data");
-yardOrders = response.data.filter(order =>
+yardOrders = response.data.orders.filter(order =>
 order.additionalInfo.some(info => info.paymentStatus === "Card charged")
 );
 let totalSpend = 0;  
