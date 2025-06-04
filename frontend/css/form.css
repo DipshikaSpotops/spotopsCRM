@@ -398,7 +398,6 @@ button + button {
     margin-left: 10px;
 }
 .submitYardNotes {
-    align-self: flex-end;
     padding: 8px 16px;
     background-color: #ff914d;
     border: 1 px solid black;
@@ -494,7 +493,7 @@ cursor: pointer;
 }
 #sendPOBtn {
     background-color: #ff914d;
-    border: 1cap solid black;
+    border: 1cap solid #d3cbc5;;
     padding: 10px 16px;
     border-radius: 20px;
     color: black;
