@@ -483,7 +483,7 @@ window.location.href = "login_signup.html";
 // Function to create pagination controls
 function createPaginationControls(totalPages) {
   const paginationControls = $('#pagination-controls');
-  paginationControls.empty(); // Clear existing buttons
+  paginationControls.empty(); 
 
   if (totalPages > 1) {
     // Left arrow for "Previous" page
@@ -786,9 +786,9 @@ if (team in teamAgentsMap) {
     teamAgentsMap[team].includes(order.salesAgent)
   );
 }
-    allOrders = allOrdersCombined;
-const totalCount = response.data.totalCount;
+const totalCount = allOrders.totalCount;
     const totalPages = Math.ceil(totalCount / limit);
+    console.log("totalPages",totalPages,"total")
     currentPage = page;
     document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
     renderTableRows(1, allOrders);
