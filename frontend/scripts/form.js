@@ -3972,18 +3972,29 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   document.getElementById('shipping').textContent = shipping ? `$${shipping}` : '-';
   document.getElementById('grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 
-  const templateClone = document.getElementById('poTemplate').cloneNode(true);
-  templateClone.style.display = 'block';
-  templateClone.id = ''; 
-  document.body.appendChild(templateClone);
+const poTemplate = document.getElementById('poTemplate');
+const clone = poTemplate.cloneNode(true);
+clone.style.display = 'block';         // Show the cloned template
+clone.id = '';                         // Remove duplicate ID
+document.body.appendChild(clone);
 
-  // Generate PDF
-  const pdfBlob = await html2pdf().from(templateClone).outputPdf('blob');
-  document.body.removeChild(templateClone);
+// Wait for DOM to layout (1 frame)
+await new Promise(resolve => requestAnimationFrame(resolve));
+
+// Generate PDF with filename
+const fileName = `${order.orderNo}-PO.pdf`;
+const pdfBlob = await html2pdf().set({
+  filename: fileName,
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+}).from(clone).outputPdf('blob');
+
+document.body.removeChild(clone);
+
 
   // Create FormData with PDF and any images
   const formData = new FormData();
-  formData.append('pdf', pdfBlob, 'po.pdf');
+  formData.append('pdf', pdfBlob, `${order.orderNo}-PO.pdf`);
 
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {

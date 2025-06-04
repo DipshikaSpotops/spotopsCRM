@@ -1496,6 +1496,21 @@ scrollbar-color: #29638c #141b2d;
   justify-content: space-between;
   gap: 20px;
   margin-top: 30px;
+  flex-wrap: wrap;
+}
+.po-wrapper {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  overflow: hidden;
+}
+.po-table {
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.po-table td, .po-table th {
+  white-space: normal;
 }
 
 .card-info-table,
