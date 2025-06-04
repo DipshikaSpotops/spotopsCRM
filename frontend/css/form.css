@@ -403,16 +403,36 @@ text-align: center;
     border-radius: 6px;
     resize: vertical;
 }
+button + button {
+    margin-left: 10px;
+}
 .submitYardNotes {
     align-self: flex-end;
     padding: 8px 16px;
-    background-color: #007bff;
-    border: none;
+    background-color: #ff914d;
+    border: 1 px solid black;
     color: white;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
     margin-right: 4px;
+}
+button.btn,
+button#editYardInfo,
+button#sendPOBtn,
+button#sendEmailButton,
+button#voidLabel,
+button#cancelShipment,
+input#submit {
+    height: 42px;
+    padding: 0 20px;
+    font-size: 15px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    white-space: nowrap;
 }
 #submitYardNotes:hover {
     background-color: #0056b3;
@@ -459,7 +479,7 @@ cursor: pointer;
 #editYardInfo {
     border-radius: 20px;
     background-color: #ff914d;
-    border: none;
+    border: 1px solid black;
     padding: 10px 20px;
     color: white;
     font-weight: bold;
@@ -478,8 +498,8 @@ cursor: pointer;
     margin: 24px 0;
 }
 #sendPOBtn {
-    background-color: #28a745;
-    border: none;
+    background-color: #ff914d;
+    border: non1 px solid black;
     padding: 10px 16px;
     border-radius: 20px;
     color: white;
