@@ -184,7 +184,7 @@ $("#viewAlltasks").on("click", function () {
   }
 });
   
- const allOrders = response.data.orders || [];
+ const allOrders = response.data  [];
 
 yardOrders = allOrders.filter(order =>
   order.additionalInfo.some(info =>
