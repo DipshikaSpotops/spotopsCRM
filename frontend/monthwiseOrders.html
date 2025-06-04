@@ -358,7 +358,7 @@ sortTable(index, type);
 function renderTableRows(page, orders = allOrders) {
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  const ordersForPage = orders;
+  const ordersForPage = orders.slice(start, end);;
 
   const tbody = $("#infoTable");
   tbody.empty(); // Clear old rows
