@@ -358,7 +358,7 @@ sortTable(index, type);
 function renderTableRows(page, orders = allOrders) {
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  const ordersForPage = orders.slice(start, end);
+  const ordersForPage = orders;
 
   const tbody = $("#infoTable");
   tbody.empty(); // Clear old rows
@@ -502,21 +502,20 @@ function createPaginationControls(totalPages) {
     `);
   }
 }
-
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
-    renderTableRows(currentPage);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+    const selectedMonth = $("#monthYearPicker").val();
+    fetchOrdersForSelectedMonth(selectedMonth, currentPage);
   }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+  const selectedMonth = $("#monthYearPicker").val();
+  const totalPages = Math.ceil(allOrders.length / rowsPerPage); // you can store totalPages globally too
   if (currentPage < totalPages) {
     currentPage++;
-    renderTableRows(currentPage);
-    createPaginationControls(totalPages);
+    fetchOrdersForSelectedMonth(selectedMonth, currentPage);
   }
 });
 
@@ -767,37 +766,16 @@ $("#filterButton").click(async function () {
 
 async function fetchOrdersForSelectedMonth(monthYear) {
   const [year, month] = monthYear.split("-");
+  const limit = 25;
   $("#loadingMessage").show();
 
-  const limit = 25;
-  let allOrdersCombined = [];
-
   try {
-    // Step 1: Fetch first page
-    const firstResponse = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-      params: { month, year, page: 1, limit },
+    const response = await axios.get("https://www.spotops360.com/orders/monthly", {
+      params: { month, year, page, limit },
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
-    allOrdersCombined.push(...firstResponse.data.orders);
-    const totalCount = firstResponse.data.totalCount;
-    const totalPages = Math.ceil(totalCount / limit);
-
-    // Step 2: Fetch remaining pages in parallel
-    const promises = [];
-    for (let p = 2; p <= totalPages; p++) {
-      promises.push(
-        axios.get(`https://www.spotops360.com/orders/monthly`, {
-          params: { month, year, page: p, limit },
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        })
-      );
-    }
-
-    const responses = await Promise.all(promises);
-    responses.forEach(res => {
-      allOrdersCombined.push(...res.data.orders);
-    });
+    allOrders = response.data.orders;
     const teamAgentsMap = {
   Shankar: ["Mark", "John"],
   Vinutha: ["Michael", "David"]
