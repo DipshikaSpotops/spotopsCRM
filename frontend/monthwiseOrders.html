@@ -787,8 +787,10 @@ if (team in teamAgentsMap) {
   );
 }
     allOrders = allOrdersCombined;
-
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${allOrders.length}`;
+const totalCount = response.data.totalCount;
+    const totalPages = Math.ceil(totalCount / limit);
+    currentPage = page;
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
     renderTableRows(1, allOrders);
     createPaginationControls(Math.ceil(allOrders.length / 25));
   } catch (error) {
