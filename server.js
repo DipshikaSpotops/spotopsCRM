@@ -1139,7 +1139,7 @@ console.log("salesPersonWise",month,year);
   // Construct the start and end date for the range
   const startDate = new Date(`${year}-${month}-01`);
   const endDate = new Date(startDate);
-  endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+  endDate.setMonth(endDate.getMonth() + 1);  
 
   const orders = await Order.find({
     orderDate: {
@@ -1154,38 +1154,43 @@ console.error("Error fetching salesPersonOrders:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
-app.get('/orders/monthly', (req, res) => {
-  const { month, year, page = 1, limit = 25, filterBy } = req.query;
+app.get("/orders/monthly", async (req, res) => {
+  try {
+    const { month, year, page = 1, limit = 25, filterBy, salesAgent } = req.query;
 
-  if (!month || !year) {
-    return res.status(400).json({ error: "Missing month/year." });
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Construct the date range
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    // Base query
+    const query = {
+      orderDate: { $gte: startDate, $lt: endDate },
+    };
+    if (filterBy === "collectRefund") {
+      query["additionalInfo.collectRefundCheckbox"] = "Ticked";
+    }
+
+    const totalCount = await Order.countDocuments(query);
+    const orders = await Order.find(query)
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .lean(); 
+
+    res.json({
+      totalCount,
+      page: parseInt(page),
+      limit: parseInt(limit),
+      orders,
+    });
+  } catch (err) {
+    console.error("Error fetching monthly orders:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
-
-  const filteredByMonthYear = sampleOrders.filter(order => {
-    const orderDate = new Date(order.orderDate);
-    const orderMonth = orderDate.toLocaleString('en-US', { month: 'short' });
-    const orderYear = orderDate.getFullYear().toString();
-    return orderMonth === month && orderYear === year;
-  });
-
-  // Special logic for Collect Refund page
-  let finalFilteredOrders = filteredByMonthYear;
-  if (filterBy === 'collectRefund') {
-    finalFilteredOrders = filteredByMonthYear.filter(order =>
-      order.additionalInfo?.some(info => info.collectRefundCheckbox === "Ticked")
-    );
-  }
-
-  const totalCount = finalFilteredOrders.length;
-  const startIndex = (page - 1) * limit;
-  const paginatedOrders = finalFilteredOrders.slice(startIndex, startIndex + parseInt(limit));
-
-  return res.json({
-    totalCount,
-    page: parseInt(page),
-    limit: parseInt(limit),
-    orders: paginatedOrders
-  });
 });
 // for cancelled
 app.get("/orders/cancelled", async (req, res) => {
