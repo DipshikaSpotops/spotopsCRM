@@ -176,16 +176,11 @@ $("#viewAlltasks").on("click", function () {
   try {
   $("#loadingMessage").show();
   const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-  headers: { Authorization: `Bearer ${token}` },
-  params: {
-    month,
-    year,
-    limit: "all"
-  }
-});
+  params: { month, year, page: 1, limit },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
   
- const allOrders = response.data || [];
-
+ const allOrders = response.data.orders;
 yardOrders = allOrders.filter(order =>
   order.additionalInfo.some(info =>
     info.collectRefundCheckbox === "Ticked"
