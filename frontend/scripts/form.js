@@ -3920,7 +3920,7 @@ $("#cancelShipment").on("click", function () {
     });
 });
 document.getElementById('sendPOBtn').addEventListener('click', async function () {
-  const i = yardIndex; 
+  const i = yardIndex - 1; 
   console.log("yardIndex",i)
   const order = commonOrderRes;
   console.log("clicked sendPO btn",order.orderNo);
