@@ -486,7 +486,7 @@ cursor: pointer;
 }
 #sendPOContainer {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     align-items: center;
     gap: 8px;
     margin: 24px 0;
@@ -502,6 +502,7 @@ cursor: pointer;
 }
 #poImages {
     max-width: 80%;
+    margin-top: 15px;
 }
 #notesContainer {
     margin-top: 30px;
