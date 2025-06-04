@@ -786,7 +786,7 @@ if (team in teamAgentsMap) {
     teamAgentsMap[team].includes(order.salesAgent)
   );
 }
-const totalCount = allOrders.totalCount;
+const totalCount = allOrders.length;
     const totalPages = Math.ceil(totalCount / limit);
     console.log("totalPages",totalPages,"total")
     currentPage = page;
