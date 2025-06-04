@@ -210,15 +210,12 @@ $("#viewAlltasks").on("click", function () {
 async function fetchYardInfo(month, year) {
   try {
     $("#loadingMessage").show();
-    const limit = 25;
-
-    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-      params: { month, year, page: 1, limit },
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-
-    console.log("orders in collect refund", response);
-    const allOrders = response.data.orders; // ✅ only declare once
+   const allOrders = await fetchAllMonthlyOrders({
+  month,
+  year,
+  token,
+  filterBy: "collectRefund"
+});
 
     yardOrders = allOrders.filter(order =>
       order.additionalInfo.some(info =>
