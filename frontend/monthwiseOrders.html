@@ -793,8 +793,6 @@ async function fetchOrdersForSelectedMonth(monthYear) {
     responses.forEach(res => {
       orders.push(...res.data.orders);
     });
-
-    // ✅ Team-based filtering
     const teamAgentsMap = {
       Shankar: ["Mark", "John"],
       Vinutha: ["Michael", "David"]

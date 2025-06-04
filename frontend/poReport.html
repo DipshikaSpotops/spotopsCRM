@@ -775,46 +775,85 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 await fetchYardInfo(month, year);
 
+async function fetchAllMonthlyOrders({ month, year, token }) {
+  let page = 1;
+  const limit = 100;
+  let allOrders = [];
+  let hasMore = true;
+
+  while (hasMore) {
+    const response = await axios.get("https://www.spotops360.com/orders/monthly", {
+      params: { month, year, page, limit },
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const orders = response.data.orders;
+    if (!orders.length) break;
+
+    allOrders = allOrders.concat(orders);
+    page++;
+    hasMore = orders.length === limit;
+  }
+
+  return allOrders;
+}
 // Fetch yard info data for a specific month and 
 async function fetchYardInfo(month, year) {
-try {
-$("#loadingMessage").show();
-const response = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: { Authorization: `Bearer ${token}` },
-});
+  try {
+    $("#loadingMessage").show();
 
-if (response.status !== 200) throw new Error("Failed to fetch data");
-yardOrders = response.data.orders.filter(order =>
-order.additionalInfo.some(info => info.paymentStatus === "Card charged")
-);
-let totalSpend = 0;  
-yardOrders.forEach(order => {
-let orderSpend = 0;  
-order.additionalInfo.forEach(info => {
-if (info.paymentStatus === "Card charged") {
-const shippingCost = info.shippingDetails ? 
-parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 : 0;
-const partPrice = parseFloat(info.partPrice || 0);
-const others = parseFloat(info.others || 0);
-const refundedAmount = parseFloat(info.refundedAmount || 0);
+    const allOrders = await fetchAllMonthlyOrders({ month, year, token });
 
-const itemSpend = partPrice + others + shippingCost - refundedAmount;
-orderSpend += itemSpend;  
-}
-});
-order.totalSpend = orderSpend;  
-totalSpend += orderSpend;  
-});
-console.log("Total spend across all orders:", totalSpend);
-console.log("yardOrders with calculated spends", yardOrders);
-renderTableRows(currentPage, yardOrders);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-} catch (error) {
-console.error("Error fetching yard info:", error);
-alert("Failed to fetch data");
-} finally {
-$("#loadingMessage").hide();
-}
+    // Optional: Filter by team-based sales agents
+    const teamAgentsMap = {
+      Shankar: ["Mark", "John"],
+      Vinutha: ["Michael", "David"]
+    };
+    if (team in teamAgentsMap) {
+      yardOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    } else {
+      yardOrders = allOrders;
+    }
+
+    // Filter for paymentStatus
+    yardOrders = yardOrders.filter(order =>
+      order.additionalInfo.some(info => info.paymentStatus === "Card charged")
+    );
+
+    // Calculate spends
+    let totalSpend = 0;
+    yardOrders.forEach(order => {
+      let orderSpend = 0;
+      order.additionalInfo.forEach(info => {
+        if (info.paymentStatus === "Card charged") {
+          const shippingCost = info.shippingDetails
+            ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0
+            : 0;
+          const partPrice = parseFloat(info.partPrice || 0);
+          const others = parseFloat(info.others || 0);
+          const refundedAmount = parseFloat(info.refundedAmount || 0);
+
+          const itemSpend = partPrice + others + shippingCost - refundedAmount;
+          orderSpend += itemSpend;
+        }
+      });
+      order.totalSpend = orderSpend;
+      totalSpend += orderSpend;
+    });
+
+    console.log("Total spend:", totalSpend);
+    currentPage = 1;
+    renderTableRows(currentPage, yardOrders);
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+
+  } catch (error) {
+    console.error("Error fetching yard info:", error);
+    alert("Failed to fetch data");
+  } finally {
+    $("#loadingMessage").hide();
+  }
 }
 
 function renderTableRows(page, data = yardOrders) {
@@ -1009,20 +1048,20 @@ createPaginationControls(Math.ceil(yardOrders.length / 25));
 
 // "Previous" and "Next" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
-if (currentPage > 1) {
-currentPage--;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-}
+  if (currentPage > 1) {
+    currentPage--;
+    renderTableRows(currentPage, yardOrders);
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+  }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-const totalPages = Math.ceil(yardOrders.length / 25);
-if (currentPage < totalPages) {
-currentPage++;
-renderTableRows(currentPage);
-createPaginationControls(totalPages);
-}
+  const totalPages = Math.ceil(yardOrders.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage, yardOrders);
+    createPaginationControls(totalPages);
+  }
 });
 // Filter by month and year
 $("#filterButton").click(async function () {
