@@ -3963,7 +3963,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     Part Description: ${order.desc}<br>
     VIN: ${order.vin || ''}<br>
     Part No: ${order.partNo || ''}<br>
-    Stock No: ${yard.stockNo}<br>
+    Stock No: ${yard.stockNo || ""}<br>
     Warranty: ${yard.warranty} days
   `;
 
@@ -3974,8 +3974,8 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
 
 const poTemplate = document.getElementById('poTemplate');
 const clone = poTemplate.cloneNode(true);
-clone.style.display = 'block';         // Show the cloned template
-clone.id = '';                         // Remove duplicate ID
+clone.style.display = 'block';         
+clone.id = '';                        
 document.body.appendChild(clone);
 
 // Wait for DOM to layout (1 frame)
@@ -4011,6 +4011,7 @@ formData.append('shippingDetails', order.additionalInfo[i].shippingDetails);
 formData.append('desc', order.desc);
 formData.append('userName', firstName);
 formData.append('recipientEmail', order.additionalInfo[i].email);
+formData.append('yardName', order.additionalInfo[i].yardName);
   // Send email request
   fetch('https://www.spotops360.com/send-po-email', {
     method: 'POST',
