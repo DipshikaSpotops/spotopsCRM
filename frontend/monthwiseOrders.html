@@ -764,7 +764,7 @@ $("#filterButton").click(async function () {
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-async function fetchOrdersForSelectedMonth(monthYear) {
+async function fetchOrdersForSelectedMonth(monthYear,page = 1) {
   const [year, month] = monthYear.split("-");
   const limit = 25;
   $("#loadingMessage").show();
