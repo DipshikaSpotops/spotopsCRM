@@ -764,41 +764,61 @@ $("#filterButton").click(async function () {
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-async function fetchOrdersForSelectedMonth(monthYear,page = 1) {
+async function fetchOrdersForSelectedMonth(monthYear) {
   const [year, month] = monthYear.split("-");
   const limit = 25;
   $("#loadingMessage").show();
 
   try {
-    const response = await axios.get("https://www.spotops360.com/orders/monthly", {
-      params: { month, year, page, limit },
+    const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
+      params: { month, year, page: 1, limit },
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
-    allOrders = response.data.orders;
-    const teamAgentsMap = {
-  Shankar: ["Mark", "John"],
-  Vinutha: ["Michael", "David"]
-};
-console.log("team",team)
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-const totalCount = allOrders.length;
+    const totalCount = firstResponse.data.totalCount;
     const totalPages = Math.ceil(totalCount / limit);
-    console.log("totalPages",totalPages,"total")
-    currentPage = page;
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${totalCount}`;
-    renderTableRows(1, allOrders);
-    createPaginationControls(Math.ceil(allOrders.length / 25));
+    let orders = [...firstResponse.data.orders];
+
+    const requests = [];
+    for (let p = 2; p <= totalPages; p++) {
+      requests.push(
+        axios.get("https://www.spotops360.com/orders/monthly", {
+          params: { month, year, page: p, limit },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
+      );
+    }
+
+    const responses = await Promise.all(requests);
+    responses.forEach(res => {
+      orders.push(...res.data.orders);
+    });
+
+    // ✅ Team-based filtering
+    const teamAgentsMap = {
+      Shankar: ["Mark", "John"],
+      Vinutha: ["Michael", "David"]
+    };
+    console.log("team", team);
+    if (team in teamAgentsMap) {
+      orders = orders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    allOrders = orders;
+    currentPage = 1;
+
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month - ${allOrders.length}`;
+    renderTableRows(currentPage, allOrders);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   } catch (error) {
     console.error("Error fetching orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
   }
-
-  $("#loadingMessage").hide();
 }
+
 
 
 $("#logoutLink").click(function () {
