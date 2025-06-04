@@ -19,6 +19,7 @@ const queryString = window.location.search.substring(1);
 // console.log("query string",queryString);
 const urlParams = new URLSearchParams(window.location.search);
 var orderNo = urlParams.get("orderNo");
+var commonOrderRes;
 var orderPlacedDate;
 var cancelledRefundAmount;
 var refundedAmount;
@@ -63,6 +64,7 @@ var currentDateTime= `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
+commonOrderRes = data;
 orderPlacedDate = data.orderDate;
 cancelledRefundAmount = data.cancelledRefAmount || data.custRefAmount || data.custRefAmount;
 salePrice = data.soldP;
@@ -3915,6 +3917,103 @@ $("#cancelShipment").on("click", function () {
     })
     .catch((error) => {
       console.error("Error fetching order data:", error);
+    });
+});
+document.getElementById('sendPOBtn').addEventListener('click', async function () {
+  const i = yardIndex; 
+  console.log("yardIndex",i)
+  const order = commonOrderRes;
+  console.log("clicked sendPO btn",order.orderNo);
+  const today = new Date().toLocaleDateString('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  
+  const yard = order.additionalInfo[i];
+  const shippingDetail = yard.shippingDetails || '';
+  let shipping = 0;
+  if (shippingDetail.includes('Yard shipping')) {
+    const match = shippingDetail.match(/Yard shipping:\s*(\d+)/);
+    if (match) shipping = parseFloat(match[1]);
+  }
+
+  const partPrice = parseFloat(yard.partPrice);
+  const grandTotal = partPrice + shipping;
+  document.getElementById('po-no').textContent = order.orderNo;
+  document.getElementById('po-date').textContent = today;
+
+  document.getElementById('yard-info').innerHTML = `
+    ${yard.yardName}<br>
+    ${yard.street}, ${yard.city}, ${yard.state} ${yard.zipcode}
+  `;
+
+  document.getElementById('ship-to').innerHTML = `
+    ${order.fName} ${order.lName}<br>
+    ${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressState}, ${order.sAddressAcountry}
+  `;
+
+  document.getElementById('part-desc').innerHTML = `
+    Year: ${order.year}<br>
+    Make: ${order.make}<br>
+    Model: ${order.model}<br>
+    Part: ${order.pReq}<br>
+    Part Description: ${order.desc}<br>
+    VIN: ${order.vin || ''}<br>
+    Part No: ${order.partNo || ''}<br>
+    Stock No: ${yard.stockNo}<br>
+    Warranty: ${yard.warranty} days
+  `;
+
+  document.getElementById('amount').textContent = `$${partPrice}`;
+  document.getElementById('subtotal').textContent = `$${partPrice}`;
+  document.getElementById('shipping').textContent = shipping ? `$${shipping}` : '-';
+  document.getElementById('grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
+
+  const templateClone = document.getElementById('poTemplate').cloneNode(true);
+  templateClone.style.display = 'block';
+  templateClone.id = ''; 
+  document.body.appendChild(templateClone);
+
+  // Generate PDF
+  const pdfBlob = await html2pdf().from(templateClone).outputPdf('blob');
+  document.body.removeChild(templateClone);
+
+  // Create FormData with PDF and any images
+  const formData = new FormData();
+  formData.append('pdf', pdfBlob, 'po.pdf');
+
+  const images = document.getElementById('poImages').files;
+  for (let j = 0; j < images.length; j++) {
+    formData.append('images', images[j]);
+  }
+formData.append('orderNo', order.orderNo);
+formData.append('year', order.year);
+formData.append('make', order.make);
+formData.append('model', order.model);
+formData.append('pReq', order.pReq);
+formData.append('agentName', order.additionalInfo[i].agentName);
+formData.append('partPrice', order.additionalInfo[i].partPrice);
+formData.append('shippingDetails', order.additionalInfo[i].shippingDetails);
+formData.append('desc', order.desc);
+formData.append('userName', firstName);
+formData.append('recipientEmail', order.additionalInfo[i].email);
+  // Send email request
+  fetch('https://www.spotops360.com/send-po-email', {
+    method: 'POST',
+    body: formData,
+  })
+    .then(res => {
+      if (res.ok) {
+        alert('PO sent successfully!');
+      } else {
+        alert('Failed to send PO.');
+      }
+    })
+    .catch(err => {
+      console.error('Error sending PO:', err);
+      alert('An error occurred.');
     });
 });
 

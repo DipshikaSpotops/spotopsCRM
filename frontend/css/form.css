@@ -1491,6 +1491,30 @@ scrollbar-color: #29638c #141b2d;
     height: 3.1vh;
     color: grey;
 }
+.po-card-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card-info-table,
+.summary-table {
+  width: 48%;
+}
+
+.card-info-table th,
+.summary-table th {
+  background-color: #384763;
+  color: white;
+  text-align: center;
+}
+
+.grand-total-table td {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
 
  @media screen and (max-width: 768px) {
   .replacement-container {

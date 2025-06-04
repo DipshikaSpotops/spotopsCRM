@@ -1382,6 +1382,183 @@ Save
     <div id="uploadedImagesContainer" style="margin-top: 10px; display: flex; flex-wrap: wrap;"></div>
   </div>
 </div>
+<!-- purchase order modal -->
+ <div id="poTemplate" style="display: none;">
+  <style>
+    .po-wrapper {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      border: 1px solid #ccc;
+    }
+
+    .po-header {
+      background: #002b55;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .po-title {
+      color: #d63031;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .po-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .po-box {
+      width: 30%;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .po-box h4 {
+      background: #0b2545;
+      color: white;
+      padding: 5px;
+      margin: -10px -10px 10px -10px;
+      font-size: 16px;
+    }
+
+    .po-table, .po-table th, .po-table td {
+      border: 1px solid #ccc;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+
+    .po-table {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .summary-table td {
+      padding: 8px 16px;
+    }
+
+    .total-row {
+      font-weight: bold;
+    }
+
+    .special-instructions {
+      margin-top: 20px;
+      font-size: 12px;
+    }
+  </style>
+
+  <div class="po-wrapper">
+    <div class="po-header">
+      <h2>AUTO PARTS GROUP CORP</h2>
+      <div>5306 Blaney Way, Dallas, Texas, 75227</div>
+      <div>(866) 207-5533 • purchase@auto-partsgroup.com</div>
+    </div>
+
+    <div class="po-title">PURCHASE ORDER</div>
+
+    <div style="margin-top: 10px;">
+      <strong>PO NO:</strong> <span id="po-no"></span><br>
+      <strong>PO Date:</strong> <span id="po-date"></span><br>
+      <strong>Tax ID:</strong> 32093721457
+    </div>
+
+    <div class="po-section">
+      <div class="po-box">
+        <h4>Purchase Order To</h4>
+        <div id="yard-info"></div>
+      </div>
+      <div class="po-box">
+        <h4>Ship To</h4>
+        <div id="ship-to"></div>
+      </div>
+      <div class="po-box">
+        <h4>Bill To</h4>
+        <div>
+          Auto Parts Group Corp<br>
+          5306 Blaney Way<br>
+          Dallas, Texas, 75227<br>
+          purchase@auto-partsgroup.com<br>
+          +1 (866) 207-5533
+        </div>
+      </div>
+    </div>
+
+    <table class="po-table">
+      <thead>
+        <tr>
+          <th colspan="2">Part Description</th>
+          <th>Quantity</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="2" id="part-desc"></td>
+          <td>01</td>
+          <td id="amount"></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  <!-- Right: Payment Summary Table -->
+  <div class="po-card-summary">
+  <!-- Left: Card Info Table -->
+  <table class="po-table card-info-table">
+    <thead>
+      <tr>
+        <th colspan="2">Card Info</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Card Number</td>
+        <td><strong>•••• •••• •••• 7195</strong></td>
+      </tr>
+      <tr>
+        <td>Expiration Date</td>
+        <td><strong>05/29</strong></td>
+      </tr>
+      <tr>
+        <td>CVV</td>
+        <td><strong>***</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+    <table class="summary-table">
+      <tr><td>Sub total:</td><td id="subtotal"></td></tr>
+      <tr><td>Shipping:</td><td id="shipping"></td></tr>
+      <tr><td>Tax:</td><td>Included</td></tr>
+      <tr class="total-row"><td>Grand Total:</td><td id="grand-total"></td></tr>
+    </table>
+
+    <div class="special-instructions">
+      <strong>Special Instructions:</strong><br>
+      • Please Identify yourself with the Purchase Order No.<br>
+      • Please send Pictures to purchase@auto-partsgroup.com before Shipping.<br>
+      • Please pack the part safely to avoid any Damage during Shipping. We will not be Accountable for any shipping damage that occured due to poor or insufficient packaging.<br>
+      • Ensure “No Tags or Labels” and that it's Blind shipping.<br>
+      • Send Tracking No. and Carrier info to purchase@auto-partsgroup.com<br>
+      • By charging the above Card Details you agree with the Termas and Conditions metioned on this Purchase Order.<br>
+    </div>
+    <div class="po-footer">
+  <div class="po-footer-left">
+    📍 5306 Blaney Way, Dallas, Texas, 75227
+  </div>
+  <div class="po-footer-right">
+    🌐 www.50starsautoparts.com<br />
+    📞 (866) 207-5533
+  </div>
+</div>
+  </div>
+</div>
 <script>
 </script>
 </body>   

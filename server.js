@@ -4283,6 +4283,95 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   res.status(500).json({ message: "Server error", error });
   }
   });
+  // send PO
+  app.post('/send-po-email', upload.any(), async (req, res) => {
+    console.log("sending PO mail");
+  try {
+    const {
+      orderNo,
+      year,
+      make,
+      model,
+      pReq,
+      agentName,
+      partPrice,
+      shippingDetails,
+      desc,
+      yardName,
+      userName, 
+      recipientEmail 
+    } = req.body;
+
+    let shippingLine = '';
+    if (shippingDetails.includes('Own shipping')) {
+      shippingLine = 'Own Shipping (Auto Parts Group Corp)';
+    } else if (shippingDetails.includes('Yard shipping')) {
+      const match = shippingDetails.match(/Yard shipping:\s*(\d+)/i);
+      shippingLine = match ? `Yard Shipping - $${match[1]}` : 'Yard Shipping';
+    } else {
+      shippingLine = 'Shipping Info Unavailable';
+    }
+
+    const subject = `Purchase_Order - ${orderNo} // ${year} ${make} ${model} - ${pReq}`;
+    const emailText = `
+Hello ${agentName},
+
+Greetings, this is ${userName} from Auto Parts Group Corp. We want to place an order with you for the following. Also, find the PO attached to this email.
+
+Purchase Order To: ${yardName}
+Part Price: $${partPrice} (incl. taxes)
+Shipping: ${shippingLine}
+
+Part Required: ${pReq}
+Year: ${year}
+Make : ${make}
+Model: ${model}
+Description: ${desc}
+
+Notes: 
+Please provide the transaction receipt after you have charged our card.
+Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.
+Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.
+If there are any discrepancies or questions regarding this order, please contact us immediately.
+
+NOTE: BLIND SHIPPING 
+NOTE: PROVIDE PICTURES BEFORE SHIPPING
+
+
+${userName} 
+Customer Success
+(866) 207-5533  Auto Parts Group Corp
+5306 Blaney Way, Dallas, Texas, 75227
+`.trim();
+
+    const attachments = req.files.map(file => ({
+      filename: file.originalname,
+      content: file.buffer,
+    }));
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    const mailOptions = {
+      from: `"Auto Parts Group Corp" <${process.env.EMAIL_USER}>`,
+      to: recipientEmail || 'fallback@example.com',
+      subject,
+      text: emailText,
+      attachments
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('Email sent successfully');
+  } catch (err) {
+    console.error('Failed to send email:', err);
+    res.status(500).send('Email failed');
+  }
+});
 // to check orderNo existence
 app.get('/orders/checkOrderNo/:orderNo', async (req, res) => {
 const { orderNo } = req.params;
