@@ -505,17 +505,17 @@ function createPaginationControls(totalPages) {
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
-    const selectedMonth = $("#monthYearPicker").val();
-    fetchOrdersForSelectedMonth(selectedMonth, currentPage);
+    renderTableRows(currentPage, allOrders);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  const selectedMonth = $("#monthYearPicker").val();
-  const totalPages = Math.ceil(allOrders.length / rowsPerPage); // you can store totalPages globally too
+  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
-    fetchOrdersForSelectedMonth(selectedMonth, currentPage);
+    renderTableRows(currentPage, allOrders);
+    createPaginationControls(totalPages);
   }
 });
 
