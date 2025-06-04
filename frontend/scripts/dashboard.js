@@ -236,7 +236,7 @@ const totalOrdersData = Array(daysInMonth).fill(0);
         new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
       );
       const orderDay = orderDateInDallas.getDate() - 1;
-      if (orderDay >= 0 && orderDay < todayDate) {
+      if (orderDay >= 0 && orderDay < daysInMonth) {
         totalOrdersData[orderDay] += 1;
       }
     });
