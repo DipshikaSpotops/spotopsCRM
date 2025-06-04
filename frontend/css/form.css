@@ -259,21 +259,22 @@ margin-top: 10px;
 }
 
 #editYardPopup {
-display: block;
+ display: block;
     background-color: white;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-height: 80vh;
-    overflow-y: auto;
     width: 90%;
-    max-width: 700px;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
     border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
     z-index: 1050;
+    font-family: Arial, sans-serif;
 }
 #editYardDetailsModal{
 background-color: white;
@@ -354,16 +355,13 @@ text-decoration: underline;
 color: #3276e1;
 }
 #comment-box {
-border-radius: 4px;
-overflow-y: scroll;
-padding: 10px;
-background: #f8f9fa;
-border: 1px solid #c0c0c0;
-margin: -2% 24% 1% 0%;
-display: block;
-border: 1px solid #c0c0c0;
-height: 26vh;
-width: 100%;
+    width: 100%;
+    height: 160px;
+    border: 1px solid #c0c0c0;
+    border-radius: 6px;
+    padding: 12px;
+    background: #f8f9fa;
+    overflow-y: auto;
 }
 
 #comment-box li {
@@ -399,20 +397,24 @@ text-align: center;
 #noteInput {
     width: 100%;
     height: 60px;
-    border: 1px solid #c0c0c0;
-    border-radius: 4px;
+    margin-top: 16px;
     padding: 10px;
-    margin-top: 10px;
-    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     resize: vertical;
 }
-.sudmitYardNotes {
-    margin-top: 10px;
-    border-radius: 20px;
-    background-color: grey;
+.submitYardNotes {
+    margin-top: 12px;
+    padding: 10px 16px;
+    background-color: #007bff;
     border: none;
-    padding: 8px 16px;
-    float: right;
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+#submitYardNotes:hover {
+    background-color: #0056b3;
 }
 .container form {
     display: flex;
@@ -438,11 +440,61 @@ cursor: pointer;
 }
 
 #editPopInfo {
-margin: 0% 31% 0% 18%;
-display: flex;
-align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+#refund {
+    border-radius: 25px;
+    background-color: black;
+    color: white;
+    padding: 10px 16px;
+    font-size: 16px;
+    border: none;
+    width: 60%;
+}
+#editYardInfo {
+    border-radius: 20px;
+    background-color: #ff914d;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#editYardInfo:hover {
+    background-color: #ff7b26;
+}
+#sendPOContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 24px 0;
+}
+#sendPOBtn {
+    background-color: #28a745;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+#poImages {
+    max-width: 80%;
+}
+#notesContainer {
+    margin-top: 30px;
+    text-align: center;
 }
 
+#notesContainer h2 {
+    margin-bottom: 10px;
+}
 .input-group-text {
 font-weight: bold;
 }
