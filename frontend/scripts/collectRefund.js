@@ -180,7 +180,7 @@ $("#viewAlltasks").on("click", function () {
   params: { month, year, page: 1, limit },
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
-  
+  console.log("orders in collect refund",response);
  const allOrders = response.data.orders;
 yardOrders = allOrders.filter(order =>
   order.additionalInfo.some(info =>
