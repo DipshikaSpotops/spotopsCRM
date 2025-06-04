@@ -490,6 +490,7 @@ cursor: pointer;
     align-items: center;
     gap: 8px;
     margin: 24px 0;
+    padding-left: 15%;
 }
 #sendPOBtn {
     background-color: #ff914d;
