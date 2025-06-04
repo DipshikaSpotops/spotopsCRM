@@ -1154,6 +1154,39 @@ console.error("Error fetching salesPersonOrders:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+app.get('/orders/monthly', (req, res) => {
+  const { month, year, page = 1, limit = 25, filterBy } = req.query;
+
+  if (!month || !year) {
+    return res.status(400).json({ error: "Missing month/year." });
+  }
+
+  const filteredByMonthYear = sampleOrders.filter(order => {
+    const orderDate = new Date(order.orderDate);
+    const orderMonth = orderDate.toLocaleString('en-US', { month: 'short' });
+    const orderYear = orderDate.getFullYear().toString();
+    return orderMonth === month && orderYear === year;
+  });
+
+  // Special logic for Collect Refund page
+  let finalFilteredOrders = filteredByMonthYear;
+  if (filterBy === 'collectRefund') {
+    finalFilteredOrders = filteredByMonthYear.filter(order =>
+      order.additionalInfo?.some(info => info.collectRefundCheckbox === "Ticked")
+    );
+  }
+
+  const totalCount = finalFilteredOrders.length;
+  const startIndex = (page - 1) * limit;
+  const paginatedOrders = finalFilteredOrders.slice(startIndex, startIndex + parseInt(limit));
+
+  return res.json({
+    totalCount,
+    page: parseInt(page),
+    limit: parseInt(limit),
+    orders: paginatedOrders
+  });
+});
 // for cancelled
 app.get("/orders/cancelled", async (req, res) => {
   try {
@@ -4219,7 +4252,7 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   service: "gmail",
   auth: {
   user: "purchase@auto-partsgroup.com",
-  pass: "zhtb vimk prif bdfg",
+  pass: "cuuy wetn vefs uiwx",
   },
   });
   var yardAgent = order.additionalInfo[yardIndex].agentName;
@@ -4235,8 +4268,8 @@ var stockNo = order.additionalInfo[yardIndex].stockNo || "NA";
 var yardEmail = order.additionalInfo[yardIndex].email;
   const mailOptions = {
   from: "purchase@auto-partsgroup.com",
-  to: `dipsikha.spotopsdigital@gmail.com`,
-  // to: `${yardEmail}`,
+  // to: `dipsikha.spotopsdigital@gmail.com`,
+  to: `${yardEmail}`,
   bcc:`purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com`,
   subject: `Request for Yard Refund | ${order.orderNo}`,
   html: `<p>Dear ${yardAgent},</p>
@@ -4283,95 +4316,6 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   res.status(500).json({ message: "Server error", error });
   }
   });
-  // send PO
-  app.post('/send-po-email', upload.any(), async (req, res) => {
-    console.log("sending PO mail");
-  try {
-    const {
-      orderNo,
-      year,
-      make,
-      model,
-      pReq,
-      agentName,
-      partPrice,
-      shippingDetails,
-      desc,
-      yardName,
-      userName, 
-      recipientEmail 
-    } = req.body;
-
-    let shippingLine = '';
-    if (shippingDetails.includes('Own shipping')) {
-      shippingLine = 'Own Shipping (Auto Parts Group Corp)';
-    } else if (shippingDetails.includes('Yard shipping')) {
-      const match = shippingDetails.match(/Yard shipping:\s*(\d+)/i);
-      shippingLine = match ? `Yard Shipping - $${match[1]}` : 'Yard Shipping';
-    } else {
-      shippingLine = 'Shipping Info Unavailable';
-    }
-
-    const subject = `Purchase_Order - ${orderNo} // ${year} ${make} ${model} - ${pReq}`;
-    const emailText = `
-Hello ${agentName},
-
-Greetings, this is ${userName} from Auto Parts Group Corp. We want to place an order with you for the following. Also, find the PO attached to this email.
-
-Purchase Order To: ${yardName}
-Part Price: $${partPrice} (incl. taxes)
-Shipping: ${shippingLine}
-
-Part Required: ${pReq}
-Year: ${year}
-Make : ${make}
-Model: ${model}
-Description: ${desc}
-
-Notes: 
-Please provide the transaction receipt after you have charged our card.
-Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.
-Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.
-If there are any discrepancies or questions regarding this order, please contact us immediately.
-
-NOTE: BLIND SHIPPING 
-NOTE: PROVIDE PICTURES BEFORE SHIPPING
-
-
-${userName} 
-Customer Success
-(866) 207-5533  Auto Parts Group Corp
-5306 Blaney Way, Dallas, Texas, 75227
-`.trim();
-
-    const attachments = req.files.map(file => ({
-      filename: file.originalname,
-      content: file.buffer,
-    }));
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: "purchase@auto-partsgroup.com",
-        pass: "zhtb vimk prif bdfg",
-      }
-    });
-
-    const mailOptions = {
-      from: `"purchase@auto-partsgroup.com`,
-      to: 'dipsikha.spotopsdigital@gmail.com',
-      subject,
-      text: emailText,
-      attachments
-    };
-
-    await transporter.sendMail(mailOptions);
-    res.status(200).send('Email sent successfully');
-  } catch (err) {
-    console.error('Failed to send email:', err);
-    res.status(500).send('Email failed');
-  }
-});
 // to check orderNo existence
 app.get('/orders/checkOrderNo/:orderNo', async (req, res) => {
 const { orderNo } = req.params;
