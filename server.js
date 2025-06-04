@@ -4352,14 +4352,14 @@ Customer Success
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        user: "purchase@auto-partsgroup.com",
+        pass: "zhtb vimk prif bdfg",
       }
     });
 
     const mailOptions = {
-      from: `"Auto Parts Group Corp" <${process.env.EMAIL_USER}>`,
-      to: recipientEmail || 'fallback@example.com',
+      from: `"purchase@auto-partsgroup.com`,
+      to: 'dipsikha.spotopsdigital@gmail.com',
       subject,
       text: emailText,
       attachments
