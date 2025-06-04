@@ -228,18 +228,18 @@ const { orders } = response.data;
 
 const daysInMonth = new Date(currentDallasDate.getFullYear(), currentDallasDate.getMonth() + 1, 0).getDate();
 const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
-const totalOrdersData = Array(daysInMonth).fill(0);
-    // const totalGPData = Array(daysInMonth).fill(0);
-
-    orders.forEach(order => {
-      const orderDateInDallas = new Date(
-        new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
-      );
-      const orderDay = orderDateInDallas.getDate() - 1;
-      if (orderDay >= 0 && orderDay < daysInMonth) {
-        totalOrdersData[orderDay] += 1;
-      }
-    });
+const totalOrdersData = Array.from({ length: daysInMonth }, (_, i) => {
+  return i < currentDallasDate.getDate() ? 0 : null;
+});
+orders.forEach(order => {
+  const orderDateInDallas = new Date(
+    new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
+  );
+  const orderDay = orderDateInDallas.getDate() - 1;
+  if (orderDay >= 0 && orderDay < daysInMonth) {
+    totalOrdersData[orderDay] = (totalOrdersData[orderDay] || 0) + 1;
+  }
+});
     console.log("Total Orders Data (daily):", totalOrdersData);
     const ctx = document.getElementById("dailyOrdersChart");
     if (!ctx) {
