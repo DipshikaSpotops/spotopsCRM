@@ -372,18 +372,6 @@ padding: 10px;
 border-radius: 4px;
 }
 
-#submit {
-background-color: #007bff;
-border-color: #007bff;
-color: white;
-padding: 5px 10px;
-border-radius: 5px;
-cursor: pointer;
-}
-#submit:hover {
-background-color: #0056b3;
-border-color: #004085;
-}
 
 #saleNote {
 border: 1px solid rgb(168, 164, 164);
@@ -481,7 +469,7 @@ cursor: pointer;
     background-color: #ff914d;
     border: 1px solid black;
     padding: 10px 20px;
-    color: white;
+    color: black;
     font-weight: bold;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     cursor: pointer;
@@ -499,10 +487,10 @@ cursor: pointer;
 }
 #sendPOBtn {
     background-color: #ff914d;
-    border: non1 px solid black;
+    border: 1cap solid black;
     padding: 10px 16px;
     border-radius: 20px;
-    color: white;
+    color: black;
     font-weight: bold;
     cursor: pointer;
 }
