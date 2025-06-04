@@ -171,17 +171,52 @@ $("#viewAlltasks").on("click", function () {
       const [year, monthNumber] = $("#monthYearPicker").val().split("-");
       const month = months[parseInt(monthNumber, 10) - 1];
   await fetchYardInfo(month, year);
+  async function fetchAllMonthlyOrders({ month, year, token, filterBy = null, salesAgent = null }) {
+  const limit = 25;
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const baseParams = { month, year, page: 1, limit };
+  if (filterBy) baseParams.filterBy = filterBy;
+  if (salesAgent) baseParams.salesAgent = salesAgent;
+
+  try {
+    const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
+      params: baseParams,
+      headers,
+    });
+
+    const totalCount = firstResponse.data.totalCount;
+    const allOrders = [...firstResponse.data.orders];
+    const totalPages = Math.ceil(totalCount / limit);
+
+    const promises = [];
+    for (let p = 2; p <= totalPages; p++) {
+      const pageParams = { ...baseParams, page: p };
+      promises.push(axios.get("https://www.spotops360.com/orders/monthly", { params: pageParams, headers }));
+    }
+
+    const responses = await Promise.all(promises);
+    responses.forEach(res => {
+      allOrders.push(...res.data.orders);
+    });
+
+    return allOrders;
+  } catch (error) {
+    console.error("Error fetching paginated orders:", error);
+    return [];
+  }
+}
+
   // Fetch yard info data for a specific month and 
   async function fetchYardInfo(month, year) {
   try {
   $("#loadingMessage").show();
-   const limit = 25;
-  const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-  params: { month, year, page: 1, limit },
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
+   const allOrders = await fetchAllMonthlyOrders({
+  month,
+  year,
+  token,
+  filterBy: "collectRefund"
+});
   console.log("orders in collect refund",response);
- const allOrders = response.data.orders;
 yardOrders = allOrders.filter(order =>
   order.additionalInfo.some(info =>
     info.collectRefundCheckbox === "Ticked"
