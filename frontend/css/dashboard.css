@@ -201,8 +201,19 @@ cursor: pointer;
   display: block;
 }
 @media (max-width: 1200px) {
-  .sidebar {
-    width: 20%;
+    .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    top: 70px; /* below navbar */
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(160deg, #101a18, #80cbbc);
+    transition: transform 0.3s ease;
+    z-index: 2000;
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
   }
 
   .main-content {
@@ -211,7 +222,7 @@ cursor: pointer;
   }
 
   .charts-container {
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     gap: 10px;
   }
 }
