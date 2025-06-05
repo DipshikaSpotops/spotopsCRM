@@ -4012,7 +4012,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   formData.append('yardName', yard.yardName);
 
   // Send email request
-  fetch('https://www.spotops360.com/send-po-email', {
+  fetch(`https://www.spotops360.com/sendPOEmailYard/${order.orderNo}`, {
     method: 'POST',
     body: formData,
   })

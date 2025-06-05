@@ -4321,6 +4321,107 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   res.status(500).json({ message: "Server error", error });
   }
   });
+  app.post("/orders/sendPOEmailYard/:orderNo", upload.single("pdf"), async (req, res) => {
+  console.log("Sending PO to yard...");
+
+  try {
+    const { orderNo } = req.params;
+    const order = await Order.findOne({ orderNo });
+
+    if (!order) return res.status(404).send("Order not found");
+
+    const pdfFile = req.file;
+    if (!pdfFile) return res.status(400).send("No PDF file uploaded");
+
+    const yardIndex = parseInt(req.body.yardIndex || "1") - 1;
+    const yard = order.additionalInfo[yardIndex];
+
+    if (!yard) return res.status(400).send("Invalid yard index");
+
+    // Extract relevant fields
+    const {
+      year, make, model, pReq, desc, vin, partNo, fName, lName,
+      sAddressStreet, sAddressCity, sAddressState, sAddressAcountry
+    } = order;
+
+    const {
+      agentName, yardName, street, city, state, zipcode,
+      shippingDetails = "", partPrice, email: yardEmail,
+      stockNo = "NA", warranty = "30", others = 0
+    } = yard;
+
+    let shipping = 0;
+    if (shippingDetails.includes("Yard shipping")) {
+      const match = shippingDetails.match(/Yard shipping:\s*(\d+)/);
+      if (match) shipping = parseFloat(match[1]);
+    }
+
+    const total = parseFloat(partPrice) + shipping + parseFloat(others);
+
+    // Set up nodemailer
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "purchase@auto-partsgroup.com",
+        pass: "cuuy wetn vefs uiwx",
+      },
+    });
+
+    const mailOptions = {
+      from: "purchase@auto-partsgroup.com",
+      to: yardEmail,
+      bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
+      subject: `Purchase Order | ${orderNo}`,
+      html: `
+        <p>Dear ${agentName},</p>
+        <p>Please find attached the Purchase Order for the following:</p>
+        <ul>
+          <li><strong>Order No:</strong> ${orderNo}</li>
+          <li><strong>Year/Make/Model:</strong> ${year} ${make} ${model}</li>
+          <li><strong>Part:</strong> ${pReq}</li>
+          <li><strong>Description:</strong> ${desc}</li>
+          <li><strong>VIN:</strong> ${vin || 'NA'}</li>
+          <li><strong>Part No:</strong> ${partNo || 'NA'}</li>
+          <li><strong>Stock No:</strong> ${stockNo}</li>
+          <li><strong>Warranty:</strong> ${warranty} days</li>
+        </ul>
+        <p>Shipping to: ${fName} ${lName}, ${sAddressStreet}, ${sAddressCity}, ${sAddressState}, ${sAddressAcountry}</p>
+        <p><strong>Total Charged:</strong> $${total.toFixed(2)}</p>
+        <p>Please confirm receipt and notify us once the part has been shipped.</p>
+        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+        <p>Best regards,<br>
+        Auto Parts Group Corp<br>
+        +1 (866) 207-5533<br>
+        purchase@auto-partsgroup.com</p>
+      `,
+      attachments: [
+        {
+          filename: pdfFile.originalname,
+          content: pdfFile.buffer,
+        },
+        {
+          filename: "logo.png",
+          path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+          cid: "logo",
+        },
+      ],
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending mail:", error);
+        return res.status(500).json({ message: "Email sending failed", error });
+      } else {
+        console.log("PO email sent:", info.response);
+        return res.status(200).json({ message: "PO email sent successfully" });
+      }
+    });
+
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 // to check orderNo existence
 app.get('/orders/checkOrderNo/:orderNo', async (req, res) => {
 const { orderNo } = req.params;
