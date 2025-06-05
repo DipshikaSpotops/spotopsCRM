@@ -4333,13 +4333,11 @@ var yardEmail = order.additionalInfo[yardIndex].email;
 
     const pdfFile = req.file;
     if (!pdfFile) return res.status(400).send("No PDF file uploaded");
-
+    console.log("PDF file size received (backend):", pdfFile.buffer.length);
     const yardIndex = parseInt(req.body.yardIndex || "1") - 1;
     const yard = order.additionalInfo[yardIndex];
 
     if (!yard) return res.status(400).send("Invalid yard index");
-
-    // Extract relevant fields
     const {
       year, make, model, pReq, desc, vin, partNo, fName, lName,
       sAddressStreet, sAddressCity, sAddressState, sAddressAcountry
@@ -4399,6 +4397,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
         {
           filename: pdfFile.originalname,
           content: pdfFile.buffer,
+          contentType: 'application/pdf'
         },
         {
           filename: "logo.png",

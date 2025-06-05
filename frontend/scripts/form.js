@@ -3975,7 +3975,10 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   const poTemplate = document.getElementById('poTemplate');
   const clone = poTemplate.cloneNode(true);
   clone.style.display = 'block';
-  clone.id = '';
+    clone.style.position = 'absolute';
+    clone.style.left = '0';
+    clone.style.top = '0';
+    clone.style.zIndex = '9999'; 
   document.body.appendChild(clone);
 
   await new Promise(resolve => requestAnimationFrame(resolve));
@@ -3985,7 +3988,7 @@ await html2pdf().set({
   filename: fileName,
   html2canvas: { scale: 2 },
   jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-}).from(clone).save(); // <- this is for testing view
+}).from(clone).save();
 
 const pdfBlob = await html2pdf().set({
   filename: fileName,
