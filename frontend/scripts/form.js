@@ -3928,7 +3928,6 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     month: '2-digit',
     day: '2-digit'
   });
-
   const yard = order.additionalInfo[i];
   const shippingDetail = yard.shippingDetails || '';
   let shipping = 0;
@@ -3936,69 +3935,52 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     const match = shippingDetail.match(/Yard shipping:\s*(\d+)/);
     if (match) shipping = parseFloat(match[1]);
   }
-
   const partPrice = parseFloat(yard.partPrice);
   const grandTotal = partPrice + shipping;
+  const poTemplate = document.getElementById('poTemplate');
+  const clone = poTemplate.cloneNode(true);
+  clone.id = '';
+  clone.style.display = 'block';
+  clone.style.position = 'absolute';
+  clone.style.left = '0';
+  clone.style.top = '0';
+  clone.style.zIndex = '9999';
+  document.body.appendChild(clone);
+  clone.querySelector('#po-no').textContent = order.orderNo;
+  clone.querySelector('#po-date').textContent = today;
 
-  // Update PO info elements
-  document.getElementById('po-no').textContent = order.orderNo;
-  document.getElementById('po-date').textContent = today;
-
-  document.getElementById('yard-info').innerHTML = `
+  clone.querySelector('#yard-info').innerHTML = `
     ${yard.yardName}<br>
     ${yard.street}, ${yard.city}, ${yard.state} ${yard.zipcode}
   `;
 
-  document.getElementById('ship-to').innerHTML = `
+  clone.querySelector('#ship-to').innerHTML = `
     ${order.fName} ${order.lName}<br>
     ${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressAcountry}
   `;
-
-  // Populate individual part description fields
-  document.getElementById('part-year').textContent = order.year;
-  document.getElementById('part-make').textContent = order.make;
-  document.getElementById('part-model').textContent = order.model;
-  document.getElementById('part-name').textContent = order.pReq;
-  document.getElementById('part-desc').textContent = order.desc;
-  document.getElementById('part-vin').textContent = order.vin || '';
-  document.getElementById('part-no').textContent = order.partNo || '';
-  document.getElementById('stock-no').textContent = yard.stockNo || '';
-  document.getElementById('warranty').textContent = `${yard.warranty} days`;
-
-  // Fill pricing fields
-  document.getElementById('amount').textContent = `$${partPrice}`;
-  document.getElementById('subtotal').textContent = `$${partPrice}`;
-  document.getElementById('shipping').textContent = shipping ? `$${shipping}` : '-';
-  document.getElementById('grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
-
-  // Clone and prepare PO template
-  const clone = poTemplate.cloneNode(true);
-  clone.style.display = 'block';
-    clone.style.position = 'absolute';
-    clone.style.left = '0';
-    clone.style.top = '0';
-    clone.style.zIndex = '9999'; 
-  document.body.appendChild(clone);
-clone.querySelector('#po-no').textContent = order.orderNo;
-  await new Promise(resolve => requestAnimationFrame(resolve));
-
+  clone.querySelector('#part-year').textContent = order.year;
+  clone.querySelector('#part-make').textContent = order.make;
+  clone.querySelector('#part-model').textContent = order.model;
+  clone.querySelector('#part-name').textContent = order.pReq;
+  clone.querySelector('#part-desc').textContent = order.desc;
+  clone.querySelector('#part-vin').textContent = order.vin || '';
+  clone.querySelector('#part-no').textContent = order.partNo || '';
+  clone.querySelector('#stock-no').textContent = yard.stockNo || '';
+  clone.querySelector('#warranty').textContent = `${yard.warranty} days`;
+  clone.querySelector('#amount').textContent = `$${partPrice}`;
+  clone.querySelector('#subtotal').textContent = `$${partPrice}`;
+  clone.querySelector('#shipping').textContent = shipping ? `$${shipping}` : '-';
+  clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
+  await new Promise(r => setTimeout(r, 300));
   const fileName = `${order.orderNo}-PO.pdf`;
-await html2pdf().set({
-  filename: fileName,
-  html2canvas: { scale: 2 },
-  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-}).from(clone).save();
-
-const pdfBlob = await html2pdf().set({
-  filename: fileName,
-  html2canvas: { scale: 2 },
-  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-}).from(clone).outputPdf('blob');
-  document.body.removeChild(clone);
-
-  // Prepare FormData with PDF and images
-  const formData = new FormData();
+  const pdfBlob = await html2pdf().set({
+    filename: fileName,
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+  }).from(clone).outputPdf('blob');
   console.log("PDF blob size:", pdfBlob.size);
+  document.body.removeChild(clone);
+  const formData = new FormData();
   formData.append('pdfFile', pdfBlob, fileName);
 
   const images = document.getElementById('poImages').files;
@@ -4018,8 +4000,6 @@ const pdfBlob = await html2pdf().set({
   formData.append('userName', firstName);
   formData.append('recipientEmail', yard.email);
   formData.append('yardName', yard.yardName);
-
-  // Send email request
   fetch(`https://www.spotops360.com/sendPOEmailYard/${order.orderNo}`, {
     method: 'POST',
     body: formData,
