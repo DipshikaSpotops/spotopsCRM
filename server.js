@@ -4321,7 +4321,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   res.status(500).json({ message: "Server error", error });
   }
   });
-  app.post("/orders/sendPOEmailYard/:orderNo", upload.single("pdf"), async (req, res) => {
+  app.post("/sendPOEmailYard/:orderNo", upload.single("pdf"), async (req, res) => {
   console.log("Sending PO to yard...");
 
   try {
