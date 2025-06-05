@@ -4326,6 +4326,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
 
   try {
     const { orderNo } = req.params;
+    console.log("sending po",orderNo)
     const order = await Order.findOne({ orderNo });
 
     if (!order) return res.status(404).send("Order not found");
