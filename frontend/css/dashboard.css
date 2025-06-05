@@ -582,16 +582,16 @@ text-align:center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 #topAgentBox {
-  background-color: #d9f7be;
-  color: #1f4d3d;
+  /* background-color: #d9f7be; */
+  color: #00332e;
 }
 #bestDayBox {
-  background-color: #cce9e4;
+  /* background-color: #cce9e4; */
   color: #00332e;
 }
 #monthlyCancelRefundBox {
-  background-color: #d6eaf8;
-  color: #0d2b4a;
+  /* background-color: #d6eaf8; */
+  color: #00332e;
 }
 
 @media (max-width: 768px){
