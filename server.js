@@ -4257,7 +4257,7 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   service: "gmail",
   auth: {
   user: "purchase@auto-partsgroup.com",
-  pass: "cuuy wetn vefs uiwx",
+  pass: "zhtb vimk prif bdfg",
   },
   });
   var yardAgent = order.additionalInfo[yardIndex].agentName;
@@ -4364,7 +4364,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
       service: "gmail",
       auth: {
         user: "purchase@auto-partsgroup.com",
-        pass: "cuuy wetn vefs uiwx",
+        pass: "zhtb vimk prif bdfg",
       },
     });
 
