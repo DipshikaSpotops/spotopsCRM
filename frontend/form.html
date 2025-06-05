@@ -559,6 +559,7 @@ style="margin-right: 94px;margin-top: -9px;"
 <option value="CO">Colorado</option>
 <option value="CT">Connecticut</option>
 <option value="DE">Delaware</option>
+<option value="DC">District of Columbia</option>
 <option value="FL">Florida</option>
 <option value="GA">Georgia</option>
 <option value="HI">Hawaii</option>
@@ -829,6 +830,7 @@ Save
 <option value="CO">Colorado</option>
 <option value="CT">Connecticut</option>
 <option value="DE">Delaware</option>
+<option value="DC">District of Columbia</option>
 <option value="FL">Florida</option>
 <option value="GA">Georgia</option>
 <option value="HI">Hawaii</option>
@@ -1454,113 +1456,102 @@ Save
     }
   </style>
 
-  <div class="po-wrapper">
-    <div class="po-header">
-      <h2>AUTO PARTS GROUP CORP</h2>
-      <div>5306 Blaney Way, Dallas, Texas, 75227</div>
-      <div>(866) 207-5533 • purchase@auto-partsgroup.com</div>
+  <div id="po-pdf" style="font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; border: 1px solid #ccc;">
+
+  <div style="text-align: center; background-color: #002b55; color: white; padding: 10px 0;">
+    <h2 style="margin: 0;">AUTO PARTS GROUP CORP</h2>
+    <div>5306 Blaney Way, Dallas, Texas, 75227</div>
+    <div>(866) 207-5533 • purchase@auto-partsgroup.com</div>
+  </div>
+
+  <h2 style="text-align: center; color: #d63031; margin-top: 15px;">PURCHASE ORDER</h2>
+
+  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+    <div>
+      <div><strong>PO NO:</strong> 50STARS4475</div>
+      <div><strong>PO Date:</strong> 2 JUNE, 2025</div>
+      <div><strong>Tax ID:</strong> 32093721457</div>
     </div>
+  </div>
 
-    <div class="po-title">PURCHASE ORDER</div>
-
-    <div style="margin-top: 10px;">
-      <strong>PO NO:</strong> <span id="po-no"></span><br>
-      <strong>PO Date:</strong> <span id="po-date"></span><br>
-      <strong>Tax ID:</strong> 32093721457
+  <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+    <div style="width: 30%;">
+      <h4 style="background-color: #0b2545; color: white; padding: 5px;">Purchase Order To</h4>
+      <div>Jeremy<br/>Fox Auto Salvage & Parts Inc.<br/>7140 Alliance Rd NW<br/>Malvern OH 44644<br/>jeremy@foxautosalvage.com<br/>+1 330-863-1011</div>
     </div>
-
-    <div class="po-section">
-      <div class="po-box">
-        <h4>Purchase Order To</h4>
-        <div id="yard-info"></div>
-      </div>
-      <div class="po-box">
-        <h4>Ship To</h4>
-        <div id="ship-to"></div>
-      </div>
-      <div class="po-box">
-        <h4>Bill To</h4>
-        <div>
-          Auto Parts Group Corp<br>
-          5306 Blaney Way<br>
-          Dallas, Texas, 75227<br>
-          purchase@auto-partsgroup.com<br>
-          +1 (866) 207-5533
-        </div>
-      </div>
+    <div style="width: 30%;">
+      <h4 style="background-color: #0b2545; color: white; padding: 5px;">Ship To</h4>
+      <div>Kent Bryant<br/>127 McGowan Ave<br/>Abbeville, SC, 29620<br/>US</div>
     </div>
+    <div style="width: 30%;">
+      <h4 style="background-color: #0b2545; color: white; padding: 5px;">Bill To</h4>
+      <div>Auto Parts Group Corp<br/>5306 Blaney Way<br/>Dallas, Texas, 75227<br/>purchase@auto-partsgroup.com<br/>+1 (888) 653-2808</div>
+    </div>
+  </div>
 
-    <table class="po-table">
-      <thead>
-        <tr>
-          <th colspan="2">Part Description</th>
-          <th>Quantity</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="2" id="part-desc"></td>
-          <td>01</td>
-          <td id="amount"></td>
-        </tr>
-      </tbody>
-    </table>
-
-
-  <!-- Right: Payment Summary Table -->
-  <div class="po-card-summary">
-  <!-- Left: Card Info Table -->
-  <table class="po-table card-info-table">
+  <table style="width: 100%; border-collapse: collapse; margin-top: 30px;">
     <thead>
-      <tr>
-        <th colspan="2">Card Info</th>
+      <tr style="background: #f2f2f2;">
+        <th colspan="2" style="border: 1px solid #ccc; padding: 8px;">Part Description</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Quantity</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Amount</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Card Number</td>
-        <td><strong>•••• •••• •••• 7195</strong></td>
-      </tr>
-      <tr>
-        <td>Expiration Date</td>
-        <td><strong>05/29</strong></td>
-      </tr>
-      <tr>
-        <td>CVV</td>
-        <td><strong>***</strong></td>
+        <td colspan="2" style="border: 1px solid #ccc; padding: 8px;">
+          Year: 2008<br/>Make: Ford<br/>Model: Truck-F150<br/>Part: Anti-Lock Brake Pump (With Module)<br/>
+          Description: Assembly<br/>VIN: 1FTRF12V78KE31892<br/>Part No: NA<br/>Stock No: 190167<br/>Warranty: 30 days
+        </td>
+        <td style="border: 1px solid #ccc; padding: 8px;">01</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">$75</td>
       </tr>
     </tbody>
   </table>
-</div>
-    <table class="summary-table">
-      <tr><td>Sub total:</td><td id="subtotal"></td></tr>
-      <tr><td>Shipping:</td><td id="shipping"></td></tr>
-      <tr><td>Tax:</td><td>Included</td></tr>
-      <tr class="total-row"><td>Grand Total:</td><td id="grand-total"></td></tr>
-    </table>
 
-    <div class="special-instructions">
-      <strong>Special Instructions:</strong><br>
-      • Please Identify yourself with the Purchase Order No.<br>
-      • Please send Pictures to purchase@auto-partsgroup.com before Shipping.<br>
-      • Please pack the part safely to avoid any Damage during Shipping. We will not be Accountable for any shipping damage that occured due to poor or insufficient packaging.<br>
-      • Ensure “No Tags or Labels” and that it's Blind shipping.<br>
-      • Send Tracking No. and Carrier info to purchase@auto-partsgroup.com<br>
-      • By charging the above Card Details you agree with the Termas and Conditions metioned on this Purchase Order.<br>
-    </div>
-    <div class="po-footer">
-  <div class="po-footer-left">
-    📍 5306 Blaney Way, Dallas, Texas, 75227
+  <h4 style="margin-top: 30px;">Card Info</h4>
+  <table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse;">
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">Card Number</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">•••• •••• •••• 7195</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">Expiration Date</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">05/29</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">CVV</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">***</td>
+    </tr>
+  </table>
+
+  <table style="width: 100%; margin-top: 20px;">
+    <tr><td>Subtotal:</td><td>$75</td></tr>
+    <tr><td>Shipping:</td><td>$20</td></tr>
+    <tr><td>Tax:</td><td>Included</td></tr>
+    <tr><td><strong>Grand Total:</strong></td><td><strong>$95</strong></td></tr>
+  </table>
+
+  <div style="margin-top: 30px; font-size: 13px;">
+    <strong>Special Instructions:</strong><br/>
+    • Please Identify yourself with the Purchase Order No.<br/>
+    • Please send Pictures before Shipping.<br/>
+    • Pack the part safely. We are not responsible for shipping damage.<br/>
+    • Blind Shipping: No tags or labels.<br/>
+    • Send Tracking No. and Carrier info to purchase@auto-partsgroup.com<br/>
+    • Charging the card implies agreement to our terms and conditions.
   </div>
-  <div class="po-footer-right">
-    🌐 www.50starsautoparts.com<br />
-    📞 (866) 207-5533
+
+  <div style="margin-top: 30px; font-size: 12px; display: flex; justify-content: space-between;">
+    <div>📍 5306 Blaney Way, Dallas, Texas, 75227</div>
+    <div>🌐 www.50starsautoparts.com • 📞 (866) 207-5533</div>
   </div>
+
 </div>
-  </div>
 </div>
 <script>
 </script>
 </body>   
 </html>
+
+
