@@ -596,6 +596,11 @@ transform: translateX(0);
     max-width: 100% !important;
     height: auto !important;
   }
+  .main-content {
+    margin-left: 0;
+    margin-top: 120px;
+    padding: 10px;
+  }
 }
 #decode {
   margin: -18% -454%;
