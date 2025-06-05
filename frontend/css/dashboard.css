@@ -1,3 +1,6 @@
+html {
+  scroll-behavior: smooth;
+}
 body {
   display: flex;
     overflow-x: hidden;
@@ -157,7 +160,8 @@ cursor: pointer;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 .chart-wrapper {
-  width: 44%;         /* Same width for all */
+   width: 100%;
+  max-width: 500px;       /* Same width for all */
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -595,6 +599,11 @@ transform: translateX(0);
   canvas {
     max-width: 100% !important;
     height: auto !important;
+  }
+  .main-content {
+    margin-left: 0;
+    margin-top: 120px;
+    padding: 10px;
   }
 }
 #decode {
