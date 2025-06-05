@@ -556,6 +556,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 h3 {
 text-align:center;
 }
+
 .summary-card {
   background-color: #eaf6ff;
   padding: 15px;
@@ -580,6 +581,9 @@ margin-right: 1%;
 .summary-card {
     display: inline-block;
     padding: 1px;
+}
+#summaryCards{
+  display: flex;
 }
 .charts-container-monthly {
     flex-direction: column;
