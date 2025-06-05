@@ -3980,7 +3980,6 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     clone.style.zIndex = '9999'; 
   document.body.appendChild(clone);
 clone.querySelector('#po-no').textContent = order.orderNo;
-console.log("Rendered clone HTML:", clone.innerHTML);
   await new Promise(resolve => requestAnimationFrame(resolve));
 
   const fileName = `${order.orderNo}-PO.pdf`;
