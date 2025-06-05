@@ -3972,7 +3972,6 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   document.getElementById('grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 
   // Clone and prepare PO template
-  const poTemplate = document.getElementById('poTemplate');
   const clone = poTemplate.cloneNode(true);
   clone.style.display = 'block';
     clone.style.position = 'absolute';
@@ -3980,7 +3979,8 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     clone.style.top = '0';
     clone.style.zIndex = '9999'; 
   document.body.appendChild(clone);
-
+clone.querySelector('#po-no').textContent = order.orderNo;
+console.log("Rendered clone HTML:", clone.innerHTML);
   await new Promise(resolve => requestAnimationFrame(resolve));
 
   const fileName = `${order.orderNo}-PO.pdf`;
