@@ -557,6 +557,43 @@ text-align:center;
   font-weight: bold;
   color: #006666;
 }
+.summary-card,
+.chart-wrapper,
+.sales-insights-box {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+.summary-card:hover,
+.chart-wrapper:hover,
+.sales-insights-box:hover {
+  transform: scale(1.01);
+}
+
+.sales-insight-box {
+  text-align: center;
+  padding: 14px;
+  font-weight: 600;
+  margin: 8px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+#topAgentBox {
+  background-color: #d9f7be;
+  color: #1f4d3d;
+}
+#bestDayBox {
+  background-color: #cce9e4;
+  color: #00332e;
+}
+#monthlyCancelRefundBox {
+  background-color: #d6eaf8;
+  color: #0d2b4a;
+}
+
 @media (max-width: 768px){
   .toggle-sidebar {
 display: block;
