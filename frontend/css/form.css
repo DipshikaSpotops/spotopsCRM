@@ -235,7 +235,108 @@ margin-top: 15px;
 #refundSubmit:hover {
 background-color: #0056b3;
 }
-
+/* css for po design */
+.poContainer {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      border: 1px solid #ccc;
+    }
+    .header {
+      background-color: #002b55;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .header div {
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 20px 0;
+    }
+    .blind-label {
+      color: #d63031;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+    .title {
+      font-size: 26px;
+      font-weight: 700;
+      color: #000000;
+      margin: 5px 0;
+      font-family: Georgia, serif;
+      letter-spacing: 0.5px;
+    }
+    .title-block {
+      width: 60%;
+    }
+    .po-info-right {
+      font-size: 14px;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: right;
+      width: 40%;
+    }
+    .po-info-right div strong {
+      display: inline-block;
+      width: 80px;
+    }
+    .three-column {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .column {
+      border: 1px solid #ccc;
+      width: 32%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .column h4 {
+      background: #0b2545;
+      color: white;
+      padding: 6px;
+      margin: -10px -10px 10px -10px;
+      font-size: 14px;
+    }
+    .column p {
+      font-size: 13px;
+      margin: 6px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 13px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      vertical-align: top;
+    }
+    .footer-note {
+      font-size: 12px;
+      margin-top: 30px;
+      line-height: 1.6;
+    }
+    .page-footer {
+      margin-top: 40px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
 /* Responsive Design */
 @media (max-width: 768px) {
 #refundCollect {

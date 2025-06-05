@@ -3920,20 +3920,17 @@ $("#cancelShipment").on("click", function () {
     });
 });
 document.getElementById('sendPOBtn').addEventListener('click', async function () {
-  const i = yardIndex - 1; 
-  console.log("yardIndex",i)
+  const i = yardIndex - 1;
   const order = commonOrderRes;
-  console.log("clicked sendPO btn",order.orderNo);
   const today = new Date().toLocaleDateString('en-US', {
     timeZone: 'America/Chicago',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'
   });
-  
+
   const yard = order.additionalInfo[i];
-  console.log("yard",yard);
-  const shippingDetail = order.additionalInfo[i].shippingDetails || '';
+  const shippingDetail = yard.shippingDetails || '';
   let shipping = 0;
   if (shippingDetail.includes('Yard shipping')) {
     const match = shippingDetail.match(/Yard shipping:\s*(\d+)/);
@@ -3942,6 +3939,8 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
 
   const partPrice = parseFloat(yard.partPrice);
   const grandTotal = partPrice + shipping;
+
+  // Update PO info elements
   document.getElementById('po-no').textContent = order.orderNo;
   document.getElementById('po-date').textContent = today;
 
@@ -3952,7 +3951,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
 
   document.getElementById('ship-to').innerHTML = `
     ${order.fName} ${order.lName}<br>
-    ${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressState}, ${order.sAddressAcountry}
+    ${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressAcountry}
   `;
 
   document.getElementById('part-desc').innerHTML = `
@@ -3963,55 +3962,56 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     Part Description: ${order.desc}<br>
     VIN: ${order.vin || ''}<br>
     Part No: ${order.partNo || ''}<br>
-    Stock No: ${yard.stockNo || ""}<br>
+    Stock No: ${yard.stockNo || ''}<br>
     Warranty: ${yard.warranty} days
   `;
 
+  // Fill pricing fields
   document.getElementById('amount').textContent = `$${partPrice}`;
   document.getElementById('subtotal').textContent = `$${partPrice}`;
   document.getElementById('shipping').textContent = shipping ? `$${shipping}` : '-';
   document.getElementById('grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 
-const poTemplate = document.getElementById('poTemplate');
-const clone = poTemplate.cloneNode(true);
-clone.style.display = 'block';         
-clone.id = '';                        
-document.body.appendChild(clone);
+  // Clone and prepare PO template
+  const poTemplate = document.getElementById('poTemplate');
+  const clone = poTemplate.cloneNode(true);
+  clone.style.display = 'block';
+  clone.id = '';
+  document.body.appendChild(clone);
 
-// Wait for DOM to layout (1 frame)
-await new Promise(resolve => requestAnimationFrame(resolve));
+  await new Promise(resolve => requestAnimationFrame(resolve));
 
-// Generate PDF with filename
-const fileName = `${order.orderNo}-PO.pdf`;
-const pdfBlob = await html2pdf().set({
-  filename: fileName,
-  html2canvas: { scale: 2 },
-  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-}).from(clone).outputPdf('blob');
+  const fileName = `${order.orderNo}-PO.pdf`;
+  const pdfBlob = await html2pdf().set({
+    filename: fileName,
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+  }).from(clone).outputPdf('blob');
 
-document.body.removeChild(clone);
+  document.body.removeChild(clone);
 
-
-  // Create FormData with PDF and any images
+  // Prepare FormData with PDF and images
   const formData = new FormData();
-  formData.append('pdf', pdfBlob, `${order.orderNo}-PO.pdf`);
+  formData.append('pdf', pdfBlob, fileName);
 
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
   }
-formData.append('orderNo', order.orderNo);
-formData.append('year', order.year);
-formData.append('make', order.make);
-formData.append('model', order.model);
-formData.append('pReq', order.pReq);
-formData.append('agentName', order.additionalInfo[i].agentName);
-formData.append('partPrice', order.additionalInfo[i].partPrice);
-formData.append('shippingDetails', order.additionalInfo[i].shippingDetails);
-formData.append('desc', order.desc);
-formData.append('userName', firstName);
-formData.append('recipientEmail', order.additionalInfo[i].email);
-formData.append('yardName', order.additionalInfo[i].yardName);
+
+  formData.append('orderNo', order.orderNo);
+  formData.append('year', order.year);
+  formData.append('make', order.make);
+  formData.append('model', order.model);
+  formData.append('pReq', order.pReq);
+  formData.append('agentName', yard.agentName);
+  formData.append('partPrice', yard.partPrice);
+  formData.append('shippingDetails', shippingDetail.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
+  formData.append('desc', order.desc);
+  formData.append('userName', firstName);
+  formData.append('recipientEmail', yard.email);
+  formData.append('yardName', yard.yardName);
+
   // Send email request
   fetch('https://www.spotops360.com/send-po-email', {
     method: 'POST',
@@ -4031,3 +4031,5 @@ formData.append('yardName', order.additionalInfo[i].yardName);
 });
 
 });
+
+
