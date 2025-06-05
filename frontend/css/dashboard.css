@@ -573,9 +573,13 @@ text-align:center;
   color: #006666;
 }
 @media (max-width: 768px){
-  .toggle-sidebar {
+.toggle-sidebar {
 display: block;
 margin-right: 1%;
+}
+.summary-card {
+    display: inline-block;
+    padding: 1px;
 }
 .charts-container-monthly {
     flex-direction: column;
