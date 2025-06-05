@@ -3981,17 +3981,23 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   await new Promise(resolve => requestAnimationFrame(resolve));
 
   const fileName = `${order.orderNo}-PO.pdf`;
-  const pdfBlob = await html2pdf().set({
-    filename: fileName,
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-  }).from(clone).outputPdf('blob');
+await html2pdf().set({
+  filename: fileName,
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+}).from(clone).save(); // <- this is for testing view
 
+const pdfBlob = await html2pdf().set({
+  filename: fileName,
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+}).from(clone).outputPdf('blob');
   document.body.removeChild(clone);
 
   // Prepare FormData with PDF and images
   const formData = new FormData();
-  formData.append('pdf', pdfBlob, fileName);
+  console.log("PDF blob size:", pdfBlob.size);
+  formData.append('pdfFile', pdfBlob, fileName);
 
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
