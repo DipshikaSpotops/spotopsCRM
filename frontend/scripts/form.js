@@ -3954,17 +3954,16 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     ${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressAcountry}
   `;
 
-  document.getElementById('part-desc').innerHTML = `
-    Year: ${order.year}<br>
-    Make: ${order.make}<br>
-    Model: ${order.model}<br>
-    Part: ${order.pReq}<br>
-    Part Description: ${order.desc}<br>
-    VIN: ${order.vin || ''}<br>
-    Part No: ${order.partNo || ''}<br>
-    Stock No: ${yard.stockNo || ''}<br>
-    Warranty: ${yard.warranty} days
-  `;
+  // Populate individual part description fields
+  document.getElementById('part-year').textContent = order.year;
+  document.getElementById('part-make').textContent = order.make;
+  document.getElementById('part-model').textContent = order.model;
+  document.getElementById('part-name').textContent = order.pReq;
+  document.getElementById('part-desc').textContent = order.desc;
+  document.getElementById('part-vin').textContent = order.vin || '';
+  document.getElementById('part-no').textContent = order.partNo || '';
+  document.getElementById('stock-no').textContent = yard.stockNo || '';
+  document.getElementById('warranty').textContent = `${yard.warranty} days`;
 
   // Fill pricing fields
   document.getElementById('amount').textContent = `$${partPrice}`;
