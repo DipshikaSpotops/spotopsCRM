@@ -4410,15 +4410,15 @@ if (shippingDetails.includes("Own shipping")) {
 
           <!-- Highlighted Notes -->
          <p>
-  <strong style="background-color: #ffff00; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;">
+  <strong style="background-color: #ffff00; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:2px;">
     NOTE: BLIND SHIPPING
   </strong><br>
 
-  <strong style="background-color: #ff0000; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;">
+  <strong style="background-color: #ff0000; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:2px;">
     NOTE: PROVIDE PICTURES
   </strong><br>
 
-  <strong style="background-color: #ff0000; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;">
+  <strong style="background-color: #ff0000; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:2px;">
     BEFORE SHIPPING
   </strong>
 </p>
