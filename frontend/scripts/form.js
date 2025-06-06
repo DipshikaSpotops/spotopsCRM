@@ -4002,9 +4002,11 @@ await new Promise(resolve => setTimeout(resolve, 3000));
   .toPdf()
   .output('blob');
   console.log("PDF blob size:", pdfBlob.size);
-  document.body.appendChild(clone);
-clone.style.border = '2px solid red';
+document.body.appendChild(clone);
+clone.style.border = '2px solid red'; 
+  const formData = new FormData();
   formData.append('pdfFile', pdfBlob, fileName);
+
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
