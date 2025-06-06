@@ -776,10 +776,30 @@ async function fetchYardInfo(month, year) {
     try {
         $("#loadingMessage").show(); // Show loading message
 
-        const response = await axios.get(
-            `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const limit = 25;
+const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
+  params: { month, year, page: 1, limit },
+  headers: { Authorization: `Bearer ${token}` },
+});
+
+let yardOrdersRaw = [...firstResponse.data.orders];
+const totalPages = Math.ceil(firstResponse.data.totalCount / limit);
+
+const requests = [];
+for (let p = 2; p <= totalPages; p++) {
+  requests.push(
+    axios.get("https://www.spotops360.com/orders/monthly", {
+      params: { month, year, page: p, limit },
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
+}
+
+const responses = await Promise.all(requests);
+responses.forEach(res => {
+  yardOrdersRaw.push(...res.data.orders);
+});
+
 
         if (response.status !== 200 || !response.data || response.data.length === 0) {
             console.error("No data found for the selected month and year");
@@ -789,7 +809,7 @@ async function fetchYardInfo(month, year) {
             return;
         }
 
-        yardOrders = response.data.orders.map(order => {
+        yardOrders = yardOrdersRaw.data.orders.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
                 info =>
                     (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
