@@ -3954,7 +3954,7 @@ if (shippingDetails.includes("Own shipping")) {
   const clone = poTemplate.cloneNode(true);
   clone.id = '';
   clone.style.display = 'block';
-  clone.style.visibility = 'hidden';
+  clone.style.visibility = 'visible';
   clone.style.position = 'absolute';
   clone.style.left = '-9999px';
   clone.style.top = '-9999px';
