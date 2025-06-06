@@ -3931,7 +3931,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   });
 
   const yard = order.additionalInfo[i];
-  const shippingDetail = yard.shippingDetails || '';
+  const shippingDetails = yard.shippingDetails || '';
   let shipping = 0;
 let shippingValue = "-";
 
