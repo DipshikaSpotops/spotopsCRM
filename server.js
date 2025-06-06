@@ -4394,7 +4394,7 @@ if (shippingDetails.includes("Own shipping")) {
         <p>Shipping to: ${fName} ${lName}, ${sAddressStreet}, ${sAddressCity}, ${sAddressState}, ${sAddressAcountry}</p>
         <p><strong>Purchase Order To: ${yardName}</strong><br>
         <strong>Part Price: $${partPrice.toFixed(2)}</strong>
-        <strong>Shipping: $${shippingValue.toFixed(2)}</strong>
+        <strong>Shipping: $${shippingValue}</strong>
         </p>
         <p>Notes:<br>
         Please provide the transaction receipt after you have charged our card.<br>
