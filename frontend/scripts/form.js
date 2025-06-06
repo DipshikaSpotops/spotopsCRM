@@ -3983,35 +3983,31 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
 await new Promise(resolve => requestAnimationFrame(resolve));
 await new Promise(resolve => setTimeout(resolve, 500)); // Give it time to render visually
 
-const fileName = `${order.orderNo}-PO.pdf`;
-const worker = html2pdf()
-  .set({
-    filename: fileName,
-    margin: 0,
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      logging: true,
-    },
-    jsPDF: {
-      unit: 'pt',
-      format: [clone.offsetWidth, clone.offsetHeight],
-      orientation: 'portrait',
-    }
-  })
-  .from(clone)
-  .toPdf();
 
-const pdfArrayBuffer = await worker.output('arraybuffer');
-const pdfBlob = new Blob([pdfArrayBuffer], { type: 'application/pdf' });
+const canvas = await html2canvas(clone, {
+  scale: 2,
+  useCORS: true,
+  backgroundColor: "#ffffff", // make sure white bg is preserved
+});
+
+const imgData = canvas.toDataURL("image/png");
+const pdf = new jsPDF({
+  orientation: "portrait",
+  unit: "pt",
+  format: [canvas.width, canvas.height]
+});
+
+pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+const fileName = `${order.orderNo}-PO.pdf`;
 const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+const formData = new FormData();
+formData.append('pdfFile', pdfFile);
     console.log(clone.outerHTML);
   console.log("PDF blob size:", pdfBlob.size,"File size:", pdfFile.size);
-  for (let [k, v] of formData.entries()) console.log(k, v);
   document.body.removeChild(clone);
 
-  const formData = new FormData();
-formData.append('pdfFile', pdfFile);
+  
+for (let [k, v] of formData.entries()) console.log(k, v);
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
