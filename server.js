@@ -4470,7 +4470,7 @@ const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
     order.additionalInfo[yardIndex].status = "Yard PO Sent";
     const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 order.orderHistory.push(
-    `Yard ${yardIndex} PO sent by ${firstName} on ${formattedDateTime}`
+    `Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDateTime}`
     );
 
     await order.save();
