@@ -4006,9 +4006,6 @@ const pdfBlob = await html2pdf()
   .from(clone)
   .toPdf()
   .output('blob');
-// OPTIONAL: remove clone after rendering
-document.body.removeChild(clone);
-
     console.log(clone.outerHTML);
   console.log("PDF blob size:", pdfBlob.size);
   document.body.removeChild(clone);
