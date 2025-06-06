@@ -4325,12 +4325,10 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   });
   app.post("/sendPOEmailYard/:orderNo", upload.single("pdfFile"), async (req, res) => {
   console.log("Sending PO to yard...");
-
   try {
     const { orderNo } = req.params;
     console.log("sending po",orderNo)
     const order = await Order.findOne({ orderNo });
-
     if (!order) return res.status(404).send("Order not found");
 
     const pdfFile = req.file;
@@ -4341,7 +4339,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
 
     if (!yard) return res.status(400).send("Invalid yard index");
     const {
-      year, make, model, pReq, desc, vin, partNo, fName, lName,
+      year, make, model, pReq, desc, vin, partNo, fName, lName,firstName,
       sAddressStreet, sAddressCity, sAddressState, sAddressAcountry
     } = order;
 
@@ -4352,14 +4350,20 @@ var yardEmail = order.additionalInfo[yardIndex].email;
     } = yard;
 
     let shipping = 0;
-    if (shippingDetails.includes("Yard shipping")) {
-      const match = shippingDetails.match(/Yard shipping:\s*(\d+)/);
-      if (match) shipping = parseFloat(match[1]);
-    }
+let shippingValue = "-";
+
+if (shippingDetails.includes("Own shipping")) {
+  shippingValue = "Own Shipping (Auto Parts Group Corp)";
+} else if (shippingDetails.includes("Yard shipping")) {
+  const match = shippingDetails.match(/Yard shipping:\s*(\d+)/);
+  if (match) {
+    const parsed = parseFloat(match[1]);
+    shipping = parsed;
+    shippingValue = parsed === 0 ? "Included" : `$${parsed}`;
+  }
+}
 
     const total = parseFloat(partPrice) + shipping + parseFloat(others);
-
-    // Set up nodemailer
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -4373,7 +4377,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
       to: 'dipsikha.spotopsdigital@gmail.com',
       // to: yardEmail,
       // bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
-      subject: `Purchase Order | ${orderNo}`,
+      subject: `Purchase Order | ${orderNo} | ${year} ${make} ${model} | ${pReq} `,
       html: `
         <p>Dear ${agentName},</p>
         <p>Please find attached the Purchase Order for the following:</p>
@@ -4388,10 +4392,29 @@ var yardEmail = order.additionalInfo[yardIndex].email;
           <li><strong>Warranty:</strong> ${warranty} days</li>
         </ul>
         <p>Shipping to: ${fName} ${lName}, ${sAddressStreet}, ${sAddressCity}, ${sAddressState}, ${sAddressAcountry}</p>
-        <p><strong>Total Charged:</strong> $${total.toFixed(2)}</p>
-        <p>Please confirm receipt and notify us once the part has been shipped.</p>
-        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-        <p>Best regards,<br>
+        <p><strong>Purchase Order To: ${yardName}</strong><br>
+        <strong>Part Price: $${partPrice.toFixed(2)}</strong>
+        <strong>Shipping: $${shippingValue.toFixed(2)}</strong>
+        </p>
+        <p>Notes:<br>
+        Please provide the transaction receipt after you have charged our card.<br>
+        Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.<br>
+        Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.<br>
+        If there are any discrepancies or questions regarding this order, please contact us immediately.</p>
+        <p style="background-color: #ffff00; color: black; font-weight: bold; padding: 4px; display: inline-block;">
+          NOTE: BLIND SHIPPING
+        </p><br>
+
+        <p style="background-color: #ff0000; color: black; font-weight: bold; padding: 4px; display: inline-block;">
+          NOTE: PROVIDE PICTURES
+        </p><br>
+
+        <p style="background-color: #ff0000; color: black; font-weight: bold; padding: 4px; display: inline-block;">
+          BEFORE SHIPPING
+        </p>
+
+        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p><br>
+        <p>${firstName}<br>
         Auto Parts Group Corp<br>
         +1 (866) 207-5533<br>
         purchase@auto-partsgroup.com</p>

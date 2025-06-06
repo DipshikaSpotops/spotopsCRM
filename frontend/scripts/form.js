@@ -3933,10 +3933,18 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   const yard = order.additionalInfo[i];
   const shippingDetail = yard.shippingDetails || '';
   let shipping = 0;
-  if (shippingDetail.includes('Yard shipping')) {
-    const match = shippingDetail.match(/Yard shipping:\s*(\d+)/);
-    if (match) shipping = parseFloat(match[1]);
+let shippingValue = "-";
+
+if (shippingDetails.includes("Own shipping")) {
+  shippingValue = "Own Shipping (Auto Parts Group Corp)";
+} else if (shippingDetails.includes("Yard shipping")) {
+  const match = shippingDetails.match(/Yard shipping:\s*(\d+)/);
+  if (match) {
+    const parsed = parseFloat(match[1]);
+    shipping = parsed;
+    shippingValue = parsed === 0 ? "Included" : `$${parsed}`;
   }
+}
 
   const partPrice = parseFloat(yard.partPrice);
   const grandTotal = partPrice + shipping;
@@ -3978,10 +3986,10 @@ clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
   clone.querySelector('#warranty').textContent = `${yard.warranty} days`;
   clone.querySelector('#amount').textContent = `$${partPrice}`;
   clone.querySelector('#subtotal').textContent = `$${partPrice}`;
-  clone.querySelector('#shipping').textContent = shipping ? `$${shipping}` : '-';
+  clone.querySelector('#shipping').textContent = shippingValue ? `$${shippingValue}` : '-';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 await new Promise(resolve => requestAnimationFrame(resolve));
-await new Promise(resolve => setTimeout(resolve, 500)); // Give it time to render visually
+await new Promise(resolve => setTimeout(resolve, 500)); 
 
 
 const canvas = await html2canvas(clone, {
@@ -4026,7 +4034,7 @@ for (let [k, v] of formData.entries()) console.log(k, v);
   formData.append('partPrice', yard.partPrice);
   formData.append('shippingDetails', shippingDetail.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
   formData.append('desc', order.desc);
-  formData.append('userName', firstName);
+  formData.append('firstName', firstName);
   formData.append('recipientEmail', yard.email);
   formData.append('yardName', yard.yardName);
 
