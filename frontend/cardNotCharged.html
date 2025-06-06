@@ -801,11 +801,11 @@ responses.forEach(res => {
 });
 
 
-        if (response.status !== 200 || !response.data || response.data.length === 0) {
+        if (responses.status !== 200 || !responses.data || responses.data.length === 0) {
             console.error("No data found for the selected month and year");
             yardOrders = [];
-            renderTableRows(1, [], 0); // Render empty table
-            createPaginationControls(0); // No pagination
+            renderTableRows(1, [], 0); 
+            createPaginationControls(0); 
             return;
         }
 
