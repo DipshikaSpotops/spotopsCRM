@@ -3997,7 +3997,18 @@ const pdf = new jsPDF({
   format: 'a4',
   orientation: 'portrait'
 });
-
+await pdf.html(clone, {
+  callback: function (doc) {
+    doc.save(`${order.orderNo}-PO.pdf`);
+  },
+  html2canvas: {
+    scale: 1,
+    useCORS: true,
+    logging: false,
+  },
+  x: 10,
+  y: 10
+});
 const pdfWidth = 210;
 const pdfHeight = 297; 
 pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297); 
