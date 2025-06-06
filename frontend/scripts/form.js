@@ -3981,27 +3981,34 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   clone.querySelector('#subtotal').textContent = `$${partPrice}`;
   clone.querySelector('#shipping').textContent = shipping ? `$${shipping}` : '-';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
+await new Promise(resolve => requestAnimationFrame(resolve));
+await new Promise(resolve => setTimeout(resolve, 500)); // Give it time to render visually
 
-  await new Promise(resolve => requestAnimationFrame(resolve, { timeout: 5000 }));
-  await new Promise(resolve => setTimeout(resolve, 3000));
+const fileName = `${order.orderNo}-PO.pdf`;
 
-  const fileName = `${order.orderNo}-PO.pdf`;
-  const pdfBlob = await html2pdf()
-    .set({
-      filename: fileName,
-      margin: 0,
-      html2canvas: {
-        scale: 2,
-        useCORS: true
-      },
-      jsPDF: {
-        unit: 'pt',
-        format: 'a4',
-        orientation: 'portrait'
-      }
-    })
-    .from(clone)
-    .outputPdf('blob');
+const pdfBlob = await html2pdf()
+  .set({
+    filename: fileName,
+    margin: 0,
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      logging: true,
+      windowWidth: clone.scrollWidth,
+      windowHeight: clone.scrollHeight,
+    },
+    jsPDF: {
+      unit: 'pt',
+      format: [clone.offsetWidth, clone.offsetHeight], // Dynamically match dimensions
+      orientation: 'portrait',
+    }
+  })
+  .from(clone)
+  .toPdf()
+  .output('blob');
+// OPTIONAL: remove clone after rendering
+document.body.removeChild(clone);
+
     console.log(clone.outerHTML);
   console.log("PDF blob size:", pdfBlob.size);
   document.body.removeChild(clone);
