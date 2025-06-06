@@ -4273,9 +4273,9 @@ var stockNo = order.additionalInfo[yardIndex].stockNo || "NA";
 var yardEmail = order.additionalInfo[yardIndex].email;
   const mailOptions = {
   from: "purchase@auto-partsgroup.com",
-  to: `dipsikha.spotopsdigital@gmail.com`,
-  // to: `${yardEmail}`,
-  // bcc:`purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com`,
+  // to: `dipsikha.spotopsdigital@gmail.com`,
+  to: `${yardEmail}`,
+  bcc:`purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com`,
   subject: `Request for Yard Refund | ${order.orderNo}`,
   html: `<p>Dear ${yardAgent},</p>
   <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
@@ -4368,8 +4368,9 @@ var yardEmail = order.additionalInfo[yardIndex].email;
 
     const mailOptions = {
       from: "purchase@auto-partsgroup.com",
-      to: yardEmail,
-      bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
+      to: 'dipsikha.spotopsdigital@gmail.com',
+      // to: yardEmail,
+      // bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
       subject: `Purchase Order | ${orderNo}`,
       html: `
         <p>Dear ${agentName},</p>
