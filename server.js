@@ -4448,15 +4448,25 @@ if (shippingDetails.includes("Own shipping")) {
       ],
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending mail:", error);
-        return res.status(500).json({ message: "Email sending failed", error });
-      } else {
-        console.log("PO email sent:", info.response);
-        return res.status(200).json({ message: "PO email sent successfully" });
-      }
-    });
+ transporter.sendMail(mailOptions, async (error, info) => {
+  if (error) {
+    console.error("Error sending mail:", error);
+    return res.status(500).json({ message: "Email sending failed", error });
+  }
+
+  console.log("PO email sent:", info.response);
+
+  try {
+    order.additionalInfo[yardIndex].status = "Yard PO Sent";
+    await order.save();
+
+    return res.status(200).json({ message: "PO email sent and status updated successfully" });
+  } catch (saveError) {
+    console.error("Error updating order status:", saveError);
+    return res.status(500).json({ message: "Email sent but failed to update status", error: saveError });
+  }
+});
+
 
   } catch (error) {
     console.error("Server error:", error);
