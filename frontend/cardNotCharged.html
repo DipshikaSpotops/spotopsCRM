@@ -801,13 +801,7 @@ responses.forEach(res => {
 });
 
 
-        if (responses.status !== 200 || !responses.data || responses.data.length === 0) {
-            console.error("No data found for the selected month and year");
-            yardOrders = [];
-            renderTableRows(1, [], 0); 
-            createPaginationControls(0); 
-            return;
-        }
+let yardOrders = [];
 
         yardOrders = yardOrdersRaw.data.orders.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
