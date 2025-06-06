@@ -803,7 +803,7 @@ responses.forEach(res => {
 
 let yardOrders = [];
 
-        yardOrders = yardOrdersRaw.data.orders.map(order => {
+        yardOrders = yardOrdersRaw.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
                 info =>
                     (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
