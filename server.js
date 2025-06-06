@@ -4455,7 +4455,17 @@ if (shippingDetails.includes("Own shipping")) {
   }
 
   console.log("PO email sent:", info.response);
-
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
   try {
     order.additionalInfo[yardIndex].status = "Yard PO Sent";
     const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
