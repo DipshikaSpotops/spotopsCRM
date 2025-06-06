@@ -3984,8 +3984,7 @@ await new Promise(resolve => requestAnimationFrame(resolve));
 await new Promise(resolve => setTimeout(resolve, 500)); // Give it time to render visually
 
 const fileName = `${order.orderNo}-PO.pdf`;
-
-const pdfBlob = await html2pdf()
+const worker = html2pdf()
   .set({
     filename: fileName,
     margin: 0,
@@ -3993,24 +3992,25 @@ const pdfBlob = await html2pdf()
       scale: 2,
       useCORS: true,
       logging: true,
-      windowWidth: clone.scrollWidth,
-      windowHeight: clone.scrollHeight,
     },
     jsPDF: {
       unit: 'pt',
-      format: [clone.offsetWidth, clone.offsetHeight], // Dynamically match dimensions
+      format: [clone.offsetWidth, clone.offsetHeight],
       orientation: 'portrait',
     }
   })
   .from(clone)
-  .toPdf()
-  .output('blob');
+  .toPdf();
+
+const pdfArrayBuffer = await worker.output('arraybuffer');
+const pdfBlob = new Blob([pdfArrayBuffer], { type: 'application/pdf' });
+const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
     console.log(clone.outerHTML);
-  console.log("PDF blob size:", pdfBlob.size);
+  console.log("PDF blob size:", pdfBlob.size,"File size:", pdfFile.size);
+  for (let [k, v] of formData.entries()) console.log(k, v);
   document.body.removeChild(clone);
 
   const formData = new FormData();
-const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
 formData.append('pdfFile', pdfFile);
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
