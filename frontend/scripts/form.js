@@ -4032,7 +4032,7 @@ for (let [k, v] of formData.entries()) console.log(k, v);
   formData.append('pReq', order.pReq);
   formData.append('agentName', yard.agentName);
   formData.append('partPrice', yard.partPrice);
-  formData.append('shippingDetails', shippingDetail.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
+  formData.append('shippingDetails', shippingDetails.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
   formData.append('desc', order.desc);
   formData.append('firstName', firstName);
   formData.append('recipientEmail', yard.email);
