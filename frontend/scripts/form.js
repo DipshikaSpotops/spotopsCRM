@@ -3991,6 +3991,7 @@ const canvas = await html2canvas(clone, {
 });
 
 const imgData = canvas.toDataURL("image/png");
+const { jsPDF } = window.jspdf;
 const pdf = new jsPDF({
   orientation: "portrait",
   unit: "pt",
