@@ -3982,8 +3982,8 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   clone.querySelector('#shipping').textContent = shipping ? `$${shipping}` : '-';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 
-  await new Promise(resolve => requestAnimationFrame(resolve));
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => requestAnimationFrame(resolve, { timeout: 5000 }));
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
   const fileName = `${order.orderNo}-PO.pdf`;
   const pdfBlob = await html2pdf()
@@ -3992,9 +3992,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
       margin: 0,
       html2canvas: {
         scale: 2,
-        useCORS: true,
-        windowWidth: clone.scrollWidth,
-        windowHeight: clone.scrollHeight
+        useCORS: true
       },
       jsPDF: {
         unit: 'pt',
@@ -4004,7 +4002,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     })
     .from(clone)
     .outputPdf('blob');
-
+    console.log(clone.outerHTML);
   console.log("PDF blob size:", pdfBlob.size);
   document.body.removeChild(clone);
 
