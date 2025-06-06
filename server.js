@@ -4458,8 +4458,13 @@ if (shippingDetails.includes("Own shipping")) {
 
   try {
     order.additionalInfo[yardIndex].status = "Yard PO Sent";
-    await order.save();
+    const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+order.orderHistory.push(
+    `Yard ${yardIndex} PO sent by ${firstName} on ${formattedDateTime}`
+    );
 
+    await order.save();
+    
     return res.status(200).json({ message: "PO email sent and status updated successfully" });
   } catch (saveError) {
     console.error("Error updating order status:", saveError);

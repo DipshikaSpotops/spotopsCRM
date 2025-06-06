@@ -3922,6 +3922,7 @@ $("#cancelShipment").on("click", function () {
 
 document.getElementById('sendPOBtn').addEventListener('click', async function () {
     document.getElementById('loadingOverlay').style.display = 'block';
+    document.getElementById('refund').value = "Yard PO Sent";
   const i = yardIndex - 1;
   const order = commonOrderRes;
   const today = new Date().toLocaleDateString('en-US', {
@@ -4054,6 +4055,7 @@ var userName  = localStorage.getItem("firstName")
     })
     .finally(() => {
       document.getElementById('loadingOverlay').style.display = 'none';
+      window.location.reload()
     });
 });
 
