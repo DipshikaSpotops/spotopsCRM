@@ -4007,7 +4007,8 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   document.body.removeChild(clone);
 
   const formData = new FormData();
-  formData.append('pdfFile', pdfBlob, fileName);
+const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+formData.append('pdfFile', pdfFile);
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
