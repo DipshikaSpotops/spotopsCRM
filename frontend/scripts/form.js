@@ -3999,12 +3999,13 @@ const pdf = new jsPDF({
 });
 
 pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+const pdfBlob = pdf.output('blob');
 const fileName = `${order.orderNo}-PO.pdf`;
 const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
 const formData = new FormData();
 formData.append('pdfFile', pdfFile);
     console.log(clone.outerHTML);
-  console.log("File size:", pdfFile.size);
+  console.log("PDF blob size:", pdfBlob.size,"File size:", pdfFile.size);
   document.body.removeChild(clone);
 
   
