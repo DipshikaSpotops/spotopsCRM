@@ -4374,51 +4374,60 @@ if (shippingDetails.includes("Own shipping")) {
     });
 
     const mailOptions = {
-      from: "purchase@auto-partsgroup.com",
-      to: 'dipsikha.spotopsdigital@gmail.com',
-      // to: yardEmail,
-      // bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
-      subject: `Purchase Order | ${orderNo} | ${year} ${make} ${model} | ${pReq} `,
-      html: `
-        <p>Dear ${agentName},</p>
-        <p>Please find attached the Purchase Order for the following:</p>
-        <ul>
-          <li><strong>Order No:</strong> ${orderNo}</li>
-          <li><strong>Year/Make/Model:</strong> ${year} ${make} ${model}</li>
-          <li><strong>Part:</strong> ${pReq}</li>
-          <li><strong>Description:</strong> ${desc}</li>
-          <li><strong>VIN:</strong> ${vin || 'NA'}</li>
-          <li><strong>Part No:</strong> ${partNo || 'NA'}</li>
-          <li><strong>Stock No:</strong> ${stockNo}</li>
-          <li><strong>Warranty:</strong> ${warranty} days</li>
-        </ul>
-        <p>Shipping to: ${fName} ${lName}, ${sAddressStreet}, ${sAddressCity}, ${sAddressState}, ${sAddressAcountry}</p>
-        <p><strong>Purchase Order To: ${yardName}</strong><br>
-        <strong>Part Price: $${partPrice.toFixed(2)}</strong>
-        <strong>Shipping: $${shippingValue}</strong>
-        </p>
-        <p>Notes:<br>
-        Please provide the transaction receipt after you have charged our card.<br>
-        Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.<br>
-        Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.<br>
-        If there are any discrepancies or questions regarding this order, please contact us immediately.</p>
-        <p style="background-color: #ffff00; color: black; font-weight: bold; padding: 4px; display: inline-block;">
-          NOTE: BLIND SHIPPING
-        </p><br>
+          from: "purchase@auto-partsgroup.com",
+          to: 'dipsikha.spotopsdigital@gmail.com',
+          // to: yardEmail,
+          // bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
+          subject: `Purchase Order | ${orderNo} | ${year} ${make} ${model} | ${pReq} `,
+          html: `
+          <p style="font-size: 16px;">Dear ${agentName},</p>
+          <p style="font-size: 16px;">Please find attached the Purchase Order for the following:</p>
+          <ul style="font-size: 16px;">
+            <li><strong>Order No:</strong> ${orderNo}</li>
+            <li><strong>Year/Make/Model:</strong> ${year} ${make} ${model}</li>
+            <li><strong>Part:</strong> ${pReq}</li>
+            <li><strong>Description:</strong> ${desc}</li>
+            <li><strong>VIN:</strong> ${vin || 'NA'}</li>
+            <li><strong>Part No:</strong> ${partNo || 'NA'}</li>
+            <li><strong>Stock No:</strong> ${stockNo}</li>
+            <li><strong>Warranty:</strong> ${warranty} days</li>
+          </ul>
 
-        <p style="background-color: #ff0000; color: black; font-weight: bold; padding: 4px; display: inline-block;">
-          NOTE: PROVIDE PICTURES
-        </p><br>
+          <p style="font-size: 16px;">
+            <strong>Purchase Order To: ${yardName}</strong><br>
+            <strong>Part Price: $${partPrice.toFixed(2)}</strong><br>
+            <strong>Shipping: ${shippingValue}</strong><br>
+            <strong>Shipping to: ${fName} ${lName}, ${sAddressStreet}, ${sAddressCity}, ${sAddressState}, ${sAddressAcountry}</strong>
+          </p>
 
-        <p style="background-color: #ff0000; color: black; font-weight: bold; padding: 4px; display: inline-block;">
-          BEFORE SHIPPING
-        </p>
+          <p style="font-size: 16px;">
+            Notes:<br>
+            Please provide the transaction receipt after you have charged our card.<br>
+            Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.<br>
+            Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.<br>
+            If there are any discrepancies or questions regarding this order, please contact us immediately.
+          </p>
 
-        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p><br>
-        <p>${firstName}<br>
-        Auto Parts Group Corp<br>
-        +1 (866) 207-5533<br>
-        purchase@auto-partsgroup.com</p>
+          <!-- Highlighted Notes -->
+          <p style="background-color: #ffff00;font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block; font-size: 16px;">
+            NOTE: BLIND SHIPPING
+          </p><br>
+          <p style="background-color: #ff0000;font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block; font-size: 16px;">
+            NOTE: PROVIDE PICTURES
+          </p><br>
+          <p style="background-color: #ff0000;font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block; font-size: 16px;">
+            BEFORE SHIPPING
+          </p>
+
+          <!-- Footer -->
+          <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p><br>
+          <p style="font-size: 18px;">
+            ${firstName}<br>
+            Auto Parts Group Corp<br>
+            +1 (866) 207-5533<br>
+            purchase@auto-partsgroup.com
+          </p>
+
       `,
       attachments: [
         {
