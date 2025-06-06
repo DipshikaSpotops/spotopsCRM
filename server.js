@@ -32,6 +32,8 @@ app.use(compression());
 const s3 = new AWS.S3();
 const BUCKET_NAME = "order-specific-pictures";
 // Multer configuration for file uploads
+app.use(bodyParser.json({ limit: '25mb' }));
+app.use(bodyParser.urlencoded({ limit: '25mb', extended: true }));
 const upload = multer({
   storage: multer.memoryStorage(),
 });
