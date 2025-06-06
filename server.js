@@ -4380,9 +4380,9 @@ if (shippingDetails.includes("Own shipping")) {
           // bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
           subject: `Purchase Order | ${orderNo} | ${year} ${make} ${model} | ${pReq} `,
           html: `
-          <p style="font-size: 16px;">Dear ${agentName},</p>
-          <p style="font-size: 16px;">Please find attached the Purchase Order for the following:</p>
-          <ul style="font-size: 16px;">
+          <p style="font-size: 14px;">Dear ${agentName},</p>
+          <p style="font-size: 14px;">Please find attached the Purchase Order for the following:</p>
+          <ul style="font-size: 14px;">
             <li><strong>Order No:</strong> ${orderNo}</li>
             <li><strong>Year/Make/Model:</strong> ${year} ${make} ${model}</li>
             <li><strong>Part:</strong> ${pReq}</li>
@@ -4393,14 +4393,14 @@ if (shippingDetails.includes("Own shipping")) {
             <li><strong>Warranty:</strong> ${warranty} days</li>
           </ul>
 
-          <p style="font-size: 16px;">
+          <p style="font-size: 14px;">
             <strong>Purchase Order To: ${yardName}</strong><br>
             <strong>Part Price: $${partPrice.toFixed(2)}</strong><br>
             <strong>Shipping: ${shippingValue}</strong><br>
             <strong>Shipping to: ${fName} ${lName}, ${sAddressStreet}, ${sAddressCity}, ${sAddressState}, ${sAddressAcountry}</strong>
           </p>
 
-          <p style="font-size: 16px;">
+          <p style="font-size: 14px;">
             Notes:<br>
             Please provide the transaction receipt after you have charged our card.<br>
             Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.<br>
@@ -4410,15 +4410,15 @@ if (shippingDetails.includes("Own shipping")) {
 
           <!-- Highlighted Notes -->
          <p>
-  <strong style="background-color: #ffff00; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
+  <strong style="background-color: #ffff00; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
     NOTE: BLIND SHIPPING
   </strong><br>
 
-  <strong style="background-color: #ff0000; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
+  <strong style="background-color: #ff0000; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
     NOTE: PROVIDE PICTURES
   </strong><br>
 
-  <strong style="background-color: #ff0000; font-size: 16px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
+  <strong style="background-color: #ff0000; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
     BEFORE SHIPPING
   </strong>
 </p>
@@ -4426,7 +4426,7 @@ if (shippingDetails.includes("Own shipping")) {
 
           <!-- Footer -->
           <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p><br>
-          <p style="font-size: 18px;">
+          <p style="font-size: 16px;">
             ${firstName}<br>
             Auto Parts Group Corp<br>
             +1 (866) 207-5533<br>
