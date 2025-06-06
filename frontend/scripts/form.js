@@ -4007,11 +4007,11 @@ const pdfBlob = new Blob([pdfArrayBuffer], { type: 'application/pdf' });
 const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
     console.log(clone.outerHTML);
   console.log("PDF blob size:", pdfBlob.size,"File size:", pdfFile.size);
+  for (let [k, v] of formData.entries()) console.log(k, v);
   document.body.removeChild(clone);
 
   const formData = new FormData();
 formData.append('pdfFile', pdfFile);
-for (let [k, v] of formData.entries()) console.log(k, v);
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
