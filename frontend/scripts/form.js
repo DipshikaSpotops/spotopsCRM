@@ -3919,6 +3919,7 @@ $("#cancelShipment").on("click", function () {
       console.error("Error fetching order data:", error);
     });
 });
+
 document.getElementById('sendPOBtn').addEventListener('click', async function () {
   const i = yardIndex - 1;
   const order = commonOrderRes;
@@ -3928,6 +3929,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     month: '2-digit',
     day: '2-digit'
   });
+
   const yard = order.additionalInfo[i];
   const shippingDetail = yard.shippingDetails || '';
   let shipping = 0;
@@ -3935,35 +3937,36 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     const match = shippingDetail.match(/Yard shipping:\s*(\d+)/);
     if (match) shipping = parseFloat(match[1]);
   }
+
   const partPrice = parseFloat(yard.partPrice);
   const grandTotal = partPrice + shipping;
+
   const poTemplate = document.getElementById('poTemplate');
   const clone = poTemplate.cloneNode(true);
   clone.id = '';
   clone.style.display = 'block';
   clone.style.visibility = 'visible';
-  clone.style.position = 'relative';
+  clone.style.position = 'fixed';
   clone.style.left = '0';
   clone.style.top = '0';
   clone.style.zIndex = '9999';
-  clone.style.width = '794px';  
-clone.style.height = '1123px'; 
-clone.style.overflow = 'hidden';
-clone.style.padding = '20px';
-clone.style.boxSizing = 'border-box';
-clone.style.background = 'white';
+  clone.style.width = '794px';   // A4 width in pixels at 96dpi
+  clone.style.height = '1123px'; // A4 height in pixels at 96dpi
+  clone.style.overflow = 'hidden';
+  clone.style.padding = '20px';
+  clone.style.boxSizing = 'border-box';
+  clone.style.background = 'white';
+
   document.body.appendChild(clone);
+
+  // Fill dynamic data
   clone.querySelector('#po-no').textContent = order.orderNo;
   clone.querySelector('#po-date').textContent = today;
-
   clone.querySelector('#yard-info').innerHTML = `
-    ${yard.yardName}<br>
-    ${yard.street}, ${yard.city}, ${yard.state} ${yard.zipcode}
+    ${yard.yardName}<br>${yard.street}, ${yard.city}, ${yard.state} ${yard.zipcode}
   `;
-
   clone.querySelector('#ship-to').innerHTML = `
-    ${order.fName} ${order.lName}<br>
-    ${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressAcountry}
+    ${order.fName} ${order.lName}<br>${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressAcountry}
   `;
   clone.querySelector('#part-year').textContent = order.year;
   clone.querySelector('#part-make').textContent = order.make;
@@ -3978,35 +3981,35 @@ clone.style.background = 'white';
   clone.querySelector('#subtotal').textContent = `$${partPrice}`;
   clone.querySelector('#shipping').textContent = shipping ? `$${shipping}` : '-';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
-await new Promise(resolve => requestAnimationFrame(resolve));
-await new Promise(resolve => setTimeout(resolve, 3000));
+
+  await new Promise(resolve => requestAnimationFrame(resolve));
+  await new Promise(resolve => setTimeout(resolve, 500));
+
   const fileName = `${order.orderNo}-PO.pdf`;
   const pdfBlob = await html2pdf()
-  .set({
-    filename: fileName,
-    margin: 0,
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      logging: true,            // See console errors
-      windowWidth: clone.scrollWidth,
-      windowHeight: clone.scrollHeight,
-    },
-    jsPDF: {
-      unit: 'pt',
-      format: 'a4',
-      orientation: 'portrait'
-    }
-  })
-  .from(clone)
-  .toPdf()
-  .output('blob');
+    .set({
+      filename: fileName,
+      margin: 0,
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        windowWidth: clone.scrollWidth,
+        windowHeight: clone.scrollHeight
+      },
+      jsPDF: {
+        unit: 'pt',
+        format: 'a4',
+        orientation: 'portrait'
+      }
+    })
+    .from(clone)
+    .outputPdf('blob');
+
   console.log("PDF blob size:", pdfBlob.size);
-document.body.appendChild(clone);
-clone.style.border = '2px solid red'; 
+  document.body.removeChild(clone);
+
   const formData = new FormData();
   formData.append('pdfFile', pdfBlob, fileName);
-
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
@@ -4024,17 +4027,12 @@ clone.style.border = '2px solid red';
   formData.append('userName', firstName);
   formData.append('recipientEmail', yard.email);
   formData.append('yardName', yard.yardName);
+
   fetch(`https://www.spotops360.com/sendPOEmailYard/${order.orderNo}`, {
     method: 'POST',
     body: formData,
   })
-    .then(res => {
-      if (res.ok) {
-        alert('PO sent successfully!');
-      } else {
-        alert('Failed to send PO.');
-      }
-    })
+    .then(res => res.ok ? alert('PO sent successfully!') : alert('Failed to send PO.'))
     .catch(err => {
       console.error('Error sending PO:', err);
       alert('An error occurred.');
