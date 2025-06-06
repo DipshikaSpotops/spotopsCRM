@@ -4327,7 +4327,8 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   console.log("Sending PO to yard...");
   try {
     const { orderNo } = req.params;
-    console.log("sending po",orderNo)
+    var firstName = req.query.firstName;
+    console.log("sending po",orderNo,firstName)
     const order = await Order.findOne({ orderNo });
     if (!order) return res.status(404).send("Order not found");
 
@@ -4339,7 +4340,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
 
     if (!yard) return res.status(400).send("Invalid yard index");
     const {
-      year, make, model, pReq, desc, vin, partNo, fName, lName,firstName,
+      year, make, model, pReq, desc, vin, partNo, fName, lName,userName,
       sAddressStreet, sAddressCity, sAddressState, sAddressAcountry
     } = order;
 

@@ -4024,7 +4024,6 @@ for (let [k, v] of formData.entries()) console.log(k, v);
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
   }
-var userName  = localStorage.getItem("firstName")
   formData.append('orderNo', order.orderNo);
   formData.append('year', order.year);
   formData.append('make', order.make);
@@ -4034,11 +4033,10 @@ var userName  = localStorage.getItem("firstName")
   formData.append('partPrice', yard.partPrice);
   formData.append('shippingDetails', shippingDetails.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
   formData.append('desc', order.desc);
-  formData.append('firstName', userName);
   formData.append('recipientEmail', yard.email);
   formData.append('yardName', yard.yardName);
-
-  fetch(`https://www.spotops360.com/sendPOEmailYard/${order.orderNo}`, {
+var userName  = localStorage.getItem("firstName")
+  fetch(`https://www.spotops360.com/sendPOEmailYard/${order.orderNo}?firstName=${userName}`, {
     method: 'POST',
     body: formData,
   })
