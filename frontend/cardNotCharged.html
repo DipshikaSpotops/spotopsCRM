@@ -800,9 +800,6 @@ responses.forEach(res => {
   yardOrdersRaw.push(...res.data.orders);
 });
 
-
-let yardOrders = [];
-
         yardOrders = yardOrdersRaw.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
                 info =>
@@ -863,72 +860,68 @@ function renderTableRows(page, data = yardOrders) {
     );
     tableHeader.append('<th style="text-align:center;" scope="col">Actions</th>');
     // Render table rows for the current page
-    pageData.forEach(order => {
-        let yardInfoHtml = "";
-        let totalShipping = 0;
+pageData.forEach(order => {
+    let yardInfoHtml = "";
+    let totalCardCharged = 0;
 
-        for (let i = 0; i < maxYards; i++) {
-            if (order.additionalInfo[i]) {
-                const info = order.additionalInfo[i];
-                const shippingDetails = info.shippingDetails || "";
-                const shippingCharge = shippingDetails
-                    ? parseFloat(shippingDetails.split(":")[1]?.trim()) || 0
-                    : 0;
-                totalShipping += shippingCharge;
+    for (let i = 0; i < maxYards; i++) {
+        if (order.additionalInfo[i]) {
+            const info = order.additionalInfo[i];
+            const shippingDetails = info.shippingDetails || "";
+            const shippingCharge = shippingDetails
+                ? parseFloat(shippingDetails.split(":")[1]?.trim()) || 0
+                : 0;
 
-                const partPrice = parseFloat(info.partPrice || 0);
-                const others = parseFloat(info.others || 0);
-                const yardOSorYS = info.shippingDetails || '';
-         // Row 8: Own Shipping
-let shippingValueYard = 0;
-if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0
-} 
-console.log("yard shipping",shippingValueYard);
-                var totalCardCharged = partPrice + shippingValueYard + others;
+            const partPrice = parseFloat(info.partPrice || 0);
+            const others = parseFloat(info.others || 0);
+            const yardOSorYS = info.shippingDetails || "";
 
-                yardInfoHtml += `<td>
-                    ${info.yardName || ""}<br>
-                    Shipping: ${shippingDetails}<br>
-                    Part price: $${partPrice} | Others: $${others}<br>
-                    PO sent on : ${info.poSentDate || "N/A"}
-                </td>`;
-            } else {
-                yardInfoHtml += "<td></td>"; // Empty cell for missing yards
+            let shippingValueYard = 0;
+            if (yardOSorYS.includes("Yard shipping")) {
+                shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
             }
+
+            // Accumulate total charged across all yards
+            totalCardCharged += partPrice + shippingValueYard + others;
+
+            yardInfoHtml += `<td>
+                ${info.yardName || ""}<br>
+                Shipping: ${shippingDetails}<br>
+                Part price: $${partPrice} | Others: $${others}<br>
+                PO sent on: ${info.poSentDate || "N/A"}
+            </td>`;
+        } else {
+            yardInfoHtml += "<td></td>"; // Empty cell
         }
-        const datetime = order.orderDate;
-const date = new Date(datetime);
-const day = date.getUTCDate();  // Use UTC day
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const year = date.getUTCFullYear();  // Use UTC year
+    }
 
-const suffix = (day) => {
-  if (day > 3 && day < 21) return "th";
-  switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
-  }
-};
-const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
-        $("#yardInfoTable").append(
-            `<tr>
-                <td>${order.orderNo}</td>
-                <td>${formattedOrderDate}</td>
-                ${yardInfoHtml}
-                <td>$${totalCardCharged.toFixed(2)}</td>
-                <td><button class="btn btn-success btn-sm process-btn" data-id="${
-                  order.orderNo
-                }">View</button></td>
-            </tr>`
-        );
-        var totalOrders = yardOrders.length;
-console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Card Not Charged Orders- ${totalOrders}`;
-    });
+    const datetime = order.orderDate;
+    const date = new Date(datetime);
+    const day = date.getUTCDate();
+    const year = date.getUTCFullYear();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const suffix = (d) => {
+        if (d > 3 && d < 21) return "th";
+        switch (d % 10) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+        }
+    };
+    const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
 
+    $("#yardInfoTable").append(
+        `<tr>
+            <td>${order.orderNo}</td>
+            <td>${formattedOrderDate}</td>
+            ${yardInfoHtml}
+            <td>$${totalCardCharged.toFixed(2)}</td>
+            <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
+        </tr>`
+    );
+});
+document.getElementById("showTotalOrders").innerHTML = `Total Card Not Charged Orders - ${yardOrders.length}`;
     // Update table footer with totals
     // let footerHtml = "<tr>";
     // for (let i = 0; i <= maxYards + 1; i++) {
