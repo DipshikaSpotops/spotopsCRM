@@ -943,54 +943,54 @@ $("#yardInfoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
-function createPaginationControls(totalPages, orders = yardOrders) {
-    const paginationControls = $("#pagination-controls");
-    paginationControls.empty(); // Clear pagination controls
+function createPaginationControls(totalPages, data = yardOrders) {
+  const paginationControls = $("#pagination-controls");
+  paginationControls.empty();
 
-    console.log("Total Pages:", totalPages, "Total Orders:", orders.length);
+  if (totalPages > 1) {
+    paginationControls.append(
+      `<button class="previousNext" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
+    );
 
-    if (totalPages > 1) {
-        paginationControls.append(
-            `<button class="previousNext" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
-        );
-
-        for (let i = 1; i <= totalPages; i++) {
-            paginationControls.append(
-                `<button class="pageNos btn ${i === currentPage ? "active-page" : ""} page-btn" data-page="${i}">${i}</button>`
-            );
-        }
-
-        paginationControls.append(
-            `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>`
-        );
+    for (let i = 1; i <= totalPages; i++) {
+      paginationControls.append(
+        `<button class="pageNos btn ${i === currentPage ? "active-page" : ""} page-btn" data-page="${i}">${i}</button>`
+      );
     }
+
+    paginationControls.append(
+      `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>`
+    );
+
+    // Save the latest dataset used for pagination
+    paginationControls.data("pagedata", data);
+  }
 }
 
-
-// Event listener for pagination buttons
 $('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+  const page = $(this).data('page');
+  currentPage = page;
+  const data = $('#pagination-controls').data("pagedata") || yardOrders;
+  renderTableRows(currentPage, data);
+  createPaginationControls(Math.ceil(data.length / rowsPerPage), data);
 });
 $('#pagination-controls').on('click', '#prevPage', function () {
-    if (currentPage > 1) {
-        currentPage--;
-        console.log("Previous Page:", currentPage, "Yard Orders Length:", yardOrders.length);
-        renderTableRows(currentPage, yardOrders);
-        createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-    }
+  if (currentPage > 1) {
+    currentPage--;
+    const data = $('#pagination-controls').data("pagedata") || yardOrders;
+    renderTableRows(currentPage, data);
+    createPaginationControls(Math.ceil(data.length / rowsPerPage), data);
+  }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-    const totalPages = Math.ceil(yardOrders.length / rowsPerPage);
-    if (currentPage < totalPages) {
-        currentPage++;
-        console.log("Next Page:", currentPage, "Yard Orders Length:", yardOrders.length);
-        renderTableRows(currentPage, yardOrders);
-        createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-        }
+  const data = $('#pagination-controls').data("pagedata") || yardOrders;
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage, data);
+    createPaginationControls(totalPages, data);
+  }
 });
 
 // Filter by month and year
