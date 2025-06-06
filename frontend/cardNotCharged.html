@@ -789,7 +789,7 @@ async function fetchYardInfo(month, year) {
             return;
         }
 
-        yardOrders = response.data.map(order => {
+        yardOrders = response.data.orders.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
                 info =>
                     (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
