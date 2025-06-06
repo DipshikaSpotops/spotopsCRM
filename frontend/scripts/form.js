@@ -4024,7 +4024,7 @@ for (let [k, v] of formData.entries()) console.log(k, v);
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
   }
-firstName  = localStorage.getItem("firstName");
+var userName  = localStorage.getItem("firstName")
   formData.append('orderNo', order.orderNo);
   formData.append('year', order.year);
   formData.append('make', order.make);
@@ -4034,7 +4034,7 @@ firstName  = localStorage.getItem("firstName");
   formData.append('partPrice', yard.partPrice);
   formData.append('shippingDetails', shippingDetails.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
   formData.append('desc', order.desc);
-  formData.append('firstName', firstName);
+  formData.append('firstName', userName);
   formData.append('recipientEmail', yard.email);
   formData.append('yardName', yard.yardName);
 
