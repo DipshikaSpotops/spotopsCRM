@@ -3955,7 +3955,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   clone.style.padding = '20px';
   clone.style.boxSizing = 'border-box';
   clone.style.background = 'white';
-
+clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
   document.body.appendChild(clone);
 
   // Fill dynamic data
@@ -3989,8 +3989,8 @@ const canvas = await html2canvas(clone, {
   useCORS: true,
   backgroundColor: "#ffffff", 
 });
-
-const imgData = canvas.toDataURL("image/jpeg", 0.75);
+console.log(canvas.width, canvas.height);
+const imgData = canvas.toDataURL("image/jpeg", 0.7);
 const { jsPDF } = window.jspdf;
 const pdf = new jsPDF({
    unit: 'mm',
@@ -4000,7 +4000,7 @@ const pdf = new jsPDF({
 
 const pdfWidth = 210;
 const pdfHeight = 297; 
-pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297); 
 const pdfBlob = pdf.output('blob');
 const fileName = `${order.orderNo}-PO.pdf`;
 const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
