@@ -4004,7 +4004,7 @@ const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
 const formData = new FormData();
 formData.append('pdfFile', pdfFile);
     console.log(clone.outerHTML);
-  console.log("PDF blob size:", pdfBlob.size,"File size:", pdfFile.size);
+  console.log("File size:", pdfFile.size);
   document.body.removeChild(clone);
 
   
