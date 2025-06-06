@@ -3921,6 +3921,7 @@ $("#cancelShipment").on("click", function () {
 });
 
 document.getElementById('sendPOBtn').addEventListener('click', async function () {
+    document.getElementById('loadingOverlay').style.display = 'block';
   const i = yardIndex - 1;
   const order = commonOrderRes;
   const today = new Date().toLocaleDateString('en-US', {
@@ -4040,10 +4041,19 @@ var userName  = localStorage.getItem("firstName")
     method: 'POST',
     body: formData,
   })
-    .then(res => res.ok ? alert('PO sent successfully!') : alert('Failed to send PO.'))
+     .then(res => {
+      if (res.ok) {
+        alert('PO sent successfully!');
+      } else {
+        alert('Failed to send PO.');
+      }
+    })
     .catch(err => {
       console.error('Error sending PO:', err);
       alert('An error occurred.');
+    })
+    .finally(() => {
+      document.getElementById('loadingOverlay').style.display = 'none';
     });
 });
 
