@@ -4429,8 +4429,7 @@ if (shippingDetails.includes("Own shipping")) {
           <p style="font-size: 16px;">
             ${firstName}<br>
             Auto Parts Group Corp<br>
-            +1 (866) 207-5533<br>
-            purchase@auto-partsgroup.com
+            +1 (866) 207-5533 | purchase@auto-partsgroup.com
           </p>
 
       `,
