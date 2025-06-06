@@ -3950,9 +3950,8 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   clone.style.left = '0';
   clone.style.top = '0';
   clone.style.zIndex = '9999';
-  clone.style.width = '794px';   // A4 width in pixels at 96dpi
-  clone.style.height = '1123px'; // A4 height in pixels at 96dpi
-  clone.style.overflow = 'hidden';
+  clone.style.width = '794px';  
+  clone.style.height = '1123px'; 
   clone.style.padding = '20px';
   clone.style.boxSizing = 'border-box';
   clone.style.background = 'white';
