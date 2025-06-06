@@ -3945,7 +3945,12 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   clone.style.left = '0';
   clone.style.top = '0';
   clone.style.zIndex = '9999';
-  clone.style.background = 'white';
+  clone.style.width = '794px';  
+clone.style.height = '1123px'; 
+clone.style.overflow = 'hidden';
+clone.style.padding = '20px';
+clone.style.boxSizing = 'border-box';
+clone.style.background = 'white';
   document.body.appendChild(clone);
   clone.querySelector('#po-no').textContent = order.orderNo;
   clone.querySelector('#po-date').textContent = today;
@@ -3973,13 +3978,23 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   clone.querySelector('#shipping').textContent = shipping ? `$${shipping}` : '-';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 await new Promise(resolve => requestAnimationFrame(resolve));
-await new Promise(resolve => setTimeout(resolve, 100));
+await new Promise(resolve => setTimeout(resolve, 3000));
   const fileName = `${order.orderNo}-PO.pdf`;
   const pdfBlob = await html2pdf().set({
-    filename: fileName,
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-  }).from(clone).outputPdf('blob');
+  margin:       0,
+  filename:     fileName,
+  html2canvas:  {
+    scale: 2,
+    useCORS: true,
+    windowWidth: clone.scrollWidth,
+    windowHeight: clone.scrollHeight
+  },
+  jsPDF: {
+    unit: 'pt',
+    format: 'a4',
+    orientation: 'portrait'
+  }
+}).from(clone).toPdf().output('blob');
   console.log("PDF blob size:", pdfBlob.size);
   document.body.removeChild(clone);
   const formData = new FormData();
