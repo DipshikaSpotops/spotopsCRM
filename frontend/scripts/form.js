@@ -3941,6 +3941,7 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   const clone = poTemplate.cloneNode(true);
   clone.id = '';
   clone.style.display = 'block';
+  clone.style.visibility = 'visible';
   clone.style.position = 'relative';
   clone.style.left = '0';
   clone.style.top = '0';
@@ -3980,26 +3981,30 @@ clone.style.background = 'white';
 await new Promise(resolve => requestAnimationFrame(resolve));
 await new Promise(resolve => setTimeout(resolve, 3000));
   const fileName = `${order.orderNo}-PO.pdf`;
-  const pdfBlob = await html2pdf().set({
-  margin:       0,
-  filename:     fileName,
-  html2canvas:  {
-    scale: 2,
-    useCORS: true,
-    windowWidth: clone.scrollWidth,
-    windowHeight: clone.scrollHeight
-  },
-  jsPDF: {
-    unit: 'pt',
-    format: 'a4',
-    orientation: 'portrait'
-  }
-}).from(clone).toPdf().output('blob');
+  const pdfBlob = await html2pdf()
+  .set({
+    filename: fileName,
+    margin: 0,
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      logging: true,            // See console errors
+      windowWidth: clone.scrollWidth,
+      windowHeight: clone.scrollHeight,
+    },
+    jsPDF: {
+      unit: 'pt',
+      format: 'a4',
+      orientation: 'portrait'
+    }
+  })
+  .from(clone)
+  .toPdf()
+  .output('blob');
   console.log("PDF blob size:", pdfBlob.size);
-  document.body.removeChild(clone);
-  const formData = new FormData();
+  document.body.appendChild(clone);
+clone.style.border = '2px solid red';
   formData.append('pdfFile', pdfBlob, fileName);
-
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
     formData.append('images', images[j]);
