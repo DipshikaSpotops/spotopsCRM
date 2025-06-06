@@ -3941,10 +3941,11 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   const clone = poTemplate.cloneNode(true);
   clone.id = '';
   clone.style.display = 'block';
-  clone.style.position = 'absolute';
+  clone.style.position = 'relative';
   clone.style.left = '0';
   clone.style.top = '0';
   clone.style.zIndex = '9999';
+  clone.style.background = 'white';
   document.body.appendChild(clone);
   clone.querySelector('#po-no').textContent = order.orderNo;
   clone.querySelector('#po-date').textContent = today;
@@ -3971,7 +3972,8 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
   clone.querySelector('#subtotal').textContent = `$${partPrice}`;
   clone.querySelector('#shipping').textContent = shipping ? `$${shipping}` : '-';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
-  await new Promise(r => setTimeout(r, 300));
+await new Promise(resolve => requestAnimationFrame(resolve));
+await new Promise(resolve => setTimeout(resolve, 100));
   const fileName = `${order.orderNo}-PO.pdf`;
   const pdfBlob = await html2pdf().set({
     filename: fileName,
