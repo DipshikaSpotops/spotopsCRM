@@ -3985,17 +3985,17 @@ await new Promise(resolve => setTimeout(resolve, 500)); // Give it time to rende
 
 
 const canvas = await html2canvas(clone, {
-  scale: 2,
+  scale: 1,
   useCORS: true,
-  backgroundColor: "#ffffff", // make sure white bg is preserved
+  backgroundColor: "#ffffff", 
 });
 
 const imgData = canvas.toDataURL("image/png");
 const { jsPDF } = window.jspdf;
 const pdf = new jsPDF({
-  orientation: "portrait",
-  unit: "pt",
-  format: [canvas.width, canvas.height]
+   unit: 'mm',
+  format: 'a4',
+  orientation: 'portrait'
 });
 
 pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
