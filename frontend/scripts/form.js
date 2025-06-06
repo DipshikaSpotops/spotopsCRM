@@ -3990,7 +3990,7 @@ const canvas = await html2canvas(clone, {
   backgroundColor: "#ffffff", 
 });
 
-const imgData = canvas.toDataURL("image/png");
+const imgData = canvas.toDataURL("image/jpeg", 0.75);
 const { jsPDF } = window.jspdf;
 const pdf = new jsPDF({
    unit: 'mm',
@@ -3998,7 +3998,9 @@ const pdf = new jsPDF({
   orientation: 'portrait'
 });
 
-pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+const pdfWidth = 210;
+const pdfHeight = 297; 
+pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 const pdfBlob = pdf.output('blob');
 const fileName = `${order.orderNo}-PO.pdf`;
 const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
