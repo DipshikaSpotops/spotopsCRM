@@ -443,61 +443,76 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-$("#filterButton").click(async function () {
-  const newMonth = $("#monthYearPicker").val();
-  localStorage.setItem("selectedMonth", newMonth);
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-// var allOrdersLength = allOrders.length;
-var orders = allOrders.filter((item) => {
-const poInfoArray = item.additionalInfo;
-if (!poInfoArray || poInfoArray.length === 0) return false;
-return poInfoArray.some((info) => {
-const statusMatches = info.status === "Yard located";
-return statusMatches;
-});
-});
-const teamAgentsMap = {
-  Shankar: ["Mark", "John"],
-  Vinutha: ["Michael", "David"],
-};
-
-if (team in teamAgentsMap) {
-  orders = orders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-document.getElementById("showTotalOrders").innerHTML = `Total Yard Located Orders This Month- ${orders.length}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(orders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
 });
-// notification
+// notification$("#filterButton").click(async function () {
+  const newMonth = $("#monthYearPicker").val();
+  localStorage.setItem("selectedMonth", newMonth);
+
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
+
+  const [year, monthNumber] = newMonth.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+
+  try {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch filtered orders");
+    }
+
+    let fetchedOrders = ordersResponse.data;
+
+    // Only include orders with "Yard located" status
+    let filteredOrders = fetchedOrders.filter((item) => {
+      const poInfoArray = item.additionalInfo;
+      if (!poInfoArray || poInfoArray.length === 0) return false;
+      return poInfoArray.some((info) => info.status === "Yard located");
+    });
+
+    // Team-agent mapping
+    const teamAgentsMap = {
+      Shankar: ["Mark", "John"],
+      Vinutha: ["Michael", "David"],
+    };
+
+    const team = localStorage.getItem("team");
+
+    // Apply team filter if applicable
+    if (team in teamAgentsMap) {
+      filteredOrders = filteredOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    // Update UI
+    document.getElementById("showTotalOrders").innerHTML =
+      `Total Yard Located Orders This Month- ${filteredOrders.length}`;
+
+    // Update global orders list and render
+    allOrders = filteredOrders;
+    currentPage = 1; // Reset to page 1 when filter is applied
+
+    renderTableRows(currentPage, filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+
+  } catch (error) {
+    console.error("Error fetching filtered orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
+});
+
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
 const notificationList = $("#notificationList");
