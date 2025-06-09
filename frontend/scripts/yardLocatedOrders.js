@@ -483,7 +483,7 @@ if (team in teamAgentsMap) {
 }
 document.getElementById("showTotalOrders").innerHTML = `Total Yard Located Orders This Month- ${orders.length}`;
 renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+createPaginationControls(Math.ceil(orders.length / rowsPerPage));
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 } finally {
