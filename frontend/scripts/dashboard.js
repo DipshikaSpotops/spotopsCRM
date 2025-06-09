@@ -613,22 +613,22 @@ async function fetchAndDisplayThreeMonthsData() {
 
   try {
     const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-based index (0 = Jan, 11 = Dec)
+
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const currentMonthValue = now.toISOString().slice(0, 7); // format: YYYY-MM
+    const currentMonthValue = now.toISOString().slice(0, 7); // YYYY-MM
     document.getElementById("customMonth").value = currentMonthValue;
 
-    for (let i = 2; i >= 0; i--) {
-      const pastDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthStr = months[pastDate.getMonth()];
-      const year = pastDate.getFullYear();
-
-      monthLabels.push(`${monthStr} ${year}`);
+    for (let i = 0; i <= currentMonth; i++) {
+      const monthStr = months[i];
+      monthLabels.push(`${monthStr} ${currentYear}`);
 
       const response = await axios.get("https://www.spotops360.com/orders/monthly", {
         params: {
           month: monthStr,
-          year,
-          limit: 1000, // Request up to 1000 orders for that month
+          year: currentYear,
+          limit: 1000,
         }
       });
 
@@ -637,7 +637,7 @@ async function fetchAndDisplayThreeMonthsData() {
         const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
         monthlyGPData.push(totalGP);
       } else {
-        console.warn(`Failed to fetch data for ${monthStr} ${year}`);
+        console.warn(`Failed to fetch data for ${monthStr} ${currentYear}`);
         monthlyGPData.push(0);
       }
     }
@@ -645,11 +645,12 @@ async function fetchAndDisplayThreeMonthsData() {
     latestMonthLabels = monthLabels;
     latestMonthlyGPData = monthlyGPData;
 
-    drawBarChart(monthLabels, monthlyGPData); 
+    drawBarChart(monthLabels, monthlyGPData);
   } catch (err) {
-    console.error("Error fetching and displaying 3-month data:", err);
+    console.error("Error fetching and displaying YTD data:", err);
   }
 }
+
 
 // Function to initialize the Monthly Sales Progress Chart
 let monthlySalesProgressChartInstance = null;
