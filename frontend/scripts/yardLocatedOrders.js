@@ -310,6 +310,7 @@ const teamAgentsMap = {
 };
 var team = localStorage.getItem("team");
 console.log("team",team);
+console.log("team",team);
 if (team in teamAgentsMap) {
   allOrder = allOrder.filter(order =>
     teamAgentsMap[team].includes(order.salesAgent)
