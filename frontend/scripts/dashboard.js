@@ -291,7 +291,6 @@ orders.forEach(order => {
       
       options: {
         responsive: true,
-        maintainAspectRatio: false,
         scales: {
           x: {
             title: { display: true, text: "Day of the Month", color: colors.axisColor },
@@ -675,7 +674,6 @@ function drawBarChart(labels, data) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
       scales: {
         x: {
           title: { display: true, text: "Month", color: colors.axisColor },
@@ -778,7 +776,6 @@ function updateDoughnutChart(monthIndex) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
       plugins: {
         legend: {
           labels: { color: colors.pieChartLegendColor },
