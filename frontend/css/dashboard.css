@@ -217,24 +217,22 @@ cursor: pointer;
     max-width: 420px;
         margin-left: 18%;
   }
-  #mainContainer {
+  .three-column-row {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 20px;
-  width: 100%;
 }
 
-.chart-wrapper.monthly-overview {
-  flex: 1 1 60%;
-  min-width: 300px;
-  max-width: 60%;
-}
-
-.chart-wrapper.sales-insights {
-  flex: 1 1 38%;
+.three-column-row .chart-wrapper {
+  flex: 1 1 32%;
+  max-width: 32%;
   min-width: 280px;
-  max-width: 38%;
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
 #monthlyDoughnutChart {
@@ -285,7 +283,12 @@ cursor: pointer;
   }
 }
 
-
+@media (max-width: 992px) {
+  .three-column-row .chart-wrapper {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+}
 @media (max-width: 576px) {
   .navbar .user-info span {
     font-size: 14px;
@@ -342,13 +345,16 @@ cursor: pointer;
 }
 
 .rates-container {
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-  padding: 100px;
-  border-radius: 10px;
-  background: #fbfcfd;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rates-container .rate-item {
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
 }
 #prevMonthBtn, #nextMonthBtn {
   background-color: #3c6059;
@@ -668,16 +674,6 @@ text-align:center;
 }
 
 @media (max-width: 768px){
-    #mainContainer {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .chart-wrapper.monthly-overview,
-  .chart-wrapper.sales-insights {
-    max-width: 90%;
-    flex: 1 1 100%;
-  }
   .toggle-sidebar {
 display: block;
 margin-right: 1%;

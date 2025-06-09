@@ -217,62 +217,42 @@ window.location.href = "login_signup.html";
   </div>
   
   <!-- SECOND ROW: SINGLE CHART, SAME WIDTH AS OTHERS -->
-  <div class="charts-container" id="mainContainer">
-    <div class="charts-container-bottom">
-  <h4 style="text-align: center;">Monthly Orders' Overview</h4>
-
-  <div style="text-align:center; margin-bottom: 10px;">
-    <button id="prevMonthBtn" class="btn btn-sm btn-secondary">&larr;</button>
-    <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
-    <button id="nextMonthBtn" class="btn btn-sm btn-secondary">&rarr;</button>
-  </div>
-<div id="mainContainer">
-  <div id="doughnutCharts">
-    <div class="doughnut-wrapper" style="max-width: 420px; margin: auto;">
-      <canvas id="monthlyDoughnutChart"></canvas>
+ <div id="mainContainer">
+  <div class="three-column-row">
+    <!-- Column 1: Doughnut Chart -->
+    <div class="chart-wrapper doughnut-chart">
+      <h4 style="text-align: center;">Monthly Orders' Overview</h4>
+      <div style="text-align:center; margin-bottom: 10px;">
+        <button id="prevMonthBtn" class="btn btn-sm btn-secondary">&larr;</button>
+        <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
+        <button id="nextMonthBtn" class="btn btn-sm btn-secondary">&rarr;</button>
+      </div>
+      <div class="doughnut-wrapper">
+        <canvas id="monthlyDoughnutChart"></canvas>
+      </div>
+      <div style="text-align:center; margin: 10px 0;">
+        <input type="month" id="customMonth" />
+        <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
+      </div>
     </div>
-    <div id="monthlyRates" class="rates-container mt-3"></div>
 
-  <div style="text-align:center; margin-bottom: 6px;">
-    <input type="month" id="customMonth" />
-    <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
+    <!-- Column 2: Monthly Rates -->
+    <div class="chart-wrapper monthly-rates">
+      <h4 style="text-align: center;">Order Metrics</h4>
+      <div id="monthlyRates" class="rates-container mt-3"></div>
+    </div>
+
+    <!-- Column 3: Sales Insights -->
+    <div class="chart-wrapper sales-insights" style="background-color: #f7fefc;">
+      <h4 style="text-align: center; background-color: #f6ffed; padding: 10px; border-radius: 8px;">Sales Insights</h4>
+
+      <div id="topAgentBox" class="sales-insight-box"></div>
+      <div id="bestDayBox" class="sales-insight-box"></div>
+      <div id="monthlyCancelRefundBox" class="sales-insight-box"></div>
+    </div>
   </div>
-  </div>
 </div>
-   <div class="chart-wrapper sales-insights" style="background-color: #f7fefc;">
-  <h4 style="text-align: center; background-color: #f6ffed; padding: 10px; border-radius: 8px;">Sales Insights</h4>
 
-  <div id="topAgentBox" style="
-    text-align: center;
-    padding: 14px;
-    /* color: #1f4d3d; */
-    font-weight: 600;
-    margin: 8px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  "></div>
-
-  <div id="bestDayBox" style="
-    text-align: center;
-    padding: 14px;
-    /* color: #00332e; */
-    font-weight: 600;
-    margin: 8px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  "></div>
-
-  <div id="monthlyCancelRefundBox" style="
-    text-align: center;
-    padding: 14px;
-    /* color: #0d2b4a; */
-    font-weight: 600;
-    margin: 8px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  "></div>
-</div>
-</div>
      
   </div>  
 </div>
