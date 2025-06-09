@@ -221,7 +221,7 @@ cursor: pointer;
 
 #monthlyDoughnutChart {
   max-width: 400px;
-  max-height: 300px;
+  max-height: 278px;
   width: 100%;
   height: auto;
   margin: 0 auto;
@@ -648,7 +648,7 @@ text-align:center;
 
 .sales-insight-box {
   text-align: center;
-  padding: 14px;
+  padding: 0px;
   font-weight: 600;
   margin: 8px 0;
   border-radius: 8px;
