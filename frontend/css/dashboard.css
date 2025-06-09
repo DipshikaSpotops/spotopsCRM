@@ -614,6 +614,9 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 h3 {
 text-align:center;
 }
+#summaryCards {
+  display: flex;
+}
 .summary-card {
   background-color: #eaf6ff;
   padding: 15px;
