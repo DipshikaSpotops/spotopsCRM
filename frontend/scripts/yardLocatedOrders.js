@@ -443,12 +443,7 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-
-$("#logoutLink").click(function () {
-window.localStorage.clear();
-window.location.href = "login_signup.html";
-});
-// notification$("#filterButton").click(async function () {
+$("#filterButton").click(async function () {
   const newMonth = $("#monthYearPicker").val();
   localStorage.setItem("selectedMonth", newMonth);
 
@@ -456,12 +451,12 @@ window.location.href = "login_signup.html";
   $("body").addClass("modal-active");
   $("#loadingMessage").show();
 
-  const [year, monthNumber] = newMonth.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[parseInt(monthNumber, 10) - 1];
+  const [year1, monthNumber1] = newMonth.split("-");
+  const months1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month1 = months1[parseInt(monthNumber1, 10) - 1];
 
   try {
-    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`, {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/yardProcessing?month=${month1}&year=${year1}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
@@ -513,6 +508,11 @@ window.location.href = "login_signup.html";
   }
 });
 
+$("#logoutLink").click(function () {
+window.localStorage.clear();
+window.location.href = "login_signup.html";
+});
+// notification
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
 const notificationList = $("#notificationList");
