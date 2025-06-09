@@ -217,39 +217,36 @@ window.location.href = "login_signup.html";
   </div>
   
   <!-- SECOND ROW: SINGLE CHART, SAME WIDTH AS OTHERS -->
- <div id="mainContainer">
-  <div class="three-column-row">
-    <!-- Column 1: Doughnut Chart -->
-    <div class="chart-wrapper doughnut-chart">
-      <h4 style="text-align: center;">Monthly Orders' Overview</h4>
-      <div style="text-align:center; margin-bottom: 10px;">
-        <button id="prevMonthBtn" class="btn btn-sm btn-secondary">&larr;</button>
-        <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
-        <button id="nextMonthBtn" class="btn btn-sm btn-secondary">&rarr;</button>
-      </div>
-      <div class="doughnut-wrapper">
-        <canvas id="monthlyDoughnutChart"></canvas>
-      </div>
-      <div style="text-align:center; margin: 10px 0;">
-        <input type="month" id="customMonth" />
-        <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
-      </div>
+ <div class="three-column-row">
+  <!-- Doughnut Chart -->
+  <div class="chart-wrapper">
+    <h4 style="text-align: center;">Monthly Orders' Overview</h4>
+    <div style="text-align:center; margin-bottom: 10px;">
+      <button id="prevMonthBtn" class="btn btn-sm btn-secondary">&larr;</button>
+      <span id="monthDisplay" style="margin: 0 20px; font-weight: bold;"></span>
+      <button id="nextMonthBtn" class="btn btn-sm btn-secondary">&rarr;</button>
     </div>
-
-    <!-- Column 2: Monthly Rates -->
-    <div class="chart-wrapper monthly-rates">
-      <h4 style="text-align: center;">Order Metrics</h4>
-      <div id="monthlyRates" class="rates-container mt-3"></div>
+    <div class="doughnut-wrapper">
+      <canvas id="monthlyDoughnutChart"></canvas>
     </div>
-
-    <!-- Column 3: Sales Insights -->
-    <div class="chart-wrapper sales-insights" style="background-color: #f7fefc;">
-      <h4 style="text-align: center; background-color: #f6ffed; padding: 10px; border-radius: 8px;">Sales Insights</h4>
-
-      <div id="topAgentBox" class="sales-insight-box"></div>
-      <div id="bestDayBox" class="sales-insight-box"></div>
-      <div id="monthlyCancelRefundBox" class="sales-insight-box"></div>
+    <div style="text-align:center; margin-top: 10px;">
+      <input type="month" id="customMonth" />
+      <button id="goToMonthBtn" class="btn btn-sm btn-primary">Go</button>
     </div>
+  </div>
+
+  <!-- Order Metrics -->
+  <div class="chart-wrapper">
+    <h4 style="text-align: center;">Order Metrics</h4>
+    <div id="monthlyRates" class="rates-container mt-3"></div>
+  </div>
+
+  <!-- Sales Insights -->
+  <div class="chart-wrapper" style="background-color: #f7fefc;">
+    <h4 style="text-align: center; background-color: #f6ffed; padding: 10px; border-radius: 8px;">Sales Insights</h4>
+    <div id="topAgentBox" class="sales-insight-box"></div>
+    <div id="bestDayBox" class="sales-insight-box"></div>
+    <div id="monthlyCancelRefundBox" class="sales-insight-box"></div>
   </div>
 </div>
 
