@@ -215,8 +215,9 @@ cursor: pointer;
     flex: 1 1 300px;
     min-width: 250px;
     max-width: 420px;
-        margin-left: 18%;
-  }
+    margin-left: 8%;
+    height: 29vh
+    }
 
 #monthlyDoughnutChart {
   max-width: 400px;
@@ -228,9 +229,9 @@ cursor: pointer;
 }
 .three-column-row {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   gap: 20px;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   margin-top: 20px;
 }
 
