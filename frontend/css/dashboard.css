@@ -215,7 +215,7 @@ cursor: pointer;
     flex: 1 1 300px;
     min-width: 250px;
     max-width: 420px;
-    margin-left: 8%;
+    /* margin-left: 8%; */
     height: 29vh
     }
 
@@ -616,6 +616,7 @@ text-align:center;
 }
 #summaryCards {
   display: flex;
+  margin-left: 1%;
 }
 .summary-card {
   background-color: #eaf6ff;
