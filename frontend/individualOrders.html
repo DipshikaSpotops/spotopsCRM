@@ -701,6 +701,7 @@ async function fetchOrdersByPage(page = 1) {
   const effectiveLimit = isFetchAll ? 0 : rowsPerPage;
 
   try {
+    
     const response = await axios.get(
       `https://www.spotops360.com/salespersonWiseOrders`,
       {
@@ -708,7 +709,7 @@ async function fetchOrdersByPage(page = 1) {
           month: monthNumber,
           year: year,
           page: page,
-          limit: effectiveLimit,
+          limit: "all",
           salesAgent: loggedInUser,
         },
         headers: token ? { Authorization: `Bearer ${token}` } : {},
