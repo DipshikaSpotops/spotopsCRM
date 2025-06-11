@@ -1519,7 +1519,7 @@ $("#otherShipperInput").hide();
 $("#shipperNameEdit").val("Others");
 $("#otherShipperInput").val(yardData.shipperName).show();
 }
-} else if (yardData.status === "Yard PO sent") {
+} else if (yardData.status === "Yard PO Sent") {
   $("#sendPOContainer").show();
 }
 
