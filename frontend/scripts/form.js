@@ -2132,10 +2132,7 @@ $("#ourShippingInput").hide();
 $("#refund").on("change", function () {
 const refundStatus = $(this).val();
 console.log("yardStatus",refundStatus);
- if (refundStatus === "Yard PO Sent") {
-  $("#sendPOContainer").show();
-}
-else if (refundStatus === "Part shipped") {
+if (refundStatus === "Part shipped") {
 $("#divTrackingEdit").show();
 // $("#sendEmailButton").show();
 $("#sendEmailButton").show();
@@ -2143,18 +2140,21 @@ $("#voidLabel").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#escalation").hide();
+$("#sendPOContainer").hide();
 } else if (refundStatus === "PO cancelled") {
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
+$("#sendPOContainer").hide();
 } else if (refundStatus === "Escalation") {
 $("#escalation").show();
 $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
+$("#sendPOContainer").hide();
 } else if (refundStatus === "Label created") {
 $("#escalation").hide();    
 $("#divTrackingEdit").show();
@@ -2162,11 +2162,13 @@ $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#voidLabel").show();
+$("#sendPOContainer").hide();
 } else if (refundStatus === "Part delivered") {
 $("#notesContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
+$("#sendPOContainer").hide();
 }
 else if (refundStatus === "Collect refund") {
 $("#notesContainer").show();
@@ -2175,6 +2177,7 @@ $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
 }
 else if (refundStatus === "Yard PO Sent") {
+  $("#sendPOContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 } else if (refundStatus === "Yard located") {
