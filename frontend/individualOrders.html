@@ -1070,34 +1070,37 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   }
 });
 
+let filteredResults = []; 
+
 $("#searchInput").on("keyup", function () {
-const value = $(this).val().toLowerCase();
-const filteredOrders = sortedData.filter(order => {
-return (
-(order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-(order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-(order.customerName && order.customerName.toLowerCase().includes(value)) ||
-((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-(order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
-(order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-(order.additionalInfo && order.additionalInfo.some(info => 
-(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
-)) ||
-(order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
-(order.email && order.email.toLowerCase().includes(value))
-);
+  const value = $(this).val().toLowerCase();
+
+  filteredResults = sortedData.filter(order => {
+    return (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.additionalInfo && order.additionalInfo.some(info =>
+        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
+      )) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
+    );
+  });
+
+  if (filteredResults.length > 0 || value === "") {
+    currentPage = 1; // Reset to first page for new results
+    renderTableRows(currentPage, filteredResults);
+    createPaginationControls(Math.ceil(filteredResults.length / rowsPerPage), filteredResults);
+  } else {
+    $("#infoTable").empty();
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+    $("#pagination-controls").empty();
+  }
 });
 
-// If a search is active, display the filtered results, otherwise reset to the full dataset
-if (filteredOrders.length > 0 || value === "") {
-renderTableRows(currentPage, filteredOrders);
-createPaginationControls(Math.ceil(totalCount / rowsPerPage), filteredOrders);
-} else {
-$("#infoTable").empty(); // Clear the table if no results are found
-$("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-}
-});
 $(".toggle-btn").on("click", function () {
 $("#offcanvasSidebar").toggleClass("show");
 });
