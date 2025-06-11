@@ -160,14 +160,31 @@ table thead th {
 }
 #monthYearPicker,
 #filterButton {
-  height: 40px; /* or any consistent value */
-  line-height: 1.5;
-  padding: 6px 12px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  box-sizing: border-box;
+  height: 40px;
+    line-height: 1.5;
+    padding: 6px 12px;
+    font-size: 1rem;
+    /* display: flex
+; */
+    align-items: center;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: auto;
+}
+#userDropdown{
+  z-index: 99;
+    text-align: center;
+    position: fixed;
+    background-color: white;
+    width: 85.4%;
+    margin-top: 0.4%
+7.67188px
+;
+    text-align: center;
+    width: 5%;
+    border-radius: 18px;
+    margin-left: 18%;
+    height: 5vh;
 }
 .topHeads {
     display: flex;
@@ -625,19 +642,6 @@ window.location.href = "login_signup.html";
     <div class="topHeads">
    <div>
         <h1>View User Activity</h1>
-        <select name="userDropdowm" id="userDropdown"  class="fixed-header" style="z-index:99;text-align: center;position: fixed;background-color: white;width: 85.4%;margin-left: 81.1%;margin-top: 0.6%;text-align: center;width: 9%;border-radius:18px;">
-           <option value="">Select user</option>
-            <option value="April">April</option>
-            <option value="David">David</option>
-            <option value="Erica">Erica</option>
-            <option value="John">John</option>
-            <option value="Korina">Korina</option>
-            <option value="Max">Max</option>
-            <option value="Michael">Michael</option>
-            <option value="Richard">Richard</option>
-            <option value="Suzanne">Suzanne</option>
-            <option value="Tony">Tony</option>
-        </select>
     </div>
 <div>
 <input
@@ -652,7 +656,19 @@ placeholder="Search..."
 <input id="monthYearPicker" type="month" class="form-control" />
 <button id="filterButton" class="btn btn-primary">Filter</button>
 <!-- </div> -->
-
+      <select name="userDropdowm" id="userDropdown"  class="fixed-header">
+           <option value="">Select user</option>
+            <option value="April">April</option>
+            <option value="David">David</option>
+            <option value="Erica">Erica</option>
+            <option value="John">John</option>
+            <option value="Korina">Korina</option>
+            <option value="Max">Max</option>
+            <option value="Michael">Michael</option>
+            <option value="Richard">Richard</option>
+            <option value="Suzanne">Suzanne</option>
+            <option value="Tony">Tony</option>
+        </select>
 <div id="pagination-controls">
   <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
