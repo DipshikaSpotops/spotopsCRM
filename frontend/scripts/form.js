@@ -3955,7 +3955,7 @@ if (shippingDetails.includes("Own shipping")) {
   if (match) {
     const parsed = parseFloat(match[1]);
     shipping = parsed;
-    shippingValue = parsed === 0 ? "Included" : `${parsed}`;
+    shippingValue = parsed === 0 ? "Included" : `$${parsed}`;
   }
 }
 
@@ -3999,7 +3999,7 @@ clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
   clone.querySelector('#warranty').textContent = `${yard.warranty} days`;
   clone.querySelector('#amount').textContent = `$${partPrice}`;
   clone.querySelector('#subtotal').textContent = `$${partPrice}`;
-  clone.querySelector('#shipping').textContent = shippingValue ? `$${shippingValue}` : '-';
+  clone.querySelector('#shipping').textContent = shippingValue ? `${shippingValue}` : '-';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 await new Promise(resolve => requestAnimationFrame(resolve));
 await new Promise(resolve => setTimeout(resolve, 500)); 
