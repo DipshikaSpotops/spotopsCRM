@@ -4323,7 +4323,10 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   res.status(500).json({ message: "Server error", error });
   }
   });
-  app.post("/sendPOEmailYard/:orderNo", upload.single("pdfFile"), async (req, res) => {
+  app.post("/sendPOEmailYard/:orderNo", upload.single([
+  { name: 'pdfFile', maxCount: 1 },
+  { name: 'images', maxCount: 10 } 
+]),  async (req, res) => {
   console.log("Sending PO to yard...");
   try {
     const { orderNo } = req.params;
@@ -4333,6 +4336,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
     if (!order) return res.status(404).send("Order not found");
 
     const pdfFile = req.file;
+    const imageFiles = req.files?.images || [];
     if (!pdfFile) return res.status(400).send("No PDF file uploaded");
     console.log("PDF file size received (backend):", pdfFile.buffer.length);
     const yardIndex = parseInt(req.body.yardIndex || "1") - 1;
@@ -4444,6 +4448,11 @@ if (shippingDetails.includes("Own shipping")) {
           path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
           cid: "logo",
         },
+        ...imageFiles.map((img, index) => ({
+        filename: img.originalname || `image_${index + 1}.jpg`,
+        content: img.buffer,
+        contentType: img.mimetype
+      }))
       ],
     };
 
