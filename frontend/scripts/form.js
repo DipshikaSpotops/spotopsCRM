@@ -1478,6 +1478,11 @@ $("#esc").val(yardData.escalationCause);
 $("#escProcess").val(yardData.escalationProcess);
 
 // Handle escalation checkbox
+if (yardData.status === "Yard PO Sent") {
+$("#sendPOContainer").show();
+}else{
+  $("#sendPOContainer").hide();
+}
 if (yardData.status === "Escalation") {
 $("#escTickBox").prop("checked", true);
 $("#escalation").show();
