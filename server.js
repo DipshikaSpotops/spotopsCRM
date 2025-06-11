@@ -4484,6 +4484,9 @@ const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 order.orderHistory.push(
     `Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDateTime}`
     );
+    order.additionalInfo[yardIndex].notes.push(
+    `Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDateTime}`
+    );
 
     await order.save();
     
