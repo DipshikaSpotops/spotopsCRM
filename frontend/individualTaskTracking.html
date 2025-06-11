@@ -689,7 +689,8 @@ placeholder="Search..."
       <tr>
         <th style="cursor: pointer" scope="col">Order Date</th>
         <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Order History</th>
+        <th style="cursor: pointer; width: 300px;" scope="col">Order History</th>
+        <th style="cursor: pointer; width: 300px;" scope="col">Comments</th>
       </tr>
     </thead>
     <tbody id="infoTable">
@@ -912,6 +913,10 @@ $("#infoTable").append(`
 ${item.orderHistory.map(historyItem => `<li style="text-align: justify;">${historyItem}</li>`).join("")}
 </ul>
 </td>
+  <td style="max-width: 300px; word-wrap: break-word; white-space: normal;">
+    <ul>${item.supportNotes.map(supportNotes => `<li style="text-align: justify;">${historyItem}</li>`).join("")}</ul
+      </td>
+
 </tr>
 `);
 });
