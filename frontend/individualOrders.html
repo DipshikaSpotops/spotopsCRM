@@ -1091,8 +1091,8 @@ return (
 
 // If a search is active, display the filtered results, otherwise reset to the full dataset
 if (filteredOrders.length > 0 || value === "") {
-renderTableRows(currentPage, sortedData);
-createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
+renderTableRows(currentPage, sortedfilteredOrdersData);
+createPaginationControls(Math.ceil(totalCount / rowsPerPage), filteredOrders);
 } else {
 $("#infoTable").empty(); // Clear the table if no results are found
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
