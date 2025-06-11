@@ -4368,7 +4368,7 @@ if (shippingDetails.includes("Own shipping")) {
   if (match) {
     const parsed = parseFloat(match[1]);
     shipping = parsed;
-    shippingValue = parsed === 0 ? "Included" : `$${parsed}`;
+    shippingValue = parsed === 0 ? "Included" : `${parsed}`;
   }
 }
 
