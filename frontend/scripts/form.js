@@ -1519,7 +1519,9 @@ $("#otherShipperInput").hide();
 $("#shipperNameEdit").val("Others");
 $("#otherShipperInput").val(yardData.shipperName).show();
 }
-} 
+} else if (yardData.status === "Yard PO sent") {
+  $("#sendPOContainer").show();
+}
 
 else {
 // Hide the tracking section if not "Part shipped"

@@ -695,7 +695,10 @@ Save
 </button>
 </div>
 </div>
-
+<div id="sendPOContainer" style="display: none;">
+  <button type="button" class="btn" id="sendPOBtn">Send PO</button>
+  <input type="file" id="poImages" multiple accept="image/*" />
+</div>
 <div id="escalation">
 <!-- escalation part for yard status-->
 <label for="reason1">Reason:</label>
@@ -764,10 +767,6 @@ Save
     <textarea id="noteInput" placeholder="Type Your Notes here..."></textarea>
     <input id="submit" class="submitYardNotes" type="submit" value="Update Notes" />
   </form>
-</div>
-<div id="sendPOContainer">
-  <button type="button" class="btn" id="sendPOBtn">Send PO</button>
-  <input type="file" id="poImages" multiple accept="image/*" />
 </div>
 </div>
 <input type="hidden" id="yardIndexEdit" />
