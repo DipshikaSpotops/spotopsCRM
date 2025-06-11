@@ -846,26 +846,50 @@ Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 var monthNum = monthMap[month];
 
 $("#monthYearPicker").val(`${year}-${monthNum}`);
-//orders for the current month
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-
-allOrders = ordersResponse.data;
-var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage);
+allOrders = await fetchPaginatedOrders(month, year);
+renderTableRows(1, allOrders);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
+$("#showTotalOrders").html(`Total Orders This Month- ${allOrders.length}`);
+//orders for the current month
+async function fetchPaginatedOrders(month, year) {
+  const limit = 25;
+  let allOrdersFetched = [];
+
+  try {
+    const firstPageResponse = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month, year, page: 1, limit },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    const totalCount = firstPageResponse.data.totalCount;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    // Start with orders from the first page
+    allOrdersFetched = [...firstPageResponse.data.orders];
+
+    // Fetch remaining pages in parallel
+    const fetchPromises = [];
+    for (let page = 2; page <= totalPages; page++) {
+      fetchPromises.push(
+        axios.get(`https://www.spotops360.com/orders/monthly`, {
+          params: { month, year, page, limit },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
+      );
+    }
+
+    const responses = await Promise.all(fetchPromises);
+    responses.forEach((res) => {
+      allOrdersFetched.push(...res.data.orders);
+    });
+
+    return allOrdersFetched;
+  } catch (error) {
+    console.error("Error fetching paginated orders:", error);
+    return [];
+  }
 }
+
 
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
@@ -1010,35 +1034,28 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
+  const monthYear = $("#monthYearPicker").val();
+  const [year, monthNumber] = monthYear.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+
+  try {
+    allOrders = await fetchPaginatedOrders(month, year);
+    const totalOrders = allOrders.length;
+    $("#showTotalOrders").html(`Total Orders This Month- ${totalOrders}`);
+    renderTableRows(1, allOrders);
+    createPaginationControls(Math.ceil(totalOrders / rowsPerPage));
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
+
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
