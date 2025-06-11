@@ -734,7 +734,7 @@ ${editButton}
 const yardlength = item.additionalInfo.length;
 const datetime = item.orderDate;
 const date = new Date(item.orderDate);
-const formattedDate = `${date.getUTCDate()}${suffix(date.getUTCDate())} ${monthNames[date.getUTCMonth()]}, ${date.getUTCFullYear()}`;// console.log(dateOnly);
+const formattedDate = `${date.getUTCDate()}${suffix(date.getUTCDate())} ${monthNames[date.getUTCMonth()]}, ${date.getUTCFullYear()}`;
 
 $("#infoTable").append(`
 <tr>
