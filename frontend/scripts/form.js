@@ -1485,6 +1485,9 @@ $("#escalation").show();
 $("#escTickBox").prop("checked", false);
 $("#escalation").hide();
 }
+ if (yardData.status === "Yard PO Sent") {
+  $("#sendPOContainer").show();
+}
 if (yardData.status === "Part shipped") {
 $("#divTrackingEdit").show();
 $("#sendEmailButton").show();
@@ -1519,8 +1522,6 @@ $("#otherShipperInput").hide();
 $("#shipperNameEdit").val("Others");
 $("#otherShipperInput").val(yardData.shipperName).show();
 }
-} else if (yardData.status === "Yard PO Sent") {
-  $("#sendPOContainer").show();
 }
 
 else {
