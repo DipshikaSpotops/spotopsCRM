@@ -4323,23 +4323,20 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   res.status(500).json({ message: "Server error", error });
   }
   });
-  app.post("/sendPOEmailYard/:orderNo", (req, res, next) => {
-  console.log("Incoming request headers:", req.headers['content-type']);
-  next();
-}, upload.fields([
+  app.post("/sendPOEmailYard/:orderNo", upload.fields([
   { name: 'pdfFile', maxCount: 1 },
   { name: 'images', maxCount: 10 }
-]),  async (req, res) => {
+  ]), async (req, res) => {
   console.log("Sending PO to yard...");
   try {
     const { orderNo } = req.params;
     var firstName = req.query.firstName;
-    console.log("sending po",orderNo,firstName)
     const order = await Order.findOne({ orderNo });
     if (!order) return res.status(404).send("Order not found");
 
     const pdfFile = req.file;
     const imageFiles = req.files?.images || [];
+    console.log("sending po",orderNo,firstName,pdfFile,imageFiles);
     if (!pdfFile) return res.status(400).send("No PDF file uploaded");
     console.log("PDF file size received (backend):", pdfFile.buffer.length);
     const yardIndex = parseInt(req.body.yardIndex || "1") - 1;
