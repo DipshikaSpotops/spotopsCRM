@@ -3955,7 +3955,7 @@ if (shippingDetails.includes("Own shipping")) {
   if (match) {
     const parsed = parseFloat(match[1]);
     shipping = parsed;
-    shippingValue = parsed === 0 ? "Included" : `$${parsed}`;
+    shippingValue = parsed === 0 ? "Included" : `${parsed}`;
   }
 }
 
@@ -4044,7 +4044,7 @@ for (let [k, v] of formData.entries()) console.log(k, v);
   formData.append('pReq', order.pReq);
   formData.append('agentName', yard.agentName);
   formData.append('partPrice', yard.partPrice);
-  formData.append('shippingDetails', shippingDetails.includes('Yard shipping') ? `Yard Shipping: {shipping}` : 'Own Shipping (Auto Parts Group Corp)');
+  formData.append('shippingDetails', shippingDetails.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
   formData.append('desc', order.desc);
   formData.append('recipientEmail', yard.email);
   formData.append('yardName', yard.yardName);
