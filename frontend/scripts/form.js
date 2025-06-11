@@ -1485,9 +1485,6 @@ $("#escalation").show();
 $("#escTickBox").prop("checked", false);
 $("#escalation").hide();
 }
- if (yardData.status === "Yard PO Sent") {
-  $("#sendPOContainer").show();
-}
 if (yardData.status === "Part shipped") {
 $("#divTrackingEdit").show();
 $("#sendEmailButton").show();
@@ -2135,7 +2132,10 @@ $("#ourShippingInput").hide();
 $("#refund").on("change", function () {
 const refundStatus = $(this).val();
 console.log("yardStatus",refundStatus);
-if (refundStatus === "Part shipped") {
+ if (refundStatus === "Yard PO Sent") {
+  $("#sendPOContainer").show();
+}
+else if (refundStatus === "Part shipped") {
 $("#divTrackingEdit").show();
 // $("#sendEmailButton").show();
 $("#sendEmailButton").show();
