@@ -636,32 +636,17 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<button id="downloadCsv" class="btn">
-  <i class="fas fa-download"></i>  <!-- This is the download icon -->
-</button>
-</div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
-<input id="monthYearPicker" type="month" class="form-control"  />
-<button id="filterButton" class="btn btn-primary" >Filter</button>
+<input id="monthYearPicker" type="month" class="form-control" />
+<button id="filterButton" class="btn btn-primary">Filter</button>
 <!-- </div> -->
-<div id="showTotalOrders">Total Orders This Month-</div>
+
 <div id="pagination-controls">
   <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
 </div>
-  
-<!--  controls -->
-<div id="pagination-controls" style="margin-top: 5%;">
-    <!-- style="position: fixed;margin-top: 5%;top: 110px;z-index: 10;"> -->
-</div>
-<div id="filterAndTotal" style="margin-top: 1%;margin-left: -1.5%;">
- <!-- style="display: flex;margin-top: 10%;margin-bottom: 3%;margin-left: -2%;top: 160px; /* Adjusting for the pagination-controls */z-index: 10;"> -->
-<div class="filter-bar">
-<input id="monthYearPicker" type="month" class="form-control" />
-<button id="filterButton" class="btn btn-primary" style="background-color: black;border: none;">Filter</button>
-</div>
-<div id="showTotalOrders">Total Orders This Month-</div>
-<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>  
+
 </div>
 </div>
 <div class="table-wrapper">
@@ -908,16 +893,19 @@ window.location.href = "login_signup.html";
 // Function to create pagination controls
 function createPaginationControls(totalPages, orders = allOrders) {
 const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
+paginationControls.empty(); 
+  if (totalPages > 1) {
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
 
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
-
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);
+  }
 }
 
 
