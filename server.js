@@ -4328,6 +4328,8 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   { name: 'images', maxCount: 10 }
   ]), async (req, res) => {
   console.log("Sending PO to yard...");
+  console.log('Received fields:', Object.keys(req.body));
+console.log('Received files:', Object.keys(req.files || {}));
   try {
     const { orderNo } = req.params;
     var firstName = req.query.firstName;
