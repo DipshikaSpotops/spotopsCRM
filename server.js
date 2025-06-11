@@ -4336,8 +4336,10 @@ console.log('Received files:', Object.keys(req.files || {}));
     const order = await Order.findOne({ orderNo });
     if (!order) return res.status(404).send("Order not found");
 
-    const pdfFile = req.file;
+    const pdfFile = req.files?.pdfFile?.[0];
     const imageFiles = req.files?.images || [];
+    console.log("pdfFile received?", !!pdfFile);
+console.log("pdfFile received?", !!pdfFile);
     console.log("sending po",orderNo,firstName,pdfFile,imageFiles);
     if (!pdfFile) return res.status(400).send("No PDF file uploaded");
     console.log("PDF file size received (backend):", pdfFile.buffer.length);
