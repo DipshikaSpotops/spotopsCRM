@@ -913,10 +913,11 @@ $("#infoTable").append(`
 ${item.orderHistory.map(historyItem => `<li style="text-align: justify;">${historyItem}</li>`).join("")}
 </ul>
 </td>
-  <td style="max-width: 300px; word-wrap: break-word; white-space: normal;">
-    <ul>${item.supportNotes.map(supportNotes => `<li style="text-align: justify;">${supportNotes}</li>`).join("")}</ul
-      </td>
-
+<td>
+<ul>
+${item.supportNotes.map(historyItem => `<li style="text-align: justify;">${supportNotes}</li>`).join("")}
+</ul>
+</td>
 </tr>
 `);
 });
