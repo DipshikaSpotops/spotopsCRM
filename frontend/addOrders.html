@@ -547,10 +547,10 @@ window.location.href = "login_signup.html";
     <h6 style="text-align: center; margin-top: 1%;">Customer Info</h6>
     <div class="form-row">
       <div class="form-group col-md-2">
-        <input type="text" class="form-control uniform-height" id="firstName" placeholder="First Name" required />
+        <input type="text" class="form-control uniform-height" id="fName" placeholder="First Name" required />
       </div>
       <div class="form-group col-md-2">
-        <input type="text" class="form-control uniform-height" id="lastName" placeholder="Last Name" required />
+        <input type="text" class="form-control uniform-height" id="lName" placeholder="Last Name" required />
       </div>
       <div class="form-group col-md-2">
         <input type="email" class="form-control uniform-height" id="email" placeholder="Email Address" required />
@@ -1197,8 +1197,8 @@ var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
-$("#firstName").val(data.fName || firstNameE);
-$("#lastName").val(data.lName || lastNameE);
+$("#fName").val(data.fName || firstNameE);
+$("#lName").val(data.lName || lastNameE);
 $("#orderNo").val(data.orderNo);
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
@@ -1282,8 +1282,8 @@ $("#newOrderForm").on("submit", function (e) {
         e.preventDefault();
 
         const firstName = localStorage.getItem("firstName");
-        const cusFName = $("#firstName").val();
-        const cusLName = $("#lastName").val();
+        const cusFName = $("#fName").val();
+        const cusLName = $("#lName").val();
         const customerName = `${cusFName} ${cusLName}`;
         const orderNoInput = $("#orderNo").val();
 const newEntry = urlParams.get("newEntry");
@@ -1294,8 +1294,8 @@ const newEntry = urlParams.get("newEntry");
                 orderDate: $("#orderDate").val(),
                 salesAgent: $("#salesAgent").val(),
                 // customerName: customerName,
-                fName: $("#firstName").val(),
-                lName: $("#lastName").val(),
+                fName: $("#fName").val(),
+                lName: $("#lName").val(),
                 bAddressStreet: $("#bAddress").val(),
                 bAddressCity: $("#bCity").val(),
                 bAddressState: $("#bState").val(),
