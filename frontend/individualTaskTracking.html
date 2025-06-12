@@ -248,7 +248,7 @@ white-space: nowrap;
 overflow: auto;
 text-overflow: ellipsis;
 padding: 8px;
-text-align: center;
+/* text-align: center; */
 border-bottom: 1px solid #ddd;
 }
 table.table-fixed {
@@ -259,7 +259,7 @@ td:nth-child(3),
 th:nth-child(3),
 td:nth-child(4),
 th:nth-child(4) {
-  width: 300px !important;
+  width: 43% !important;
   overflow-wrap: break-word;
 }
 
@@ -922,12 +922,12 @@ $("#infoTable").append(`
 <td>${formattedDate}</td>
 <td>${item.orderNo}</td>
 <td style="width: 100px;">
-<ul>
+<ul style="white-space:normal">
 ${item.orderHistory.map(historyItem => `<li style="text-align: justify;">${historyItem}</li>`).join("")}
 </ul>
 </td>
 <td style="width: 100px;">
-<ul>
+<ul style="white-space:normal">
 ${item.supportNotes.map(supportNotes => `<li style="text-align: justify;">${supportNotes}</li>`).join("")}
 </ul>
 </td>
