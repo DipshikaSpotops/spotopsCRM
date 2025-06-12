@@ -844,21 +844,31 @@ sortTable(index, type);
 }
 });
 function renderFilteredOrders(agentName) {
-    const filteredOrders = allOrders.map(order => {
-      // Filter orderHistory for the selected agent
-      const filteredHistory = order.orderHistory.filter(historyItem =>
-        historyItem.toLowerCase().includes(agentName.toLowerCase())
-      );
+  const filteredOrders = allOrders.map(order => {
+    // Filter both orderHistory and supportNotes
+    const filteredHistory = order.orderHistory.filter(historyItem =>
+      historyItem.toLowerCase().includes(agentName.toLowerCase())
+    );
 
-      // Return the order only if it has filtered history
-      return filteredHistory.length > 0
-        ? { ...order, orderHistory: filteredHistory }
-        : null;
-    }).filter(order => order !== null); // Remove null orders
+    const filteredSupportNotes = order.supportNotes.filter(note =>
+      note.toLowerCase().includes(agentName.toLowerCase())
+    );
 
-    renderTableRows(1, filteredOrders);
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-  }
+    // Include the order only if either history or supportNotes matches
+    if (filteredHistory.length > 0 || filteredSupportNotes.length > 0) {
+      return {
+        ...order,
+        orderHistory: filteredHistory,
+        supportNotes: filteredSupportNotes
+      };
+    }
+
+    return null;
+  }).filter(order => order !== null); // Remove nulls
+
+  renderTableRows(1, filteredOrders);
+  createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+}
 
   // Attach change event to the dropdown
   $("#userDropdown").on("change", function () {
