@@ -908,12 +908,12 @@ $("#infoTable").append(`
 <tr>
 <td>${formattedDate}</td>
 <td>${item.orderNo}</td>
-<td style="width: 300px;">
+<td style="width: 100px;">
 <ul>
 ${item.orderHistory.map(historyItem => `<li style="text-align: justify;">${historyItem}</li>`).join("")}
 </ul>
 </td>
-<td style="width: 300px;">
+<td style="width: 100px;">
 <ul>
 ${item.supportNotes.map(supportNotes => `<li style="text-align: justify;">${supportNotes}</li>`).join("")}
 </ul>
