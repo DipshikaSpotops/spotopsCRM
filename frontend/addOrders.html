@@ -1191,8 +1191,8 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 // document.getElementById("estPP").textContent += data.costP;
 var customerNameE = data.customerName;
 const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
-const firstNameE = nameParts[0] || ""; // Default to empty string if no first name
-const lastNameE = nameParts[1] || "";  // Default to empty string if no last name
+const firstNameE = nameParts[0] || ""; 
+const lastNameE = nameParts[1] || "";  
 var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
@@ -1369,8 +1369,10 @@ const newEntry = urlParams.get("newEntry");
                 sAddressAcountry: $("#sCountry").val(),
                 attention: $("#sAttention").val(),
                 email: $("#email").val(),
+                fName:$("fName").val(),
+                lName: $("#lName").val(),
                 phone: $("#phone").val(),
-               altPhone: $("#altPhone").val(),
+                altPhone: $("#altPhone").val(),
                 make: $("#make").val(),
                 model: $("#model").val(),
                 year: $("#year").val(),
