@@ -3983,10 +3983,10 @@ clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
   clone.querySelector('#po-no').textContent = order.orderNo;
   clone.querySelector('#po-date').textContent = today;
   clone.querySelector('#yard-info').innerHTML = `
-    ${yard.yardName}<br>${yard.street}, ${yard.city}, ${yard.state} ${yard.zipcode}
+    ${yard.yardName}<br>${yard.street}, ${yard.city}, ${yard.state}, ${yard.zipcode}
   `;
   clone.querySelector('#ship-to').innerHTML = `
-  ${order.attention || `${order.fName} ${order.lName}`}<br>${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressZip}, ${order.sAddressAcountry}`;
+  ${order.attention || `${order.fName} ${order.lName}`}<br>${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressZip}`;
   clone.querySelector('#part-year').textContent = order.year;
   clone.querySelector('#part-make').textContent = order.make;
   clone.querySelector('#part-model').textContent = order.model;
