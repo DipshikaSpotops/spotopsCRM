@@ -4423,11 +4423,7 @@ if (shippingDetails.includes("Own shipping")) {
   </strong><br>
 
   <strong style="background-color: #ff0000; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
-    NOTE: PROVIDE PICTURES
-  </strong><br>
-
-  <strong style="background-color: #ff0000; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
-    BEFORE SHIPPING
+    NOTE: PROVIDE PICTURES BEFORE SHIPPING 
   </strong>
 </p>
 
