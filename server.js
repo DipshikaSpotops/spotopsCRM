@@ -4383,8 +4383,8 @@ if (shippingDetails.includes("Own shipping")) {
 
     const mailOptions = {
           from: "purchase@auto-partsgroup.com",
-          to: 'dipsikha.spotopsdigital@gmail.com',
-          // to: yardEmail,
+          // to: 'dipsikha.spotopsdigital@gmail.com',
+          to: yardEmail,
           // bcc: "purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com",
           subject: `Purchase Order | ${orderNo} | ${year} ${make} ${model} | ${pReq} `,
           html: `
