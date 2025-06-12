@@ -3986,8 +3986,7 @@ clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
     ${yard.yardName}<br>${yard.street}, ${yard.city}, ${yard.state} ${yard.zipcode}
   `;
   clone.querySelector('#ship-to').innerHTML = `
-    ${order.attention || `${order.fName} ${order.lName}`}<br>${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressAcountry}, ${order.sAddressZip}
-  `;
+  ${order.attention || `${order.fName} ${order.lName}`}<br>${order.sAddressStreet}, ${order.sAddressCity}, ${order.sAddressState}, ${order.sAddressZip}, ${order.sAddressAcountry}`;
   clone.querySelector('#part-year').textContent = order.year;
   clone.querySelector('#part-make').textContent = order.make;
   clone.querySelector('#part-model').textContent = order.model;
