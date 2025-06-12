@@ -251,6 +251,18 @@ padding: 8px;
 text-align: center;
 border-bottom: 1px solid #ddd;
 }
+table.table-fixed {
+  table-layout: fixed;
+  width: 100%;
+}
+td:nth-child(3),
+th:nth-child(3),
+td:nth-child(4),
+th:nth-child(4) {
+  width: 300px !important;
+  overflow-wrap: break-word;
+}
+
 table.table td.actions {
 display: flex;
 gap: 5px;
@@ -687,6 +699,7 @@ placeholder="Search..."
   <table class="table table-bordered mt-4 mt-4 table-fixed">
     <thead style="text-align: center;">
       <tr>
+        
         <th style="cursor: pointer" scope="col">Order Date</th>
         <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
         <th style="cursor: pointer; width: 300px;" scope="col">Order History</th>
