@@ -4405,7 +4405,6 @@ if (shippingDetails.includes("Own shipping")) {
             <strong>Purchase Order To: ${yardName}</strong><br>
             <strong>Part Price: $${partPrice.toFixed(2)}</strong><br>
             <strong>Shipping: ${shippingValue}</strong><br>
-            <strong>Shipping to: ${fName} ${lName}, ${sAddressStreet}, ${sAddressCity}, ${sAddressState}, ${sAddressAcountry}</strong>
           </p>
 
           <p style="font-size: 14px;">
