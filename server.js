@@ -4332,7 +4332,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   try {
     const { orderNo } = req.params;
     const firstName = req.query.firstName;
-    const yardIndex = parseInt(req.body.yardIndex);
+    const yardIndex = parseInt(req.body.yardIndex -1);
     console.log("Sending PO to yard..." ,"yardIndex",yardIndex);
     const order = await Order.findOne({ orderNo });
     if (!order) return res.status(404).send("Order not found");
