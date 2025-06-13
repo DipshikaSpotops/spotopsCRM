@@ -4328,12 +4328,12 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   { name: 'pdfFile', maxCount: 1 },
   { name: 'images', maxCount: 10 }
 ]), async (req, res) => {
-  console.log("Sending PO to yard...");
+  
   try {
     const { orderNo } = req.params;
     const firstName = req.query.firstName;
-    const yardIndex = parseInt(req.body.yardIndex || "0"); // Use passed yardIndex
-
+    const yardIndex = parseInt(req.body.yardIndex);
+    console.log("Sending PO to yard..." ,"yardIndex",yardIndex);
     const order = await Order.findOne({ orderNo });
     if (!order) return res.status(404).send("Order not found");
 
