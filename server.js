@@ -4231,98 +4231,134 @@ res.status(500).json({ message: "Server error", error });
 }
 });
 // to send refund email to the yard
-app.post("/orders/sendRefundEmailYard/:orderNo", upload.single("pdfFile"), async (req, res) => {
-  console.log("send refund email to the yard");
+app.post("/sendPOEmailYard/:orderNo", upload.fields([
+  { name: 'pdfFile', maxCount: 1 },
+  { name: 'images', maxCount: 10 }
+]), async (req, res) => {
+  console.log("Sending PO to yard...");
   try {
-  const order = await Order.findOne({ orderNo: req.params.orderNo });
-  console.log("no", order);
-  if (!order) {
-  return res.status(400).send("Order not found");
-  }
-  const pdfFile = req.file; 
-if (!pdfFile) return res.status(400).send("No PDF file uploaded");
-  var orderDate = order.orderDate;
-  var yardIndex = req.query.yardIndex - 1;
-  var refundReason = req.query.refundReason;
-  var returnTracking = req.query.returnTracking;
-  var refundToCollect = req.query.refundToCollect;
-  var shipperName = req.query.shipper;
-  console.log("yardIndex",yardIndex);
-  // const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
-  // date.setDate(date.getDate() - 1);
-  // const month = (date.getMonth() + 1).toString().padStart(2, '0');  
-  // const day = date.getDate().toString().padStart(2, '0');
-  // const year = date.getFullYear();
-  // var orderedDate =  `${month}/${day}/${year}`;
-  console.log("refundReason", refundReason, returnTracking, refundToCollect);
-  const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-  user: "purchase@auto-partsgroup.com",
-  pass: "zhtb vimk prif bdfg",
-  },
-  });
-  var yardAgent = order.additionalInfo[yardIndex].agentName;
-  var partPrice = order.additionalInfo[yardIndex].partPrice;
-  const yardOSorYS = order.additionalInfo[yardIndex].shippingDetails || '';
-  let shippingValueYard = 0;
- if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-}
-var others = order.additionalInfo[yardIndex].others || 0;
-var chargedAmount = partPrice + shippingValueYard + others;
-var stockNo = order.additionalInfo[yardIndex].stockNo || "NA";
-var yardEmail = order.additionalInfo[yardIndex].email;
-  const mailOptions = {
-  from: "purchase@auto-partsgroup.com",
-  // to: `dipsikha.spotopsdigital@gmail.com`,
-  to: `${yardEmail}`,
-  bcc:`purchase@auto-partsgroup.com,dipsikha.spotopsdigital@gmail.com`,
-  subject: `Request for Yard Refund | ${order.orderNo}`,
-  html: `<p>Dear ${yardAgent},</p>
-  <p>I am writing to bring to your attention that there was a charge  on my credit card for the Order ID- #<b>${order.orderNo}</b>, for a <b>${order.year} ${order.make}
-  ${order.model} ${order.pReq}</b>. I request a refund for the same.
-  <p>Requested refund amount : $${refundToCollect} </p>
-  <p>Stock No: ${stockNo}</p>
-  <p>Return tracking number : ${returnTracking} (${shipperName})</p>
-  <p>I kindly request you to process the refund at your earliest convenience and share the refund receipt with us.</p>
-  <p>If any further information or documentation is required, please do not hesitate to contact us.</p>
-  <p>Thank you for your understanding and cooperation.</p>
-  <p>I appreciate your prompt attention to this matter and look forward to a swift resolution.</p>
-  <p>Note : If you have another company name or DBA, please do let us know. Purchase Order has been attached below for your reference.</p>
-             
-  <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
-  attachments: [
-    {
-    filename: pdfFile.originalname,
-    content: pdfFile.buffer,
-    },
-    {
-    filename: "logo.png",
-    path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
-    cid: "logo",
-    },
-    ],
-  };
-  
-  console.log("mail", mailOptions);
-  
-  transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-  console.error("Error sending mail:", error);
-  res.status(500).json({ message: `Error sending mail: ${error.message}` });
-  } else {
-  console.log("Cancellation email sent successfully:", info.response);
-  res.json({ message: `Cancellation email sent successfully` });
-  }
-  
-  });
+    const { orderNo } = req.params;
+    const firstName = req.query.firstName;
+    const yardIndex = parseInt(req.body.yardIndex || "0"); // Use passed yardIndex
+
+    const order = await Order.findOne({ orderNo });
+    if (!order) return res.status(404).send("Order not found");
+
+    const pdfFile = req.files?.pdfFile?.[0];
+    const imageFiles = req.files?.images || [];
+    if (!pdfFile) return res.status(400).send("No PDF file uploaded");
+
+    const yard = order.additionalInfo[yardIndex];
+    if (!yard) return res.status(400).send("Invalid yard index");
+
+    const {
+      year, make, model, pReq, desc, vin, partNo,
+      fName, lName, sAddressStreet, sAddressCity,
+      sAddressState, sAddressZip
+    } = order;
+
+    const {
+      agentName, yardName, street, city, state, zipcode,
+      shippingDetails = "", partPrice, email: yardEmail,
+      stockNo = "NA", warranty = "30", others = 0
+    } = yard;
+
+    let shipping = 0;
+    let shippingValue = "-";
+    if (shippingDetails.includes("Own shipping")) {
+      shippingValue = "Own Shipping (Auto Parts Group Corp)";
+    } else if (shippingDetails.includes("Yard shipping")) {
+      const match = shippingDetails.match(/Yard shipping:\s*(\d+)/);
+      if (match) {
+        const parsed = parseFloat(match[1]);
+        shipping = parsed;
+        shippingValue = parsed === 0 ? "Included" : `${parsed}`;
+      }
+    }
+
+    const total = parseFloat(partPrice) + shipping + parseFloat(others);
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "purchase@auto-partsgroup.com",
+        pass: "zhtb vimk prif bdfg",
+      },
+    });
+
+    const mailOptions = {
+      from: "purchase@auto-partsgroup.com",
+      to: yardEmail,
+      bcc: "dipsikha.spotopsdigital@gmail.com",
+      subject: `Purchase Order | ${orderNo} | ${year} ${make} ${model} | ${pReq}`,
+      html: `
+        <p style="font-size: 14px;">Dear ${agentName},</p>
+        <p style="font-size: 14px;">Please find attached the Purchase Order for the following:</p>
+        <ul style="font-size: 14px;">
+          <li><strong>Order No:</strong> ${orderNo}</li>
+          <li><strong>Year/Make/Model:</strong> ${year} ${make} ${model}</li>
+          <li><strong>Part:</strong> ${pReq}</li>
+          <li><strong>Description:</strong> ${desc}</li>
+          <li><strong>VIN:</strong> ${vin || 'NA'}</li>
+          <li><strong>Part No:</strong> ${partNo || 'NA'}</li>
+          <li><strong>Stock No:</strong> ${stockNo}</li>
+          <li><strong>Warranty:</strong> ${warranty} days</li>
+        </ul>
+        <p><strong>Purchase Order To:</strong> ${yardName}<br>
+        <strong>Part Price:</strong> $${parseFloat(partPrice).toFixed(2)}<br>
+        <strong>Shipping:</strong> ${shippingValue}</p>
+        <p>NOTE: BLIND SHIPPING<br>NOTE: PROVIDE PICTURES BEFORE SHIPPING</p>
+        <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+        <p style="font-size: 16px;">
+          ${firstName}<br>
+          Auto Parts Group Corp<br>
+          +1 (866) 207-5533 | purchase@auto-partsgroup.com
+        </p>
+      `,
+      attachments: [
+        {
+          filename: pdfFile.originalname,
+          content: pdfFile.buffer,
+          contentType: 'application/pdf'
+        },
+        {
+          filename: "logo.png",
+          path: "https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png",
+          cid: "logo",
+        },
+        ...imageFiles.map((img, index) => ({
+          filename: img.originalname || `image_${index + 1}.jpg`,
+          content: img.buffer,
+          contentType: img.mimetype
+        }))
+      ]
+    };
+
+    transporter.sendMail(mailOptions, async (error, info) => {
+      if (error) {
+        console.error("Error sending mail:", error);
+        return res.status(500).json({ message: "Email sending failed", error });
+      }
+
+      const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+      const date = new Date(centralTime);
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const formattedDate = `${date.getDate()} ${months[date.getMonth()]}, ${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+      order.additionalInfo[yardIndex].status = "Yard PO Sent";
+      order.additionalInfo[yardIndex].notes.push(`Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDate}`);
+      order.orderHistory.push(`Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDate}`);
+
+      await order.save();
+      console.log("PO email sent:", info.response);
+      return res.status(200).json({ message: "PO email sent and status updated successfully" });
+    });
+
   } catch (error) {
-  console.error("Server  at the end:", error);
-  res.status(500).json({ message: "Server error", error });
+    console.error("Server error:", error);
+    res.status(500).json({ message: "Server error", error });
   }
-  });
+});
   app.post("/sendPOEmailYard/:orderNo", upload.fields([
   { name: 'pdfFile', maxCount: 1 },
   { name: 'images', maxCount: 10 }
