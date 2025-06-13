@@ -4041,12 +4041,9 @@ for (let [k, v] of formData.entries()) console.log(k, v);
   formData.append('make', order.make);
   formData.append('model', order.model);
   formData.append('pReq', order.pReq);
-  formData.append('agentName', yard.agentName);
-  formData.append('partPrice', yard.partPrice);
+  formData.append('yardIndex', yardIndex); 
   formData.append('shippingDetails', shippingDetails.includes('Yard shipping') ? `Yard Shipping: ${shipping}` : 'Own Shipping (Auto Parts Group Corp)');
   formData.append('desc', order.desc);
-  formData.append('recipientEmail', yard.email);
-  formData.append('yardName', yard.yardName);
 var userName  = localStorage.getItem("firstName")
   fetch(`https://www.spotops360.com/sendPOEmailYard/${order.orderNo}?firstName=${userName}`, {
     method: 'POST',

@@ -4327,7 +4327,8 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   { name: 'pdfFile', maxCount: 1 },
   { name: 'images', maxCount: 10 }
   ]), async (req, res) => {
-  console.log("Sending PO to yard...");
+    const yardIndex = parseInt(req.body.yardIndex) - 1;
+  console.log("Sending PO to yard...","yardIndex",yardIndex);
   console.log('Received fields:', Object.keys(req.body));
 console.log('Received files:', Object.keys(req.files || {}));
   try {
@@ -4339,7 +4340,7 @@ console.log('Received files:', Object.keys(req.files || {}));
     const pdfFile = req.files?.pdfFile?.[0];
     const imageFiles = req.files?.images || [];
     console.log("pdfFile received?", !!pdfFile);
-console.log("pdfFile received?", !!pdfFile);
+    console.log("pdfFile received?", !!pdfFile);
     console.log("sending po",orderNo,firstName,pdfFile,imageFiles);
     if (!pdfFile) return res.status(400).send("No PDF file uploaded");
     console.log("PDF file size received (backend):", pdfFile.buffer.length);
