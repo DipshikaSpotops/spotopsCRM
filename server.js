@@ -4400,7 +4400,26 @@ var yardEmail = order.additionalInfo[yardIndex].email;
         <p><strong>Purchase Order To:</strong> ${yardName}<br>
         <strong>Part Price:</strong> $${parseFloat(partPrice).toFixed(2)}<br>
         <strong>Shipping:</strong> ${shippingValue}</p>
-        <p>NOTE: BLIND SHIPPING<br>NOTE: PROVIDE PICTURES BEFORE SHIPPING</p>
+        
+         <p style="font-size: 14px;">
+            Notes:<br>
+            Please provide the transaction receipt after you have charged our card.<br>
+            Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.<br>
+            Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.<br>
+            If there are any discrepancies or questions regarding this order, please contact us immediately.
+          </p>
+
+          <!-- Highlighted Notes -->
+         <p>
+  <strong style="background-color: #ffff00; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
+    NOTE: BLIND SHIPPING
+  </strong><br>
+
+  <strong style="background-color: #ff0000; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
+    NOTE: PROVIDE PICTURES BEFORE SHIPPING 
+  </strong>
+</p>
+
         <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
         <p style="font-size: 16px;">
           ${firstName}<br>
