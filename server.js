@@ -4239,7 +4239,7 @@ app.post("/sendPOEmailYard/:orderNo", upload.fields([
   try {
     const { orderNo } = req.params;
     const firstName = req.query.firstName;
-    const yardIndex = parseInt(req.body.yardIndex || "0"); // Use passed yardIndex
+    const yardIndex = parseInt(req.body.yardIndex - 1); 
 
     const order = await Order.findOne({ orderNo });
     if (!order) return res.status(404).send("Order not found");
