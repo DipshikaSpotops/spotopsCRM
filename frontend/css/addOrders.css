@@ -36,7 +36,7 @@ body {
     
     .sidebar {
     /* background-color: black; */
-    background: linear-gradient(160deg, #101a18, #80cbbc);
+    background: linear-gradient(160deg, #017b82, #0771b4);
     position: fixed;
     z-index: 1;
     top: 0;
@@ -62,10 +62,10 @@ body {
     cursor: default;
     border: none;
     }
-    #orderNo{
+    #orderNo {
     text-align: center;
     height: 4vh;
-    border: 1px solid #248287;
+    border: 1px solid #1aaac4;
     border-radius: 10px;
     margin: 1% 37.7%;
     }
@@ -123,7 +123,7 @@ body {
     /* Specific styles for the New Order Entry page */
     #addoBtn {
     margin: 0% 38.1%;
-    background: linear-gradient(160deg, #101a18, #80cbbc);
+    background: linear-gradient(160deg, #101a18, #037894);
     color: white;
     }
     #addoBtn:hover {
@@ -134,11 +134,11 @@ body {
     margin: -2% 0% -2% 12%;
     }
     .firstRow {
-    border: 1px solid #248287;
+    border: 1px solid #1aaac4;
     border-radius: 10px;
     margin: -3% 18% 4% 2%;
     padding: 1%;
-    color: #023f42;
+    color: #0e6b7c;
     }
     .firstRow input {
     border: 1px solid #c8d8c9;
@@ -199,7 +199,7 @@ body {
       text-align: center;
         margin-top: -2%;
         text-decoration-line: underline;
-        color: #023f42;
+        color: #037894;
     }
     #expediteS {
       display: flex;
