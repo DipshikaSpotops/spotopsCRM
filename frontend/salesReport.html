@@ -787,9 +787,9 @@ function updateStatsTitle(filter) {
 }
 
 // Initial fetch for the chart (daily view)
-updateStatsTitle(filter);
-fetchSalesData("daily");
-
+const defaultFilter = "daily";
+updateStatsTitle(defaultFilter);
+fetchSalesData(defaultFilter);
 $(".toggle-btn").on("click", function () {
 $("#offcanvasSidebar").removeClass("hide");
 });
