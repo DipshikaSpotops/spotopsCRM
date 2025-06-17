@@ -103,10 +103,15 @@ margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     height: auto;
-    margin-top: -4px;
+    margin-top: -60px;
     margin-right: 14%;
     background-color: #037894;
-    color: white;
+    color: black;
+}
+#statsTitle, #totalOrders, #estimatedGP, #estimatedHighestGP, #estimatedAverageGP, #AverageGP {
+  text-align: center;
+    font-weight: bold;
+    background-color: #acd8e3;
 }
 .stats-box {
 margin-bottom: 10px;
@@ -332,7 +337,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="stats-container">
-  <div id="statsTitle" style="text-align: center; font-weight: bold;">Daily Stats</div>
+  <div id="statsTitle" >Daily Stats</div>
 <div class="stats-box" id="totalOrders">Total Orders: 0</div>
 <div class="stats-box" id="estimatedGP">Estimated GP: $0</div>
 <div class="stats-box" id="estimatedHighestGP">Highest GP: $0</div>
