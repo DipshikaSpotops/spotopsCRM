@@ -516,34 +516,29 @@ var month = months[date.getMonth()];
 var year = date.getFullYear();
 // Fetch data for daily graph (only for the current month)
 async function fetchSalesDataForCurrentMonth() {
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
-  const currentYear = currentDate.getFullYear();
-
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&salesAgent=${firstName}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch orders");
-    }
+    const orders = response.data.orders || [];
 
-    dailyData = response.data.filter((order) => {
-      const parsedOrderDate = new Date(order.orderDate); // Parse the orderDate into a Date object
-      if (!parsedOrderDate) return false;
-
-      const orderMonth = parsedOrderDate.getMonth();
-      const orderYear = parsedOrderDate.getFullYear();
-      return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
+    dailyData = orders.filter((order) => {
+      const parsedOrderDate = new Date(order.orderDate);
+      return (
+        parsedOrderDate.getMonth() === now.getMonth() &&
+        parsedOrderDate.getFullYear() === now.getFullYear() &&
+        order.salesAgent === firstName
+      );
     });
 
-    calculateStats(dailyData); // Calculate stats for current month
+    calculateStats(dailyData);
   } catch (error) {
     console.error("Error fetching sales data:", error);
   }
 }
+
 
 // Calculate stats based on daily data (for the current month)
 function calculateStats(data) {
@@ -637,7 +632,7 @@ async function fetchSalesData(filter) {
 
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
+      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&salesAgent=${firstName}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -645,21 +640,19 @@ async function fetchSalesData(filter) {
       throw new Error("Failed to fetch orders");
     }
 
-    const data = response.data.filter((order) => order.salesAgent === firstName);
+    const orders = response.data.orders || [];
+
     const salesData = [];
     const labels = filter === "daily" 
       ? getDaysInMonth(currentMonth, currentYear) 
       : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    labels.forEach((label) => {
-      salesData.push(0);
-    });
+    labels.forEach(() => salesData.push(0));  // Initialize sales data
 
-    data.forEach((order) => {
-      const parsedOrderDate = new Date(order.orderDate); // Parse the orderDate into a Date object
+    orders.forEach((order) => {
+      const parsedOrderDate = new Date(order.orderDate);
       if (!parsedOrderDate) return;
 
-      // For daily, only include orders from the current month
       if (filter === "daily") {
         const orderMonth = parsedOrderDate.getMonth();
         const orderYear = parsedOrderDate.getFullYear();
@@ -676,11 +669,12 @@ async function fetchSalesData(filter) {
       }
     });
 
-    updateSalesChart(salesData, labels, filter); // Update chart based on the selected filter
+    updateSalesChart(salesData, labels, filter); // Update the chart
   } catch (error) {
     console.error("Error fetching sales data:", error);
   }
 }
+
 
 function updateSalesChart(salesData, labels, filter) {
 const ctx = document.getElementById("salesChart").getContext("2d");
