@@ -10,8 +10,8 @@ body {
 }
 #logoImg {
   height: auto;
-    width: 243px;
-    margin: -16px 6px;
+  width: 150px;
+  margin: -16px 6px;
 }
 .navbar .user-info span {
 margin-right: 10px;
