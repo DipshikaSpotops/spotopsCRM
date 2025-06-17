@@ -494,11 +494,7 @@ location.reload();
 
 let dailyData = []; // Store the daily data (data for the current month)
 let currentMonthStats = {};
-const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-const chicagoDate = new Date(now);
-const months1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month1 = months1[chicagoDate.getMonth()];
-const year1 = chicagoDate.getFullYear();
+const now = new Date();
 const options = {
 timeZone: 'America/Chicago',
 year: 'numeric',
@@ -520,29 +516,34 @@ var month = months[date.getMonth()];
 var year = date.getFullYear();
 // Fetch data for daily graph (only for the current month)
 async function fetchSalesDataForCurrentMonth() {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-indexed: Jan = 0
+  const currentYear = currentDate.getFullYear();
+
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&salesAgent=${firstName}`,
+      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    const orders = response.data.orders || [];
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch orders");
+    }
 
-    dailyData = orders.filter((order) => {
-      const parsedOrderDate = new Date(order.orderDate);
-      return (
-        parsedOrderDate.getMonth() === now.getMonth() &&
-        parsedOrderDate.getFullYear() === now.getFullYear() &&
-        order.salesAgent === firstName
-      );
+    dailyData = response.data.filter((order) => {
+      const parsedOrderDate = new Date(order.orderDate); // Parse the orderDate into a Date object
+      if (!parsedOrderDate) return false;
+
+      const orderMonth = parsedOrderDate.getMonth();
+      const orderYear = parsedOrderDate.getFullYear();
+      return orderMonth === currentMonth && orderYear === currentYear && order.salesAgent === firstName;
     });
 
-    calculateStats(dailyData);
+    calculateStats(dailyData); // Calculate stats for current month
   } catch (error) {
     console.error("Error fetching sales data:", error);
   }
 }
-
 
 // Calculate stats based on daily data (for the current month)
 function calculateStats(data) {
@@ -630,10 +631,11 @@ $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
 
 // Fetch data based on the selected filter (daily or monthly) for the chart
 async function fetchSalesData(filter) {
-  const chicagoNow = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-  const currentMonth = chicagoNow.getMonth(); 
+  const chicagoTimeString = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+  const chicagoDate = new Date(chicagoTimeString);
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const currentYear = chicagoNow.getFullYear();
+  const currentMonth = chicagoDate.getMonth(); 
+  const currentYear = chicagoDate.getFullYear();
   const month = months[currentMonth];
   const pageSize = 50;
   let page = 1;
@@ -647,11 +649,10 @@ async function fetchSalesData(filter) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (response.status !== 200) throw new Error("Failed to fetch orders");
-
       const { orders, totalCount } = response.data;
-      allOrders = allOrders.concat(orders);
+      if (!orders || !Array.isArray(orders)) break;
 
+      allOrders = allOrders.concat(orders);
       const totalPages = Math.ceil(totalCount / pageSize);
       page++;
       hasMore = page <= totalPages;
@@ -659,7 +660,7 @@ async function fetchSalesData(filter) {
 
     const labels = filter === "daily"
       ? getDaysInMonth(currentMonth, currentYear)
-      : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      : months;
 
     const salesData = Array(labels.length).fill(0);
 
@@ -682,7 +683,6 @@ async function fetchSalesData(filter) {
     console.error("Error fetching sales data:", error);
   }
 }
-
 
 function updateSalesChart(salesData, labels, filter) {
 const ctx = document.getElementById("salesChart").getContext("2d");
