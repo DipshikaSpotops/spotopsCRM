@@ -331,6 +331,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="stats-container">
+  <div id="statsTitle" style="text-align: center; font-weight: bold;">Daily Stats</div>
 <div class="stats-box" id="totalOrders">Total Orders: 0</div>
 <div class="stats-box" id="estimatedGP">Estimated GP: $0</div>
 <div class="stats-box" id="estimatedHighestGP">Highest GP: $0</div>
@@ -761,10 +762,32 @@ brandSummaryTable.append(`
 }
 
 $("#salesFilter").on("change", function () {
-const filter = $(this).val();
-fetchSalesData(filter);
+  const filter = $(this).val();
+  fetchSalesData(filter);
+  updateStatsForFilter(filter);
 });
+function updateStatsForFilter(filter) {
+  if (filter === "daily") {
+    updateStats(currentMonthStats); // Use already calculated daily stats
+  } else if (filter === "monthly") {
+    // For simplicity, show number of orders per month
+    const monthlyStats = {
+      totalOrders: window.salesChart.data.datasets[0].data.reduce((sum, val) => sum + val, 0),
+      estimatedGP: 0,
+      highestGP: 0,
+      estimatedAverageGP: 0,
+      totalAgp: 0,
+    };
+    updateStats(monthlyStats);
+  }
+}
+function updateStatsTitle(filter) {
+  const title = filter === "daily" ? "Daily Stats" : "Monthly Summary";
+  $("#statsTitle").text(title);
+}
+
 // Initial fetch for the chart (daily view)
+updateStatsTitle(filter);
 fetchSalesData("daily");
 
 $(".toggle-btn").on("click", function () {
