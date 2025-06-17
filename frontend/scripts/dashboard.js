@@ -38,12 +38,12 @@ const token = localStorage.getItem("token");
 console.log("role:",role);
 if (role === "Sales") {
 // Hide specific reports links for Team Charlie
-$("#submenu-reports .nav-link")
-.not(':contains("My Sales Report")')
-.hide();
-$("#submenu-reports .nav-link")
-.not(':contains(`Incentives Report`)')
-.hide();
+$("#submenu-reports .nav-link").each(function () {
+  const text = $(this).text().trim();
+  if (text !== "My Sales Report" && text !== "Incentives Report") {
+    $(this).hide();
+  }
+});
 // Hide specific dashboards links for Team Charlie
 $(
 "#submenu-dashboards .in-transit-link, #submenu-dashboards .view-fulfilled-link,.escalation,.view-ordersSheet-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .refunded-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .escalated-orders, #submenu-dashboards .ongoingEscalated-orders,#submenu-dashboards .yard-located-orders, #submenu-dashboards .sales-data-link, #submenu-dashboards .view-myTasks-link, #submenu-dashboards .view-myTasks-link"
