@@ -75,7 +75,7 @@ transition: margin-left 0.3s ease;
 .scale-wrapper {
   transform: scale(0.85);
   transform-origin: top left;
-  width: 110%; /* 100 / 0.75 */
+  width: 104%;
 }
 .submenu {
 display: block;
