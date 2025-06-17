@@ -139,14 +139,14 @@ cursor: pointer;
   padding: 6px 12px;
   font-size: 14px;
   border: none;
-  background-color: #35554f;
+  background-color: #037894;
   color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .vin-decoder-form button:hover {
-  background-color: #2a4642;
+  background-color: #024656;
 }
 #doughnut {
   background-color: #fbfcfd;
