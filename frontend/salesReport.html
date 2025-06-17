@@ -83,6 +83,11 @@ margin-top: 60px;
 display: flex;
 flex-direction: column;
 }
+.scale-wrapper {
+  transform: scale(0.75);
+  transform-origin: top left;
+  width: 110%;
+}
 .chart-row {
 display: flex;
 justify-content: space-between;
@@ -327,7 +332,7 @@ window.location.href = "login_signup.html";
 </div>
 </div>
 
-<div class="main-content">
+<div class="main-content scale-wrapper">
 <h1>Sales Report</h1>
 <div class="form-group">
 <label for="salesFilter">Filter:</label>
