@@ -773,10 +773,22 @@ function updateStatsForFilter(filter) {
   if (!globalOrders || globalOrders.length === 0) return;
 
   if (filter === "daily") {
-    // Already calculated and stored
-    updateStats(currentMonthStats);
+    const todayDallas = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+    const today = new Date(todayDallas);
+
+    const filtered = globalOrders.filter(order => {
+      const orderDateDallas = new Date(new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" }));
+      return (
+        orderDateDallas.getDate() === today.getDate() &&
+        orderDateDallas.getMonth() === today.getMonth() &&
+        orderDateDallas.getFullYear() === today.getFullYear()
+      );
+    });
+
+    calculateStats(filtered); 
+
   } else if (filter === "monthly") {
-    calculateStats(globalOrders); // now reuse for full data
+    calculateStats(globalOrders); 
   }
 }
 
@@ -787,8 +799,10 @@ function updateStatsTitle(filter) {
 
 // Initial fetch for the chart (daily view)
 const defaultFilter = "daily";
+$("#salesFilter").val(defaultFilter); 
 updateStatsTitle(defaultFilter);
-fetchSalesData(defaultFilter);
+await fetchSalesData(defaultFilter);
+updateStatsForFilter(defaultFilter);
 $(".toggle-btn").on("click", function () {
 $("#offcanvasSidebar").removeClass("hide");
 });
