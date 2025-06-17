@@ -515,6 +515,7 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 var day = date.getDate();
 var month = months[date.getMonth() + 1];
 var year = date.getFullYear();
+let globalOrders = [];
 // Fetch data for daily graph (only for the current month)
 async function fetchSalesDataForCurrentMonth() {
   const chicagoTime = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
@@ -530,7 +531,7 @@ async function fetchSalesDataForCurrentMonth() {
     );
 
     const orders = response.data || [];
-
+globalOrders = orders;
     dailyData = orders;
 
     calculateStats(dailyData);
@@ -761,26 +762,28 @@ brandSummaryTable.append(`
 }
 }
 
+javascript
+Copy
+Edit
 $("#salesFilter").on("change", function () {
   const filter = $(this).val();
   fetchSalesData(filter);
   updateStatsForFilter(filter);
+  updateStatsTitle(filter); 
 });
 function updateStatsForFilter(filter) {
+  updateStatsTitle(filter);
+
+  if (!globalOrders || globalOrders.length === 0) return;
+
   if (filter === "daily") {
-    updateStats(currentMonthStats); // Use already calculated daily stats
+    // Already calculated and stored
+    updateStats(currentMonthStats);
   } else if (filter === "monthly") {
-    // For simplicity, show number of orders per month
-    const monthlyStats = {
-      totalOrders: window.salesChart.data.datasets[0].data.reduce((sum, val) => sum + val, 0),
-      estimatedGP: 0,
-      highestGP: 0,
-      estimatedAverageGP: 0,
-      totalAgp: 0,
-    };
-    updateStats(monthlyStats);
+    calculateStats(globalOrders); // now reuse for full data
   }
 }
+
 function updateStatsTitle(filter) {
   const title = filter === "daily" ? "Daily Stats" : "Monthly Summary";
   $("#statsTitle").text(title);
