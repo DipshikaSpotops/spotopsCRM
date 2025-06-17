@@ -529,9 +529,9 @@ async function fetchSalesDataForCurrentMonth() {
     if (response.status !== 200) {
       throw new Error("Failed to fetch orders");
     }
-
-    dailyData = response.data.filter((order) => {
-      const parsedOrderDate = new Date(order.orderDate); // Parse the orderDate into a Date object
+const orders = response.data.orders || [];
+dailyData = orders.filter((order) => {
+      const parsedOrderDate = new Date(order.orderDate); 
       if (!parsedOrderDate) return false;
 
       const orderMonth = parsedOrderDate.getMonth();
