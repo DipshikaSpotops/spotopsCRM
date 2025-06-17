@@ -6,7 +6,7 @@ body {
     background-color: #eaf6ff;;
     }
     #logoImg {
-    height: auto;
+        height: auto;
     width: 150px;
     margin: -16px 6px;
     }
@@ -36,10 +36,10 @@ body {
     
     .sidebar {
     /* background-color: black; */
-    background: linear-gradient(160deg, #101a18, #80cbbc);
+    background: linear-gradient(160deg, #017b82, #0771b4);
     position: fixed;
     z-index: 1;
-    top: 0;
+    top: 55px;
     left: 0;
     overflow-x: hidden;
     padding-top: 20px;
