@@ -22,7 +22,7 @@ body {
     .navbar {
     color: white;
     /* background-color: black; */
-    background: linear-gradient(160deg, #101a18, #80cbbc);
+    background: linear-gradient(160deg, #017b82, #0771b4);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
