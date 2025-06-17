@@ -1,4 +1,5 @@
-$("#viewAlltasks").on("click", function () {
+$(document).ready(function () {
+  $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
 // to prefill the stae and the city 
@@ -161,6 +162,8 @@ function calculateProfit() {
 }
 
 $("#soldP, #costP, #shippingFee").on("input", calculateProfit);
+
+
 // Function to extract the highest order number from a collection
 function getHighestOrderNo(orderArr, existingOrderNo) {
 if (orderArr.length === 0) return existingOrderNo;
@@ -195,21 +198,17 @@ if (orderNo) {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then((response) => response.json())
 .then((data) => {
-  $("#programmingCostQuoted").val(data.programmingCostQuoted || "");
-if (data.programmingRequired === "true") {
-  $("#programmingCostQuoted").show();
-}
 // document.getElementById("estPP").textContent += data.costP;
 var customerNameE = data.customerName;
 const nameParts = (customerNameE || "").split(" ").filter(part => part.trim() !== "");
-const firstNameE = nameParts[0] || ""; // Default to empty string if no first name
-const lastNameE = nameParts[1] || "";  // Default to empty string if no last name
+const firstNameE = nameParts[0] || ""; 
+const lastNameE = nameParts[1] || "";  
 var notes = data.notes;
 var notes1 = notes.toString();
 var resultNotes = notes1.split('</br>')[0];
 var onlyNotes = resultNotes.trim();
-$("#firstName").val(data.fName || firstNameE);
-$("#lastName").val(data.lName || lastNameE);
+$("#fName").val(data.fName || firstNameE);
+$("#lName").val(data.lName || lastNameE);
 $("#orderNo").val(data.orderNo);
 $("#orderDate").val(data.orderDate);
 $("#salesAgent").val(data.salesAgent);
@@ -293,8 +292,8 @@ $("#newOrderForm").on("submit", function (e) {
         e.preventDefault();
 
         const firstName = localStorage.getItem("firstName");
-        const cusFName = $("#firstName").val();
-        const cusLName = $("#lastName").val();
+        const cusFName = $("#fName").val();
+        const cusLName = $("#lName").val();
         const customerName = `${cusFName} ${cusLName}`;
         const orderNoInput = $("#orderNo").val();
 const newEntry = urlParams.get("newEntry");
@@ -305,8 +304,8 @@ const newEntry = urlParams.get("newEntry");
                 orderDate: $("#orderDate").val(),
                 salesAgent: $("#salesAgent").val(),
                 // customerName: customerName,
-                fName: $("#firstName").val(),
-                lName: $("#lastName").val(),
+                fName: $("#fName").val(),
+                lName: $("#lName").val(),
                 bAddressStreet: $("#bAddress").val(),
                 bAddressCity: $("#bCity").val(),
                 bAddressState: $("#bState").val(),
@@ -361,91 +360,77 @@ const newEntry = urlParams.get("newEntry");
                     alert("An error occurred while saving the order. Please try again.");
                 });
         } else {
-          fetch(`https://www.spotops360.com/orders/${orderNo}`)
-      .then(res => res.json())
-      .then(existingData => {
-        const loggedInUser = localStorage.getItem("firstName");
-        const updatedOrderData = {
-           orderNo: orderNoInput,
-    orderDate: $("#orderDate").val(),
-    salesAgent: $("#salesAgent").val(),
-    fName: $("#firstName").val(),           
-    lName: $("#lastName").val(),            
-    customerName: `${$("#firstName").val()} ${$("#lastName").val()}`, // Optional if used
-    bAddressStreet: $("#bAddress").val(),
-    bAddressCity: $("#bCity").val(),
-    bAddressState: $("#bState").val(),
-    bAddressZip: $("#bZip").val(),
-    bAddressAcountry: $("#bCountry").val(),
-    bName: $("#bAttention").val(),
-    sAddressStreet: $("#sAddress").val(),
-    sAddressCity: $("#sCity").val(),
-    sAddressState: $("#sState").val(),
-    sAddressZip: $("#sZip").val(),
-    sAddressAcountry: $("#sCountry").val(),
-    attention: $("#sAttention").val(),
-    email: $("#email").val(),
-    phone: $("#phone").val(),
-    altPhone: $("#altPhone").val(),
-    make: $("#make").val(),
-    model: $("#model").val(),
-    year: $("#year").val(),
-    pReq: $("#pReq").val(),
-    desc: $("#desc").val(),
-    warranty: $("#warranty").val(),
-    soldP: $("#soldP").val(),
-    costP: $("#costP").val(),
-    shippingFee: $("#shippingFee").val(),
-    salestax: $("#salestax").val(),
-    grossProfit: $("#grossProfit").val(),
-    orderStatus: $("#orderStatus").val(),
-    vin: $("#vin").val(),
-    partNo: $("#partNo").val(),
-    last4digits: $("#issueOrder").val(),
-    notes: $("#notes").val(),
-    dsCall: $("#dsCallCheckbox").prop("checked"),
-    expediteShipping: $("#expeditorNot").prop("checked"),
-    businessName: $("#sBusinessName").val(),
-    programmingRequired: $("#programmingRequiredCheckbox").prop("checked"),
-    programmingCostQuoted: $("#programmingCostQuoted").val(),
-        };
+            // Update an existing order
+            const updatedOrderData = {
+                orderNo: orderNoInput,
+                orderDate: $("#orderDate").val(),
+                salesAgent: $("#salesAgent").val(),
+                customerName: customerName,
+                bAddressStreet: $("#bAddress").val(),
+                bAddressCity: $("#bCity").val(),
+                bAddressState: $("#bState").val(),
+                bAddressZip: $("#bZip").val(),
+                bAddressAcountry: $("#bCountry").val(),
+                bName: $("#bAttention").val(),
+                sAddressStreet: $("#sAddress").val(),
+                sAddressCity: $("#sCity").val(),
+                sAddressState: $("#sState").val(),
+                sAddressZip: $("#sZip").val(),
+                sAddressAcountry: $("#sCountry").val(),
+                attention: $("#sAttention").val(),
+                email: $("#email").val(),
+                fName: $("#fName").val(),
+                lName: $("#lName").val(),
+                phone: $("#phone").val(),
+                altPhone: $("#altPhone").val(),
+                make: $("#make").val(),
+                model: $("#model").val(),
+                year: $("#year").val(),
+                pReq: $("#pReq").val(),
+                desc: $("#desc").val(),
+                warranty: $("#warranty").val(),
+                soldP: $("#soldP").val(),
+                costP: $("#costP").val(),
+                shippingFee: $("#shippingFee").val(),
+                salestax: $("#salestax").val(),
+                grossProfit: $("#grossProfit").val(),
+                orderStatus: $("#orderStatus").val(),
+                vin: $("#vin").val(),
+                partNo: $("#partNo").val(),
+                last4digits: $("#issueOrder").val(),
+                notes: $("#notes").val(),
+                dsCall: $("#dsCallCheckbox").prop("checked") ? true : false,
+                expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
+                businessName: $("#sBusinessName").val(),
+                programmingRequired: $("#programmingRequiredCheckbox").prop("checked") ? true : false,
+                programmingCostQuoted: $("#programmingCostQuoted").val(),
+            };
 
-        const orderHistory = [];
-
-        for (let key in updatedOrderData) {
-          const oldVal = existingData[key] ?? "";
-          const newVal = updatedOrderData[key] ?? "";
-          if (oldVal.toString() !== newVal.toString()) {
-            const readableKey = key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
-            orderHistory.push(`${readableKey} changed from "${oldVal}" to "${newVal}" by ${loggedInUser}`);
-          }
-        }
-
-        updatedOrderData.orderHistory = [...(existingData.orderHistory || []), ...orderHistory];
-
-        // Step 2: Now PUT with updatedOrderData + orderHistory
-        return fetch(`https://www.spotops360.com/orders/${orderNo}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(updatedOrderData)
-        });
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Update failed");
-        return res.json();
-      })
-      .then(() => {
-        alert(`Order ${orderNoInput} updated successfully with history.`);
-        window.location.reload();
-      })
-      .catch(err => {
-        console.error("Error while updating order with history:", err);
-        alert("An error occurred during update.");
-      });
+            fetch(`https://www.spotops360.com/orders/${orderNo}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedOrderData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to update the order.");
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    alert(`Order ${orderNoInput} has been successfully updated.`);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error updating order:", error);
+                    alert("An error occurred while updating the order. Please try again.");
+                });
         }
     });
+
+  // Helper function to format order date
   function getFormattedOrderDate() {
     const now = new Date();
     const options = {
@@ -483,6 +468,8 @@ const newEntry = urlParams.get("newEntry");
     return `${day}${daySuffix(day)} ${month}, ${year} ${hour}:${minute}`;
   }
 
+
+// Sidebar and navigation functionality
 if (team === "Team Charlie" || role === "Sales") {
 // Hide specific reports links for Team Charlie
 $("#submenu-reports .nav-link")
@@ -542,6 +529,20 @@ headers: { Authorization: `Bearer ${token}` },
 .then((response) => {
 const data = response.data.filter((order) => order.salesAgent === firstName);
 let validOrders = [];
+
+// Filter orders by the current month
+// data.forEach((order) => {
+// // const orderDate = parseOrderDate(order.orderDate);
+// const orderMonth = orderDate.getMonth();
+// const orderYear = orderDate.getFullYear();
+
+// // Only consider orders from the current month and year
+// if (orderMonth === currentMonth && orderYear === currentYear) {
+// validOrders.push(order);
+// }
+// });
+
+// Process the filtered orders
 updateOrdersUI(validOrders);
 })
 .catch((error) => {
@@ -549,11 +550,18 @@ console.error("Error fetching orders:", error);
 });
 }
 
+// Function to update the UI with valid orders
 function updateOrdersUI(validOrders) {
 const totalOrders = validOrders.length;
 console.log(`Total Orders for this month: ${totalOrders}`);
+
+// Update stats box
 $("#totalOrders").text(`Total Orders: ${totalOrders}`);
+
+// Add more UI updates like charts, tables, etc.
 }
+
+// Fetch sales data on page load
 fetchSalesData();
 
 $(".toggle-sidebar").on("click", function () {
@@ -591,7 +599,7 @@ location.reload();
 
 
 // Event listener for "Same as Billing Address" checkbox
-$("input[type='checkbox'][value='Same as Billing Adress']").on("change", function () {
+$("#sameasBA").on("change",function () {
 if ($(this).is(":checked")) {
 // Copy the values from billing address fields to shipping address fields
 $("#sAddress").val($("#bAddress").val());
@@ -915,4 +923,6 @@ $("#programmingRequiredCheckbox").on("change", function () {
   } else {
     $("#programmingCostQuoted").hide().val("");
   }
+});
+
 });

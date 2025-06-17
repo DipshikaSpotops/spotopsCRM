@@ -22,7 +22,7 @@ body {
     .navbar {
     color: white;
     /* background-color: black; */
-    background: linear-gradient(160deg, #101a18, #80cbbc);
+    background: linear-gradient(160deg, #017b82, #0771b4);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
@@ -62,7 +62,7 @@ body {
     cursor: default;
     border: none;
     }
-    #orderNo {
+    #orderNo{
     text-align: center;
     height: 4vh;
     border: 1px solid #1aaac4;
@@ -158,13 +158,11 @@ body {
     }
     .priceRow {
     padding: 14px;
-  border: 1px solid #c0c0c0;
-  border-radius: 10px;
-  width: 100%;
-  margin: 0 auto;
-  height: auto; 
-  display: flex;
-  flex-direction: column;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+    width: 115%;
+    margin: -4% -19%;
+    height: 20vh;
     }
     .form-group {
     margin-bottom: 15px;
