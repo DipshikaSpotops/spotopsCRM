@@ -212,10 +212,10 @@ body {
     display: none;
     }
     h2 {
-      text-align: center;
-        margin-top: -3%;
-        text-decoration-line: underline;
-        color: #037894;
+    margin-top: -2%;
+    text-decoration-line: underline;
+    color: #037894;
+    margin-left: 18%;
     }
     #expediteS {
       display: flex;
@@ -538,7 +538,12 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content scale-wrapper">
+  <div class="top" style="display: flex;">
 <h2>ADD NEW ORDER</h2>
+<div>
+<input type="text" id="orderNo" required placeholder="Enter Order No."/>
+</div>
+</div>
 <div id="firstRow">
 <div>
 <input type="text" id="salesAgent" required readonly/>
@@ -985,9 +990,6 @@ window.location.href = "login_signup.html";
 
 <!-- price and gp info till here -->
 <div id="below">
-<div>
-<input type="text" id="orderNo" required placeholder="Enter Order No."/>
-</div>
 <button type="submit" class="btn" id="addoBtn">Add/Edit New Order</button>
 </div>
 </form>
