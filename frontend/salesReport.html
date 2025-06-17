@@ -99,31 +99,30 @@ height: 400px;
 margin-bottom: 20px;
 }
 .stats-container {
-    width: 28%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    margin-left: -3%;
-    /* padding: 119px; */
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    height: auto;
-    margin-top: -60px;
-    margin-right: 14%;
-    background-color: #037894;
-  
-    
-}
-#statsTitle, #totalOrders, #estimatedGP, #estimatedHighestGP, #estimatedAverageGP, #AverageGP {
-    text-align: center;
-    font-weight: normal;
-    color: white;
-    font-size: 20px;
+    width: 100%;
+  max-width: 350px;
+  background: linear-gradient(135deg, #017b82, #0596ac);
+  border-radius: 12px;
+  color: white;
+  padding: 30px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  margin-left: auto;
+  margin-right: auto;
 }
 .stats-box {
-margin-bottom: 10px;
-text-align: center;
+  margin: 10px 0;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+#statsTitle {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+  text-transform: uppercase;
 }
 table thead th {
   background-color: #037894;
@@ -464,6 +463,22 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+function formatReadableDate(dateString) {
+  const date = new Date(dateString);
+  if (isNaN(date)) return "Invalid Date";
+
+  const day = date.getDate();
+  const suffix =
+    day % 10 === 1 && day !== 11 ? "st" :
+    day % 10 === 2 && day !== 12 ? "nd" :
+    day % 10 === 3 && day !== 13 ? "rd" : "th";
+
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+
+  return `${day}${suffix} ${month}, ${year}`;
+}
+
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -752,7 +767,7 @@ recentOrdersTable.append(`
 ? `${order.fName} ${order.lName}`
 : (order.customerName || "")
 }</td>
-<td>${order.orderDate}</td>
+<td>${formatReadableDate(order.orderDate)}</td>
 <td>$${order.grossProfit.toFixed(2)}</td>
 </tr>
 `);
