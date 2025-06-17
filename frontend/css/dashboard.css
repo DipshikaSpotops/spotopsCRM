@@ -139,7 +139,7 @@ cursor: pointer;
   padding: 6px 12px;
   font-size: 14px;
   border: none;
-  background-color: #037894;
+  background-color: #59a3b5;
   color: white;
   border-radius: 5px;
   cursor: pointer;
@@ -244,6 +244,7 @@ cursor: pointer;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  height: auto;
 }
 @media (max-width: 1200px) {
   .sidebar {
@@ -500,11 +501,11 @@ white-space: nowrap;
 }
 
 .rate-success {
-  border-color: #52c41a;
-  background-color: #f6ffed;
-  color: #389e0d;
-  white-space: nowrap;
-  width: auto;
+      border-color: #1aaac4;
+    background-color: #f6ffed;
+    color: #1aaac4;
+    white-space: nowrap;
+    width: auto;
 }
 
 .rate-escalation {
