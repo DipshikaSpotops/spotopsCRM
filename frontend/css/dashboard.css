@@ -52,6 +52,10 @@ transition: transform 0.3s ease;
 scrollbar-color: white white;
 font-size: 12px;
 }
+#vinLabel{
+  margin-left: 3%;
+  margin-top: -25%;
+}
 .sidebar .nav-link {
 color: #ffffff;
 cursor: pointer;
@@ -136,7 +140,8 @@ cursor: pointer;
   border: 1px solid gray;
   border-radius: 5px;
   background-color: #eee;
-  width: 200px;
+  /* width: 200px; */
+  width: 130px;
   max-width: 100%;
 }
 
