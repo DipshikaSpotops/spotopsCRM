@@ -531,7 +531,6 @@ async function fetchSalesDataForCurrentMonth() {
     );
 
     const orders = response.data || [];
-globalOrders = orders;
     dailyData = orders;
 
     calculateStats(dailyData);
@@ -640,6 +639,7 @@ async function fetchSalesData(filter) {
     );
 
     const orders = response.data || [];
+    globalOrders = orders
     const labels = filter === "daily"
       ? getDaysInMonth(currentMonth, currentYear)
       : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
