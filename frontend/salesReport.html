@@ -620,7 +620,7 @@ function updateStats(stats) {
   $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
   $("#estimatedHighestGP").html(`Highest GP: $${stats.highestGP.toFixed(2)}${stats.highestGPOrderNo ? ` (Order No: ${stats.highestGPOrderNo})` : ''}`);
   $("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
-  $("#AverageGP").html(`Actual GP: $${stats.totalAgp.toFixed(2)}${stats.highestActualGPOrderNo ? ` (Order No: ${stats.highestActualGPOrderNo})` : ''}`);
+  $("#AverageGP").html(`Actual GP: $${stats.totalAgp.toFixed(2)}${stats.highestActualGPOrderNo};
 }
 
 
