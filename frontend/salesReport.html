@@ -496,6 +496,7 @@ let dailyData = []; // Store the daily data (data for the current month)
 let currentMonthStats = {};
 const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
 const chicagoDate = new Date(now);
+const months1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const month1 = months[chicagoDate.getMonth()];
 const year1 = chicagoDate.getFullYear();
 const options = {
@@ -631,6 +632,7 @@ $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
 async function fetchSalesData(filter) {
   const chicagoNow = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
   const currentMonth = chicagoNow.getMonth(); 
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const currentYear = chicagoNow.getFullYear();
   const month = months[currentMonth];
   const pageSize = 50;
