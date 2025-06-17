@@ -69,13 +69,13 @@ border: none;
 flex-grow: 1;
 padding: 20px;
 margin-left: 12%;
-margin-top: 96px;
+margin-top: 58px;
 transition: margin-left 0.3s ease;
 }
 .scale-wrapper {
   transform: scale(0.85);
   transform-origin: top left;
-  width: 104%;
+  width: 110%;
 }
 .submenu {
 display: block;
