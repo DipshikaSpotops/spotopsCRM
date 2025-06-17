@@ -713,51 +713,67 @@ async function fetchSalesData(filter) {
   }
 }
 
-
 function updateSalesChart(salesData, labels, filter) {
-const ctx = document.getElementById("salesChart").getContext("2d");
-if (window.salesChart instanceof Chart) {
-window.salesChart.destroy();
-}
-window.salesChart = new Chart(ctx, {
-type: "bar",
-data: {
-labels: labels,
-datasets: [
-{
-label: "Number of Orders",
-data: salesData,
-// backgroundColor: "rgba(75, 192, 192, 0.2)",
-backgroundColor: "#037894",
-borderColor: "rgba(75, 192, 192, 1)",
-borderWidth: 1,
-},
-],
-},
-options: {
-responsive: true,
-scales: {
-x: {
-display: true,
-title: {
-display: true,
-text: filter === "daily" ? "Days of the Month" : "Months",
-},
-},
-y: {
-display: true,
-title: {
-display: true,
-text: "Number of Orders",
-},
-ticks: {
-stepSize: 1,
-beginAtZero: true,
-},
-},
-},
-},
-});
+  const ctx = document.getElementById("salesChart").getContext("2d");
+
+  if (window.salesChart instanceof Chart) {
+    window.salesChart.destroy();
+  }
+
+  window.salesChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Number of Orders",
+        data: salesData,
+        backgroundColor: "rgba(3, 120, 148, 0.7)",
+        borderColor: "#025b6d",
+        borderWidth: 2,
+        borderRadius: 6,
+        hoverBackgroundColor: "rgba(3, 120, 148, 1)",
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: {
+        duration: 1000,
+        easing: 'easeOutQuart',
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#037894',
+          titleColor: '#fff',
+          bodyColor: '#fff',
+          borderColor: '#025b6d',
+          borderWidth: 1,
+          padding: 10,
+        },
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(0, 0, 0, 0.05)' },
+          ticks: {
+            color: '#333',
+            font: { size: 12, weight: 'bold' }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            color: '#333',
+            font: { size: 12, weight: 'bold' }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)',
+            drawBorder: false
+          }
+        }
+      }
+    }
+  });
 }
 
 // Initial fetch for daily data (for the stats)
