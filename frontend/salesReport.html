@@ -494,7 +494,10 @@ location.reload();
 
 let dailyData = []; // Store the daily data (data for the current month)
 let currentMonthStats = {};
-const now = new Date();
+const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+const chicagoDate = new Date(now);
+const month1 = months[chicagoDate.getMonth()];
+const year1 = chicagoDate.getFullYear();
 const options = {
 timeZone: 'America/Chicago',
 year: 'numeric',
@@ -626,50 +629,53 @@ $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
 
 // Fetch data based on the selected filter (daily or monthly) for the chart
 async function fetchSalesData(filter) {
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); 
-  const currentYear = currentDate.getFullYear();
+  const chicagoNow = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+  const currentMonth = chicagoNow.getMonth(); 
+  const currentYear = chicagoNow.getFullYear();
+  const month = months[currentMonth];
+  const pageSize = 50;
+  let page = 1;
+  let allOrders = [];
+  let hasMore = true;
 
   try {
-    const response = await axios.get(
-      `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&salesAgent=${firstName}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    while (hasMore) {
+      const response = await axios.get(
+        `https://www.spotops360.com/orders/monthly?month=${month}&year=${currentYear}&salesAgent=${firstName}&page=${page}&limit=${pageSize}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch orders");
+      if (response.status !== 200) throw new Error("Failed to fetch orders");
+
+      const { orders, totalCount } = response.data;
+      allOrders = allOrders.concat(orders);
+
+      const totalPages = Math.ceil(totalCount / pageSize);
+      page++;
+      hasMore = page <= totalPages;
     }
 
-    const orders = response.data.orders || [];
-
-    const salesData = [];
-    const labels = filter === "daily" 
-      ? getDaysInMonth(currentMonth, currentYear) 
+    const labels = filter === "daily"
+      ? getDaysInMonth(currentMonth, currentYear)
       : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    labels.forEach(() => salesData.push(0));  // Initialize sales data
+    const salesData = Array(labels.length).fill(0);
 
-    orders.forEach((order) => {
-      const parsedOrderDate = new Date(order.orderDate);
+    allOrders.forEach(order => {
+      const parsedOrderDate = new Date(new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" }));
       if (!parsedOrderDate) return;
 
-      if (filter === "daily") {
-        const orderMonth = parsedOrderDate.getMonth();
-        const orderYear = parsedOrderDate.getFullYear();
-        if (orderMonth !== currentMonth || orderYear !== currentYear) return;
-      }
-
-      const label = filter === "daily" 
-        ? parsedOrderDate.getDate().toString() 
+      const label = filter === "daily"
+        ? parsedOrderDate.getDate().toString()
         : parsedOrderDate.toLocaleDateString("en-US", { month: "short" });
 
       const labelIndex = labels.indexOf(label);
       if (labelIndex !== -1) {
-        salesData[labelIndex] += 1;
+        salesData[labelIndex]++;
       }
     });
 
-    updateSalesChart(salesData, labels, filter); // Update the chart
+    updateSalesChart(salesData, labels, filter);
   } catch (error) {
     console.error("Error fetching sales data:", error);
   }
