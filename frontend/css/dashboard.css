@@ -351,11 +351,11 @@ cursor: pointer;
   background: #fbfcfd;
 }
 #prevMonthBtn, #nextMonthBtn {
-  background-color: #3c6059;
+  background-color: #037894;
 }
 #goToMonthBtn{
   margin-top: -1%;
-  background-color: #3c6059;
+  background-color: #037894;
 }
 
 .rate-item {
