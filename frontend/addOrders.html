@@ -80,8 +80,13 @@ body {
     height: 4vh;
     border: 1px solid #1aaac4;
     border-radius: 10px;
-    margin: 1% 37.7%;
+    margin: -4% 174.7%;
     }
+    #top {
+    margin-top: -3%;
+    display: flex;
+    margin-left: 4%;
+}
     .main-content {
     width: 100%;
     flex-grow: 1;
@@ -140,7 +145,7 @@ body {
     }
     /* Specific styles for the New Order Entry page */
     #addoBtn {
-    margin: 0% 38.1%;
+    margin: 2% 38.1%;
     background: linear-gradient(160deg, #101a18, #037894);
     color: white;
     }
@@ -212,10 +217,11 @@ body {
     display: none;
     }
     h2 {
-    margin-top: -2%;
+        margin-top: -2%;
     text-decoration-line: underline;
     color: #037894;
-    margin-left: 18%;
+    margin-left: 125%;
+    white-space: nowrap;
     }
     #expediteS {
       display: flex;
@@ -538,7 +544,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content scale-wrapper">
-  <div class="top" style="display: flex;">
+  <div class="top">
 <div><h2>ADD NEW ORDER</h2></div>
 <div>
 <input type="text" id="orderNo" required placeholder="Enter Order No."/>
