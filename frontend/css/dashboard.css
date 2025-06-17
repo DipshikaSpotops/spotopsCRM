@@ -50,7 +50,7 @@ height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
 scrollbar-color: white white;
-
+font-size: 12px;
 }
 .sidebar .nav-link {
 color: #ffffff;
