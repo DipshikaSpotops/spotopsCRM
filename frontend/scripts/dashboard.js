@@ -35,7 +35,8 @@ console.log("hhhh",firstName);
 const token = localStorage.getItem("token");
 
 // Apply team-based and role-based restrictions
-if (team === "Team Charlie" || role === "Sales") {
+console.log("role:",role);
+if (role === "Sales") {
 // Hide specific reports links for Team Charlie
 $("#submenu-reports .nav-link")
 .not(':contains("My Sales Report")')
