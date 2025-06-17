@@ -512,31 +512,25 @@ const date = new Date(formattedDate);
 // Array of month names
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var day = date.getDate();
-var month = months[date.getMonth()];
+var month = months[date.getMonth() + 1];
 var year = date.getFullYear();
 // Fetch data for daily graph (only for the current month)
 async function fetchSalesDataForCurrentMonth() {
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
+  const chicagoTime = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+  const chicagoDate = new Date(chicagoTime);
+  const currentMonth = chicagoDate.getMonth();
+  const currentYear = chicagoDate.getFullYear();
+  const month = String(currentMonth + 1).padStart(2, '0');
 
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/salesPersonWise?month=${month}&year=${year}&salesAgent=${firstName}`,
+      `https://www.spotops360.com/orders/salesPersonWise?month=${month}&year=${currentYear}&firstName=${firstName}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
     const orders = response.data || [];
 
-    dailyData = orders.filter((order) => {
-      const parsedOrderDate = new Date(order.orderDate); 
-      return (
-        parsedOrderDate &&
-        parsedOrderDate.getMonth() === currentMonth &&
-        parsedOrderDate.getFullYear() === currentYear &&
-        order.salesAgent === firstName
-      );
-    });
+    dailyData = orders;
 
     calculateStats(dailyData);
   } catch (error) {
@@ -622,7 +616,7 @@ return days;
 
 // Updating the stats-container with the provided stats
 function updateStats(stats) {
-$("#totalOrders").text(`Total Orders: ${stats.totalOrders - 1}`);
+$("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
 $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
 $("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
 $("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
@@ -631,36 +625,32 @@ $("#AverageGP").text(`Actual GP: $${stats.totalAgp.toFixed(2)}`);
 
 // Fetch data based on the selected filter (daily or monthly) for the chart
 async function fetchSalesData(filter) {
-  const chicagoTimeString = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-  const chicagoDate = new Date(chicagoTimeString);
-
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const currentMonth = chicagoDate.getMonth(); 
+  const chicagoTime = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+  const chicagoDate = new Date(chicagoTime);
+  const currentMonth = chicagoDate.getMonth();
   const currentYear = chicagoDate.getFullYear();
-  const month = months[currentMonth];
+  const month = String(currentMonth + 1).padStart(2, '0');
 
   try {
     const response = await axios.get(
-      `https://www.spotops360.com/orders/salesPersonWise?month=${month}&year=${currentYear}&salesAgent=${firstName}`,
+      `https://www.spotops360.com/orders/salesPersonWise?month=${month}&year=${currentYear}&firstName=${firstName}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
     const orders = response.data || [];
-
     const labels = filter === "daily"
       ? getDaysInMonth(currentMonth, currentYear)
-      : months;
+      : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const salesData = Array(labels.length).fill(0);
 
     orders.forEach((order) => {
-      const chicagoOrderDateStr = new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" });
-      const chicagoOrderDate = new Date(chicagoOrderDateStr);
-      if (isNaN(chicagoOrderDate)) return;
+      const dallasTime = new Date(new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" }));
+      if (isNaN(dallasTime)) return;
 
       const label = filter === "daily"
-        ? chicagoOrderDate.getDate().toString()
-        : months[chicagoOrderDate.getMonth()];
+        ? dallasTime.getDate().toString()
+        : labels[dallasTime.getMonth()];
 
       const labelIndex = labels.indexOf(label);
       if (labelIndex !== -1) {
