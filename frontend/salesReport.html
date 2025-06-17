@@ -78,7 +78,7 @@ border: none;
 }
 .main-content {
 flex-grow: 1;
-padding: 20px;
+padding: 30px 40px;
 margin-left: 14%;
 margin-top: 60px;
 display: flex;
@@ -87,43 +87,46 @@ flex-direction: column;
 .scale-wrapper {
   transform: scale(0.90);
   transform-origin: top left;
-  width: 110%;
+  width: 94%;
 }
 .chart-row {
 display: flex;
-justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
 }
 .chart-container {
-width: 50%;
-height: 400px;
-margin-bottom: 20px;
+ max-width: 700px;
+  width: 100%;
 }
 .stats-container {
-    width: 100%;
   max-width: 350px;
+  width: 100%;
   background: linear-gradient(135deg, #017b82, #0596ac);
   border-radius: 12px;
   color: white;
-  padding: 30px 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 30px 25px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   font-family: 'Segoe UI', sans-serif;
-  margin-left: auto;
-  margin-right: auto;
+  text-align: center;
+  margin-top: 20px;
+  flex-shrink: 0;
 }
 .stats-box {
   margin: 10px 0;
-  text-align: center;
-  font-size: 18px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.6;
 }
 
 #statsTitle {
   font-size: 22px;
   font-weight: 600;
-  margin-bottom: 15px;
-  text-align: center;
   text-transform: uppercase;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
 }
+
 table thead th {
   background-color: #037894;
     color: white;
@@ -250,6 +253,17 @@ background: rgba(0, 0, 0, 0.5);
 }
 body.modal-active {
 overflow: hidden; 
+}
+@media (max-width: 768px) {
+  .chart-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chart-container,
+  .stats-container {
+    max-width: 100%;
+  }
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
