@@ -622,7 +622,7 @@ return days;
 
 // Updating the stats-container with the provided stats
 function updateStats(stats) {
-$("#totalOrders").text(`Total Orders: ${stats.totalOrders}`);
+$("#totalOrders").text(`Total Orders: ${stats.totalOrders - 1}`);
 $("#estimatedGP").text(`Estimated GP: $${stats.estimatedGP.toFixed(2)}`);
 $("#estimatedHighestGP").text(`Highest GP: $${stats.highestGP.toFixed(2)}`);
 $("#estimatedAverageGP").text(`Average GP: $${stats.estimatedAverageGP.toFixed(2)}`);
