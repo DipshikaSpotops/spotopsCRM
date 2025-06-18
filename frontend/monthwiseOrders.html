@@ -23,7 +23,13 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 </script>
-
+<script>
+  (function() {
+    if (localStorage.getItem("darkMode") === "true") {
+      document.documentElement.classList.add("dark-mode");
+    }
+  })();
+</script>
 <!-- <script>
   (function() {
     const isDarkMode = localStorage.getItem("darkMode") === "true";

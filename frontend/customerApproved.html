@@ -27,11 +27,8 @@ window.location.href = "login_signup.html";
 </script>
 <script>
   (function() {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-    if (isDarkMode) {
+    if (localStorage.getItem("darkMode") === "true") {
       document.documentElement.classList.add("dark-mode");
-    } else {
-      document.documentElement.classList.add("light-mode");
     }
   })();
 </script>
