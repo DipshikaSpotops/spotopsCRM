@@ -143,7 +143,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #037894;
+    color: #106072;
     }
     
     .modal-dialog {
@@ -287,7 +287,7 @@ body {
 #filterButton:hover,
 #showTotalOrders:hover,
 #monthYearPicker:hover {
-  background-color: #287a5d;
+  background-color: #0b4f5f;
 }
 .table td:first-child {
     display: flex;
@@ -308,7 +308,7 @@ body {
       background-color: #c40505; border: none; color: white;
     }
     .approve-btn:hover {
-        background-color: #287a5d;
+        background-color: #0b4f5f;
         cursor: pointer;
       }
       
@@ -502,7 +502,7 @@ body {
       font-size: 18px; 
     }
     .table tbody tr:hover {
-      background-color: #f1f1f1;
+      background-color: #6fa4b0;
     }
 
     @media (max-width: 768px) {
