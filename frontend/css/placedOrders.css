@@ -509,14 +509,27 @@ body {
   .sidebar {
     font-size: 10px;
   }
-
+.topHeads {
+  margin-top: 3%;
+}
   .sidebar .nav-link {
     padding: 8px 12px;
     font-size: 11px;
+    margin-left: -8%;
   }
-
+table.table td {
+  font-size: 12px;
+}
+.table thead th {
+    font-size: 12px;
+}
   .sidebar .chevron-icon i {
     font-size: 10px;
+  }
+  .approve-btn, .cancel-btn {
+    min-width: 50px;
+    height: 31px;
+    padding: -1px 0px;
   }
 }
     @media (max-width: 768px) {
