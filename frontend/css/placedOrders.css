@@ -459,6 +459,7 @@ min-width: 50px;
         overflow-y: auto;
         position: relative;
         scrollbar-color: #037894 white;
+        box-sizing: content-box;
         /* overflow-x:hidden; */
     }
     
@@ -472,6 +473,7 @@ min-width: 50px;
       top: 0;
       z-index: 10; 
       transform: translateZ(0); 
+      overflow-anchor: none;
       background-color: #037894; 
       color: white;
       padding: 8px;

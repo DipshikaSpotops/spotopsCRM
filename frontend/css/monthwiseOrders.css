@@ -556,10 +556,12 @@ table {
     overflow-y: auto;
     scrollbar-color: #037894 white;
     position: relative;
+    box-sizing: content-box;
 }
 table thead th {
   position: sticky;
   transform: translateZ(0); 
+  overflow-anchor: none;
   top: 0;
   z-index: 10; 
   background-color: #037894; 
