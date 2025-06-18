@@ -457,6 +457,7 @@ min-width: 50px;
     .table-wrapper {
       max-height: 82vh;
         overflow-y: auto;
+        position: relative;
         scrollbar-color: #037894 white;
         /* overflow-x:hidden; */
     }

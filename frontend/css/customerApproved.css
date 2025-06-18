@@ -423,6 +423,7 @@ color: #e0e0e0;
   max-height: 82vh;
     overflow-y: auto;
     scrollbar-color: #037894 white;
+    position: relative;
 }
 
 table {

@@ -349,11 +349,7 @@ td:first-child {
 .dark-mode td:nth-child(2) {
   left: 100px; 
 } */
-.table-wrapper {
-  max-height: 82vh;
-    overflow-y: auto;
-    scrollbar-color: #037894 white;
-}
+
 /* for dark mode */
 .dark-mode {
 background-color: #141b2d;
@@ -554,6 +550,12 @@ table {
   border-collapse: collapse;
 }
 
+.table-wrapper {
+  max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
+    position: relative;
+}
 table thead th {
   position: sticky;
   top: 0;
