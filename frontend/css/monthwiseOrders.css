@@ -277,15 +277,21 @@ color:white;
   box-sizing: border-box;
 }
 .edit-btn {
-background-color: #96dce1;
+    background-color: #037894;
     border: none;
-    color: #38696c;
+    color: #e5f6ff;
 }
 .process-btn {
-  background-color: #cae8c9;
+     background-color: #065d20;
     border: none;
-    color: #61a55e;
-    cursor: pointer;
+    color: #f9fff9;
+}
+.process-btn :hover {
+     background-color: #0ba439;
+    border: none;
+}
+.edit-btn :hover {
+    background-color: #0b4f5f;
 }
 .table tbody tr:hover {
   background-color: #c0c0c0 !important; 

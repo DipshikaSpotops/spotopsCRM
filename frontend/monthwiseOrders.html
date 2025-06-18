@@ -47,7 +47,7 @@ window.location.href = "login_signup.html";
     
     
     <div class="user-info dropdown" style="display: flex;">
-    <span style="white-space: nowrap;margin-left: -14%;">Welcome <span id="user-name"></span></span>
+    <span style="white-space: nowrap;margin-left: -14%;">Hi <span id="user-name"></span></span>
     <!-- for dark mode -->
     <div class="dark-mode-toggle">
       <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
@@ -395,7 +395,7 @@ function renderTableRows(page, orders = allOrders) {
 
     const editButton = (team === "Team Mark" || team === "Team Sussane")
       ? ""
-      : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
+      : `<button class="btn edit-btn" data-id="${item.orderNo}">Edit</button>`;
 
     const processBtnDisabled = ["Placed", "Customer approved"].includes(item.orderStatus) ? "disabled" : "";
 
@@ -440,7 +440,7 @@ function renderTableRows(page, orders = allOrders) {
         <td ${escalationStyle}>${escalationStatus}</td>
         <td>
           ${editButton}
-          <button class="btn btn-sm process-btn" data-id="${item.orderNo}" ${processBtnDisabled}>View</button>
+          <button class="btn  process-btn" data-id="${item.orderNo}" ${processBtnDisabled}>View</button>
         </td>
       </tr>
     `;
