@@ -555,6 +555,9 @@ table.table td {
         #searchInput {
     width: 93%;
         }
+        .navbar .user-info span
+ {    margin-left: 5%;
+}
         .sidebar.show {
         transform: translateX(0);
         }
