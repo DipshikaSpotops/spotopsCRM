@@ -15,7 +15,7 @@ text-align: center;
   margin: 0 5px;
 }
 .previousNext{
-  background-color: #35554f;
+  background-color: #037894;
   color: white;
   border: none;
   padding: 10px;
@@ -216,7 +216,7 @@ cursor: pointer;
 background-color: green;
 }
 .active-page {
-background-color: #35554f;
+background-color: #037894;
   color: white;
 }
 #loadingMessage {
@@ -253,16 +253,16 @@ border-radius: 5px;;
 margin: 0% 1%;
 /* background-color: #3096a58f; */
 padding: 5px;
-background-color: #35554f;
+background-color: #037894;
 color:white;
 }
 #monthYearPicker{
-  background-color: #35554f;
+  background-color: #037894;
     color: white;
     width: auto;
 }
 #filterButton {
-  background-color: #35554f;color:white; border: none; 
+  background-color: #037894;color:white; border: none; 
   margin-left: 1%;
 }
 #monthYearPicker,
@@ -543,7 +543,7 @@ table thead th {
   position: sticky;
   top: 0;
   z-index: 10; 
-  background-color: #35554f; 
+  background-color: #037894; 
   color: white;
   padding: 8px;
   text-align: center;
@@ -551,7 +551,7 @@ table thead th {
   white-space: nowrap;
 }
 #downloadCsv {
-  background-color: #35554f;
+  background-color: #037894;
   color: white;
   padding: 6px 9px;
   border-radius: 5px;
