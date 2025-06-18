@@ -180,14 +180,11 @@ width: 82vw;
 
 
 table.table td {
-white-space: nowrap;
-overflow: auto;
-text-overflow: ellipsis;
-padding: 8px;
-text-align: center;
-color: #106072;
-border-bottom: 1px solid #ddd;
-text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
 }
 
 

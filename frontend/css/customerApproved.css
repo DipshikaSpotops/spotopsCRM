@@ -149,11 +149,11 @@ border: 1px solid #ccc;
 border-radius: 4px;
 }
 table.table td{
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-color: #037894;
-text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
 }
 
 .modal-dialog {
