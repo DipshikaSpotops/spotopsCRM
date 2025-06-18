@@ -128,32 +128,16 @@ cursor: pointer;
 flex-shrink: 0;
 margin: 0% 30%;
 }
-@media (max-width: 768px) {
-  .sidebar {
-transform: translateX(-100%);
-width:38%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
-}
 #searchInput {
-width: auto;
-border-radius: 30px;
-border: 1px solid grey;
-margin: 4% 8%;
-background: white
-url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png)
-5px center no-repeat;
-background-size: 20px 20px;
-padding-left: 35px;
-height: 40px;
+    width: auto;
+    border-radius: 30px;
+    border: 1px solid grey;
+    background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
+    background-size: 20px 20px;
+    padding-left: 35px;
+    height: 35px;
+    margin-top: 3%;
+    margin-left: 3%;
 }
 .profile-table {
 width: 50%;
@@ -359,16 +343,18 @@ body.modal-active {
 overflow: hidden; 
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
+  text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
 }
-@media (max-width: 320px) {
-#mainHeading {
-  font-size: 20px;
-}
-}
+
 .table-wrapper {
-  max-height: 84vh;
-  overflow-y: auto;
+  max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
+    position: relative;
+    scrollbar-gutter: stable;
 }
 
 table {
@@ -479,3 +465,87 @@ td.sticky-col.second-col {
   background: #2c3e50; /* match your dark mode table background */
   color: white;
 }
+@media (max-width: 992px) {
+  .sidebar {
+    font-size: 10px;
+  }
+.topHeads {
+  margin-top: 4%;
+}
+  .sidebar .nav-link {
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-left: -8%;
+  }
+table.table td {
+  font-size: 12px;
+}
+.table thead th {
+    font-size: 12px;
+}
+  .sidebar .chevron-icon i {
+    font-size: 10px;
+  }
+  .approve-btn, .cancel-btn {
+    min-width: 50px;
+    height: 31px;
+    font-size: 12px;
+  }
+  h1 {
+    font-size: 1.5rem; 
+    font-weight: 600;
+  }
+  #searchInput {
+        height: 30px;
+    margin-top: 1%;
+    margin-left: 3%;
+  }
+  #monthYearPicker {
+    font-size: 12px;
+  }
+}
+    @media (max-width: 768px) {
+        .sidebar {
+        transform: translateX(-100%);
+        width:38%;
+        }
+        .topHeads{
+          margin-top: 8%
+        }
+        #searchInput {
+    width: 93%;
+        }
+        .navbar .user-info span
+ {    margin-left: 5%;
+}
+        .sidebar.show {
+        transform: translateX(0);
+        }
+        .main-content {
+        margin-left: 0;
+        }
+        .toggle-sidebar {
+        display: block;
+        }
+        .table-wrapper {
+              overflow-x: auto; 
+            }
+        
+            table {
+              min-width: 800px;
+            }
+        }
+        @media (max-width: 600px) {
+  .sidebar {
+    font-size: 9px;
+  }
+
+  .sidebar .nav-link {
+    font-size: 10px;
+  }
+}
+    @media (max-width: 320px) {
+        #mainHeading {
+          font-size: 20px;
+        }
+        }
