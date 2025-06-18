@@ -16,11 +16,11 @@ text-align: center;
 }
 .previousNext{
   background-color: #037894;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  font-size: 18px;
+     color: white;
+    border: none;
+    padding: 4px;
+    border-radius: 50%;
+    font-size: 18px;
   cursor: pointer;
 }
 .previousNext:disabled {
