@@ -192,7 +192,7 @@ color: white;
     margin: 0% 1%;
     /* background-color: #3096a58f; */
     padding: 5px;
-    background-color: #35554f;
+    background-color: #037894;
     color: white;
 }
 .filter-bar {
@@ -206,7 +206,7 @@ margin-bottom: 0px;
 margin-left: 10px;
 }
 #monthYearPicker{
-  background-color: #35554f;
+  background-color: #037894;
     color: white;
     width: auto;
 }
@@ -215,7 +215,7 @@ margin-left: 10px;
     margin-left: -5%;
 }
 #filterButton {
-  background-color: #35554f;
+  background-color: #037894;
     color: white;
     border: none;
     margin-left: 1%;
@@ -469,7 +469,11 @@ body.modal-active {
 overflow: hidden; 
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: -6px;color: #023f42;white-space: nowrap;
+    text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
+  text-decoration: underline;
 }
 table {
   width: 100%;
@@ -480,7 +484,7 @@ table thead th {
   position: sticky;
   top: 0;
   z-index: 10; 
-  background-color: #35554f; 
+  background-color: #037894; 
   color: white;
   padding: 8px;
   text-align: center;
