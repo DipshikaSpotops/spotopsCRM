@@ -145,6 +145,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     color: #106072;
+        text-align: left;
     }
     
     .modal-dialog {

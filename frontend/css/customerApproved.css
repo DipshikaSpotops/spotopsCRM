@@ -153,6 +153,7 @@ white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
 color: #037894;
+text-align: left;
 }
 
 .modal-dialog {

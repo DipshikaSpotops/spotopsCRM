@@ -522,14 +522,10 @@ if (team in teamAgentsMap) {
   ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
   </td>
   </td>               
-  <td>Year: ${item.year}</br>
-  Make: ${item.make}</br>
-  Model: ${item.model}</br>
+  <td>Year: ${item.year} | Make: ${item.make} | Model: ${item.model}</br>
   Part Description: ${item.desc}</br>
-  Part No: ${item.partNo}</br>
-  VIN: ${item.vin}</br>
-  Warranty: ${item.warranty} days</br>
-  ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
+  Part No: ${item.partNo} | VIN: ${item.vin}</br>
+  Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
   </td>
   <td>${item.orderStatus || ''}</td>
   </tr>`
