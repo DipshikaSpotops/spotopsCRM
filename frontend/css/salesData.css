@@ -143,11 +143,11 @@ margin: 0% 30%;
     padding: 5px;
 }
 
-#searchInput,
+/* #searchInput,
 #userDropdown {
   width: 90%;
   margin: 10px auto;
-}
+} */
 
 /* .table-wrapper {
   overflow-x: auto;
@@ -183,7 +183,7 @@ background-color: #f1f1f1;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
-    height: 35px;
+    height: 3vh;
     margin-top: 3%;
     margin-left: 3%;
 }
@@ -209,12 +209,11 @@ display: block;
 width: 82vw; 
 }
 table.table td {
-white-space: nowrap;
-overflow: auto;
-text-overflow: ellipsis;
-padding: 8px;
-text-align: center;
-border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
 }
 
 table.table td.actions {
