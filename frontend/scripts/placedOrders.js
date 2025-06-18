@@ -502,13 +502,11 @@ if (team in teamAgentsMap) {
   : (item.customerName || "")
   }<br>
   Email: ${item.email || ''}<br>
-  Phone: ${item.phone || ''}<br>
-  Alt Phone: ${item.altPhone || ''}<br>
-  Email: ${item.email || ""}<br>
+  Phone: ${item.phone || ''} | Alt Phone: ${item.altPhone || ''}<br>
   Billing Address:
   ${
   (item.bName ||  item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry) 
-  ? `<b>Billing Name</b>: ${item.bName || ""} <br>${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.bAddressAcountry || ""}<br> `
+  ? `<b>Billing Name</b>: ${item.bName || ""} <br>${item.bAddressStreet || ""},${item.bAddressCity || ""}, ${item.bAddressState || ""},${item.bAddressZip || ""}, ${item.bAddressAcountry || ""} `
   : `${formattedBAddress || ""}`
   }
   </td>
