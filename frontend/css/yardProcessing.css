@@ -284,9 +284,11 @@ min-width: 50px;
 font-size: 13px;
 }
 .table-wrapper {
-  max-height: 82vh; 
-  overflow-y: auto;
-  margin-top: 1%;
+  max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
+    position: relative;
+    scrollbar-gutter: stable;
 }
 #pagination-controls {
   margin-top: 0;
