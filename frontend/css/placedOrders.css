@@ -453,15 +453,20 @@ min-width: 50px;
       white-space: nowrap;
       margin-left: 0%;
     }
-   
-    .table-wrapper {
-      max-height: 82vh;
-        overflow-y: auto;
-        position: relative;
-        scrollbar-color: #037894 white;
-        box-sizing: content-box;
-        /* overflow-x:hidden; */
-    }
+  .table-wrapper {
+  max-height: 82vh;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-gutter: stable;
+  padding-right: 17px;
+  box-sizing: content-box;
+}
+
+.table-wrapper table {
+  width: 100%;
+  table-layout: fixed; /* ensures column widths are even */
+}
+
     
     table {
       width: 100%;

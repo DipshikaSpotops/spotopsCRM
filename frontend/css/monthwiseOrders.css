@@ -550,14 +550,20 @@ table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .table-wrapper {
   max-height: 82vh;
-    overflow-y: auto;
-    scrollbar-color: #037894 white;
-    position: relative;
-    box-sizing: content-box;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-gutter: stable;
+  padding-right: 17px;
+  box-sizing: content-box;
 }
+
+.table-wrapper table {
+  width: 100%;
+  table-layout: fixed; /* ensures column widths are even */
+}
+
 table thead th {
   position: sticky;
   transform: translateZ(0); 
