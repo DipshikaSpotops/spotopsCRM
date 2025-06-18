@@ -75,23 +75,25 @@ body {
     cursor: default;
     border: none;
     }
-    #orderNo{
-    text-align: center;
-    height: 4vh;
-    border: 1px solid #1aaac4;
-    border-radius: 10px;
-    margin: -4% 174.7%;
-    }
+    #orderNo {
+  margin: 0 auto;
+  display: block;
+  width: 200px;
+  text-align: center;
+  border: 1px solid #1aaac4;
+  border-radius: 10px;
+}
+
     .top {
     margin-top: -3%;
     display: flex;
-    margin-left: 4%;
+    margin-left: 0%;
 }
     .main-content {
     width: 100%;
     flex-grow: 1;
     padding: 20px;
-    margin-left: 4%;
+    margin-left: 14%;
     margin-top: 5%;
     transition: margin-left 0.3s ease;
     }
@@ -128,21 +130,7 @@ body {
     font-size: 24px;
     cursor: pointer;
     }
-    @media (max-width: 768px) {
-    .sidebar {
-    transform: translateX(-100%);
-    width: 70%;
-    }
-    .sidebar.show {
-    transform: translateX(0);
-    }
-    .main-content {
-    margin-left: 0;
-    }
-    .toggle-sidebar {
-    display: block;
-    }
-    }
+ 
     /* Specific styles for the New Order Entry page */
     #addoBtn {
     margin: 2% 35%;
@@ -157,11 +145,12 @@ body {
     margin: -2% 0% -2% 12%;
     }
     .firstRow {
-    border: 1px solid #1aaac4;
-    border-radius: 10px;
-    margin: -3% 18% 5% 2%;
-    padding: 1%;
-    color: #0e6b7c;
+     border: 1px solid #1aaac4;
+      border-radius: 10px;
+      margin: 20px 0;
+      padding: 20px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .firstRow input {
     border: 1px solid #c8d8c9;
@@ -401,6 +390,26 @@ body {
         width: 101%;
         margin-bottom: 3%
     }
+       @media (max-width: 768px) {
+    .sidebar {
+    transform: translateX(-100%);
+    width: 70%;
+    }
+    .sidebar.show {
+    transform: translateX(0);
+    }
+    .main-content {
+    margin-left: 0;
+    padding: 10px;
+    }
+    .toggle-sidebar {
+    display: block;
+    }
+    .firstRow {
+    margin: 5% 0;
+    padding: 10px;
+  }
+    }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -563,19 +572,19 @@ window.location.href = "login_signup.html";
   <div class="firstRow" id="customer">
     <h6 style="text-align: center; margin-top: 1%;">Customer Info</h6>
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="fName" placeholder="First Name" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="lName" placeholder="Last Name" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="email" class="form-control uniform-height" id="email" placeholder="Email Address" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="phone" placeholder="Phone No." required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="altPhone" placeholder="Alt Phone No" />
       </div>
     </div>
@@ -586,16 +595,16 @@ window.location.href = "login_signup.html";
   
     <!-- Row 1: 5 equal-width inputs -->
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="bAttention" placeholder="Name" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="bAddress" placeholder="Street Address" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="bCity" placeholder="City" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <select class="form-control uniform-height" id="bState" required>
           <option value="">Select State/Province</option>
           <!-- ...state options... --><option value="AL">Alabama</option>
@@ -668,7 +677,7 @@ window.location.href = "login_signup.html";
 <option value="YT">Yukon</option>
         </select>
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <select class="form-control uniform-height" id="bCountry" required>
           <option value="">Country</option>
           <option value="US">US</option>
@@ -679,7 +688,7 @@ window.location.href = "login_signup.html";
   
     <!-- Row 2: Zip Code matching same width and height -->
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-height" id="bZip" placeholder="Zip Code" required />
       </div>
     </div>
@@ -697,19 +706,19 @@ window.location.href = "login_signup.html";
   
     <!-- First Row -->
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-input" id="sBusinessName" placeholder="Business Name" />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-input" id="sAttention" placeholder="Attention" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-input" id="sAddress" placeholder="Street Address" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-input" id="sCity" placeholder="City" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <select class="form-control uniform-input" id="sState" required>
           <option value="">Select State/Province</option>
           <option value="AL">Alabama</option>
@@ -786,14 +795,14 @@ window.location.href = "login_signup.html";
   
     <!-- Second Row -->
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <select class="form-control uniform-input" id="sCountry" required>
           <option value="">Country</option>
           <option value="US">US</option>
           <option value="Canada">Canada</option>
         </select>
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control uniform-input" id="sZip" placeholder="Zip Code" required />
       </div>
     </div>
@@ -848,29 +857,29 @@ window.location.href = "login_signup.html";
           <option value="add_new_part">➕ Add New Part</option>
         </select>
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="year" placeholder="Year" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="make" placeholder="Make" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="model" placeholder="Model" required />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="warranty" placeholder="Warranty (in days)" required />
       </div>
     </div>
   
     <!-- Second Row: 3 columns -->
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="desc" placeholder="Description" />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="vin" required placeholder="VIN No." />
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="partNo" placeholder="Part No." />
       </div>
     </div>
@@ -905,7 +914,7 @@ window.location.href = "login_signup.html";
   <!-- First Row: 5 columns -->
   <div class="form-row">
     <!-- Sale Price -->
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -915,7 +924,7 @@ window.location.href = "login_signup.html";
     </div>
 
     <!-- Est. Yard Price -->
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -925,7 +934,7 @@ window.location.href = "login_signup.html";
     </div>
 
     <!-- Est. Shipping -->
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -941,7 +950,7 @@ window.location.href = "login_signup.html";
     </div>
 
     <!-- Sales Tax -->
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">%</span>
@@ -954,12 +963,12 @@ window.location.href = "login_signup.html";
   <!-- Second Row: 5 columns -->
   <div class="form-row mt-3">
     <!-- Last 4 Digits -->
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <input type="text" class="form-control" id="issueOrder" required placeholder="Last 4 Digits" />
     </div>
 
     <!-- Estimated GP -->
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text dollars">$</span>
@@ -969,12 +978,12 @@ window.location.href = "login_signup.html";
     </div>
 
     <!-- Order Notes -->
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <input type="text" class="form-control" id="notes" required placeholder="Order Notes" />
     </div>
 
     <!-- DS Call -->
-    <div class="form-group col-md-2" id="dsCall">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2" id="dsCall">
       <label for="dsCallCheckbox" style="margin-right: 10px;">DS Call</label>
       <input type="checkbox" id="dsCallCheckbox" class="dsCall" style="width: 30px; height: 23px;">
     </div>
@@ -988,7 +997,7 @@ window.location.href = "login_signup.html";
 
   <!-- Optional Programming Cost Input (shown conditionally) -->
   <div class="form-row mt-2">
-    <div class="form-group col-md-2">
+    <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
       <input type="number" id="programmingCostQuoted" placeholder="Enter cost" class="form-control" style="display: none;" />
     </div>
   </div>
