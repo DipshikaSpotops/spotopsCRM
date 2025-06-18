@@ -469,7 +469,9 @@ h1 {
 
 .table tbody tr.selected {
   background-color: #e7dcfd !important;
-  outline: 2px solid #000 !important; 
+}
+.table tbody tr.selected td {
+  border: 1px solid #000 !important;
 }
 .table thead th {
 font-size: 13px;
