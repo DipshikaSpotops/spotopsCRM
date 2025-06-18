@@ -155,7 +155,8 @@ margin: 0% 30%;
 
 
 #pagination-controls {
-  margin-top: -0.4%;
+margin-top: 0;
+float: left;
 }
 #userDropdown {
 height: 3vh;
