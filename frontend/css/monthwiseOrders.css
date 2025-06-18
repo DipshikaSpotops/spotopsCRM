@@ -305,7 +305,7 @@ h1 {
 }
 
 .table tbody tr.selected {
-  background-color: #8779fb !important;
+  background-color: #e5d5f7 !important;
   outline: 2px solid #000 !important; 
 }
 /* First and Second Columns (Headers) */
