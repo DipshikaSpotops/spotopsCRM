@@ -329,6 +329,7 @@ td:first-child {
   overflow-y: auto;
   overflow-x: auto;
   position: relative;
+  scrollbar-color: #037894 white;
   /* margin-top: 4%; */
 }
 /* for dark mode */
@@ -559,56 +560,87 @@ table thead th {
 #downloadCsv i {
   font-size: 18px; 
 }
-@media (max-width: 768px) {
-  #showTotalOrders{
-    margin: 0% 30%;
-  }
-  #notificationDropdown{
-    width: 129%;
-   font-size: 12px;
-  }
-  .notification-dropdown ul li{
-    height: 5vh;
-  }
-  .topHeads{
-  margin-top: 6%;
-}
+@media (max-width: 992px) {
   .sidebar {
-transform: translateX(-100%);
-width:38%;
+    font-size: 10px;
+  }
+.topHeads {
+  margin-top: 4%;
 }
-.sidebar.show {
-transform: translateX(0);
+  .sidebar .nav-link {
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-left: -8%;
+  }
+table.table td {
+  font-size: 12px;
 }
-.main-content {
-margin-left: 0;
-padding: 10px;
+.table thead th {
+    font-size: 12px;
 }
-.toggle-sidebar {
-display: block;
+  .sidebar .chevron-icon i {
+    font-size: 10px;
+  }
+  .approve-btn, .cancel-btn {
+    min-width: 50px;
+    height: 31px;
+    font-size: 12px;
+  }
+  h1 {
+    font-size: 1.5rem; 
+    font-weight: 600;
+  }
+  #searchInput {
+        height: 30px;
+    margin-top: 1%;
+    margin-left: 3%;
+  }
+  #monthYearPicker {
+    font-size: 12px;
+  }
 }
-/* #filterAndTotal {
-  display: flex;
-    margin-left: 6%;
-    margin-top: 3%;
-    } */
-    #searchInput {
-        width: 80%;
-        margin: 10px;
-    }
-    .filter-bar{
-      width: 23%;
-    }
-    /* #pagination-controls{
-    margin-top: 20%;
-    } */
-    .table-wrapper {
-      overflow-x: auto;
-        margin-top: -21%;
-    
-    }
+    @media (max-width: 768px) {
+        .sidebar {
+        transform: translateX(-100%);
+        width:38%;
+        }
+        .topHeads{
+          margin-top: 8%
+        }
+        #searchInput {
+    width: 93%;
+        }
+        .navbar .user-info span
+ {    margin-left: 5%;
+}
+        .sidebar.show {
+        transform: translateX(0);
+        }
+        .main-content {
+        margin-left: 0;
+        }
+        .toggle-sidebar {
+        display: block;
+        }
+        .table-wrapper {
+              overflow-x: auto; 
+            }
+        
+            table {
+              min-width: 800px;
+            }
+        }
+        @media (max-width: 600px) {
+  .sidebar {
+    font-size: 9px;
+  }
 
-    table {
-      min-width: 800px;
-    }
+  .sidebar .nav-link {
+    font-size: 10px;
+  }
 }
+    @media (max-width: 320px) {
+        #mainHeading {
+          font-size: 20px;
+        }
+        }

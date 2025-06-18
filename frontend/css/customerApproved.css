@@ -414,6 +414,7 @@ color: #e0e0e0;
 .table-wrapper {
   max-height: 80vh;
   overflow-y: auto;
+  scrollbar-color: #037894 white;
 }
 
 table {
