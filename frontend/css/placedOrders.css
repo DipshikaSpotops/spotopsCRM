@@ -335,7 +335,9 @@ min-width: 50px;
         scrollbar-color: #29638c #141b2d;
     }
     .dark-mode .approve-btn {
-      background-color: #141b2d;
+       background-color: white;
+    border: none;
+    color: #007413;
     }
     .dark-mode #mainHeading{
     color: #999999;
