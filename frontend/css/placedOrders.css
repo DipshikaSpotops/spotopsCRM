@@ -531,6 +531,10 @@ table.table td {
     height: 31px;
     padding: -1px 0px;
   }
+  h1 {
+    font-size: 1.5rem; 
+    font-weight: 600;
+  }
 }
     @media (max-width: 768px) {
         .sidebar {
