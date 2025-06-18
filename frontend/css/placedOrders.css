@@ -476,15 +476,12 @@ min-width: 50px;
     table thead th {
       position: sticky;
       top: 0;
-      z-index: 10; 
-      transform: translateZ(0); 
-      overflow-anchor: none;
-      background-color: #037894; 
+      z-index: 10;
+      background-color: #037894;
       color: white;
-      padding: 8px;
       text-align: center;
-      border-bottom: 1px solid #ddd;
       white-space: nowrap;
+      overflow-anchor: none;
     }
       /* Default Light Mode */
       body.light-mode {

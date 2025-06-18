@@ -563,20 +563,16 @@ table {
   width: 100%;
   table-layout: fixed; /* ensures column widths are even */
 }
-
 table thead th {
-  position: sticky;
-  transform: translateZ(0); 
-  overflow-anchor: none;
-  top: 0;
-  z-index: 10; 
-  background-color: #037894; 
-  color: white;
-  padding: 8px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  white-space: nowrap;
-}
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: #037894;
+      color: white;
+      text-align: center;
+      white-space: nowrap;
+      overflow-anchor: none;
+    }
 #downloadCsv {
   background-color: #037894;
   color: white;
