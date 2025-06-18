@@ -75,18 +75,28 @@ body {
     cursor: default;
     border: none;
     }
-    #orderNo {
- border: 1px solid #1aaac4;
-  border-radius: 10px;
-  height: 40px;
-  padding: 5px 10px;
+   .top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-    .top {
-    margin-top: -3%;
-    display: flex;
-    margin-left: 0%;
+.order-heading {
+  margin-bottom: 10px;
+  text-decoration: underline;
+  color: #037894;
 }
+
+#orderNo {
+  width: 250px;
+  height: 40px;
+  border: 1px solid #1aaac4;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
     .main-content {
     width: 100%;
     flex-grow: 1;
@@ -204,11 +214,11 @@ body {
     display: none;
     }
     h2 {
-        margin-top: -2%;
+          margin-top: 1%;
     text-decoration-line: underline;
     color: #037894;
-    margin-left: 125%;
     white-space: nowrap;
+    margin-left: 18%;
     }
     #expediteS {
       display: flex;
@@ -551,9 +561,9 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content scale-wrapper">
-  <div class="top d-flex flex-column flex-md-row align-items-start justify-content-between mb-3">
-  <h2 style="margin-left: 0; margin-bottom: 10px;">ADD NEW ORDER</h2>
-  <input type="text" id="orderNo" class="form-control" placeholder="Enter Order No." style="max-width: 250px;" />
+  <div class="top-section">
+  <h2 class="order-heading">ADD NEW ORDER</h2>
+  <input type="text" id="orderNo" placeholder="Enter Order No." />
 </div>
 <div id="firstRow">
 <div>
