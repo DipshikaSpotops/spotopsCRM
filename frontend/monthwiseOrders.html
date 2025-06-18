@@ -422,15 +422,11 @@ function renderTableRows(page, orders = allOrders) {
           ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
           Phone: ${item.phone} | Email: ${item.email}
         </td>
-        <td>
-          Part required: ${partRequired}<br>
-          ${item.year} ${item.make} ${item.model}<br>
-          Part Description: ${item.desc}<br>
-          Part No: ${item.partNo}<br>
-          VIN: ${item.vin}<br>
-          Warranty: ${item.warranty} days<br>
-          Programming required: ${programmingRequired}
-        </td>
+        <td>Year: ${item.year} | Make: ${item.make} | Model: ${item.model}</br>
+Part Description: ${item.desc}</br>
+Part No: ${item.partNo} | VIN: ${item.vin}</br>
+Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
+</td>
         <td>${yardInfo}</td>
         <td>${item.orderStatus}</td>
         <td>$${item.soldP}</td>
