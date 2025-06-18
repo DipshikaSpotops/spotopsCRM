@@ -510,7 +510,7 @@ body {
     font-size: 10px;
   }
 .topHeads {
-  margin-top: 3%;
+  margin-top: 4%;
 }
   .sidebar .nav-link {
     padding: 8px 12px;
@@ -529,11 +529,19 @@ table.table td {
   .approve-btn, .cancel-btn {
     min-width: 50px;
     height: 31px;
-    padding: -1px 0px;
+    font-size: 12px;
   }
   h1 {
     font-size: 1.5rem; 
     font-weight: 600;
+  }
+  #searchInput {
+        height: 30px;
+    margin-top: 1%;
+    margin-left: 3%;
+  }
+  #monthYearPicker {
+    font-size: 12px;
   }
 }
     @media (max-width: 768px) {
@@ -542,8 +550,10 @@ table.table td {
         width:38%;
         }
         .topHeads{
-          margin-top: 6%;
-          margin-top: 3%;
+          margin-top: 18%
+        }
+        #searchInput {
+    width: 93%;
         }
         .sidebar.show {
         transform: translateX(0);
