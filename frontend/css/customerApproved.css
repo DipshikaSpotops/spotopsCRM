@@ -433,6 +433,7 @@ table {
 
 table thead th {
   position: sticky;
+  transform: translateZ(0); 
   top: 0;
   z-index: 10; 
   background-color: #037894; 
