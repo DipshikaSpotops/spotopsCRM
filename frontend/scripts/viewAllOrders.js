@@ -238,7 +238,6 @@ Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Progr
           <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
           <td ${escalationStyle}>${escalationStatus}</td>
           <td>${actions}</td>
-          <td>${item.email}</td>
         </tr>
       `);
     });
