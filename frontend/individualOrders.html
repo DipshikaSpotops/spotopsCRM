@@ -25,13 +25,13 @@ text-align: center;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
-    height: 40px;
-    margin-top: 13%;
-    margin-left: -47%;
+    height: 35px;
+    margin-top: 3%;
+    margin-left: 3%;
 }
 .navbar {
 color: white;
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -70,7 +70,8 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
 text-align: left;
 }
 .sidebar .nav-link {
@@ -96,12 +97,12 @@ border: none;
   margin: 0 5px;
 }
 .previousNext{
-  background-color: #35554f;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  font-size: 18px;
+  background-color: #037894;
+     color: white;
+    border: none;
+    padding: 4px;
+    border-radius: 50%;
+    font-size: 18px;
   cursor: pointer;
 }
 .previousNext:disabled {
@@ -253,7 +254,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 #filterButton{
   background-color: #35554f;color: white;width: auto;border: none;
 }
-#monthYearPicker,
+#monthYearPicker,#showTotalEstGP, #showTotalActualGP, #showCancellationRate,
 #filterButton,#showTotalOrders {
       min-width: 100px;
     height: 36px;
@@ -495,9 +496,11 @@ table {
 
 table thead th {
   position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
   top: 0;
   z-index: 10; 
-  background-color: #35554f; 
+  background-color: #037894; 
   color: white;
   padding: 8px;
   text-align: center;
@@ -514,12 +517,13 @@ table thead th {
   flex-wrap: wrap;
 }
 #pagination-controls {
-  margin-top: -0.3%;
-    margin-left: 1%;
+margin-top: 0;
+float: left;
 }
 .topHeads {
-  display: flex;
-  margin-right: 100%;
+    display: flex;
+    margin-bottom: 1%;
+    margin-top: 2%;
 }
 #mainHeading {
   text-align: center; 
