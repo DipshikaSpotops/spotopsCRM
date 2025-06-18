@@ -297,7 +297,7 @@ if (team in teamAgentsMap) {
 }
   var totalOrders = allOrder.length;
   console.log("totalOrders",totalOrders)
-  document.getElementById("showTotalOrders").innerHTML = `No of Placed Orders- ${totalOrders}`;
+  document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${totalOrders}`;
   allOrder = sortOrdersByOrderNoDesc(allOrder);
   
   renderOrders(allOrder);
@@ -576,7 +576,7 @@ if (team in teamAgentsMap) {
 }
   // console.log("allorders at filter btn",allOrders);
   var allOrdersLength = allOrders.length;
-  document.getElementById("showTotalOrders").innerHTML = `No of Placed Orders- ${allOrdersLength}`;
+  document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrdersLength}`;
   renderOrders(allOrders);
   } catch (error) {
   console.error("Error fetching current month's orders:", error);
