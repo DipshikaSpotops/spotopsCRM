@@ -289,7 +289,7 @@ font-size: 13px;
   margin-top: 1%;
 }
 #pagination-controls {
-  margin-top: -0.5%;
+  margin-top: 0;
     float: left;
 }
 #filterAndTotal{
