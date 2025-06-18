@@ -229,6 +229,11 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+const $wrapper = $(".table-wrapper");
+  if ($wrapper[0].scrollHeight > $wrapper.innerHeight()) {
+    $wrapper.scrollTop(1); 
+  }
+});
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
