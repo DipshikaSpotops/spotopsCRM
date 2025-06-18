@@ -408,7 +408,9 @@ min-width: 50px;
  .table tbody tr:hover {
   background-color: #b6c2c4 !important; 
 }
-
+table.table td:last-child {
+    white-space: nowrap;
+}
 .table tbody tr.selected {
   background-color: #e7dcfd !important;
 }
