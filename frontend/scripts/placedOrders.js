@@ -231,7 +231,11 @@ $(document).ready(async function () {
   $("#searchInput").on("keyup", function () {
     let value = $(this).val().toLowerCase();
     let visibleCount = 0;
-  
+  $(document).on("click", "#infoTable tr", function () {
+  console.log("Row clicked:", $(this).text()); // Debugging
+  $("#infoTable tr").removeClass("selected");
+  $(this).addClass("selected");
+});
     $("#infoTable tr").filter(function () {
       const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
       $(this).toggle(isMatch);

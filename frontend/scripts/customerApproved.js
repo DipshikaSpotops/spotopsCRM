@@ -462,7 +462,11 @@ $("body").removeClass("modal-active");
 window.location.reload();
 
 });
-
+$(document).on("click", "#infoTable tr", function () {
+  console.log("Row clicked:", $(this).text()); // Debugging
+  $("#infoTable tr").removeClass("selected");
+  $(this).addClass("selected");
+});
 $("#infoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;

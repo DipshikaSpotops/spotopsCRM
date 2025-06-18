@@ -511,7 +511,7 @@ body {
 }
 
 .table tbody tr.selected {
-  background-color: #757070 !important;
+  background-color: #0b1d45 !important;
   outline: 2px solid #000 !important; 
 }
 @media (max-width: 992px) {
