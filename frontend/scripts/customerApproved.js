@@ -369,7 +369,13 @@ $("#infoTable").append(
 <td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
-<td>Name: ${item.customerName || ""} ${item.fName || ""} ${item.lName || ""}</br>
+<td>
+  Name: ${
+    (item.fName || item.lName) 
+      ? `${item.fName || ""} ${item.lName || ""}` 
+      : item.customerName || ""
+  }
+</td>
 Email: ${item.email}</br>
 Phone: ${item.phone}</br>
 Alt Phone: ${item.altPhone}</br>
