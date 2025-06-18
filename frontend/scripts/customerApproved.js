@@ -375,7 +375,6 @@ $("#infoTable").append(
       ? `${item.fName || ""} ${item.lName || ""}` 
       : item.customerName || ""
   }
-</td>
 Email: ${item.email}</br>
 Phone: ${item.phone}</br>
 Alt Phone: ${item.altPhone}</br>
