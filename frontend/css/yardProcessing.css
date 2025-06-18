@@ -497,7 +497,7 @@ table thead th {
     font-size: 10px;
   }
 .topHeads {
-  margin-top: 4%;
+  margin-top: -4%;
 }
   .sidebar .nav-link {
     padding: 8px 12px;
@@ -537,7 +537,7 @@ table.table td {
         width:38%;
         }
         .topHeads{
-          margin-top: 8%
+          margin-top: -5%
         }
         #searchInput {
     width: 93%;
