@@ -374,16 +374,15 @@ $("#infoTable").append(
     (item.fName || item.lName) 
       ? `${item.fName || ""} ${item.lName || ""}` 
       : item.customerName || ""
-  }
+  }</br>
 Email: ${item.email}</br>
-Phone: ${item.phone}</br>
-Alt Phone: ${item.altPhone}</br>
-Billing Name:${item.bName}<br>
-Billing Address:</br>  ${
+Phone: ${item.phone} | Alt Phone: ${item.altPhone}</br>
+Billing Name: ${item.bName}<br>
+Billing Address: ${
 (item.bAddressStreet || item.bAddressCity || item.bAddressState || item.bAddressZip || item.bAddressAcountry) 
-? ` ${item.bAddressStreet || ""},<br>${item.bAddressCity || ""}, ${item.bAddressState || ""},<br>${item.bAddressZip || ""}, ${item.sAddressAcountry || ""} `
+? ` ${item.bAddressStreet || ""}, ${item.bAddressCity || ""}, ${item.bAddressState || ""}, ${item.bAddressZip || ""}, ${item.sAddressAcountry || ""} `
 : `${formattedBAddress || ""}`
-}</br>
+}
 </td>
 <td>  ${
 (item.sAddressStreet || item.sAddressCity || item.sAddressState || item.sAddressZip || item.sAddressAcountry) 
@@ -396,14 +395,10 @@ ${item.costP ? `<b>Est. Part Price:</b> $${item.costP}<br>` : ''}
 ${exp ? `<b>Expedite Shipping:</b> ${exp}<br>` : ''}
 ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
 </td>               
-<td>Year: ${item.year}</br>
-Make: ${item.make}</br>
-Model: ${item.model}</br>
+<td>Year: ${item.year} | Make: ${item.make} | Model: ${item.model}</br>
 Part Description: ${item.desc}</br>
-Part No: ${item.partNo}</br>
-VIN: ${item.vin}</br>
-Warranty: ${item.warranty} days</br>
-${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
+Part No: ${item.partNo} | VIN: ${item.vin}</br>
+Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
 </td>
 <td>${item.orderStatus}</td>
 </tr>`
