@@ -15,7 +15,7 @@ text-align: center;
   margin: 0 5px;
 }
 .previousNext{
-  background-color: #35554f;
+  background-color: #037894;
   color: white;
   border: none;
   padding: 10px;
@@ -47,7 +47,7 @@ cursor: pointer;
 .navbar {
 color: white;
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -60,7 +60,8 @@ border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
 position: fixed;
 z-index: 11;
 top: 0;
@@ -379,20 +380,46 @@ table thead th {
   position: sticky;
   top: 0;
   z-index: 10; 
-  background-color: #35554f; 
+  background-color: #037894; 
   color: white;
   padding: 8px;
   text-align: center;
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
 }
-.table tbody tr:hover {
-    background-color: #c0c0c0 !important;
+h1 {
+  font-size: 2rem;
+}
+.edit-btn {
+    background-color: #037894;
+    border: none;
+    color: #e5f6ff;
+}
+.process-btn {
+     background-color: #065d20;
+    border: none;
+    color: #f9fff9;
+}
+.process-btn :hover {
+     background-color: #0ba439;
+    border: none;
+    color: #f9fff9;
+}
+.edit-btn :hover {
+    background-color: #0b4f5f;
+}
+ .table tbody tr:hover {
+  background-color: #b6c2c4 !important; 
 }
 
-/* Selected row style */
 .table tbody tr.selected {
-    background-color: #757070 !important; 
+  background-color: #e7dcfd !important;
+}
+.table tbody tr.selected td {
+  border: 1px solid #767171 !important;
+}
+.table thead th {
+font-size: 13px;
 }
 /* Sticky column styles */
 .sticky-col {
@@ -402,7 +429,7 @@ table thead th {
   white-space: nowrap;
 }
 .sticky-col th {
-  background: #35554f;
+  background: #037894;
 }
 .first-col {
   position: sticky;
@@ -427,13 +454,13 @@ table thead th {
 }
 /* Sticky header columns (for <th>) */
   th.sticky-col.first-col {
-  background-color: #35554f; /* Example: Deep blue */
+  background-color: #037894; /* Example: Deep blue */
   color: white;
   z-index: 21;
 }
 
 th.sticky-col.second-col {
-  background-color:#35554f; 
+  background-color:#037894; 
   color: white;
   z-index: 21;
 }
