@@ -258,14 +258,21 @@ box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
 #monthYearPicker,
 #filterButton,#showTotalOrders {
-  height: 40px;
-  line-height: 1.5;
-  padding: 6px 12px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  box-sizing: border-box;
+    min-width: 100px;
+    height: 36px;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+    border: none;
+    background-color: #037894;
+    color: white;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 .process-btn {
   background-color: #037894;
