@@ -365,7 +365,7 @@ const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()
 // Append data to the table with optional chaining and default values
 $("#infoTable").append(
 `<tr>
-<td><button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" >Process</button></td>
+<td><button class="btn btn-sm process-btn" data-id="${item.orderNo}" >Process</button></td>
 <td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
