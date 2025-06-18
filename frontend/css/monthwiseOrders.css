@@ -558,7 +558,7 @@ table {
     position: relative;
     scrollbar-gutter: stable;
 }
-/* table thead th {
+table thead th {
   position: sticky;
   transform: translateZ(0); 
   overflow-anchor: none;
@@ -570,27 +570,6 @@ table {
   text-align: center;
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
-} */
- .table-head-only {
-  table-layout: fixed;
-  width: 100%;
-}
-
-.scroll-body {
-  max-height: 82vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.table-body-only {
-  table-layout: fixed;
-  width: 100%;
-}
-
-.table-head-only th,
-.table-body-only td {
-  white-space: nowrap;
-  text-align: center;
 }
 #downloadCsv {
   background-color: #037894;
