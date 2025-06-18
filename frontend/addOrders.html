@@ -1950,9 +1950,9 @@ loadParts();
 // Show/hide programming cost input based on checkbox
 $("#programmingRequiredCheckbox").on("change", function () {
   if ($(this).is(":checked")) {
-    $("#programmingCostQuoted").show();
+    $("#programmingCostQuoted").val("70").show();
   } else {
-    $("#programmingCostQuoted").hide().val("70");
+    $("#programmingCostQuoted").hide().val("");
   }
 });
 
