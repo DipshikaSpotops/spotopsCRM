@@ -553,11 +553,6 @@ font-size: 12px;
   margin-left: 0%;
   text-decoration: underline;
 }
-@media (max-width: 320px) {
-#mainHeading {
-  font-size: 20px;
-}
-}
 table {
   width: 100%;
   border-collapse: collapse;
