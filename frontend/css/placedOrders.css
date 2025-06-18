@@ -1,10 +1,10 @@
 body {
     display: flex;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     flex-direction: column;
     background-color: #eaf6ff;
     text-align: center;
-    overflow-y: hidden;
+    overflow-y: auto;
     }
     #searchInput {
       width: auto;
@@ -88,7 +88,7 @@ body {
     padding: 20px;
     margin-left: 13%;
     margin-top: 10px;
-    overflow-x: auto;
+    overflow: hidden;
     transition: margin-left 0.3s ease;
     }
     .submenu {

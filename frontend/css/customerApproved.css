@@ -1,9 +1,10 @@
 body {
 display: flex;
-overflow: hidden;
+/* overflow: hidden; */
 flex-direction: column;
 background-color: #eaf6ff;
 text-align: center;
+overflow-y: auto;
 }
 #searchInput {
   width: auto;
@@ -83,12 +84,12 @@ cursor: default;
 border: none;
 }
 .main-content {
-  flex-grow: 1;
-padding: 20px;
-margin-left: 13%;
-margin-top: 15px;
-transition: margin-left 0.3s ease;
-/* overflow-y: auto; */
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 13%;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: margin-left 0.3s ease;
 }
 .submenu {
 display: block; /* Show all submenus by default */
