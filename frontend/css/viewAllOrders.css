@@ -162,12 +162,11 @@ width: 82vw;
 }
 
 table.table td {
-white-space: nowrap;
 overflow: hidden;
-text-overflow: ellipsis;
-padding: 8px;
-text-align: center;
-border-bottom: 1px solid #ddd;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
 }
 /* table.table th {
 background-color: #f2f2f2;
@@ -347,6 +346,7 @@ overflow: hidden;
   color: #037894;
   white-space: nowrap;
   margin-left: 0%;
+  text-decoration: underline;
 }
 
 .table-wrapper {

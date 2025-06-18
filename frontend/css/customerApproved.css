@@ -127,6 +127,7 @@ cursor: pointer;
 #mainHeading {
   text-align: center; 
   color: #037894;
+  text-decoration: underline;
   white-space: nowrap;
 }
 #filterAndTotal {
