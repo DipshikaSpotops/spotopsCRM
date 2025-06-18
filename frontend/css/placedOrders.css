@@ -507,8 +507,13 @@ body {
       font-size: 18px; 
     }
     .table tbody tr:hover {
-      background-color: #b6c2c4;
-    }
+  background-color: #b6c2c4 !important; 
+}
+
+.table tbody tr.selected {
+  background-color: #757070 !important;
+  outline: 2px solid #000 !important; 
+}
 @media (max-width: 992px) {
   .sidebar {
     font-size: 10px;

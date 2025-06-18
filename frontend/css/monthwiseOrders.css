@@ -300,8 +300,8 @@ h1 {
 .edit-btn :hover {
     background-color: #0b4f5f;
 }
-.table tbody tr:hover {
-  background-color: #c0c0c0 !important; 
+ .table tbody tr:hover {
+  background-color: #b6c2c4 !important; 
 }
 
 .table tbody tr.selected {
