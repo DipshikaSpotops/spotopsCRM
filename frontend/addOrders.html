@@ -76,12 +76,10 @@ body {
     border: none;
     }
     #orderNo {
-  margin: 0 auto;
-  display: block;
-  width: 200px;
-  text-align: center;
-  border: 1px solid #1aaac4;
+ border: 1px solid #1aaac4;
   border-radius: 10px;
+  height: 40px;
+  padding: 5px 10px;
 }
 
     .top {
@@ -93,7 +91,7 @@ body {
     width: 100%;
     flex-grow: 1;
     padding: 20px;
-    margin-left: 14%;
+    margin-left: 5%;
     margin-top: 5%;
     transition: margin-left 0.3s ease;
     }
@@ -553,11 +551,9 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content scale-wrapper">
-  <div class="top">
-<div><h2>ADD NEW ORDER</h2></div>
-<div>
-<input type="text" id="orderNo" required placeholder="Enter Order No."/>
-</div>
+  <div class="top d-flex flex-column flex-md-row align-items-start justify-content-between mb-3">
+  <h2 style="margin-left: 0; margin-bottom: 10px;">ADD NEW ORDER</h2>
+  <input type="text" id="orderNo" class="form-control" placeholder="Enter Order No." style="max-width: 250px;" />
 </div>
 <div id="firstRow">
 <div>
