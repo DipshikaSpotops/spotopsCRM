@@ -382,7 +382,7 @@ function renderTableRows(page, orders = allOrders) {
 
     const escalationStatus = item.additionalInfo?.[0]?.escTicked === "Yes" ? "Yes" : "";
     const escalationStyle = (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") 
-                            ? 'style="background-color: lightgreen;"' 
+                            ? 'style="background-color: #248700;"' 
                             : "";
 
     const yardInfo = item.additionalInfo?.map((info, index) => `
