@@ -469,7 +469,7 @@ h1 {
 
 .table tbody tr.selected {
   background-color: #e7dcfd !important;
-  border: 2px solid #000 !important; 
+  outline: 2px solid #000 !important; 
 }
 @media (max-width: 992px) {
   .sidebar {
