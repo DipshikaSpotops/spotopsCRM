@@ -85,12 +85,12 @@ cursor: default;
 border: none;
 }
 .main-content {
-flex-grow: 1;
-padding: 20px;
-margin-left: 14%;
-margin-top: 60px;
-transition: margin-left 0.3s ease;
-overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 13%;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: margin-left 0.3s ease;
 }
 .submenu {
 display: block;

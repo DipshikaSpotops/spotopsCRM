@@ -44,7 +44,7 @@ cursor: pointer;
 .navbar {
 color: white;
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -67,7 +67,8 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
 text-align: left;
 }
 .sidebar .nav-link {
@@ -84,12 +85,12 @@ cursor: default;
 border: none;
 }
 .main-content {
-flex-grow: 1;
-padding: 20px;
-margin-left: 14%;
-margin-top: 60px;
-transition: margin-left 0.3s ease;
-overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 13%;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: margin-left 0.3s ease;
 }
 .submenu {
 display: block;
