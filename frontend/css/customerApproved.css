@@ -19,7 +19,7 @@ text-align: center;
 .navbar {
 color: white;
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);;
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -49,7 +49,8 @@ left: auto;
 }
 .sidebar {
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+font-size: 12px;
+background: linear-gradient(160deg, #017b82, #0771b4);;
 position: fixed;
 z-index: 11;
 top: 0;
@@ -117,48 +118,15 @@ cursor: pointer;
   margin-bottom: 1%;
   margin-top: 2%;
 }
-@media (max-width: 768px) {
-  .sidebar {
-transform: translateX(-100%);
-width:38%;
-}
-.topHeads{
-  margin-top: 6%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
-#filterAndTotal {
-  margin: 0;
-}
-.table-wrapper {
-      overflow-x: auto; /* Enable horizontal scroll for smaller screens */
-    }
-
-    table {
-      min-width: 800px;
-    }
-}
 #mainHeading {
   text-align: center; 
-  color: #023f42;
+  color: #037894;
   white-space: nowrap;
 }
 #filterAndTotal {
   display: flex;
   margin-left: 0%;
   margin-top: -1%;
-}
-@media (max-width: 320px) {
-#mainHeading {
-  font-size: 20px;
-}
 }
 .profile-table {
 width: 50%;
@@ -179,7 +147,7 @@ table.table td{
 white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
-color: #023f42;
+color: #037894;
 }
 
 .modal-dialog {
@@ -267,17 +235,17 @@ box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
     margin: 0% 1%;
     /* background-color: #3096a58f; */
     padding: 5px;
-    background-color: #35554f;
+    background-color: #037894;
     color: white;
 }
 #monthYearPicker {
-  background-color: #35554f;
+  background-color: #037894;
     color: white;
     width: auto;
     text-align: center;
 }
 #filterButton {
-  background-color: #35554f;
+  background-color: #037894;
     color: white;
     border: none;
     margin-left: 1%;
@@ -294,7 +262,7 @@ box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
 }
 .process-btn {
-  background-color: #35554f;
+  background-color: #037894;
     border: none;
     color: white;
 }
@@ -452,7 +420,7 @@ table thead th {
   position: sticky;
   top: 0;
   z-index: 10; 
-  background-color: #35554f; 
+  background-color: #037894; 
   color: white;
   padding: 8px;
   text-align: center;
@@ -461,7 +429,7 @@ table thead th {
 }
 
 #downloadCsv {
-  background-color: #35554f;
+  background-color: #037894;
   color: white;
   padding: 6px 9px;
   border-radius: 5px;
@@ -478,3 +446,87 @@ table thead th {
 #downloadCsv i {
   font-size: 18px; 
 }
+@media (max-width: 992px) {
+  .sidebar {
+    font-size: 10px;
+  }
+.topHeads {
+  margin-top: 4%;
+}
+  .sidebar .nav-link {
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-left: -8%;
+  }
+table.table td {
+  font-size: 12px;
+}
+.table thead th {
+    font-size: 12px;
+}
+  .sidebar .chevron-icon i {
+    font-size: 10px;
+  }
+  .approve-btn, .cancel-btn {
+    min-width: 50px;
+    height: 31px;
+    font-size: 12px;
+  }
+  h1 {
+    font-size: 1.5rem; 
+    font-weight: 600;
+  }
+  #searchInput {
+        height: 30px;
+    margin-top: 1%;
+    margin-left: 3%;
+  }
+  #monthYearPicker {
+    font-size: 12px;
+  }
+}
+    @media (max-width: 768px) {
+        .sidebar {
+        transform: translateX(-100%);
+        width:38%;
+        }
+        .topHeads{
+          margin-top: 18%
+        }
+        #searchInput {
+    width: 93%;
+        }
+        .navbar .user-info span
+ {    margin-left: 5%;
+}
+        .sidebar.show {
+        transform: translateX(0);
+        }
+        .main-content {
+        margin-left: 0;
+        }
+        .toggle-sidebar {
+        display: block;
+        }
+        .table-wrapper {
+              overflow-x: auto; 
+            }
+        
+            table {
+              min-width: 800px;
+            }
+        }
+        @media (max-width: 600px) {
+  .sidebar {
+    font-size: 9px;
+  }
+
+  .sidebar .nav-link {
+    font-size: 10px;
+  }
+}
+    @media (max-width: 320px) {
+        #mainHeading {
+          font-size: 20px;
+        }
+        }
