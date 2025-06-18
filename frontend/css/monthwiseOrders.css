@@ -550,29 +550,27 @@ table {
   width: 100%;
   border-collapse: collapse;
 }
+
 .table-wrapper {
   max-height: 82vh;
-  overflow-y: auto;
-  position: relative;
-  scrollbar-gutter: stable;
-  padding-right: 17px;
-  box-sizing: content-box;
-}
-
-.table-wrapper table {
-  width: 100%;
-  table-layout: fixed; /* ensures column widths are even */
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
+    position: relative;
+    box-sizing: content-box;
 }
 table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background-color: #037894;
-      color: white;
-      text-align: center;
-      white-space: nowrap;
-      overflow-anchor: none;
-    }
+  position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
+  top: 0;
+  z-index: 10; 
+  background-color: #037894; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
 #downloadCsv {
   background-color: #037894;
   color: white;
