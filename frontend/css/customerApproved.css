@@ -420,9 +420,9 @@ color: #e0e0e0;
     font-weight: bold;
 }
 .table-wrapper {
-  max-height: 80vh;
-  overflow-y: auto;
-  scrollbar-color: #037894 white;
+  max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
 }
 
 table {
