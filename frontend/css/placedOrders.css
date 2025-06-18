@@ -514,7 +514,7 @@ min-width: 50px;
   background-color: #e7dcfd !important;
 }
 .table tbody tr.selected td {
-  border: 1px solid #000 !important;
+  border: 1px solid #e5dbdb !important;
 }
 .table thead th {
 font-size: 13px;
