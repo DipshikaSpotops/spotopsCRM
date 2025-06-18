@@ -152,9 +152,9 @@ margin: 0% 30%;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
-    height: 40px;
+    height: 35px;
     margin-top: 3%;
-    margin-left: 5%;
+    margin-left: 3%;
 }
 .profile-table {
 width: 50%;
@@ -280,6 +280,9 @@ color:white;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+h1 {
+  font-size: 2rem;
 }
 .edit-btn {
     background-color: #037894;

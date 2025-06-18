@@ -13,9 +13,9 @@ body {
         background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
         background-size: 20px 20px;
         padding-left: 35px;
-        height: 40px;
-        margin-top: 3%;
-        margin-left: 5%;
+        height: 35px;
+    margin-top: 3%;
+    margin-left: 3%;
     }
     #filterAndTotal {
       display: flex;
@@ -147,7 +147,9 @@ body {
     text-align: left;
     font-size: 13px;
     }
-    
+    h1 {
+  font-size: 2rem;
+}
     .modal-dialog {
     display: flex;
     align-items: center;

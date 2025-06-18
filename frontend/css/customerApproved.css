@@ -12,9 +12,9 @@ text-align: center;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
-    height: 40px;
+    height: 35px;
     margin-top: 3%;
-    margin-left: 2%;
+    margin-left: 3%;
 }
 .navbar {
 color: white;
@@ -459,6 +459,9 @@ table thead th {
 
 #downloadCsv i {
   font-size: 18px; 
+}
+h1 {
+  font-size: 2rem;
 }
 @media (max-width: 992px) {
   .sidebar {
