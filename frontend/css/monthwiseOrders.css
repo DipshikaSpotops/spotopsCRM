@@ -182,7 +182,9 @@ table.table td {
     text-align: left;
     font-size: 13px;
 }
-
+table.table td:last-child {
+  white-space: nowrap;
+}
 
 .btn {
 padding: 0.375rem 0.75rem;
