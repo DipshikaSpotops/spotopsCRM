@@ -556,7 +556,7 @@ table {
     overflow-y: auto;
     scrollbar-color: #037894 white;
     position: relative;
-    box-sizing: content-box;
+    scrollbar-gutter: stable;
 }
 table thead th {
   position: sticky;
