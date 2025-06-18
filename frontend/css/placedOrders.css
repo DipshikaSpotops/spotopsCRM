@@ -453,6 +453,7 @@ body {
     .table-wrapper {
       max-height: 82vh;
         overflow-y: auto;
+        scrollbar-color: #037894 white;
         /* overflow-x:hidden; */
     }
     
@@ -502,7 +503,7 @@ body {
       font-size: 18px; 
     }
     .table tbody tr:hover {
-      background-color: #6fa4b0;
+      background-color: #b6c2c4;
     }
 
     @media (max-width: 768px) {
