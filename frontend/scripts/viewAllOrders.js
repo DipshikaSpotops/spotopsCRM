@@ -193,7 +193,7 @@ var allDOrders;
       // const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
       const editButton = (team === "Team Mark" || team === "Team Sussane")
         ? "" // Hide the edit button
-        : `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}" style="background-color: #96dce1; border: none; color: #38696c;">Edit</button>`;
+        : `<button class="edit-btn" data-id="${item.orderNo}" >Edit</button>`;
       const datetime = item.orderDate;
       const date = new Date(datetime);
       const day = date.getUTCDate();  // Use UTC day
@@ -212,7 +212,7 @@ var allDOrders;
       const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
       const actions = `
         ${editButton}
-        <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" style="background-color: #cae8c9; border: none; color: #61a55e;" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+        <button class="process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
       $("#infoTable").append(`
         <tr>
