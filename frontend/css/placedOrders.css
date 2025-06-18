@@ -505,7 +505,20 @@ body {
     .table tbody tr:hover {
       background-color: #b6c2c4;
     }
+@media (max-width: 992px) {
+  .sidebar {
+    font-size: 10px;
+  }
 
+  .sidebar .nav-link {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .sidebar .chevron-icon i {
+    font-size: 10px;
+  }
+}
     @media (max-width: 768px) {
         .sidebar {
         transform: translateX(-100%);
@@ -513,6 +526,7 @@ body {
         }
         .topHeads{
           margin-top: 6%;
+          margin-top: 3%;
         }
         .sidebar.show {
         transform: translateX(0);
@@ -531,6 +545,15 @@ body {
               min-width: 800px;
             }
         }
+        @media (max-width: 600px) {
+  .sidebar {
+    font-size: 9px;
+  }
+
+  .sidebar .nav-link {
+    font-size: 10px;
+  }
+}
     @media (max-width: 320px) {
         #mainHeading {
           font-size: 20px;
