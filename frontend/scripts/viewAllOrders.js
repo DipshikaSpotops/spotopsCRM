@@ -2,6 +2,41 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+$(document).ready(function () {
+  // Apply dark mode on page load
+  if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  } else {
+    disableDarkMode();
+  }
+
+  // Toggle on icon click
+  $("#darkModeIcon").on("click", function () {
+    if ($("body").hasClass("dark-mode")) {
+      disableDarkMode();
+    } else {
+      enableDarkMode();
+    }
+  });
+
+  function enableDarkMode() {
+    $("body").addClass("dark-mode");
+    $(".navbar").addClass("dark-mode");
+    $(".sidebar").addClass("dark-mode");
+    $("table").addClass("table-dark");
+    $("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+    localStorage.setItem("darkMode", "true");
+  }
+
+  function disableDarkMode() {
+    $("body").removeClass("dark-mode");
+    $(".navbar").removeClass("dark-mode");
+    $(".sidebar").removeClass("dark-mode");
+    $("table").removeClass("table-dark");
+    $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+    localStorage.setItem("darkMode", "false");
+  }
+});
 
 
 let debounceTimer;
@@ -717,43 +752,7 @@ $("#infoTable").on("click", "tr", function () {
         $("#infoTable tr").removeClass("selected");
         $(this).addClass("selected");
     });
-        // Toggle Dark Mode
-        if (localStorage.getItem("darkMode") === "true") {
-    enableDarkMode();
-  }        
-$("#darkModeIcon").on("click", function () {
-if ($("body").hasClass("dark-mode")) {
-disableDarkMode();
-} else {
-enableDarkMode();
-}
-});
 
-(function() {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-    if (isDarkMode) {
-      enableDarkMode()
-    } else {
-      disableDarkMode()
-    }
-  })();
-function enableDarkMode() {
-$("body").addClass("dark-mode");
-$(".navbar").addClass("dark-mode");
-$(".sidebar").addClass("dark-mode");
-$("table").addClass("table-dark");
-$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
-localStorage.setItem("darkMode", "true");
-}
-
-function disableDarkMode() {
-$("body").removeClass("dark-mode");
-$(".navbar").removeClass("dark-mode");
-$(".sidebar").removeClass("dark-mode");
-$("table").removeClass("table-dark");
-$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
-localStorage.setItem("darkMode", "false");
-}
 $(".toggle-sidebar").on("click", function () {
   $("#offcanvasSidebar").toggleClass("show");
   if ($("#offcanvasSidebar").hasClass("show")) {

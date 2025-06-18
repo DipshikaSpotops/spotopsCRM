@@ -469,7 +469,9 @@ th.sticky-col.second-col {
   z-index: 21;
 } */
 
-
+body, .navbar, .sidebar, table {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 /* Adjust for dark mode */
 .dark-mode .sticky-col {
   /* background: #2c3e50;  */
