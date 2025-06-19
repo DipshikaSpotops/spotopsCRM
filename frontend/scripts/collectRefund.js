@@ -130,6 +130,15 @@ $("#viewAlltasks").on("click", function () {
     $(this).addClass("selected");
   }
 });
+$(document).on("click", "#infoTable tr", function () {
+  const isSelected = $(this).hasClass("selected");
+
+  $("#infoTable tr").removeClass("selected");
+
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
+});
   const currentTime = Date.now();
   const loginTimestamp = localStorage.getItem("loginTimestamp");
   if (loginTimestamp) {
