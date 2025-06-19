@@ -712,10 +712,15 @@ $("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
-$("#infoTable").on("click", "tr", function () {
-        $("#infoTable tr").removeClass("selected");
-        $(this).addClass("selected");
-    });
+$(document).on("click", "#infoTable tr", function () {
+  const isSelected = $(this).hasClass("selected");
+
+  $("#infoTable tr").removeClass("selected");
+
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
+});
     if (localStorage.getItem("darkMode") === "true") {
     enableDarkMode();
   }

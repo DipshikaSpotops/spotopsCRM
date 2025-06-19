@@ -558,15 +558,6 @@ font-size: 13px;
       border-bottom: 1px solid #ddd;
       white-space: nowrap;
     }
-    .table tbody tr:hover {
-        background-color: #c0c0c0 !important;
-        cursor: pointer;
-    }
-    
-    /* Selected row style */
-    .table tbody tr.selected {
-        background-color: #757070 !important; 
-    }
     .topHeads{
       display: flex;
     margin-bottom: 1%;
