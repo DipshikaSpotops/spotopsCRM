@@ -19,7 +19,7 @@ body {
     cursor: pointer;
     }
     #searchInput {
-    width: auto;
+  width: auto;
     border-radius: 30px;
     border: 1px solid grey;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
@@ -77,10 +77,9 @@ body {
     flex-grow: 1;
     padding: 20px;
     margin-left: 13%;
-    margin-top: 1%;
+    margin-top: 10px;
+    overflow: hidden;
     transition: margin-left 0.3s ease;
-    width: auto;
-    /* overflow-y: auto; */
     }
     .submenu {
     display: block; /* Show all submenus by default */
@@ -148,6 +147,9 @@ body {
     padding: 10px;
     border-radius: 10px;
     text-align: center;
+    }
+    #showTotalOrders{
+      margin-left: 1%;
     }
     /* Horizontal scroll container for the table */
     .table-responsive {
@@ -534,9 +536,9 @@ font-size: 13px;
       border-collapse: collapse;
     }
     #filterAndTotal{
-     display: flex;
-    margin-left: 0%;
-    margin-top: -1%;
+      display: flex;
+      margin-left: -1%;
+      margin-top: -1%;
     }
     table thead th {
       position: sticky;
