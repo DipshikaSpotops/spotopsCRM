@@ -84,12 +84,12 @@ cursor: default;
 border: none;
 }
 .main-content {
-flex-grow: 1;
-padding: 20px;
-margin-left: 14%;
-margin-top: 60px;
-transition: margin-left 0.3s ease;
-overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 13%;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: margin-left 0.3s ease;
 }
 .submenu {
 display: block; /* Show all submenus by default */
@@ -360,7 +360,11 @@ scrollbar-color: #29638c #141b2d;
     background-color: #29638c;
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: -21px;color: #023f42;white-space: nowrap;
+  text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
+  text-decoration: underline;
 }
 #monthYearPicker{
   background-color: #35554f;
