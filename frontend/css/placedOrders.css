@@ -290,7 +290,7 @@ min-width: 50px;
 
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover {
+#monthYearPicker:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 .table td:first-child {

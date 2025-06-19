@@ -320,7 +320,7 @@ overflow: hidden;
 }
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover, #gpTotals:hover {
+#monthYearPicker:hover, #gpTotals:hover,.previousNext:hover {
   background-color: #0b4f5f;
 }
 h1 {

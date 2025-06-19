@@ -250,7 +250,7 @@ margin-left: 10px;
 }
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover {
+#monthYearPicker:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 h1 {

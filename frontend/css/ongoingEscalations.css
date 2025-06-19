@@ -448,7 +448,7 @@ scrollbar-color: #29638c #141b2d;
 }
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover {
+#monthYearPicker:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 h1 {

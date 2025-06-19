@@ -266,7 +266,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 }
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover {
+#monthYearPicker:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 h1 {
