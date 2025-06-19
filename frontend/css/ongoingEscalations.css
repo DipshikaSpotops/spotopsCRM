@@ -15,17 +15,21 @@ margin: 0;
   margin: 0 5px;
 }
 .previousNext{
-  background-color: #35554f;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  font-size: 18px;
+  background-color: #037894;
+     color: white;
+    border: none;
+    padding: 4px;
+    border-radius: 50%;
+    font-size: 18px;
   cursor: pointer;
 }
 .previousNext:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+#pagination-controls {
+  margin-top: 0;
+    float: left;
 }
 /* btn pagination till here */
 #logoImg {
