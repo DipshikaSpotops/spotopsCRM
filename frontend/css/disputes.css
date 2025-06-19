@@ -289,8 +289,12 @@ font-size: 1.5em;
 color: #333;
 }
 .table-wrapper {
-  max-height: 86vh; 
-  overflow-y: auto;
+  max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
+    position: relative;
+    scrollbar-gutter: stable;
+    margin-top: 1%;
 }
 #monthYearPicker{
   background-color: #35554f;
