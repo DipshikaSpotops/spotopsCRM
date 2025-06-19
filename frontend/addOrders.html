@@ -1329,12 +1329,25 @@ $("#newOrderForm").on("submit", function (e) {
         const orderNoInput = $("#orderNo").val();
 const newEntry = urlParams.get("newEntry");
         if (newEntry || !orderNo) {
-            // Create a new order
+    if (!orderNoInput.trim()) {
+        alert("Order No is required. Please enter an order number.");
+        return;
+    }
+
+    // Check if order number already exists
+    fetch(`https://www.spotops360.com/orders/checkOrderNo/${orderNoInput}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.exists) {
+                alert("This order no already exists. Please enter a unique order number.");
+                return;
+            }
+
+            // Create new order
             const newOrderData = {
                 orderNo: orderNoInput,
                 orderDate: $("#orderDate").val(),
                 salesAgent: $("#salesAgent").val(),
-                // customerName: customerName,
                 fName: $("#fName").val(),
                 lName: $("#lName").val(),
                 bAddressStreet: $("#bAddress").val(),
@@ -1368,12 +1381,14 @@ const newEntry = urlParams.get("newEntry");
                 partNo: $("#partNo").val(),
                 last4digits: $("#issueOrder").val(),
                 notes: $("#notes").val(),
-                dsCall: $("#dsCallCheckbox").prop("checked") ? true : false,
-                expediteShipping: $("#expeditorNot").prop("checked") ? true : false,
+                dsCall: $("#dsCallCheckbox").prop("checked"),
+                expediteShipping: $("#expeditorNot").prop("checked"),
                 businessName: $("#sBusinessName").val(),
-                programmingRequired: $("#programmingRequiredCheckbox").prop("checked") ? true : false, 
+                programmingRequired: $("#programmingRequiredCheckbox").prop("checked"),
                 programmingCostQuoted: $("#programmingCostQuoted").val(),
             };
+
+            console.log("Submitting order:", newOrderData); // helpful for debugging
 
             fetch(`https://www.spotops360.com/orders?firstName=${firstName}`, {
                 method: "POST",
@@ -1382,15 +1397,27 @@ const newEntry = urlParams.get("newEntry");
                 },
                 body: JSON.stringify(newOrderData),
             })
-                .then((response) => {
-                    alert(`Order ${orderNoInput} has been successfully created.`);
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    console.error("Error saving new order:", error);
-                    alert("An error occurred while saving the order. Please try again.");
-                });
-        } else {
+            .then(async (response) => {
+                if (!response.ok) {
+                    const errText = await response.text();
+                    console.error("Server response error:", errText);
+                    throw new Error(`Server error (${response.status})`);
+                }
+
+                alert(`Order ${orderNoInput} has been successfully created.`);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error saving new order:", error);
+                alert("An error occurred while saving the order. Please check the console for details.");
+            });
+        })
+        .catch(error => {
+            console.error("Error checking duplicate order:", error);
+            alert("Something went wrong while verifying the order number.");
+        });
+}
+ else {
             // Update an existing order
             const updatedOrderData = {
                 orderNo: orderNoInput,
