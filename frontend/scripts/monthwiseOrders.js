@@ -849,10 +849,10 @@ $(".toggle-sidebar").on("click", function () {
   $("#offcanvasSidebar").toggleClass("show");
   if ($("#offcanvasSidebar").hasClass("show")) {
     $("body").addClass("no-scroll");
-    $("body").append('<div class="modal-overlay"></div>'); // Add the shadow overlay
+    $("body").append('<div class="modal-overlay"></div>');
   } else {
     $("body").removeClass("no-scroll");
-    $(".modal-overlay").remove(); // Remove the shadow overlay
+    $(".modal-overlay").remove(); 
   }
 });
 fetchNotifications();
