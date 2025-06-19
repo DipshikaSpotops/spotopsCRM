@@ -487,7 +487,11 @@ overflow: hidden;
     margin-left: -8%;
   }
 table.table td {
-  font-size: 12px;
+      overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
 }
 .table thead th {
     font-size: 12px;
