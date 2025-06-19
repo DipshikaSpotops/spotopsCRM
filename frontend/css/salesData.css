@@ -363,10 +363,11 @@ font-size: 13px;
 }
 .table-wrapper {
   max-height: 82vh;
-    overflow-y: auto;
-    scrollbar-color: #037894 white;
-    position: relative;
-    scrollbar-gutter: stable;
+  overflow-y: auto;
+  scrollbar-color: #037894 white;
+  position: relative;
+  scrollbar-gutter: stable;
+  margin-top: 1%;
 }
 .topHeads{
    display: flex;
