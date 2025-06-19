@@ -294,7 +294,7 @@ if (team in teamAgentsMap) {
 }
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -441,7 +441,7 @@ if (team in teamAgentsMap) {
   );
 }
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total In Transit Orders This Month- ${allOrdersLength}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${allOrdersLength}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {

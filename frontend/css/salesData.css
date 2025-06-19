@@ -126,7 +126,7 @@ flex-shrink: 0;
 margin: 0% 30%;
 }
 #gpTotals {
-  background-color: #037894;
+background-color: #037894;
     color: white;
     padding: 10px;
     border-radius: 7px;
@@ -136,11 +136,13 @@ margin: 0% 30%;
     z-index: 1;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     display: flex;
-    gap: 19px;
+    gap: 42px;
     width: auto;
     float: right;
     height: auto;
     padding: 5px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 /* #searchInput,

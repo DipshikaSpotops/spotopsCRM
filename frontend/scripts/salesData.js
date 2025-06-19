@@ -138,9 +138,9 @@ function calculateAndUpdateTotals(orders) {
     });
 
     // Update the totals in the UI
-    document.getElementById("totalEstGP").innerHTML = `<i class="fas fa-chart-line"></i> Total Est GP: <strong>$${totalEstGP.toFixed(2)}</strong>`;
-    document.getElementById("totalCurrentGP").innerHTML = `<i class="fas fa-dollar-sign"></i> Total Current GP: <strong>$${totalCurrentGP.toFixed(2)}</strong>`;
-    document.getElementById("totalActualGP").innerHTML = `<i class="fas fa-check-circle"></i> Total Actual GP: <strong>$${totalActualGP.toFixed(2)}</strong>`;
+    document.getElementById("totalEstGP").innerHTML = `<i class="fas fa-chart-line"></i>Est GP: <strong>$${totalEstGP.toFixed(2)}</strong>`;
+    document.getElementById("totalCurrentGP").innerHTML = `<i class="fas fa-dollar-sign"></i>Current GP: <strong>$${totalCurrentGP.toFixed(2)}</strong>`;
+    document.getElementById("totalActualGP").innerHTML = `<i class="fas fa-check-circle"></i>Actual GP: <strong>$${totalActualGP.toFixed(2)}</strong>`;
 }
 
 
@@ -154,7 +154,7 @@ order.salesAgent?.toLowerCase().includes(agentName.toLowerCase())
 calculateAndUpdateTotals(filteredOrders);
 
 // Update the total orders dynamically
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
+document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${filteredOrders.length}`;
 
 // Render the filtered orders in the table
 renderTableRows(1, filteredOrders);
@@ -176,7 +176,7 @@ $("#userDropdown").on("change", function () {
         calculateAndUpdateTotals(filteredOrders);
 
         // Update the total orders dynamically
-        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${filteredOrders.length}`;
+        document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${filteredOrders.length}`;
 
         // Render the filtered orders & create pagination
         renderTableRows(1, filteredOrders);
@@ -185,7 +185,7 @@ $("#userDropdown").on("change", function () {
         // Reset to all orders
         filteredOrders = allOrders; // Ensure it contains all orders again
         calculateAndUpdateTotals(allOrders);
-        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+        document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${allOrders.length}`;
         renderTableRows(1, allOrders);
         createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
     }
@@ -425,7 +425,7 @@ throw new Error("Failed to fetch current month's orders");
 }
 
 allOrders = ordersResponse.data.orders;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${allOrders.length}`;
 
 // Calculate totals and render the first page
 calculateAndUpdateTotals(allOrders);
@@ -603,7 +603,7 @@ $("#filterButton").click(async function () {
 
         // Update the orders and display them
         allOrders = ordersResponse.data.orders;
-        document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month: ${allOrders.length}`;
+        document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${allOrders.length}`;
 
         // Recalculate totals and update them
         calculateAndUpdateTotals(allOrders);
