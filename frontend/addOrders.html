@@ -1329,6 +1329,10 @@ $("#newOrderForm").on("submit", function (e) {
         const orderNoInput = $("#orderNo").val();
 const newEntry = urlParams.get("newEntry");
         if (newEntry || !orderNo) {
+          if (!orderNoInput.trim()) {
+        alert("Order No is required. Please enter an order number.");
+        return;
+    }
             // Create a new order
             const newOrderData = {
                 orderNo: orderNoInput,
