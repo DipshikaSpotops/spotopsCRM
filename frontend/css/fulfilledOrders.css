@@ -28,7 +28,7 @@ text-align: center;
   cursor: not-allowed;
 }
 #pagination-controls {
-  margin-top: 0;
+  margin-top: 17px;
     float: left;
 }
 /* btn pagination till here */
@@ -251,11 +251,12 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     color: #61a55e;
 }
 .table-wrapper {
-    margin-top: 0%; 
-    max-height: 85vh; 
-  overflow-y: auto;
-  overflow-x: auto;
-  position: relative;
+  max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
+    position: relative;
+    scrollbar-gutter: stable;
+    margin-top: 1%;
 }
 #monthYearPicker{
   background-color: #35554f;
