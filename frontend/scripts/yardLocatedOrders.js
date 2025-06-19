@@ -318,7 +318,7 @@ if (team in teamAgentsMap) {
 }
 var totalOrders = allOrder.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Yard Located Orders This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Yard Located Orders- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrder);
 allOrders = allOrder; 
 renderTableRows(currentPage);
@@ -490,7 +490,7 @@ $("#filterButton").click(async function () {
 
     // Update UI
     document.getElementById("showTotalOrders").innerHTML =
-      `Total Yard Located Orders This Month- ${filteredOrders.length}`;
+      `Yard Located Orders- ${filteredOrders.length}`;
 
     // Update global orders list and render
     allOrders = filteredOrders;
