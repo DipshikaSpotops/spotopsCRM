@@ -463,6 +463,7 @@ min-width: 50px;
         position: relative;
         scrollbar-color: #037894 white;
         box-sizing: content-box;
+        margin-top: 1%;
         /* overflow-x:hidden; */
     }
     

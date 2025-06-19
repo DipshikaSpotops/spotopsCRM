@@ -427,6 +427,7 @@ color: #e0e0e0;
     scrollbar-color: #037894 white;
     position: relative;
     box-sizing: content-box;
+    margin-top: 1%;
 }
 
 table {
