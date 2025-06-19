@@ -687,8 +687,12 @@ $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
 $(document).on("click", "#infoTable tr", function () {
-  console.log("Row clicked:", $(this).text()); // Debugging
+  const isSelected = $(this).hasClass("selected");
+
   $("#infoTable tr").removeClass("selected");
-  $(this).addClass("selected");
+
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
 });
 });

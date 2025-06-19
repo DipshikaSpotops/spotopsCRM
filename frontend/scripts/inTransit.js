@@ -641,9 +641,14 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
-$("#infoTable").on("click", "tr", function () {
-        $("#infoTable tr").removeClass("selected");
-        $(this).addClass("selected");
-    });
+$(document).on("click", "#infoTable tr", function () {
+  const isSelected = $(this).hasClass("selected");
+
+  $("#infoTable tr").removeClass("selected");
+
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
+});
 fetchNotifications();
 });

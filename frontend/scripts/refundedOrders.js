@@ -468,11 +468,15 @@ $("#infoTable").on("click", ".process-btn", function () {
     sessionStorage.setItem("currentPage", currentPage);
     window.location.href = `form.html?orderNo=${id}&process=true`;
 });
-$("#infoTable").on("click", "tr", function () {
-        $("#infoTable tr").removeClass("selected");
-        $(this).addClass("selected");
-    });
+$(document).on("click", "#infoTable tr", function () {
+  const isSelected = $(this).hasClass("selected");
 
+  $("#infoTable tr").removeClass("selected");
+
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
+});
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
