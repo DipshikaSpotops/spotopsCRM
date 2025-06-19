@@ -360,6 +360,7 @@ overflow: hidden;
     scrollbar-color: #037894 white;
     position: relative;
     scrollbar-gutter: stable;
+    margin-top: 1%;
 }
 
 table {
