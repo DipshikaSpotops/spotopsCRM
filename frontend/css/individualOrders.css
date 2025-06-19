@@ -102,13 +102,12 @@ border: none;
 }
 /* btn pagination till here */
 .main-content {
-flex-grow: 1;
-padding: 20px;
-margin-left: 13%;
-margin-top: 10px;
-/* overflow-x: hidden;  */
-/* overflow-y: scroll;  */
-text-align:center;
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 13%;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: margin-left 0.3s ease;
 }
 .toggle-btn,
 .close-btn {
