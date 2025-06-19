@@ -270,7 +270,11 @@ min-width: 50px;
 font-size: 13px;
 }
 .table td {
-font-size: 13px;
+overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
 }
 .filter-bar {
 display: flex;
