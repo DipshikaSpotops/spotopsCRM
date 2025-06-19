@@ -63,19 +63,20 @@ border-bottom: 1px solid #e0e0e0;
     margin-left: 38%;
 }
 .sidebar {
-  position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
-    width: 13%;
-    height: 100vh;
-    padding: 50px 0px;
-    transition: transform 0.3s ease;
-    background: llinear-gradient(160deg, #017b82, #0771b4);
-    font-size: 12px;
-    text-align: left;
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
+position: fixed;
+z-index: 11;
+top: 0;
+left: 0;
+overflow-x: hidden;
+padding-top: 20px;
+width: 13%;
+height: 100vh;
+padding: 50px 0px;
+transition: transform 0.3s ease;
+text-align: left;
+scrollbar-color: white white;
 }
 .sidebar .nav-link {
 color: #ffffff;
