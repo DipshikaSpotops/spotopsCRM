@@ -36,7 +36,7 @@ cursor: pointer;
 }
 .navbar {
   color: white;
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -48,7 +48,8 @@ z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
-  background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
 position: fixed;
 z-index: 1;
 top: 0;
@@ -115,22 +116,6 @@ cursor: pointer;
 flex-shrink: 0;
 margin: 0% 30%;
 }
-@media (max-width: 768px) {
-.sidebar {
-transform: translateX(-100%);
-width: 70%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
-}
-
 #filterAndTotal{
   display: flex;
     margin-left: 32%;
@@ -159,9 +144,11 @@ width: 100vw;
 
 table thead th {
   position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
   top: 0;
   z-index: 10; 
-  background-color: #35554f; 
+  background-color: #037894; 
   color: white;
   padding: 8px;
   text-align: center;
@@ -221,14 +208,66 @@ color: white;
 }
 #monthYearPicker,
 #filterButton,#showTotalOrders {
-  height: 40px;
-  line-height: 1.5;
-  padding: 6px 12px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  box-sizing: border-box;
+      min-width: 100px;
+    height: 36px;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+    border: none;
+    background-color: #037894;
+    color: white;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+h1 {
+  font-size: 2rem;
+}
+.edit-btn {
+    background-color: #037894;
+    border: none;
+    color: #e5f6ff;
+}
+.process-btn {
+     background-color: #065d20;
+    border: none;
+    color: #f9fff9;
+}
+.edit-btn, .process-btn {
+min-width: 50px;
+    height: 28px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    text-align: center;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+.process-btn :hover {
+     background-color: #0ba439;
+    border: none;
+    color: #f9fff9;
+}
+.edit-btn :hover {
+    background-color: #0b4f5f;
+}
+ .table tbody tr:hover {
+  background-color: #b6c2c4 !important; 
+}
+
+.table tbody tr.selected {
+  background-color: #e7dcfd !important;
+}
+.table tbody tr.selected td {
+  border: 1px solid #767171 !important;
+}
+.table thead th {
+font-size: 13px;
 }
 .filter-bar {
 display: flex;
@@ -240,14 +279,8 @@ margin-bottom: 0px;
 .filter-bar button {
 margin-left: 2px;
 }
-.process-btn {
-  background-color: #cae8c9;
-    border: none;
-    color: #61a55e;
-}
-
 #pagination-controls {
-  margin-top: -0.3%;
+  margin-top: 0%;
   margin-left: 1%;
 }
 #filterAndTotal{
@@ -261,11 +294,11 @@ margin-left: 2px;
     margin-top: -1%;
   }
   #mainHeading {
-    text-align: center;
-    margin-right: 125px;
-    margin-top: 0px;
-    color: #023f42;
-    white-space: nowrap;
+  text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
+  text-decoration: underline;
 }
 #searchInput {
   width: auto;
@@ -274,9 +307,9 @@ margin-left: 2px;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
-    height: 40px;
+    height: 35px;
     margin-top: 3%;
-    margin-left: -46%;
+    margin-left: 3%;
 }
 /* for dark mode */
 .dark-mode {
@@ -434,7 +467,94 @@ body.modal-active {
 overflow: hidden; 
 }
 .table-wrapper {
-  max-height: 80vh;
-  overflow-y: auto;
-  margin-top: 12px;
+  max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-color: #037894 white;
+    position: relative;
+    scrollbar-gutter: stable;
+    margin-top: 1%;
 }
+@media (max-width: 992px) {
+  .sidebar {
+    font-size: 10px;
+  }
+.topHeads {
+  margin-top: 4%;
+}
+  .sidebar .nav-link {
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-left: -8%;
+  }
+table.table td {
+  font-size: 12px;
+}
+.table thead th {
+    font-size: 12px;
+}
+  .sidebar .chevron-icon i {
+    font-size: 10px;
+  }
+  .approve-btn, .cancel-btn {
+    min-width: 50px;
+    height: 31px;
+    font-size: 12px;
+  }
+  h1 {
+    font-size: 1.5rem; 
+    font-weight: 600;
+  }
+  #searchInput {
+        height: 30px;
+    margin-top: 1%;
+    margin-left: 3%;
+  }
+  #monthYearPicker {
+    font-size: 12px;
+  }
+}
+    @media (max-width: 768px) {
+        .sidebar {
+        transform: translateX(-100%);
+        width:38%;
+        }
+        .topHeads{
+          margin-top: 8%
+        }
+        #searchInput {
+    width: 93%;
+        }
+        .navbar .user-info span
+ {    margin-left: 5%;
+}
+        .sidebar.show {
+        transform: translateX(0);
+        }
+        .main-content {
+        margin-left: 0;
+        }
+        .toggle-sidebar {
+        display: block;
+        }
+        .table-wrapper {
+              overflow-x: auto; 
+            }
+        
+            table {
+              min-width: 800px;
+            }
+        }
+        @media (max-width: 600px) {
+  .sidebar {
+    font-size: 9px;
+  }
+
+  .sidebar .nav-link {
+    font-size: 10px;
+  }
+}
+    @media (max-width: 320px) {
+        #mainHeading {
+          font-size: 20px;
+        }
+        }
