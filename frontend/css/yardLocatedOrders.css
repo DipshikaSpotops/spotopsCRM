@@ -269,6 +269,9 @@ min-width: 50px;
 .table thead th {
 font-size: 13px;
 }
+.table thead td {
+font-size: 13px;
+}
 .filter-bar {
 display: flex;
 justify-content: flex-end;
