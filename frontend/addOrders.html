@@ -1329,7 +1329,19 @@ $("#newOrderForm").on("submit", function (e) {
         const orderNoInput = $("#orderNo").val();
 const newEntry = urlParams.get("newEntry");
         if (newEntry || !orderNo) {
-            // Create a new order
+          if (!orderNoInput) {
+          alert("Order No is required. Please enter an order number.");
+          return;
+        }
+         // Check if the orderNo already exists before proceeding
+  fetch(`https://www.spotops360.com/orders/checkOrderNo/${orderNoInput}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.exists) {
+        alert("This order no already exists. Please enter a unique order number.");
+        return;
+      }
+                  // Create a new order
             const newOrderData = {
                 orderNo: orderNoInput,
                 orderDate: $("#orderDate").val(),
@@ -1386,6 +1398,7 @@ const newEntry = urlParams.get("newEntry");
                     alert(`Order ${orderNoInput} has been successfully created.`);
                     window.location.reload();
                 })
+                    })
                 .catch((error) => {
                     console.error("Error saving new order:", error);
                     alert("An error occurred while saving the order. Please try again.");
