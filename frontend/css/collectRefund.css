@@ -74,10 +74,10 @@ body {
     border: none;
     }
     .main-content {
-    flex-grow: 1;
+      flex-grow: 1;
     padding: 20px;
     margin-left: 13%;
-    margin-top: 10px;
+    margin-top: 2px;
     overflow: hidden;
     transition: margin-left 0.3s ease;
     }
@@ -564,8 +564,9 @@ font-size: 13px;
     }
     .topHeads{
       display: flex;
-      margin-bottom: 1%;
-      margin-top: 2%;
+    margin-bottom: 1%;
+    margin-top: 2%;
+    margin-left: -1%;
       }
     @media (max-width: 768px) {
       #filterAndTotal {
