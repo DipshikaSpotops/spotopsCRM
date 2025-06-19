@@ -318,6 +318,11 @@ overflow: hidden;
     justify-content: center;
     cursor: pointer;
 }
+#filterButton:hover,
+#showTotalOrders:hover,
+#monthYearPicker:hover, #gpTotals {
+  background-color: #0b4f5f;
+}
 h1 {
   font-size: 2rem;
 }
