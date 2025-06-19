@@ -537,13 +537,6 @@ font-size: 13px;
       z-index: 999;
       color: #e0e0e0;
     }
-    
-    #mainHeading {
-      text-align: center; margin-right: 125px; margin-top: 19px;color: #023f42;white-space: nowrap;
-    }
-    
-    
-    
     table {
       width: 100%;
       border-collapse: collapse;
@@ -580,9 +573,6 @@ font-size: 13px;
       margin-bottom: 1%;
       margin-top: 2%;
       }
-    #mainHeading {
-      text-align: center; margin-left: 2%; margin-top: 37px;color: #023f42;white-space: nowrap;
-    }
     @media (max-width: 768px) {
       #filterAndTotal {
         flex-direction: column;
