@@ -37,7 +37,7 @@ cursor: pointer;
 .navbar {
 color: white;
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -50,7 +50,8 @@ border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
 position: fixed;
 z-index: 1;
 top: 0;
@@ -77,12 +78,12 @@ cursor: default;
 border: none;
 }
 .main-content {
-flex-grow: 1;
-padding: 20px;
-margin-left: 14%;
-margin-top: 60px;
-transition: margin-left 0.3s ease;
-overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 13%;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: margin-left 0.3s ease;
 }
 .submenu {
 display: block;
@@ -116,21 +117,6 @@ cursor: pointer;
 flex-shrink: 0;
 margin: 0% 30%;
 }
-@media (max-width: 768px) {
-.sidebar {
-transform: translateX(-100%);
-width: 70%;
-}
-.sidebar.show {
-transform: translateX(0);
-}
-.main-content {
-margin-left: 0;
-}
-.toggle-sidebar {
-display: block;
-}
-}
 #searchInput {
   width: auto;
     border-radius: 30px;
@@ -138,9 +124,9 @@ display: block;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
-    height: 40px;
-    margin-top: 8%;
-    margin-left: -50%;
+    height: 35px;
+    margin-top: 3%;
+    margin-left: 3%;
 }
 .profile-table {
 width: 50%;
@@ -165,22 +151,23 @@ width: 82vw;
 }
 table thead th {
   position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
   top: 0;
   z-index: 10; 
-  background-color: #35554f; 
+  background-color: #037894; 
   color: white;
   padding: 8px;
   text-align: center;
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
 }
-/* Hover effect - highlights the entire row */
-.table tbody tr:hover {
-    background-color: #c0c0c0 !important; 
-    cursor: pointer;
-}
-.table tbody tr.selected {
-    background-color: #757070 !important;
+table.table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
 }
 table.table td.actions {
 display: flex;
@@ -322,14 +309,66 @@ color: #333;
 }
 #monthYearPicker,
 #filterButton,#showTotalOrders {
-  height: 40px;
-  line-height: 1.5;
-  padding: 6px 12px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  box-sizing: border-box;
+      min-width: 100px;
+    height: 36px;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+    border: none;
+    background-color: #037894;
+    color: white;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+h1 {
+  font-size: 2rem;
+}
+.edit-btn {
+    background-color: #037894;
+    border: none;
+    color: #e5f6ff;
+}
+.process-btn {
+     background-color: #065d20;
+    border: none;
+    color: #f9fff9;
+}
+.edit-btn, .process-btn {
+min-width: 50px;
+    height: 28px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    text-align: center;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+.process-btn :hover {
+     background-color: #0ba439;
+    border: none;
+    color: #f9fff9;
+}
+.edit-btn :hover {
+    background-color: #0b4f5f;
+}
+ .table tbody tr:hover {
+  background-color: #b6c2c4 !important; 
+}
+
+.table tbody tr.selected {
+  background-color: #e7dcfd !important;
+}
+.table tbody tr.selected td {
+  border: 1px solid #767171 !important;
+}
+.table thead th {
+font-size: 13px;
 }
 /* for dark mode */
 .dark-mode {
@@ -454,9 +493,9 @@ background-color: #96dce1;
     color: #61a55e;
 }
 .topHeads{
-  display: flex;
+    display: flex;
     margin-bottom: 1%;
-    margin-top: -2%;
+    margin-top: 2%;
 }
 /* notification */
 .notification-badge {
@@ -506,3 +545,87 @@ background-color: #96dce1;
     color: red;
     font-weight: bold;
 }
+@media (max-width: 992px) {
+  .sidebar {
+    font-size: 10px;
+  }
+.topHeads {
+  margin-top: 4%;
+}
+  .sidebar .nav-link {
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-left: -8%;
+  }
+table.table td {
+  font-size: 12px;
+}
+.table thead th {
+    font-size: 12px;
+}
+  .sidebar .chevron-icon i {
+    font-size: 10px;
+  }
+  .approve-btn, .cancel-btn {
+    min-width: 50px;
+    height: 31px;
+    font-size: 12px;
+  }
+  h1 {
+    font-size: 1.5rem; 
+    font-weight: 600;
+  }
+  #searchInput {
+        height: 30px;
+    margin-top: 1%;
+    margin-left: 3%;
+  }
+  #monthYearPicker {
+    font-size: 12px;
+  }
+}
+    @media (max-width: 768px) {
+        .sidebar {
+        transform: translateX(-100%);
+        width:38%;
+        }
+        .topHeads{
+          margin-top: 8%
+        }
+        #searchInput {
+    width: 93%;
+        }
+        .navbar .user-info span
+ {    margin-left: 5%;
+}
+        .sidebar.show {
+        transform: translateX(0);
+        }
+        .main-content {
+        margin-left: 0;
+        }
+        .toggle-sidebar {
+        display: block;
+        }
+        .table-wrapper {
+              overflow-x: auto; 
+            }
+        
+            table {
+              min-width: 800px;
+            }
+        }
+        @media (max-width: 600px) {
+  .sidebar {
+    font-size: 9px;
+  }
+
+  .sidebar .nav-link {
+    font-size: 10px;
+  }
+}
+@media (max-width: 320px) {
+  #mainHeading {
+    font-size: 20px;
+  }
+  }

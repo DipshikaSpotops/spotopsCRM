@@ -675,8 +675,8 @@ table.table td {
     font-size: 10px;
   }
 }
-    @media (max-width: 320px) {
-        #mainHeading {
-          font-size: 20px;
-        }
-        }
+@media (max-width: 320px) {
+  #mainHeading {
+    font-size: 20px;
+  }
+  }
