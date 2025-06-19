@@ -121,15 +121,6 @@ $("#viewAlltasks").on("click", function () {
   .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
   }
   );
-$(document).on("click", "#yardInfoTable tr", function () {
-  const isSelected = $(this).hasClass("selected");
-
-  $("#yardInfoTable tr").removeClass("selected");
-
-  if (!isSelected) {
-    $(this).addClass("selected");
-  }
-});
   const currentTime = Date.now();
   const loginTimestamp = localStorage.getItem("loginTimestamp");
   if (loginTimestamp) {
@@ -838,13 +829,18 @@ async function fetchYardInfo(month, year) {
     }
   });
   fetchNotifications();
-  $("#yardInfoTable").on("click", "tr", function () {
-          // Remove selection from all rows
-          $("#yardInfoTable tr").removeClass("selected");
-  
-          // Add selection to the clicked row
-          $(this).addClass("selected");
-      });
+$(document).on("click", "#yardInfoTable tr", function () {
+  const $row = $(this);
+  const isSelected = $row.hasClass("selected");
+
+  $("#yardInfoTable tr").removeClass("selected");
+
+  if (!isSelected) {
+    $row.addClass("selected");
+  }
+});
+
+      
       // Toggle Dark Mode
   if (localStorage.getItem("darkMode") === "true") {
       enableDarkMode();
