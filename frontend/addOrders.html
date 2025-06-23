@@ -399,6 +399,19 @@ body {
         width: 101%;
         margin-bottom: 3%
     }
+    .modal {
+    z-index: 1055 !important;
+    display: block !important;
+    pointer-events: auto;
+}
+
+.modal-backdrop {
+    z-index: 1050 !important;
+}
+.modal-dialog {
+    z-index: 1060 !important;
+    position: relative;
+}
        @media (max-width: 768px) {
         .top-section{
           margin-top: 52px;
@@ -906,7 +919,7 @@ window.location.href = "login_signup.html";
 <!-- New Part Modal -->
 <div class="modal fade" id="newPartModal" tabindex="-1" aria-labelledby="newPartModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-      <div class="modal-content" style="margin-top: 100%;margin-left: 20%;">
+      <div class="modal-content" id="addNewPartMOdal">
           <div class="modal-header">
               <h5 class="modal-title" id="newPartModalLabel">Add New Part</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
