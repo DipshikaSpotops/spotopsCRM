@@ -327,10 +327,10 @@ async function fetchYardInfo(month, year) {
               for (let i = 0; i < maxYards; i++) {
                   const additionalInfo = item.additionalInfo[i];
   
-                  if (
-                      additionalInfo &&
-                      additionalInfo.collectRefundCheckbox === "Ticked"
-                  ) {
+                 if (
+  additionalInfo &&
+  additionalInfo.collectRefundCheckbox === "Ticked" &&
+  !isRefunded) {
                       appendOrder = true;
   
                       const partPrice = parseFloat(additionalInfo.partPrice || 0);
@@ -345,9 +345,9 @@ async function fetchYardInfo(month, year) {
                           shippingCharge = parseFloat(shippingDetails.split(":")[1]?.trim() || 0);
                       }
   
-                      if (refunds === 0) {
-                          totalRefundToCollect += toBeRefunded;
-                      }
+                    if (parseFloat(refunds || 0) === 0 && parseFloat(toBeRefunded || 0) > 0) {
+    totalRefundToCollect += parseFloat(toBeRefunded);
+}
   
                       totalPartPrice += partPrice;
                       totalShipping += shippingCharge;
