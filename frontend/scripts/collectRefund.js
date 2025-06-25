@@ -329,7 +329,8 @@ async function fetchYardInfo(month, year) {
   
                  if (
   additionalInfo &&
-  additionalInfo.collectRefundCheckbox === "Ticked") {
+  additionalInfo.collectRefundCheckbox === "Ticked" &&
+  !additionalInfo.refundedAmount) {
                       appendOrder = true;
   
                       const partPrice = parseFloat(additionalInfo.partPrice || 0);
