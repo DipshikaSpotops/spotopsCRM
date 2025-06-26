@@ -1077,22 +1077,26 @@ const handleMigrateDates = async () => {
     alert("Migration failed. Check console.");
   }
 };
-document.getElementById('searchInput').addEventListener('input', function () {
-    const orderNo = this.value.trim();
-    const resultDiv = document.getElementById('searchResult');
+  const searchInput = document.getElementById('searchInput');
+  const resultDiv = document.getElementById('searchResult');
 
-    // If the input looks like a valid order number, show the View button
-    if (orderNo.length > 0) {
+  searchInput.addEventListener('input', function () {
+    const orderNo = searchInput.value.trim();
+
+    // Check if input is not empty
+    if (orderNo !== '') {
       resultDiv.innerHTML = `
         <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
       `;
 
+      // Add click event each time the button is created
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
-        // Redirect logic — you can change the URL pattern as needed
-        window.location.href = 'individualOrderPage.html?orderNo=' + encodeURIComponent(orderNo);
+        // Assuming you redirect to a page that accepts orderNo as a query parameter
+        window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo);
       });
     } else {
-      resultDiv.innerHTML = ''; // Clear button if no input
+      // Clear result if input is empty
+      resultDiv.innerHTML = '';
     }
   });
 fetchNotifications();
