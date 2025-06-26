@@ -1092,7 +1092,8 @@ const handleMigrateDates = async () => {
       // Add click event each time the button is created
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
         // Assuming you redirect to a page that accepts orderNo as a query parameter
-        window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo);
+       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+
       });
     } else {
       // Clear result if input is empty
