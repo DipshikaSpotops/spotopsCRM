@@ -1100,6 +1100,25 @@ const handleMigrateDates = async () => {
       resultDiv.innerHTML = '';
     }
   });
+    const searchInputForOrderNo = document.getElementById('searchInputForOrderNo');
+  const resultOrder = document.getElementById('searchResult');
+
+  searchInput.addEventListener('input', function () {
+    const orderNo = searchInputForOrderNo.value.trim();
+
+    if (orderNo !== '') {
+      resultOrder.innerHTML = `
+        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
+      `;
+
+      document.getElementById('viewOrderBtn').addEventListener('click', function () {
+       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+
+      });
+    } else {
+      resultDiv.innerHTML = '';
+    }
+  });
 fetchNotifications();
 await fetchAndRenderCharts()
 });

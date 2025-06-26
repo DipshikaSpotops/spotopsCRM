@@ -711,5 +711,23 @@ $("#downloadCsv").on("click", function () {
   // Debugging the generated CSV content
   console.log("Generated CSV Content:", csvContent);
 });
+  const searchInput = document.getElementById('searchInputForOrderNo');
+  const resultDiv = document.getElementById('searchResult');
 
+  searchInput.addEventListener('input', function () {
+    const orderNo = searchInput.value.trim();
+
+    if (orderNo !== '') {
+      resultDiv.innerHTML = `
+        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
+      `;
+
+      document.getElementById('viewOrderBtn').addEventListener('click', function () {
+       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+
+      });
+    } else {
+      resultDiv.innerHTML = '';
+    }
+  });
 });

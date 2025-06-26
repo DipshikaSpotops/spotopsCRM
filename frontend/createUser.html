@@ -37,7 +37,19 @@ window.location.href = "login_signup.html";
     
     
     <div class="user-info dropdown" style="display: flex;">
-    <span style="white-space: nowrap;margin-left: -14%;">Welcome <span id="user-name"></span></span>
+           <div style="display: flex;">
+      <div style="margin-left: -28%;"> <input
+      type="text"
+      class="form-control"
+      id="searchInputForOrderNo"
+      placeholder="Search order no."
+      />
+      </div>
+<div id="searchResult" style="margin-left: 10px; margin-top: 5px;"></div>
+</div>
+<div id="searchResult" style="margin-left: 10px; margin-top: 5px;"></div>
+</div>
+    <span style="white-space: nowrap;margin-left: -14%;">Hi <span id="user-name"></span></span>
     <!-- for dark mode -->
     <div class="dark-mode-toggle">
       <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
