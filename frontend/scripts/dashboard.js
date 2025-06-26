@@ -1077,7 +1077,25 @@ const handleMigrateDates = async () => {
     alert("Migration failed. Check console.");
   }
 };
+document.getElementById('searchInput').addEventListener('input', function () {
+    const orderNo = this.value.trim();
+    const resultDiv = document.getElementById('searchResult');
 
+    // If the input looks like a valid order number, show the View button
+    if (orderNo.length > 0) {
+      resultDiv.innerHTML = `
+        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
+      `;
+
+      document.getElementById('viewOrderBtn').addEventListener('click', function () {
+        // Redirect logic — you can change the URL pattern as needed
+        window.location.href = 'individualOrderPage.html?orderNo=' + encodeURIComponent(orderNo);
+      });
+    } else {
+      resultDiv.innerHTML = ''; // Clear button if no input
+    }
+  });
 fetchNotifications();
 await fetchAndRenderCharts()
 });
+
