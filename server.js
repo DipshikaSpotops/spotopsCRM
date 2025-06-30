@@ -1411,8 +1411,8 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // monthly orders
-// const db = mongoose.connection;
-// console.log("my db",db);
+const db = mongoose.connection;
+console.log("my db",db);
 // db.orders.createIndex({ cancelledDate: 1 })
 // db.orders.createIndex({ custRefundDate: 1 })
 
