@@ -2297,6 +2297,11 @@ const shipper = $("#customerShipperReturn").val();
 const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("poFilePDF");
 const file = fileInput.files[0] || "";
+if (!file) {
+  alert("Please attach the PO PDF before sending the email.");
+  $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
+  return;
+}
 console.log("yardddd",selectedYardIndex,yardIndex);
 const formData = new FormData();
 formData.append("pdfFile", file);
