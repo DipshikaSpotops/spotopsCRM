@@ -971,7 +971,7 @@ ordersForPage.forEach((item) => {
     }
   });
 
-  const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+const lastInfo = [...item.additionalInfo].reverse().find(info => info.storeCredit !== undefined && !isNaN(info.storeCredit));
   console.log("lastInfo",lastInfo);
   console.log(item.additionalInfo);
 
