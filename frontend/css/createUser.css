@@ -41,7 +41,7 @@ background: linear-gradient(160deg, #017b82, #0771b4);;
 text-align: left;
 position: fixed;
 z-index: 1;
-top: 55px;
+top: 3px;
 left: 0;
 overflow-x: hidden;
 padding-top: 20px;
@@ -70,11 +70,19 @@ cursor: default;
 border: none;
 }
 .main-content {
-flex-grow: 1;
-padding: 20px;
-margin-left: 12%;
-margin-top: 58px;
+padding: 40px;
+margin-left: 14%;
+margin-top: 70px;
 transition: margin-left 0.3s ease;
+width: 25%;
+border: 1px solid #0675a5;
+}
+#createUser {
+    margin: 1% 0% -2% 42%;
+    background: linear-gradient(160deg, #101a18, #037894);
+    color: white;
+    border-radius: 22px;
+    font-size: 12px;
 }
 .scale-wrapper {
   transform: scale(0.80);
@@ -262,8 +270,9 @@ cursor: pointer;
   }
 
   .main-content {
-    margin-left: 1%;
-    margin-top: -3%;
+        margin-left: 22%;
+        margin-top: 7%;
+        width: 42%;
   }
 
   .charts-container {
