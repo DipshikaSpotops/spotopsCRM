@@ -41,7 +41,7 @@ cursor: pointer;
 .navbar {
   color: white;
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -54,10 +54,9 @@ border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
 position: fixed;
 z-index: 1;
-top: 0;
+top: 4px;
 left: 0;
 overflow-x: hidden;
 padding-top: 20px;
@@ -65,7 +64,9 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
-scrollbar-color: white white;
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
+text-align: left;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -269,9 +270,30 @@ scrollbar-color: #29638c #141b2d;
     background-color: #29638c;
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
+  text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
+  text-decoration: underline;
 }
-
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  background-color: #037894; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+table.table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
+}
 #filterButton {
   background-color: #35554f;
     color: white;
@@ -539,7 +561,7 @@ aria-labelledby="userMenu"
 </div>
 </div>
 <div class="main-content">
-  <h1 class="fixed-header" style="text-align: center; color: black; margin: 1%;margin-right: 8%;">
+  <h1 id="mainHeading">
     View All Tasks
   </h1>
   <table id="tasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
