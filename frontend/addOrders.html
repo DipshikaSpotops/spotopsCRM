@@ -1964,6 +1964,8 @@ cancelModalBtn.addEventListener("click", closeModal);
             if (!response.ok) {
                 alert(data.error || "Failed to add part.");
                 return;
+            }else{
+              alert("New part added");
             }
             // Reload parts after saving
             await loadParts();
