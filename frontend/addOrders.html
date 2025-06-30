@@ -1877,18 +1877,20 @@ $("body").removeClass("modal-active");
 fetchNotifications();
 loadParts();
 // below is the part to add a new part and dynamically add the value to the dropdown list
-    const partDropdown = document.getElementById("pReq");
-    const newPartModalElement = document.getElementById("newPartModal");
-    const newPartModal = new bootstrap.Modal(newPartModalElement);
-    const newPartNameInput = document.getElementById("newPartName");
-    const saveNewPartBtn = document.getElementById("saveNewPart");
-    // Open modal when "Add New Part" is selected
-    partDropdown.addEventListener("change", function () {
-        if (partDropdown.value === "add_new_part") {
-            newPartNameInput.value = "";
-            newPartModal.show();
-        }
-});
+  const partDropdown = document.getElementById("pReq");
+  const newPartModalElement = document.getElementById("newPartModal");
+  const newPartNameInput = document.getElementById("newPartName");
+  const saveNewPartBtn = document.getElementById("saveNewPart");
+
+  // Instantiate the modal (only once)
+  const newPartModal = new bootstrap.Modal(newPartModalElement);
+
+  partDropdown.addEventListener("change", function () {
+    if (partDropdown.value === "add_new_part") {
+      newPartNameInput.value = "";
+      newPartModal.show();
+    }
+  });
     async function saveNewPart() {
         const newPartName = newPartNameInput.value.trim();
         if (!newPartName) {
