@@ -972,6 +972,7 @@ ordersForPage.forEach((item) => {
   });
 
   const lastInfo = item.additionalInfo[item.additionalInfo.length - 1];
+  console.log("lastInfo",lastInfo);
   console.log(item.additionalInfo);
 
   const yardPP = lastInfo.partPrice || 0;
@@ -1018,7 +1019,7 @@ const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()
     </tr>
   `;
 
-  $('#infoTable').append(row); // Add the row to the table
+  $('#infoTable').append(row); 
 });
 
 createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
