@@ -377,17 +377,6 @@ body {
         color: red;
         font-weight: bold;
     }
-    .modal-backdrop {
-    z-index: 1040 !important;
-}
-#newPartModal {
-    z-index: 9999 !important;
-    display: block !important;
-    opacity: 1 !important;
-}
-.modal {
-    z-index: 1055 !important;
-}
     .modal-overlay {
     position: fixed;
     top: 0;
@@ -917,7 +906,7 @@ window.location.href = "login_signup.html";
 <!-- New Part Modal -->
 <div class="modal fade" id="newPartModal" tabindex="-1" aria-labelledby="newPartModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="margin-top: 100%;margin-left: 20%;">
           <div class="modal-header">
               <h5 class="modal-title" id="newPartModalLabel">Add New Part</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -1890,14 +1879,14 @@ loadParts();
 // below is the part to add a new part and dynamically add the value to the dropdown list
     const partDropdown = document.getElementById("pReq");
     const newPartModalElement = document.getElementById("newPartModal");
-    // const newPartModal = new bootstrap.Modal(newPartModalElement);
+    const newPartModal = new bootstrap.Modal(newPartModalElement);
     const newPartNameInput = document.getElementById("newPartName");
     const saveNewPartBtn = document.getElementById("saveNewPart");
     // Open modal when "Add New Part" is selected
     partDropdown.addEventListener("change", function () {
         if (partDropdown.value === "add_new_part") {
             newPartNameInput.value = "";
-            newPartModalElement.display = "block";
+            newPartModal.show();
         }
 });
     async function saveNewPart() {
