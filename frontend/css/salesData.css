@@ -59,7 +59,7 @@ background: linear-gradient(160deg, #017b82, #0771b4);
 /* background-color: black; */
 position: fixed;
 z-index: 1;
-top: 0;
+top: 4px;
 left: 0;
 overflow-x: hidden;
 padding-top: 20px;

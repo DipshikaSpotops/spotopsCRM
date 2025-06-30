@@ -419,6 +419,17 @@ height: 36px;
 width: 186%;
 text-align: center;
 }
+.viewBtns{
+background-color: #037894;
+    border: none;
+    color: #f9f9f9;
+    margin-top: 1%;
+    font-size: 12px;
+}
+.viewBtns:hover {
+    background-color: #0b4f5f;
+    cursor: pointer;
+  }
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -593,22 +604,22 @@ aria-labelledby="userMenu"
           <tr>
             <td>
               <span id="completedOnTimeCount">Count: 0</span><br />
-              <button class="btn btn-primary btn-sm view-orders-btn" style="background-color: #6d706e;border: none;color: #f9f9f9;margin-top: 1%;" data-category="completedOnTime">View Orders</button></td>
+              <button class="btn btn-primary btn-sm view-orders-btn viewBtns" data-category="completedOnTime">View Orders</button></td>
             <td>
               <span id="alertCount">Count: 0</span><br />
-              <button class="btn btn-warning btn-sm view-orders-btn" style="background-color: #6d706e;border: none;color: #f9f9f9;margin-top: 1%;" data-category="alert">View Orders</button>
+              <button class="btn btn-warning btn-sm view-orders-btn viewBtns"  data-category="alert">View Orders</button>
             </td>
             <td>
               <span id="completedLateCount">Count: 0</span><br />
-              <button class="btn btn-danger btn-sm view-orders-btn" style="background-color: #6d706e;border: none;color: #f9f9f9;margin-top: 1%;" data-category="completedLate">View Orders</button>
+              <button class="btn btn-danger btn-sm view-orders-btn viewBtns"  data-category="completedLate">View Orders</button>
             </td>
             <td>
               <span id="warningCount">Count: 0</span><br />
-              <button class="btn btn-secondary btn-sm view-orders-btn" style="background-color: #6d706e;border: none;color: #f9f9f9;margin-top: 1%;" data-category="warning">View Orders</button>
+              <button class="btn btn-secondary btn-sm view-orders-btn viewBtns"  data-category="warning">View Orders</button>
             </td>
             <td>
               <span id="notCompletedCount">Count: 0</span><br />
-              <button class="btn btn-dark btn-sm view-orders-btn" style="background-color: #6d706e;border: none;color: #f9f9f9;margin-top: 1%;" data-category="notCompleted">View Orders</button>
+              <button class="btn btn-dark btn-sm view-orders-btn viewBtns"  data-category="notCompleted">View Orders</button>
             </td>
           </tr>
         </tbody>
