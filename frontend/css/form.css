@@ -650,9 +650,10 @@ padding: 20px;
 background-color: #f8f9fa;
 border-left: 1px solid #ddd;
 overflow-y: auto;
-margin-top: 75px;
+margin-top: 44px;
 flex: 1;
 box-sizing: border-box;
+    font-size: 13px;
 /* height: 100vh; */
 }
 
@@ -776,7 +777,7 @@ left: 15px;
 width: 14px;
 height: 14px;
 transform: rotate(45deg);
-background: #5f9f9f;
+background: #c2dae3;
 border: 4px solid #c5c5c5;
 margin: 12px;
 transition: transform 0.4s ease;
@@ -799,7 +800,7 @@ border-radius: 2px;
 font-weight: normal;
 margin-bottom: 10px;
 color: black;
-background-color: #cce0e0;
+background-color: #c2dae3;
 padding: 10px;
 border-radius: 2px;
 }
@@ -816,7 +817,7 @@ background: #f8da69;
 
 .navbar {
 color: white;
-background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
