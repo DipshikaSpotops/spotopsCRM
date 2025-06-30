@@ -1392,6 +1392,7 @@ const isStoreCredit = $("#storeCreditCheckbox").is(":checked");
 const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
 const refundToCollect = $("#refundToCollect").val();
 const refundedDate = $("#refundedDate").val();
+const refundReason = $("#refundReasonYard").val();
 console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
 if (collectRefundCheckbox === true){
 var collectRefundChecked = "Ticked"
@@ -1406,7 +1407,8 @@ refundedAmount: refundedAmount,
 storeCredit: isStoreCredit ? refundedAmount : null,
 refundedDate: refundedDate || "",
 collectRefundCheckbox: collectRefundChecked,
-refundToCollect:refundToCollect
+refundToCollect:refundToCollect,
+refundReason: refundReason
 
 };
 
@@ -2285,7 +2287,7 @@ if (!refundToCollect){
   $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
   return;
 }else if (!refundReason) {
-  alert("Please select or enter a refund reason.");
+  alert("Please select a refund reason.");
   $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
   return;
 }
