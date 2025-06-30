@@ -2301,7 +2301,7 @@ const yardIndex = $(this).data("yard-index");
 const fileInput = document.getElementById("poFilePDF");
 const file = fileInput.files[0] || "";
 if (!file) {
-  alert("Please attach the PO PDF before sending the email.");
+  alert("Please attach the PO before sending the email.");
   $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
   return;
 }
