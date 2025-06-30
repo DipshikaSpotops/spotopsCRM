@@ -81,7 +81,7 @@ border: 1px solid #0675a5;
     margin: 1% 0% -2% 42%;
     background: linear-gradient(160deg, #101a18, #037894);
     color: white;
-    border-radius: 22px;
+    border-radius: 5px;
     font-size: 12px;
 }
 .scale-wrapper {
