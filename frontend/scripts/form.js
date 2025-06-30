@@ -1393,6 +1393,7 @@ const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
 const refundToCollect = $("#refundToCollect").val();
 const refundedDate = $("#refundedDate").val();
 const refundReason = $("#refundReasonYard").val();
+console.log("refund reason",refundReason);
 console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
 if (collectRefundCheckbox === true){
 var collectRefundChecked = "Ticked"

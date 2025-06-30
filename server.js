@@ -2359,7 +2359,7 @@ return res.status(400).json({ message: "Invalid yard index" });
 
 const { refundStatus, refundedAmount, storeCredit, refundedDate, collectRefundCheckbox, refundToCollect , refundReason} = req.body;
 const firstName = req.query.firstName || "Unknown User";
-console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect);
+console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect,"reason", refundReason);
 const yardInfo = order.additionalInfo[yardIndex];
 yardInfo.refundStatus = refundStatus;
 yardInfo.refundedAmount = refundedAmount;
