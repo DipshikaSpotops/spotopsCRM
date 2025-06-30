@@ -55,7 +55,7 @@ background: linear-gradient(160deg, #017b82, #0771b4);
 font-size: 12px;
 position: fixed;
 z-index: 1;
-top: 0;
+top: 4px;
 left: 0;
 overflow-x: hidden;
 padding-top: 20px;
@@ -249,10 +249,10 @@ scrollbar-color: #29638c #141b2d;
   text-decoration: underline;
 }
 #total-tasks {
-  text-align: left;white-space: nowrap;width: 100%;color: #037894;margin-bottom: 1%;
+  text-align: left;white-space: nowrap;width: 100%;color: #037894;margin-bottom: 1%;font-size: 20px;
 }
 #myTasks{
-  text-align: left;white-space: nowrap;width: 100%;color: #037894;margin-bottom: 1%;
+  text-align: left;white-space: nowrap;width: 100%;color: #037894;margin-bottom: 1%;font-size: 20px;
 }
 #monthly-tasks {
   text-align: left;
@@ -260,6 +260,7 @@ scrollbar-color: #29638c #141b2d;
     width: 100%;
     color: #037894;
     margin-bottom: 1%;
+    font-size: 20px;
     margin-top: 2%;
 }
 table.table td {
@@ -614,13 +615,13 @@ aria-labelledby="userMenu"
       </table>
       <div style="display: flex;">
       <h1 class="fixed-header"  id="myTasks">My Tasks</h1>
-      <div>
+      <!-- <div>
         <input
         type="text"
         id="searchInput"
         placeholder="Search..."
         />
-      </div>
+      </div> -->
       </div>
       <table id="tasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
         <thead>

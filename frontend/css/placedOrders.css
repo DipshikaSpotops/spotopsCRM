@@ -50,17 +50,7 @@ body {
     cursor: pointer;
     }
     .dropdown-menu {
-    right: 0;
-    left: auto;
-    }
-    .sidebar {
-    /* background-color: black; */
-    font-size: 12px;  
-    background: linear-gradient(160deg, #017b82, #0771b4);
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
+    right: 0;  
     padding-top: 20px;
     width: 13%;
     height: 100vh;
