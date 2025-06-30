@@ -2277,16 +2277,14 @@ $("#sendRefundEmailYard").on("click", function () {
 $("#sendRefundEmailYard").prop("disabled", true).css("filter", "blur(2px)");
 // const refundReason = $("#refundReasonYard").val();
 const returnTracking = $("#returnTrackingNo").val();
-const refundToCollect = $("#refundToCollect").val()?.trim();
-const refundReason = $("#refundReasonYard").val()?.trim();
+const refundToCollect = $("#refundToCollect").val();
+const refundReason = $("#refundReasonYard").val();
 
-if (!refundToCollect || isNaN(refundToCollect) || Number(refundToCollect) <= 0) {
+if (!refundToCollect){
   alert("Please enter a valid refund amount to collect.");
   $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
   return;
-}
-
-if (!refundReason) {
+}else if (!refundReason) {
   alert("Please select or enter a refund reason.");
   $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
   return;
