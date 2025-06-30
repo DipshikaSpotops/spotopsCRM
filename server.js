@@ -68,6 +68,8 @@ console.log("MongoDB connected");
 console.error("Connection failed", err);
 });
 
+const db = mongoose.connection;
+console.log("my db",db);
 let orderCount = 0;
 
 // Add a new order and update the order number
@@ -1411,8 +1413,7 @@ res.status(500).json({ message: "Server error", error });
 }  
 });
 // monthly orders
-const db = mongoose.connection;
-console.log("my db",db);
+
 // db.orders.createIndex({ cancelledDate: 1 })
 // db.orders.createIndex({ custRefundDate: 1 })
 
