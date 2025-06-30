@@ -387,10 +387,22 @@ body {
     /* z-index: 999; Places it just below the modal div */
     }
     body.modal-active {
-    overflow: hidden; /* Prevents background scrolling when modal is active */
+    overflow: hidden; 
     }
     #addNewPartBtn{
       width: 16%;
+    }
+    #footerAddNewPart{
+      justify-content: flex-start;
+    gap: 5px;
+    }
+    #cancelModalBtn{
+    background-color: #c40505;
+    border: none;
+    }
+    #saveNewPart{
+    background-color: #04759d;
+    border: none;
     }
     #programmingCostQuoted{
       margin-left: -0.3%;
@@ -401,6 +413,9 @@ body {
     }
     body.modal-open {
   overflow: hidden;
+}
+#newPartName {
+  margin-bottom: 2%;
 }
     .custom-modal {
   position: fixed;
@@ -948,7 +963,7 @@ window.location.href = "login_signup.html";
           <div class="modal-body">
               <input type="text" id="newPartName" class="form-control" placeholder="Enter new part name">
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer" id="footerAddNewPart">
               <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
               <button type="button" class="btn btn-primary" id="saveNewPart">Save</button>
           </div>
@@ -1954,8 +1969,9 @@ cancelModalBtn.addEventListener("click", closeModal);
             await loadParts();
             // Select the newly added part
             partDropdown.value = newPartName;
-            newPartModal.hide();
-        } catch (error) {
+            newPartModal.classList.add("hidden"); 
+            document.body.classList.remove("modal-open");
+         } catch (error) {
             console.error("Error saving new part:", error);
             alert("Failed to add part.");
         }
