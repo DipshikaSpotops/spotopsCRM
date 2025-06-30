@@ -2275,9 +2275,22 @@ $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"
 // send Refund Email to the yard
 $("#sendRefundEmailYard").on("click", function () {
 $("#sendRefundEmailYard").prop("disabled", true).css("filter", "blur(2px)");
-const refundReason = $("#refundReasonYard").val();
+// const refundReason = $("#refundReasonYard").val();
 const returnTracking = $("#returnTrackingNo").val();
-const refundToCollect = $("#refundToCollect").val();
+const refundToCollect = $("#refundToCollect").val()?.trim();
+const refundReason = $("#refundReasonYard").val()?.trim();
+
+if (!refundToCollect || isNaN(refundToCollect) || Number(refundToCollect) <= 0) {
+  alert("Please enter a valid refund amount to collect.");
+  $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
+  return;
+}
+
+if (!refundReason) {
+  alert("Please select or enter a refund reason.");
+  $("#sendRefundEmailYard").prop("disabled", false).css("filter", "none");
+  return;
+}
 const shipper = $("#customerShipperReturn").val();
 // var shipperName = $("#shipperNameEdit").val();
 // if (shipperName === "Others") {
@@ -2289,7 +2302,7 @@ const file = fileInput.files[0] || "";
 console.log("yardddd",selectedYardIndex,yardIndex);
 const formData = new FormData();
 formData.append("pdfFile", file);
-fetch(`https://www.spotops360.com/orders/sendRefundEmailYard/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}&shipper=${shipper}`, {
+fetch(`https://www.spotops360.com/orders/sendRefundEmailYard/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}&shipper=${shipper}&refundReason=${refundReason}`, {
 method: "POST",
 body: formData,
 })

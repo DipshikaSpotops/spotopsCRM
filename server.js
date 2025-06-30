@@ -4247,6 +4247,7 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var returnTracking = req.query.returnTracking;
   var refundToCollect = req.query.refundToCollect;
   var shipperName = req.query.shipper;
+  var refundReason = req.query.selectedValue;
   console.log("yardIndex",yardIndex);
   // const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
   // date.setDate(date.getDate() - 1);
@@ -4285,6 +4286,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   <p>Requested refund amount : $${refundToCollect} </p>
   <p>Stock No: ${stockNo}</p>
   <p>Return tracking number : ${returnTracking} (${shipperName})</p>
+  <p>Refund Reason : ${refundReason}</p>
   <p>I kindly request you to process the refund at your earliest convenience and share the refund receipt with us.</p>
   <p>If any further information or documentation is required, please do not hesitate to contact us.</p>
   <p>Thank you for your understanding and cooperation.</p>
