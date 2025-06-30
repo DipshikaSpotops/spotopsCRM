@@ -38,7 +38,8 @@ cursor: pointer;
 .navbar {
   color: white;
 /* background-color: black; */
-background: linear-gradient(160deg, #101a18, #80cbbc);
+/* background: linear-gradient(160deg, #101a18, #80cbbc); */
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -50,7 +51,8 @@ z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
 .sidebar {
-  background: linear-gradient(160deg, #101a18, #80cbbc);
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
 position: fixed;
 z-index: 1;
 top: 0;
@@ -240,7 +242,36 @@ scrollbar-color: #29638c #141b2d;
     background-color: #29638c;
 }
 #mainHeading {
-  text-align: center; margin-right: 125px; margin-top: 37px;color: #023f42;white-space: nowrap;
+  text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
+  text-decoration: underline;
+}
+#total-tasks {
+  text-align: left;white-space: nowrap;width: 100%;color: #037894;margin-bottom: 1%;font-size: 12px;
+}
+#myTasks{
+  text-align: left;white-space: nowrap;width: 100%;color: #037894;margin-bottom: 1%;font-size: 12px;
+}
+#monthly-tasks {
+  text-align: left;
+    white-space: nowrap;
+    width: 100%;
+    color: #037894;
+    margin-bottom: 1%;
+    margin-top: 2%;
+    font-size: 12px;
+}
+table.table td {
+  overflow: hidden;
+    text-overflow: ellipsis;
+    color: #106072;
+    text-align: left;
+    font-size: 13px;
+}
+h1 {
+  font-size: 2rem;
 }
 #monthYearPicker{
   background-color: #35554f;
@@ -266,15 +297,17 @@ background-color: #96dce1;
   display: flex;
 }
 table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 10; 
-  background-color: #35554f; 
-  color: white;
-  padding: 8px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    transform: translateZ(0);
+    overflow-anchor: none;
+    background-color: #037894;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap;
 }
 /* Hover effect - highlights the entire row */
 .table tbody tr:hover {
@@ -543,8 +576,8 @@ aria-labelledby="userMenu"
 </div>
 </div>
     <div class="main-content">
-      <h1 class="fixed-header" style="text-align: center; margin-right: 1%;color: black;margin-top: 0%;margin-bottom: 2%;">View Task Summary</h1>
-      <h3 class="fixed-header" style="text-align: left;white-space: nowrap;width: 100%;color: black;margin-bottom: 1%;" id="total-tasks">View My Tasks</h3>
+      <h1 class="fixed-header" id="mainHeading">View Task Summary</h1>
+      <h3 class="fixed-header" id="total-tasks">View My Tasks</h3>
         <table class="table table-bordered text-center" style="color: black; margin-top: 20px;">
         <thead>
           <tr>
@@ -580,7 +613,7 @@ aria-labelledby="userMenu"
         </tbody>
       </table>
       <div style="display: flex;">
-      <h3 class="fixed-header" style="text-align: left;white-space: nowrap;width: 100%;color: black;margin-bottom: 1%;" id="total-tasks">My Tasks</h3>
+      <h2 class="fixed-header"  id="myTasks">My Tasks</h2>
       <div>
         <input
         type="text"
