@@ -380,7 +380,11 @@ body {
     .modal-backdrop {
     z-index: 1040 !important;
 }
-
+#newPartModal {
+    z-index: 9999 !important;
+    display: block !important;
+    opacity: 1 !important;
+}
 .modal {
     z-index: 1055 !important;
 }
@@ -914,7 +918,6 @@ window.location.href = "login_signup.html";
 <div class="modal fade" id="newPartModal" tabindex="-1" aria-labelledby="newPartModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-dialog modal-dialog-centered">
-
           <div class="modal-header">
               <h5 class="modal-title" id="newPartModalLabel">Add New Part</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
