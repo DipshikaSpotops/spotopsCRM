@@ -399,6 +399,35 @@ body {
         width: 101%;
         margin-bottom: 3%
     }
+    .custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.custom-dialog {
+  background: white;
+  border-radius: 8px;
+  padding: 0;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.custom-content {
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
        @media (max-width: 768px) {
         .top-section{
           margin-top: 52px;
@@ -904,12 +933,12 @@ window.location.href = "login_signup.html";
   
 <!-- popup to add a new part -->
 <!-- New Part Modal -->
-<div class="modal fade" id="newPartModal" tabindex="-1" aria-labelledby="newPartModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content" style="margin-top: 100%;margin-left: 20%;">
+<div id="newPartModal" class="custom-modal hidden" tabindex="-1" aria-labelledby="newPartModalLabel" aria-hidden="true">
+  <div class="custom-dialog">
+      <div class="custom-content">
           <div class="modal-header">
               <h5 class="modal-title" id="newPartModalLabel">Add New Part</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <button type="button" class="close" id="closeModalBtn" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
               </button>
           </div>
@@ -917,7 +946,7 @@ window.location.href = "login_signup.html";
               <input type="text" id="newPartName" class="form-control" placeholder="Enter new part name">
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
               <button type="button" class="btn btn-primary" id="saveNewPart">Save</button>
           </div>
       </div>
@@ -1877,20 +1906,20 @@ $("body").removeClass("modal-active");
 fetchNotifications();
 loadParts();
 // below is the part to add a new part and dynamically add the value to the dropdown list
-  const partDropdown = document.getElementById("pReq");
-  const newPartModalElement = document.getElementById("newPartModal");
-  const newPartNameInput = document.getElementById("newPartName");
-  const saveNewPartBtn = document.getElementById("saveNewPart");
+const partDropdown = document.getElementById("pReq");
+const newPartModal = document.getElementById("newPartModal");
+const newPartNameInput = document.getElementById("newPartName");
+const saveNewPartBtn = document.getElementById("saveNewPart");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const cancelModalBtn = document.getElementById("cancelModalBtn");
 
-  // Instantiate the modal (only once)
-  const newPartModal = new bootstrap.Modal(newPartModalElement);
-
-  partDropdown.addEventListener("change", function () {
-    if (partDropdown.value === "add_new_part") {
-      newPartNameInput.value = "";
-      newPartModal.show();
-    }
-  });
+partDropdown.addEventListener("change", () => {
+  if (partDropdown.value === "add_new_part") {
+    newPartNameInput.value = "";
+    newPartModal.classList.remove("hidden");
+    newPartNameInput.focus();
+  }
+});
     async function saveNewPart() {
         const newPartName = newPartNameInput.value.trim();
         if (!newPartName) {
