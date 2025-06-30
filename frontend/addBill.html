@@ -27,7 +27,7 @@ cursor: pointer;
 }
 .navbar {
 color: white;
-background-color: black;
+background: linear-gradient(160deg, #017b82, #0771b4);
 padding: 10px 20px;
 display: flex;
 justify-content: space-between;
@@ -38,12 +38,19 @@ top: 0;
 z-index: 2;
 border-bottom: 1px solid #e0e0e0;
 }
+#mainHeading {
+  text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
+  text-decoration: underline;
+}
+
 
 .sidebar {
-background-color: black;
 position: fixed;
 z-index: 1;
-top: 0;
+top: 4px;
 left: 0;
 overflow-x: hidden;
 padding-top: 20px;
@@ -51,6 +58,9 @@ width: 13%;
 height: 100vh;
 padding: 50px 0px;
 transition: transform 0.3s ease;
+background: linear-gradient(160deg, #017b82, #0771b4);
+font-size: 12px;
+text-align: left;
 }
 .sidebar .nav-link {
 color: #ffffff;
@@ -125,9 +135,9 @@ display: block;
 }
 /* Specific styles for the New Order Entry page */
 #addoBtn {
-margin: 0% 39.4%;
-background-color: black;
-color: white;
+  margin: 4% 3.5%;
+  background: linear-gradient(160deg, #101a18, #037894);
+  color: white;
 }
 
 #newBillForm {
@@ -182,7 +192,7 @@ border-radius: 10px;
 color: grey;
 height: 5vh;
 text-align: center;
-background-color: black;
+background-color: #037894;
 }
 /* for dark mode */
 .dark-mode {
@@ -431,7 +441,7 @@ window.location.href = "login_signup.html";
 </div>
 
 <div class="main-content">
-<h2 style="margin: 0% 0% -3% 18%;color: grey;">ADD NEW BILL</h2>
+<h2 id="mainHeading">ADD NEW BILL</h2>
 <div id="firstRow" style="display: flex; margin: 0% 28%;">
 <div>
 <input type="text" id="billAgent" required readonly/>
