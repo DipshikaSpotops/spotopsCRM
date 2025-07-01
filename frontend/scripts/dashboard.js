@@ -522,7 +522,6 @@ function analyzeTopAgentAndBestSalesDay(orders) {
 
   console.log("Top Agent Data:", topAgentToday);
   console.log("Best Sales Day Data:", bestDay);
-  showSalesInsightsModal(topAgentToday, bestDay);
 }
 
 function cleanDateString(dateStr) {
