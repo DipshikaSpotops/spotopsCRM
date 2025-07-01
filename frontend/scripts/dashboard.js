@@ -221,14 +221,19 @@ function showSalesInsightsPopup(topAgentToday, bestDay) {
 
   // Sales info
   const agent = topAgentToday?.[0] || "N/A";
-  const agentAmount = topAgentToday?.[1]?.toFixed(2) || "0.00";
-  const bestDayDate = bestDay?.[0] || "N/A";
-  const bestDayAmount = bestDay?.[1]?.toFixed(2) || "0.00";
+  const agentAmount = topAgentToday?.[1] != null ? topAgentToday[1].toFixed(2) : "N/A";
+const bestDayAmount = bestDay?.[1] != null ? bestDay[1].toFixed(2) : "N/A";
 
+  const bestDayDate = bestDay?.[0] || "N/A";
+const formattedBestDay = new Date(bestDayDate).toLocaleDateString("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric"
+});
   content.innerHTML += `
     <h4>Sales Insights</h4>
     <p><strong>Top Agent:</strong> ${agent} ($${agentAmount})</p>
-    <p><strong>Best Sales Day:</strong> ${bestDayDate} ($${bestDayAmount})</p>
+    <p><strong>Best Sales Day:</strong> ${formattedBestDay} ($${bestDayAmount})</p>
   `;
 
   modal.appendChild(content);
