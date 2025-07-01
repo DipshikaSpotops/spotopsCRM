@@ -428,7 +428,7 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
   }
 
   const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
- console.log("topAgentToday",topAgentToday);
+ console.log("topAgentToday",topAgentToday,"bestDay",bestDay);
   // Output to modal
   document.getElementById("salesInsightsContent").innerHTML = topAgentToday
     ? `
