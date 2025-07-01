@@ -638,6 +638,22 @@ z-index: 999;
   font-size: 24px;
   cursor: pointer;
 }
+h4 {
+    color: #0e405b;
+    text-decoration: underline;
+    font-size: 1rem;
+}
+#dynamicSalesModal{
+      background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    /* text-align: center; */
+    font-size: 14px;
+}
 body.no-scroll {
   overflow: hidden; /* Disable scrolling */
 }
