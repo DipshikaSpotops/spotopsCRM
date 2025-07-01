@@ -175,16 +175,13 @@ cachedDallasDate = currentDallasDate;
   updateSummaryCards(orders);
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
-
-  // This already fetches June/July logic later on arrow buttons
-  // So you're good now!
 }
 function showSalesInsightsPopup(topAgentToday, bestDay) {
-  // Check if modal already exists
+  // Remove existing modal if any
   const existing = document.getElementById("dynamicSalesModal");
   if (existing) existing.remove();
 
-  // Create modal wrapper
+  // Create modal overlay
   const modal = document.createElement("div");
   modal.id = "dynamicSalesModal";
   modal.style.position = "fixed";
@@ -198,7 +195,7 @@ function showSalesInsightsPopup(topAgentToday, bestDay) {
   modal.style.alignItems = "center";
   modal.style.zIndex = "9999";
 
-  // Create modal content
+  // Create content box
   const content = document.createElement("div");
   content.style.backgroundColor = "#fff";
   content.style.padding = "20px";
@@ -206,27 +203,29 @@ function showSalesInsightsPopup(topAgentToday, bestDay) {
   content.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
   content.style.maxWidth = "400px";
   content.style.width = "90%";
+  content.style.position = "relative";
   content.style.textAlign = "center";
 
-  // Close button
+  // Close button (×)
   const closeBtn = document.createElement("span");
   closeBtn.innerHTML = "&times;";
   closeBtn.style.position = "absolute";
-  closeBtn.style.top = "20px";
-  closeBtn.style.right = "30px";
-  closeBtn.style.fontSize = "30px";
+  closeBtn.style.top = "10px";
+  closeBtn.style.right = "15px";
+  closeBtn.style.fontSize = "28px";
   closeBtn.style.cursor = "pointer";
-  closeBtn.style.color = "#fff";
+  closeBtn.style.color = "#000";
   closeBtn.addEventListener("click", () => modal.remove());
-  modal.appendChild(closeBtn);
 
-  // Add data
+  content.appendChild(closeBtn);
+
+  // Sales info
   const agent = topAgentToday?.[0] || "N/A";
   const agentAmount = topAgentToday?.[1]?.toFixed(2) || "0.00";
   const bestDayDate = bestDay?.[0] || "N/A";
   const bestDayAmount = bestDay?.[1]?.toFixed(2) || "0.00";
 
-  content.innerHTML = `
+  content.innerHTML += `
     <h4>Sales Insights</h4>
     <p><strong>Top Agent:</strong> ${agent} ($${agentAmount})</p>
     <p><strong>Best Sales Day:</strong> ${bestDayDate} ($${bestDayAmount})</p>
@@ -234,6 +233,11 @@ function showSalesInsightsPopup(topAgentToday, bestDay) {
 
   modal.appendChild(content);
   document.body.appendChild(modal);
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
 }
 document.getElementById("salesInfoIcon").addEventListener("click", () => {
   try {
