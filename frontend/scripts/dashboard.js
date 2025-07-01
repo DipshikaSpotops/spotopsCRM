@@ -814,12 +814,64 @@ async function preloadLastThreeMonths() {
   doughnutMonthIndex = allFetchedMonthlyData.length - 1; // Latest month
   updateDoughnutChart(doughnutMonthIndex);
 }
+function updateMonthlyFinancialSummary(index) {
+  const data = allFetchedMonthlyData[index];
+  if (!data || !Array.isArray(data.orders)) return;
+
+  const orders = data.orders;
+
+  let sales = 0;
+  let estRevenue = 0;
+  let actualRevenue = 0;
+  let purchases = 0;
+  let cancelled = 0;
+  let refunded = 0;
+  let refundAmount = 0;
+
+  orders.forEach(order => {
+    sales += parseFloat(order.soldP) || 0;
+    estRevenue += parseFloat(order.grossProfit) || 0;
+    actualRevenue += parseFloat(order.actualGP) || 0;
+
+    if (order.orderStatus === "Order Cancelled") cancelled++;
+    if (order.orderStatus === "Refunded") {
+      refunded++;
+      refundAmount += parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+    }
+
+    if (Array.isArray(order.additionalInfo)) {
+      order.additionalInfo.forEach(info => {
+        const partPrice = parseFloat(info.partPrice) || 0;
+        const shipping = parseFloat(info.shippingDetails?.match(/(\d+(\.\d+)?)/)?.[0]) || 0;
+        const others = parseFloat(info.others) || 0;
+        purchases += partPrice + shipping + others;
+      });
+    }
+  });
+
+  // Update DOM (assumes you have elements with these IDs)
+  $("#salesTotal").text(`$${sales.toFixed(2)}`);
+  $("#grossProfitTotal").text(`$${estRevenue.toFixed(2)}`);
+  $("#actualGPTotal").text(`$${actualRevenue.toFixed(2)}`);
+  $("#purchaseTotal").text(`$${purchases.toFixed(2)}`);
+
+  // Cancel/Refund box (optional custom container)
+  $("#monthlyCancelRefundBox").html(`
+    <div class="text-center p-2">
+      <h5 class="text-warning" style="color: #ffffff !important;">Monthly Cancellations & Refunds</h5>
+      <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
+      <p><strong>Refunded Orders:</strong> ${refunded}</p>
+      <p><strong>Total Refund Amount:</strong> $${refundAmount.toFixed(2)}</p>
+    </div>
+  `);
+}
 
 // Event listeners
 document.getElementById("prevMonthBtn").addEventListener("click", () => {
   if (doughnutMonthIndex > 0) {
     doughnutMonthIndex--;
     updateDoughnutChart(doughnutMonthIndex);
+    updateMonthlyFinancialSummary(doughnutMonthIndex); // ← Add this
   }
 });
 
@@ -827,6 +879,7 @@ document.getElementById("nextMonthBtn").addEventListener("click", () => {
   if (doughnutMonthIndex < allFetchedMonthlyData.length - 1) {
     doughnutMonthIndex++;
     updateDoughnutChart(doughnutMonthIndex);
+    updateMonthlyFinancialSummary(doughnutMonthIndex); // ← Add this
   }
 });
 
@@ -842,7 +895,9 @@ document.getElementById("goToMonthBtn").addEventListener("click", async () => {
   const orders = await fetchMonthlyOrders(monthShort, parseInt(year));
   allFetchedMonthlyData.push({ label, orders });
   doughnutMonthIndex = allFetchedMonthlyData.length - 1;
+
   updateDoughnutChart(doughnutMonthIndex);
+  updateMonthlyFinancialSummary(doughnutMonthIndex); // ← Add this line
 });
 
 // Initial call
