@@ -1,5 +1,7 @@
 $(document).ready(async function () {
 console.log("ready function");
+let cachedDailyOrders = [];
+let cachedDallasDate = null;
 $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
@@ -158,13 +160,17 @@ async function fetchRefundedOrders(month, year) {
 }
 
 async function fetchAndRenderCharts() {
-  const { orders, currentDallasDate } = await fetchDailyOrders();
+const result = await fetchDailyOrders();
+if (!result) return;
+
+const { orders, currentDallasDate } = result;
+cachedDailyOrders = orders;
+cachedDallasDate = currentDallasDate;
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const shortMonth = months[currentDallasDate.getMonth()];
   const year = currentDallasDate.getFullYear();
-
-  await loadMonthlyCancellationRefundData(shortMonth, year); // <-- 👈 this ensures data shows on load
+  await loadMonthlyCancellationRefundData(shortMonth, year); 
 
   updateSummaryCards(orders);
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
@@ -173,12 +179,12 @@ async function fetchAndRenderCharts() {
   // This already fetches June/July logic later on arrow buttons
   // So you're good now!
 }
-document.getElementById("salesInfoIcon").addEventListener("click", async () => {
-  const { orders, currentDallasDate } = await fetchDailyOrders(); // or use cached orders if available
-  await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
-  document.getElementById("salesInsightsPopover").style.display = "block"; // adjust as needed
-});
+document.getElementById("salesInfoIcon").addEventListener("click", () => {
+  if (!cachedDailyOrders.length || !cachedDallasDate) return;
 
+  analyzeTopAgentAndBestSalesDay(cachedDailyOrders, cachedDallasDate);
+  document.getElementById("salesInsightsPopover").style.display = "block";
+});
 
 // Fetch daily orders and display them in a chart
 // Global variable to track the daily orders chart
