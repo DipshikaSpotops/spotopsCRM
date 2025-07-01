@@ -399,7 +399,11 @@ if (team in teamAgentsMap) {
     teamAgentsMap[team].includes(order.salesAgent)
   );
 }
-        document.getElementById("showTotalOrders").innerHTML = `No of Refunded Orders- ${allOrders.length}`;
+const totalRefundedAmount = allOrders.reduce((sum, order) => {
+  const amount = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+  return sum + (isNaN(amount) ? 0 : amount);
+}, 0);
+        document.getElementById("showTotalOrders").innerHTML = `Refunded Orders- ${allOrders.length}`;
 
         renderTableRows(currentPage);
         createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -562,7 +566,12 @@ if (team in teamAgentsMap) {
   );
 }
 var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `No of Refunded Orders- ${allOrdersLength}`;
+const totalRefundedAmount = allOrders.reduce((sum, order) => {
+  const amount = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+  return sum + (isNaN(amount) ? 0 : amount);
+}, 0);
+
+document.getElementById("showTotalOrders").innerHTML = `Refunded Orders - ${allOrdersLength} | Amount: $${totalRefundedAmount.toFixed(2)}`;
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
