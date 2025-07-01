@@ -254,7 +254,8 @@ document.getElementById("salesInfoIcon").addEventListener("click", () => {
     // Calculate top agent & best day
     const topAgentToday = calculateTopAgent(cachedDailyOrders);
     const bestDay = calculateBestSalesDay(cachedDailyOrders);
-
+    console.log("Top Agent Data:", topAgentToday);
+    console.log("Best Sales Day Data:", bestDay);
     showSalesInsightsPopup(topAgentToday, bestDay);
 
   } catch (err) {
