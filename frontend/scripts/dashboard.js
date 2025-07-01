@@ -197,6 +197,7 @@ function showSalesInsightsPopup(topAgentToday, bestDay) {
 
   // Create content box
   const content = document.createElement("div");
+  content.id= "dynamicSalesModalContent";
   content.style.backgroundColor = "#fff";
   content.style.padding = "20px";
   content.style.borderRadius = "8px";
@@ -208,6 +209,7 @@ function showSalesInsightsPopup(topAgentToday, bestDay) {
 
   // Close button (×)
   const closeBtn = document.createElement("span");
+  closeBtn.id = "closeBtn"; 
   closeBtn.innerHTML = "&times;";
   closeBtn.style.position = "absolute";
   closeBtn.style.top = "10px";
@@ -288,8 +290,8 @@ function calculateBestSalesDay(orders) {
   return bestDay;
 }
 
-document.getElementById("closeInsightsModal").addEventListener("click", () => {
-  document.getElementById("salesInsightsModal").style.display = "none";
+document.getElementById("closeBtn").addEventListener("click", () => {
+  document.getElementById("dynamicSalesModalContent").style.display = "none";
 });
 // Fetch daily orders and display them in a chart
 // Global variable to track the daily orders chart
