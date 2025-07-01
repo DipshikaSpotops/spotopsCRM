@@ -865,21 +865,36 @@ function updateMonthlyFinancialSummary(index) {
     </div>
   `);
 }
+async function loadMonthlyCancellationRefundData(monthShort, year) {
+  const [cancelledOrders, refundedOrders] = await Promise.all([
+    fetchCancelledOrders(monthShort, year),
+    fetchRefundedOrders(monthShort, year)
+  ]);
 
+  analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders);
+}
 // Event listeners
-document.getElementById("prevMonthBtn").addEventListener("click", () => {
+document.getElementById("prevMonthBtn").addEventListener("click", async () => {
   if (doughnutMonthIndex > 0) {
     doughnutMonthIndex--;
     updateDoughnutChart(doughnutMonthIndex);
-    updateMonthlyFinancialSummary(doughnutMonthIndex); // ← Add this
+    updateMonthlyFinancialSummary(doughnutMonthIndex);
+
+    const { label } = allFetchedMonthlyData[doughnutMonthIndex];
+    const [monthName, yearStr] = label.split(" ");
+    await loadMonthlyCancellationRefundData(monthName.slice(0, 3), parseInt(yearStr));
   }
 });
 
-document.getElementById("nextMonthBtn").addEventListener("click", () => {
+document.getElementById("nextMonthBtn").addEventListener("click", async () => {
   if (doughnutMonthIndex < allFetchedMonthlyData.length - 1) {
     doughnutMonthIndex++;
     updateDoughnutChart(doughnutMonthIndex);
-    updateMonthlyFinancialSummary(doughnutMonthIndex); // ← Add this
+    updateMonthlyFinancialSummary(doughnutMonthIndex);
+
+    const { label } = allFetchedMonthlyData[doughnutMonthIndex];
+    const [monthName, yearStr] = label.split(" ");
+    await loadMonthlyCancellationRefundData(monthName.slice(0, 3), parseInt(yearStr));
   }
 });
 
@@ -897,7 +912,8 @@ document.getElementById("goToMonthBtn").addEventListener("click", async () => {
   doughnutMonthIndex = allFetchedMonthlyData.length - 1;
 
   updateDoughnutChart(doughnutMonthIndex);
-  updateMonthlyFinancialSummary(doughnutMonthIndex); // ← Add this line
+  updateMonthlyFinancialSummary(doughnutMonthIndex);
+  await loadMonthlyCancellationRefundData(monthShort, parseInt(year));
 });
 
 // Initial call
