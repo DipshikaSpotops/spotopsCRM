@@ -159,20 +159,21 @@ async function fetchRefundedOrders(month, year) {
 
 async function fetchAndRenderCharts() {
   const { orders, currentDallasDate } = await fetchDailyOrders();
-  // const allOrders = await fetchAllOrders();
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const shortMonth = months[currentDallasDate.getMonth()];
+  const year = currentDallasDate.getFullYear();
+
+  await loadMonthlyCancellationRefundData(shortMonth, year); // <-- 👈 this ensures data shows on load
+
   updateSummaryCards(orders);
   await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
   await fetchAndDisplayThreeMonthsData();
-  const [cancelledOrders, refundedOrders] = await Promise.all([
-  fetchCancelledOrders(month, year),
-  fetchRefundedOrders(month, year)
-]);
-setTimeout(() => {
-  analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders);
-}, 100);
-  // await analyzeMonthlyCancelRefunds(allOrders, currentDallasDate);
-  // await analyzeMonthlyReimbursements(allOrders, currentDallasDate);
+
+  // This already fetches June/July logic later on arrow buttons
+  // So you're good now!
 }
+
 
 // Fetch daily orders and display them in a chart
 // Global variable to track the daily orders chart
