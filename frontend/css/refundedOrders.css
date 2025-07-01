@@ -18,13 +18,12 @@ margin: 0;
   margin: 0 5px;
 }
 .previousNext{
-  background-color: #35554f;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  font-size: 18px;
-  cursor: pointer;
+    background-color: #037894;
+    color: white;
+    border: none;
+    padding: 4px;
+    border-radius: 50%;
+    font-size: 18px;
 }
 .previousNext:disabled {
   background-color: #ccc;
