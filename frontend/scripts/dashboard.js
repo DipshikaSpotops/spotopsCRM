@@ -181,11 +181,12 @@ cachedDallasDate = currentDallasDate;
 }
 document.getElementById("salesInfoIcon").addEventListener("click", () => {
   if (!cachedDailyOrders.length || !cachedDallasDate) return;
-
   analyzeTopAgentAndBestSalesDay(cachedDailyOrders, cachedDallasDate);
-  document.getElementById("salesInsightsPopover").style.display = "block";
+  document.getElementById("salesInsightsModal").style.display = "flex";
 });
-
+document.getElementById("closeInsightsModal").addEventListener("click", () => {
+  document.getElementById("salesInsightsModal").style.display = "none";
+});
 // Fetch daily orders and display them in a chart
 // Global variable to track the daily orders chart
 let dailyOrdersChartInstance = null;
@@ -409,23 +410,27 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
   if (Object.keys(topAgents).length > 0) {
     topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0];
   }
-    const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
-document.getElementById("reimbursedThisMonth").innerHTML = topAgentToday
-  ? `
-    <div class="text-center p-2">
-      <h5>Top Sales Agent Today</h5>
-      <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
-    </div>
-    <div class="text-center p-2">
-      <h5 class="text-info">Best Sales Day</h5>
-      <p><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
-    </div>`
-  : `
-    <div class="text-center p-2 text-muted">
-      <p>No Sales Made Today</p>
-      <p>No Best Day Data</p>
-    </div>`;
+
+  const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
+
+  // Output to modal
+  document.getElementById("salesInsightsContent").innerHTML = topAgentToday
+    ? `
+      <div class="text-center p-2">
+        <h5>Top Sales Agent Today</h5>
+        <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
+      </div>
+      <div class="text-center p-2">
+        <h5 class="text-info">Best Sales Day</h5>
+        <p><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
+      </div>`
+    : `
+      <div class="text-center p-2 text-muted">
+        <p>No Sales Made Today</p>
+        <p>No Best Day Data</p>
+      </div>`;
 }
+
 function cleanDateString(dateStr) {
   if (!dateStr) return null;
 
