@@ -252,12 +252,17 @@ window.location.href = "login_signup.html";
   </div>
 
   <!-- 3. Sales Insights -->
-  <div class="chart-wrapper" style="background-color: #f7fefc;">
-    <h4 style="text-align: center; background-color: #edfeff; padding: 10px; border-radius: 8px;">Sales Insights</h4>
-    <div id="topAgentBox" class="sales-insight-box"></div>
-    <div id="bestDayBox" class="sales-insight-box"></div>
-    <div id="monthlyCancelRefundBox" class="sales-insight-box"></div>
-  </div>
+<div class="chart-wrapper" style="background-color: #f7fefc;">
+  <h4 style="text-align: center; background-color: #edfeff; padding: 10px; border-radius: 8px;">
+    Sales Insights
+    <i class="fas fa-info-circle text-primary" id="salesInfoIcon" style="cursor: pointer; margin-left: 8px;" title="Click for more details"></i>
+  </h4>
+
+  <!-- Visible by default -->
+  <div id="monthlyCancelRefundBox" class="sales-insight-box"></div>
+  <!-- Hidden insights shown via icon click -->
+  <div id="reimbursedThisMonth" class="sales-insight-box d-none"></div>
+</div>
 </div>
 
      

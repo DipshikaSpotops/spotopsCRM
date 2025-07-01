@@ -203,6 +203,12 @@ cursor: pointer;
   min-width: 250px;
   max-width: 38%;
 }
+.sales-insight-box {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 10px;
+}
 .charts-container {
   display: flex;
   margin-top: -1%;
