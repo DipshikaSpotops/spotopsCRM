@@ -216,6 +216,11 @@ if (!monthShort || !year) {
   monthShort = months[currentDallasDate.getMonth()];
   year = currentDallasDate.getFullYear();
 }
+const displayMonthName = new Date(`${monthShort} 1, ${year}`).toLocaleString("default", {
+  month: "long",
+  year: "numeric"
+});
+document.getElementById("dailyOrdersTitle").innerText = `Daily Orders (${displayMonthName})`;
 console.log("month",month,"year",year);
   try {
     console.log(`Fetching data for ${month} ${year}`);
@@ -231,9 +236,8 @@ const { orders } = response.data;
 
 const daysInMonth = new Date(currentDallasDate.getFullYear(), currentDallasDate.getMonth() + 1, 0).getDate();
 const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
-const totalOrdersData = Array.from({ length: daysInMonth }, (_, i) => {
-  return i < currentDallasDate.getDate() ? 0 : null;
-});
+const totalOrdersData = Array(daysInMonth).fill(0);
+
 orders.forEach(order => {
   const orderDateInDallas = new Date(
     new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
