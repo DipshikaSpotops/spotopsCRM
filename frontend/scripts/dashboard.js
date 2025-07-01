@@ -266,7 +266,7 @@ function calculateTopAgent(orders) {
   const agentSales = {};
   orders.forEach(order => {
     const agent = order.salesAgent;
-    const value = parseFloat(order.soldP || 0);  // ← FIXED HERE
+    const value = parseFloat(order.grossProfit || 0);  
     if (!agentSales[agent]) agentSales[agent] = 0;
     agentSales[agent] += value;
   });
@@ -279,7 +279,7 @@ function calculateBestSalesDay(orders) {
   const dailySales = {};
   orders.forEach(order => {
     const dateKey = new Date(order.orderDate).toISOString().split("T")[0];
-    const value = parseFloat(order.soldP || 0);  // ← FIXED HERE
+    const value = parseFloat(order.grossProfit || 0);  
     if (!dailySales[dateKey]) dailySales[dateKey] = 0;
     dailySales[dateKey] += value;
   });
@@ -501,7 +501,7 @@ function analyzeTopAgentAndBestSalesDay(orders) {
   orders.forEach(order => {
     const agent = order.salesAgent;
     const date = new Date(order.orderDate).toISOString().split("T")[0]; // 'YYYY-MM-DD'
-    const sold = parseFloat(order.soldP);
+    const sold = parseFloat(order.grossProfit);
     console.log("sold",sold);
     if (!isNaN(sold)) {
       agentSales[agent] = (agentSales[agent] || 0) + sold;
@@ -636,7 +636,7 @@ function analyzeMonthlyReimbursements(orders, currentDallasDate) {
   });
 
   // Log each order reimbursement
-  console.log("🧾 Orders Reimbursed This Month:");
+  console.log("Orders Reimbursed This Month:");
   reimbursedOrdersDetails.forEach(detail =>
     console.log(`Order: ${detail.orderNo} | Reimbursed: $${detail.amount}`)
   );
