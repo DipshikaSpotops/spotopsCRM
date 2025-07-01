@@ -207,18 +207,20 @@ function getChartColors() {
 
 let month;
 let year;
-async function fetchDailyOrders() {
+async function fetchDailyOrders(monthShort = null, year = null) {
   const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
   const currentDallasDate = new Date(now);
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
- month = months[currentDallasDate.getMonth()];
- year = currentDallasDate.getFullYear();
+if (!monthShort || !year) {
+  monthShort = months[currentDallasDate.getMonth()];
+  year = currentDallasDate.getFullYear();
+}
 console.log("month",month,"year",year);
   try {
     console.log(`Fetching data for ${month} ${year}`);
 const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-  params: { month, year, limit: 1000 },
+  params: { month: monthShort, year, limit: 1000 },
 });
 
 const { orders } = response.data;
@@ -882,10 +884,12 @@ document.getElementById("prevMonthBtn").addEventListener("click", async () => {
 
     const { label } = allFetchedMonthlyData[doughnutMonthIndex];
     const [monthName, yearStr] = label.split(" ");
-    await loadMonthlyCancellationRefundData(monthName.slice(0, 3), parseInt(yearStr));
+    const monthShort = monthName.slice(0, 3);
+
+    await loadMonthlyCancellationRefundData(monthShort, parseInt(yearStr));
+    await fetchDailyOrders(monthShort, parseInt(yearStr)); // 👈 Update chart here
   }
 });
-
 document.getElementById("nextMonthBtn").addEventListener("click", async () => {
   if (doughnutMonthIndex < allFetchedMonthlyData.length - 1) {
     doughnutMonthIndex++;
@@ -894,10 +898,12 @@ document.getElementById("nextMonthBtn").addEventListener("click", async () => {
 
     const { label } = allFetchedMonthlyData[doughnutMonthIndex];
     const [monthName, yearStr] = label.split(" ");
-    await loadMonthlyCancellationRefundData(monthName.slice(0, 3), parseInt(yearStr));
+    const monthShort = monthName.slice(0, 3);
+
+    await loadMonthlyCancellationRefundData(monthShort, parseInt(yearStr));
+    await fetchDailyOrders(monthShort, parseInt(yearStr));
   }
 });
-
 document.getElementById("goToMonthBtn").addEventListener("click", async () => {
   const monthInput = document.getElementById("customMonth").value;
   if (!monthInput) return;
@@ -914,6 +920,7 @@ document.getElementById("goToMonthBtn").addEventListener("click", async () => {
   updateDoughnutChart(doughnutMonthIndex);
   updateMonthlyFinancialSummary(doughnutMonthIndex);
   await loadMonthlyCancellationRefundData(monthShort, parseInt(year));
+  await fetchDailyOrders(monthShort, parseInt(year)); // 👈 Update chart here
 });
 
 // Initial call
