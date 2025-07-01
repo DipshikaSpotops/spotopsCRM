@@ -491,27 +491,20 @@ orders.forEach(order => {
 async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
   const topAgents = {};
   const dailyGPGroups = {};
-
   orders.forEach(order => {
-    const orderDate = new Date(
-      new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
-    );
+  const agent = order.salesAgent;
+  const date = new Date(order.orderDate).toISOString().split("T")[0]; // 'YYYY-MM-DD'
 
-    const key = `${orderDate.getFullYear()}-${orderDate.getMonth() + 1}-${orderDate.getDate()}`;
-    const agent = order.salesAgent || "Unknown";
-    const gp = order.grossProfit || 0;
+  const sold = parseFloat(order.soldP); // <- This is probably NaN
 
-    // Count today's sales per agent
-    if (orderDate.toDateString() === currentDallasDate.toDateString()) {
-      if (!topAgents[agent]) topAgents[agent] = 0;
-      topAgents[agent] += gp;
-    }
-
-    // Sum GP for each day
-    if (!dailyGPGroups[key]) dailyGPGroups[key] = 0;
-    dailyGPGroups[key] += gp;
-  });
-
+  if (!isNaN(sold)) {
+    agentSales[agent] = (agentSales[agent] || 0) + sold;
+    daySales[date] = (daySales[date] || 0) + sold;
+  } else {
+    console.warn("Invalid or missing soldP:", order.orderNo, order.soldP);
+  }
+});
+console.log("Orders used for analysis:", orders.length, orders);
   const topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0] || null;
   const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0] || null;
 
