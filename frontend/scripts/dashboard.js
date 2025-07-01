@@ -488,47 +488,41 @@ orders.forEach(order => {
   }
 }
 
-async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
-  const topAgents = {};
-  const dailyGPGroups = {};
-  orders.forEach(order => {
-  const agent = order.salesAgent;
-  const date = new Date(order.orderDate).toISOString().split("T")[0]; // 'YYYY-MM-DD'
-
-  const sold = parseFloat(order.soldP); // <- This is probably NaN
-
-  if (!isNaN(sold)) {
-    agentSales[agent] = (agentSales[agent] || 0) + sold;
-    daySales[date] = (daySales[date] || 0) + sold;
-  } else {
-    console.warn("Invalid or missing soldP:", order.orderNo, order.soldP);
-  }
-});
-console.log("Orders used for analysis:", orders.length, orders);
-  const topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0] || null;
-  const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0] || null;
-
-  const contentEl = document.getElementById("salesInsightsContent");
-  if (!contentEl) {
-    console.error("Modal container not found.");
+function analyzeTopAgentAndBestSalesDay(orders) {
+  if (!orders || orders.length === 0) {
+    console.warn("No orders to analyze.");
     return;
   }
 
-  contentEl.innerHTML = topAgentToday
-    ? `
-    <div class="text-center p-2">
-      <h5>Top Sales Agent Today</h5>
-      <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
-    </div>
-    <div class="text-center p-2">
-      <h5 class="text-info">Best Sales Day</h5>
-      <p><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
-    </div>`
-    : `
-    <div class="text-center p-2 text-muted">
-      <p>No Sales Made Today</p>
-      <p>No Best Day Data</p>
-    </div>`;
+  const agentSales = {};
+  const daySales = {};
+
+  orders.forEach(order => {
+    const agent = order.salesAgent;
+    const date = new Date(order.orderDate).toISOString().split("T")[0]; // 'YYYY-MM-DD'
+    const sold = parseFloat(order.soldP);
+
+    if (!isNaN(sold)) {
+      agentSales[agent] = (agentSales[agent] || 0) + sold;
+      daySales[date] = (daySales[date] || 0) + sold;
+    } else {
+      console.warn("Invalid or missing soldP:", order.orderNo, order.soldP);
+    }
+  });
+
+  // Determine top agent
+  const topAgentToday = Object.entries(agentSales).reduce((max, entry) => {
+    return entry[1] > max[1] ? entry : max;
+  }, ["", 0]);
+
+  // Determine best sales day
+  const bestDay = Object.entries(daySales).reduce((max, entry) => {
+    return entry[1] > max[1] ? entry : max;
+  }, ["", 0]);
+
+  console.log("Top Agent Data:", topAgentToday);
+  console.log("Best Sales Day Data:", bestDay);
+  showSalesInsightsModal(topAgentToday, bestDay);
 }
 
 function cleanDateString(dateStr) {
