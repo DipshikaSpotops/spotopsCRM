@@ -3041,7 +3041,7 @@ html: `<p>Hi ${customerName},</p>
 <p>ETA(YYYY-MM-DD) - ${eta}</p>
 <p>Link - <a href="${link}">${link}</a></p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3168,7 +3168,7 @@ html: `<p>Dear ${customerName},</p>
 <p>If you have any questions or need further assistance with the return process, please feel free to reach out.</p>
 <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3228,7 +3228,7 @@ ${remainingPart}</p>
 <p>If you have any questions about the process or need further assistance, please feel free to contact us.</p>
 <p>Thank you for giving us an opportunity to make this right.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3281,7 +3281,7 @@ html: `<p>Dear ${customerName},</p>
 <p>Thank you again, and please don’t hesitate to reach out anytime.</p>
 <p>If you have any questions or need further assistance, please feel free to reach out.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3343,7 +3343,7 @@ html: `<p>Dear ${customerName},</p>
 <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
 <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [
 {
 filename: pdfFile.originalname,
@@ -3402,7 +3402,7 @@ html: `
 <p>If you need assistance or have any questions, please feel free to reach out.</p>
 <p>Thank you for allowing us the opportunity to make this right for you.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [
 {
 filename: pdfFile.originalname,
@@ -3473,7 +3473,7 @@ html: `<p>Dear ${customerName},</p>
 <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
 <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [
 {
 filename: pdfFile.originalname,
@@ -4207,7 +4207,7 @@ Please call us if you have any questions. Rest assured, any payment made for the
 If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1(888)-653-2808</b>]. We are here to assist you in any way we can.Thank you for your understanding and continued support.<br></p>
 <p><b>Please reply to this email with a quick confirmation to acknowledge and approve this cancellation request.</b></p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -4296,7 +4296,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   <p>Note : If you have another company name or DBA, please do let us know. Purchase Order has been attached below for your reference.</p>
              
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
   attachments: [
     {
     filename: pdfFile.originalname,
@@ -4428,7 +4428,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
         <p style="font-size: 16px;">
           ${firstName}<br>
           Auto Parts Group Corp<br>
-          +1 (866) 207-5533 | purchase@auto-partsgroup.com
+          +1 (888) 732-8680 | purchase@auto-partsgroup.com
         </p>
       `,
       attachments: [
