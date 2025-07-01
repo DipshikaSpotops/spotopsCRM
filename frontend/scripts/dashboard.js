@@ -252,7 +252,31 @@ document.getElementById("salesInfoIcon").addEventListener("click", () => {
     console.error("Error showing popup:", err);
   }
 });
+function calculateTopAgent(orders) {
+  const agentSales = {};
+  orders.forEach(order => {
+    const agent = order.salesAgent;
+    const value = parseFloat(order.soldPrice || 0);
+    if (!agentSales[agent]) agentSales[agent] = 0;
+    agentSales[agent] += value;
+  });
 
+  let topAgent = Object.entries(agentSales).sort((a, b) => b[1] - a[1])[0];
+  return topAgent;
+}
+
+function calculateBestSalesDay(orders) {
+  const dailySales = {};
+  orders.forEach(order => {
+    const dateKey = new Date(order.orderDate).toISOString().split("T")[0];
+    const value = parseFloat(order.soldPrice || 0);
+    if (!dailySales[dateKey]) dailySales[dateKey] = 0;
+    dailySales[dateKey] += value;
+  });
+
+  let bestDay = Object.entries(dailySales).sort((a, b) => b[1] - a[1])[0];
+  return bestDay;
+}
 document.getElementById("closeInsightsModal").addEventListener("click", () => {
   document.getElementById("salesInsightsModal").style.display = "none";
 });
