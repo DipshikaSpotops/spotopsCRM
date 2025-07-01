@@ -180,7 +180,10 @@ cachedDallasDate = currentDallasDate;
   // So you're good now!
 }
 document.getElementById("salesInfoIcon").addEventListener("click", () => {
-  if (!cachedDailyOrders.length || !cachedDallasDate) return;
+  if (!cachedDailyOrders.length || !cachedDallasDate) {
+    alert("Sales data not loaded yet.");
+    return;
+  }
   analyzeTopAgentAndBestSalesDay(cachedDailyOrders, cachedDallasDate);
   document.getElementById("salesInsightsModal").style.display = "flex";
 });
@@ -242,6 +245,8 @@ const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
 });
 
 const { orders } = response.data;
+cachedDailyOrders = orders;
+cachedDallasDate = currentDallasDate;
     if (!orders || !Array.isArray(orders)) {
       console.error("Invalid orders data.");
       return;
