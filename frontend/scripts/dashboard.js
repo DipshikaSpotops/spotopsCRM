@@ -179,17 +179,78 @@ cachedDallasDate = currentDallasDate;
   // This already fetches June/July logic later on arrow buttons
   // So you're good now!
 }
-document.getElementById("salesInfoIcon").addEventListener("click", async () => {
-  const currentMonthData = allFetchedMonthlyData[doughnutMonthIndex];
-  if (!currentMonthData || !currentMonthData.orders) return;
+function showSalesInsightsPopup(topAgentToday, bestDay) {
+  // Check if modal already exists
+  const existing = document.getElementById("dynamicSalesModal");
+  if (existing) existing.remove();
 
-  const { orders } = currentMonthData;
-  const [monthName, year] = currentMonthData.label.split(" ");
-  const currentDallasDate = new Date(`${monthName} 1, ${year}`);
+  // Create modal wrapper
+  const modal = document.createElement("div");
+  modal.id = "dynamicSalesModal";
+  modal.style.position = "fixed";
+  modal.style.top = "0";
+  modal.style.left = "0";
+  modal.style.width = "100vw";
+  modal.style.height = "100vh";
+  modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+  modal.style.display = "flex";
+  modal.style.justifyContent = "center";
+  modal.style.alignItems = "center";
+  modal.style.zIndex = "9999";
 
-  await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
+  // Create modal content
+  const content = document.createElement("div");
+  content.style.backgroundColor = "#fff";
+  content.style.padding = "20px";
+  content.style.borderRadius = "8px";
+  content.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+  content.style.maxWidth = "400px";
+  content.style.width = "90%";
+  content.style.textAlign = "center";
 
-  document.getElementById("salesInsightsModal").style.display = "flex";
+  // Close button
+  const closeBtn = document.createElement("span");
+  closeBtn.innerHTML = "&times;";
+  closeBtn.style.position = "absolute";
+  closeBtn.style.top = "20px";
+  closeBtn.style.right = "30px";
+  closeBtn.style.fontSize = "30px";
+  closeBtn.style.cursor = "pointer";
+  closeBtn.style.color = "#fff";
+  closeBtn.addEventListener("click", () => modal.remove());
+  modal.appendChild(closeBtn);
+
+  // Add data
+  const agent = topAgentToday?.[0] || "N/A";
+  const agentAmount = topAgentToday?.[1]?.toFixed(2) || "0.00";
+  const bestDayDate = bestDay?.[0] || "N/A";
+  const bestDayAmount = bestDay?.[1]?.toFixed(2) || "0.00";
+
+  content.innerHTML = `
+    <h4>Sales Insights</h4>
+    <p><strong>Top Agent:</strong> ${agent} ($${agentAmount})</p>
+    <p><strong>Best Sales Day:</strong> ${bestDayDate} ($${bestDayAmount})</p>
+  `;
+
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+}
+document.getElementById("salesInfoIcon").addEventListener("click", () => {
+  try {
+    if (!cachedDailyOrders.length || !cachedDallasDate) {
+      alert("Sales data not available yet.");
+      return;
+    }
+
+    // Calculate top agent & best day
+    const topAgentToday = calculateTopAgent(cachedDailyOrders);
+    const bestDay = calculateBestSalesDay(cachedDailyOrders);
+
+    showSalesInsightsPopup(topAgentToday, bestDay);
+
+  } catch (err) {
+    console.error("Error showing popup:", err);
+  }
 });
 
 document.getElementById("closeInsightsModal").addEventListener("click", () => {
