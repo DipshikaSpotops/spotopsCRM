@@ -207,153 +207,103 @@ function getChartColors() {
 
 let month;
 let year;
-async function fetchDailyOrders() {
-  const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-  const currentDallasDate = new Date(now);
+async function fetchDailyOrders(monthShort = null, year = null) {
+  let currentDallasDate = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
 
+  // Use the passed-in month/year if provided
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
- month = months[currentDallasDate.getMonth()];
- year = currentDallasDate.getFullYear();
-console.log("month",month,"year",year);
+
+  if (!monthShort || !year) {
+    monthShort = months[currentDallasDate.getMonth()];
+    year = currentDallasDate.getFullYear();
+  } else {
+    // If month/year passed, set currentDallasDate to 1st of that month
+    const monthIndex = months.indexOf(monthShort);
+    currentDallasDate = new Date(year, monthIndex, 1);
+  }
+
   try {
-    console.log(`Fetching data for ${month} ${year}`);
-const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-  params: { month, year, limit: 1000 },
-});
-
-const { orders } = response.data;
-    if (!orders || !Array.isArray(orders)) {
-      console.error("Invalid orders data.");
-      return;
-    }
-
-const daysInMonth = new Date(currentDallasDate.getFullYear(), currentDallasDate.getMonth() + 1, 0).getDate();
-const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
-const totalOrdersData = Array.from({ length: daysInMonth }, (_, i) => {
-  return i < currentDallasDate.getDate() ? 0 : null;
-});
-orders.forEach(order => {
-  const orderDateInDallas = new Date(
-    new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
-  );
-  const orderDay = orderDateInDallas.getDate() - 1;
-  if (orderDay >= 0 && orderDay < daysInMonth) {
-    totalOrdersData[orderDay] = (totalOrdersData[orderDay] || 0) + 1;
-  }
-});
-    console.log("Total Orders Data (daily):", totalOrdersData);
-    const ctx = document.getElementById("dailyOrdersChart");
-    if (!ctx) {
-      console.error("dailyOrdersChart element not found.");
-      return;
-    }
-    // Destroying the previous chart instance if it exists
-    if (dailyOrdersChartInstance) {
-      dailyOrdersChartInstance.destroy();
-    }
-    const colors = getChartColors();
-
-    // Create new chart
-    dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
-        type: "line", // change to stepLine style via options
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: "Total Orders",
-              backgroundColor: colors.totalOrdersBg,
-              borderColor: colors.totalOrdersColor,
-              pointBackgroundColor: colors.totalOrdersColor,
-              pointBorderColor: colors.totalOrdersColor,
-              data: totalOrdersData,
-              fill: true,
-              tension: 0, // <-- remove smooth curves
-              stepped: true ,
-              // pointBackgroundColor: "#fff",
-                pointBorderWidth: 2,
-                pointHoverBorderWidth: 3,
-                pointRadius: 5,
-                fill: true,
-                tension: 0.4,
-            },
-            // {
-            //   label: "Actual GP",
-            //   backgroundColor: colors.actualGPBg,
-            //   borderColor: colors.actualGPColor,
-            //   pointBackgroundColor: colors.actualGPColor,
-            //   pointBorderColor: "#fff",
-            //   data: totalGPData,
-            //   fill: true,
-            //   tension: 0, // <-- remove smooth curves
-            //   stepped: true // <-- ADD THIS LINE for step look
-            // }
-          ]
-        },
-      
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            title: { display: true, text: "Day of the Month", color: colors.axisColor },
-            ticks: { color: colors.axisColor },
-            grid: { color: colors.gridColor },
-          },
-          y: {
-            title: { display: true, text: "Actual GP", color: colors.axisColor },
-            ticks: { color: colors.axisColor },
-            grid: { color: colors.gridColor },
-            min: -5, 
-          },
-        },
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-                align: 'center',
-                labels: {
-                  color: colors.legendColor,
-                  boxWidth: 20,
-                  padding: 20 
-                }
-              }
-              ,
-          title: {
-            display: true,
-            color: colors.axisColor,
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const label = context.dataset.label || '';
-                const value = context.parsed.y;
-                return `${label}: ${value}`;
-              }
-            },
-            backgroundColor: '#fff',
-            titleColor: '#000',
-            bodyColor: '#000',
-            borderColor: '#ccc',
-            borderWidth: 1,
-            titleFont: { weight: 'bold' },
-            bodyFont: { weight: 'bold' },
-          },
-        },
-        interaction: {
-            mode: 'index',
-            intersect: false,
-          },
-          hover: {
-            mode: 'index',
-            intersect: false,
-          },          
-      },
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month: monthShort, year, limit: 1000 }
     });
-    console.log("Chart rendered successfully.");
-    return { orders, currentDallasDate };
+
+    const orders = response.data.orders || [];
+    const daysInMonth = new Date(currentDallasDate.getFullYear(), currentDallasDate.getMonth() + 1, 0).getDate();
+    const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
+    const totalOrdersData = Array(daysInMonth).fill(0);
+
+    orders.forEach(order => {
+      const orderDateInDallas = new Date(
+        new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
+      );
+      const orderMonth = orderDateInDallas.getMonth();
+      const expectedMonthIndex = months.indexOf(monthShort);
+
+      if (orderMonth === expectedMonthIndex) {
+        const orderDay = orderDateInDallas.getDate() - 1;
+        if (orderDay >= 0 && orderDay < daysInMonth) {
+          totalOrdersData[orderDay]++;
+        }
+      }
+    });
+
+    renderDailyChart(labels, totalOrdersData);
   } catch (error) {
-    console.error("Error fetching daily orders:", error);
+    console.error("Error fetching daily orders for selected month:", error);
   }
+}
+function renderDailyChart(labels, totalOrdersData) {
+  const ctx = document.getElementById("dailyOrdersChart");
+  if (!ctx) return;
+
+  if (dailyOrdersChartInstance) {
+    dailyOrdersChartInstance.destroy();
+  }
+
+  const colors = getChartColors();
+
+  dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Total Orders",
+        backgroundColor: colors.totalOrdersBg,
+        borderColor: colors.totalOrdersColor,
+        pointBackgroundColor: colors.totalOrdersColor,
+        data: totalOrdersData,
+        fill: true,
+        tension: 0,
+        stepped: true,
+        pointBorderWidth: 2,
+        pointHoverBorderWidth: 3,
+        pointRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          title: { display: true, text: "Day of the Month", color: colors.axisColor },
+          ticks: { color: colors.axisColor },
+          grid: { color: colors.gridColor }
+        },
+        y: {
+          title: { display: true, text: "Orders", color: colors.axisColor },
+          ticks: { color: colors.axisColor },
+          grid: { color: colors.gridColor },
+          min: 0
+        }
+      },
+      plugins: {
+        legend: { labels: { color: colors.legendColor } },
+        title: { display: true, color: colors.axisColor }
+      },
+      interaction: { mode: 'index', intersect: false },
+      hover: { mode: 'index', intersect: false }
+    }
+  });
 }
 
 async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
@@ -882,6 +832,8 @@ document.getElementById("prevMonthBtn").addEventListener("click", async () => {
 
     const { label } = allFetchedMonthlyData[doughnutMonthIndex];
     const [monthName, yearStr] = label.split(" ");
+await fetchDailyOrders(monthName.slice(0, 3), parseInt(yearStr));
+
     await loadMonthlyCancellationRefundData(monthName.slice(0, 3), parseInt(yearStr));
   }
 });
@@ -894,6 +846,8 @@ document.getElementById("nextMonthBtn").addEventListener("click", async () => {
 
     const { label } = allFetchedMonthlyData[doughnutMonthIndex];
     const [monthName, yearStr] = label.split(" ");
+await fetchDailyOrders(monthName.slice(0, 3), parseInt(yearStr));
+
     await loadMonthlyCancellationRefundData(monthName.slice(0, 3), parseInt(yearStr));
   }
 });
