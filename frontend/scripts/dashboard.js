@@ -232,7 +232,7 @@ const formattedBestDay = new Date(bestDayDate).toLocaleDateString("en-US", {
 });
   content.innerHTML += `
     <h4>Sales Insights</h4>
-    <p><strong>Top Agent:</strong> ${agent} ($${agentAmount})</p>
+    <p><strong>Top Salesagent:</strong> ${agent} ($${agentAmount})</p>
     <p><strong>Best Sales Day:</strong> ${formattedBestDay} ($${bestDayAmount})</p>
   `;
 
@@ -266,7 +266,7 @@ function calculateTopAgent(orders) {
   const agentSales = {};
   orders.forEach(order => {
     const agent = order.salesAgent;
-    const value = parseFloat(order.soldPrice || 0);
+    const value = parseFloat(order.soldP || 0);  // ← FIXED HERE
     if (!agentSales[agent]) agentSales[agent] = 0;
     agentSales[agent] += value;
   });
@@ -279,7 +279,7 @@ function calculateBestSalesDay(orders) {
   const dailySales = {};
   orders.forEach(order => {
     const dateKey = new Date(order.orderDate).toISOString().split("T")[0];
-    const value = parseFloat(order.soldPrice || 0);
+    const value = parseFloat(order.soldP || 0);  // ← FIXED HERE
     if (!dailySales[dateKey]) dailySales[dateKey] = 0;
     dailySales[dateKey] += value;
   });
@@ -287,6 +287,7 @@ function calculateBestSalesDay(orders) {
   let bestDay = Object.entries(dailySales).sort((a, b) => b[1] - a[1])[0];
   return bestDay;
 }
+
 document.getElementById("closeInsightsModal").addEventListener("click", () => {
   document.getElementById("salesInsightsModal").style.display = "none";
 });
@@ -501,7 +502,7 @@ function analyzeTopAgentAndBestSalesDay(orders) {
     const agent = order.salesAgent;
     const date = new Date(order.orderDate).toISOString().split("T")[0]; // 'YYYY-MM-DD'
     const sold = parseFloat(order.soldP);
-
+    console.log("sold",sold);
     if (!isNaN(sold)) {
       agentSales[agent] = (agentSales[agent] || 0) + sold;
       daySales[date] = (daySales[date] || 0) + sold;
