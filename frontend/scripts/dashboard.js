@@ -179,14 +179,24 @@ cachedDallasDate = currentDallasDate;
   // This already fetches June/July logic later on arrow buttons
   // So you're good now!
 }
-document.getElementById("salesInfoIcon").addEventListener("click", () => {
-  console.log("cached",cachedDailyOrders)
-  if (!cachedDailyOrders.length || !cachedDallasDate) {
-    alert("Sales data not loaded yet.");
-    return;
+document.getElementById("salesInfoIcon").addEventListener("click", async () => {
+  try {
+    const currentMonthData = allFetchedMonthlyData[doughnutMonthIndex];
+    if (!currentMonthData || !currentMonthData.orders) {
+      alert("Monthly data not loaded yet.");
+      return;
+    }
+
+    const { orders } = currentMonthData;
+    const [monthName, year] = currentMonthData.label.split(" ");
+    const currentDallasDate = new Date(`${monthName} 1, ${year}`);
+
+    await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
+
+    document.getElementById("salesInsightsModal").style.display = "flex";
+  } catch (err) {
+    console.error("Error in salesInfoIcon click:", err);
   }
-  analyzeTopAgentAndBestSalesDay(cachedDailyOrders, cachedDallasDate);
-  document.getElementById("salesInsightsModal").style.display = "flex";
 });
 document.getElementById("closeInsightsModal").addEventListener("click", () => {
   document.getElementById("salesInsightsModal").style.display = "none";
@@ -418,7 +428,7 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
   }
 
   const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
-
+ console.log("topAgentToday",topAgentToday);
   // Output to modal
   document.getElementById("salesInsightsContent").innerHTML = topAgentToday
     ? `
