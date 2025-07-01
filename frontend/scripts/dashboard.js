@@ -236,15 +236,23 @@ const { orders } = response.data;
 
 const daysInMonth = new Date(currentDallasDate.getFullYear(), currentDallasDate.getMonth() + 1, 0).getDate();
 const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
-const totalOrdersData = Array(daysInMonth).fill(0);
-
+const totalOrdersData = Array.from({ length: daysInMonth }, (_, i) => {
+  const isCurrentMonth = monthShort === months[currentDallasDate.getMonth()] && year === currentDallasDate.getFullYear();
+  const isFutureDay = isCurrentMonth && i + 1 > currentDallasDate.getDate();
+  return isFutureDay ? null : 0; // Null for future days, 0 for past/today
+});
 orders.forEach(order => {
   const orderDateInDallas = new Date(
     new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
   );
-  const orderDay = orderDateInDallas.getDate() - 1;
-  if (orderDay >= 0 && orderDay < daysInMonth) {
-    totalOrdersData[orderDay] = (totalOrdersData[orderDay] || 0) + 1;
+  const orderMonth = orderDateInDallas.getMonth();
+  const expectedMonthIndex = months.indexOf(monthShort);
+
+  if (orderMonth === expectedMonthIndex) {
+    const day = orderDateInDallas.getDate() - 1;
+    if (day >= 0 && day < totalOrdersData.length) {
+      totalOrdersData[day] = (totalOrdersData[day] || 0) + 1;
+    }
   }
 });
     console.log("Total Orders Data (daily):", totalOrdersData);
@@ -309,7 +317,7 @@ orders.forEach(order => {
             title: { display: true, text: "Actual GP", color: colors.axisColor },
             ticks: { color: colors.axisColor },
             grid: { color: colors.gridColor },
-            min: -5, 
+            min: -1, 
           },
         },
         plugins: {
