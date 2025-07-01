@@ -231,9 +231,9 @@ const formattedBestDay = new Date(bestDayDate).toLocaleDateString("en-US", {
   year: "numeric"
 });
   content.innerHTML += `
-    <h4>Sales Insights</h4>
-    <p><strong>Top Salesagent:</strong> ${agent} ($${agentAmount})</p>
-    <p><strong>Best Sales Day:</strong> ${formattedBestDay} ($${bestDayAmount})</p>
+    <h4 style="text-align:left;">Sales Insights</h4>
+    <p style="text-align:left;font-size: 15px"><strong>Top Salesagent:</strong> ${agent} ($${agentAmount})</p>
+    <p style="text-align:left;font-size: 15px"><strong>Best Sales Day:</strong> ${formattedBestDay} ($${bestDayAmount})</p>
   `;
 
   modal.appendChild(content);
