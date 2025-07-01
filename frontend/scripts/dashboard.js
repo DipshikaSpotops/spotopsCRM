@@ -180,6 +180,7 @@ cachedDallasDate = currentDallasDate;
   // So you're good now!
 }
 document.getElementById("salesInfoIcon").addEventListener("click", () => {
+  console.log("cached",cachedDailyOrders)
   if (!cachedDailyOrders.length || !cachedDallasDate) {
     alert("Sales data not loaded yet.");
     return;
