@@ -180,24 +180,18 @@ cachedDallasDate = currentDallasDate;
   // So you're good now!
 }
 document.getElementById("salesInfoIcon").addEventListener("click", async () => {
-  try {
-    const currentMonthData = allFetchedMonthlyData[doughnutMonthIndex];
-    if (!currentMonthData || !currentMonthData.orders) {
-      alert("Monthly data not loaded yet.");
-      return;
-    }
+  const currentMonthData = allFetchedMonthlyData[doughnutMonthIndex];
+  if (!currentMonthData || !currentMonthData.orders) return;
 
-    const { orders } = currentMonthData;
-    const [monthName, year] = currentMonthData.label.split(" ");
-    const currentDallasDate = new Date(`${monthName} 1, ${year}`);
+  const { orders } = currentMonthData;
+  const [monthName, year] = currentMonthData.label.split(" ");
+  const currentDallasDate = new Date(`${monthName} 1, ${year}`);
 
-    await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
+  await analyzeTopAgentAndBestSalesDay(orders, currentDallasDate);
 
-    document.getElementById("salesInsightsModal").style.display = "flex";
-  } catch (err) {
-    console.error("Error in salesInfoIcon click:", err);
-  }
+  document.getElementById("salesInsightsModal").style.display = "flex";
 });
+
 document.getElementById("closeInsightsModal").addEventListener("click", () => {
   document.getElementById("salesInsightsModal").style.display = "none";
 });
@@ -407,6 +401,7 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     const orderDate = new Date(
       new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
     );
+
     const key = `${orderDate.getFullYear()}-${orderDate.getMonth() + 1}-${orderDate.getDate()}`;
     const agent = order.salesAgent || "Unknown";
     const gp = order.grossProfit || 0;
@@ -422,29 +417,30 @@ async function analyzeTopAgentAndBestSalesDay(orders, currentDallasDate) {
     dailyGPGroups[key] += gp;
   });
 
-  let topAgentToday = null;
-  if (Object.keys(topAgents).length > 0) {
-    topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0];
+  const topAgentToday = Object.entries(topAgents).sort((a, b) => b[1] - a[1])[0] || null;
+  const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0] || null;
+
+  const contentEl = document.getElementById("salesInsightsContent");
+  if (!contentEl) {
+    console.error("Modal container not found.");
+    return;
   }
 
-  const bestDay = Object.entries(dailyGPGroups).sort((a, b) => b[1] - a[1])[0];
- console.log("topAgentToday",topAgentToday,"bestDay",bestDay);
-  // Output to modal
-  document.getElementById("salesInsightsContent").innerHTML = topAgentToday
+  contentEl.innerHTML = topAgentToday
     ? `
-      <div class="text-center p-2">
-        <h5>Top Sales Agent Today</h5>
-        <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
-      </div>
-      <div class="text-center p-2">
-        <h5 class="text-info">Best Sales Day</h5>
-        <p><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
-      </div>`
+    <div class="text-center p-2">
+      <h5>Top Sales Agent Today</h5>
+      <p><strong>${topAgentToday[0]}</strong> with <strong>$${topAgentToday[1].toFixed(2)}</strong> GP</p>
+    </div>
+    <div class="text-center p-2">
+      <h5 class="text-info">Best Sales Day</h5>
+      <p><strong>${bestDay[0]}</strong> with <strong>$${bestDay[1].toFixed(2)}</strong> GP</p>
+    </div>`
     : `
-      <div class="text-center p-2 text-muted">
-        <p>No Sales Made Today</p>
-        <p>No Best Day Data</p>
-      </div>`;
+    <div class="text-center p-2 text-muted">
+      <p>No Sales Made Today</p>
+      <p>No Best Day Data</p>
+    </div>`;
 }
 
 function cleanDateString(dateStr) {
