@@ -391,6 +391,7 @@ $("#searchInput").on("keyup", function () {
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
       (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
       (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.cancellationReason && order.cancellationReason.toLowerCase().includes(value)) ||
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
       (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
