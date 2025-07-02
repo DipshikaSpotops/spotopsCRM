@@ -1,22 +1,27 @@
+
 document.addEventListener("DOMContentLoaded", async function () {
-  const monthInput = document.getElementById("monthYearPicker").value;
+  const monthPicker = document.getElementById("monthYearPicker");
+  const dallasDate = new Date(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Chicago",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date())
+      .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2") 
+  );
 
-  if (!monthInput) {
-    console.warn("No month selected yet.");
-    return;
-  }
-
-  const [year, month] = monthInput.split("-");
+  const defaultMonth = dallasDate.toISOString().slice(0, 7); 
+  monthPicker.value = defaultMonth;
+  const [year, month] = defaultMonth.split("-");
   const monthShort = new Date(`${month}-01-2000`).toLocaleString("default", { month: "short" });
 
   const [cancelledOrders, refundedOrders] = await Promise.all([
     fetchOrdersByType("cancelled-by-date", monthShort, year),
     fetchOrdersByType("refunded-by-date", monthShort, year),
   ]);
-
   const combined = [...cancelledOrders, ...refundedOrders];
   const uniqueOrdersMap = {};
-
   combined.forEach(order => {
     const orderNo = order.orderNo;
     if (!uniqueOrdersMap[orderNo]) {
@@ -41,7 +46,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   renderTable(Object.values(uniqueOrdersMap));
 });
-
 
 function extractDate(text) {
   const match = text.match(/on (\d{1,2}) (\w+), (\d{4})/);
