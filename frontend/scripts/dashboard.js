@@ -304,7 +304,7 @@ function getChartColors() {
     totalOrdersBg: isDarkMode ? "#2c3e50" : "white",
     actualGPBg: isDarkMode ? "#29638c" : "rgba(54, 162, 235, 0.2)",
 
-    axisColor: isDarkMode ? "#2c3e50" : "#555555",
+    axisColor: isDarkMode ? "#FFFFFF" : "#555555",
     gridColor: isDarkMode ? "#2c3e50" : "white", 
     legendColor: isDarkMode ? "#FFFFFF" : "#000000", 
 
