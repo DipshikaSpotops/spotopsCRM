@@ -188,25 +188,34 @@ async function fetchYardInfo(month, year) {
     );
 
     // Calculate spends
-    let totalSpend = 0;
-    yardOrders.forEach(order => {
-      let orderSpend = 0;
-      order.additionalInfo.forEach(info => {
-        if (info.paymentStatus === "Card charged") {
-          const shippingCost = info.shippingDetails
-            ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0
-            : 0;
-          const partPrice = parseFloat(info.partPrice || 0);
-          const others = parseFloat(info.others || 0);
-          const refundedAmount = parseFloat(info.refundedAmount || 0);
+let totalSpend = 0;
 
-          const itemSpend = partPrice + others + shippingCost - refundedAmount;
-          orderSpend += itemSpend;
-        }
-      });
-      order.totalSpend = orderSpend;
-      totalSpend += orderSpend;
-    });
+yardOrders.forEach(order => {
+  let orderSpend = 0;
+
+  order.additionalInfo.forEach(info => {
+    if (info.paymentStatus === "Card charged") {
+      const shippingCost = info.shippingDetails
+        ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0
+        : 0;
+      const partPrice = parseFloat(info.partPrice || 0);
+      const others = parseFloat(info.others || 0);
+      const refundedAmount = parseFloat(info.refundedAmount || 0);
+
+      const soldP = parseFloat(order.soldP || 0);
+      const salesTax = parseFloat(order.salestax || 0);
+
+      const calculatedSpend = soldP - salesTax - partPrice - shippingCost - others - refundedAmount;
+
+      // If negative (can happen if refund is too high), clamp to 0
+      orderSpend += Math.max(0, calculatedSpend);
+    }
+  });
+
+  totalSpend += orderSpend;
+});
+
+//
 
     console.log("Total spend:", totalSpend);
     currentPage = 1;
@@ -424,15 +433,17 @@ $('#pagination-controls').on('click', '#nextPage', function () {
 
 // Filter by month and year
 $("#filterButton").click(async function () {
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-await fetchYardInfo(month, year);
-currentPage = 1;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
+  const monthYear = $("#monthYearPicker").val(); 
+  const [year, monthNumber] = monthYear.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+
+  await fetchYardInfo(month, year);  // ✅ this updates #showTotalOrders internally
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(yardOrders.length / 25));
 });
+
 
 // Search functionality
 $("#searchInput").on("keyup", function () {
