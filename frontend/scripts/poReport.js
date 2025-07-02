@@ -354,11 +354,7 @@ ${yardInfoHtml}
 <td>${otherCharges.toFixed(2)}</td>
 <td>${tRefunds.toFixed(2)}</td>
 <td>${totalOveralls.toFixed(2)}</td>
-<td><button class="btn btn-success btn-sm process-btn" data-id="${
-item.orderNo
-}" style="background-color: #cae8c9;
-border: none;
-color: #61a55e;">View</button></td>
+<td><button class="btn btn-success btn-sm process-btn" data-id=${item.orderNo}>View</button></td>
 </tr>`
 );
 }
