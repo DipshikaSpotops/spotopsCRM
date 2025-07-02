@@ -256,7 +256,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     scrollbar-color: #037894 white;
     position: relative;
     scrollbar-gutter: stable;
-    margin-top: 1%;
+    margin-top: 0%;
 }
 #monthYearPicker{
   background-color: #35554f;

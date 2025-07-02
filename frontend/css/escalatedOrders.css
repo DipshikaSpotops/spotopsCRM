@@ -377,8 +377,9 @@ scrollbar-color: #29638c #141b2d;
     width: auto;
 }
 #filterAndTotal{
-  display: flex;
+    display: flex;
     margin-left: 0%;
+    margin-top: -1%;
 }
 #filterButton {
   background-color: #35554f;

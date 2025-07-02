@@ -59,7 +59,8 @@ border-bottom: 1px solid #e0e0e0;
 }
 #filterAndTotal{
   display: flex;
-    margin-left: 38%;
+  margin-left: 0%;
+  margin-top: -1%;
 }
 .sidebar {
 position: fixed;

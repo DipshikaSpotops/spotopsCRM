@@ -132,9 +132,9 @@ flex-shrink: 0;
 margin: 0% 30%;
 }
 #filterAndTotal{
-    display: flex;
-    margin-left: 0%;
-    margin-top: -1%;
+  display: flex;
+  margin-left: 0%;
+  margin-top: -1%;
 }
 .topHeads {
     display: flex;

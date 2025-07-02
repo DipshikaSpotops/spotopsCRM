@@ -222,7 +222,8 @@ margin-left: 10px;
 }
 #filterAndTotal{
   display: flex;
-    margin-left: 0%;
+  margin-left: 0%;
+  margin-top: -1%;
 }
 #filterButton {
   background-color: #037894;

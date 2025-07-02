@@ -303,7 +303,8 @@ color: #333;
 }
 #filterAndTotal{
   display: flex;
-    margin-left: 0%;
+  margin-left: 0%;
+  margin-top: -1%;
 }
 #filterButton {
   background-color: #35554f;
