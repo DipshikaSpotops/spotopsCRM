@@ -165,64 +165,23 @@ $(document).ready(async function () {
     });
   }
 
-  function createPaginationControls(totalPages, orders = allOrders) {
-  const paginationControls = $('#pagination-controls');
-  paginationControls.empty();
-
-  if (totalPages > 1) {
-    paginationControls.append(`
-      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>
-        Previous
-      </button>
-    `);
-
-    for (let i = 1; i <= totalPages; i++) {
-      paginationControls.append(`
-        <button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">
-          ${i}
-        </button>
-      `);
-    }
-
-    paginationControls.append(`
-      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>
-        Next
-      </button>
-    `);
-  }
-
-  // Save current orders for pagination events
-  paginationControls.data("orders", orders);
-}
-
-// === Pagination event bindings ===
-$('#pagination-controls').on('click', '.page-btn', function () {
-  const page = $(this).data('page');
-  currentPage = page;
-  localStorage.setItem('currentPage', currentPage);
-
-  const orders = $('#pagination-controls').data('orders') || allOrders;
-  renderTableRows(currentPage, orders);
-});
-
+  
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     localStorage.setItem('currentPage', currentPage);
-
-    const orders = $('#pagination-controls').data('orders') || allOrders;
-    renderTableRows(currentPage, orders);
   }
 });
 
 $('#pagination-controls').on('click', '#nextPage', function () {
-  const orders = $('#pagination-controls').data('orders') || allOrders;
-  const totalPages = Math.ceil(orders.length / rowsPerPage);
-
+  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
+    renderTableRows(currentPage);
+    createPaginationControls(totalPages);
     localStorage.setItem('currentPage', currentPage);
-    renderTableRows(currentPage, orders);
   }
 });
 
