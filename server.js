@@ -4287,7 +4287,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   ${order.model} ${order.pReq}</b>. I request a refund for the same.
   <p>Requested refund amount : $${refundToCollect} </p>
   <p>Stock No: ${stockNo}</p>
-  <p>Return tracking number : ${returnTracking} (${shipperName})</p>
+  <p>Return tracking number : ${returnTracking}</p>
   <p>Refund Reason : ${refundReason}</p>
   <p>I kindly request you to process the refund at your earliest convenience and share the refund receipt with us.</p>
   <p>If any further information or documentation is required, please do not hesitate to contact us.</p>
