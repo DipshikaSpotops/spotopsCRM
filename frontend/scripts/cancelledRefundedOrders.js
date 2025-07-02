@@ -78,15 +78,16 @@ function renderTable(orders) {
   }
 
   orders.forEach(order => {
+    const actions = `
+            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}" ${order.orderStatus === "Placed" || order.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
     const row = `
       <tr>
         <td>${order.orderNo}</td>
         <td>${formatDate(order.orderDate)}</td>
-        <td>${order.cancelledDate || "-"}</td>
-        <td>${order.custRefundDate || "-"}</td>
+        <td>${formatDate(order.cancelledDate)}</td>
+        <td>${formatDate(order.custRefundDate)}</td>
         <td>${order.cancellationReason || "-"}</td>
-        <td>$${order.custRefAmount || "-"}</td>
-        <td>${order.custRefAmount || "-"}</td>
+        <td>${actions}</td>
       </tr>
     `;
     tbody.insertAdjacentHTML("beforeend", row);
