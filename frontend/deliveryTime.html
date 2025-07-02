@@ -578,7 +578,7 @@ table {
     scrollbar-color: #037894 white;
     position: relative;
     scrollbar-gutter: stable;
-    margin-top: -2%;
+    margin-top: -1%;
     margin-left: 14%;
 }
 table thead th {
@@ -1045,7 +1045,7 @@ $(this)
 .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
 });
 
-await fetchData();
+await fetchData(month, year);
 
 // Sidebar toggle and menu functionality
 $(".toggle-sidebar").on("click", function () {
