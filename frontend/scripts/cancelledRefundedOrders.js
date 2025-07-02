@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       uniqueOrdersMap[orderNo] = {
         orderNo,
         orderDate: order.orderDate,
-        cancelledDate: null,
-        refundedDate: null,
+        cancelledDate: order.cancelledDate,
+        refundedDate: order.custRefundDate,
         orderHistory: order.orderHistory || [],
       };
     }
