@@ -1311,7 +1311,15 @@ color: #999999;
 .dark-mode .form-control:disabled{
     background-color: #0a192f;
     border: none;
-    color: #727ca3;
+    color: #979797;
+}
+.dark-mode .input-group-text {
+  background: #000000;
+    border: none;
+    color: #e9e9e9;
+}
+.dark-mode #createTaskButton {
+      background-color: #141b2d;
 }
 .dark-mode .form-control[readonly] {
     background-color: #0a192f;
@@ -1352,7 +1360,7 @@ color: #999999;
   color: #bfccff;
 }
 .dark-mode .form-group label {
-  color: #bfccff;
+  color: #b1b1b1;
 }
 .dark-mode .previousNext {
     background-color: #29638c;
