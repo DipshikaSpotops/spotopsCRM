@@ -87,6 +87,7 @@ function renderTable(orders) {
         <td>${formatDate(order.cancelledDate)}</td>
         <td>${formatDate(order.custRefundDate)}</td>
         <td>${order.cancellationReason || "-"}</td>
+        <td>$${order.custRefAmount || 0}</td>
         <td>${actions}</td>
       </tr>
     `;
