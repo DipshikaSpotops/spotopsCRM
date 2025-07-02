@@ -299,9 +299,9 @@ function getChartColors() {
   const isDarkMode = document.body.classList.contains("dark-mode");
 
   return {
-    totalOrdersColor: isDarkMode ? "#c1627e" : "#037894", 
+    totalOrdersColor: isDarkMode ? "#696ffb" : "#037894", 
     actualGPColor: isDarkMode ? "#6a74fb" : "rgba(54, 162, 235, 1)", 
-    totalOrdersBg: isDarkMode ? "white" : "white",
+    totalOrdersBg: isDarkMode ? "#2c3e50" : "white",
     actualGPBg: isDarkMode ? "#29638c" : "rgba(54, 162, 235, 0.2)",
 
     axisColor: isDarkMode ? "#FFFFFF" : "#555555",
