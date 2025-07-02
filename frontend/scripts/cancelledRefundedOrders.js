@@ -102,3 +102,35 @@ function formatDate(dateStr) {
     year: "numeric", month: "short", day: "numeric"
   });
 }
+$("#searchInput").on("keyup", function () {
+  const value = $(this).val().toLowerCase();
+
+  const filteredOrders = allOrders.filter(order => {
+    return (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.cancellationReason && order.cancellationReason.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.additionalInfo && order.additionalInfo.some(info =>
+        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
+      )) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
+    );
+  });
+
+  // Update the Total Orders count
+  document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`;
+
+  if (filteredOrders.length > 0 || value === "") {
+    renderTableRows(1, filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  } else {
+    $("#infoTable").empty();
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+  }
+});
