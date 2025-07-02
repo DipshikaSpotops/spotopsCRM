@@ -567,11 +567,12 @@ font-size: 12px;
 }
 
 #mainHeading {
-  text-align: center; 
-  color: #037894;
-  white-space: nowrap;
-  margin-left: 0%;
-  text-decoration: underline;
+    text-align: left;
+    color: #037894;
+    white-space: nowrap;
+    margin-left: 0%;
+    text-decoration: underline;
+    margin-top: 2%;
 }
 table {
   width: 100%;
@@ -1058,15 +1059,15 @@ const userRow = `
 <td>${user.firstName} ${user.lastName}</td>
 <td>${user.email}</td>
 <td>${user.team || ""}</td>
-<td>${user.role}</td>
+<td>${user.role || ""}</td>
 <td>
 <button class="btn  btn-sm edit-user-btn" data-id="${user._id}" style="color: white;
-background-color: #5f88c3;
+background-color: #037894;
 border-radius: 10px;
 width: 17%;
 margin: 0% -2%">Edit</button>
 <button class="btn  btn-sm delete-user-btn" data-id="${user._id}" style="    color: white;
-background-color: #ad291ef0;
+background-color: #037894;
 border-radius: 10px;
 width: 24%;
 margin: 0% 2%;">Delete</button>
