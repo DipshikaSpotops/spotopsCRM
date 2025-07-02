@@ -177,14 +177,14 @@ float: left;
 }
 #userDropdown {
 height: 3vh;
-    /* z-index: 99; */
-    text-align: center;
-    background-color: white;
-    width: auto;
-    margin-left: 3%;
-    margin-top: 4%;
-    text-align: center;
-    border-radius: 20px;
+text-align: center;
+background-color: white;
+width: auto;
+min-width: 150px;
+margin-left: 0%;
+margin-top: 1%;
+text-align: center;
+border-radius: 20px;
   }
 
 table.table tbody tr:nth-child(odd) {
@@ -301,13 +301,11 @@ overflow: hidden;
     width: auto;
 }
 #filterAndTotal{
-  display: flex; 
-  margin-left: 0%;
-    margin-top: 1%;
-    gap: 10px;
-  margin-left: 0%;
-  margin-top: -1%;
-  flex-wrap: wrap;
+display: flex;
+gap: 10px;
+margin-left: -30%;
+margin-top: 3%;
+flex-wrap: wrap;
 }
 #filterButton {
   background-color: #037894;
@@ -817,7 +815,7 @@ window.location.href = "login_signup.html";
 <div class="main-content">   
     <div class="topHeads">
    <div>
-        <h1>View User Activity</h1>
+        <h1 id="mainHeading">View User Activity</h1>
     </div>
 <div>
 <input
@@ -830,7 +828,7 @@ placeholder="Search..."
 <div id="filterAndTotal">
 <input id="monthYearPicker" type="month" class="form-control" style="width: auto; min-width: 140px;" />
 <button id="filterButton" class="btn btn-primary" style="white-space: nowrap;">Filter</button>
-<select id="userDropdown" class="form-control" style="width: auto; min-width: 150px;">
+<select id="userDropdown" class="form-control">
       <option value="">Select user</option>
       <option value="Ashley">Ashley</option>
     <option value="Katherine">Katherine</option>
@@ -852,10 +850,10 @@ placeholder="Search..."
 
 </div>
 <div class="table-wrapper">
-  <table class="table table-bordered mt-4 mt-4 table-fixed">
+  <table class="table table-bordered table-head-only">
     <thead style="text-align: center;">
       <tr>
-        
+      
         <th style="cursor: pointer" scope="col">Order Date</th>
         <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
         <th style="cursor: pointer; width: 300px;" scope="col">Order History</th>
