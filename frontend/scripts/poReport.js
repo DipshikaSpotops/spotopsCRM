@@ -388,30 +388,27 @@ const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
-function createPaginationControls(totalPages, orders = yardOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); // Clear pagination controls
+function createPaginationControls(totalPages) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty(); 
 
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
+  if (totalPages > 1) {
+    // Left arrow for "Previous" page
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
 
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);}
+    // Page number display: Page X of Y
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
 
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
+    // Right arrow for "Next" page
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);
+  }
 }
-}
-
-
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-const page = $(this).data('page');
-currentPage = page;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(yardOrders.length / 25));
-});
-
-// "Previous" and "Next" button functionality
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
@@ -428,6 +425,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     createPaginationControls(totalPages);
   }
 });
+
 // Filter by month and year
 $("#filterButton").click(async function () {
 const monthYear = $("#monthYearPicker").val(); 

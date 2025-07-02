@@ -250,7 +250,7 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-function createPaginationControls(totalPages) {
+PaginationControls(totalPages) {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty(); 
 
@@ -260,7 +260,7 @@ function createPaginationControls(totalPages) {
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
-    // Page number display: Page X of Y
+    // Pafunction createge number display: Page X of Y
     paginationControls.append(`
       <span class="page-info">Page ${currentPage} of ${totalPages}</span>
     `);
