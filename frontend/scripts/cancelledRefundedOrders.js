@@ -1,44 +1,47 @@
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("loadCancelledRefundedBtn").addEventListener("click", async () => {
-    const monthInput = document.getElementById("crMonthPicker").value;
-    if (!monthInput) return alert("Please select a month.");
+document.addEventListener("DOMContentLoaded", async function () {
+  const monthInput = document.getElementById("monthYearPicker").value;
 
-    const [year, month] = monthInput.split("-");
-    const monthShort = new Date(`${month}-01-2000`).toLocaleString("default", { month: "short" });
+  if (!monthInput) {
+    console.warn("No month selected yet.");
+    return;
+  }
 
-    const [cancelledOrders, refundedOrders] = await Promise.all([
-      fetchOrdersByType("cancelled-by-date", monthShort, year),
-      fetchOrdersByType("refunded-by-date", monthShort, year),
-    ]);
+  const [year, month] = monthInput.split("-");
+  const monthShort = new Date(`${month}-01-2000`).toLocaleString("default", { month: "short" });
 
-    const combined = [...cancelledOrders, ...refundedOrders];
-    const uniqueOrdersMap = {};
+  const [cancelledOrders, refundedOrders] = await Promise.all([
+    fetchOrdersByType("cancelled-by-date", monthShort, year),
+    fetchOrdersByType("refunded-by-date", monthShort, year),
+  ]);
 
-    combined.forEach(order => {
-      const orderNo = order.orderNo;
-      if (!uniqueOrdersMap[orderNo]) {
-        uniqueOrdersMap[orderNo] = {
-          orderNo,
-          orderDate: order.orderDate,
-          cancelledDate: null,
-          refundedDate: null,
-          orderHistory: order.orderHistory || [],
-        };
+  const combined = [...cancelledOrders, ...refundedOrders];
+  const uniqueOrdersMap = {};
+
+  combined.forEach(order => {
+    const orderNo = order.orderNo;
+    if (!uniqueOrdersMap[orderNo]) {
+      uniqueOrdersMap[orderNo] = {
+        orderNo,
+        orderDate: order.orderDate,
+        cancelledDate: null,
+        refundedDate: null,
+        orderHistory: order.orderHistory || [],
+      };
+    }
+
+    order.orderHistory?.forEach(entry => {
+      if (entry.includes("cancelled") && !uniqueOrdersMap[orderNo].cancelledDate) {
+        uniqueOrdersMap[orderNo].cancelledDate = extractDate(entry);
       }
-
-      order.orderHistory?.forEach(entry => {
-        if (entry.includes("cancelled") && !uniqueOrdersMap[orderNo].cancelledDate) {
-          uniqueOrdersMap[orderNo].cancelledDate = extractDate(entry);
-        }
-        if (entry.includes("refunded") && !uniqueOrdersMap[orderNo].refundedDate) {
-          uniqueOrdersMap[orderNo].refundedDate = extractDate(entry);
-        }
-      });
+      if (entry.includes("refunded") && !uniqueOrdersMap[orderNo].refundedDate) {
+        uniqueOrdersMap[orderNo].refundedDate = extractDate(entry);
+      }
     });
-
-    renderTable(Object.values(uniqueOrdersMap));
   });
+
+  renderTable(Object.values(uniqueOrdersMap));
 });
+
 
 function extractDate(text) {
   const match = text.match(/on (\d{1,2}) (\w+), (\d{4})/);
@@ -59,7 +62,7 @@ async function fetchOrdersByType(type, month, year) {
 }
 
 function renderTable(orders) {
-  const tbody = document.getElementById("cancelledRefundedTableBody");
+  const tbody = document.getElementById("infoTable");
   tbody.innerHTML = "";
 
   if (!orders.length) {
