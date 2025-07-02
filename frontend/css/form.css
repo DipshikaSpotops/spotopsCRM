@@ -1435,7 +1435,7 @@ border: none;
 }
 .dark-mode #deadline {
   background-color: #0a192f;
-    color: #0a192f;
+    color: #0a192f !important;
 }
 .table-dark td, .table-dark th, .table-dark thead th {
     border-color: #454d55;
