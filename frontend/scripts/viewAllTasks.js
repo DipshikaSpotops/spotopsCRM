@@ -387,4 +387,16 @@ fetchNotifications();
       resultDiv.innerHTML = '';
     }
   });
+
+  const currentPath = window.location.pathname + "?newEntry=true";
+console.log("currentPath",currentPath)
+$(".nav-link").each(function () {
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
+});
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
     });

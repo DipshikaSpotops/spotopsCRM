@@ -457,6 +457,11 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
 // $("#showTotalOrders").hide();

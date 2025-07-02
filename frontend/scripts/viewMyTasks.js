@@ -163,6 +163,11 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
     async function calculateTotalTasks() {
         const currentMonth = new Date().getMonth(); 
         const currentYear = new Date().getFullYear();

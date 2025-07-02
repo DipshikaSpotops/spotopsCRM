@@ -2877,6 +2877,10 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 $('#crossBtnEditYard').on('click', function(e) {
 $('#editYardPopup').hide();
 $(".modal-overlay").remove();

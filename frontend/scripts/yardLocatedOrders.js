@@ -394,6 +394,10 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 role = localStorage.getItem("role");
 team = localStorage.getItem("team");
 if (team === "Team Charlie" || role === "Sales") {

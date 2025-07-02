@@ -280,7 +280,10 @@ $('#pagination-controls').on('click', '.page-btn', function () {
     localStorage.setItem('currentPage', currentPage);
     renderTableRows(currentPage);
   });
-
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
   $('#pagination-controls').on('click', '#prevPage', function () {
     if (currentPage > 1) {
       currentPage--;
