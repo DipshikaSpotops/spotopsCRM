@@ -1,5 +1,4 @@
-$(document).ready(async function () {
-var firstname = localStorage.getItem("firstName");
+var firstName = localStorage.getItem("firstName");
 if (firstName) {
 $("#user-name").text(firstName);
 }
@@ -22,7 +21,7 @@ console.error("Error fetching token:", error);
 
 let token = localStorage.getItem("token");
 if (!token) {
-await fetchToken();
+ fetchToken();
 token = localStorage.getItem("token");
 }
 
@@ -179,6 +178,4 @@ const searchInput = document.getElementById('searchInputForOrderNo');
     } else {
       resultDiv.innerHTML = '';
     }
-  });
-
   });
