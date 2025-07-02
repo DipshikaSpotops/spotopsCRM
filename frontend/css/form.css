@@ -1286,6 +1286,9 @@ input[type="date"]:valid {
 background-color: #0a192f;
 color: #999999;
 }
+.dark-mode p {
+  color: #979797;
+}
 .dark-mode .sidebarOrder {
   background-color: #172a46;
     border: none;
