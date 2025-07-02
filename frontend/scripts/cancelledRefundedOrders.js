@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         orderNo,
         orderDate: order.orderDate,
         cancelledDate: order.cancelledDate,
-        refundedDate: order.custRefundDate,
+        refundedDate: order.refundedDate,
+        cancellationReason: order.cancellationReason,
+        custRefAmount: order.custRefAmount,
         orderHistory: order.orderHistory || [],
       };
     }
@@ -81,7 +83,9 @@ function renderTable(orders) {
         <td>${order.orderNo}</td>
         <td>${formatDate(order.orderDate)}</td>
         <td>${order.cancelledDate || "-"}</td>
-        <td>${order.custRefundDate || "-"}</td>
+        <td>${order.refundedDate || "-"}</td>
+        <td>${order.cancellationReason || "-"}</td>
+        <td>${order.custRefAmount || "-"}</td>
         <td>${order.custRefAmount || "-"}</td>
       </tr>
     `;
