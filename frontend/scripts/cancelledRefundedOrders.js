@@ -1,3 +1,29 @@
+var firstname = localStorage.getItem("firstName");
+if (firstName) {
+$("#user-name").text(firstName);
+}
+if (!firstName) {
+window.location.href = "login_signup.html";
+}
+// Token fetching logic
+async function fetchToken() {
+try {
+const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
+if (response.status === 200) {
+localStorage.setItem("token", response.data.token);
+} else {
+throw new Error("Failed to fetch token");
+}
+} catch (error) {
+console.error("Error fetching token:", error);
+}
+}
+
+let token = localStorage.getItem("token");
+if (!token) {
+await fetchToken();
+token = localStorage.getItem("token");
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
   const monthPicker = document.getElementById("monthYearPicker");
@@ -134,3 +160,22 @@ $("#searchInput").on("keyup", function () {
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
   }
 });
+const searchInput = document.getElementById('searchInputForOrderNo');
+  const resultDiv = document.getElementById('searchResult');
+
+  searchInput.addEventListener('input', function () {
+    const orderNo = searchInput.value.trim();
+
+    if (orderNo !== '') {
+      resultDiv.innerHTML = `
+        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
+      `;
+
+      document.getElementById('viewOrderBtn').addEventListener('click', function () {
+       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+
+      });
+    } else {
+      resultDiv.innerHTML = '';
+    }
+  });
