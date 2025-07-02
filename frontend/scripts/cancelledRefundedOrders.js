@@ -242,8 +242,9 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     window.location.href = `form.html?orderNo=${id}&process=true`;
   });
 });
-const currentPath = window.location.pathname + "?newEntry=true";
-console.log("currentPath",currentPath)
+// Highlight active link based on current URL
+const currentPath = window.location.pathname;
+console.log("+++",currentPath);
 $(".nav-link").each(function () {
 if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
