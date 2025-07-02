@@ -50,23 +50,41 @@ $(document).ready(async function () {
 $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
 
-  const filtered = allOrders.filter(order =>
-    order.orderNo?.toLowerCase().includes(value) ||
-    order.cancellationReason?.toLowerCase().includes(value) ||
-    order.customerName?.toLowerCase().includes(value)
-  );
+  // Filter the entire allOrders dataset based on the search term
+  const filteredOrders = allOrders.filter(order => {
+    return (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.cancellationReason && order.cancellationReason.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName &&
+        order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.additionalInfo && order.additionalInfo.some(info =>
+        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
+      )) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked &&
+        order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
+    );
+  });
 
-  // Sum the refunded amounts where there's a refund
-  const totalRefundedAmount = filtered
-    .filter(order => order.custRefundDate) // or you can check `order.orderStatus === "Refunded"`
+  const totalRefundedAmount = filteredOrders
+    .filter(order => order.custRefundDate) 
     .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
 
   $("#showTotalOrders").text(`Total Orders - ${filtered.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
 
-  renderTableRows(1, filtered);
-  createPaginationControls(Math.ceil(filtered.length / rowsPerPage), filtered);
+  if (filteredOrders.length > 0 || value === "") {
+    renderTableRows(1, filteredOrders); // Render the first page of filtered results
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+  } else {
+    $("#infoTable").empty(); // Clear the table if no results are found
+    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+  }
 });
-
 
   // Search input for quick nav
   const searchQuick = document.getElementById("searchInputForOrderNo");
@@ -116,7 +134,11 @@ $("#searchInput").on("keyup", function () {
     });
 
     allOrders = Object.values(unique);
-    $("#showTotalOrders").text(`Total Orders - ${allOrders.length}`);
+const totalRefundedAmount = allOrders
+  .filter(order => order.custRefundDate)
+  .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
+
+$("#showTotalOrders").text(`Total Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
     renderTableRows(1);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   }
