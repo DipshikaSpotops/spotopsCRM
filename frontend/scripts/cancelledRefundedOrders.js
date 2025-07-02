@@ -166,34 +166,65 @@ $(document).ready(async function () {
   }
 
   function createPaginationControls(totalPages, orders = allOrders) {
-    const container = $("#pagination-controls").empty();
-    if (totalPages <= 1) return;
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty();
 
-    container.append(`<button class="previousNext" id="prevPage">Previous</button>`);
+  if (totalPages > 1) {
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>
+        Previous
+      </button>
+    `);
+
     for (let i = 1; i <= totalPages; i++) {
-      container.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+      paginationControls.append(`
+        <button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">
+          ${i}
+        </button>
+      `);
     }
-    container.append(`<button class="previousNext" id="nextPage">Next</button>`);
 
-    container.off("click").on("click", ".page-btn", function () {
-      currentPage = parseInt($(this).data("page"));
-      renderTableRows(currentPage, orders);
-    });
-
-    container.on("click", "#prevPage", () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderTableRows(currentPage, orders);
-      }
-    });
-
-    container.on("click", "#nextPage", () => {
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderTableRows(currentPage, orders);
-      }
-    });
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>
+        Next
+      </button>
+    `);
   }
+
+  // Save current orders for pagination events
+  paginationControls.data("orders", orders);
+}
+
+// === Pagination event bindings ===
+$('#pagination-controls').on('click', '.page-btn', function () {
+  const page = $(this).data('page');
+  currentPage = page;
+  localStorage.setItem('currentPage', currentPage);
+
+  const orders = $('#pagination-controls').data('orders') || allOrders;
+  renderTableRows(currentPage, orders);
+});
+
+$('#pagination-controls').on('click', '#prevPage', function () {
+  if (currentPage > 1) {
+    currentPage--;
+    localStorage.setItem('currentPage', currentPage);
+
+    const orders = $('#pagination-controls').data('orders') || allOrders;
+    renderTableRows(currentPage, orders);
+  }
+});
+
+$('#pagination-controls').on('click', '#nextPage', function () {
+  const orders = $('#pagination-controls').data('orders') || allOrders;
+  const totalPages = Math.ceil(orders.length / rowsPerPage);
+
+  if (currentPage < totalPages) {
+    currentPage++;
+    localStorage.setItem('currentPage', currentPage);
+    renderTableRows(currentPage, orders);
+  }
+});
 
   // Table row click highlights
   $(document).on("click", "#infoTable tr", function () {
