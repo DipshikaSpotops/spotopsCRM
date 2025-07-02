@@ -1209,14 +1209,16 @@ input[type="date"] {
 }
 
 .placeholder {
-  position: absolute;
-  top: 50%;
-  left: 12px;
-  transform: translateY(-50%);
-  font-size: 16px;
-  color: black; /* Placeholder is visible initially */
-  pointer-events: none;
-  transition: 0.3s ease-in-out;
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: black;
+    pointer-events: none;
+    transition: 0.3s ease-in-out;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 100;
 }
 
 input[type="date"]:focus + .placeholder,
@@ -1288,6 +1290,9 @@ color: #999999;
 }
 .dark-mode p {
   color: #979797;
+}
+.dark-mode .placeholder {
+  color: #8d8787;
 }
 .dark-mode .sidebarOrder {
   background-color: #172a46;
@@ -1416,6 +1421,15 @@ background-color: rgba(255, 255, 255, 0.1);
 background-color: #141b2d;
 color: #e0e0e0;
 scrollbar-color: #29638c #141b2d;
+border: none;
+}
+.dark-mode #taskName, #assignTo, #taskDesc {
+  background-color: #0a192f;
+  border: none;
+}
+.dark-mode #deadline {
+  background-color: #0a192f;
+    color: #0a192f;
 }
 .table-dark td, .table-dark th, .table-dark thead th {
     border-color: #454d55;
