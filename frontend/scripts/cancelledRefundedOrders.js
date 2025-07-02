@@ -165,7 +165,29 @@ $(document).ready(async function () {
     });
   }
 
-  
+  function createPaginationControls(totalPages) {
+  const paginationControls = $('#pagination-controls');
+  console.log("pages", totalPages, "currentPage", currentPage);
+
+  paginationControls.empty();
+
+  if (totalPages > 1) {
+    // Left arrow for "Previous" page
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
+
+    // Page number display
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
+
+    // Right arrow for "Next" page
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);
+  }
+}
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
