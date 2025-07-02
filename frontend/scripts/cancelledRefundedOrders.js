@@ -243,7 +243,8 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   });
 });
 // Highlight active link based on current URL
-const currentPath = window.location.pathname.replace(/^\/+/, ""); // remove leading slash
+const currentPath = window.location.pathname.replace(/^\/+/, "");
+console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
   const linkHref = $(this).attr("href");
   if (linkHref && currentPath.includes(linkHref.replace(/^\/+/, ""))) {
