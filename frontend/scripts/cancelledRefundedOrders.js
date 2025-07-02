@@ -243,10 +243,10 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   });
 });
 // Highlight active link based on current URL
-const currentPath = window.location.pathname;
-console.log("+++",currentPath);
+const currentPath = window.location.pathname.replace(/^\/+/, ""); // remove leading slash
 $(".nav-link").each(function () {
-if (currentPath.includes($(this).attr("href"))) {
-$(this).addClass("active");
-}
+  const linkHref = $(this).attr("href");
+  if (linkHref && currentPath.includes(linkHref.replace(/^\/+/, ""))) {
+    $(this).addClass("active");
+  }
 });
