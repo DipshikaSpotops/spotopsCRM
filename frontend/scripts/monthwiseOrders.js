@@ -250,7 +250,7 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-PaginationControls(totalPages) {
+function createPaginationControls(totalPages) {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty(); 
 
@@ -260,7 +260,7 @@ PaginationControls(totalPages) {
       <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
     `);
 
-    // Pafunction createge number display: Page X of Y
+    // Page number display: Page X of Y
     paginationControls.append(`
       <span class="page-info">Page ${currentPage} of ${totalPages}</span>
     `);
@@ -457,10 +457,6 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
-const activeLink = $(".nav-link.active")[0];
-if (activeLink) {
-  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
-}
 role = localStorage.getItem("role");
 team = localStorage.getItem("team");
 if (team === "Team Charlie" || role === "Sales") {
