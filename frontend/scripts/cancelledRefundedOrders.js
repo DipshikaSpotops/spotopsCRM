@@ -75,7 +75,7 @@ $("#searchInput").on("keyup", function () {
     .filter(order => order.custRefundDate) 
     .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
 
-  $("#showTotalOrders").text(`Total Orders - ${filtered.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
+  $("#showTotalOrders").text(`Total Orders - ${filteredOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
 
   if (filteredOrders.length > 0 || value === "") {
     renderTableRows(1, filteredOrders); // Render the first page of filtered results
