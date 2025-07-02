@@ -69,7 +69,7 @@ $("#searchInput").on("keyup", function () {
       (order.email && order.email.toLowerCase().includes(value))
     );
   });
-  const totalRefundedAmount = filtered
+  const totalRefundedAmount = filteredOrders
     .filter(order => order.custRefundDate) 
     .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
 
