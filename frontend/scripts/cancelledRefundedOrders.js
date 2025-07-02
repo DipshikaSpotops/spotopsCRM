@@ -1,181 +1,209 @@
-var firstName = localStorage.getItem("firstName");
-if (firstName) {
-$("#user-name").text(firstName);
-}
-if (!firstName) {
-window.location.href = "login_signup.html";
-}
-// Token fetching logic
-async function fetchToken() {
-try {
-const response = await axios.get(`https://www.spotops360.com/auth/token/${localStorage.getItem("userId")}`);
-if (response.status === 200) {
-localStorage.setItem("token", response.data.token);
-} else {
-throw new Error("Failed to fetch token");
-}
-} catch (error) {
-console.error("Error fetching token:", error);
-}
-}
+$(document).ready(async function () {
+  let allOrders = [];
+  const rowsPerPage = 25;
+  let currentPage = 1;
+  const userId = localStorage.getItem("userId");
+  const firstName = localStorage.getItem("firstName");
 
-let token = localStorage.getItem("token");
-if (!token) {
- fetchToken();
-token = localStorage.getItem("token");
-}
+  if (!firstName) {
+    window.location.href = "login_signup.html";
+    return;
+  }
+  $("#user-name").text(firstName);
 
-document.addEventListener("DOMContentLoaded", async function () {
-  const monthPicker = document.getElementById("monthYearPicker");
+  // Token logic
+  let token = localStorage.getItem("token");
+  if (!token) {
+    try {
+      const response = await axios.get(`https://www.spotops360.com/auth/token/${userId}`);
+      if (response.status === 200) {
+        token = response.data.token;
+        localStorage.setItem("token", token);
+      }
+    } catch (err) {
+      console.error("Token fetch failed", err);
+    }
+  }
+
+  // Set Dallas month default
   const dallasDate = new Date(
     new Intl.DateTimeFormat("en-US", {
       timeZone: "America/Chicago",
       year: "numeric",
       month: "2-digit",
-      day: "2-digit",
-    }).format(new Date())
-      .replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2") 
+      day: "2-digit"
+    }).format(new Date()).replace(/(\\d+)\\/(\\d+)\\/(\\d+)/, "$3-$1-$2")
   );
+  const defaultMonth = dallasDate.toISOString().slice(0, 7);
+  $("#monthYearPicker").val(defaultMonth);
 
-  const defaultMonth = dallasDate.toISOString().slice(0, 7); 
-  monthPicker.value = defaultMonth;
-  const [year, month] = defaultMonth.split("-");
-  const monthShort = new Date(`${month}-01-2000`).toLocaleString("default", { month: "short" });
+  // Load data on page load
+  await loadOrders(defaultMonth);
 
-  const [cancelledOrders, refundedOrders] = await Promise.all([
-    fetchOrdersByType("cancelled-by-date", monthShort, year),
-    fetchOrdersByType("refunded-by-date", monthShort, year),
-  ]);
-  const combined = [...cancelledOrders, ...refundedOrders];
-  const uniqueOrdersMap = {};
-  combined.forEach(order => {
-    const orderNo = order.orderNo;
-    console.log("custRefundDate",order.custRefundDate);
-    if (!uniqueOrdersMap[orderNo]) {
-      uniqueOrdersMap[orderNo] = {
-        orderNo,
+  // Filter button
+  $("#filterButton").click(async function () {
+    const selected = $("#monthYearPicker").val();
+    if (selected) await loadOrders(selected);
+  });
+
+  // Search input
+  $("#searchInput").on("keyup", function () {
+    const value = $(this).val().toLowerCase();
+    const filtered = allOrders.filter(order =>
+      order.orderNo?.toLowerCase().includes(value) ||
+      order.cancellationReason?.toLowerCase().includes(value) ||
+      order.customerName?.toLowerCase().includes(value)
+    );
+    $("#showTotalOrders").text(`Total Orders - ${filtered.length}`);
+    renderTableRows(1, filtered);
+    createPaginationControls(Math.ceil(filtered.length / rowsPerPage), filtered);
+  });
+
+  // Search input for quick nav
+  const searchQuick = document.getElementById("searchInputForOrderNo");
+  const resultDiv = document.getElementById("searchResult");
+  if (searchQuick) {
+    searchQuick.addEventListener("input", function () {
+      const val = this.value.trim();
+      resultDiv.innerHTML = val
+        ? `<button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>`
+        : "";
+      if (val) {
+        document.getElementById("viewOrderBtn").onclick = () => {
+          window.location.href = `form.html?orderNo=${encodeURIComponent(val)}&process=true`;
+        };
+      }
+    });
+  }
+
+  // Core data loader
+  async function loadOrders(monthYear) {
+    const [year, monthNum] = monthYear.split("-");
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = months[parseInt(monthNum, 10) - 1];
+    const [cancelled, refunded] = await Promise.all([
+      fetchOrders("cancelled-by-date", month, year),
+      fetchOrders("refunded-by-date", month, year)
+    ]);
+    const combined = [...cancelled, ...refunded];
+    const unique = {};
+
+    combined.forEach(order => {
+      const o = unique[order.orderNo] ??= {
+        orderNo: order.orderNo,
         orderDate: order.orderDate,
-        cancelledDate: order.cancelledDate,
-        custRefundDate: order.custRefundDate,
         cancellationReason: order.cancellationReason,
         custRefAmount: order.custRefAmount,
+        custRefundDate: order.custRefundDate,
+        cancelledDate: order.cancelledDate,
+        customerName: order.customerName,
         orderHistory: order.orderHistory || [],
       };
-    }
-
-    order.orderHistory?.forEach(entry => {
-      if (entry.includes("cancelled") && !uniqueOrdersMap[orderNo].cancelledDate) {
-        uniqueOrdersMap[orderNo].cancelledDate = extractDate(entry);
-      }
-      if (entry.includes("refunded") && !uniqueOrdersMap[orderNo].custRefundDate) {
-        uniqueOrdersMap[orderNo].custRefundDate = extractDate(entry);
-      }
-    });
-  });
-
-  renderTable(Object.values(uniqueOrdersMap));
-});
-
-function extractDate(text) {
-  const match = text.match(/on (\d{1,2}) (\w+), (\d{4})/);
-  if (!match) return "-";
-  return `${match[1]} ${match[2]} ${match[3]}`;
-}
-
-async function fetchOrdersByType(type, month, year) {
-  try {
-    const response = await axios.get(`https://www.spotops360.com/orders/${type}`, {
-      params: { month, year },
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching ${type} orders:`, error);
-    return [];
-  }
-}
-
-function renderTable(orders) {
-  const tbody = document.getElementById("infoTable");
-  tbody.innerHTML = "";
-
-  if (!orders.length) {
-    tbody.innerHTML = `<tr><td colspan="4" class="text-center">No cancelled or refunded orders for selected month.</td></tr>`;
-    return;
-  }
-
-  orders.forEach(order => {
-    const actions = `
-            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}" ${order.orderStatus === "Placed" || order.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-    const row = `
-      <tr>
-        <td>${order.orderNo}</td>
-        <td>${formatDate(order.orderDate)}</td>
-        <td>${formatDate(order.cancelledDate)}</td>
-        <td>${formatDate(order.custRefundDate)}</td>
-        <td>${order.cancellationReason || "-"}</td>
-        <td>$${order.custRefAmount || 0}</td>
-        <td>${actions}</td>
-      </tr>
-    `;
-    tbody.insertAdjacentHTML("beforeend", row);
-  });
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return "-";
-  const date = new Date(dateStr);
-  return isNaN(date) ? "-" : date.toLocaleDateString("en-US", {
-    year: "numeric", month: "short", day: "numeric"
-  });
-}
-$("#searchInput").on("keyup", function () {
-  const value = $(this).val().toLowerCase();
-
-  const filteredOrders = allOrders.filter(order => {
-    return (
-      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-      (order.cancellationReason && order.cancellationReason.toLowerCase().includes(value)) ||
-      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
-      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
-      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.additionalInfo && order.additionalInfo.some(info =>
-        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
-      )) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
-      (order.email && order.email.toLowerCase().includes(value))
-    );
-  });
-
-  // Update the Total Orders count
-  document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`;
-
-  if (filteredOrders.length > 0 || value === "") {
-    renderTableRows(1, filteredOrders);
-    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-  } else {
-    $("#infoTable").empty();
-    $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-  }
-});
-const searchInput = document.getElementById('searchInputForOrderNo');
-  const resultDiv = document.getElementById('searchResult');
-
-  searchInput.addEventListener('input', function () {
-    const orderNo = searchInput.value.trim();
-
-    if (orderNo !== '') {
-      resultDiv.innerHTML = `
-        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
-      `;
-
-      document.getElementById('viewOrderBtn').addEventListener('click', function () {
-       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
-
+      order.orderHistory?.forEach(entry => {
+        if (entry.includes("cancelled") && !o.cancelledDate) o.cancelledDate = extractDate(entry);
+        if (entry.includes("refunded") && !o.custRefundDate) o.custRefundDate = extractDate(entry);
       });
-    } else {
-      resultDiv.innerHTML = '';
+    });
+
+    allOrders = Object.values(unique);
+    $("#showTotalOrders").text(`Total Orders - ${allOrders.length}`);
+    renderTableRows(1);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  }
+
+  async function fetchOrders(type, month, year) {
+    try {
+      const res = await axios.get(`https://www.spotops360.com/orders/${type}`, {
+        params: { month, year },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      return res.data;
+    } catch (err) {
+      console.error(`Error fetching ${type}`, err);
+      return [];
     }
+  }
+
+  function extractDate(text) {
+    const match = text.match(/on (\\d{1,2}) (\\w+), (\\d{4})/);
+    return match ? `${match[1]} ${match[2]} ${match[3]}` : "-";
+  }
+
+  function formatDate(str) {
+    if (!str) return "-";
+    const d = new Date(str);
+    return isNaN(d) ? "-" : d.toLocaleDateString("en-US", {
+      year: "numeric", month: "short", day: "numeric"
+    });
+  }
+
+  function renderTableRows(page, orders = allOrders) {
+    const start = (page - 1) * rowsPerPage;
+    const data = orders.slice(start, start + rowsPerPage);
+    const tbody = $("#infoTable").empty();
+
+    if (!data.length) {
+      tbody.append(`<tr><td colspan="7">No orders found.</td></tr>`);
+      return;
+    }
+
+    data.forEach(order => {
+      tbody.append(`
+        <tr>
+          <td>${order.orderNo}</td>
+          <td>${formatDate(order.orderDate)}</td>
+          <td>${formatDate(order.cancelledDate)}</td>
+          <td>${formatDate(order.custRefundDate)}</td>
+          <td>${order.cancellationReason || "-"}</td>
+          <td>$${order.custRefAmount || 0}</td>
+          <td>
+            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button>
+          </td>
+        </tr>
+      `);
+    });
+  }
+
+  function createPaginationControls(totalPages, orders = allOrders) {
+    const container = $("#pagination-controls").empty();
+    if (totalPages <= 1) return;
+
+    container.append(`<button class="previousNext" id="prevPage">Previous</button>`);
+    for (let i = 1; i <= totalPages; i++) {
+      container.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);
+    }
+    container.append(`<button class="previousNext" id="nextPage">Next</button>`);
+
+    container.off("click").on("click", ".page-btn", function () {
+      currentPage = parseInt($(this).data("page"));
+      renderTableRows(currentPage, orders);
+    });
+
+    container.on("click", "#prevPage", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTableRows(currentPage, orders);
+      }
+    });
+
+    container.on("click", "#nextPage", () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTableRows(currentPage, orders);
+      }
+    });
+  }
+
+  // Table row click highlights
+  $(document).on("click", "#infoTable tr", function () {
+    $("#infoTable tr").removeClass("selected");
+    $(this).addClass("selected");
   });
+
+  // View button click
+  $("#infoTable").on("click", ".process-btn", function () {
+    const id = $(this).data("id");
+    window.location.href = `form.html?orderNo=${id}&process=true`;
+  });
+});
