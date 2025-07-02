@@ -1340,7 +1340,13 @@ color: #999999;
 }
 .dark-mode .timeline-item .timeline-panel .timeline-heading {
     background-color: #0a192f;
-    color: #bfccff;
+    color: #b1b1b1;
+}
+.dark-mode .timeline-item::before {
+  background: #525252;
+}
+.dark-mode h2 {
+    color: #d3d6d9;
 }
 .dark-mode .timeline-item .timeline-panel .timeline-body {
   color: #bfccff;
