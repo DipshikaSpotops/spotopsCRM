@@ -139,7 +139,7 @@ margin: 0% 30%;
 .topHeads {
     display: flex;
     margin-bottom: 1%;
-    margin-top: 3%;
+    margin-top: 2%;
   }
 
 #searchInput {
@@ -222,10 +222,9 @@ font-size: 1.5em;
 color: #333;
 }
 .page-info {
-  display: inline-block;
-  margin-left: 10px;
-  font-size: 18px;
-  font-weight: bold;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
 }
 .modal-overlay {
 position: fixed;

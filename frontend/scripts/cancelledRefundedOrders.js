@@ -47,17 +47,38 @@ $(document).ready(async function () {
   });
 
   // Search input
-  $("#searchInput").on("keyup", function () {
-    const value = $(this).val().toLowerCase();
-    const filtered = allOrders.filter(order =>
-      order.orderNo?.toLowerCase().includes(value) ||
-      order.cancellationReason?.toLowerCase().includes(value) ||
-      order.customerName?.toLowerCase().includes(value)
+$("#searchInput").on("keyup", function () {
+  const value = $(this).val().toLowerCase();
+
+ const filteredOrders = allOrders.filter(order => {
+    return (
+      (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+      (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+      (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+      (order.cancellationReason && order.cancellationReason.toLowerCase().includes(value)) ||
+      (order.customerName && order.customerName.toLowerCase().includes(value)) ||
+      ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName &&
+        order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+      (order.additionalInfo && order.additionalInfo.some(info =>
+        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
+      )) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked &&
+        order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+      (order.email && order.email.toLowerCase().includes(value))
     );
-    $("#showTotalOrders").text(`Total Orders - ${filtered.length}`);
-    renderTableRows(1, filtered);
-    createPaginationControls(Math.ceil(filtered.length / rowsPerPage), filtered);
   });
+  const totalRefundedAmount = filtered
+    .filter(order => order.custRefundDate) 
+    .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
+
+  $("#showTotalOrders").text(`Total Orders - ${filtered.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
+
+  renderTableRows(1, filtered);
+  createPaginationControls(Math.ceil(filtered.length / rowsPerPage), filtered);
+});
+
 
   // Search input for quick nav
   const searchQuick = document.getElementById("searchInputForOrderNo");
@@ -107,7 +128,11 @@ $(document).ready(async function () {
     });
 
     allOrders = Object.values(unique);
-    $("#showTotalOrders").text(`Total Orders - ${allOrders.length}`);
+const totalRefundedAmount = allOrders
+  .filter(order => order.custRefundDate)
+  .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
+
+$("#showTotalOrders").text(`Total Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
     renderTableRows(1);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   }
@@ -218,4 +243,11 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     const id = $(this).data("id");
     window.location.href = `form.html?orderNo=${id}&process=true`;
   });
+});
+const currentPath = window.location.pathname + "?newEntry=true";
+console.log("currentPath",currentPath)
+$(".nav-link").each(function () {
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
 });
