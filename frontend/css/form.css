@@ -1282,7 +1282,13 @@ input[type="date"]:valid {
     padding: 5px 10px;
     height: 3vh;
   }
-
+#deadline {
+      height: 40px;
+    color: white;
+    border-radius: 10px;
+    border: 1px solid black;
+    width: 159%;
+}
   /* for dark mode */
   .dark-mode {
 background-color: #0a192f;
