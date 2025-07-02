@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         orderNo,
         orderDate: order.orderDate,
         cancelledDate: order.cancelledDate,
-        refundedDate: order.refundedDate,
+        custRefundDate: order.custRefundDate,
         cancellationReason: order.cancellationReason,
         custRefAmount: order.custRefAmount,
         orderHistory: order.orderHistory || [],
@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (entry.includes("cancelled") && !uniqueOrdersMap[orderNo].cancelledDate) {
         uniqueOrdersMap[orderNo].cancelledDate = extractDate(entry);
       }
-      if (entry.includes("refunded") && !uniqueOrdersMap[orderNo].refundedDate) {
-        uniqueOrdersMap[orderNo].refundedDate = extractDate(entry);
+      if (entry.includes("refunded") && !uniqueOrdersMap[orderNo].custRefundDate) {
+        uniqueOrdersMap[orderNo].custRefundDate = extractDate(entry);
       }
     });
   });
@@ -83,9 +83,9 @@ function renderTable(orders) {
         <td>${order.orderNo}</td>
         <td>${formatDate(order.orderDate)}</td>
         <td>${order.cancelledDate || "-"}</td>
-        <td>${order.refundedDate || "-"}</td>
+        <td>${order.custRefundDate || "-"}</td>
         <td>${order.cancellationReason || "-"}</td>
-        <td>${order.custRefAmount || "-"}</td>
+        <td>$${order.custRefAmount || "-"}</td>
         <td>${order.custRefAmount || "-"}</td>
       </tr>
     `;
