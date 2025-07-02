@@ -59,14 +59,6 @@ $("#searchInput").on("keyup", function () {
       (order.cancellationReason && order.cancellationReason.toLowerCase().includes(value)) ||
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName &&
-        order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
-      (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-      (order.additionalInfo && order.additionalInfo.some(info =>
-        (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
-      )) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked &&
-        order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
       (order.email && order.email.toLowerCase().includes(value))
     );
   });
