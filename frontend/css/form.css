@@ -1438,7 +1438,15 @@ color: #e0e0e0;
 scrollbar-color: #29638c #141b2d;
 border: none;
 }
-.dark-mode #taskName, #assignTo, #taskDesc {
+.dark-mode #taskName, .dark-mode #taskDesc {
+  background-color: #0a192f;
+  border: none;
+}
+.dark-mode #assignTo {
+  background-color: #0a192f;
+  border: none;
+}
+.dark-mode #taskDesc {
   background-color: #0a192f;
   border: none;
 }
