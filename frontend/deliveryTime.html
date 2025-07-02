@@ -1098,6 +1098,10 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 $("#filterButton").click(async function () {
   console.log("Filter button clicked!"); 
   const selectedMonthYear = $("#monthYearPicker").val();
