@@ -668,7 +668,7 @@ $.ajax({
   success: function (users) {
     const teamShankar = [];
     const teamVinutha = [];
-
+  console.log("users",users);
     users.forEach(user => {
       const name = `${user.firstName} ${user.lastName || ''}`;
       if (user.team === "Shankar") {
