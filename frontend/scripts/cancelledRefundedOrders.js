@@ -21,7 +21,7 @@ console.error("Error fetching token:", error);
 
 let token = localStorage.getItem("token");
 if (!token) {
-await fetchToken();
+fetchToken();
 token = localStorage.getItem("token");
 }
 
