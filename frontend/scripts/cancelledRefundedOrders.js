@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const uniqueOrdersMap = {};
   combined.forEach(order => {
     const orderNo = order.orderNo;
+    console.log("custRefundDate",order.custRefundDate);
     if (!uniqueOrdersMap[orderNo]) {
       uniqueOrdersMap[orderNo] = {
         orderNo,
