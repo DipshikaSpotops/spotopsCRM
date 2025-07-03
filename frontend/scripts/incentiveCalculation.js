@@ -29,10 +29,48 @@ displayLabels = monthIndices.map(i => `${months[i]} ${i > currentMonth ? display
 
   for (let i = 0; i < 3; i++) {
     const [month, year] = displayLabels[i].split(" ");
-    const ordersRes = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month.substring(0, 3)}&year=${year}`);
     const lockedRes = await axios.get(`https://www.spotops360.com/getLockedGP?month=${month.substring(0, 3)}&year=${year}`);
-    const agentTotals = {};
-const orders = Array.isArray(ordersRes.data.orders) ? ordersRes.data.orders : [];
+    const limit = 25;
+let page = 1;
+let orders = [];
+
+try {
+  // First page request to get total count
+  const firstRes = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+    params: {
+      month: month.substring(0, 3),
+      year,
+      page,
+      limit
+    }
+  });
+
+  const totalCount = firstRes.data.totalCount || 0;
+  const totalPages = Math.ceil(totalCount / limit);
+
+  orders.push(...firstRes.data.orders);
+
+  // Fetch remaining pages (if any)
+  const pageRequests = [];
+  for (let p = 2; p <= totalPages; p++) {
+    pageRequests.push(
+      axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: {
+          month: month.substring(0, 3),
+          year,
+          page: p,
+          limit
+        }
+      })
+    );
+  }
+
+  const responses = await Promise.all(pageRequests);
+  responses.forEach(res => orders.push(...res.data.orders));
+} catch (err) {
+  console.error(`Error fetching paginated orders for ${month} ${year}`, err);
+}
+
 const lockedAgents = Array.isArray(lockedRes.data) ? lockedRes.data : (lockedRes.data.lockedAgents || []);
 
 
