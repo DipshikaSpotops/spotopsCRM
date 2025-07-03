@@ -206,6 +206,7 @@ yardOrders.forEach(order => {
       const salesTax = parseFloat(order.salestax || 0);
 
       const calculatedSpend = soldP - salesTax - partPrice - shippingCost - others - refundedAmount;
+      console.log("soldP:", soldP, "salesTax:", salesTax, "partPrice:", partPrice, "shippingCost:", shippingCost, "others:", others, "refundedAmount:", refundedAmount,"calculatedSpend",calculatedSpend);
 
       // If negative (can happen if refund is too high), clamp to 0
       orderSpend += Math.max(0, calculatedSpend);
@@ -218,6 +219,8 @@ yardOrders.forEach(order => {
 //
 
     console.log("Total spend:", totalSpend);
+    $("#showTotalOrders").text(`Total Spend $${totalSpend.toFixed(2)}`);
+
     currentPage = 1;
     renderTableRows(currentPage, yardOrders);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
