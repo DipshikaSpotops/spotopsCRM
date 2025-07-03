@@ -184,11 +184,6 @@ function renderTableRows(page, orders = allOrders) {
         <td>${formattedDate}</td>
         <td>${item.orderNo}</td>
         <td>${yardInfo}</td>
-        <td>$${item.soldP}</td>
-        <td>$${item.grossProfit}</td>
-        <td>$${currentGP.toFixed(2)}</td>
-        <td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
-        <td ${escalationStyle}>${escalationStatus}</td>
         <td>
           ${editButton}
           <button class="btn  process-btn" data-id="${item.orderNo}" ${processBtnDisabled}>View</button>
