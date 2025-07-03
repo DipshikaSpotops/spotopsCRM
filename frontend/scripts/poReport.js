@@ -203,7 +203,7 @@ yardOrders.forEach(order => {
       const refundedAmount = parseFloat(info.refundedAmount || 0);
       const soldP = parseFloat(order.soldP || 0);
       const salesTax = parseFloat(order.salestax || 0);
-      const calculatedSpend = partPrice - shippingCost - others - refundedAmount;
+      const calculatedSpend = partPrice + shippingCost + others - refundedAmount;
       console.log("calculatedSpend",calculatedSpend,"paymentStatus",info.paymentStatus);
       orderSpend += Math.max(0, calculatedSpend);
     }
