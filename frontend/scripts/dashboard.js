@@ -962,11 +962,11 @@ if (Array.isArray(order.additionalInfo)) {
       const partPrice = parseFloat(info.partPrice) || 0;
       const shipping = parseFloat(info.shippingDetails?.match(/(\d+(\.\d+)?)/)?.[0]) || 0;
       const others = parseFloat(info.others) || 0;
-      const refundedAmount = parseFloat(info.refundedAmount) || 0;
-      console.log(partPrice,shipping,others,refundAmount);
-      purchases += partPrice + shipping + others - refundedAmount;
+
+      purchases += partPrice + shipping + others;
     });
 }
+
   });
 
   // Update DOM (assumes you have elements with these IDs)
