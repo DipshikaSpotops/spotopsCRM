@@ -29,7 +29,10 @@ if (date.getDate() >= 15) {
     const [month, year] = displayLabels[i].split(" ");
     const ordersRes = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month.substring(0, 3)}&year=${year}`);
     const lockedRes = await axios.get(`https://www.spotops360.com/getLockedGP?month=${month.substring(0, 3)}&year=${year}`);
-    const agentTotals = {}, orders = ordersRes.data, lockedAgents = lockedRes.data;
+    const agentTotals = {};
+const orders = Array.isArray(ordersRes.data.orders) ? ordersRes.data.orders : [];
+const lockedAgents = Array.isArray(lockedRes.data) ? lockedRes.data : (lockedRes.data.lockedAgents || []);
+
 
     orders.forEach(o => {
       const a = o.salesAgent;
