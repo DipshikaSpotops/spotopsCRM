@@ -526,23 +526,21 @@ async function fetchOrdersForSelectedMonth(monthYear) {
     allOrders = orders;
     currentPage = 1;
     let totalShipping = 0;
+let totalShipping = 0;
 
-const yardInfo = allOrders.additionalInfo?.map((info, index) => {
-  let shippingValue = 0;
-
-  if (info.paymentStatus === "Card charged") {
-    const shippingMatch = info.shippingDetails?.match(/(\d+(\.\d+)?)/);
-    shippingValue = shippingMatch ? parseFloat(shippingMatch[0]) : 0;
-    totalShipping += shippingValue;
-    console.log("totalShipping",totalShipping);
+allOrders.forEach(order => {
+  if (Array.isArray(order.additionalInfo)) {
+    order.additionalInfo.forEach(info => {
+      if (info.paymentStatus === "Card charged") {
+        const match = info.shippingDetails?.match(/(\d+(\.\d+)?)/);
+        const shippingValue = match ? parseFloat(match[0]) : 0;
+        totalShipping += shippingValue;
+      }
+    });
   }
+});
 
-  return `
-    <b>Yard ${index + 1}</b>: ${info.yardName}<br>
-    Shipping: ${info.shippingDetails || ""}<br>
-  `;
-}).join("<br>") || "";
-document.getElementById("showTotalOrders").innerText = `$${totalShipping.toFixed(2)}`;
+document.getElementById("showTotalOrders").innerText = `Total Shipping: $${totalShipping.toFixed(2)}`;
     renderTableRows(currentPage, allOrders);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   } catch (error) {
