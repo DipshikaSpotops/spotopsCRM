@@ -14,6 +14,7 @@ let displayLabels = [], monthIndices = [], displayYear = date.getFullYear();
 const currentMonth = date.getMonth(); // 0-based, July = 6
 
 for (let i = 0; i < 3; i++) {
+    const agentTotals = {};
   const monthIndex = (currentMonth - i + 12) % 12;
   monthIndices.push(monthIndex);
 }
@@ -33,7 +34,7 @@ displayLabels = monthIndices.map(i => `${months[i]} ${i > currentMonth ? display
     const limit = 25;
 let page = 1;
 let orders = [];
-
+const agentTotals = {}; 
 try {
   // First page request to get total count
   const firstRes = await axios.get(`https://www.spotops360.com/orders/monthly`, {
