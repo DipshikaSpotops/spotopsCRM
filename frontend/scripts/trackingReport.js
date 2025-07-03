@@ -522,9 +522,42 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
+const limit = 25;
+const allFetchedOrders = [];
+let page = 1;
+let totalPages = 1;
+
+try {
+  const firstPageResponse = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+    params: { month, year, page, limit },
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+
+  const totalCount = firstPageResponse.data.totalCount || 0;
+  totalPages = Math.ceil(totalCount / limit);
+  allFetchedOrders.push(...firstPageResponse.data.orders);
+
+  // Fetch remaining pages
+  const promises = [];
+  for (let p = 2; p <= totalPages; p++) {
+    promises.push(
+      axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: { month, year, page: p, limit },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      })
+    );
+  }
+
+  const responses = await Promise.all(promises);
+  responses.forEach(res => {
+    allFetchedOrders.push(...res.data.orders);
+  });
+
+  allOrders = allFetchedOrders;
+  console.log("Total orders fetched:", allOrders.length);
+} catch (error) {
+  console.error("Error fetching paginated orders:", error);
+}
 
 if (ordersResponse.status !== 200) {
 throw new Error("Failed to fetch current month's orders");
