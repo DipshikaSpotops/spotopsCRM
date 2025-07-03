@@ -600,6 +600,48 @@ table thead th {
 #downloadCsv i {
   font-size: 18px; 
 }
+/* navbar */
+.navbar .user-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .user-info input {
+  max-width: 200px;
+}
+.welcome-text {
+  white-space: nowrap;
+  color: white;
+}
+#darkModeIcon {
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+}
+
+/* Notification Icon */
+#notificationIcon {
+  cursor: pointer;
+  position: relative;
+  color: white;
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+/* Notification Count Badge */
+#notificationCount {
+  display: block;
+  margin-left: -12px;
+  margin-top: -6px;
+}
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+/* navbar styling till here */
 @media (max-width: 992px) {
   .sidebar {
     font-size: 10px;
@@ -640,6 +682,23 @@ table.table td {
   }
 }
     @media (max-width: 768px) {
+        .navbar .user-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-info span,
+  .user-info .dark-mode-toggle,
+  .user-info .notification-container,
+  .user-info .user-icon {
+    margin-left: 0 !important;
+  }
         .sidebar {
         transform: translateX(-100%);
         width:38%;
