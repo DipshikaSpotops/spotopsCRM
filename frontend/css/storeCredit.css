@@ -527,6 +527,15 @@ table thead th {
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
 }
+.user-btn{
+  background-color: #96dce1;
+    border: none;
+    color: #38696c;
+}
+.usedForButton-btn{
+  background-color: #45a392;
+    border: none;
+}
 @media (max-width: 992px) {
   .sidebar {
     font-size: 10px;
