@@ -62,6 +62,7 @@ transition: transform 0.3s ease;
 background: linear-gradient(160deg, #017b82, #0771b4);
 font-size: 12px;
 text-align: left;
+scrollbar-color: white white;
 }
 #filterAndTotal{
   display: flex;
