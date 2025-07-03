@@ -831,5 +831,14 @@ $(document).on("click", "#infoTable tr", function () {
       resultDiv.innerHTML = '';
     }
   });
+  $(document).on("click", "#yardInfoTable  tr", function () {
+  const isSelected = $(this).hasClass("selected");
+
+  $("#yardInfoTable  tr").removeClass("selected");
+
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
+});
 fetchNotifications();
 });
