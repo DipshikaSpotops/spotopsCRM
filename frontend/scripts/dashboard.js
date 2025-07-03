@@ -338,9 +338,9 @@ const displayMonthName = new Date(`${monthShort} 1, ${year}`).toLocaleString("de
   year: "numeric"
 });
 document.getElementById("dailyOrdersTitle").innerText = `Daily Orders (${displayMonthName})`;
-console.log("month",month,"year",year);
+console.log("month",monthShort,"year",year);
   try {
-    console.log(`Fetching data for ${month} ${year}`);
+    console.log(`Fetching data for ${monthShort} ${year}`);
 const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
   params: { month: monthShort, year, limit: 1000 },
 });
