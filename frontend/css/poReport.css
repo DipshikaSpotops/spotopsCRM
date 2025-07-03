@@ -321,11 +321,12 @@ min-width: 50px;
   background-color: #b6c2c4 !important; 
 }
 
-.table tbody tr.selected {
+/* .table tbody tr.selected {
   background-color: #e7dcfd !important;
-}
+} */
 .table tbody tr.selected td {
   border: 1px solid #767171 !important;
+  background-color: #e7dcfd;
 }
 .table thead th {
 font-size: 13px;
