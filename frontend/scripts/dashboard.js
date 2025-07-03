@@ -1252,6 +1252,7 @@ function updateSummaryCards(orders) {
         const others = parseFloat(info.others) || 0;
         const refundedAmount = parseFloat(info.refundedAmount) || 0;
         totalPurchases += partPrice + shipping + others - refundedAmount;
+        console.log("totalPurchases",totalPurchases);
       }
       });
     }
