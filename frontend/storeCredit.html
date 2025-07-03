@@ -61,10 +61,10 @@ color: white;
 cursor: pointer;
 }
 #searchInput {
-  width: auto;
+    width: auto;
     border-radius: 30px;
     border: 1px solid grey;
-    margin: 20% -42%;
+    margin: 10% 6%;
     background: white url(https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/magnify.png) 5px center no-repeat;
     background-size: 20px 20px;
     padding-left: 35px;
@@ -350,11 +350,12 @@ scrollbar-color: #29638c #141b2d;
     background-color: #29638c;
 }
 #mainHeading {
-  text-align: center; 
-  color: #037894;
-  white-space: nowrap;
-  margin-left: 0%;
-  text-decoration: underline;
+    text-align: center;
+    color: #037894;
+    white-space: nowrap;
+    margin-left: 0%;
+    text-decoration: underline;
+    margin-top: 1.3%;
 }
 #monthYearPicker{
   background-color: #35554f;
@@ -391,6 +392,8 @@ background-color: #96dce1;
 }
 table thead th {
   position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
   top: 0;
   z-index: 10; 
   background-color: #037894; 
@@ -546,17 +549,6 @@ overflow: hidden;
 
 #usedForModal .btn-primary:hover {
   background-color: #307a68;
-}
-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 10; 
-  background-color: #35554f; 
-  color: white;
-  padding: 8px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  white-space: nowrap;
 }
 #submitUSage {
   background-color: #2b4540;
