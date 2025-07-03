@@ -222,11 +222,10 @@ font-size: 1.5em;
 color: #333;
 }
 .page-info {
-  display: inline-block;
-  margin-left: 10px;
-  font-size: 18px;
-  font-weight: bold;
-}
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 16px;
+}    
 .modal-overlay {
 position: fixed;
 top: 0;
