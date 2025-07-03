@@ -1248,7 +1248,7 @@ function updateSummaryCards(orders) {
         if (shippingMatch) {
           shipping = parseFloat(shippingMatch[1]);
         }
-
+        console.log("shipping",shippingStr,shipping);
         const others = parseFloat(info.others) || 0;
         const refundedAmount = parseFloat(info.refundedAmount) || 0;
         totalPurchases += partPrice + shipping + others - refundedAmount;
