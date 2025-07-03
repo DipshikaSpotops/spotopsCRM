@@ -1253,7 +1253,7 @@ function updateSummaryCards(orders) {
         const refundedAmount = parseFloat(info.refundedAmount) || 0;
         let purchases = partPrice + shipping + others - refundedAmount
         totalPurchases += partPrice + shipping + others - refundedAmount;
-        console.log("totalPurchases",totalPurchases,"purchases",purchases);
+        console.log("purchases",purchases,"order no",order.orderNo);
       }
       });
     }
