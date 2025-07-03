@@ -160,10 +160,7 @@ function renderTableRows(page, orders = allOrders) {
 
     const yardInfo = item.additionalInfo?.map((info, index) => `
       <b>Yard ${index + 1}</b>: ${info.yardName}<br>
-      ${info.email} | ${info.phone}<br>
-      Status: <b>${info.status}</b> | Stock No.: ${info.stockNo || ""}<br>
-      Part price: $${info.partPrice} ${info.shippingDetails || ""} Others: $${info.others || 0}<br>
-      ${info.paymentStatus || ""} Refunds: ${info.refundedAmount || 0}
+      Shipping: ${info.shippingDetails || ""}<br>
     `).join("<br>") || "";
 
     const editButton = (team === "Team Mark" || team === "Team Sussane")
@@ -186,22 +183,7 @@ function renderTableRows(page, orders = allOrders) {
       <tr>
         <td>${formattedDate}</td>
         <td>${item.orderNo}</td>
-        <td>${item.salesAgent}</td>
-        <td>
-          Customer Name: ${customerName}<br>
-          ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
-          ${item.sAddress || ""} ${item.sAddressStreet || ""},<br>
-          ${item.sAddressCity || ""}, ${item.sAddressState || ""},<br>
-          ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
-          Phone: ${item.phone} | Email: ${item.email}
-        </td>
-        <td>Year: ${item.year} | Make: ${item.make} | Model: ${item.model}</br>
-Part Description: ${item.desc}</br>
-Part No: ${item.partNo} | VIN: ${item.vin}</br>
-Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
-</td>
         <td>${yardInfo}</td>
-        <td>${item.orderStatus}</td>
         <td>$${item.soldP}</td>
         <td>$${item.grossProfit}</td>
         <td>$${currentGP.toFixed(2)}</td>
@@ -575,8 +557,23 @@ async function fetchOrdersForSelectedMonth(monthYear) {
 
     allOrders = orders;
     currentPage = 1;
+    let totalShipping = 0;
 
-    document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${allOrders.length}`;
+const yardInfo = allOrders.additionalInfo?.map((info, index) => {
+  let shippingValue = 0;
+
+  if (info.paymentStatus === "Card charged") {
+    const shippingMatch = info.shippingDetails?.match(/(\d+(\.\d+)?)/);
+    shippingValue = shippingMatch ? parseFloat(shippingMatch[0]) : 0;
+    totalShipping += shippingValue;
+  }
+
+  return `
+    <b>Yard ${index + 1}</b>: ${info.yardName}<br>
+    Shipping: ${info.shippingDetails || ""}<br>
+  `;
+}).join("<br>") || "";
+document.getElementById("showTotalOrders").innerText = `$${totalShipping.toFixed(2)}`;
     renderTableRows(currentPage, allOrders);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   } catch (error) {
