@@ -1250,7 +1250,8 @@ function updateSummaryCards(orders) {
         }
 
         const others = parseFloat(info.others) || 0;
-        totalPurchases += partPrice + shipping + others;
+        const refundedAmount = parseFloat(info.refundedAmount) || 0;
+        totalPurchases += partPrice + shipping + others - refundedAmount;
       }
       });
     }
