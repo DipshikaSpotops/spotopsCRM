@@ -954,7 +954,7 @@ function updateMonthlyFinancialSummary(index) {
       refunded++;
       refundAmount += parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
     }
-console.log("length",order.length);
+console.log("lengthdd",order.length);
 if (Array.isArray(order.additionalInfo)) {
   order.additionalInfo
     .filter(info => info.paymentStatus === "Card charged")
