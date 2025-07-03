@@ -183,7 +183,11 @@ function renderTableRows(page, orders = allOrders) {
       <tr>
         <td>${formattedDate}</td>
         <td>${item.orderNo}</td>
+        <td>${item.fName && item.lName 
+      ? `${item.fName} ${item.lName}` 
+      : item.customerName || ""}</td>
         <td>${yardInfo}</td>
+        <td>${item.orderStatus}</td>
         <td>
           ${editButton}
           <button class="btn  process-btn" data-id="${item.orderNo}" ${processBtnDisabled}>View</button>
