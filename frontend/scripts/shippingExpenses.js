@@ -152,11 +152,10 @@ function renderTableRows(page, orders = allOrders) {
   ordersForPage.forEach((item) => {
     const date = new Date(item.orderDate);
     const formattedDate = `${date.getUTCDate()}${suffix(date.getUTCDate())} ${monthNames[date.getUTCMonth()]}, ${date.getUTCFullYear()}`;
-
-    const escalationStatus = item.additionalInfo?.[0]?.escTicked === "Yes" ? "Yes" : "";
-    const escalationStyle = (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") 
-                            ? 'style="background-color: #c6fbd6;"color: white""' 
-                            : "";
+    // const escalationStatus = item.additionalInfo?.[0]?.escTicked === "Yes" ? "Yes" : "";
+    // const escalationStyle = (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") 
+    //                         ? 'style="background-color: #c6fbd6;"color: white""' 
+    //                         : "";
 
     const yardInfo = item.additionalInfo?.map((info, index) => `
       <b>Yard ${index + 1}</b>: ${info.yardName}<br>
@@ -169,24 +168,15 @@ function renderTableRows(page, orders = allOrders) {
 
     const processBtnDisabled = ["Placed", "Customer approved"].includes(item.orderStatus) ? "disabled" : "";
 
-    const currentGP = calculateCurrentGP(item);
-
     const customerName = item.fName && item.lName 
       ? `${item.fName} ${item.lName}` 
       : item.customerName || "";
-
-    const partRequired = item.pReq || item.partName;
-    const programmingRequired = (item.programmingRequired === true || item.programmingRequired === "true")
-      ? `Yes ($${item.programmingCostQuoted})` : "No";
-
     const rowHTML = `
       <tr>
         <td>${formattedDate}</td>
         <td>${item.orderNo}</td>
         <td>${item.salesAgent}</td>
-        <td>${item.fName && item.lName 
-      ? `${item.fName} ${item.lName}` 
-      : item.customerName || ""}</td>
+        <td>${customerName}</td>
         <td>${yardInfo}</td>
         <td>${item.orderStatus}</td>
         <td>
@@ -199,36 +189,14 @@ function renderTableRows(page, orders = allOrders) {
     tbody.append(rowHTML);
   });
 }
-function calculateCurrentGP(item) {
-  let totalYardSpent = 0;
 
-  (item.additionalInfo || []).forEach(info => {
-    const yardPP = parseFloat(info.partPrice) || 0;
-    const shippingValue = (info.shippingDetails?.match(/:\s*(\d+(\.\d+)?)/) || [])[1] || 0;
-    const others = parseFloat(info.others) || 0;
-    const refunded = parseFloat(info.refundedAmount) || 0;
-    const escReturn = parseFloat(info.custOwnShippingReturn) || 0;
-    const escReplace = parseFloat(info.custOwnShipReplacement) || 0;
-    const yardReplace = parseFloat(info.yardOwnShipping) || 0;
-
-    const include = info.status !== "PO cancelled" || (info.status === "PO cancelled" && info.paymentStatus === "Card charged");
-    if (include) {
-      totalYardSpent += yardPP + parseFloat(shippingValue) + others + escReturn + escReplace + yardReplace - refunded;
-    }
-  });
-
-  const spMinusTax = (parseFloat(item.soldP) || 0) - (parseFloat(item.salestax) || 0);
-  const refund = parseFloat(item.custRefundedAmount) || 0;
-
-  return spMinusTax - refund - totalYardSpent;
-}
 
 // <td>${sendInvoice}</td>
 var firstname = localStorage.getItem("firstName");
-if (firstName) {
+if (firstname) {
 $("#user-name").text(firstName);
 }
-if (!firstName) {
+if (!firstname) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
@@ -566,6 +534,7 @@ const yardInfo = allOrders.additionalInfo?.map((info, index) => {
     const shippingMatch = info.shippingDetails?.match(/(\d+(\.\d+)?)/);
     shippingValue = shippingMatch ? parseFloat(shippingMatch[0]) : 0;
     totalShipping += shippingValue;
+    console.log("totalShipping",totalShipping);
   }
 
   return `
