@@ -306,13 +306,14 @@ h1 {
     color: #f9fff9;
 }
 .user-btn{
-  background-color: #96dce1;
+    background-color: #02798c;
     border: none;
-    color: #38696c;
+    color: white;
 }
 .usedForButton-btn{
-  background-color: #45a392;
+    background-color: #276c60;
     border: none;
+    color: white;
 }
 .user-btn, .process-btn, .usedForButton-btn {
 min-width: 50px;
