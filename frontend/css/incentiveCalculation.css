@@ -249,6 +249,14 @@ overflow: hidden;
 h3 {
 text-align:center;
 }
+
+#mainHeading {
+  text-align: center; 
+  color: #037894;
+  white-space: nowrap;
+  margin-left: 0%;
+  text-decoration: underline;
+}
 .container {
             max-width: 1200px;
             margin: 0 auto;
