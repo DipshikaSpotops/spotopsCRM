@@ -297,8 +297,8 @@ throw new Error("Failed to fetch orders");
 
 var allOrder = response.data;
 const teamAgentsMap = {
-  Shankar: ["Mark", "John"],
-  Vinutha: ["Michael", "David"],
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
   // etc.
 };
 
