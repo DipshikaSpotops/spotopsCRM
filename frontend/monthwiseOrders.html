@@ -59,15 +59,14 @@ window.location.href = "login_signup.html";
 </div>
     <span style="white-space: nowrap;margin-left: -14%;">Hi <span id="user-name"></span></span>
     <!-- for dark mode -->
-  <div class="navbar-icons">
-  <div class="dark-mode-toggle">
-    <i id="darkModeIcon" class="fas fa-moon"></i>
-  </div>
-  <div class="notification-container">
-    <i class="fas fa-bell" id="notificationIcon"></i>
-    <span id="notificationCount" class="notification-badge">0</span>
-  </div>
-</div>
+    <div class="dark-mode-toggle">
+      <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
+    </div>
+    <!--dark mode till here  -->
+    <div class="notification-container" style="margin: 0% 7%;">
+      <i class="fas fa-bell" id="notificationIcon" style="cursor: pointer; position: relative; color: white;margin-left: -19%;font-size: x-large;"></i>
+      <span id="notificationCount" class="notification-badge" style="display:block;margin-right: 20%;margin-top: -3%;">0</span>
+    </div>
     <div class="notification-dropdown" id="notificationDropdown">
       <ul id="notificationList"></ul>
       <button id="viewAlltasks">View All Tasks</button>
