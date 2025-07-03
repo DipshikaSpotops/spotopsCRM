@@ -526,7 +526,6 @@ async function fetchOrdersForSelectedMonth(monthYear) {
     allOrders = orders;
     currentPage = 1;
     let totalShipping = 0;
-let totalShipping = 0;
 
 allOrders.forEach(order => {
   if (Array.isArray(order.additionalInfo)) {
