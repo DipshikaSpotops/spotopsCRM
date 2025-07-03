@@ -497,12 +497,12 @@ function analyzeTopAgentAndBestSalesDay(orders) {
 
   const agentSales = {};
   const daySales = {};
-
+console.log("length",orders.length);
   orders.forEach(order => {
     const agent = order.salesAgent;
     const date = new Date(order.orderDate).toISOString().split("T")[0]; // 'YYYY-MM-DD'
     const sold = parseFloat(order.grossProfit);
-    console.log("sold",sold);
+    
     if (!isNaN(sold)) {
       agentSales[agent] = (agentSales[agent] || 0) + sold;
       daySales[date] = (daySales[date] || 0) + sold;
