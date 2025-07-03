@@ -180,7 +180,7 @@ table.table td {
     overflow: hidden;
     text-overflow: ellipsis;
     color: #106072;
-    text-align: left;
+    /* text-align: left; */
     font-size: 13px;
 }
 table.table td:last-child {
