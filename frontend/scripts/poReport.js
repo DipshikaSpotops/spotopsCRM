@@ -438,7 +438,7 @@ $("#filterButton").click(async function () {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const month = months[parseInt(monthNumber, 10) - 1];
 
-  await fetchYardInfo(month, year);  // ✅ this updates #showTotalOrders internally
+  await fetchYardInfo(month, year); 
   currentPage = 1;
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(yardOrders.length / 25));
