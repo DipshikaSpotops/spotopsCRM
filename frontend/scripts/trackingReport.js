@@ -167,6 +167,11 @@ labelCreationD = info.labelCreationDate[0];
 var labelCreationDateOnly = labelCreationD.split(" ")[0] + " " + labelCreationD.split(" ")[1] + " " + labelCreationD.split(" ")[2];
 console.log("labelCreationDateOnly",labelCreationDateOnly);
 }
+  const editButton = (team === "Team Mark" || team === "Team Sussane")
+      ? ""
+      : `<button class="btn edit-btn" data-id="${item.orderNo}">Edit</button>`;
+
+    const processBtnDisabled = ["Placed", "Customer approved"].includes(item.orderStatus) ? "disabled" : "";
 // Append the main row for `trackingNo`
 if (trackingNo.length > 0) {
 $("#infoTable").append(`
@@ -179,6 +184,10 @@ $("#infoTable").append(`
 <td>${info.partShippedDate || ""}</td>
 <td>${eta}</td>
 <td>${deliveredDate}</td>
+  <td>
+          ${editButton}
+          <button class="btn  process-btn" data-id="${item.orderNo}" ${processBtnDisabled}>View</button>
+        </td>
 </tr>
 `);
 }
