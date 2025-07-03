@@ -230,11 +230,24 @@ const formattedBestDay = new Date(bestDayDate).toLocaleDateString("en-US", {
   day: "numeric",
   year: "numeric"
 });
-  content.innerHTML += `
-    <h4 style="text-align:left;">Sales Insights</h4>
-    <p style="text-align:left;font-size: 15px"><strong>Top Salesagent:</strong> ${agent} ($${agentAmount})</p>
-    <p style="text-align:left;font-size: 15px"><strong>Best Sales Day:</strong> ${formattedBestDay} ($${bestDayAmount})</p>
-  `;
+
+const title = document.createElement("h4");
+title.style.textAlign = "left";
+title.innerText = "Sales Insights";
+
+const agentLine = document.createElement("p");
+agentLine.style.textAlign = "left";
+agentLine.style.fontSize = "15px";
+agentLine.innerHTML = `<strong>Top Salesagent:</strong> ${agent} ($${agentAmount})`;
+
+const dayLine = document.createElement("p");
+dayLine.style.textAlign = "left";
+dayLine.style.fontSize = "15px";
+dayLine.innerHTML = `<strong>Best Sales Day:</strong> ${formattedBestDay} ($${bestDayAmount})`;
+
+content.appendChild(title);
+content.appendChild(agentLine);
+content.appendChild(dayLine);
 
   modal.appendChild(content);
   document.body.appendChild(modal);
