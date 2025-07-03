@@ -959,7 +959,7 @@ if (Array.isArray(order.additionalInfo)) {
   console.log("additionalInfo is an array of length", order.additionalInfo.length);
 
   order.additionalInfo.forEach(info => {
-    console.log("Inspecting info:", info);  // See what’s inside
+    console.log("Inspecting info:", info);  
 
     if (info.paymentStatus === "Card charged") {
       const partPrice = parseFloat(info.partPrice) || 0;
@@ -1240,9 +1240,8 @@ function updateSummaryCards(orders) {
     // Purchases
     if (Array.isArray(order.additionalInfo)) {
       order.additionalInfo.forEach(info => {
+        if (info.paymentStatus === "Card charged") {
         const partPrice = parseFloat(info.partPrice) || 0;
-
-        // Parse shipping value (e.g., "Own shipping: 20")
         let shipping = 0;
         const shippingStr = info.shippingDetails || "";
         const shippingMatch = shippingStr.match(/(\d+(\.\d+)?)/);
@@ -1252,6 +1251,7 @@ function updateSummaryCards(orders) {
 
         const others = parseFloat(info.others) || 0;
         totalPurchases += partPrice + shipping + others;
+      }
       });
     }
   });
