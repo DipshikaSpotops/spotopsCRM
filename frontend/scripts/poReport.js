@@ -201,14 +201,10 @@ yardOrders.forEach(order => {
       const partPrice = parseFloat(info.partPrice || 0);
       const others = parseFloat(info.others || 0);
       const refundedAmount = parseFloat(info.refundedAmount || 0);
-
       const soldP = parseFloat(order.soldP || 0);
       const salesTax = parseFloat(order.salestax || 0);
-
       const calculatedSpend = partPrice - shippingCost - others - refundedAmount;
-      console.log("soldP:", soldP, "salesTax:", salesTax, "partPrice:", partPrice, "shippingCost:", shippingCost, "others:", others, "refundedAmount:", refundedAmount,"calculatedSpend",calculatedSpend);
-
-      // If negative (can happen if refund is too high), clamp to 0
+      console.log("soldP:", soldP, "salesTax:", salesTax, "partPrice:", partPrice, "shippingCost:", shippingCost, "others:", others, "refundedAmount:", refundedAmount,"calculatedSpend",calculatedSpend,"paymentStatus",info.paymentStatus);
       orderSpend += Math.max(0, calculatedSpend);
     }
   });
