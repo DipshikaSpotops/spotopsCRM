@@ -183,6 +183,7 @@ function renderTableRows(page, orders = allOrders) {
       <tr>
         <td>${formattedDate}</td>
         <td>${item.orderNo}</td>
+        <td>${item.salesAgent}</td>
         <td>${item.fName && item.lName 
       ? `${item.fName} ${item.lName}` 
       : item.customerName || ""}</td>
