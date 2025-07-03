@@ -962,8 +962,9 @@ if (Array.isArray(order.additionalInfo)) {
       const partPrice = parseFloat(info.partPrice) || 0;
       const shipping = parseFloat(info.shippingDetails?.match(/(\d+(\.\d+)?)/)?.[0]) || 0;
       const others = parseFloat(info.others) || 0;
+      const refundedAmount = parseFloat(info.refundedAmount) || 0;
 
-      purchases += partPrice + shipping + others;
+      purchases += partPrice + shipping + others - refundedAmount;
     });
 }
   });

@@ -205,7 +205,7 @@ yardOrders.forEach(order => {
       const soldP = parseFloat(order.soldP || 0);
       const salesTax = parseFloat(order.salestax || 0);
 
-      const calculatedSpend = soldP - salesTax - partPrice - shippingCost - others - refundedAmount;
+      const calculatedSpend = partPrice - shippingCost - others - refundedAmount;
       console.log("soldP:", soldP, "salesTax:", salesTax, "partPrice:", partPrice, "shippingCost:", shippingCost, "others:", others, "refundedAmount:", refundedAmount,"calculatedSpend",calculatedSpend);
 
       // If negative (can happen if refund is too high), clamp to 0
