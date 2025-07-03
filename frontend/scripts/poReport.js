@@ -183,10 +183,10 @@ async function fetchYardInfo(month, year) {
     $("#loadingMessage").show();
 
     const allOrders = await fetchAllMonthlyOrders({ month, year, token });
-    yardOrders = allOrders.filter(order =>
-      order.additionalInfo.some(info => info.paymentStatus === "Card charged")
-    );
-
+    // yardOrders = allOrders.filter(order =>
+    //   order.additionalInfo.some(info => info.paymentStatus === "Card charged")
+    // );
+yardOrders = allOrders.filter(order => Array.isArray(order.additionalInfo) && order.additionalInfo.length > 0);
     // Calculate spends
 let totalSpend = 0;
 
@@ -215,7 +215,7 @@ yardOrders.forEach(order => {
 //
 
     console.log("Total spend:", totalSpend);
-    $("#showTotalOrders").text(`Total Spend $${totalSpend.toFixed(2)}`);
+    $("#showTotalOrders").text(`Card Charged $${totalSpend.toFixed(2)}`);
 
     currentPage = 1;
     renderTableRows(currentPage, yardOrders);
@@ -320,8 +320,8 @@ yardInfoHtml += `<td>
 ${item.additionalInfo[i].yardName || ""}${
 item.additionalInfo[i].yardName ? "" : ""
 }<br>
-${item.additionalInfo[i].email || ""}<br>
-${item.additionalInfo[i].phone || ""}<br>
+${item.additionalInfo[i].phone || ""}<br> | ${item.additionalInfo[i].email || ""}<br>
+Payment Status: ${item.additionalInfo[i].paymentStatus || ""}<br>
 Part price: ${item.additionalInfo[i].partPrice}  | ${item.additionalInfo[i].shippingDetails} |  Others: ${item.additionalInfo[i].others} <br>
 </td>`;
 } else {
