@@ -955,14 +955,17 @@ function updateMonthlyFinancialSummary(index) {
       refundAmount += parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
     }
 
-    if (Array.isArray(order.additionalInfo)) {
-      order.additionalInfo.forEach(info => {
-        const partPrice = parseFloat(info.partPrice) || 0;
-        const shipping = parseFloat(info.shippingDetails?.match(/(\d+(\.\d+)?)/)?.[0]) || 0;
-        const others = parseFloat(info.others) || 0;
-        purchases += partPrice + shipping + others;
-      });
-    }
+if (Array.isArray(order.additionalInfo)) {
+  order.additionalInfo
+    .filter(info => info.paymentStatus === "Card charged")
+    .forEach(info => {
+      const partPrice = parseFloat(info.partPrice) || 0;
+      const shipping = parseFloat(info.shippingDetails?.match(/(\d+(\.\d+)?)/)?.[0]) || 0;
+      const others = parseFloat(info.others) || 0;
+
+      purchases += partPrice + shipping + others;
+    });
+}
   });
 
   // Update DOM (assumes you have elements with these IDs)
