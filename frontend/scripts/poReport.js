@@ -320,7 +320,7 @@ yardInfoHtml += `<td>
 ${item.additionalInfo[i].yardName || ""}${
 item.additionalInfo[i].yardName ? "" : ""
 }<br>
-${item.additionalInfo[i].phone || ""}<br> | ${item.additionalInfo[i].email || ""}<br>
+${item.additionalInfo[i].phone || ""} | ${item.additionalInfo[i].email || ""}<br>
 Payment Status: ${item.additionalInfo[i].paymentStatus || ""}<br>
 Part price: ${item.additionalInfo[i].partPrice}  | ${item.additionalInfo[i].shippingDetails} |  Others: ${item.additionalInfo[i].others} <br>
 </td>`;
