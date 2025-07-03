@@ -204,7 +204,7 @@ yardOrders.forEach(order => {
       const soldP = parseFloat(order.soldP || 0);
       const salesTax = parseFloat(order.salestax || 0);
       const calculatedSpend = partPrice - shippingCost - others - refundedAmount;
-      console.log("soldP:", soldP, "salesTax:", salesTax, "partPrice:", partPrice, "shippingCost:", shippingCost, "others:", others, "refundedAmount:", refundedAmount,"calculatedSpend",calculatedSpend,"paymentStatus",info.paymentStatus);
+      console.log("partPrice:", partPrice, "shippingCost:", shippingCost, "others:", others, "refundedAmount:", refundedAmount,"calculatedSpend",calculatedSpend,"paymentStatus",info.paymentStatus);
       orderSpend += Math.max(0, calculatedSpend);
     }
   });
