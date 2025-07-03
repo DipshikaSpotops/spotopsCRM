@@ -956,17 +956,19 @@ function updateMonthlyFinancialSummary(index) {
     }
 console.log("lengthdd",order.length);
 if (Array.isArray(order.additionalInfo)) {
-  order.additionalInfo
-    .filter(info => info.paymentStatus === "Card charged")
-    .forEach(info => {
+  order.additionalInfo.forEach(info => {
+    if (info.paymentStatus === "Card charged") {
       const partPrice = parseFloat(info.partPrice) || 0;
-      const shipping = parseFloat(info.shippingDetails?.match(/(\d+(\.\d+)?)/)?.[0]) || 0;
+      let shipping = 0;
+      if (typeof info.shippingDetails === "string" && info.shippingDetails.includes(":")) {
+        const parts = info.shippingDetails.split(":");
+        shipping = parseFloat(parts[1]) || 0;
+      }
       const others = parseFloat(info.others) || 0;
-
       purchases += partPrice + shipping + others;
-    });
+    }
+  });
 }
-
   });
 
   // Update DOM (assumes you have elements with these IDs)
