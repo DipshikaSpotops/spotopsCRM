@@ -238,9 +238,9 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 
 // Helper function to generate action buttons
 function generateActions(item) {
-  const processButton = `<button class="btn process-btn" data-id="${item.orderNo}">View</button>`;
-  const useButton = `<button class="btn user-btn" data-id="${item.orderNo}">Use</button>`;
-  const usedForButton = `<button class="btn usedForButton-btn" data-id="${item.orderNo}">Used For</button>`;
+  const processButton = `<button class="process-btn" data-id="${item.orderNo}">View</button>`;
+  const useButton = `<button class="user-btn" data-id="${item.orderNo}">Use</button>`;
+  const usedForButton = `<button class="usedForButton-btn" data-id="${item.orderNo}">Used For</button>`;
 
   return `
     <div style="display: flex; gap: 6px; flex-wrap: nowrap; align-items: center;">
