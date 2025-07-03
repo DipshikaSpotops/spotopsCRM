@@ -966,6 +966,7 @@ if (Array.isArray(order.additionalInfo)) {
       }
       const others = parseFloat(info.others) || 0;
       purchases += partPrice + shipping + others;
+      console.log("purchases",purchases);
     }
   });
 }
