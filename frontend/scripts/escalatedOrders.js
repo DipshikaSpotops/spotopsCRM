@@ -294,8 +294,8 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 var team = localStorage.getItem("team");
 const teamAgentsMap = {
-  Shankar: ["Mark", "John"],
-  Vinutha: ["Michael", "David"],
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
 };
 
 if (team in teamAgentsMap) {
@@ -440,8 +440,8 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 var team = localStorage.getItem("team");
 const teamAgentsMap = {
-  Shankar: ["Mark", "John"],
-  Vinutha: ["Michael", "David"],
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
 };
 
 if (team in teamAgentsMap) {

@@ -563,8 +563,8 @@ async function fetchOrdersForSelectedMonth(monthYear) {
       orders.push(...res.data.orders);
     });
     const teamAgentsMap = {
-      Shankar: ["Mark", "John"],
-      Vinutha: ["Michael", "David"]
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
     };
     console.log("team", team);
     if (team in teamAgentsMap) {

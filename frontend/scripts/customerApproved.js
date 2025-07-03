@@ -438,8 +438,8 @@ throw new Error("Failed to fetch current month's orders");
 allOrders = ordersResponse.data;
 // console.log("allorders at filter btn",allOrders);4
 const teamAgentsMap = {
-  Shankar: ["Mark", "John"],
-  Vinutha: ["Michael", "David"],
+Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
   // etc.
 };
 

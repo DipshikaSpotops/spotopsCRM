@@ -305,8 +305,8 @@ return statusMatches;
 });
 });
 const teamAgentsMap = {
-  Shankar: ["Mark", "John"],
-  Vinutha: ["Michael", "David"],
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
 };
 var team = localStorage.getItem("team");
 console.log("team",team);
@@ -479,8 +479,8 @@ $("#filterButton").click(async function () {
 
     // Team-agent mapping
     const teamAgentsMap = {
-      Shankar: ["Mark", "John"],
-      Vinutha: ["Michael", "David"],
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
     };
 
     const team = localStorage.getItem("team");
