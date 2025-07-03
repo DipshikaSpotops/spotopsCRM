@@ -956,19 +956,29 @@ function updateMonthlyFinancialSummary(index) {
     }
 console.log("lengthdd",order.length);
 if (Array.isArray(order.additionalInfo)) {
+  console.log("additionalInfo is an array of length", order.additionalInfo.length);
+
   order.additionalInfo.forEach(info => {
+    console.log("Inspecting info:", info);  // See what’s inside
+
     if (info.paymentStatus === "Card charged") {
       const partPrice = parseFloat(info.partPrice) || 0;
+
       let shipping = 0;
       if (typeof info.shippingDetails === "string" && info.shippingDetails.includes(":")) {
         const parts = info.shippingDetails.split(":");
         shipping = parseFloat(parts[1]) || 0;
       }
+
       const others = parseFloat(info.others) || 0;
-      purchases += partPrice + shipping + others;
-      console.log("purchases",purchases);
+      const sum = partPrice + shipping + others;
+
+      purchases += sum;
+      console.log("Added to purchases:", sum, "Running total:", purchases);
     }
   });
+} else {
+  console.warn("order.additionalInfo is not an array!", order.additionalInfo);
 }
   });
 
