@@ -241,7 +241,14 @@ function generateActions(item) {
   const processButton = `<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}">View</button>`;
   const useButton = `<button class="btn btn-primary btn-sm user-btn" data-id="${item.orderNo}">Use</button>`;
   const usedForButton = `<button class="btn btn-sm usedForButton-btn" data-id="${item.orderNo}">Used For</button>`;
-  return `${processButton} ${useButton} ${usedForButton}`;
+
+  return `
+    <div style="display: flex; gap: 6px; flex-wrap: nowrap;">
+      ${processButton}
+      ${useButton}
+      ${usedForButton}
+    </div>
+  `;
 }
 
 
