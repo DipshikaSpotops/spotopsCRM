@@ -56,6 +56,11 @@ top: 0;
 z-index: 12;
 border-bottom: 1px solid #e0e0e0;
 }
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 .sidebar {
 /* background-color: black; */
 background: linear-gradient(160deg, #017b82, #0771b4);
