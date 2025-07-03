@@ -10,15 +10,17 @@ const months = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
 
 let displayLabels = [], monthIndices = [], displayYear = date.getFullYear();
-if (date.getDate() >= 15) {
-    let base = (date.getMonth() - 1 + 12) % 12;
-    for (let i = 0; i < 3; i++) monthIndices.push((base - i + 12) % 12);
-  } else {
-    let base = (date.getMonth() - 2 + 12) % 12;
-    for (let i = 0; i < 3; i++) monthIndices.push((base - i + 12) % 12);
-  }
 
-  displayLabels = monthIndices.map(i => `${months[i]} ${i > date.getMonth() ? displayYear - 1 : displayYear}`);
+const currentMonth = date.getMonth(); // 0-based, July = 6
+
+for (let i = 0; i < 3; i++) {
+  const monthIndex = (currentMonth - i + 12) % 12;
+  monthIndices.push(monthIndex);
+}
+
+displayLabels = monthIndices.map(i => `${months[i]} ${i > currentMonth ? displayYear - 1 : displayYear}`);
+
+
 
   $("#monthIncentive").text(`Incentive for ${displayLabels[0]}`);
   $("#prevMonth1").text(`Incentive for ${displayLabels[1]}`);
