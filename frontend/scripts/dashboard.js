@@ -264,7 +264,12 @@ document.getElementById("salesInfoIcon").addEventListener("click", () => {
 });
 function calculateTopAgent(orders) {
   const agentSales = {};
-  orders.forEach(order => {
+  const todayDallas = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+const todayDate = new Date(todayDallas).toISOString().split("T")[0];
+
+orders.forEach(order => {
+  const orderDate = new Date(order.orderDate).toISOString().split("T")[0];
+  if (orderDate !== todayDate) return;
     const agent = order.salesAgent;
     const value = parseFloat(order.grossProfit || 0);  
     if (!agentSales[agent]) agentSales[agent] = 0;
