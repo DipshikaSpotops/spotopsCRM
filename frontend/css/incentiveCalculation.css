@@ -101,13 +101,18 @@ body.dark-mode {
   background-color: #1c1c1e;
   color: #e0e0e0;
 }
-
+.dark-mode .container {
+  background-color: #2c3e50
+}
 .dark-mode .navbar {
   background: #1f2940;
   border-color: #333;
   scrollbar-color: #1f2940 #1f2940;
 }
-.dark-mode .sidebar {
+.dark-mode .locked ,.dark-mode .actualGP, .dark-mode .salesAgent, .dar-mode .difference{
+            background-color: #2c3e50
+}
+dark-mode .sidebar {
   background: #1f2940;
   border-color: #333;
   scrollbar-color: #1f2940 #1f2940;
@@ -117,12 +122,16 @@ body.dark-mode {
 .dark-mode .nav-link i {
   color: #b3b3b3 !important;
 }
-
+.dark-mode .table-wrapper {
+    scrollbar-color: #29638c #141b2d;
+}
 .dark-mode .nav-link:hover,
 .dark-mode .nav-link.selected {
   background-color: rgba(255, 255, 255, 0.1);
 }
-
+.dark-mode th {
+    background-color: #29638c
+  }
 
 .dark-mode .chart-wrapper,
 .dark-mode .chart-item-monthly {
