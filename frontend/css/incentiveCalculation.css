@@ -109,7 +109,7 @@ body.dark-mode {
   border-color: #333;
   scrollbar-color: #1f2940 #1f2940;
 }
-.dark-mode .locked ,.dark-mode .actualGP, .dark-mode .salesAgent, .dar-mode .difference{
+.dark-mode .locked ,.dark-mode .actualGP, .dark-mode .salesAgent, .dark-mode .difference, .dark-mode.totalGP {
             background-color: #2c3e50
 }
 dark-mode .sidebar {
