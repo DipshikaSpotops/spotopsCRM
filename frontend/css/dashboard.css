@@ -403,11 +403,15 @@ body.dark-mode {
   border-color: #333;
   scrollbar-color: #1f2940 #1f2940;
 }
-.dark-mode .sidebar {
+.dark-mode .sidebar, .dark-mode.summary-card {
   background: #1f2940;
   border-color: #333;
   scrollbar-color: #1f2940 #1f2940;
   color: white;
+}
+.dark-mode .rates-container 
+{
+      background: #2c3e50;
 }
 .dark-mode .nav-link,
 .dark-mode .nav-link i {
