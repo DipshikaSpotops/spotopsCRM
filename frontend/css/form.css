@@ -1300,7 +1300,7 @@ color: #999999;
 .dark-mode p {
   color: #979797;
 }
-.dark-mode #mainDiv {
+.dark-mode .mainDiv {
   margin-top: 2%;
 }
 .dark-mode .placeholder, #assignTo {
