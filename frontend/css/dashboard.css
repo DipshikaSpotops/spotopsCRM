@@ -409,9 +409,17 @@ body.dark-mode {
   scrollbar-color: #1f2940 #1f2940;
   color: white;
 }
+.dark-mode #monthlyCancelRefundCBox {
+    background-color: #2c3e50;
+    color: #696ffb;
+}
 .dark-mode .rates-container 
 {
       background: #2c3e50;
+}
+.dark-mode .summary-card, .dark-mode .chart-wrapper , .dark-mode .sales-insight-box
+.dark-mode .summary-card{
+    background: #2c3e50;
 }
 .dark-mode .nav-link,
 .dark-mode .nav-link i {
