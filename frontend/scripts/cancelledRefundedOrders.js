@@ -310,7 +310,9 @@ $("#reason-popup-trigger").on("click", function () {
       statsMap[reason] = { count: 0, amount: 0 };
     }
     statsMap[reason].count += 1;
-    statsMap[reason].amount += parseFloat(order.custRefAmount || 0);
+    if (order.custRefundDate) {
+      statsMap[reason].amount += parseFloat(order.custRefAmount || 0);
+    }
   });
 
   const tableBody = $("#reasonStatsTable").empty();
