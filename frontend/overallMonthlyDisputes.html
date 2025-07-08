@@ -187,7 +187,7 @@ window.location.href = "login_signup.html";
   <div class="topHeads">
     <div>
 <h1 id="mainHeading">
-Cancelled & Refunded Orders
+Monthly Disputes
 </h1>
 </div>
 <div>
@@ -215,12 +215,48 @@ placeholder="Search..."
 <table class="table table-bordered">
 <thead>
 <tr>
-  <th data-column="orderNo">Order No. <span class="sort-icon"></span></th>
-  <th data-column="orderDate">Order Date <span class="sort-icon"></span></th>
-  <th data-column="cancelledDate">Cancelled Date <span class="sort-icon"></span></th>
-  <th data-column="custRefundDate">Refunded Date <span class="sort-icon"></span></th>
-  <th data-column="cancellationReason">Cancellation Reason <span class="sort-icon"></span></th>
-  <th data-column="custRefAmount">Refund Amount <span class="sort-icon"></span></th>
+<th data-column="orderNo" class="sortable">
+    Order No.
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+  <th data-column="orderDate" class="sortable">
+    Order Date
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+   <th data-column="cancellationReason" class="sortable">
+      Customer Name
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+  <th data-column="cancelledDate" class="sortable">
+    Disputed Date
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+  <th data-column="cancellationReason" class="sortable">
+    Dispute Reason
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+  <th data-column="custRefAmount" class="sortable">
+    Refund Amount
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
   <th>Actions</th>
 </tr>
 </thead>
