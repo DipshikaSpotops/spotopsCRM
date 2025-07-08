@@ -196,7 +196,7 @@ th.sortable {
   color: #000; /* Bold black or use accent color */
   font-weight: bold;
 }
-#reasn-popup-trigger{
+#reason-popup-trigger {
   display:inline-block; margin-left:10px; cursor:pointer;margin-top: 0.3%;
 }
 #cancellationSummary{
