@@ -241,17 +241,17 @@ $('#pagination-controls').on('click', '#nextPage', function () {
     const id = $(this).data("id");
     window.location.href = `form.html?orderNo=${id}&process=true`;
   });
-});
-// Highlight active link based on current URL
-const currentPath = window.location.pathname.replace(/^\/+/, "");
+  const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
-  const linkHref = $(this).attr("href");
-  if (linkHref && currentPath.includes(linkHref.replace(/^\/+/, ""))) {
-    $(this).addClass("active");
-  }
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
 });
 const activeLink = $(".nav-link.active")[0];
 if (activeLink) {
   activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
 }
+});
+
+
