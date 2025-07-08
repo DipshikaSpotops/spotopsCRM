@@ -85,7 +85,26 @@ console.log("Order Status changed to:", newOrderStatus);
 if (newOrderStatus == "Dispute") { 
 $(".disputedRefAmount").val(cancelledRefundAmount)
 // console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
-$("#disputedDate").val(now);
+const dallasNow = new Date(
+  new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  })
+  .formatToParts(new Date())
+  .reduce((acc, part) => {
+    if (part.type !== "literal") acc[part.type] = part.value;
+    return acc;
+  }, {})
+);
+
+const isoUtc = new Date(dallasNow).toISOString();
+$("#disputedDate").val(isoUtc);
 // orderedDate
 $(".orderedDate").val(orderPlacedDate);
 $("body").append('<div class="modal-overlay"></div>');
