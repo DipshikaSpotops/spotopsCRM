@@ -254,9 +254,16 @@ if (activeLink) {
 
  let currentSortColumn = '';
 let sortAsc = true;
+}
+// sorting 
+let currentSortColumn = '';
+let sortAsc = true;
 
 $("#infoTableHeader th").on("click", function () {
-  const column = $(this).data("column"); // Add `data-column` to your `<th>`
+  const column = $(this).data("column");
+  if (!column) return;
+
+  // Toggle sort order
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
@@ -264,19 +271,34 @@ $("#infoTableHeader th").on("click", function () {
     sortAsc = true;
   }
 
+  // Sort allOrders
   allOrders.sort((a, b) => {
-    const valA = (a[column] || "").toString().toLowerCase();
-    const valB = (b[column] || "").toString().toLowerCase();
+    let valA = a[column] ?? '';
+    let valB = b[column] ?? '';
 
-    if (valA < valB) return sortAsc ? -1 : 1;
-    if (valA > valB) return sortAsc ? 1 : -1;
-    return 0;
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else if (column === "custRefAmount") {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA.toString().toLowerCase();
+      valB = valB.toString().toLowerCase();
+    }
+
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
-  renderTableRows(1);
+  // Render table
+  currentPage = 1;
+  renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-}); 
-}
+
+  // Update sorting icons
+  $("#infoTableHeader .sort-icon").html(''); // Clear all
+  $(this).find(".sort-icon").html(sortAsc ? "&#9650;" : "&#9660;"); // Add arrow to clicked one
+});
 
 $("#reason-popup-trigger").on("click", function () {
   const statsMap = {};
