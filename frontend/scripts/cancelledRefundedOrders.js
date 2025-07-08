@@ -259,11 +259,10 @@ let sortAsc = true;
 let currentSortColumn = '';
 let sortAsc = true;
 
-$("#infoTableHeader th").on("click", function () {
+$("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
 
-  // Toggle sort order
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
@@ -271,7 +270,7 @@ $("#infoTableHeader th").on("click", function () {
     sortAsc = true;
   }
 
-  // Sort allOrders
+  // Sort data
   allOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
@@ -290,14 +289,16 @@ $("#infoTableHeader th").on("click", function () {
     return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
-  // Render table
   currentPage = 1;
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Update sorting icons
-  $("#infoTableHeader .sort-icon").html(''); // Clear all
-  $(this).find(".sort-icon").html(sortAsc ? "&#9650;" : "&#9660;"); // Add arrow to clicked one
+  // Reset all arrows
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+
+  // Highlight the active arrow
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(arrowToActivate).addClass("active");
 });
 
 $("#reason-popup-trigger").on("click", function () {
