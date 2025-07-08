@@ -251,7 +251,59 @@ $(this).addClass("active");
 const activeLink = $(".nav-link.active")[0];
 if (activeLink) {
   activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+
+ let currentSortColumn = '';
+let sortAsc = true;
+
+$("#infoTableHeader th").on("click", function () {
+  const column = $(this).data("column"); // Add `data-column` to your `<th>`
+  if (currentSortColumn === column) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = column;
+    sortAsc = true;
+  }
+
+  allOrders.sort((a, b) => {
+    const valA = (a[column] || "").toString().toLowerCase();
+    const valB = (b[column] || "").toString().toLowerCase();
+
+    if (valA < valB) return sortAsc ? -1 : 1;
+    if (valA > valB) return sortAsc ? 1 : -1;
+    return 0;
+  });
+
+  renderTableRows(1);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+}); 
 }
+
+$("#reason-popup-trigger").on("click", function () {
+  const statsMap = {};
+
+  allOrders.forEach(order => {
+    const reason = order.cancellationReason || "Unknown";
+    if (!statsMap[reason]) {
+      statsMap[reason] = { count: 0, amount: 0 };
+    }
+    statsMap[reason].count += 1;
+    statsMap[reason].amount += parseFloat(order.custRefAmount || 0);
+  });
+
+  const tableBody = $("#reasonStatsTable").empty();
+  Object.entries(statsMap).forEach(([reason, data]) => {
+    tableBody.append(`
+      <tr>
+        <td>${reason}</td>
+        <td>${data.count}</td>
+        <td>$${data.amount.toFixed(2)}</td>
+      </tr>
+    `);
+  });
+
+  $("#reasonModal").modal("show");
+});
+
 });
 
 

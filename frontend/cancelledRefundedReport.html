@@ -208,6 +208,9 @@ placeholder="Search..."
 <!-- </div> -->
 <div id="showTotalOrders">Total Orders-</div>
 <div id="pagination-controls"></div>
+<div id="reason-popup-trigger" style="display:inline-block; margin-left:10px; cursor:pointer;">
+  <i class="fa fa-eye"></i>
+</div>
 <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
 </div>
 <div class="table-wrapper">
@@ -232,6 +235,33 @@ placeholder="Search..."
 </div>
 </div>
 </div>
+<div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cancellation Summary</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Cancellation Reason</th>
+              <th>Number of Orders</th>
+              <th>Total Refunded Amount</th>
+            </tr>
+          </thead>
+          <tbody id="reasonStatsTable">
+            <!-- Data goes here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 
 </script>
