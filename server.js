@@ -71,7 +71,33 @@ console.error("Connection failed", err);
 const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
+  try {
+    const orders = await Order.find({
+      disputedDate: { $type: "string" } // Only update those with string format
+    });
 
+    console.log(`Found ${orders.length} orders with string disputedDate.`);
+
+    for (const order of orders) {
+      const parsedDate = parseDisputedDate(order.disputedDate);
+      if (parsedDate) {
+        order.disputedDate = parsedDate;
+        await order.save();
+        console.log(`Updated Order ${order.orderNo} -> ${parsedDate.toISOString()}`);
+      } else {
+        console.warn(`Skipped invalid date: ${order.disputedDate}`);
+      }
+    }
+
+    console.log("✅ All disputedDate fields updated to ISO Date format.");
+    mongoose.disconnect();
+  } catch (err) {
+    console.error("❌ Error during migration:", err);
+    mongoose.disconnect();
+  }
+}
+
+updateDisputedDates();
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
 console.log("Adding new order");
@@ -1312,7 +1338,49 @@ console.log("endDate:", endDate.toISOString());
     res.status(500).json({ message: "Server error", error });
   }
 });
+app.get("/orders/cancelled-by-date", async (req, res) => {
+  try {
+    const { month, year } = req.query;
 
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year are required" });
+    }
+
+    // Support both numeric and string month formats
+    const monthMap = {
+      Jan: "01", January: "01",
+      Feb: "02", February: "02",
+      Mar: "03", March: "03",
+      Apr: "04", April: "04",
+      May: "05",
+      Jun: "06", June: "06",
+      Jul: "07", July: "07",
+      Aug: "08", August: "08",
+      Sep: "09", September: "09",
+      Oct: "10", October: "10",
+      Nov: "11", November: "11",
+      Dec: "12", December: "12"
+    };
+
+    const normalizedMonth = monthMap[month] || month.padStart(2, "0");
+    console.log("normalizedMonth:",normalizedMonth);
+    const startDate = new Date(`${year}-${normalizedMonth}`);
+    const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth), 1));
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const orders = await Order.find({
+      disputedDate: {
+        $gte: startDate,
+        $lt: endDate
+      }
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error(" Error fetching cancelled-by-date orders:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 
 app.get("/migrate-dates", async (req, res) => {
   try {
