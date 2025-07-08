@@ -215,13 +215,12 @@ placeholder="Search..."
 <table class="table table-bordered">
 <thead>
 <tr>
-<th style="cursor: pointer" scope="col">Order No.</th>
-<th style="cursor: pointer" scope="col">Order Date <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Cancelled Date <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Refunded Date <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Cancellation Reason <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Refund Amount<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Actions</th>
+  <th style="cursor: pointer" scope="col" data-column="orderDate">Order Date</th>
+  <th style="cursor: pointer" scope="col" data-column="cancelledDate">Cancelled Date</th>
+  <th style="cursor: pointer" scope="col" data-column="custRefundDate">Refunded Date</th>
+  <th style="cursor: pointer" scope="col" data-column="cancellationReason">Cancellation Reason</th>
+  <th style="cursor: pointer" scope="col" data-column="custRefAmount">Refund Amount</th>
+  <th scope="col">Actions</th>
 </tr>
 </thead>
 <tbody id="infoTable">
