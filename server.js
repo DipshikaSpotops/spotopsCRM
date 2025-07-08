@@ -71,33 +71,7 @@ console.error("Connection failed", err);
 const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
-  try {
-    const orders = await Order.find({
-      disputedDate: { $type: "string" } // Only update those with string format
-    });
 
-    console.log(`Found ${orders.length} orders with string disputedDate.`);
-
-    for (const order of orders) {
-      const parsedDate = parseDisputedDate(order.disputedDate);
-      if (parsedDate) {
-        order.disputedDate = parsedDate;
-        await order.save();
-        console.log(`Updated Order ${order.orderNo} -> ${parsedDate.toISOString()}`);
-      } else {
-        console.warn(`Skipped invalid date: ${order.disputedDate}`);
-      }
-    }
-
-    console.log("✅ All disputedDate fields updated to ISO Date format.");
-    mongoose.disconnect();
-  } catch (err) {
-    console.error("❌ Error during migration:", err);
-    mongoose.disconnect();
-  }
-}
-
-updateDisputedDates();
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
 console.log("Adding new order");
