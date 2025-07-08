@@ -193,6 +193,13 @@ const disputes = responseData.map(order => ({
     const id = $(this).data("id");
     window.location.href = `form.html?orderNo=${id}&process=true`;
   });
+    $("#filterButton").click(async function () {
+    const selected = $("#monthYearPicker").val();
+    console.log("Filter clicked - selected:", selected); 
+    if (selected) {
+      await loadDisputes(selected); 
+    }
+  });
 
     // sorting 
 let currentSortColumn = '';
