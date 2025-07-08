@@ -282,7 +282,10 @@ cursor: pointer;
     width: 250px;
     transform: translateX(-100%);
   }
-
+#summaryCards{
+  margin-top: 10%;
+  margin-left: 12%;
+}
   .sidebar.show {
     transform: translateX(0);
   }
@@ -295,6 +298,7 @@ cursor: pointer;
   .charts-container {
     flex-direction: column;
     align-items: center;
+    margin-left: 12%;
   }
 
   .chart-wrapper {
@@ -521,7 +525,7 @@ width: 30%;
 text-align: center;
 padding: 10px;
 border-radius: 5px;
-white-space: nowrap;
+white-space: break-spaces;
   width: auto;
   border-color: #c6cfc2;
   background-color: #f6ffed;
@@ -532,7 +536,7 @@ white-space: nowrap;
       border-color: #1aaac4;
     background-color: #f6ffed;
     color: #1aaac4;
-    white-space: nowrap;
+    white-space: break-spaces;
     width: auto;
 }
 
@@ -540,7 +544,7 @@ white-space: nowrap;
   border-color: #faad14;
   background-color: #fffbe6;
   color: #d48806;
-  white-space: nowrap;
+  white-space: break-spaces;
   width: auto;
 }
 
@@ -548,7 +552,7 @@ white-space: nowrap;
   border-color: #f5222d;
   background-color: #fff1f0;
   color: #a8071a;
-  white-space: nowrap;
+  white-space: break-spaces;
   width: auto;
 }
 /* canvas {
