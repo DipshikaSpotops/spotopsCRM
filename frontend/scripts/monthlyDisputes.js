@@ -59,7 +59,7 @@ $(document).ready(async function () {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const month = months[parseInt(monthNum, 10) - 1];
-
+    console.log("month",month,year)
     try {
       const res = await axios.get(`https://www.spotops360.com/orders/disputes-by-date`, {
         params: { month, year },
