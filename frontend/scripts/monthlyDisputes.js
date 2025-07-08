@@ -65,16 +65,24 @@ $(document).ready(async function () {
         params: { month, year },
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
+      if (!res.data) {
+  console.warn("No dispute data received:", res);
+  return;
+}
 
-      const disputes = res.data.map(order => ({
-        orderNo: order.orderNo,
-        orderDate: order.orderDate,
-        customerName: order.customerName,
-        disputeDate: extractDisputeDate(order.orderHistory || []),
-        disputeReason: order.disputeReason || "-",
-        custRefAmount: parseFloat(order.custRefAmount || 0) || 0,
-        orderHistory: order.orderHistory || []
-      }));
+
+const responseData = Array.isArray(res.data) ? res.data : [];
+
+const disputes = responseData.map(order => ({
+  orderNo: order.orderNo,
+  orderDate: order.orderDate,
+  customerName: order.customerName,
+  disputeDate: extractDisputeDate(order.orderHistory || []),
+  disputeReason: order.disputeReason || "-",
+  custRefAmount: parseFloat(order.custRefAmount || 0) || 0,
+  orderHistory: order.orderHistory || []
+}));
+
 
       // Filter only disputes from selected month
       allDisputes = disputes.filter(order => {
