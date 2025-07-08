@@ -196,8 +196,15 @@ th.sortable {
   color: #000; /* Bold black or use accent color */
   font-weight: bold;
 }
+#reasn-popup-trigger{
+  display:inline-block; margin-left:10px; cursor:pointer;margin-top: 0.3%;
+}
+#cancellationSummary{
+      justify-content: center;
+    margin-top: 12%;
+    margin-left: 3%;
 
-
+}
 table.table td {
     overflow: hidden;
     text-overflow: ellipsis;
