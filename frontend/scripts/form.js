@@ -85,7 +85,7 @@ console.log("Order Status changed to:", newOrderStatus);
 if (newOrderStatus == "Dispute") { 
 $(".disputedRefAmount").val(cancelledRefundAmount)
 // console.log("dispute?", newOrderStatus,"order placed on:",orderPlacedDate);
-$("#disputedDate").val(currentDateTime);
+$("#disputedDate").val(now);
 // orderedDate
 $(".orderedDate").val(orderPlacedDate);
 $("body").append('<div class="modal-overlay"></div>');
