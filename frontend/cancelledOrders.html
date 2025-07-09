@@ -209,22 +209,22 @@ placeholder="Search..."
 </div>
 <div class="table-wrapper">
 <table class="table table-bordered">
-<thead>
+<thead id="infoTableHeader">
 <tr>
-<th style="cursor: pointer" scope="col">Order Date</th>
-<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Sale Price <span class="aToZ" >&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Agent Name <span class="aToZ" >&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Part Name <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Yard Info<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Order Cancelled by <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Cancelled Date<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Cx Refund Amount <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Cancellation Reason<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">order Status<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Overall Spending<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Actions</th>
+<th style="cursor: pointer" data-column="orderDate">Order Date</th>
+<th style="cursor: pointer" data-column="orderNo">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
+<th style="cursor: pointer" data-column="salePrice">Sale Price <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="salesAgent">Agent Name <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="customerName">Customer Name<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="partName">Part Name <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="yardInfo">Yard Info<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="cancelledBy">Order Cancelled by <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="cancelledDate">Cancelled Date<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="custRefAmount">Cx Refund Amount <span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="cancellationReason">Cancellation Reason<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="orderStatus">Order Status<span class="aToZ">&#9650;</span></th>
+<th style="cursor: pointer" data-column="overallSpending">Overall Spending<span class="aToZ">&#9650;</span></th>
+<th>Actions</th>
 </tr>
 </thead>
 <tbody id="infoTable">
