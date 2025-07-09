@@ -560,49 +560,70 @@ $(".toggle-sidebar").on("click", function () {
       resultDiv.innerHTML = '';
     }
   });
-    // sorting 
+// sorting
 let currentSortColumn = '';
 let sortAsc = true;
 
-$("#infoTableHeader th.sortable").on("click", function () {
-    const column = $(this).data("column");
-    if (!column) return;
+// Mapping of UI column names to actual data keys
+const columnMap = {
+  salePrice: "soldP",
+  estGp: "grossProfit",
+  currGp: "currentGP",
+  actualGp: "actualGP",
+  custRefAmount: "custRefundedAmount"
+};
 
-    if (currentSortColumn === column) {
-      sortAsc = !sortAsc;
-    } else {
-      currentSortColumn = column;
-      sortAsc = true;
+// Columns that contain numeric values
+const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount"];
+
+$("#infoTableHeader th.sortable").on("click", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+
+  // Toggle sort direction or change column
+  if (currentSortColumn === column) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = column;
+    sortAsc = true;
+  }
+
+  const actualColumn = columnMap[column] || column;
+
+  allOrders.sort((a, b) => {
+    let valA = a[actualColumn];
+    let valB = b[actualColumn];
+
+    // Handle date fields
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    }
+    // Handle numeric fields
+    else if (numericCols.includes(column)) {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    }
+    // Handle text
+    else {
+      valA = valA?.toString().toLowerCase() || "";
+      valB = valB?.toString().toLowerCase() || "";
     }
 
-    // Sort logic
-    allOrders.sort((a, b) => {
-      let valA = a[column] ?? '';
-      let valB = b[column] ?? '';
-
-      if (column.toLowerCase().includes("date")) {
-        valA = new Date(valA);
-        valB = new Date(valB);
-      } else if (column === "custRefAmount") {
-        valA = parseFloat(valA) || 0;
-        valB = parseFloat(valB) || 0;
-      } else {
-        valA = valA.toString().toLowerCase();
-        valB = valB.toString().toLowerCase();
-      }
-
-      return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
-    });
-
-    currentPage = 1;
-    renderTableRows(allOrders); // You must define this elsewhere
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage)); // Define this too
-
-    // Update sort icons
-    $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-    const arrowToActivate = sortAsc ? ".asc" : ".desc";
-    $(this).find(".sort-icons").children(arrowToActivate).addClass("active");
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
+
+  currentPage = 1;
+  renderTableRows(currentPage, allOrders);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Update sorting icons
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(".sort-icons").children(arrowToActivate).addClass("active");
+});
+
+
 });
 
 
