@@ -614,7 +614,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   });
 
   currentPage = 1;
-  renderTableRows(currentPage, allOrders);
+  renderTableRows(allOrders);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
   // Update sorting icons
