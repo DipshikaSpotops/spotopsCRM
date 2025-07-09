@@ -627,6 +627,9 @@ th.sortable {
   color: #000; /* Bold black or use accent color */
   font-weight: bold;
 }
+.toggle-sidebar {
+  display: none;
+}
     @media (max-width: 768px) {
         .sidebar {
         transform: translateX(-100%);
