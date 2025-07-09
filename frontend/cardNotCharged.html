@@ -710,7 +710,7 @@ placeholder="Search..."
 </div>
 <div class="table-wrapper">
 <table class="table table-bordered">
-<thead>
+<thead id="infoTableHeader">
 <tr id="tableHeader" style="background-color: #f2f2f2">
 <th data-sort="orderNo">
   Order No
@@ -1594,34 +1594,51 @@ $(document).on("click", "#infoTable tr", function () {
   }
 });
 fetchNotifications();
-$(document).on("click", "th[data-sort]", function () {
-  const $th = $(this);
-  const sortBy = $th.data("sort");
-  const columnIndex = $th.index();
+  // sorting 
+let currentSortColumn = '';
+let sortAsc = true;
 
-  // Determine type: yard column or date column
-  const isDateColumn = sortBy === "orderDate";
-  const isYardColumn = sortBy.startsWith("yard");
+$("#infoTableHeader th.sortable").on("click", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+  console.log("Current sort column:", currentSortColumn);
+  if (currentSortColumn === column) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = column;
+    sortAsc = true;
+  }
 
-  // Toggle sort order
-  currentSort.order =
-    currentSort.column === sortBy && currentSort.order === "asc"
-      ? "desc"
-      : "asc";
-  currentSort.column = sortBy;
+  // Sort data
+  allOrders.sort((a, b) => {
+    let valA = a[column] ?? '';
+    let valB = b[column] ?? '';
 
-  // Call sorting function
-  sortTable(columnIndex, currentSort.order, isDateColumn, isYardColumn);
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else if (column === "custRefAmount") {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA.toString().toLowerCase();
+      valB = valB.toString().toLowerCase();
+    }
 
-  // Update all icons
-  $(".sort-icons").removeClass("sorted-asc sorted-desc");
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  });
 
-  // Add sorted class to the correct one
-  $th.find(".sort-icons").addClass(
-    currentSort.order === "asc" ? "sorted-asc" : "sorted-desc"
-  );
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Reset all arrows
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+
+  // Highlight the active arrow
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(arrowToActivate).addClass("active");
 });
-
 });
 </script>
 </body>
