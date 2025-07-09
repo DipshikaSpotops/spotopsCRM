@@ -72,7 +72,7 @@ $(document).ready(async function () {
 }
 
 
-const responseData = Array.isArray(res.data) ? res.data : [];
+const responseData = res.data;
 
 const disputes = responseData.map(order => ({
   orderNo: order.orderNo,
