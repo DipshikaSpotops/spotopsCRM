@@ -992,7 +992,7 @@ function renderTableRows(page, data = yardOrders) {
     tableHeader.find("th:gt(1)").remove(); // Remove previous Yard headers
     for (let i = 1; i <= maxYards; i++) {
     tableHeader.append(`
-        <th class="sortable" scope="col" data-column="yard${i}">
+        <th class="sortable" scope="col" data-sort="yard${i}">
             Yard ${i}
             <span class="sort-icons">
                 <span class="asc">▲</span>
