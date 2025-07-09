@@ -763,30 +763,28 @@ $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
 
-  if (currentSortColumn === column) {
-    sortAsc = !sortAsc;
-  } else {
-    currentSortColumn = column;
-    sortAsc = true;
-  }
+  currentSortColumn === column ? sortAsc = !sortAsc : (currentSortColumn = column, sortAsc = true);
+
+  const actualColumn = columnMap[column] || column;
 
   allOrders.sort((a, b) => {
-    let valA = a[column];
-    let valB = b[column];
+    let valA = a[actualColumn];
+    let valB = b[actualColumn];
 
-    // Handle undefined/null
-    valA = valA !== undefined && valA !== null ? valA : 0;
-    valB = valB !== undefined && valB !== null ? valB : 0;
-console.log("Sorting column:", column, "Sample A:", valA, "Sample B:", valB);
+    // Handle dates
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (numericCols.includes(column)) {
-      valA = Number(valA);
-      valB = Number(valB);
-    } else {
-      valA = valA.toString().toLowerCase();
-      valB = valB.toString().toLowerCase();
+    }
+    // Handle numbers
+    else if (numericCols.includes(column)) {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    }
+    // Default string sorting
+    else {
+      valA = valA?.toString().toLowerCase() || "";
+      valB = valB?.toString().toLowerCase() || "";
     }
 
     return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
@@ -796,10 +794,10 @@ console.log("Sorting column:", column, "Sample A:", valA, "Sample B:", valB);
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Update arrow icons
+  // Update arrows
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-  const arrow = sortAsc ? ".asc" : ".desc";
-  $(this).find(".sort-icons").children(arrow).addClass("active");
+  $(this).find(".sort-icons").children(sortAsc ? ".asc" : ".desc").addClass("active");
 });
+
 
 });
