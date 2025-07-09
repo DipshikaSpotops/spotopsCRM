@@ -1340,7 +1340,6 @@ app.get("/orders/disputes-by-date", async (req, res) => {
     const startDate = new Date(`${year}-${normalizedMonth}`);
     const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth, 10) - 1, 1));
     endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setMonth(endDate.getMonth() + 1);
     console.log("<<<",startDate,endDate);
     const orders = await Order.find({
       disputedDate: {
