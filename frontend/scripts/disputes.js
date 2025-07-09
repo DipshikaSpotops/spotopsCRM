@@ -654,7 +654,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   allOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
-
+console.log(column,"---");
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
