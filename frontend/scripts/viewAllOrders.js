@@ -815,7 +815,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   }
 
   // Sort data
-  allOrders.sort((a, b) => {
+  orders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
 
