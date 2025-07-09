@@ -775,10 +775,11 @@ console.log("column",column,valA,valB);
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (["custRefAmount", "salePrice", "estGp", "currGp", "actualGp", "grossProfit"].includes(column)) {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    } else {
+    } else if (["salePrice", "estGp", "currGp", "actualGp"].includes(column)) {
+  valA = parseFloat(String(valA).replace(/[^0-9.-]+/g, '')) || 0;
+  valB = parseFloat(String(valB).replace(/[^0-9.-]+/g, '')) || 0;
+}
+else {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
     }
