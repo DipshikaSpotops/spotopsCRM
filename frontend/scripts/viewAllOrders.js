@@ -815,7 +815,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   }
 
   // Sort data
-  orders.sort((a, b) => {
+  allOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
 
@@ -829,11 +829,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
     }
-$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
 
-// Highlight the active arrow correctly
-const arrowToActivate = sortAsc ? ".asc" : ".desc";
-$(this).find(".sort-icons").children(arrowToActivate).addClass("active");
     return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
