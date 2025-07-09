@@ -50,44 +50,6 @@ $("#searchInput").on("input", function () {
   }, 300);
 });
 let allOrders = [];
-
-
-// Sorting Order Object
-var team, role;
-let sortOrder = {
-orderDate: "asc",
-orderNo: "asc",
-agentName: "asc",
-customerName: "asc",
-partName: "asc",
-yard: "asc",
-orderStatus: "asc",
-email: "asc",
-};
-
-
-
-
-
-// Event listeners for sorting
-$("th").each(function (index) {
-const th = $(this);
-let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-
-if (type === "orderdate") {
-th.on("click", function () {
-sortTable(index, "date");
-});
-} else if (type === "orderno") {
-th.on("click", function () {
-sortTable(index, "number");
-});
-} else {
-th.on("click", function () {
-sortTable(index, type);
-});
-}
-});
 const rowsPerPage = 25;
 let currentPage = 1;
 const savedSearch = localStorage.getItem("viewAllOrdersSearch");
@@ -127,8 +89,9 @@ var allDOrders;
 
     const { orders, totalPages: total } = response.data;
     totalPages = total;
-    orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
-    renderTableRows(orders);
+    allOrders = orders;
+    allOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+    renderTableRows(allOrders);
     createPaginationControls(totalPages, page);
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -759,3 +722,34 @@ $("#infoTableHeader th.sortable").on("click", function () {
 // } catch (error) {
 // console.error("Error fetching orders:", error);
 // }
+// Sorting Order Object
+// var team, role;
+// let sortOrder = {
+// orderDate: "asc",
+// orderNo: "asc",
+// agentName: "asc",
+// customerName: "asc",
+// partName: "asc",
+// yard: "asc",
+// orderStatus: "asc",
+// email: "asc",
+// };
+// // Event listeners for sorting
+// $("th").each(function (index) {
+// const th = $(this);
+// let type = th.text().trim().toLowerCase().replace(/\s/g, "");
+
+// if (type === "orderdate") {
+// th.on("click", function () {
+// sortTable(index, "date");
+// });
+// } else if (type === "orderno") {
+// th.on("click", function () {
+// sortTable(index, "number");
+// });
+// } else {
+// th.on("click", function () {
+// sortTable(index, type);
+// });
+// }
+// });
