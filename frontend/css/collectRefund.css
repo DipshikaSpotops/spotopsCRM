@@ -545,19 +545,6 @@ font-size: 13px;
       margin-left: -1%;
       margin-top: -1%;
     }
-    table thead th {
-      position: sticky;
-      transform: translateZ(0); 
-      overflow-anchor: none;
-      top: 0;
-      z-index: 10; 
-      background-color: #037894; 
-      color: white;
-      padding: 8px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-      white-space: nowrap;
-    }
     .topHeads{
       display: flex;
     margin-bottom: 1%;
@@ -565,6 +552,19 @@ font-size: 13px;
     margin-left: -1%;
       }
       /* sorting */
+      #infoTableHeader {
+  position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
+  top: 0;
+  z-index: 10; 
+  background-color: #037894; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
 th.sortable {
   cursor: pointer;
   user-select: none;
