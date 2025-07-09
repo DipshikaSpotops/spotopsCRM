@@ -280,20 +280,7 @@ background-color: #96dce1;
 .topHeads{
   display: flex;
 }
-table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    transform: translateZ(0);
-    overflow-anchor: none;
-    background-color: #037894;
-    color: white;
-    padding: 8px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-    white-space: nowrap;
-    font-size: 13px;
-}
+
 /* Hover effect - highlights the entire row */
 .table tbody tr:hover {
     background-color: #c0c0c0 !important; 
@@ -414,3 +401,39 @@ background-color: #037894;
     background-color: #0b4f5f;
     cursor: pointer;
   }
+  /* sorting */
+#infoTableHeader {
+  position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
+  top: 0;
+  z-index: 10; 
+  background-color: #037894; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sort-icons {
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.sort-icons .asc,
+.sort-icons .desc {
+  font-size: 12px;
+  color: #999;
+  margin-left: 2px;
+}
+
+.sort-icons .active {
+  color: #000; /* Bold black or use accent color */
+  font-weight: bold;
+}

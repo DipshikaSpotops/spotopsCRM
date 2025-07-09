@@ -526,7 +526,7 @@ font-size: 13px;
     td:first-child {
       position: sticky;
       left: 0;
-      z-index: 999;
+      z-index: 2;
       border-right: 3px solid #ddd;
       background-color: #eaf6ff;
     }

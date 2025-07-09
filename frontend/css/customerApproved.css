@@ -435,19 +435,7 @@ table {
   border-collapse: collapse;
 }
 
-table thead th {
-  position: sticky;
-  transform: translateZ(0); 
-  overflow-anchor: none;
-  top: 0;
-  z-index: 10; 
-  background-color: #037894; 
-  color: white;
-  padding: 8px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  white-space: nowrap;
-}
+
 
 #downloadCsv {
   background-color: #037894;
@@ -482,6 +470,42 @@ h1 {
 }
 .table thead th {
 font-size: 13px;
+}
+/* sorting */
+#infoTableHeader {
+  position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
+  top: 0;
+  z-index: 10; 
+  background-color: #037894; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sort-icons {
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.sort-icons .asc,
+.sort-icons .desc {
+  font-size: 12px;
+  color: #999;
+  margin-left: 2px;
+}
+
+.sort-icons .active {
+  color: #000; /* Bold black or use accent color */
+  font-weight: bold;
 }
 @media (max-width: 992px) {
   .sidebar {

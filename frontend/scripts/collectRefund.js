@@ -333,7 +333,7 @@ async function fetchYardInfo(month, year) {
                 <span class="desc">▼</span>
             </span></span></th>`
       );
-      tableHeader.append('<th scope="col">Actions</th>');
+      tableHeader.append('<th scope="col" class="sortable">Actions</th>');
   
       data.forEach((item) => {
           let appendOrder = false;

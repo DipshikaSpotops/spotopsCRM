@@ -919,4 +919,49 @@ if (cancelledDate) {
       resultDiv.innerHTML = '';
     }
   });
+  // sorting 
+let currentSortColumn = '';
+let sortAsc = true;
+
+$("#infoTableHeader th.sortable").on("click", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+  console.log("Current sort column:", currentSortColumn);
+  if (currentSortColumn === column) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = column;
+    sortAsc = true;
+  }
+
+  // Sort data
+  allOrders.sort((a, b) => {
+    let valA = a[column] ?? '';
+    let valB = b[column] ?? '';
+
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else if (column === "custRefAmount") {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA.toString().toLowerCase();
+      valB = valB.toString().toLowerCase();
+    }
+
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  });
+
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Reset all arrows
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+
+  // Highlight the active arrow
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(arrowToActivate).addClass("active");
+});
 });

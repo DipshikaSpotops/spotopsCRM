@@ -209,19 +209,75 @@ placeholder="Search..."
   </div>
   <div class="table-wrapper">
     <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th style="cursor: pointer;" scope="col">Actions</th>
-          <th style="cursor: pointer;" scope="col">Order date</th>
-          <th style="cursor: pointer;" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer;" scope="col">Agent Name <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer;" scope="col">Customer Info <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer;" scope="col">Shipping Info <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer;" scope="col">Sale Info <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer;" scope="col">Part Info <span class="sort-icon onlyNumber">&#9650;</span></th>
-          <th style="cursor: pointer;" scope="col">Order Status <span class="sort-icon onlyNumber">&#9650;</span></th>
-        </tr>
-      </thead>
+      <thead id="infoTableHeader">
+  <tr>
+    <th>Actions</th>
+
+    <th class="sortable" data-column="orderDate">
+      Order Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="orderNo">
+      Order No.
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="salesAgent">
+      Agent Name
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="customerInfo">
+      Customer Info
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="shippingInfo">
+      Shipping Info
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="saleInfo">
+      Sale Info
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="partInfo">
+      Part Info
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="orderStatus">
+      Order Status
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+  </tr>
+</thead>
       <tbody id="infoTable">
         <!-- Dynamic rows will be appended here -->
       </tbody>
