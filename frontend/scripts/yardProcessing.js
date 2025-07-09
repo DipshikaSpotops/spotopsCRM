@@ -21,112 +21,6 @@ let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
 
-// Sorting Order Object
-var team, role;
-let sortOrder = {
-orderDate: "asc",
-orderNo: "asc",
-agentName: "asc",
-customerName: "asc",
-partName: "asc",
-yard: "asc",
-orderStatus: "asc",
-email: "asc",
-};
-
-function parseCustomDate(dateString) {
-const months = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-Nov: "11", Dec: "12"
-};
-// regex to extract parts from the string (day, month, year, time)
-const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
-if (parts) {
-const day = parts[1].padStart(2, '0'); 
-const month = months[parts[2]];
-const year = parts[3];
-const hour = parts[4];
-const minute = parts[5];
-return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-}
-return null;
-}
-function sortTableByDate() {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray(); 
-rows.sort((a, b) => {
-let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
-let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
-if (!dateA) return 1;
-if (!dateB) return -1;
-if (sortOrder.orderDate === "asc") {
-return dateA - dateB;
-} else {
-return dateB - dateA;
-}
-});
-$.each(rows, function (index, row) {
-table.append(row);
-});
-sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
-updateSortIcons(0, sortOrder.orderDate);
-}
-function sortTable(column, type) {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray();
-rows.sort((a, b) => {
-let valA = $(a).find("td").eq(column).text().trim();
-let valB = $(b).find("td").eq(column).text().trim();
-if (type === "number") {
-valA = parseInt(valA.replace(/\D/g, ""), 10);
-valB = parseInt(valB.replace(/\D/g, ""), 10);
-}
-if (sortOrder[type] === "asc") {
-return valA > valB ? 1 : -1;
-} else {
-return valA < valB ? 1 : -1;
-}
-});
-$.each(rows, function (index, row) {
-table.append(row);
-});
-// Toggle sort order
-sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-// Update the sort icon
-updateSortIcons(column, sortOrder[type]);
-}
-
-function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;");
-$("th").each(function (index) {
-if (index === columnIndex) {
-$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-}
-});
-}
-
-// Event listeners for sorting
-$("th").each(function (index) {
-const th = $(this);
-let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-
-if (type === "orderdate") {
-th.on("click", function () {
-sortTable(index, "date");
-});
-} else if (type === "orderno") {
-th.on("click", function () {
-sortTable(index, "number");
-});
-} else {
-th.on("click", function () {
-sortTable(index, type);
-});
-}
-});
-
-
 function renderTableRows(page, orders = allOrders) {
   const filteredOrders = orders.filter(item => item.orderStatus === "Yard Processing");
   const start = (page - 1) * rowsPerPage;
@@ -784,4 +678,53 @@ $(document).on("click", "#infoTable tr", function () {
     }
   });
 fetchNotifications();
+// sorting
+let currentSortColumn = '';
+let sortAsc = true;
+
+const columnMap = {
+  currGp: "currentGP", 
+};
+
+const numericCols = ["currGp"];
+
+$("#infoTableHeader th.sortable").on("click", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+
+  currentSortColumn === column ? (sortAsc = !sortAsc) : (currentSortColumn = column, sortAsc = true);
+
+  const actualColumn = columnMap[column] || column;
+
+  allOrders.sort((a, b) => {
+    let valA = a[actualColumn];
+    let valB = b[actualColumn];
+
+    // Fallback if currentGP needs to be computed manually
+    if (actualColumn === "currentGP") {
+      valA = computeCurrentGP(a);
+      valB = computeCurrentGP(b);
+    }
+
+    if (numericCols.includes(column)) {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA?.toString().toLowerCase() || "";
+      valB = valB?.toString().toLowerCase() || "";
+    }
+
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  });
+
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Update sort icons
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  const arrow = sortAsc ? ".asc" : ".desc";
+  $(this).find(".sort-icons").children(arrow).addClass("active");
+});
+
 });
