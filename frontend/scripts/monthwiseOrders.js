@@ -8,17 +8,17 @@ const rowsPerPage = 25;
 let currentPage = 1;
 
 // Sorting Order Object
-// var team, role;
-// let sortOrder = {
-// orderDate: "asc",
-// orderNo: "asc",
-// agentName: "asc",
-// customerName: "asc",
-// partName: "asc",
-// yard: "asc",
-// orderStatus: "asc",
-// email: "asc",
-// };
+var team, role;
+let sortOrder = {
+orderDate: "asc",
+orderNo: "asc",
+agentName: "asc",
+customerName: "asc",
+partName: "asc",
+yard: "asc",
+orderStatus: "asc",
+email: "asc",
+};
 
 // function parseCustomDate(dateString) {
 // const months = {
@@ -44,68 +44,68 @@ let currentPage = 1;
 // return null;
 // }
 // Sort the table by the Order Date column
-// function sortTableByDate() {
-// const table = $("#infoTable");
-// const rows = table.find("tr").toArray(); 
+function sortTableByDate() {
+const table = $("#infoTable");
+const rows = table.find("tr").toArray(); 
 
-// rows.sort((a, b) => {
-// let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
-// let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
-// if (!dateA) return 1;
-// if (!dateB) return -1;
-// if (sortOrder.orderDate === "asc") {
-// return dateA - dateB;
-// } else {
-// return dateB - dateA;
-// }
-// });
-// $.each(rows, function (index, row) {
-// table.append(row);
-// });
-// sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
-// updateSortIcons(0, sortOrder.orderDate);
-// }
-// $("th").eq(0).on("click", function () {
-// sortTableByDate();
-// });
-// function sortTable(column, type) {
-// const table = $("#infoTable");
-// const rows = table.find("tr").toArray();
+rows.sort((a, b) => {
+let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
+let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
+if (!dateA) return 1;
+if (!dateB) return -1;
+if (sortOrder.orderDate === "asc") {
+return dateA - dateB;
+} else {
+return dateB - dateA;
+}
+});
+$.each(rows, function (index, row) {
+table.append(row);
+});
+sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
+updateSortIcons(0, sortOrder.orderDate);
+}
+$("th").eq(0).on("click", function () {
+sortTableByDate();
+});
+function sortTable(column, type) {
+const table = $("#infoTable");
+const rows = table.find("tr").toArray();
 
-// rows.sort((a, b) => {
-// let valA = $(a).find("td").eq(column).text().trim();
-// let valB = $(b).find("td").eq(column).text().trim();
-// if (type === "number") {
-// valA = parseInt(valA.replace(/\D/g, ""), 10);
-// valB = parseInt(valB.replace(/\D/g, ""), 10);
-// }
+rows.sort((a, b) => {
+let valA = $(a).find("td").eq(column).text().trim();
+let valB = $(b).find("td").eq(column).text().trim();
+if (type === "number") {
+valA = parseInt(valA.replace(/\D/g, ""), 10);
+valB = parseInt(valB.replace(/\D/g, ""), 10);
+}
 
-// if (sortOrder[type] === "asc") {
-// return valA > valB ? 1 : -1;
-// } else {
-// return valA < valB ? 1 : -1;
-// }
-// });
+if (sortOrder[type] === "asc") {
+return valA > valB ? 1 : -1;
+} else {
+return valA < valB ? 1 : -1;
+}
+});
 
-// $.each(rows, function (index, row) {
-// table.append(row);
-// });
+$.each(rows, function (index, row) {
+table.append(row);
+});
 
-// // Toggle sort order
-// sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+// Toggle sort order
+sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
 
-// // Update the sort icon
-// updateSortIcons(column, sortOrder[type]);
-// }
+// Update the sort icon
+updateSortIcons(column, sortOrder[type]);
+}
 
-// function updateSortIcons(columnIndex, order) {
-// $("th .sort-icon").html("&#9650;"); 
-// $("th").each(function (index) {
-// if (index === columnIndex) {
-// $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-// }
-// });
-// }
+function updateSortIcons(columnIndex, order) {
+$("th .sort-icon").html("&#9650;"); 
+$("th").each(function (index) {
+if (index === columnIndex) {
+$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+}
+});
+}
 
 // Event listeners for sorting
 $("th").each(function (index) {
