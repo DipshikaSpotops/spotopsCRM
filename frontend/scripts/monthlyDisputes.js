@@ -89,6 +89,7 @@ console.log("disputes",disputes);
       allDisputes = disputes.filter(order => {
         if (!order.disputedDate) return false;
         const date = order.disputedDate;
+        return date.getFullYear() === targetYear && date.getMonth() === targetMonth;
       });
 
       $("#showTotalOrders").text(`Total Disputes - ${allDisputes.length}`);
@@ -136,7 +137,7 @@ console.log("disputes",disputes);
           <td>${order.orderNo}</td>
           <td>${formatDate(order.orderDate)}</td>
           <td>${order.customerName || "-"}</td>
-          <td>${formatDate(order.disputeDate)}</td>
+          <td>${formatDate(order.disputedDate)}</td>
           <td>${order.disputeReason}</td>
           <td>$${order.custRefAmount.toFixed(2)}</td>
           <td>
