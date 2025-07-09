@@ -771,11 +771,11 @@ $("#infoTableHeader th.sortable").on("click", function () {
   allOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
-console.log("column",column);
+console.log("column",column,valA,valB);
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (["custRefAmount", "soldP", "estGp", "currGp", "actualGp", "grossProfit"].includes(column)) {
+    } else if (["custRefAmount", "salePrice", "estGp", "currGp", "actualGp", "grossProfit"].includes(column)) {
       valA = parseFloat(valA) || 0;
       valB = parseFloat(valB) || 0;
     } else {
