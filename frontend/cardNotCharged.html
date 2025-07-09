@@ -154,6 +154,29 @@ color: white;
 font-size: 24px;
 cursor: pointer;
 }
+/* sorting */
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sort-icons {
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.sort-icons .asc,
+.sort-icons .desc {
+  font-size: 12px;
+  color: #999;
+  margin-left: 2px;
+}
+
+.sort-icons .active {
+  color: #000; /* Bold black or use accent color */
+  font-weight: bold;
+}
 @media (max-width: 768px) {
 .sidebar {
 transform: translateX(-100%);
@@ -689,8 +712,20 @@ placeholder="Search..."
 <table class="table table-bordered">
 <thead>
 <tr id="tableHeader" style="background-color: #f2f2f2">
-<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderNo">Order No <span class="sort-icon onlyNumber">&#x25B2;</span></th>
-<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderDate">Order Date</th>
+<th data-sort="orderNo">
+  Order No
+  <span class="sort-icons">
+    <span class="asc">▲</span>
+    <span class="desc">▼</span>
+  </span>
+</th>
+<th data-sort="orderDate">
+  Order Date
+  <span class="sort-icons">
+    <span class="asc">▲</span>
+    <span class="desc">▼</span>
+  </span>
+</th>
 </tr>
 </thead>
 <tbody id="yardInfoTable" style="text-align: center">
@@ -959,10 +994,16 @@ function renderTableRows(page, data = yardOrders) {
     // Update table headers dynamically
     tableHeader.find("th:gt(1)").remove(); // Remove previous Yard headers
     for (let i = 1; i <= maxYards; i++) {
-        tableHeader.append(
-            `<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
-        );
-    }
+    tableHeader.append(`
+        <th style="text-align:center; cursor: pointer;" scope="col" data-sort="yard${i}">
+            Yard ${i}
+            <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span>
+        </th>
+    `);
+}
     tableHeader.append(
         '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Approximate Card Charged($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
     );
@@ -1553,6 +1594,34 @@ $(document).on("click", "#infoTable tr", function () {
   }
 });
 fetchNotifications();
+$(document).on("click", "th[data-sort]", function () {
+  const $th = $(this);
+  const sortBy = $th.data("sort");
+  const columnIndex = $th.index();
+
+  // Determine type: yard column or date column
+  const isDateColumn = sortBy === "orderDate";
+  const isYardColumn = sortBy.startsWith("yard");
+
+  // Toggle sort order
+  currentSort.order =
+    currentSort.column === sortBy && currentSort.order === "asc"
+      ? "desc"
+      : "asc";
+  currentSort.column = sortBy;
+
+  // Call sorting function
+  sortTable(columnIndex, currentSort.order, isDateColumn, isYardColumn);
+
+  // Update all icons
+  $(".sort-icons").removeClass("sorted-asc sorted-desc");
+
+  // Add sorted class to the correct one
+  $th.find(".sort-icons").addClass(
+    currentSort.order === "asc" ? "sorted-asc" : "sorted-desc"
+  );
+});
+
 });
 </script>
 </body>
