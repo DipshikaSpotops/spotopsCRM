@@ -249,4 +249,15 @@ $("#infoTableHeader th.sortable").on("click", function () {
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
+  $("#infoTable").on("click", ".process-btn", function () {
+    const id = $(this).data("id");
+    window.location.href = `form.html?orderNo=${id}&process=true`;
+  });
+  const currentPath = window.location.pathname + "?newEntry=true";
+console.log("currentPath",currentPath)
+$(".nav-link").each(function () {
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
+});
 });
