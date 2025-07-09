@@ -515,7 +515,21 @@ table {
   border-collapse: collapse;
 }
 
-table thead th {
+/* table thead th {
+  position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
+  top: 0;
+  z-index: 10; 
+  background-color: #037894; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+} */
+/* sorting */
+#infoTableHeader {
   position: sticky;
   transform: translateZ(0); 
   overflow-anchor: none;
@@ -528,7 +542,6 @@ table thead th {
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
 }
-/* sorting */
 th.sortable {
   cursor: pointer;
   user-select: none;
