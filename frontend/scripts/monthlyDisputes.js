@@ -56,6 +56,8 @@ $(document).ready(async function () {
 
   async function loadDisputes(monthYear) {
     const [year, monthNum] = monthYear.split("-");
+    const targetYear = parseInt(year, 10);
+    const targetMonth = parseInt(monthNum, 10) - 1;
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const month = months[parseInt(monthNum, 10) - 1];
@@ -89,7 +91,7 @@ console.log("disputes",disputes);
       allDisputes = disputes.filter(order => {
         if (!order.disputedDate) return false;
         const date = new Date(order.disputedDate);
-        return date.getFullYear() === targetYear && date.getMonth() === targetMonth;
+        return !isNaN(date) && date.getFullYear() === targetYear && date.getMonth() === targetMonth;
       });
 
       $("#showTotalOrders").text(`Total Disputes - ${allDisputes.length}`);
