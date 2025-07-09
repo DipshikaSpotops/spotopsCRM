@@ -150,7 +150,7 @@ Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Progr
 </td>
           <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo.map((info, index) => `<b>Yard ${index + 1}</b>:${info.yardName}<br>${info.email} ${info.phone}<br> ${info.status} ${info.stockNo || ""} <br> Part price: $${info.partPrice} | $${info.shippingDetails} | Others: $${info.others || 0}`).join("<br>") : ""}</td>
           <td>${item.orderStatus}</td>
-          <td>${item.actualGP ? item.actualGP.toFixed(2) : ""}</td>
+          <td>$${item.actualGP ? item.actualGP.toFixed(2) : 0}</td>
           <td ${escalationStyle}>${escalationStatus}</td>
           <td>${actions}</td>
         </tr>
