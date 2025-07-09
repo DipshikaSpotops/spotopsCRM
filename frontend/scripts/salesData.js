@@ -7,125 +7,6 @@ let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
 
-// Sorting Order Object
-var team, role;
-let sortOrder = {
-orderDate: "asc",
-orderNo: "asc",
-agentName: "asc",
-customerName: "asc",
-partName: "asc",
-yard: "asc",
-orderStatus: "asc",
-email: "asc",
-};
-
-function parseCustomDate(dateString) {
-const months = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-Nov: "11", Dec: "12"
-};
-
-// Extract parts from the string (day, month, year, time)
-const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
-
-if (parts) {
-const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
-const month = months[parts[2]];
-const year = parts[3];
-const hour = parts[4];
-const minute = parts[5];
-
-// Return a valid date string for comparison
-return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-}
-
-return null;
-}
-// Sort the table by the Order Date column
-function sortTableByDate() {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray(); 
-
-rows.sort((a, b) => {
-let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
-let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
-if (!dateA) return 1;
-if (!dateB) return -1;
-if (sortOrder.orderDate === "asc") {
-return dateA - dateB;
-} else {
-return dateB - dateA;
-}
-});
-$.each(rows, function (index, row) {
-table.append(row);
-});
-sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
-updateSortIcons(0, sortOrder.orderDate);
-}
-$("th").eq(0).on("click", function () {
-sortTableByDate();
-});
-function sortTable(column, type) {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray();
-
-rows.sort((a, b) => {
-let valA = $(a).find("td").eq(column).text().trim();
-let valB = $(b).find("td").eq(column).text().trim();
-if (type === "number") {
-valA = parseInt(valA.replace(/\D/g, ""), 10);
-valB = parseInt(valB.replace(/\D/g, ""), 10);
-}
-
-if (sortOrder[type] === "asc") {
-return valA > valB ? 1 : -1;
-} else {
-return valA < valB ? 1 : -1;
-}
-});
-
-$.each(rows, function (index, row) {
-table.append(row);
-});
-
-// Toggle sort order
-sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-// Update the sort icon
-updateSortIcons(column, sortOrder[type]);
-}
-
-function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); 
-$("th").each(function (index) {
-if (index === columnIndex) {
-$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-}
-});
-}
-
-// Event listeners for sorting
-$("th").each(function (index) {
-const th = $(this);
-let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-
-if (type === "orderdate") {
-th.on("click", function () {
-sortTable(index, "date");
-});
-} else if (type === "orderno") {
-th.on("click", function () {
-sortTable(index, "number");
-});
-} else {
-th.on("click", function () {
-sortTable(index, type);
-});
-}
-});
 function calculateAndUpdateTotals(orders) {
     let totalEstGP = 0;
     let totalCurrentGP = 0;
@@ -844,4 +725,49 @@ fetchNotifications();
       resultDiv.innerHTML = '';
     }
   });
+  // sorting
+  const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount", "overallSpending"];
+let currentSortColumn = null;
+let currentSortOrder = "asc";
+
+$("#infoTableHeader th.sortable").on("click", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+
+  // Toggle sort order
+  currentSortOrder = (currentSortColumn === column && currentSortOrder === "asc") ? "desc" : "asc";
+  currentSortColumn = column;
+
+  const isNumeric = numericCols.includes(column);
+  const sorted = [...(filteredOrders.length ? filteredOrders : allOrders)].sort((a, b) => {
+    let valA = a[column];
+    let valB = b[column];
+
+    if (typeof valA === "string") valA = valA.trim().replace(/[^0-9.-]+/g, "");
+    if (typeof valB === "string") valB = valB.trim().replace(/[^0-9.-]+/g, "");
+
+    if (isNumeric) {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else {
+      valA = valA?.toString().toLowerCase() || "";
+      valB = valB?.toString().toLowerCase() || "";
+    }
+
+    return currentSortOrder === "asc"
+      ? valA > valB ? 1 : -1
+      : valA < valB ? 1 : -1;
+  });
+
+  renderTableRows(1, sorted);
+  createPaginationControls(Math.ceil(sorted.length / rowsPerPage), sorted);
+
+  // Update icons
+  $(".sort-icons .asc, .sort-icons .desc").removeClass("active");
+  $(this).find(currentSortOrder === "asc" ? ".asc" : ".desc").addClass("active");
+});
+
 });
