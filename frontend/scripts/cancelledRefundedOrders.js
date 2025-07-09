@@ -259,7 +259,7 @@ let sortAsc = true;
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
-
+  console.log("Current sort column:", currentSortColumn);
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
