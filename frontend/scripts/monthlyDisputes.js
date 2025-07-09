@@ -217,7 +217,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   }
 
   // Sort data
-  allOrders.sort((a, b) => {
+  allDisputes.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
 
@@ -237,7 +237,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
 
   currentPage = 1;
   renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  createPaginationControls(Math.ceil(allDisputes.length / rowsPerPage));
 
   // Reset all arrows
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");

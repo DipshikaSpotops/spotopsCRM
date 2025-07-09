@@ -1313,13 +1313,12 @@ console.log("endDate:", endDate.toISOString());
   }
 });
 app.get("/orders/disputes-by-date", async (req, res) => {
+  console.log("disputes-by-date");
   try {
     const { month, year } = req.query;
-
     if (!month || !year) {
       return res.status(400).json({ message: "Month and year are required" });
     }
-
     // Support both numeric and string month formats
     const monthMap = {
       Jan: "01", January: "01",
@@ -1339,7 +1338,8 @@ app.get("/orders/disputes-by-date", async (req, res) => {
     const normalizedMonth = monthMap[month] || month.padStart(2, "0");
     console.log("normalizedMonth:",normalizedMonth);
     const startDate = new Date(`${year}-${normalizedMonth}`);
-    const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth), 1));
+    const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth, 10) - 1, 1));
+    endDate.setMonth(endDate.getMonth() + 1);
     endDate.setMonth(endDate.getMonth() + 1);
 
     const orders = await Order.find({
