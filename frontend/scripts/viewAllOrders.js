@@ -65,96 +65,9 @@ orderStatus: "asc",
 email: "asc",
 };
 
-function parseCustomDate(dateString) {
-const months = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-Nov: "11", Dec: "12"
-};
 
-// Extract parts from the string (day, month, year, time)
-const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
 
-if (parts) {
-const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
-const month = months[parts[2]];
-const year = parts[3];
-const hour = parts[4];
-const minute = parts[5];
 
-// Return a valid date string for comparison
-return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-}
-$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-
-// Highlight the active arrow correctly
-const arrowToActivate = sortAsc ? ".asc" : ".desc";
-$(this).find(".sort-icons").children(arrowToActivate).addClass("active");
-return null;
-}
-// Sort the table by the Order Date column
-function sortTableByDate() {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray(); 
-
-rows.sort((a, b) => {
-let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
-let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
-if (!dateA) return 1;
-if (!dateB) return -1;
-if (sortOrder.orderDate === "asc") {
-return dateA - dateB;
-} else {
-return dateB - dateA;
-}
-});
-$.each(rows, function (index, row) {
-table.append(row);
-});
-sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
-updateSortIcons(0, sortOrder.orderDate);
-}
-$("th").eq(0).on("click", function () {
-    sortTableByDate();
-});
-function sortTable(column, type) {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray();
-
-rows.sort((a, b) => {
-let valA = $(a).find("td").eq(column).text().trim();
-let valB = $(b).find("td").eq(column).text().trim();
-if (type === "number") {
-valA = parseInt(valA.replace(/\D/g, ""), 10);
-valB = parseInt(valB.replace(/\D/g, ""), 10);
-}
-
-if (sortOrder[type] === "asc") {
-return valA > valB ? 1 : -1;
-} else {
-return valA < valB ? 1 : -1;
-}
-});
-
-$.each(rows, function (index, row) {
-table.append(row);
-});
-
-// Toggle sort order
-sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-// Update the sort icon
-updateSortIcons(column, sortOrder[type]);
-}
-
-function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); 
-$("th").each(function (index) {
-if (index === columnIndex) {
-$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-}
-});
-}
 
 // Event listeners for sorting
 $("th").each(function (index) {
@@ -347,121 +260,6 @@ if (!token) {
 await fetchToken();
 token = localStorage.getItem("token");
 }
-
-// // Fetch orders and apply pagination
-// try {
-// const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
-// axios.get("https://www.spotops360.com/orders", {
-// headers: token ? { Authorization: `Bearer ${token}` } : {},
-// })
-// ]);
-
-// if (ordersResponse.status !== 200) {
-// throw new Error("Failed to fetch orders");
-// }
-
-// var orders = ordersResponse.data;
-// allOrders = orders;
-
-// // Sort and render the orders
-// allOrders = sortOrdersByOrderNoDesc(allOrders);
-// renderTableRows(allOrders);
-// createPaginationControls(Math.ceil(allOrders.length / 25));
-// } catch (error) {
-// console.error("Error fetching orders:", error);
-// }
-
-// Filtering functionality
-// $("#searchInput").on("keyup", function () {
-//   const value = $(this).val().toLowerCase();
-//   $("#infoTable tr").filter(function () {
-//     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-//   });
-// });
-
-// Filtering functionality for  the search bar
-// Update search and pagination dynamically
-// $("#searchInput").on(
-//   "keyup",function () {
-//     const searchTerm = $(this).val().trim();
-//     console.log("searchTerm",searchTerm)
-//     currentPage = 1;  // Reset to the first page
-//     fetchOrders(currentPage, searchTerm);  // Fetch based on search
-//  // Debounce by 300ms
-// });
-// const ordersAll = await axios.get(`https://www.spotops360.com/orders`, {
-// headers: token ? { Authorization: `Bearer ${token}` } : {},
-// });
-
-//    var  searchOrders = ordersAll.data;
-//    console.log('searchInpur',searchOrders);
-// $("#searchInput").on("keyup", function () {
-// const value = $(this).val().toLowerCase();
-// // console.log("allOrders",allDOrders);
-// const filteredOrders = searchOrders.filter(order => {
-// const basicSearch = (
-// (order.soldP && String(order.soldP).toLowerCase().includes(value)) || // Converting soldP to string
-// (order.grossProfit && String(order.grossProfit).toLowerCase().includes(value)) || 
-// (order.actualGP && String(order.actualGP).toLowerCase().includes(value)) || 
-// (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
-// (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-// (order.bAddressStreet && order.bAddressStreet.toLowerCase().includes(value)) ||
-// (order.bAddressCity && order.bAddressCity.toLowerCase().includes(value)) ||
-// (order.bAddressState && order.bAddressState.toLowerCase().includes(value)) ||
-// (order.bAddressZip && order.bAddressZip.toLowerCase().includes(value)) ||
-// (order.bAddressAcountry && order.bAddressAcountry.toLowerCase().includes(value)) ||
-// (order.sAddressStreet && order.sAddressStreet.toLowerCase().includes(value)) ||
-// (order.sAddressState && order.sAddressState.toLowerCase().includes(value)) ||
-// (order.sAddressZip && order.sAddressZip.toLowerCase().includes(value)) ||
-// (order.sAddressAcountry && order.sAddressAcountry.toLowerCase().includes(value)) ||
-// (order.attention && order.attention.toLowerCase().includes(value)) ||
-// (order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
-// (order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
-// (order.customerName && order.customerName.toLowerCase().includes(value)) ||
-// (order.fName && order.fName.toLowerCase().includes(value)) ||
-// (order.lName && order.lName.toLowerCase().includes(value)) ||
-// (order.bName && order.bName.toLowerCase().includes(value)) ||
-// (order.bAddress && order.bAddress.toLowerCase().includes(value)) ||
-// (order.sAddress && order.sAddress.toLowerCase().includes(value)) ||
-// ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-// (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
-// (order.email && order.email.toLowerCase().includes(value)) ||
-// (order.additionalInfo && order.additionalInfo.some(info => 
-// (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
-// )) ||
-// (order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
-// (order.make && order.make.toLowerCase().includes(value)) ||    // Added make
-// (order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
-// (order.model && order.model.toLowerCase().includes(value))     // Added model
-// );
-
-// // Check if any yard detail (including stockNo) matches the search term
-// const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
-// const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
-// return (
-// yardLabel.includes(value) || 
-// (info.yardName && info.yardName.toLowerCase().includes(value)) ||
-// (info.phone && String(info.phone).toLowerCase().includes(value)) || 
-// (info.email && info.email.toLowerCase().includes(value)) || 
-// (info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
-// (info.status && info.status.toLowerCase().includes(value)) ||
-// (info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
-// );
-// });
-
-// // Return true if any of the basic fields or yard details match the search term
-// return basicSearch || yardSearch;
-// });
-
-// // If a search is active, display the filtered results, otherwise reset to the full dataset
-// if (filteredOrders.length > 0 || value === "") {
-// renderTableRows(1, filteredOrders); // Render the first page of filtered results
-// createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
-// } else {
-// $("#infoTable").empty(); // Clear the table if no results are found
-// $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
-// }
-// });
 // Sort orders by Order No in descending order
 function sortOrdersByOrderNoDesc(orders) {
 return orders.sort((a, b) => {
@@ -804,44 +602,160 @@ let currentSortColumn = '';
 let sortAsc = true;
 
 $("#infoTableHeader th.sortable").on("click", function () {
-  const column = $(this).data("column");
-  if (!column) return;
-  console.log("Current sort column:", currentSortColumn);
-  if (currentSortColumn === column) {
-    sortAsc = !sortAsc;
-  } else {
-    currentSortColumn = column;
-    sortAsc = true;
-  }
+    const column = $(this).data("column");
+    if (!column) return;
 
-  // Sort data
-  allOrders.sort((a, b) => {
-    let valA = a[column] ?? '';
-    let valB = b[column] ?? '';
-
-    if (column.toLowerCase().includes("date")) {
-      valA = new Date(valA);
-      valB = new Date(valB);
-    } else if (column === "custRefAmount") {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
+    if (currentSortColumn === column) {
+      sortAsc = !sortAsc;
     } else {
-      valA = valA.toString().toLowerCase();
-      valB = valB.toString().toLowerCase();
+      currentSortColumn = column;
+      sortAsc = true;
     }
 
-    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+    // Sort logic
+    allOrders.sort((a, b) => {
+      let valA = a[column] ?? '';
+      let valB = b[column] ?? '';
+
+      if (column.toLowerCase().includes("date")) {
+        valA = new Date(valA);
+        valB = new Date(valB);
+      } else if (column === "custRefAmount") {
+        valA = parseFloat(valA) || 0;
+        valB = parseFloat(valB) || 0;
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+    });
+
+    currentPage = 1;
+    renderTableRows(allOrders); // You must define this elsewhere
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage)); // Define this too
+
+    // Update sort icons
+    $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+    const arrowToActivate = sortAsc ? ".asc" : ".desc";
+    $(this).find(".sort-icons").children(arrowToActivate).addClass("active");
   });
-
-  currentPage = 1;
-  renderTableRows(allOrders);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-
-  // Reset all arrows
-$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-
-// Highlight the active arrow correctly
-const arrowToActivate = sortAsc ? ".asc" : ".desc";
-$(this).find(".sort-icons").children(arrowToActivate).addClass("active");
 });
-});
+
+
+// function parseCustomDate(dateString) {
+// const months = {
+// Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+// Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+// Nov: "11", Dec: "12"
+// };
+
+// // Extract parts from the string (day, month, year, time)
+// const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+
+// if (parts) {
+// const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
+// const month = months[parts[2]];
+// const year = parts[3];
+// const hour = parts[4];
+// const minute = parts[5];
+
+// // Return a valid date string for comparison
+// return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+// }
+// $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+
+// // Highlight the active arrow correctly
+// const arrowToActivate = sortAsc ? ".asc" : ".desc";
+// $(this).find(".sort-icons").children(arrowToActivate).addClass("active");
+// return null;
+// }
+
+// Sort the table by the Order Date column
+// function sortTableByDate() {
+// const table = $("#infoTable");
+// const rows = table.find("tr").toArray(); 
+
+// rows.sort((a, b) => {
+// let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
+// let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
+// if (!dateA) return 1;
+// if (!dateB) return -1;
+// if (sortOrder.orderDate === "asc") {
+// return dateA - dateB;
+// } else {
+// return dateB - dateA;
+// }
+// });
+// $.each(rows, function (index, row) {
+// table.append(row);
+// });
+// sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
+// updateSortIcons(0, sortOrder.orderDate);
+// }
+// $("th").eq(0).on("click", function () {
+//     sortTableByDate();
+// });
+
+// function sortTable(column, type) {
+// const table = $("#infoTable");
+// const rows = table.find("tr").toArray();
+
+// rows.sort((a, b) => {
+// let valA = $(a).find("td").eq(column).text().trim();
+// let valB = $(b).find("td").eq(column).text().trim();
+// if (type === "number") {
+// valA = parseInt(valA.replace(/\D/g, ""), 10);
+// valB = parseInt(valB.replace(/\D/g, ""), 10);
+// }
+
+// if (sortOrder[type] === "asc") {
+// return valA > valB ? 1 : -1;
+// } else {
+// return valA < valB ? 1 : -1;
+// }
+// });
+
+// $.each(rows, function (index, row) {
+// table.append(row);
+// });
+
+// // Toggle sort order
+// sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
+
+// // Update the sort icon
+// updateSortIcons(column, sortOrder[type]);
+// }
+
+// function updateSortIcons(columnIndex, order) {
+// $("th .sort-icon").html("&#9650;"); 
+// $("th").each(function (index) {
+// if (index === columnIndex) {
+// $(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
+// }
+// });
+// }
+
+
+// // Fetch orders and apply pagination
+// try {
+// const [ordersResponse, cancelledOrdersResponse] = await Promise.all([
+// axios.get("https://www.spotops360.com/orders", {
+// headers: token ? { Authorization: `Bearer ${token}` } : {},
+// })
+// ]);
+
+// if (ordersResponse.status !== 200) {
+// throw new Error("Failed to fetch orders");
+// }
+
+// var orders = ordersResponse.data;
+// allOrders = orders;
+
+// // Sort and render the orders
+// allOrders = sortOrdersByOrderNoDesc(allOrders);
+// renderTableRows(allOrders);
+// createPaginationControls(Math.ceil(allOrders.length / 25));
+// } catch (error) {
+// console.error("Error fetching orders:", error);
+// }
