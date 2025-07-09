@@ -834,7 +834,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   });
 
   currentPage = 1;
-  renderTableRows(currentPage);
+  renderTableRows(allOrders);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
   // Reset all arrows
