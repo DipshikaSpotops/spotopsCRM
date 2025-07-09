@@ -20,29 +20,33 @@ orderStatus: "asc",
 email: "asc",
 };
 
-// function parseCustomDate(dateString) {
-// const months = {
-// Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-// Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-// Nov: "11", Dec: "12"
-// };
+function parseCustomDate(dateString) {
+const months = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
+Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
+Nov: "11", Dec: "12"
+};
 
-// // Extract parts from the string (day, month, year, time)
-// const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
+// Extract parts from the string (day, month, year, time)
+const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
 
-// if (parts) {
-// const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
-// const month = months[parts[2]];
-// const year = parts[3];
-// const hour = parts[4];
-// const minute = parts[5];
+if (parts) {
+const day = parts[1].padStart(2, '0'); // Pad day with leading 0 if necessary
+const month = months[parts[2]];
+const year = parts[3];
+const hour = parts[4];
+const minute = parts[5];
 
-// // Return a valid date string for comparison
-// return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-// }
+// Return a valid date string for comparison
+return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+}
+$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
 
-// return null;
-// }
+// Highlight the active arrow correctly
+const arrowToActivate = sortAsc ? ".asc" : ".desc";
+$(this).find(".sort-icons").children(arrowToActivate).addClass("active");
+return null;
+}
 // Sort the table by the Order Date column
 function sortTableByDate() {
 const table = $("#infoTable");
