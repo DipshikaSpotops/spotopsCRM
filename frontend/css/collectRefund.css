@@ -552,7 +552,7 @@ font-size: 13px;
     margin-left: -1%;
       }
       /* sorting */
-      #infoTableHeader {
+#infoTableHeader {
   position: sticky;
   transform: translateZ(0); 
   overflow-anchor: none;
@@ -567,6 +567,7 @@ font-size: 13px;
 }
 th.sortable {
   cursor: pointer;
+  background-color: #037894; 
   user-select: none;
   position: relative;
 }
