@@ -71,6 +71,8 @@ console.error("Connection failed", err);
 const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
+console.log("====")
+db.orders.find({ disputedDate: { $exists: true } }).limit(5)
 
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
@@ -1350,7 +1352,7 @@ app.get("/orders/disputes-by-date", async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    console.error(" Error fetching cancelled-by-date orders:", error);
+    console.error(" Error fetching disputed-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
