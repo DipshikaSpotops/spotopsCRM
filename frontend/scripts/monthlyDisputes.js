@@ -209,7 +209,7 @@ console.log("disputes",disputes);
 let currentSortColumn = '';
 let sortAsc = true;
 
-$("#infoTableHeader th.sortable").on("click", function () {
+$(document).on("click", "#infoTableHeader th.sortable", function () {
   const column = $(this).data("column");
   if (!column) return;
   console.log("Clicked column:", column);
