@@ -65,7 +65,7 @@ $(document).ready(async function () {
         params: { month, year },
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
-      console.log("res",res);
+      console.log("res",res.data);
       if (!res.data) {
   console.warn("No dispute data received:", res);
   return;
