@@ -1342,8 +1342,13 @@ app.get("/orders/disputes-by-date", async (req, res) => {
     const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth, 10) - 1, 1));
     endDate.setMonth(endDate.getMonth() + 1);
     console.log("<<<",startDate,endDate);
-    const disputedOrders = Order.find({ disputedDate: { $exists: true } }).limit(5)
-    console.log("disputed",disputedOrders);
+    // const disputedOrders = Order.find({ disputedDate: { $exists: true } }).limit(5)
+    // console.log("disputed",disputedOrders);
+    const testOrders = await Order.find({ disputedDate: { $ne: null } })
+  .sort({ disputedDate: -1 })
+  .limit(5);
+
+console.log("Recent disputes:", testOrders);
     const orders = await Order.find({
       disputedDate: {
         $gte: startDate,
