@@ -71,8 +71,7 @@ console.error("Connection failed", err);
 const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
-console.log("====")
-db.orders.find({ disputedDate: { $exists: true } }).limit(5)
+
 
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
