@@ -251,9 +251,6 @@ $(this).addClass("active");
 const activeLink = $(".nav-link.active")[0];
 if (activeLink) {
   activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
-
- let currentSortColumn = '';
-let sortAsc = true;
 }
 // sorting 
 let currentSortColumn = '';

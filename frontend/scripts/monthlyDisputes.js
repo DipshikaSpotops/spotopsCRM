@@ -1,5 +1,6 @@
 $(document).ready(async function () {
     let allDisputes = [];
+    
   const rowsPerPage = 25;
   let currentPage = 1;
   const userId = localStorage.getItem("userId");
@@ -263,9 +264,6 @@ $(this).addClass("active");
 const activeLink = $(".nav-link.active")[0];
 if (activeLink) {
   activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
-
- let currentSortColumn = '';
-let sortAsc = true;
 }
 
 });
