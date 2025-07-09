@@ -712,13 +712,13 @@ placeholder="Search..."
 <table class="table table-bordered">
 <thead id="infoTableHeader">
 <tr id="tableHeader" style="background-color: #f2f2f2">
-<th style="cursor: pointer" data-column="orderDate">Order No.
+<th class="sortable" data-column="orderDate">Order No.
     <span class="sort-icons">
       <span class="asc">&#9650;</span>
       <span class="desc">&#9660;</span>
     </span>
 </th>
-<th style="cursor: pointer" data-column="orderNo">Order Date 
+<th class="sortable" data-column="orderNo">Order Date 
     <span class="sort-icons">
       <span class="asc">&#9650;</span>
       <span class="desc">&#9660;</span>
@@ -993,7 +993,7 @@ function renderTableRows(page, data = yardOrders) {
     tableHeader.find("th:gt(1)").remove(); // Remove previous Yard headers
     for (let i = 1; i <= maxYards; i++) {
     tableHeader.append(`
-        <th style="text-align:center; cursor: pointer;" scope="col" data-sort="yard${i}">
+        <th class="sortable" scope="col" data-sort="yard${i}">
             Yard ${i}
             <span class="sort-icons">
                 <span class="asc">▲</span>
@@ -1003,8 +1003,11 @@ function renderTableRows(page, data = yardOrders) {
     `);
 }
     tableHeader.append(
-        '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Approximate Card Charged($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
-    );
+        `<th class="sortable" scope="col" data-sort="totalShipping">Approximate Card Charged($)  <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span></th>
+    `);
     tableHeader.append('<th style="text-align:center;" scope="col">Actions</th>');
     // Render table rows for the current page
 pageData.forEach(order => {
