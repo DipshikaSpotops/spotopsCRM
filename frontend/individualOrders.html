@@ -42,11 +42,19 @@ window.location.href = "login_signup.html";
             </a>   
             </div>
         <div class="toggle-sidebar">
-        <!-- <i class="fas fa-bars"></i> -->
+        <i class="fas fa-bars"></i>
         </div>
         
         
         <div class="user-info dropdown" style="display: flex;">
+            <div style="display: flex;">
+      <div style="margin-left: -28%;"> <input
+      type="text"
+      class="form-control"
+      id="searchInputForOrderNo"
+      placeholder="Search order no."
+      />
+      </div>
 <div id="searchResult" style="margin-left: 10px; margin-top: 5px;"></div>
 </div>
         <span style="white-space: nowrap;margin-left: -14%;">Hi <span id="user-name"></span></span>
@@ -63,7 +71,7 @@ window.location.href = "login_signup.html";
           <ul id="notificationList"></ul>
           <button id="viewAlltasks">View All Tasks</button>
         </div>
-        <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: -4%;font-size: x-large;color: white;"></i>
+        <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: -4%;font-size: x-large;"></i>
         <div
         class="dropdown-menu dropdown-menu-right"
         aria-labelledby="userMenu"
@@ -143,23 +151,71 @@ placeholder="Search..."
   </div>
 <div class="table-wrapper">
 <table class="table table-bordered">
-<thead>
-<tr>
-<th style="cursor: pointer;">Order Date</th>
-<th style="cursor: pointer;">Order No <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Customer Name <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Part Name <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Sale Price <span class="sort-icon">&#9650;</span></th>
-<!-- <th style="cursor: pointer;">Estimated Info</th> -->
-<!-- <th style="cursor: pointer;">Actual Info <span class="sort-icon">&#9650;</span></th> -->
-<!-- <th style="cursor: pointer;">Overall Spend <span class="sort-icon">&#9650;</span></th> -->
-<th style="cursor: pointer;">Actual GP <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Est GP <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Trackin No. <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Order Status <span class="sort-icon">&#9650;</span></th>
-<th style="cursor: pointer;">Actions <span class="sort-icon">&#9650;</span></th>
-</tr>
+<thead id="infoTableHeader">
+  <tr>
+    <th class="sortable" data-column="orderDate">Order Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="orderNo">Order No
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="customerName">Customer Name
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="partName">Part Name
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="salePrice">Sale Price
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="actualGp">Actual GP
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="estGp">Est GP
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="trackingNo">Tracking No.
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="orderStatus">Order Status
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="actions">Actions
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+  </tr>
 </thead>
+
 <tbody id="infoTable">
 <!-- Order data will be populated here -->
 </tbody>

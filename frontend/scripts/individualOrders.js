@@ -736,35 +736,43 @@ $(document).on("click", "#infoTable tr", function () {
     $(this).addClass("selected");
   }
 });
-  // sorting 
-let currentSortColumn = '';
+ // sorting
+  let currentSortColumn = '';
 let sortAsc = true;
-
+const columnMap = {
+  salePrice: "soldP",
+  estGp: "grossProfit",
+  currGp: "currentGP",
+  actualGp: "actualGP",
+  custRefAmount: "custRefundedAmount"
+};
+const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount"];
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
-  console.log("Current sort column:", currentSortColumn);
-  if (currentSortColumn === column) {
-    sortAsc = !sortAsc;
-  } else {
-    currentSortColumn = column;
-    sortAsc = true;
-  }
 
-  // Sort data
+  currentSortColumn === column ? sortAsc = !sortAsc : (currentSortColumn = column, sortAsc = true);
+
+  const actualColumn = columnMap[column] || column;
+
   allOrders.sort((a, b) => {
-    let valA = a[column] ?? '';
-    let valB = b[column] ?? '';
+    let valA = a[actualColumn];
+    let valB = b[actualColumn];
 
+    // Handle dates
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (column === "custRefAmount") {
+    }
+    // Handle numbers
+    else if (numericCols.includes(column)) {
       valA = parseFloat(valA) || 0;
       valB = parseFloat(valB) || 0;
-    } else {
-      valA = valA.toString().toLowerCase();
-      valB = valB.toString().toLowerCase();
+    }
+    // Default string sorting
+    else {
+      valA = valA?.toString().toLowerCase() || "";
+      valB = valB?.toString().toLowerCase() || "";
     }
 
     return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
@@ -774,11 +782,8 @@ $("#infoTableHeader th.sortable").on("click", function () {
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Reset all arrows
-$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-
-// Highlight the active arrow correctly
-const arrowToActivate = sortAsc ? ".asc" : ".desc";
-$(this).find(".sort-icons").children(arrowToActivate).addClass("active");
+  // Update arrows
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  $(this).find(".sort-icons").children(sortAsc ? ".asc" : ".desc").addClass("active");
 });
 });
