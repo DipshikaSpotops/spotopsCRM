@@ -682,10 +682,6 @@ fetchNotifications();
 let currentSortColumn = '';
 let sortAsc = true;
 
-const columnMap = {
-  currGp: "currentGP", 
-};
-
 const numericCols = ["currGp"];
 
 $("#infoTableHeader th.sortable").on("click", function () {
@@ -694,32 +690,21 @@ $("#infoTableHeader th.sortable").on("click", function () {
 
   currentSortColumn === column ? (sortAsc = !sortAsc) : (currentSortColumn = column, sortAsc = true);
 
-  const actualColumn = columnMap[column] || column;
+  const colIndex = $(this).index();
 
-  allOrders.sort((a, b) => {
-    let valA = a[actualColumn];
-    let valB = b[actualColumn];
+  const rows = $("#infoTable tr").get();
 
-    // Fallback if currentGP needs to be computed manually
-    if (actualColumn === "currentGP") {
-      valA = computeCurrentGP(a);
-      valB = computeCurrentGP(b);
-    }
+  rows.sort((rowA, rowB) => {
+    const cellA = $(rowA).children().eq(colIndex).text().replace(/[^0-9.-]+/g, "");
+    const cellB = $(rowB).children().eq(colIndex).text().replace(/[^0-9.-]+/g, "");
 
-    if (numericCols.includes(column)) {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    } else {
-      valA = valA?.toString().toLowerCase() || "";
-      valB = valB?.toString().toLowerCase() || "";
-    }
+    let valA = numericCols.includes(column) ? parseFloat(cellA) || 0 : cellA.toLowerCase();
+    let valB = numericCols.includes(column) ? parseFloat(cellB) || 0 : cellB.toLowerCase();
 
     return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
-  currentPage = 1;
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  $("#infoTable").empty().append(rows);
 
   // Update sort icons
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
