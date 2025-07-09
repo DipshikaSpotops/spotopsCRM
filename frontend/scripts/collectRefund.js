@@ -285,29 +285,53 @@ async function fetchYardInfo(month, year) {
       });
   
       tableHeader.find("th:gt(1)").remove(); // Remove all columns after Order Date
-      for (let i = 1; i <= maxYards; i++) {
-          tableHeader.append(
-              `<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
-          );
-      }
+    for (let i = 1; i <= maxYards; i++) {
+    tableHeader.append(`
+        <th class="sortable" scope="col" data-sort="yard${i}">
+            Yard ${i}
+            <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span>
+        </th>
+    `);
+}
   
       tableHeader.append(
-          '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+         `<th class="sortable" scope="col" data-sort="totalPartPrice">Total Part Price($)  <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span></th>
+    `);
+      tableHeader.append(
+          `<th class="sortable" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span></span></th>`
       );
       tableHeader.append(
-          '<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+          `<th class="sortable" scope="col" data-sort="others">Other Charges($) <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span></span></th>`
       );
       tableHeader.append(
-          '<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+          `<th class="sortable" scope="col" data-sort="overallToBeRefunded">To Be Refunded($) <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span></span></th>`
       );
       tableHeader.append(
-          '<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallToBeRefunded">To Be Refunded($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+          `<th class="sortable" scope="col" data-sort="refunds">Refunded($) <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span></span></th>`
       );
       tableHeader.append(
-          '<th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunded($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
-      );
-      tableHeader.append(
-          '<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+          `<th class="sortable" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icons">
+                <span class="asc">▲</span>
+                <span class="desc">▼</span>
+            </span></span></th>`
       );
       tableHeader.append('<th scope="col">Actions</th>');
   
@@ -898,4 +922,49 @@ $(document).on("click", "#yardInfoTable tr", function () {
       resultDiv.innerHTML = '';
     }
   });
+    // sorting 
+let currentSortColumn = '';
+let sortAsc = true;
+
+$("#infoTableHeader th.sortable").on("click", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+  console.log("Current sort column:", currentSortColumn);
+  if (currentSortColumn === column) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = column;
+    sortAsc = true;
+  }
+
+  // Sort data
+  allOrders.sort((a, b) => {
+    let valA = a[column] ?? '';
+    let valB = b[column] ?? '';
+
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else if (column === "custRefAmount") {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA.toString().toLowerCase();
+      valB = valB.toString().toLowerCase();
+    }
+
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  });
+
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Reset all arrows
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+
+  // Highlight the active arrow
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(arrowToActivate).addClass("active");
+});
 });
