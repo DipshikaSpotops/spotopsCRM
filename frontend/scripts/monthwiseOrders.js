@@ -768,11 +768,10 @@ $("#infoTableHeader th.sortable").on("click", function () {
     sortAsc = true;
   }
 
-  // 💡 Combined Sorting Logic
   allOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
-
+console.log("column",column);
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
@@ -791,7 +790,6 @@ $("#infoTableHeader th.sortable").on("click", function () {
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // 🔄 Update arrow icons
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(".sort-icons").children(arrowToActivate).addClass("active");
