@@ -172,9 +172,8 @@ th.sortable {
   color: #999;
   margin-left: 2px;
 }
-
 .sort-icons .active {
-  color: #000; /* Bold black or use accent color */
+  color: #000;
   font-weight: bold;
 }
 @media (max-width: 768px) {
@@ -993,7 +992,7 @@ function renderTableRows(page, data = yardOrders) {
     tableHeader.find("th:gt(1)").remove(); // Remove previous Yard headers
     for (let i = 1; i <= maxYards; i++) {
     tableHeader.append(`
-        <th class="sortable" scope="col" data-sort="yard${i}">
+        <th class="sortable" scope="col" data-column="yard${i}">
             Yard ${i}
             <span class="sort-icons">
                 <span class="asc">▲</span>
