@@ -88,7 +88,7 @@ console.log("disputes",disputes);
       // Filter only disputes from selected month
       allDisputes = disputes.filter(order => {
         if (!order.disputedDate) return false;
-        const date = order.disputedDate;
+        const date = new Date(order.disputedDate);
         return date.getFullYear() === targetYear && date.getMonth() === targetMonth;
       });
 
