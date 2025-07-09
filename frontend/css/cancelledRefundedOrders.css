@@ -264,6 +264,12 @@ height: 100%;
 background: rgba(0, 0, 0, 0.5); /* Dark overlay behind the modal */
 z-index: 5;
 }
+.modal-title {
+      margin-bottom: 0;
+    line-height: 1.5;
+      color: #037894;
+    text-decoration-line: underline;
+}
 body.no-scroll {
   overflow: hidden; /* Disable scrolling */
 }
