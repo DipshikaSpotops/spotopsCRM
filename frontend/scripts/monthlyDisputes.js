@@ -78,13 +78,13 @@ const disputes = responseData.map(order => ({
   orderNo: order.orderNo,
   orderDate: order.orderDate,
   customerName: order.customerName,
-  disputeDate: extractDisputeDate(order.orderHistory || []),
+  disputedDate: order.disputedDate,
   disputeReason: order.disputeReason || "-",
   custRefAmount: parseFloat(order.custRefAmount || 0) || 0,
   orderHistory: order.orderHistory || []
 }));
 
-
+console.log("disputes",disputes);
       // Filter only disputes from selected month
       allDisputes = disputes.filter(order => {
         if (!order.disputedDate) return false;
