@@ -143,7 +143,7 @@ console.log("disputes",disputes);
           <td>${order.disputeReason}</td>
           <td>$${order.custRefAmount.toFixed(2)}</td>
           <td>
-            <button class="btn btn-primary btn-sm view-order" data-id="${order.orderNo}">View</button>
+            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button>
           </td>
         </tr>
       `);
