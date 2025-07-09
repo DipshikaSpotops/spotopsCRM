@@ -774,10 +774,10 @@ $("#infoTableHeader th.sortable").on("click", function () {
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
   // Reset all arrows
-  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
 
-  // Highlight the active arrow
-  const arrowToActivate = sortAsc ? ".asc" : ".desc";
-  $(this).find(arrowToActivate).addClass("active");
+// Highlight the active arrow correctly
+const arrowToActivate = sortAsc ? ".asc" : ".desc";
+$(this).find(".sort-icons").children(arrowToActivate).addClass("active");
 });
 });
