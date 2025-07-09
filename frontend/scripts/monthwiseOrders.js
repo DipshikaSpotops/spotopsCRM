@@ -754,13 +754,17 @@ fetchNotifications();
       resultDiv.innerHTML = '';
     }
   });
-    // sorting 
+// sorting 
 let currentSortColumn = '';
 let sortAsc = true;
+
+const numericCols = ["soldP", "grossProfit", "currentGP", "actualGP", "custRefAmount"];
+
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
 
+  // Toggle sort direction if clicking the same column
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
@@ -771,15 +775,19 @@ $("#infoTableHeader th.sortable").on("click", function () {
   allOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
-console.log("column",column,valA,valB);
+
+    // Date sorting
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (["salePrice", "estGp", "currGp", "actualGp"].includes(column)) {
-  valA = parseFloat(String(valA).replace(/[^0-9.-]+/g, '')) || 0;
-  valB = parseFloat(String(valB).replace(/[^0-9.-]+/g, '')) || 0;
-}
-else {
+    }
+    // Numeric sorting
+    else if (numericCols.includes(column)) {
+      valA = typeof valA === "string" ? parseFloat(valA.replace(/[^0-9.-]+/g, '')) : valA || 0;
+      valB = typeof valB === "string" ? parseFloat(valB.replace(/[^0-9.-]+/g, '')) : valB || 0;
+    }
+    // Text sorting
+    else {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
     }
@@ -791,8 +799,10 @@ else {
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
+  // 🔄 Update sort icons
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-  const arrowToActivate = sortAsc ? ".asc" : ".desc";
-  $(this).find(".sort-icons").children(arrowToActivate).addClass("active");
+  const arrow = sortAsc ? ".asc" : ".desc";
+  $(this).find(".sort-icons").children(arrow).addClass("active");
 });
+
 });
