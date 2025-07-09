@@ -87,8 +87,8 @@ const disputes = responseData.map(order => ({
 
       // Filter only disputes from selected month
       allDisputes = disputes.filter(order => {
-        if (!order.disputeDate) return false;
-        const date = new Date(order.disputeDate);
+        if (!order.disputedDate) return false;
+        const date = order.disputedDate;
         return date.getFullYear() === parseInt(year) && (date.getMonth() + 1) === parseInt(monthNum);
       });
 
