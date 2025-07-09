@@ -274,7 +274,37 @@ const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
             throw new Error("Failed to fetch current month's orders");
         }
 
-        allOrders = ordersResponse.data;
+allOrders = ordersResponse.data.map(order => {
+  const yardSpent = (order.additionalInfo || []).reduce((sum, info) => {
+    const shippingCost = info.shippingDetails 
+      ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 
+      : 0;
+    const partPrice = parseFloat(info.partPrice || 0);
+    const others = parseFloat(info.others || 0);
+    const refundedAmount = parseFloat(info.refundedAmount || 0);
+    const yardOwnShipping = parseFloat(info.yardOwnShipping || 0);
+    const custOwnShippingReturn = parseFloat(info.custOwnShippingReturn || 0);
+    const custOwnShipReplacement = parseFloat(info.custOwnShipReplacement || 0);
+
+    return sum + partPrice + shippingCost + others - refundedAmount + yardOwnShipping + custOwnShippingReturn - custOwnShipReplacement;
+  }, 0);
+
+  const refundedBy = (order.orderHistory || []).filter(entry =>
+    entry.includes("Order status changed to Refunded")
+  ).map(entry => {
+    const parts = entry.split(" by ");
+    return parts[1]?.split(" on ")[0] || "Unknown";
+  })[0] || "";
+
+  const refundedDateRaw = new Date(order.custRefundDate).getTime();
+
+  return {
+    ...order,
+    yardSpent: parseFloat(yardSpent.toFixed(2)),
+    refundedBy,
+    refundedDateRaw
+  };
+});
         var team = localStorage.getItem("team");
 const teamAgentsMap = {
   Shankar: ["David", "John"],
@@ -690,9 +720,13 @@ let currentSortColumn = '';
 let sortAsc = true;
 const columnMap = {
   totalYardSpend: "yardSpent",
-  refundedAmount : "custRefAmount"
+  refundedAmount: "custRefAmount",
+  refundedBy: "refundedBy",
+  refundedDate: "refundedDateRaw"
 };
-const numericCols = ["totalYardSpend","refundedAmount"];
+
+const numericCols = ["yardSpent", "custRefAmount"];
+const dateCols = ["refundedDateRaw"];
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
@@ -705,18 +739,13 @@ $("#infoTableHeader th.sortable").on("click", function () {
     let valA = a[actualColumn];
     let valB = b[actualColumn];
 
-    // Handle dates
-    if (column.toLowerCase().includes("date")) {
+    if (dateCols.includes(actualColumn)) {
       valA = new Date(valA);
       valB = new Date(valB);
-    }
-    // Handle numbers
-    else if (numericCols.includes(column)) {
+    } else if (numericCols.includes(actualColumn)) {
       valA = parseFloat(valA) || 0;
       valB = parseFloat(valB) || 0;
-    }
-    // Default string sorting
-    else {
+    } else {
       valA = valA?.toString().toLowerCase() || "";
       valB = valB?.toString().toLowerCase() || "";
     }
@@ -728,8 +757,8 @@ $("#infoTableHeader th.sortable").on("click", function () {
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Update arrows
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   $(this).find(".sort-icons").children(sortAsc ? ".asc" : ".desc").addClass("active");
 });
+
 });
