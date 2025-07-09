@@ -44,27 +44,27 @@ return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
 return null;
 }
 // Sort the table by the Order Date column
-function sortTableByDate() {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray(); 
+// function sortTableByDate() {
+// const table = $("#infoTable");
+// const rows = table.find("tr").toArray(); 
 
-rows.sort((a, b) => {
-let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
-let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
-if (!dateA) return 1;
-if (!dateB) return -1;
-if (sortOrder.orderDate === "asc") {
-return dateA - dateB;
-} else {
-return dateB - dateA;
-}
-});
-$.each(rows, function (index, row) {
-table.append(row);
-});
-sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
-updateSortIcons(0, sortOrder.orderDate);
-}
+// rows.sort((a, b) => {
+// let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
+// let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
+// if (!dateA) return 1;
+// if (!dateB) return -1;
+// if (sortOrder.orderDate === "asc") {
+// return dateA - dateB;
+// } else {
+// return dateB - dateA;
+// }
+// });
+// $.each(rows, function (index, row) {
+// table.append(row);
+// });
+// sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
+// updateSortIcons(0, sortOrder.orderDate);
+// }
 $("th").eq(0).on("click", function () {
 sortTableByDate();
 });
