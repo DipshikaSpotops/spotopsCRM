@@ -764,7 +764,6 @@ $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
 
-  // Toggle sort direction if clicking the same column
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
@@ -773,20 +772,20 @@ $("#infoTableHeader th.sortable").on("click", function () {
   }
 
   allOrders.sort((a, b) => {
-    let valA = a[column] ?? '';
-    let valB = b[column] ?? '';
+    let valA = a[column] ?? 0;
+    let valB = b[column] ?? 0;
 
-    // Date sorting
+    // Convert to Date if it's a date
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
     }
-    // Numeric sorting
+    // Numeric comparison
     else if (numericCols.includes(column)) {
-      valA = typeof valA === "string" ? parseFloat(valA.replace(/[^0-9.-]+/g, '')) : valA || 0;
-      valB = typeof valB === "string" ? parseFloat(valB.replace(/[^0-9.-]+/g, '')) : valB || 0;
+      valA = Number(valA);
+      valB = Number(valB);
     }
-    // Text sorting
+    // String/text comparison
     else {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
@@ -796,13 +795,14 @@ $("#infoTableHeader th.sortable").on("click", function () {
   });
 
   currentPage = 1;
-  renderTableRows(currentPage);
+  renderTableRows(currentPage); // Re-render the sorted rows
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // 🔄 Update sort icons
+  // Update sort icons
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrow = sortAsc ? ".asc" : ".desc";
   $(this).find(".sort-icons").children(arrow).addClass("active");
 });
+
 
 });
