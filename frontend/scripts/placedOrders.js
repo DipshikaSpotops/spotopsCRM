@@ -919,7 +919,7 @@ if (cancelledDate) {
       resultDiv.innerHTML = '';
     }
   });
-  // sorting 
+ // sorting 
 let currentSortColumn = '';
 let sortAsc = true;
 

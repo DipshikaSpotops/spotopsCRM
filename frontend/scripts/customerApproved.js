@@ -735,7 +735,7 @@ $("#downloadCsv").on("click", function () {
       resultDiv.innerHTML = '';
     }
   });
-  // sorting 
+ // sorting 
 let currentSortColumn = '';
 let sortAsc = true;
 
