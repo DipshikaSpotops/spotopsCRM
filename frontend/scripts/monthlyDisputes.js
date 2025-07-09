@@ -89,7 +89,6 @@ console.log("disputes",disputes);
       allDisputes = disputes.filter(order => {
         if (!order.disputedDate) return false;
         const date = order.disputedDate;
-        return date.getFullYear() === parseInt(year) && (date.getMonth() + 1) === parseInt(monthNum);
       });
 
       $("#showTotalOrders").text(`Total Disputes - ${allDisputes.length}`);
