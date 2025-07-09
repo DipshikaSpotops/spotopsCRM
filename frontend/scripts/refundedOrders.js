@@ -689,9 +689,10 @@ localStorage.setItem("darkMode", "false");
 let currentSortColumn = '';
 let sortAsc = true;
 const columnMap = {
-  totalYardSpend: "yardSpent"
+  totalYardSpend: "yardSpent",
+  refundedAmount : "custRefAmount"
 };
-const numericCols = ["totalYardSpend"];
+const numericCols = ["totalYardSpend","refundedAmount"];
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
