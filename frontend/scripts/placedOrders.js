@@ -958,7 +958,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
   // Reset all arrows
-$(".sortable .sort-icons .asc, .sort-icons .desc").removeClass("active");
+$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
 
 // Highlight the active arrow correctly
 const arrowToActivate = sortAsc ? ".asc" : ".desc";
