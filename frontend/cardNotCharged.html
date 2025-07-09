@@ -1598,7 +1598,7 @@ fetchNotifications();
 let currentSortColumn = '';
 let sortAsc = true;
 
-$(document).on("click", "#infoTableHeader th.sortable", function () {
+$("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
   console.log("Current sort column:", currentSortColumn);
@@ -1610,19 +1610,23 @@ $(document).on("click", "#infoTableHeader th.sortable", function () {
   }
 
   // Sort data
-let valA, valB;
-if (column.startsWith("yard")) {
-  const index = parseInt(column.replace("yard", "")) - 1;
-  valA = a.additionalInfo?.[index]?.yardName?.toLowerCase() || '';
-  valB = b.additionalInfo?.[index]?.yardName?.toLowerCase() || '';
-} else if (column === "totalShipping") {
-  // assuming you've calculated this value elsewhere and stored it
-  valA = a.totalShipping || 0;
-  valB = b.totalShipping || 0;
-} else {
-  valA = a[column]?.toString().toLowerCase() || '';
-  valB = b[column]?.toString().toLowerCase() || '';
-}
+  yardOrders.sort((a, b) => {
+    let valA = a[column] ?? '';
+    let valB = b[column] ?? '';
+
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else if (column === "custRefAmount") {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA.toString().toLowerCase();
+      valB = valB.toString().toLowerCase();
+    }
+
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  });
 
   currentPage = 1;
   renderTableRows(currentPage);
