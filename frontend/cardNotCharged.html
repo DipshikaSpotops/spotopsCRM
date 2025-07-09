@@ -606,7 +606,7 @@ window.location.href = "login_signup.html";
 <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
 <!-- <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a> -->
 <a class="nav-link view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
-<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewyardOrders.html">View All Orders</a>
 <a class="nav-link yard-located-orders" id="yard-located-orders-linl" href="yardLocatedOrders.html">Yard Located Orders</a>
 <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
 <a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
@@ -617,7 +617,7 @@ window.location.href = "login_signup.html";
 <a class="nav-link cancelled-orders-link"  id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
 <a class="nav-link refunded-orders-link" id="refunded-orders-link" href="refundedOrders.html">Refunded Orders</a>
 <a class="nav-link refunded-orders-link" id="disputed-orders-link" href="disputes.html">Disputed Orders</a>
-<!-- <a class="nav-link view-ordersSheet-link" href="viewAllOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
+<!-- <a class="nav-link view-ordersSheet-link" href="viewyardOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
 <a class="nav-link view-fulfilled-link" href="fulfilledOrders.html">Fulfilled Orders</a>
 <a class="nav-link escalated-orders" href="escalatedOrders.html">Overall Escalation</a>
 <a class="nav-link ongoingEscalated-orders" href="ongoingEscalations.html">Ongoing Escalation</a>
@@ -1611,7 +1611,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   }
 
   // Sort data
-  allOrders.sort((a, b) => {
+  yardOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
 
@@ -1631,7 +1631,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
 
   currentPage = 1;
   renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 
   // Reset all arrows
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
