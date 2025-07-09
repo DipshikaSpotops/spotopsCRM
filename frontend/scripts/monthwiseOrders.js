@@ -757,7 +757,13 @@ fetchNotifications();
 // sorting 
 let currentSortColumn = '';
 let sortAsc = true;
-
+const columnMap = {
+  salePrice: "soldP",
+  estGp: "grossProfit",
+  currGp: "currentGP",
+  actualGp: "actualGP",
+  custRefAmount: "custRefundedAmount"
+};
 const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount"];
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
