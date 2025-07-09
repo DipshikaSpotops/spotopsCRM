@@ -759,7 +759,6 @@ let currentSortColumn = '';
 let sortAsc = true;
 
 const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount"];
-
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
@@ -772,21 +771,20 @@ $("#infoTableHeader th.sortable").on("click", function () {
   }
 
   allOrders.sort((a, b) => {
-    let valA = a[column] ?? 0;
-    let valB = b[column] ?? 0;
+    let valA = a[column];
+    let valB = b[column];
 
-    // Convert to Date if it's a date
+    // Handle undefined/null
+    valA = valA !== undefined && valA !== null ? valA : 0;
+    valB = valB !== undefined && valB !== null ? valB : 0;
+console.log("Sorting column:", column, "Sample A:", valA, "Sample B:", valB);
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    }
-    // Numeric comparison
-    else if (numericCols.includes(column)) {
+    } else if (numericCols.includes(column)) {
       valA = Number(valA);
       valB = Number(valB);
-    }
-    // String/text comparison
-    else {
+    } else {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
     }
@@ -795,14 +793,13 @@ $("#infoTableHeader th.sortable").on("click", function () {
   });
 
   currentPage = 1;
-  renderTableRows(currentPage); // Re-render the sorted rows
+  renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Update sort icons
+  // Update arrow icons
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrow = sortAsc ? ".asc" : ".desc";
   $(this).find(".sort-icons").children(arrow).addClass("active");
 });
-
 
 });
