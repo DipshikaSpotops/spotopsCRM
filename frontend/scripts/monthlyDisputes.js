@@ -212,7 +212,9 @@ let sortAsc = true;
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
-
+  console.log("Clicked column:", column);
+  console.log("Current sort column:", currentSortColumn);
+  console.log("Sort direction before click:", sortAsc ? "asc" : "desc");
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
