@@ -726,48 +726,54 @@ fetchNotifications();
     }
   });
   // sorting
-  const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount", "overallSpending"];
-let currentSortColumn = null;
-let currentSortOrder = "asc";
-
+  let currentSortColumn = '';
+let sortAsc = true;
+const columnMap = {
+  salePrice: "soldP",
+  estGp: "grossProfit",
+  currGp: "currentGP",
+  actualGp: "actualGP",
+  custRefAmount: "custRefundedAmount"
+};
+const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount"];
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
 
-  // Toggle sort order
-  currentSortOrder = (currentSortColumn === column && currentSortOrder === "asc") ? "desc" : "asc";
-  currentSortColumn = column;
+  currentSortColumn === column ? sortAsc = !sortAsc : (currentSortColumn = column, sortAsc = true);
 
-  const isNumeric = numericCols.includes(column);
-  const sorted = [...(filteredOrders.length ? filteredOrders : allOrders)].sort((a, b) => {
-    let valA = a[column];
-    let valB = b[column];
+  const actualColumn = columnMap[column] || column;
 
-    if (typeof valA === "string") valA = valA.trim().replace(/[^0-9.-]+/g, "");
-    if (typeof valB === "string") valB = valB.trim().replace(/[^0-9.-]+/g, "");
+  allOrders.sort((a, b) => {
+    let valA = a[actualColumn];
+    let valB = b[actualColumn];
 
-    if (isNumeric) {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    } else if (column.toLowerCase().includes("date")) {
+    // Handle dates
+    if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else {
+    }
+    // Handle numbers
+    else if (numericCols.includes(column)) {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    }
+    // Default string sorting
+    else {
       valA = valA?.toString().toLowerCase() || "";
       valB = valB?.toString().toLowerCase() || "";
     }
 
-    return currentSortOrder === "asc"
-      ? valA > valB ? 1 : -1
-      : valA < valB ? 1 : -1;
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
-  renderTableRows(1, sorted);
-  createPaginationControls(Math.ceil(sorted.length / rowsPerPage), sorted);
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Update icons
-  $(".sort-icons .asc, .sort-icons .desc").removeClass("active");
-  $(this).find(currentSortOrder === "asc" ? ".asc" : ".desc").addClass("active");
+  // Update arrows
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  $(this).find(".sort-icons").children(sortAsc ? ".asc" : ".desc").addClass("active");
 });
 
 });
