@@ -1008,7 +1008,7 @@ function renderTableRows(page, data = yardOrders) {
                 <span class="desc">▼</span>
             </span></th>
     `);
-    tableHeader.append('<th style="text-align:center;" scope="col">Actions</th>');
+    tableHeader.append('<th class="sortable" scope="col">Actions</th>');
     // Render table rows for the current page
 pageData.forEach(order => {
     let yardInfoHtml = "";
