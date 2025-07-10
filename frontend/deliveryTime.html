@@ -832,7 +832,13 @@ console.log("sliced data",allOrders);
     // Ensure table headers include all required yard columns
     tableHeader.find("th:gt(1)").remove(); // Remove previous yard columns
     for (let i = 1; i <= maxYards; i++) {
-        tableHeader.append(`<th scope="col" class="sortable">Yard ${i} <span class="sort-icon">&#9650;</span></th>`);
+tableHeader.append(`<th scope="col" class="sortable" data-column="yard${i}">
+  Yard ${i} 
+  <span class="sort-icons">
+    <span class="asc">&#9650;</span>
+    <span class="desc">&#9660;</span>
+  </span>
+</th>`);
     }
 
     // Populate table rows with paginated data
@@ -1281,6 +1287,63 @@ fetchTaskSummary();
 
   })();
 });
+let currentSortColumn = '';
+let sortAsc = true;
+
+$("#infoTableHeader").on("click", "th.sortable", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+
+  if (currentSortColumn === column) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = column;
+    sortAsc = true;
+  }
+
+  // Perform sorting
+  allOrders.sort((a, b) => {
+    let valA = a[column];
+    let valB = b[column];
+
+    // Handle yard columns (e.g., yard1, yard2, etc.)
+    if (column.startsWith("yard")) {
+      const yardIndex = parseInt(column.replace("yard", "")) - 1;
+      valA = a.additionalInfo?.[yardIndex]?.yardName || "";
+      valB = b.additionalInfo?.[yardIndex]?.yardName || "";
+    }
+
+    // Date comparison
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } 
+    // Numeric fallback
+    else if (!isNaN(parseFloat(valA)) && !isNaN(parseFloat(valB))) {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } 
+    // String fallback
+    else {
+      valA = valA?.toString().toLowerCase() || "";
+      valB = valB?.toString().toLowerCase() || "";
+    }
+
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  });
+
+  // Reset pagination + update table
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Reset all sort icons
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+
+  // Activate appropriate arrow
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(arrowToActivate).addClass("active");
+});
 
 </script>
 </head>
@@ -1456,12 +1519,26 @@ placeholder="Search..."
   </div>
   <div class="table-wrapper">
   <table class="table table-bordered">
-<thead>
-<tr id="tableHeader">
-<th scope="col" class="sortable">Order No <span class="sort-icon">&#9650;</span></th>
-<th scope="col" class="sortable">Order Date <span class="sort-icon">&#9650;</span></th>
-<!-- Yard columns will be added dynamically -->
-</tr>
+<thead id="infoTableHeader">
+  <tr>
+    <th class="sortable" data-column="orderNo">
+      Order No
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <th class="sortable" data-column="orderDate">
+      Order Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+
+    <!-- Yard headers will be appended dynamically via JS -->
+  </tr>
 </thead>
 <tbody id="yardInfoTable">
 <!-- Yard information will be appended here -->
