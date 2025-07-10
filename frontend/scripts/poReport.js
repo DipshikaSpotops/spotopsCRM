@@ -269,17 +269,17 @@ tableHeader.append(
       </span></th>`
 );
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2; <span class="asc">&#9650;</span>
+`<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($)<span class="asc onlyNumber">&#9650;</span>
         <span class="desc">&#9660;</span>
       </span></th>`
 );
 tableHeader.append(
-`th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunds($) <span class="sort-icon onlyNumber">&#x25B2; <span class="asc">&#9650;</span>
+`th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunds($)<span class="asc onlyNumber">&#9650;</span>
         <span class="desc">&#9660;</span>
       </span></th>`
 );
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber"><span class="asc">&#9650;</span>
+`<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($)<span class="asc onlyNumber">&#9650;</span>
         <span class="desc">&#9660;</span>
       </span></th>`
 );
