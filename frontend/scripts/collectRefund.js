@@ -5,122 +5,6 @@ $("#viewAlltasks").on("click", function () {
   let yardOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1; 
-  let currentSort = {
-  column: "",
-  order: "asc", 
-  };
-  
-  function sortTable(column, order, isDateColumn, isYardColumn) {
-  const tbody = $("#yardInfoTable");
-  const rows = tbody.find("tr").toArray();
-  
-  rows.sort(function (a, b) {
-  let cellA = $(a).find("td").eq(column).text().trim();
-  let cellB = $(b).find("td").eq(column).text().trim();
-  
-  if (isDateColumn) {
-  // Convert date strings into Date objects for sorting
-  cellA = new Date(cellA);
-  cellB = new Date(cellB);
-  return order === "asc" ? cellA - cellB : cellB - cellA;
-  } else if (isYardColumn) {
-  // Sort Yard columns alphabetically
-  return order === "asc"
-  ? cellA.localeCompare(cellB)
-  : cellB.localeCompare(cellA);
-  } else {
-  // General string comparison for other columns
-  return order === "asc"
-  ? cellA.localeCompare(cellB)
-  : cellB.localeCompare(cellA);
-  }
-  });
-  
-  // Append sorted rows back to the table body
-  $.each(rows, function (index, row) {
-  tbody.append(row);
-  });
-  }
-  
-  // Click event for sorting columns with numerical values and dates
-  $(document).on("click", ".onlyNumber", function () {
-  const column = $(this).closest("th").index();
-  const sortBy = $(this).closest("th").data("sort");
-  
-  // Ensure sortBy is defined before using it
-  if (!sortBy) return;
-  
-  // Determine if the column is a date column or Yard column
-  const isDateColumn = sortBy === "orderDate";
-  const isYardColumn = sortBy.startsWith("yard");
-  
-  // Toggle the sort order
-  currentSort.order =
-  currentSort.column === sortBy && currentSort.order === "asc"
-  ? "desc"
-  : "asc";
-  currentSort.column = sortBy;
-  
-  sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-  
-  // Update sort icon
-  $(".sort-icon").html("&#9650;"); // Reset all icons to ascending
-  $(this)
-  .find(".sort-icon")
-  .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
-  });
-  // Click event for sorting Yard columns
-  $(document).on("click", ".fYardName", function () {
-  const column = $(this).closest("th").index();
-  const sortBy = $(this).closest("th").data("sort");
-  
-  // Determine if the column is a Yard column
-  const isYardColumn = sortBy.startsWith("yard");
-  
-  // Toggle the sort order
-  currentSort.order =
-  currentSort.column === sortBy && currentSort.order === "asc"
-  ? "desc"
-  : "asc";
-  currentSort.column = sortBy;
-  
-  sortTable(column, currentSort.order, false, isYardColumn);
-  
-  // Update sort icon
-  $(".fYardName").html("&#9650;"); // Reset all icons to ascending
-  $(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-  });
-  
-  // Click event for sorting any sortable column
-  $(document).on(
-  "click",
-  "th[data-sort], th[data-sort] .sort-icon",
-  function (event) {
-  const $target = $(event.target);
-  const $th = $target.closest("th");
-  const column = $th.index();
-  const sortBy = $th.data("sort");
-  
-  // Determine if the column is a date column or a yard column
-  const isDateColumn = sortBy === "orderDate";
-  const isYardColumn = sortBy.startsWith("yard");
-  
-  // Toggle the sort order
-  currentSort.order =
-  currentSort.column === sortBy && currentSort.order === "asc"
-  ? "desc"
-  : "asc";
-  currentSort.column = sortBy;
-  
-  sortTable(column, currentSort.order, isDateColumn, isYardColumn);
-  
-  // Update sort icon
-  $("th[data-sort] .sort-icon").html("&#9650;"); // Reset all icons to ascending
-  $th
-  .find(".sort-icon")
-  .html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); // Toggle current column icon
-  }
-  );
   const currentTime = Date.now();
   const loginTimestamp = localStorage.getItem("loginTimestamp");
   if (loginTimestamp) {
@@ -926,26 +810,27 @@ $(document).on("click", "#yardInfoTable tr", function () {
 let currentSortColumn = '';
 let sortAsc = true;
 
-$("#infoTableHeader th.sortable").on("click", function () {
-  const column = $(this).data("column");
-  if (!column) return;
-  console.log("Current sort column:", currentSortColumn);
-  if (currentSortColumn === column) {
-    sortAsc = !sortAsc;
-  } else {
-    currentSortColumn = column;
-    sortAsc = true;
-  }
+$(document).on("click", "th.sortable", function () {
+  const $th = $(this);
+  const sortKey = $th.data("sort");
+  if (!sortKey) return;
 
-  // Sort data
-  allOrders.sort((a, b) => {
-    let valA = a[column] ?? '';
-    let valB = b[column] ?? '';
+  // Toggle sort direction
+  currentSort.order = (currentSort.column === sortKey && currentSort.order === "asc") ? "desc" : "asc";
+  currentSort.column = sortKey;
 
-    if (column.toLowerCase().includes("date")) {
+  // Sort yardOrders
+  yardOrders.sort((a, b) => {
+    let valA = a[sortKey] ?? "";
+    let valB = b[sortKey] ?? "";
+
+    if (sortKey.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (column === "custRefAmount") {
+    } else if (
+      ["totalPartPrice", "totalShipping", "others", "overallToBeRefunded", "refunds", "overallSum"].includes(sortKey) ||
+      !isNaN(parseFloat(valA))
+    ) {
       valA = parseFloat(valA) || 0;
       valB = parseFloat(valB) || 0;
     } else {
@@ -953,18 +838,17 @@ $("#infoTableHeader th.sortable").on("click", function () {
       valB = valB.toString().toLowerCase();
     }
 
-    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+    return currentSort.order === "asc" ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
   currentPage = 1;
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  renderTable(currentPage, yardOrders);
+  createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 
-  // Reset all arrows
-  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-
-  // Highlight the active arrow
-  const arrowToActivate = sortAsc ? ".asc" : ".desc";
-  $(this).find(arrowToActivate).addClass("active");
+  // Reset sort icons
+  $(".sort-icons .asc, .sort-icons .desc").removeClass("active");
+  const arrow = currentSort.order === "asc" ? ".asc" : ".desc";
+  $th.find(arrow).addClass("active");
 });
+
 });
