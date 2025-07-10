@@ -214,17 +214,53 @@ placeholder="Search..."
 <!--  controls -->
 <div class="table-wrapper">
   <table class="table table-bordered table-head-only">
-    <thead style="text-align: center;">
-      <tr>
-        <th style="cursor: pointer" scope="col">Order Date</th>
-        <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Sales Agent</th>
-        <th style="cursor: pointer" scope="col">Customer Name<span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Yard <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Order Status <span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Actions</th>
-      </tr>
-    </thead>
+    <thead id="infoTableHeader">
+  <tr>
+    <th style="cursor: pointer" class="sortable" scope="col" data-sort="orderDate">
+      Order Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th style="cursor: pointer" class="sortable" scope="col" data-sort="orderNo">
+      Order No.
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th style="cursor: pointer" class="sortable" scope="col" data-sort="salesAgent">
+      Sales Agent
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th style="cursor: pointer" class="sortable" scope="col" data-sort="customerName">
+      Customer Name
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th style="cursor: pointer" class="sortable" scope="col" data-sort="yard">
+      Yard
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th style="cursor: pointer" class="sortable" scope="col" data-sort="orderStatus">
+      Order Status
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th scope="col">Actions</th>
+  </tr>
+</thead>
     <tbody id="infoTable">
       <!-- Table data goes here -->
     </tbody>
