@@ -613,14 +613,14 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
     const usedList = usedCredits.map(item => `<li>Order No: ${item.orderNo} | Amount Used: $${item.amountUsed}</li>`).join('');
     $('#usedCreditsList').html(usedList);
   }
- let currentSortColumn = '';
+//  sorting
+let currentSortColumn = '';
 let sortAsc = true;
 
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
 
-  console.log("Clicked column:", column);
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
@@ -632,21 +632,23 @@ $("#infoTableHeader th.sortable").on("click", function () {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
 
-    // Special handling for date fields
+    // Sort by date
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
     }
-    // Special handling for chargedAmount/refundedAmount with embedded $-values
+
+    // Sort by dollar amount from the first line
     else if (["chargedAmount", "refundedAmount"].includes(column)) {
-      const extractAmount = (str) => {
+      const extractFirstDollarAmount = (str) => {
         const match = str.match(/\$([\d,\.]+)/);
         return match ? parseFloat(match[1].replace(/,/g, '')) : 0;
       };
-      valA = extractAmount(valA);
-      valB = extractAmount(valB);
+      valA = extractFirstDollarAmount(valA);
+      valB = extractFirstDollarAmount(valB);
     }
-    // Default string sorting
+
+    // Fallback to text sorting
     else {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
@@ -660,9 +662,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
   // Reset all sort icons
-  $("#infoTableHeader .sort-icons .asc, #infoTableHeader .sort-icons .desc").removeClass("active");
-
-  // Activate the correct icon
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
