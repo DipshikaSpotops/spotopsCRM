@@ -861,29 +861,45 @@ $("#showTotalOrders").text(`Total Orders This Month - ${totalCount}`);
     const end = start + rowsPerPage;
     const paginatedData = allOrders.slice(start, end);
 console.log("sliced data",allOrders);
-const tableHeaderRow = $("#infoTableHeader tr");
     $("#yardInfoTable").empty();
 
     let maxYards = 0;
+const tableHeaderRow = $("#infoTableHeader tr");
+tableHeaderRow.find("th:gt(1)").remove(); // Keep only Order No and Order Date
 
-    // Determine the maximum number of yard columns needed
-    paginatedData.forEach((item) => {
-        if (item.additionalInfo && item.additionalInfo.length > maxYards) {
-            maxYards = item.additionalInfo.length;
-        }
+const usedYardIndexes = new Set();
+
+// Find which yard indexes have data
+paginatedData.forEach((item) => {
+  if (item.additionalInfo) {
+    item.additionalInfo.forEach((yard, index) => {
+      if (
+        yard?.yardName ||
+        yard?.poSentDate ||
+        yard?.partDeliveredDate ||
+        yard?.status ||
+        yard?.trackingNo
+      ) {
+        usedYardIndexes.add(index);
+      }
     });
+  }
+});
 
-    // Ensure table headers include all required yard columns
-    tableHeaderRow.append(`<th scope="col" class="sortable" ... >`);
-        for (let i = 1; i <= maxYards; i++) {
-        tableHeaderRow.append(`<th scope="col" class="sortable" data-column="yard${i}">
-    Yard ${i}
-    <span class="sort-icons">
-      <span class="asc">&#9650;</span>
-      <span class="desc">&#9660;</span>
-    </span>
-  </th>`);
-    }
+const sortedYardIndexes = [...usedYardIndexes].sort((a, b) => a - b);
+
+// Add headers only for used yard indexes
+sortedYardIndexes.forEach((index) => {
+  tableHeaderRow.append(`
+    <th scope="col" class="sortable" data-column="yard${index + 1}">
+      Yard ${index + 1}
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+  `);
+});
 
     // Populate table rows with paginated data
     paginatedData.forEach((item) => {
