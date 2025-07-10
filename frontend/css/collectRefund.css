@@ -552,17 +552,7 @@ font-size: 13px;
     margin-left: -1%;
       }
       /* sorting */
-      #tableHeader th {
-  background-color: #037894;
-  color: white;
-  padding: 8px;
-  white-space: nowrap;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
+      
 #infoTableHeader {
   position: sticky;
   transform: translateZ(0); 
