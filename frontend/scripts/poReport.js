@@ -131,7 +131,6 @@ function renderTableRows(page, data = yardOrders) {
 const start = (page - 1) * 25;
 const end = start + 25;
 const pageData = data.slice(start, end);
-const tableHeader = $("#tableHeader");
 const tableFooter = $("#tableFooter");
 $("#yardInfoTable").empty();
 let maxYards = 0;
@@ -147,33 +146,73 @@ if (item.additionalInfo.length > maxYards) {
 maxYards = item.additionalInfo.length;
 }
 });
-tableHeader.find("th:gt(1)").remove(); 
-  for (let i = 1; i <= maxYards; i++) {
-    tableHeader.find("tr").append(`
-      <th class="sortable" data-column="yard${i}">
-        Yard ${i}
-        <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
-      </th>`);
-  }
-const financialHeaders = [
-  { label: "Total Part Price", key: "totalPartPrice" },
-  { label: "Total Shipping($)", key: "totalShipping" },
-  { label: "Other Charges($)", key: "others" },
-  { label: "Refunds($)", key: "refunds" },
-  { label: "Overall Purchase Cost($)", key: "overallSum" }
-];
+const headerRow = $("#tableHeader"); // the <tr> inside thead
+headerRow.find("th:gt(1)").remove(); // keep Order No and Date, clear rest
 
-financialHeaders.forEach(({ label, key }) => {
-  $(`<th class="sortable" data-sort="${key}" style="text-align: center;">
-      ${label}
+for (let i = 1; i <= maxYards; i++) {
+  headerRow.append(`
+    <th class="sortable" data-sort="yard${i}">
+      Yard ${i}
       <span class="sort-icons">
         <span class="asc">&#9650;</span>
         <span class="desc">&#9660;</span>
       </span>
-    </th>`).appendTo(tableHeader.find("tr"));
-});
-tableHeader.append('<th scope="col">Actions</th>');
+    </th>
+  `);
+}
 
+// Add remaining sortable columns
+headerRow.append(`
+  <th class="sortable" data-sort="totalPartPrice">
+    Total Part Price
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+`);
+
+headerRow.append(`
+  <th class="sortable" data-sort="totalShipping">
+    Total Shipping ($)
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+`);
+
+headerRow.append(`
+  <th class="sortable" data-sort="others">
+    Other Charges ($)
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+`);
+
+headerRow.append(`
+  <th class="sortable" data-sort="refunds">
+    Refunds ($)
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+`);
+
+headerRow.append(`
+  <th class="sortable" data-sort="overallSum">
+    Overall Purchase Cost ($)
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+`);
+
+headerRow.append(`<th>Actions</th>`);
 pageData.forEach((item) => {
 let appendOrder = false;
 let yardInfoHtml = "";
