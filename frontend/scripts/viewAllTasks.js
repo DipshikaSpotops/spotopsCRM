@@ -131,9 +131,10 @@ async function fetchTasks() {
      });
     const taskGroups = response.data;
     allTasks = [];
-taskGroups.forEach((group) => {
-  const { tasks } = group;
-  allTasks.push(...tasks); 
+    taskGroups.forEach((group) => {
+    const { orderNo, tasks } = group;
+    const enrichedTasks = tasks.map(task => ({ ...task, orderNo }));
+    allTasks.push(...enrichedTasks);
 });
 renderTableRows(allTasks);
   } catch (error) {
