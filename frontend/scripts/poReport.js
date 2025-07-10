@@ -151,19 +151,19 @@ headerRow.find("th:gt(1)").remove(); // keep Order No and Date, clear rest
 
 for (let i = 1; i <= maxYards; i++) {
   headerRow.append(`
-    <th class="sortable" data-sort="yard${i}">
-      Yard ${i}
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
-  `);
+  <th style="cursor: pointer; text-align: center; background-color: #037894; color: white;" class="sortable" data-sort="yard${i}">
+    Yard ${i}
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>
+`);
 }
 
 // Add remaining sortable columns
 headerRow.append(`
-  <th class="sortable" data-sort="totalPartPrice">
+  <th style="cursor: pointer; text-align: center; background-color: #037894; color: white;" class="sortable" data-sort="totalPartPrice">
     Total Part Price
     <span class="sort-icons">
       <span class="asc">&#9650;</span>
