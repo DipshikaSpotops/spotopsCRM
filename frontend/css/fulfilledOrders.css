@@ -282,9 +282,9 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     color: white;
 }
 .process-btn {
-  background-color: #cae8c9;
+     background-color: #065d20;
     border: none;
-    color: #61a55e;
+    color: #f9fff9;
 }
 .table-wrapper {
   max-height: 82vh;

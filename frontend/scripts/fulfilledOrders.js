@@ -151,7 +151,7 @@ escalationStyle = 'style="background-color: lightgreen;"';
 const team = localStorage.getItem('team');
 
 const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
+<button class="btn process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
 
 const yardlength = item.additionalInfo.length;
