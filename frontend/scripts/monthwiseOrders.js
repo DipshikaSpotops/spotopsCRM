@@ -45,7 +45,7 @@ function renderTableRows(page, orders = allOrders) {
       ${info.paymentStatus || ""} Refunds: ${info.refundedAmount || 0}
     `).join("<br>") || "";
 
-    const editButton = (team === "Team Mark" || team === "Team Sussane" || role === "Support")
+    const editButton = (role === "Support" || role === "Sales")
   ? ""
   : `<button class="btn edit-btn" data-id="${item.orderNo}">Edit</button>`;
 

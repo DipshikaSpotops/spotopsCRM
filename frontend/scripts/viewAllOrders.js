@@ -106,7 +106,7 @@ var allDOrders;
       const escalationStatus = item.additionalInfo && item.additionalInfo[0]?.escTicked === "Yes" ? "Yes" : "";
       const escalationStyle = item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes" ? 'style="background-color: lightgreen;"' : '';
       // const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
-      const editButton = (team === "Team Mark" || team === "Team Sussane" || role === "Support")
+      const editButton = (role === "Support" || role === "Sales")
   ? ""
   : `<button class="btn edit-btn" data-id="${item.orderNo}">Edit</button>`;
       const datetime = item.orderDate;
