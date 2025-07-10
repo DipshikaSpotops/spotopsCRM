@@ -874,8 +874,8 @@ const tableHeaderRow = $("#infoTableHeader tr");
     });
 
     // Ensure table headers include all required yard columns
-    tableHeader.find("th:gt(1)").remove(); // Remove previous yard columns
-    for (let i = 1; i <= maxYards; i++) {
+    tableHeaderRow.append(`<th scope="col" class="sortable" ... >`);
+        for (let i = 1; i <= maxYards; i++) {
         tableHeaderRow.append(`<th scope="col" class="sortable" data-column="yard${i}">
     Yard ${i}
     <span class="sort-icons">
