@@ -130,13 +130,22 @@ async function fetchTasks() {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
      });
     const taskGroups = response.data;
-
-    const tableBody = $("#tasksTable tbody");
-    tableBody.empty();
     allTasks = [];
-    taskGroups.forEach((group) => {
-    const { orderNo, tasks } = group;
-    tasks.forEach((task) => {
+taskGroups.forEach((group) => {
+  const { orderNo, tasks } = group;
+  const enrichedTasks = tasks.map(task => ({ ...task, orderNo }));
+  allTasks.push(...enrichedTasks);
+});
+renderTableRows(allTasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+  }
+}
+function renderTableRows(taskArray) {
+  const tableBody = $("#tasksTable tbody");
+  tableBody.empty();
+
+  taskArray.forEach((task) => {
     const date = new Date(task.deadline);
     const day = date.getDate();
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -145,38 +154,33 @@ async function fetchTasks() {
     let hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time
+    hours = hours % 12 || 12;
     const ordinalSuffix = (n) => {
-      if (n > 3 && n < 21) return "th"; // Covers 11th to 19th
+      if (n > 3 && n < 21) return "th";
       switch (n % 10) {
         case 1: return "st";
         case 2: return "nd";
         case 3: return "rd";
         default: return "th";
       }
-  };
-
-  var formattedDeadline = `${day}${ordinalSuffix(day)} ${month}, ${year} ${hours}:${minutes} ${ampm}`;
-        const row = `
-          <tr>
-            <td>${orderNo}</td>
-            <td>${task.taskName}</td>
-            <td>${task.assignedTo}</td>
-            <td>${task.assignedBy}</td>
-            <td>${task.taskCreatedDate}</td>
-            <td>${formattedDeadline}</td>
-            <td>${task.taskStatus}</td>
-          </tr>
-        `;
-        if (task.taskStatus !== "Completed"){
-        tableBody.append(row);
-        }
-      });
-      allTasks.push(task);
-    });
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-  }
+    };
+    const formattedDeadline = `${day}${ordinalSuffix(day)} ${month}, ${year} ${hours}:${minutes} ${ampm}`;
+    
+    const row = `
+      <tr>
+        <td>${task.orderNo}</td>
+        <td>${task.taskName}</td>
+        <td>${task.assignedTo}</td>
+        <td>${task.assignedBy}</td>
+        <td>${task.taskCreatedDate}</td>
+        <td>${formattedDeadline}</td>
+        <td>${task.taskStatus}</td>
+      </tr>
+    `;
+    if (task.taskStatus !== "Completed") {
+      tableBody.append(row);
+    }
+  });
 }
 
 // Call the function to fetch and populate tasks
