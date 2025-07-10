@@ -1759,8 +1759,6 @@ const searchInput = document.getElementById('searchInputForOrderNo');
   // sorting
   let currentSortColumn = '';
 let sortAsc = true;
-let currentSortColumn = '';
-let sortAsc = true;
 $("#infoTableHeader").on("click", "th.sortable", function () {
   const columnKey = $(this).data("column"); // e.g., "yard1", "orderNo"
   if (!columnKey) return;
