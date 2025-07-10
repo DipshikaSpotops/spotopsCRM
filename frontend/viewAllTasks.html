@@ -185,22 +185,58 @@ aria-labelledby="userMenu"
   <h1 id="mainHeading">
     View All Tasks
   </h1>
-  <table id="tasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
-    <thead>
-      <tr>
-        <th>Order No</th>
-        <th>Task Name</th>
-        <th>Assigned To</th>
-        <th>Assigned By</th>
-        <th>Task Created Date</th>
-        <th>Deadline</th>
-        <th>Task Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Table rows will be populated dynamically -->
-    </tbody>
-  </table>
+<table id="tasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
+  <thead id="infoTableHeader">
+    <tr>
+      <th class="sortable" data-column="orderNo">Order No
+        <span class="sort-icons">
+          <span class="asc">&#9650;</span>
+          <span class="desc">&#9660;</span>
+        </span>
+      </th>
+      <th class="sortable" data-column="taskName">Task Name
+        <span class="sort-icons">
+          <span class="asc">&#9650;</span>
+          <span class="desc">&#9660;</span>
+        </span>
+      </th>
+      <th class="sortable" data-column="assignedTo">Assigned To
+        <span class="sort-icons">
+          <span class="asc">&#9650;</span>
+          <span class="desc">&#9660;</span>
+        </span>
+      </th>
+      <th class="sortable" data-column="assignedBy">Assigned By
+        <span class="sort-icons">
+          <span class="asc">&#9650;</span>
+          <span class="desc">&#9660;</span>
+        </span>
+      </th>
+      <th class="sortable" data-column="taskCreatedDate">Task Created Date
+        <span class="sort-icons">
+          <span class="asc">&#9650;</span>
+          <span class="desc">&#9660;</span>
+        </span>
+      </th>
+      <th class="sortable" data-column="deadline">Deadline
+        <span class="sort-icons">
+          <span class="asc">&#9650;</span>
+          <span class="desc">&#9660;</span>
+        </span>
+      </th>
+      <th class="sortable" data-column="taskStatus">Task Status
+        <span class="sort-icons">
+          <span class="asc">&#9650;</span>
+          <span class="desc">&#9660;</span>
+        </span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Table rows will be populated dynamically -->
+  </tbody>
+</table>
+
 </div>
     
     <!-- Modal for Viewing Orders -->
