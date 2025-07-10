@@ -861,7 +861,7 @@ $("#showTotalOrders").text(`Total Orders This Month - ${totalCount}`);
     const end = start + rowsPerPage;
     const paginatedData = allOrders.slice(start, end);
 console.log("sliced data",allOrders);
-    const tableHeader = $("#tableHeader");
+const tableHeaderRow = $("#infoTableHeader tr");
     $("#yardInfoTable").empty();
 
     let maxYards = 0;
@@ -876,13 +876,13 @@ console.log("sliced data",allOrders);
     // Ensure table headers include all required yard columns
     tableHeader.find("th:gt(1)").remove(); // Remove previous yard columns
     for (let i = 1; i <= maxYards; i++) {
-tableHeader.append(`<th scope="col" class="sortable" data-column="yard${i}">
-  Yard ${i} 
-  <span class="sort-icons">
-    <span class="asc">&#9650;</span>
-    <span class="desc">&#9660;</span>
-  </span>
-</th>`);
+        tableHeaderRow.append(`<th scope="col" class="sortable" data-column="yard${i}">
+    Yard ${i}
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+  </th>`);
     }
 
     // Populate table rows with paginated data
