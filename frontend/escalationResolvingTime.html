@@ -548,6 +548,43 @@ scrollbar-color: #29638c #141b2d;
 margin-top: 0;
 float: left;
 }
+    /* sorting */
+#infoTableHeader {
+  position: sticky;
+  transform: translateZ(0); 
+  overflow-anchor: none;
+  top: 0;
+  z-index: 10; 
+  background-color: #037894; 
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+}
+th.sortable {
+  cursor: pointer;
+  background-color: #037894; 
+  user-select: none;
+  position: relative;
+}
+
+.sort-icons {
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.sort-icons .asc,
+.sort-icons .desc {
+  font-size: 12px;
+  color: #999;
+  margin-left: 2px;
+}
+
+.sort-icons .active {
+  color: #000; 
+  font-weight: bold;
+}
 @media (max-width: 480px) {
 /* #pagination-controls {
 font-size: 14px;
@@ -886,19 +923,61 @@ placeholder="Search..."
 </div>
 <div class="table-wrapper">
 <table class="table table-bordered">
-<thead style="text-align: center;">
-    <tr>
-        <th style="cursor: pointer" scope="col" onclick="sortTableByDate('orderDate')">Order Date <span class="sort-icon">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Yard<span class="sort-icon">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col" onclick="sortTableByDate('escDate')">Esc Date <span class="sort-icon">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col" onclick="sortTableByDate('resolutionDate')">Resolution Date <span class="sort-icon">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Resolved In<span class="sort-icon">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Resolved By<span class="sort-icon">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Actions</th>
-    </tr>
-    
+<thead id="infoTableHeader">
+  <tr>
+    <th class="sortable" data-column="orderDate">
+      Order Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="orderNo">
+      Order No.
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="yardName">
+      Yard
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="escDate">
+      Esc Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="resolutionDate">
+      Resolution Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="resolvedIn">
+      Resolved In
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="resolvedBy">
+      Resolved By
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th>Actions</th>
+  </tr>
 </thead>
+
 <tbody id="infoTable">
 <!-- Table data goes here -->
 </tbody>
@@ -1720,6 +1799,71 @@ const searchInput = document.getElementById('searchInputForOrderNo');
       resultDiv.innerHTML = '';
     }
   });
+  // sorting
+  function getColumnValue(order, column) {
+  if (column.startsWith("yard")) {
+    const index = parseInt(column.replace("yard", ""), 10) - 1;
+    return order.additionalInfo?.[index]?.yardName || "";
+  }
+
+  if (column === "resolvedIn") {
+    return parseInt(order[column]) || 0; // Ensure numeric sort
+  }
+
+  return order[column] || "";
+}
+
+function isDate(value) {
+  return !isNaN(Date.parse(value));
+}
+
+  let currentSortColumn = "";
+let sortAscending = true;
+
+$("#infoTableHeader").on("click", "th.sortable", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+
+  // Toggle direction
+  if (currentSortColumn === column) {
+    sortAscending = !sortAscending;
+  } else {
+    currentSortColumn = column;
+    sortAscending = true;
+  }
+
+  // Sort logic
+  allOrders.sort((a, b) => {
+    let valA = getColumnValue(a, column);
+    let valB = getColumnValue(b, column);
+
+    // Handle dates
+    if (isDate(valA) && isDate(valB)) {
+      return sortAscending ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
+    }
+
+    // Handle numbers
+    if (!isNaN(valA) && !isNaN(valB)) {
+      return sortAscending ? valA - valB : valB - valA;
+    }
+
+    // Fallback: string comparison
+    valA = valA?.toString().toLowerCase() || "";
+    valB = valB?.toString().toLowerCase() || "";
+    return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
+  });
+
+  // Re-render
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Update icons
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  const activeIcon = sortAscending ? ".asc" : ".desc";
+  $(this).find(activeIcon).addClass("active");
+});
+
 });
 </script>
 
