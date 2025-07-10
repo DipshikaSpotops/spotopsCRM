@@ -123,39 +123,37 @@ window.location.href = "login_signup.html";
 });
 
 // fetch all tasks
+let allTasks = [];
 async function fetchTasks() {
   try {
     const response = await axios.get("https://www.spotops360.com/allTasks", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+     });
     const taskGroups = response.data;
 
     const tableBody = $("#tasksTable tbody");
     tableBody.empty();
-
+    allTasks = [];
     taskGroups.forEach((group) => {
-      const { orderNo, tasks } = group;
-
-      tasks.forEach((task) => {
-        const date = new Date(task.deadline);
-
-  const day = date.getDate();
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = monthNames[date.getMonth()];
-  const year = date.getFullYear();
-
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time
-  const ordinalSuffix = (n) => {
-    if (n > 3 && n < 21) return "th"; // Covers 11th to 19th
-    switch (n % 10) {
-      case 1: return "st";
-      case 2: return "nd";
-      case 3: return "rd";
-      default: return "th";
-    }
+    const { orderNo, tasks } = group;
+    tasks.forEach((task) => {
+    const date = new Date(task.deadline);
+    const day = date.getDate();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time
+    const ordinalSuffix = (n) => {
+      if (n > 3 && n < 21) return "th"; // Covers 11th to 19th
+      switch (n % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
   };
 
   var formattedDeadline = `${day}${ordinalSuffix(day)} ${month}, ${year} ${hours}:${minutes} ${ampm}`;
@@ -174,6 +172,7 @@ async function fetchTasks() {
         tableBody.append(row);
         }
       });
+      allTasks.push(task);
     });
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -415,7 +414,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
   }
 
   // Sort data
-  allOrders.sort((a, b) => {
+  allTasks.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
 
@@ -435,7 +434,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
 
   currentPage = 1;
   renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  createPaginationControls(Math.ceil(allTasks.length / rowsPerPage));
 
   // Reset all arrows
 $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
