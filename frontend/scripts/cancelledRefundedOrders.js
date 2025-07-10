@@ -302,7 +302,10 @@ $("#reason-popup-trigger").on("click", function () {
   const statsMap = {};
 
   allOrders.forEach(order => {
-    const reason = order.cancellationReason || "Unknown";
+    if(!order.cancellationReason){
+      console.log("orderNos",order.orderNo);
+    }
+    const reason = order.cancellationReason || "";
     if (!statsMap[reason]) {
       statsMap[reason] = { count: 0, amount: 0 };
     }
