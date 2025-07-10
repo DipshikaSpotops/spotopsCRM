@@ -1761,10 +1761,10 @@ const searchInput = document.getElementById('searchInputForOrderNo');
 let sortAsc = true;
 
 $("#infoTableHeader").on("click", "th.sortable", function () {
-  const columnKey = $(this).data("column");
+  const columnKey = $(this).data("column"); // column key like 'orderNo', 'yardName', etc.
   if (!columnKey) return;
 
-  // Toggle sorting order
+  // Toggle sort order
   if (currentSortColumn === columnKey) {
     sortAsc = !sortAsc;
   } else {
@@ -1772,43 +1772,45 @@ $("#infoTableHeader").on("click", "th.sortable", function () {
     sortAsc = true;
   }
 
-  // Sort allOrders
   allOrders.sort((a, b) => {
-    const valA = getSortValue(a, columnKey);
-    const valB = getSortValue(b, columnKey);
+    const valA = extractValue(a, columnKey);
+    const valB = extractValue(b, columnKey);
 
-    // Handle date sorting
-    if (isDate(valA) && isDate(valB)) {
+    if (isValidDate(valA) && isValidDate(valB)) {
       return sortAsc ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
-    }
-
-    // Handle numeric sorting
-    if (!isNaN(valA) && !isNaN(valB)) {
+    } else if (!isNaN(valA) && !isNaN(valB)) {
       return sortAsc ? valA - valB : valB - valA;
+    } else {
+      return sortAsc
+        ? valA.toString().localeCompare(valB.toString())
+        : valB.toString().localeCompare(valA.toString());
     }
-
-    // Fallback: string sorting
-    return sortAsc
-      ? valA.toString().localeCompare(valB.toString())
-      : valB.toString().localeCompare(valA.toString());
   });
 
   currentPage = 1;
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Toggle sort icon state
+  // Reset sort icons
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
 
-function getSortValue(obj, column) {
-  return obj[column] || "";  // Update this if you need nested access
+/** Utility Functions */
+function extractValue(order, key) {
+  switch (key) {
+    case "yardName":
+      return order.additionalInfo?.[0]?.yardName || "";
+    case "resolvedIn":
+      return order.resolvedIn || 0;
+    default:
+      return order[key] || "";
+  }
 }
 
-function isDate(value) {
-  return !isNaN(Date.parse(value));
+function isValidDate(val) {
+  return !isNaN(Date.parse(val));
 }
 });
 </script>
