@@ -702,11 +702,32 @@ $(".toggle-sidebar").on("click", function () {
     $(".modal-overlay").remove(); 
   }
 });
-  // sorting 
+fetchNotifications();
+  const searchInput = document.getElementById('searchInputForOrderNo');
+  const resultDiv = document.getElementById('searchResult');
+
+  searchInput.addEventListener('input', function () {
+    const orderNo = searchInput.value.trim();
+
+    if (orderNo !== '') {
+      resultDiv.innerHTML = `
+        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
+      `;
+
+      document.getElementById('viewOrderBtn').addEventListener('click', function () {
+       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+
+      });
+    } else {
+      resultDiv.innerHTML = '';
+    }
+  });
+   // sorting 
 let currentSortColumn = '';
 let sortAsc = true;
 
 $("#infoTableHeader th.sortable").on("click", function () {
+  console.log("click th");
   const column = $(this).data("column");
   if (!column) return;
   console.log("Current sort column:", currentSortColumn);
@@ -747,25 +768,4 @@ $("#infoTableHeader th.sortable").on("click", function () {
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
-fetchNotifications();
-  const searchInput = document.getElementById('searchInputForOrderNo');
-  const resultDiv = document.getElementById('searchResult');
-
-  searchInput.addEventListener('input', function () {
-    const orderNo = searchInput.value.trim();
-
-    if (orderNo !== '') {
-      resultDiv.innerHTML = `
-        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
-      `;
-
-      document.getElementById('viewOrderBtn').addEventListener('click', function () {
-       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
-
-      });
-    } else {
-      resultDiv.innerHTML = '';
-    }
-  });
- 
 });
