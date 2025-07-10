@@ -143,7 +143,7 @@ renderTableRows(allTasks);
 function renderTableRows(taskArray) {
   const tableBody = $("#tasksTable tbody");
   tableBody.empty();
-
+  console.log("taskArray",taskArray);
   taskArray.forEach((task) => {
     const date = new Date(task.deadline);
     const day = date.getDate();
