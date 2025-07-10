@@ -1079,6 +1079,80 @@ window.location.href = "login_signup.html";
 </form>
 </div>
 </div>
+<!-- Profile Modal -->
+<div
+class="modal fade"
+id="profileModal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="profileModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="profileModalLabel">My Profile</h5>
+<button
+type="button"
+class="close"
+data-dismiss="modal"
+aria-label="Close"
+>
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<form id="profileForm">
+<div class="form-group">
+<label for="profileFirstName">First Name</label>
+<input
+type="text"
+class="form-control"
+id="profileFirstName"
+readonly
+/>
+</div>
+<div class="form-group">
+<label for="profileLastName">Last Name</label>
+<input
+type="text"
+class="form-control"
+id="profileLastName"
+readonly
+/>
+</div>
+<div class="form-group">
+<label for="profileEmail">Email</label>
+<input
+type="email"
+class="form-control"
+id="profileEmail"
+readonly
+/>
+</div>
+<div class="form-group">
+<label for="profileRole">Role</label>
+<input
+type="text"
+class="form-control"
+id="profileRole"
+readonly
+/>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button
+type="button"
+class="btn btn-secondary close"
+data-dismiss="modal"
+>
+Close
+</button>
+</div>
+</div>
+</div>
+</div>
 <script>
 $(document).ready(function () {
   $("#viewAlltasks").on("click", function () {
