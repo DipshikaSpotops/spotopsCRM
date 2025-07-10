@@ -528,7 +528,7 @@ margin-top: 0;
 float: left;
 }
 /* sorting */
-#infoTableHeader {
+#tableHeader {
   position: sticky;
   transform: translateZ(0); 
   overflow-anchor: none;
