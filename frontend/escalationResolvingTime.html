@@ -245,7 +245,7 @@ color: #333;
   display: inline-block;
   margin-left: 10px;
   font-size: 18px;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .modal-overlay {
 position: fixed;
@@ -1759,12 +1759,12 @@ const searchInput = document.getElementById('searchInputForOrderNo');
   // sorting
   let currentSortColumn = '';
 let sortAsc = true;
-
+let currentSortColumn = '';
+let sortAsc = true;
 $("#infoTableHeader").on("click", "th.sortable", function () {
-  const columnKey = $(this).data("column"); // column key like 'orderNo', 'yardName', etc.
+  const columnKey = $(this).data("column"); // e.g., "yard1", "orderNo"
   if (!columnKey) return;
 
-  // Toggle sort order
   if (currentSortColumn === columnKey) {
     sortAsc = !sortAsc;
   } else {
@@ -1773,17 +1773,28 @@ $("#infoTableHeader").on("click", "th.sortable", function () {
   }
 
   allOrders.sort((a, b) => {
-    const valA = extractValue(a, columnKey);
-    const valB = extractValue(b, columnKey);
+    let valA = "", valB = "";
 
-    if (isValidDate(valA) && isValidDate(valB)) {
-      return sortAsc ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
-    } else if (!isNaN(valA) && !isNaN(valB)) {
+    if (columnKey.startsWith("yard")) {
+      const index = parseInt(columnKey.replace("yard", ""), 10) - 1;
+      valA = a.additionalInfo?.[index]?.yardName || "";
+      valB = b.additionalInfo?.[index]?.yardName || "";
+    } else if (columnKey === "orderDate") {
+      valA = new Date(a.orderDate);
+      valB = new Date(b.orderDate);
+    } else {
+      valA = a[columnKey];
+      valB = b[columnKey];
+    }
+
+    // Normalize strings
+    if (typeof valA === "string") valA = valA.toLowerCase();
+    if (typeof valB === "string") valB = valB.toLowerCase();
+
+    if (valA instanceof Date && valB instanceof Date) {
       return sortAsc ? valA - valB : valB - valA;
     } else {
-      return sortAsc
-        ? valA.toString().localeCompare(valB.toString())
-        : valB.toString().localeCompare(valA.toString());
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
     }
   });
 
@@ -1791,27 +1802,11 @@ $("#infoTableHeader").on("click", "th.sortable", function () {
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Reset sort icons
+  // Update arrow
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
-
-/** Utility Functions */
-function extractValue(order, key) {
-  switch (key) {
-    case "yardName":
-      return order.additionalInfo?.[0]?.yardName || "";
-    case "resolvedIn":
-      return order.resolvedIn || 0;
-    default:
-      return order[key] || "";
-  }
-}
-
-function isValidDate(val) {
-  return !isNaN(Date.parse(val));
-}
 });
 </script>
 
