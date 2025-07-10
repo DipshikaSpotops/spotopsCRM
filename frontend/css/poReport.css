@@ -528,7 +528,6 @@ margin-top: 0;
 float: left;
 }
 /* sorting */
-th.sortable,
 #infoTableHeader {
   position: sticky;
   transform: translateZ(0); 
@@ -561,7 +560,7 @@ th.sortable {
 }
 
 .sort-icons .active {
-  color: #000; 
+  color: #000; /* Bold black or use accent color */
   font-weight: bold;
 }
 @media (max-width: 480px) {
