@@ -204,39 +204,69 @@ placeholder="Search..."
 </div>
 <div class="table-wrapper">
 <table class="table table-bordered">
-<thead>
-<tr>
-<th style="cursor: pointer" scope="col">
-Order Date
-</th>
-<th style="cursor: pointer" scope="col">
-Order No. <span class="sort-icon onlyNumber">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Agent Name <span class="aToZ" >&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Customer Name
-<span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Part Name <span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Yard <span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Order Status <span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">
-Escalation Status
-<span class="aToZ">&#9650;</span>
-</th>
-<th style="cursor: pointer" scope="col">Actions</th>
-<th style="cursor: pointer" scope="col">
-Email <span class="aToZ">&#9650;</span>
-</th>
-</tr>
+<thead id="infoTableHeader">
+  <tr>
+    <th class="sortable" data-column="orderDate">Order Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="orderNo">Order No.
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="agentName">Agent Name
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="customerName">Customer Name
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="partName">Part Name
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="yard">Yard
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="orderStatus">Order Status
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="escalationStatus">Escalation Status
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="actions">Actions
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="email">Email
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+  </tr>
 </thead>
 <tbody id="infoTable">
 <!-- Table data goes here -->
