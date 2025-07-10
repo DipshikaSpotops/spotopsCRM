@@ -667,7 +667,7 @@ table.table td {
   }
 }
 /* sorting */
-#infoTableHeader {
+table thead th {
   position: sticky;
   transform: translateZ(0); 
   overflow-anchor: none;
