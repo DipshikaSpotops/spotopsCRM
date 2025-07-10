@@ -441,7 +441,11 @@ $("#infoTableHeader th.sortable").on("click", function () {
   });
 
   currentPage = 1;
-  renderTableRows(currentPage);
+  const start = (currentPage - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+const paginatedTasks = allTasks.slice(start, end);
+
+renderTableRows(paginatedTasks);
   createPaginationControls(Math.ceil(allTasks.length / rowsPerPage));
 
   // Reset all arrows
