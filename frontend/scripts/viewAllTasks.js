@@ -145,6 +145,7 @@ function renderTableRows(taskArray) {
   tableBody.empty();
   console.log("Is taskArray an array?", Array.isArray(taskArray));
 console.log("Type of taskArray:", typeof taskArray);
+taskArray = taskArray.someProperty;
   taskArray.forEach((task) => {
     const date = new Date(task.deadline);
     const day = date.getDate();
