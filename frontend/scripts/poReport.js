@@ -5,6 +5,108 @@ $(document).ready(async function () {
 let yardOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;  
+let currentSort = {
+column: "",
+order: "asc", // ascending by default
+};
+
+function sortTable(column, order, isDateColumn, isYardColumn) {
+const tbody = $("#yardInfoTable");
+const rows = tbody.find("tr").toArray();
+rows.sort(function (a, b) {
+let cellA = $(a).find("td").eq(column).text().trim();
+let cellB = $(b).find("td").eq(column).text().trim();
+if (isDateColumn) {
+// Convert date strings into Date objects for sorting
+cellA = new Date(cellA);
+cellB = new Date(cellB);
+return order === "asc" ? cellA - cellB : cellB - cellA;
+} else if (isYardColumn) {
+// Sort Yard columns alphabetically
+return order === "asc"
+? cellA.localeCompare(cellB)
+: cellB.localeCompare(cellA);
+} else {
+// General string comparison for other columns
+return order === "asc"
+? cellA.localeCompare(cellB)
+: cellB.localeCompare(cellA);
+}
+});
+
+// Append sorted rows back to the table body
+$.each(rows, function (index, row) {
+tbody.append(row);
+});
+}
+
+// Click event for sorting columns with numerical values and dates
+$(document).on("click", ".onlyNumber", function () {
+const column = $(this).closest("th").index();
+const sortBy = $(this).closest("th").data("sort");
+
+// Ensure sortBy is defined before using it
+if (!sortBy) return;
+
+// Determine if the column is a date column or Yard column
+const isDateColumn = sortBy === "orderDate";
+const isYardColumn = sortBy.startsWith("yard");
+
+// Toggle the sort order
+currentSort.order =
+currentSort.column === sortBy && currentSort.order === "asc"
+? "desc"
+: "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+
+// Update sort icon
+$(".sort-icon").html("&#9650;"); 
+$(this)
+.find(".sort-icon")
+.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
+});
+// Click event for sorting Yard columns
+$(document).on("click", ".fYardName", function () {
+const column = $(this).closest("th").index();
+const sortBy = $(this).closest("th").data("sort");
+const isYardColumn = sortBy.startsWith("yard");
+currentSort.order =
+currentSort.column === sortBy && currentSort.order === "asc"
+? "desc"
+: "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, false, isYardColumn);
+$(".fYardName").html("&#9650;");
+$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;");
+});
+
+$(document).on(
+"click",
+"th[data-sort], th[data-sort] .sort-icon",
+function (event) {
+const $target = $(event.target);
+const $th = $target.closest("th");
+const column = $th.index();
+const sortBy = $th.data("sort");
+const isDateColumn = sortBy === "orderDate";
+const isYardColumn = sortBy.startsWith("yard");
+currentSort.order =
+currentSort.column === sortBy && currentSort.order === "asc"
+? "desc"
+: "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+$("th[data-sort] .sort-icon").html("&#9650;"); 
+$th
+.find(".sort-icon")
+.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
+}
+);
+
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
 if (loginTimestamp) {
@@ -131,6 +233,7 @@ function renderTableRows(page, data = yardOrders) {
 const start = (page - 1) * 25;
 const end = start + 25;
 const pageData = data.slice(start, end);
+const tableHeader = $("#tableHeader");
 const tableFooter = $("#tableFooter");
 $("#yardInfoTable").empty();
 let maxYards = 0;
@@ -146,73 +249,29 @@ if (item.additionalInfo.length > maxYards) {
 maxYards = item.additionalInfo.length;
 }
 });
-const headerRow = $("#tableHeader"); // the <tr> inside thead
-headerRow.find("th:gt(1)").remove(); // keep Order No and Date, clear rest
-
+tableHeader.find("th:gt(1)").remove(); 
 for (let i = 1; i <= maxYards; i++) {
-  headerRow.append(`
-  <th style="cursor: pointer; text-align: center; background-color: #037894; color: white;" class="sortable" data-sort="yard${i}">
-    Yard ${i}
-    <span class="sort-icons">
-      <span class="asc">&#9650;</span>
-      <span class="desc">&#9660;</span>
-    </span>
-  </th>
-`);
+tableHeader.append(
+`<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
+);
 }
+tableHeader.append(
+'<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+);
+tableHeader.append(
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+);
+tableHeader.append(
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+);
+tableHeader.append(
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunds($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+);
+tableHeader.append(
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
+);
+tableHeader.append('<th scope="col">Actions</th>');
 
-// Add remaining sortable columns
-headerRow.append(`
-  <th style="cursor: pointer; text-align: center; background-color: #037894; color: white;" class="sortable" data-sort="totalPartPrice">
-    Total Part Price
-    <span class="sort-icons">
-      <span class="asc">&#9650;</span>
-      <span class="desc">&#9660;</span>
-    </span>
-  </th>
-`);
-
-headerRow.append(`
-  <th class="sortable" data-sort="totalShipping">
-    Total Shipping ($)
-    <span class="sort-icons">
-      <span class="asc">&#9650;</span>
-      <span class="desc">&#9660;</span>
-    </span>
-  </th>
-`);
-
-headerRow.append(`
-  <th class="sortable" data-sort="others">
-    Other Charges ($)
-    <span class="sort-icons">
-      <span class="asc">&#9650;</span>
-      <span class="desc">&#9660;</span>
-    </span>
-  </th>
-`);
-
-headerRow.append(`
-  <th class="sortable" data-sort="refunds">
-    Refunds ($)
-    <span class="sort-icons">
-      <span class="asc">&#9650;</span>
-      <span class="desc">&#9660;</span>
-    </span>
-  </th>
-`);
-
-headerRow.append(`
-  <th class="sortable" data-sort="overallSum">
-    Overall Purchase Cost ($)
-    <span class="sort-icons">
-      <span class="asc">&#9650;</span>
-      <span class="desc">&#9660;</span>
-    </span>
-  </th>
-`);
-
-headerRow.append(`<th>Actions</th>`);
 pageData.forEach((item) => {
 let appendOrder = false;
 let yardInfoHtml = "";
@@ -782,68 +841,4 @@ $(document).on("click", "#infoTable tr", function () {
   }
 });
 fetchNotifications();
-// sorting
- let currentSort = {
-  column: '',
-  order: 'asc'
-};
-
-$(document).on("click", "th.sortable", function () {
-  const $th = $(this);
-  const sortKey = $th.data("sort");
-  if (!sortKey) return;
-  currentSort.order = (currentSort.column === sortKey && currentSort.order === "asc") ? "desc" : "asc";
-  currentSort.column = sortKey;
-  yardOrders.forEach(order => {
-    let totalPartPrice = 0, totalShipping = 0, others = 0, refunds = 0, toBeRefunded = 0, overallSum = 0;
-    if (Array.isArray(order.additionalInfo)) {
-      order.additionalInfo.forEach(info => {
-        if (info.collectRefundCheckbox === "Ticked" && !info.refundedAmount) {
-          const part = parseFloat(info.partPrice || 0);
-          const other = parseFloat(info.others || 0);
-          const shipping = info.shippingDetails ? parseFloat(info.shippingDetails.split(":")[1]?.trim() || 0) : 0;
-          const refund = parseFloat(info.refundedAmount || 0);
-          const toRefund = parseFloat(info.refundToCollect || 0);
-          totalPartPrice += part;
-          totalShipping += shipping;
-          others += other;
-          refunds += refund;
-          toBeRefunded += toRefund;
-          overallSum += (part + shipping + other) - refund;
-        }
-      });
-    }
-    order.totalPartPrice = totalPartPrice;
-    order.totalShipping = totalShipping;
-    order.others = others;
-    order.refunds = refunds;
-    order.overallToBeRefunded = toBeRefunded;
-    order.overallSum = overallSum;
-  });
-  yardOrders.sort((a, b) => {
-    let valA = a[sortKey] ?? "";
-    let valB = b[sortKey] ?? "";
-
-    if (sortKey.toLowerCase().includes("date")) {
-      valA = new Date(valA);
-      valB = new Date(valB);
-    } else if (
-      ["totalPartPrice", "totalShipping", "others", "overallToBeRefunded", "refunds", "overallSum"].includes(sortKey)
-      || !isNaN(parseFloat(valA))
-    ) {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    } else {
-      valA = valA.toString().toLowerCase();
-      valB = valB.toString().toLowerCase();
-    }
-    return currentSort.order === "asc" ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
-  });
-  currentPage = 1;
-  renderTable(currentPage, yardOrders);
-  createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-  $(".sort-icons .asc, .sort-icons .desc").removeClass("active");
-  const arrow = currentSort.order === "asc" ? ".asc" : ".desc";
-  $th.find(arrow).addClass("active");
-});
 });

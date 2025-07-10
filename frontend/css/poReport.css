@@ -560,7 +560,7 @@ th.sortable {
 }
 
 .sort-icons .active {
-  color: #000; /* Bold black or use accent color */
+  color: #000; 
   font-weight: bold;
 }
 @media (max-width: 480px) {
