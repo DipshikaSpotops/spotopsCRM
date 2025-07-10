@@ -925,59 +925,16 @@ placeholder="Search..."
 <table class="table table-bordered">
 <thead id="infoTableHeader">
   <tr>
-    <th class="sortable" data-column="orderDate">
-      Order Date
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <th class="sortable" data-column="orderNo">
-      Order No.
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <th class="sortable" data-column="yardName">
-      Yard
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <th class="sortable" data-column="escDate">
-      Esc Date
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <th class="sortable" data-column="resolutionDate">
-      Resolution Date
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <th class="sortable" data-column="resolvedIn">
-      Resolved In
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <th class="sortable" data-column="resolvedBy">
-      Resolved By
-      <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span>
-    </th>
+    <th class="sortable" data-column="orderDate">Order Date <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span></th>
+    <th class="sortable" data-column="orderNo">Order No. <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span></th>
+    <th class="sortable" data-column="yardName">Yard <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span></th>
+    <th class="sortable" data-column="escDate">Esc Date <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span></th>
+    <th class="sortable" data-column="resolutionDate">Resolution Date <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span></th>
+    <th class="sortable" data-column="resolvedIn">Resolved In <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span></th>
+    <th class="sortable" data-column="resolvedBy">Resolved By <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span></th>
     <th>Actions</th>
   </tr>
 </thead>
-
 <tbody id="infoTable">
 <!-- Table data goes here -->
 </tbody>
@@ -1800,70 +1757,59 @@ const searchInput = document.getElementById('searchInputForOrderNo');
     }
   });
   // sorting
-  function getColumnValue(order, column) {
-  if (column.startsWith("yard")) {
-    const index = parseInt(column.replace("yard", ""), 10) - 1;
-    return order.additionalInfo?.[index]?.yardName || "";
+  let currentSortColumn = '';
+let sortAsc = true;
+
+$("#infoTableHeader").on("click", "th.sortable", function () {
+  const columnKey = $(this).data("column");
+  if (!columnKey) return;
+
+  // Toggle sorting order
+  if (currentSortColumn === columnKey) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = columnKey;
+    sortAsc = true;
   }
 
-  if (column === "resolvedIn") {
-    return parseInt(order[column]) || 0; // Ensure numeric sort
-  }
+  // Sort allOrders
+  allOrders.sort((a, b) => {
+    const valA = getSortValue(a, columnKey);
+    const valB = getSortValue(b, columnKey);
 
-  return order[column] || "";
+    // Handle date sorting
+    if (isDate(valA) && isDate(valB)) {
+      return sortAsc ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
+    }
+
+    // Handle numeric sorting
+    if (!isNaN(valA) && !isNaN(valB)) {
+      return sortAsc ? valA - valB : valB - valA;
+    }
+
+    // Fallback: string sorting
+    return sortAsc
+      ? valA.toString().localeCompare(valB.toString())
+      : valB.toString().localeCompare(valA.toString());
+  });
+
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  // Toggle sort icon state
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(arrowToActivate).addClass("active");
+});
+
+function getSortValue(obj, column) {
+  return obj[column] || "";  // Update this if you need nested access
 }
 
 function isDate(value) {
   return !isNaN(Date.parse(value));
 }
-
-  let currentSortColumn = "";
-let sortAscending = true;
-
-$("#infoTableHeader").on("click", "th.sortable", function () {
-  const column = $(this).data("column");
-  if (!column) return;
-
-  // Toggle direction
-  if (currentSortColumn === column) {
-    sortAscending = !sortAscending;
-  } else {
-    currentSortColumn = column;
-    sortAscending = true;
-  }
-
-  // Sort logic
-  allOrders.sort((a, b) => {
-    let valA = getColumnValue(a, column);
-    let valB = getColumnValue(b, column);
-
-    // Handle dates
-    if (isDate(valA) && isDate(valB)) {
-      return sortAscending ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
-    }
-
-    // Handle numbers
-    if (!isNaN(valA) && !isNaN(valB)) {
-      return sortAscending ? valA - valB : valB - valA;
-    }
-
-    // Fallback: string comparison
-    valA = valA?.toString().toLowerCase() || "";
-    valB = valB?.toString().toLowerCase() || "";
-    return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
-  });
-
-  // Re-render
-  currentPage = 1;
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-
-  // Update icons
-  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-  const activeIcon = sortAscending ? ".asc" : ".desc";
-  $(this).find(activeIcon).addClass("active");
-});
-
 });
 </script>
 
