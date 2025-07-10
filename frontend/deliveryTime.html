@@ -1339,62 +1339,55 @@ fetchNotifications();
 });
 let currentSortColumn = '';
 let sortAsc = true;
-
 $("#infoTableHeader").on("click", "th.sortable", function () {
-  const column = $(this).data("column");
-  if (!column) return;
+  const columnKey = $(this).data("column"); // e.g., "yard1", "orderNo", etc.
+  if (!columnKey) return;
 
-  if (currentSortColumn === column) {
+  // Toggle sort direction
+  if (currentSortColumn === columnKey) {
     sortAsc = !sortAsc;
   } else {
-    currentSortColumn = column;
+    currentSortColumn = columnKey;
     sortAsc = true;
   }
 
   // Perform sorting
   allOrders.sort((a, b) => {
-    let valA = a[column];
-    let valB = b[column];
+    let valA, valB;
 
-    // Handle yard columns (e.g., yard1, yard2, etc.)
-    if (column.startsWith("yard")) {
-      const yardIndex = parseInt(column.replace("yard", "")) - 1;
-      valA = a.additionalInfo?.[yardIndex]?.yardName || "";
-      valB = b.additionalInfo?.[yardIndex]?.yardName || "";
-    }
-
-    // Date comparison
-    if (column.toLowerCase().includes("date")) {
-      valA = new Date(valA);
-      valB = new Date(valB);
+    // For dynamic yard columns
+    if (columnKey.startsWith("yard")) {
+      const index = parseInt(columnKey.replace("yard", ""), 10) - 1;
+      valA = a.additionalInfo?.[index]?.yardName || "";
+      valB = b.additionalInfo?.[index]?.yardName || "";
     } 
-    // Numeric fallback
-    else if (!isNaN(parseFloat(valA)) && !isNaN(parseFloat(valB))) {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    } 
-    // String fallback
+    // Regular order fields
     else {
-      valA = valA?.toString().toLowerCase() || "";
-      valB = valB?.toString().toLowerCase() || "";
+      valA = a[columnKey];
+      valB = b[columnKey];
     }
 
-    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+    // Normalize values
+    valA = typeof valA === "string" ? valA.toLowerCase() : valA;
+    valB = typeof valB === "string" ? valB.toLowerCase() : valB;
+
+    // Sort by number or string
+    if (!isNaN(valA) && !isNaN(valB)) {
+      return sortAsc ? valA - valB : valB - valA;
+    }
+    return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
   });
 
-  // Reset pagination + update table
+  // Update pagination
   currentPage = 1;
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Reset all sort icons
+  // Update sort icons
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-
-  // Activate appropriate arrow
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
-
 </script>
 </head>
 <body>
