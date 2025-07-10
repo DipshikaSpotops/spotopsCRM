@@ -252,36 +252,23 @@ maxYards = item.additionalInfo.length;
 tableHeader.find("th:gt(1)").remove(); 
 for (let i = 1; i <= maxYards; i++) {
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i}   <span class="sort-icons">
-        <span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span></th>`
+`<th style="text-align:center;cursor: pointer" scope="col" data-sort="yard${i}">Yard ${i} <span class="sort-icon fYardName">&#9650;</span></th>`
 );
 }
 tableHeader.append(
-`<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;<span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span></th>`
+'<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;<span class="asc">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span></th>`
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($)<span class="asc onlyNumber">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span></th>`
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="others">Other Charges($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append(
-`th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunds($)<span class="asc onlyNumber">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span></th>`
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="refunds">Refunds($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($)<span class="asc onlyNumber">&#9650;</span>
-        <span class="desc">&#9660;</span>
-      </span></th>`
+'<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#x25B2;</span></th>'
 );
 tableHeader.append('<th scope="col">Actions</th>');
 
