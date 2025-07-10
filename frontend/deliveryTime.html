@@ -1332,18 +1332,13 @@ $(document).on("click", function (event) {
 $("body").removeClass("modal-active");
   }
 });
-fetchNotifications();
-// fetchTaskSummary();
-
-  })();
-});
+// sorting
 let currentSortColumn = '';
 let sortAsc = true;
 $("#infoTableHeader").on("click", "th.sortable", function () {
-  const columnKey = $(this).data("column"); // e.g., "yard1", "orderNo", etc.
+  const columnKey = $(this).data("column"); // e.g., "yard1", "orderNo"
   if (!columnKey) return;
 
-  // Toggle sort direction
   if (currentSortColumn === columnKey) {
     sortAsc = !sortAsc;
   } else {
@@ -1351,43 +1346,50 @@ $("#infoTableHeader").on("click", "th.sortable", function () {
     sortAsc = true;
   }
 
-  // Perform sorting
   allOrders.sort((a, b) => {
-    let valA, valB;
+    let valA = "", valB = "";
 
-    // For dynamic yard columns
     if (columnKey.startsWith("yard")) {
       const index = parseInt(columnKey.replace("yard", ""), 10) - 1;
       valA = a.additionalInfo?.[index]?.yardName || "";
       valB = b.additionalInfo?.[index]?.yardName || "";
-    } 
-    // Regular order fields
-    else {
+    } else if (columnKey === "orderDate") {
+      valA = new Date(a.orderDate);
+      valB = new Date(b.orderDate);
+    } else {
       valA = a[columnKey];
       valB = b[columnKey];
     }
 
-    // Normalize values
-    valA = typeof valA === "string" ? valA.toLowerCase() : valA;
-    valB = typeof valB === "string" ? valB.toLowerCase() : valB;
+    // Normalize strings
+    if (typeof valA === "string") valA = valA.toLowerCase();
+    if (typeof valB === "string") valB = valB.toLowerCase();
 
-    // Sort by number or string
-    if (!isNaN(valA) && !isNaN(valB)) {
+    if (valA instanceof Date && valB instanceof Date) {
       return sortAsc ? valA - valB : valB - valA;
+    } else {
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
     }
-    return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
   });
 
-  // Update pagination
   currentPage = 1;
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Update sort icons
+  // Update arrow
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
+fetchNotifications();
+// fetchTaskSummary();
+
+  })();
+
+});
+
+
+
 </script>
 </head>
 <body>
