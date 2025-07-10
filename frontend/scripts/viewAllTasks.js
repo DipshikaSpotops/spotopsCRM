@@ -182,9 +182,9 @@ console.log("Type of taskArray:", typeof taskArray);
         <td>${task.taskStatus}</td>
       </tr>
     `;
-    if (task.taskStatus !== "Completed") {
+    // if (task.taskStatus !== "Completed") {
       tableBody.append(row);
-    }
+    
   });
 }
 
