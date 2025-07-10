@@ -407,13 +407,17 @@ if (activeLink) {
   activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
 }
    // sorting 
+const rowsPerPage = 10;
+let currentPage = 1;
 let currentSortColumn = '';
 let sortAsc = true;
 
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
-  console.log("Current sort column:", currentSortColumn);
+
+  console.log("Sorting by column:", column);
+
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
@@ -421,7 +425,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
     sortAsc = true;
   }
 
-  // Sort data
+  // Sort the allTasks array
   allTasks.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
@@ -429,9 +433,8 @@ $("#infoTableHeader th.sortable").on("click", function () {
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (column === "custRefAmount") {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
+    } else if (typeof valA === "number" && typeof valB === "number") {
+      // keep as-is
     } else {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
@@ -440,19 +443,25 @@ $("#infoTableHeader th.sortable").on("click", function () {
     return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
+  // Reset to first page on sort
   currentPage = 1;
-  const start = (currentPage - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const paginatedTasks = allTasks.slice(start, end);
 
-renderTableRows(paginatedTasks);
-  createPaginationControls(Math.ceil(allTasks.length / rowsPerPage));
+  // Paginate and render
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedTasks = allTasks.slice(start, end);
+  renderTableRows(paginatedTasks);
+
+  // Create/update pagination controls (if implemented)
+  if (typeof createPaginationControls === "function") {
+    createPaginationControls(Math.ceil(allTasks.length / rowsPerPage));
+  }
 
   // Reset all arrows
-$("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
 
-// Highlight the active arrow correctly
-const arrowToActivate = sortAsc ? ".asc" : ".desc";
-$(this).find(".sort-icons").children(arrowToActivate).addClass("active");
+  // Highlight the active arrow
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(".sort-icons").children(arrowToActivate).addClass("active");
 });
     });
