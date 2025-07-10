@@ -528,6 +528,7 @@ margin-top: 0;
 float: left;
 }
 /* sorting */
+th.sortable,
 #infoTableHeader {
   position: sticky;
   transform: translateZ(0); 

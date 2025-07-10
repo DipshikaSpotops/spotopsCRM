@@ -209,24 +209,17 @@ placeholder="Search..."
 
   <div class="table-wrapper"> 
 <table class="table table-bordered">
-<thead id="infoTableHeader">
-  <tr>
-    <th class="sortable" data-column="orderNo">
-      Order No
-      <span class="sort-icons">
+<thead>
+<tr id="tableHeader" style="background-color: #f2f2f2">
+<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderNo">Order No <span class="sort-icons">
         <span class="asc">&#9650;</span>
         <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <th class="sortable" data-column="orderDate">
-      Order Date
-      <span class="sort-icons">
+      </span></th>
+<th style="text-align: center; cursor: pointer" scope="col" data-sort="orderDate">Order Date   <span class="sort-icons">
         <span class="asc">&#9650;</span>
         <span class="desc">&#9660;</span>
-      </span>
-    </th>
-    <!-- Add more sortable columns here if needed -->
-  </tr>
+      </span></th>
+</tr>
 </thead>
 <tbody id="yardInfoTable" style="text-align: center">
 <!-- Yard information will be appended here -->
