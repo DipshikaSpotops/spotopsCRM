@@ -408,7 +408,7 @@ if (activeLink) {
   activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
 }
    // sorting 
-const rowsPerPage = 10;
+const rowsPerPage = 25;
 let currentPage = 1;
 let currentSortColumn = '';
 let sortAsc = true;
