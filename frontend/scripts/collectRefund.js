@@ -926,45 +926,47 @@ $(document).on("click", "#yardInfoTable tr", function () {
 let currentSortColumn = '';
 let sortAsc = true;
 
-$("#infoTableHeader th.sortable").on("click", function () {
-  const column = $(this).data("column");
-  if (!column) return;
-  console.log("Current sort column:", currentSortColumn);
-  if (currentSortColumn === column) {
-    sortAsc = !sortAsc;
-  } else {
-    currentSortColumn = column;
-    sortAsc = true;
-  }
+function attachSorting(tableId, dataArray, renderFunction) {
+  $(`#${tableId} thead th.sortable`).on("click", function () {
+    const column = $(this).data("column");
+    if (!column) return;
 
-  // Sort data
-  allOrders.sort((a, b) => {
-    let valA = a[column] ?? '';
-    let valB = b[column] ?? '';
-
-    if (column.toLowerCase().includes("date")) {
-      valA = new Date(valA);
-      valB = new Date(valB);
-    } else if (column === "custRefAmount") {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
+    if (currentSortColumn === column) {
+      sortAsc = !sortAsc;
     } else {
-      valA = valA.toString().toLowerCase();
-      valB = valB.toString().toLowerCase();
+      currentSortColumn = column;
+      sortAsc = true;
     }
 
-    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+    dataArray.sort((a, b) => {
+      let valA = a[column] ?? '';
+      let valB = b[column] ?? '';
+
+      const isNumeric = !isNaN(parseFloat(valA)) && !isNaN(parseFloat(valB));
+      const isDate = column.toLowerCase().includes("date");
+
+      if (isDate) {
+        valA = new Date(valA);
+        valB = new Date(valB);
+      } else if (isNumeric) {
+        valA = parseFloat(valA);
+        valB = parseFloat(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+    });
+
+    // Clear sort icons
+    $(`#${tableId} .sort-icon`).removeClass("active");
+
+    // Add active icon
+    const arrow = sortAsc ? ".asc" : ".desc";
+    $(this).find(arrow).addClass("active");
+
+    renderFunction(dataArray);
   });
-
-  currentPage = 1;
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-
-  // Reset all arrows
-  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-
-  // Highlight the active arrow
-  const arrowToActivate = sortAsc ? ".asc" : ".desc";
-  $(this).find(arrowToActivate).addClass("active");
-});
+}
 });
