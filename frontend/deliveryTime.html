@@ -861,34 +861,23 @@ $("#showTotalOrders").text(`Total Orders This Month - ${totalCount}`);
     const end = start + rowsPerPage;
     const paginatedData = allOrders.slice(start, end);
 console.log("sliced data",allOrders);
-    $("#yardInfoTable").empty();
-
-    let maxYards = 0;
 const tableHeaderRow = $("#infoTableHeader tr");
-tableHeaderRow.find("th:gt(1)").remove(); // Keep only Order No and Order Date
+tableHeaderRow.find("th:gt(1)").remove();
+    $("#yardInfoTable").empty();
+      const usedYardIndexes = new Set();
 
-const usedYardIndexes = new Set();
-
-// Find which yard indexes have data
 paginatedData.forEach((item) => {
-  if (item.additionalInfo) {
-    item.additionalInfo.forEach((yard, index) => {
-      if (
-        yard?.yardName ||
-        yard?.poSentDate ||
-        yard?.partDeliveredDate ||
-        yard?.status ||
-        yard?.trackingNo
-      ) {
-        usedYardIndexes.add(index);
-      }
-    });
-  }
+  item.additionalInfo?.forEach((yard, index) => {
+    if (
+      yard?.yardName || yard?.poSentDate || yard?.partDeliveredDate || 
+      yard?.status || yard?.trackingNo || yard?.phone || yard?.paymentStatus
+    ) {
+      usedYardIndexes.add(index);
+    }
+  });
 });
 
 const sortedYardIndexes = [...usedYardIndexes].sort((a, b) => a - b);
-
-// Add headers only for used yard indexes
 sortedYardIndexes.forEach((index) => {
   tableHeaderRow.append(`
     <th scope="col" class="sortable" data-column="yard${index + 1}">
@@ -900,6 +889,7 @@ sortedYardIndexes.forEach((index) => {
     </th>
   `);
 });
+
 
     // Populate table rows with paginated data
     paginatedData.forEach((item) => {
