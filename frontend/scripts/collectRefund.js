@@ -806,20 +806,53 @@ $(document).on("click", "#yardInfoTable tr", function () {
       resultDiv.innerHTML = '';
     }
   });
-    // sorting 
-let currentSortColumn = '';
-let sortAsc = true;
+// sorting
+ let currentSort = {
+  column: '',
+  order: 'asc'
+};
 
 $(document).on("click", "th.sortable", function () {
   const $th = $(this);
   const sortKey = $th.data("sort");
   if (!sortKey) return;
 
-  // Toggle sort direction
+  // 🔁 Toggle sort order
   currentSort.order = (currentSort.column === sortKey && currentSort.order === "asc") ? "desc" : "asc";
   currentSort.column = sortKey;
 
-  // Sort yardOrders
+  // ✅ Inject calculated fields into each yardOrders item
+  yardOrders.forEach(order => {
+    let totalPartPrice = 0, totalShipping = 0, others = 0, refunds = 0, toBeRefunded = 0, overallSum = 0;
+
+    if (Array.isArray(order.additionalInfo)) {
+      order.additionalInfo.forEach(info => {
+        if (info.collectRefundCheckbox === "Ticked" && !info.refundedAmount) {
+          const part = parseFloat(info.partPrice || 0);
+          const other = parseFloat(info.others || 0);
+          const shipping = info.shippingDetails ? parseFloat(info.shippingDetails.split(":")[1]?.trim() || 0) : 0;
+          const refund = parseFloat(info.refundedAmount || 0);
+          const toRefund = parseFloat(info.refundToCollect || 0);
+
+          totalPartPrice += part;
+          totalShipping += shipping;
+          others += other;
+          refunds += refund;
+          toBeRefunded += toRefund;
+          overallSum += (part + shipping + other) - refund;
+        }
+      });
+    }
+
+    order.totalPartPrice = totalPartPrice;
+    order.totalShipping = totalShipping;
+    order.others = others;
+    order.refunds = refunds;
+    order.overallToBeRefunded = toBeRefunded;
+    order.overallSum = overallSum;
+  });
+
+  // 🔃 Sort yardOrders
   yardOrders.sort((a, b) => {
     let valA = a[sortKey] ?? "";
     let valB = b[sortKey] ?? "";
@@ -828,8 +861,8 @@ $(document).on("click", "th.sortable", function () {
       valA = new Date(valA);
       valB = new Date(valB);
     } else if (
-      ["totalPartPrice", "totalShipping", "others", "overallToBeRefunded", "refunds", "overallSum"].includes(sortKey) ||
-      !isNaN(parseFloat(valA))
+      ["totalPartPrice", "totalShipping", "others", "overallToBeRefunded", "refunds", "overallSum"].includes(sortKey)
+      || !isNaN(parseFloat(valA))
     ) {
       valA = parseFloat(valA) || 0;
       valB = parseFloat(valB) || 0;
@@ -841,11 +874,12 @@ $(document).on("click", "th.sortable", function () {
     return currentSort.order === "asc" ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
   });
 
+  // ⏮ Reset to page 1 and re-render
   currentPage = 1;
   renderTable(currentPage, yardOrders);
   createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 
-  // Reset sort icons
+  // 🔄 Reset sort icons
   $(".sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrow = currentSort.order === "asc" ? ".asc" : ".desc";
   $th.find(arrow).addClass("active");
