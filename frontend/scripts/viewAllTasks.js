@@ -132,9 +132,8 @@ async function fetchTasks() {
     const taskGroups = response.data;
     allTasks = [];
 taskGroups.forEach((group) => {
-  const { orderNo, tasks } = group;
-  const enrichedTasks = tasks.map(task => ({ ...task, orderNo }));
-  allTasks.push(...enrichedTasks);
+  const { tasks } = group;
+  allTasks.push(...tasks); 
 });
 renderTableRows(allTasks);
   } catch (error) {
