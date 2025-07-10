@@ -895,7 +895,7 @@ sortedYardIndexes.forEach((index) => {
     paginatedData.forEach((item) => {
         let yardInfoHtml = "";
 
-        for (let i = 0; i < maxYards; i++) {
+        sortedYardIndexes.forEach((i) => {
             if (item.additionalInfo && item.additionalInfo[i]) {
                 let yard = item.additionalInfo[i];
 
@@ -963,7 +963,7 @@ sortedYardIndexes.forEach((index) => {
             } else {
                 yardInfoHtml += "<td></td>"; 
             }
-        }
+        });
 // `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`
 const datetime = item.orderDate;
 // const dateOnly = datetime.split(" ")[0] + " " + datetime.split(" ")[1] + " " + datetime.split(" ")[2];
