@@ -259,12 +259,12 @@ tableHeader.append(
 );
 }
 tableHeader.append(
-`<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2; <span class="asc">&#9650;</span>
+`<th "style="text-align:center;cursor: pointer" scope="col" data-sort="totalPartPrice">Total Part Price <span class="sort-icon onlyNumber">&#x25B2;<span class="asc">&#9650;</span>
         <span class="desc">&#9660;</span>
       </span></th>`
 );
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2; <span class="asc">&#9650;</span>
+`<th style="text-align:center;cursor: pointer" scope="col" data-sort="totalShipping">Total Shipping($) <span class="sort-icon onlyNumber">&#x25B2;<span class="asc">&#9650;</span>
         <span class="desc">&#9660;</span>
       </span></th>`
 );
@@ -279,7 +279,7 @@ tableHeader.append(
       </span></th>`
 );
 tableHeader.append(
-`<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber">&#    <span class="asc">&#9650;</span>
+`<th style="text-align:center;cursor: pointer" scope="col" data-sort="overallSum">Overall Purchase Cost($) <span class="sort-icon onlyNumber"><span class="asc">&#9650;</span>
         <span class="desc">&#9660;</span>
       </span></th>`
 );
