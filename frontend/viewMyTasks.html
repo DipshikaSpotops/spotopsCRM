@@ -228,17 +228,31 @@ aria-labelledby="userMenu"
       </div> -->
       </div>
       <table id="tasksTable" class="table table-bordered text-center" style="color: black; margin-top: 20px;">
-        <thead>
-          <tr>
-            <th>Order No</th>
-            <th>Task Name</th>
-            <th>Assigned To</th>
-            <th>Assigned By</th>
-            <th>Task Created Date</th>
-            <th>Deadline</th>
-            <th>Task Status</th>
-          </tr>
-        </thead>
+        <thead id="monthlyTableHeader">
+  <tr>
+    <th class="sortable" data-column="orderNo">Order No
+      <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
+    </th>
+    <th class="sortable" data-column="taskName">Task Name
+      <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
+    </th>
+    <th class="sortable" data-column="assignedTo">Assigned To
+      <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
+    </th>
+    <th class="sortable" data-column="assignedBy">Assigned By
+      <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
+    </th>
+    <th class="sortable" data-column="taskCreatedDate">Task Created Date
+      <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
+    </th>
+    <th class="sortable" data-column="deadline">Deadline
+      <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
+    </th>
+    <th class="sortable" data-column="taskStatus">Task Status
+      <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
+    </th>
+  </tr>
+</thead>
         <tbody>
           <!-- Table rows will be populated dynamically -->
         </tbody>
