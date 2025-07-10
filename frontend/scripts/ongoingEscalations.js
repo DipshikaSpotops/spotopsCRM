@@ -51,7 +51,9 @@ $("#infoTable").append(`
 <td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
 <td>${item.salesAgent}</td>
-<td>${item.customerName}</td>
+<td>${
+    (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
+  }</td>
 <td>${item.pReq || item.partName}</td>
 <td>${item.additionalInfo && item.additionalInfo.length > 0 ? item.additionalInfo[yardlength - 1].yardName : ""}</td>
 <td>${item.orderStatus}</td>
