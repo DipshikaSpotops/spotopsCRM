@@ -655,9 +655,8 @@ th.sortable {
   color: #999;
   margin-left: 2px;
 }
-
 .sort-icons .active {
-  color: #000; /* Bold black or use accent color */
+  color: #000; 
   font-weight: bold;
 }
 @media (max-width: 992px) {

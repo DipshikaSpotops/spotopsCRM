@@ -213,19 +213,59 @@ placeholder="Search..."
 <!--  controls -->
 <div class="table-wrapper">
   <table class="table table-bordered table-head-only">
-    <thead style="text-align: center;">
-      <tr>
-<th style="cursor: pointer" scope="col">Order Date</th>
-<th style="cursor: pointer" scope="col">Order No. <span class="sort-icon onlyNumber">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Tracking No <span class="aToZ" >&#9650;</span></th>
-<th style="cursor: pointer" scope="col">BOL DOE<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Shipping Type<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Transit DOE <span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Est Delivery<span class="aToZ">&#9650;</span></th>
-<th style="cursor: pointer" scope="col">Delivered Date<span class="aToZ">&#9650;</span></th>
-        <th style="cursor: pointer" scope="col">Actions</th>
-      </tr>
-    </thead>
+    <thead id="infoTableHeader">
+  <tr>
+    <th class="sortable" data-column="orderDate">Order Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="orderNo">Order No.
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="trackingNo">Tracking No
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="bolDate">BOL DOE
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="shippingType">Shipping Type
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="transitDate">Transit DOE
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="estDelivery">Est Delivery
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th class="sortable" data-column="deliveredDate">Delivered Date
+      <span class="sort-icons">
+        <span class="asc">&#9650;</span>
+        <span class="desc">&#9660;</span>
+      </span>
+    </th>
+    <th scope="col">Actions</th>
+  </tr>
+</thead>
     <tbody id="infoTable">
       <!-- Table data goes here -->
     </tbody>
