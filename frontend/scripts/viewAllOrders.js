@@ -106,9 +106,9 @@ var allDOrders;
       const escalationStatus = item.additionalInfo && item.additionalInfo[0]?.escTicked === "Yes" ? "Yes" : "";
       const escalationStyle = item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes" ? 'style="background-color: lightgreen;"' : '';
       // const dateOnly = item.orderDate.split(" ")[0] + " " + item.orderDate.split(" ")[1] + " " + item.orderDate.split(" ")[2];
-      const editButton = (team === "Team Mark" || team === "Team Sussane")
-        ? "" // Hide the edit button
-        : `<button class="edit-btn" data-id="${item.orderNo}" >Edit</button>`;
+      const editButton = (team === "Team Mark" || team === "Team Sussane" || role === "Support")
+  ? ""
+  : `<button class="btn edit-btn" data-id="${item.orderNo}">Edit</button>`;
       const datetime = item.orderDate;
       const date = new Date(datetime);
       const day = date.getUTCDate();  // Use UTC day
