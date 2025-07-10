@@ -613,14 +613,14 @@ $('#infoTable').on('click', '.usedForButton-btn', function () {
     const usedList = usedCredits.map(item => `<li>Order No: ${item.orderNo} | Amount Used: $${item.amountUsed}</li>`).join('');
     $('#usedCreditsList').html(usedList);
   }
-  // sorting 
-let currentSortColumn = '';
+ let currentSortColumn = '';
 let sortAsc = true;
 
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
-  console.log("Current sort column:", currentSortColumn);
+
+  console.log("Clicked column:", column);
   if (currentSortColumn === column) {
     sortAsc = !sortAsc;
   } else {
@@ -628,18 +628,26 @@ $("#infoTableHeader th.sortable").on("click", function () {
     sortAsc = true;
   }
 
-  // Sort data
   allOrders.sort((a, b) => {
     let valA = a[column] ?? '';
     let valB = b[column] ?? '';
 
+    // Special handling for date fields
     if (column.toLowerCase().includes("date")) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (column === "custRefAmount") {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    } else {
+    }
+    // Special handling for chargedAmount/refundedAmount with embedded $-values
+    else if (["chargedAmount", "refundedAmount"].includes(column)) {
+      const extractAmount = (str) => {
+        const match = str.match(/\$([\d,\.]+)/);
+        return match ? parseFloat(match[1].replace(/,/g, '')) : 0;
+      };
+      valA = extractAmount(valA);
+      valB = extractAmount(valB);
+    }
+    // Default string sorting
+    else {
       valA = valA.toString().toLowerCase();
       valB = valB.toString().toLowerCase();
     }
@@ -651,39 +659,11 @@ $("#infoTableHeader th.sortable").on("click", function () {
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Reset all arrows
-  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+  // Reset all sort icons
+  $("#infoTableHeader .sort-icons .asc, #infoTableHeader .sort-icons .desc").removeClass("active");
 
-  // Highlight the active arrow
+  // Activate the correct icon
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
-});
-
-$("#reason-popup-trigger").on("click", function () {
-  const statsMap = {};
-
-  allOrders.forEach(order => {
-    const reason = order.cancellationReason || "Unknown";
-    if (!statsMap[reason]) {
-      statsMap[reason] = { count: 0, amount: 0 };
-    }
-    statsMap[reason].count += 1;
-    if (order.custRefundDate) {
-      statsMap[reason].amount += parseFloat(order.custRefAmount || 0);
-    }
-  });
-
-  const tableBody = $("#reasonStatsTable").empty();
-  Object.entries(statsMap).forEach(([reason, data]) => {
-    tableBody.append(`
-      <tr>
-        <td>${reason}</td>
-        <td>${data.count}</td>
-        <td>$${data.amount.toFixed(2)}</td>
-      </tr>
-    `);
-  });
-
-  $("#reasonModal").modal("show");
 });
 });
