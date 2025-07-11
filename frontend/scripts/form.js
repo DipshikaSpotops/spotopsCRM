@@ -924,7 +924,7 @@ $("#crmForm").on("submit", function (e) {
                     ? formatDate(updatedData[key])
                     : updatedData[key];
 
-                changes.push(`Admin changed "${key}" from "${fromVal}" to "${toVal}" on ${formatDate(now)} by ${adminName}`);
+                changes.push(`Changed "${key}" from ${fromVal} to ${toVal}  by ${adminName} on ${currentDateTime}`);
             }
         }
 
