@@ -1986,28 +1986,37 @@ app.put("/orders/:orderNo", async (req, res) => {
         if (!order) return res.status(404).send("Order not found");
 
         const oldStatus = order.orderStatus;
-        const firstName = req.query.firstName;
+        const firstName = req.query.firstName || 'Unknown';
         console.log("Logged in user:", firstName);
 
         const changeLogs = [];
 
-        // 🔧 Helper to format orderDate in Dallas time, minus 1 day
+        // Format dates if they are ISO strings
+        const formatIfDate = (val) => {
+            if (!val) return val;
+            if (typeof val === 'string' && val.includes('T')) {
+                return moment(val).tz('America/Chicago').format('DD MMM, YYYY HH:mm');
+            }
+            return val;
+        };
+
         const formatOrderDateForDisplay = (isoDate) => {
-            if (!isoDate) return "";
             return moment(isoDate)
                 .tz('America/Chicago')
-                .subtract(1, 'day')
                 .format('DD MMM, YYYY HH:mm');
         };
 
         // Handle customerApprovedDate separately
         if (req.body.customerApprovedDate) {
             if (order.customerApprovedDate !== req.body.customerApprovedDate) {
-                changeLogs.push(`Changed "customerApprovedDate" from "${order.customerApprovedDate}" to "${req.body.customerApprovedDate}" by ${firstName}`);
+                const fromVal = formatIfDate(order.customerApprovedDate);
+                const toVal = formatIfDate(req.body.customerApprovedDate);
+                changeLogs.push(`Changed customerApprovedDate from ${fromVal} to ${toVal} by ${firstName} on ${formattedDateTime}`);
                 order.customerApprovedDate = req.body.customerApprovedDate;
             }
         }
 
+        // Skip fields that don't need to be compared here
         const skipFields = ['orderHistory', 'customerApprovedDate'];
 
         for (let key in req.body) {
@@ -2015,14 +2024,19 @@ app.put("/orders/:orderNo", async (req, res) => {
                 const oldValue = order[key];
                 const newValue = req.body[key];
 
+                // Avoid logging undefined -> undefined
+                if (oldValue === undefined && newValue === undefined) continue;
+
                 if (oldValue != newValue) {
-                    changeLogs.push(`Changed "${key}" from "${oldValue}" to "${newValue}" by ${firstName}`);
+                    const fromVal = formatIfDate(oldValue);
+                    const toVal = formatIfDate(newValue);
+                    changeLogs.push(`Changed ${key} from ${fromVal} to ${toVal} by ${firstName} on ${formattedDateTime}`);
                     order[key] = newValue;
                 }
             }
         }
 
-        // 🔁 Fix the first line in orderHistory if orderDate was changed
+        // 🧠 Fix the first line of orderHistory to use proper Dallas time
         if (req.body.orderHistory && Array.isArray(req.body.orderHistory)) {
             const firstLine = req.body.orderHistory[0];
             if (firstLine && order.orderDate) {
@@ -2034,18 +2048,18 @@ app.put("/orders/:orderNo", async (req, res) => {
                 req.body.orderHistory[0] = fixedFirstLine;
             }
 
-            // Replace history
+            // Apply updated history array
             order.orderHistory = req.body.orderHistory;
         }
 
-        // ✍️ Log status change
+        // ✍️ Log status change (separate logic)
         if (oldStatus !== order.orderStatus) {
             order.orderHistory.push(
                 `Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`
             );
         }
 
-        // 📜 Add other change logs
+        // 📜 Log other field changes
         if (changeLogs.length > 0) {
             changeLogs.forEach(log => {
                 order.orderHistory.push(`${log} on ${formattedDateTime}`);
@@ -2055,6 +2069,7 @@ app.put("/orders/:orderNo", async (req, res) => {
         const updatedOrder = await order.save();
         res.json(updatedOrder);
     } catch (err) {
+        console.error("Error in order update:", err.message);
         res.status(400).send(err.message);
     }
 });
