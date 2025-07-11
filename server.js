@@ -1991,7 +1991,7 @@ app.put("/orders/:orderNo", async (req, res) => {
 
         const changeLogs = [];
 
-        // Format dates if they are ISO strings
+        // Format ISO date string into Dallas time
         const formatIfDate = (val) => {
             if (!val) return val;
             if (typeof val === 'string' && val.includes('T')) {
@@ -2001,42 +2001,40 @@ app.put("/orders/:orderNo", async (req, res) => {
         };
 
         const formatOrderDateForDisplay = (isoDate) => {
-            return moment(isoDate)
-                .tz('America/Chicago')
-                .format('DD MMM, YYYY HH:mm');
+            return moment(isoDate).tz('America/Chicago').format('DD MMM, YYYY HH:mm');
         };
 
-        // Handle customerApprovedDate separately
+        // Handle customerApprovedDate
         if (req.body.customerApprovedDate) {
             if (order.customerApprovedDate !== req.body.customerApprovedDate) {
                 const fromVal = formatIfDate(order.customerApprovedDate);
                 const toVal = formatIfDate(req.body.customerApprovedDate);
-                changeLogs.push(`Changed customerApprovedDate from ${fromVal} to ${toVal} by ${firstName} on ${formattedDateTime}`);
+                changeLogs.push(`Changed customerApprovedDate from ${fromVal} to ${toVal} by ${firstName}`);
                 order.customerApprovedDate = req.body.customerApprovedDate;
             }
         }
 
-        // Skip fields that don't need to be compared here
-        const skipFields = ['orderHistory', 'customerApprovedDate'];
+        // Skip fields that shouldn't be logged or updated here
+        const skipFields = ['orderHistory', 'customerApprovedDate', 'firstName'];
 
         for (let key in req.body) {
             if (!skipFields.includes(key)) {
                 const oldValue = order[key];
                 const newValue = req.body[key];
 
-                // Avoid logging undefined -> undefined
                 if (oldValue === undefined && newValue === undefined) continue;
 
                 if (oldValue != newValue) {
-                    const fromVal = formatIfDate(oldValue);
-                    const toVal = formatIfDate(newValue);
-                    changeLogs.push(`Changed ${key} from ${fromVal} to ${toVal} by ${firstName} on ${formattedDateTime}`);
+                    const fromVal = key.toLowerCase().includes('date') ? formatIfDate(oldValue) : oldValue;
+                    const toVal = key.toLowerCase().includes('date') ? formatIfDate(newValue) : newValue;
+
+                    changeLogs.push(`Changed ${key} from ${fromVal} to ${toVal} by ${firstName}`);
                     order[key] = newValue;
                 }
             }
         }
 
-        // 🧠 Fix the first line of orderHistory to use proper Dallas time
+        // 🧠 Fix the first line of orderHistory to match updated orderDate (Dallas time)
         if (req.body.orderHistory && Array.isArray(req.body.orderHistory)) {
             const firstLine = req.body.orderHistory[0];
             if (firstLine && order.orderDate) {
@@ -2048,23 +2046,21 @@ app.put("/orders/:orderNo", async (req, res) => {
                 req.body.orderHistory[0] = fixedFirstLine;
             }
 
-            // Apply updated history array
+            // Apply updated history
             order.orderHistory = req.body.orderHistory;
         }
 
-        // ✍️ Log status change (separate logic)
+        // ✍️ Log status change
         if (oldStatus !== order.orderStatus) {
             order.orderHistory.push(
                 `Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`
             );
         }
 
-        // 📜 Log other field changes
-        if (changeLogs.length > 0) {
-            changeLogs.forEach(log => {
-                order.orderHistory.push(`${log} on ${formattedDateTime}`);
-            });
-        }
+        // 📜 Add field change logs
+        changeLogs.forEach(log => {
+            order.orderHistory.push(`${log} on ${formattedDateTime}`);
+        });
 
         const updatedOrder = await order.save();
         res.json(updatedOrder);
