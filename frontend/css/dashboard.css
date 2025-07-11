@@ -731,6 +731,9 @@ text-align:center;
 display: block;
 margin-right: 1%;
 }
+.rates-container {
+  padding: 50px
+}
 .charts-container-monthly {
     flex-direction: column;
   }
