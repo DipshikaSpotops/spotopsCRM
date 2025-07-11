@@ -891,141 +891,80 @@ showModal("#trackingModal");
 }
 // Listen for form submission
 $("#crmForm").on("submit", function (e) {
-    e.preventDefault();
-
-    const firstName = localStorage.getItem("firstName");
-    const cusFName = document.getElementById("firstName").value;
-    const cuLName = document.getElementById("lastname").value;
-    const customerName = cusFName + " " + cuLName;
-
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-        return date.toLocaleString("en-GB", {
-            day: '2-digit', month: 'short', year: 'numeric',
-            hour: '2-digit', minute: '2-digit'
-        }).replace(',', '');
-    };
-
-    const buildChangeHistory = (existingData, updatedData, adminName) => {
-        const changes = [];
-        const now = new Date();
-
-        for (const key in updatedData) {
-            if (
-                updatedData[key] !== undefined &&
-                existingData[key] !== undefined &&
-                updatedData[key] != existingData[key]
-            ) {
-                const fromVal = key.toLowerCase().includes("date")
-                    ? formatDate(existingData[key])
-                    : existingData[key];
-
-                const toVal = key.toLowerCase().includes("date")
-                    ? formatDate(updatedData[key])
-                    : updatedData[key];
-
-                changes.push(`Changed "${key}" from ${fromVal} to ${toVal}  by ${adminName} on ${currentDateTime}`);
-            }
-        }
-
-        return changes;
-    };
-
-    const updateFirstHistoryLine = (existingHistory, oldDate, newDate) => {
-        if (!existingHistory || !existingHistory[0]) return existingHistory;
-
-        const oldFormatted = formatDate(oldDate);
-        const newFormatted = formatDate(newDate);
-
-        let updatedLine = existingHistory[0];
-
-        if (updatedLine.includes(oldFormatted)) {
-            updatedLine = updatedLine.replace(oldFormatted, newFormatted);
-        } else {
-            updatedLine = updatedLine.replace(/\d{1,2} \w{3}, \d{4} \d{2}:\d{2}/, newFormatted);
-        }
-
-        const updatedHistory = [...existingHistory];
-        updatedHistory[0] = updatedLine;
-
-        return updatedHistory;
-    };
-
-    const updateOrder = (url, updatedData) => {
-        return fetch(`${url}?firstName=${firstName}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedData),
-        });
-    };
-
-    fetch(`https://www.spotops360.com/orders/${orderNo}`)
-        .then((response) => response.json())
-        .then((existingOrderData) => {
-            const updatedData = {
-                orderNo: orderNo,
-                orderDate: $("#orderDate").val() || existingOrderData.orderDate,
-                salesAgent: $("#salesAgent").val(),
-                customerName: customerName,
-                bAddress: $("#bAddress").val(),
-                sAddress: $("#sAddress").val(),
-                attention: $("#attention").val(),
-                email: $("#email").val(),
-                phone: $("#phone").val(),
-                make: $("#make").val(),
-                model: $("#model").val(),
-                year: $("#year").val(),
-                pReq: $("#pReq").val(),
-                desc: $("#desc").val(),
-                warranty: $("#warranty").val(),
-                soldP: $("#soldP").val(),
-                costP: $("#costP").val(),
-                shippingFee: $("#shippingFee").val(),
-                salestax: $("#salestax").val(),
-                grossProfit: $("#grossProfit").val(),
-                orderStatus: $("#orderStatus").val(),
-                vin: document.getElementById("vin").value,
-                partNo: document.getElementById("partNo").value,
-                last4digits: $("#issueOrder").val(),
-                notes: $("#notes").val(),
-                firstName: firstName,
-            };
-
-            // Handle orderHistory update
-            let existingHistory = existingOrderData.orderHistory || [];
-
-            if (existingOrderData.orderDate !== updatedData.orderDate) {
-                existingHistory = updateFirstHistoryLine(existingHistory, existingOrderData.orderDate, updatedData.orderDate);
-            }
-
-            const changeLogs = buildChangeHistory(existingOrderData, updatedData, firstName);
-            updatedData.orderHistory = [...existingHistory, ...changeLogs];
-
-            return updateOrder(`https://www.spotops360.com/orders/${orderNo}`, updatedData);
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            updateOrderHistory(data.orderHistory);
-            const team = localStorage.getItem("team");
-            alert("Details have been updated");
-            window.location.reload();
-            // Optional redirect logic
-            // if (team === "Team Charlie") {
-            //     window.location.href = "individualOrders.html";
-            // } else {
-            //     window.location.href = "monthwiseOrders.html";
-            // }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+e.preventDefault(); 
+const firstName = localStorage.getItem("firstName");
+var cusFName = document.getElementById("firstName").value;
+var cuLName = document.getElementById("lastname").value;
+var customerName = cusFName + " " + cuLName;
+const updateOrder = (url, existingOrderData) => {
+const updatedData = {
+orderNo: orderNo,
+orderDate: $("#orderDate").val() || existingOrderData.orderDate, 
+salesAgent: $("#salesAgent").val(),
+customerName: customerName,
+bAddress: $("#bAddress").val(),
+sAddress: $("#sAddress").val(),
+attention: $("#attention").val(),
+email: $("#email").val(),
+phone: $("#phone").val(),
+make: $("#make").val(),
+model: $("#model").val(),
+year: $("#year").val(),
+pReq: $("#pReq").val(),
+desc: $("#desc").val(),
+warranty: $("#warranty").val(),
+soldP: $("#soldP").val(),
+costP: $("#costP").val(),
+shippingFee: $("#shippingFee").val(),
+salestax: $("#salestax").val(),
+grossProfit: $("#grossProfit").val(),
+orderStatus: $("#orderStatus").val(),
+vin: document.getElementById("vin").value,
+partNo: document.getElementById("partNo").value,
+last4digits: $("#issueOrder").val(),
+notes: $("#notes").val(),
+firstName: firstName,
+};
+// Sending the updated data to the API using the PUT method
+return fetch(`${url}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedData), 
+});
+};
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => {
+return response.json();
+})
+.then((existingOrderData) => {
+const isCancelledOrder = existingOrderData.isCancelled || false;
+const updateUrl = isCancelledOrder 
+? `https://www.spotops360.com/cancelledOrders/${orderNo}` 
+: `https://www.spotops360.com/orders/${orderNo}`;
+return updateOrder(updateUrl, existingOrderData);
+})
+.then((response) => {
+if (!response.ok) {
+throw new Error("Network response was not ok");
+}
+return response.json(); 
+})
+.then((data) => {
+updateOrderHistory(data.orderHistory);
+const team = localStorage.getItem("team");
+alert("Details have been updated");
+window.location.reload();
+// if (team === "Team Charlie") {
+// window.location.href = "individualOrders.html";
+// } else {
+// window.location.href = "monthwiseOrders.html";
+// }
+})
+.catch((error) => {
+console.error("Error:", error);
+});
 });
 
 

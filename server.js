@@ -1976,100 +1976,53 @@ app.get('/unread-notifications-count', async (req, res) => {
   }
 });
 
-// changing order details
+// changing order status
 app.put("/orders/:orderNo", async (req, res) => {
-    const now = moment().tz('America/Chicago');
-    const formattedDateTime = now.format('DD MMM, YYYY HH:mm');
+const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+console.log('US Central Time:', centralTime);
+const date = new Date(centralTime);
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const hours = date.getHours().toString().padStart(2, '0');
+const minutes = date.getMinutes().toString().padStart(2, '0');
+const formattedDate = `${day} ${month}, ${year}`;
+const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
 
-    try {
-        const order = await Order.findOne({ orderNo: req.params.orderNo });
-        if (!order) return res.status(404).send("Order not found");
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+if (!order) return res.status(404).send("Order not found");
 
-        const oldStatus = order.orderStatus;
-        const firstName = req.query.firstName || 'Unknown';
-        console.log("Logged in user:", firstName);
+const oldStatus = order.orderStatus;
 
-        const changeLogs = [];
+// Preserve existing customerApprovedDate if not provided
+if (req.body.customerApprovedDate) {
+order.customerApprovedDate = req.body.customerApprovedDate;
+}
+// Update only the fields provided in the request
+for (let key in req.body) {
+if (key !== 'customerApprovedDate') {
+order[key] = req.body[key];
+}
+}
+1 
+const firstName = req.query.firstName;
+console.log("Logged in user:", firstName);
 
-        // Format ISO date string into Dallas time
-        const formatIfDate = (val) => {
-            if (!val) return val;
-            if (typeof val === 'string' && val.includes('T')) {
-                return moment(val).tz('America/Chicago').format('DD MMM, YYYY HH:mm');
-            }
-            return val;
-        };
+// Add timestamp to order history only if the status has changed
+if (oldStatus !== order.orderStatus) {
+order.orderHistory.push(
+`Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`
+);
+}
 
-        const formatOrderDateForDisplay = (isoDate) => {
-            return moment(isoDate).tz('America/Chicago').format('DD MMM, YYYY HH:mm');
-        };
-
-        // Handle customerApprovedDate
-        if (req.body.customerApprovedDate) {
-            if (order.customerApprovedDate !== req.body.customerApprovedDate) {
-                const fromVal = formatIfDate(order.customerApprovedDate);
-                const toVal = formatIfDate(req.body.customerApprovedDate);
-                changeLogs.push(`Changed customerApprovedDate from ${fromVal} to ${toVal} by ${firstName}`);
-                order.customerApprovedDate = req.body.customerApprovedDate;
-            }
-        }
-
-        // Skip fields that shouldn't be logged or updated here
-        const skipFields = ['orderHistory', 'customerApprovedDate', 'firstName'];
-
-        for (let key in req.body) {
-            if (!skipFields.includes(key)) {
-                const oldValue = order[key];
-                const newValue = req.body[key];
-
-                if (oldValue === undefined && newValue === undefined) continue;
-
-                if (oldValue != newValue) {
-                    const fromVal = key.toLowerCase().includes('date') ? formatIfDate(oldValue) : oldValue;
-                    const toVal = key.toLowerCase().includes('date') ? formatIfDate(newValue) : newValue;
-
-                    changeLogs.push(`Changed ${key} from ${fromVal} to ${toVal} by ${firstName}`);
-                    order[key] = newValue;
-                }
-            }
-        }
-
-        // 🧠 Fix the first line of orderHistory to match updated orderDate (Dallas time)
-        if (req.body.orderHistory && Array.isArray(req.body.orderHistory)) {
-            const firstLine = req.body.orderHistory[0];
-            if (firstLine && order.orderDate) {
-                const correctedDate = formatOrderDateForDisplay(order.orderDate);
-                const fixedFirstLine = firstLine.replace(
-                    /\d{1,2} \w{3}, \d{4} \d{2}:\d{2}/,
-                    correctedDate
-                );
-                req.body.orderHistory[0] = fixedFirstLine;
-            }
-
-            // Apply updated history
-            order.orderHistory = req.body.orderHistory;
-        }
-
-        // ✍️ Log status change
-        if (oldStatus !== order.orderStatus) {
-            order.orderHistory.push(
-                `Order status updated to ${order.orderStatus} by ${firstName} on ${formattedDateTime}`
-            );
-        }
-
-        // 📜 Add field change logs
-        changeLogs.forEach(log => {
-            order.orderHistory.push(`${log} on ${formattedDateTime}`);
-        });
-
-        const updatedOrder = await order.save();
-        res.json(updatedOrder);
-    } catch (err) {
-        console.error("Error in order update:", err.message);
-        res.status(400).send(err.message);
-    }
+const updatedOrder = await order.save();
+res.json(updatedOrder);
+} catch (err) {
+res.status(400).send(err.message);
+}
 });
-
 
 // changing the orderStatus and yrdStatus when reimbursement amount is added
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
