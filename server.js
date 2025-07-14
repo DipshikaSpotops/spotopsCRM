@@ -56,11 +56,11 @@ res.status(400).send('Malformed URI');
 app.use(bodyParser.json());
 
 // Corrected connection string with the '@' character properly URL-encoded
-// const mongoURI =
-// "mongodb+srv://Dipshika:dnjDdHAD0Hhxj5Zp@cluster0.gojob9v.mongodb.net/ordersDB?retryWrites=true&w=majority";
+const mongoURI =
+"mongodb+srv://Dipshika:dnjDdHAD0Hhxj5Zp@cluster0.gojob9v.mongodb.net/ordersDB?retryWrites=true&w=majority";
 
 mongoose
-.connect(process.env.MONGODB_URI)
+.connect(mongoURI)
 .then(() => {
 console.log("MongoDB connected");
 })
