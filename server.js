@@ -14,6 +14,7 @@ const fs = require("fs");
 const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 require("dotenv").config();
+const shippingRoutes = require('./backend/routes/shipping');
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
 
@@ -27,6 +28,8 @@ const compression = require('compression');
 const port = 3000;
 const app = express();
 app.use(compression());
+app.use('/api/shipping', shippingRoutes);
+app.use(express.static('frontend'));
 
 // s3 bucket for uploading order specific pictures
 const s3 = new AWS.S3();

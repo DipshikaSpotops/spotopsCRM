@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SpeedShip API Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    button {
+      margin: 10px 10px 10px 0;
+      padding: 10px 18px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #eee;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+  </style>
+</head>
+<body>
+  <h2>SpeedShip Integration Demo</h2>
+  <p>This demo tests the following live flows using sandbox credentials:</p>
+
+  <div class="section">
+    <button onclick="callGetRates()">1. Get Rates</button>
+    <button onclick="callCreateShipment()">2. Create Shipment</button>
+    <button onclick="callSchedulePickup()">3. Schedule Pickup</button>
+  </div>
+
+  <div class="section">
+    <strong>Response:</strong>
+    <pre id="result">Click any button above to see the API response here...</pre>
+  </div>
+
+  <script>
+    const display = (text) => {
+      document.getElementById('result').innerText = text;
+    };
+
+    async function callGetRates() {
+      display("Calling shopFlow (Get Rates)...");
+      const response = await fetch('/api/shipping/get-rates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientId: "12345",
+          shipmentDetails: {
+            originPostalCode: "84101",
+            destinationPostalCode: "90210",
+            serviceType: "GROUND",
+            packageType: "PARCEL",
+            weight: 5,
+            dimensions: { length: 10, width: 8, height: 4 }
+          }
+        })
+      });
+      display(await response.text());
+    }
+
+    async function callCreateShipment() {
+      display("Calling integratedOrderFlow (Create Shipment)...");
+      const response = await fetch('/api/shipping/create-shipment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientId: "12345",
+          shipment: {
+            shipper: {
+              name: "Sender Co",
+              address: "123 Main St",
+              city: "Salt Lake City",
+              state: "UT",
+              zip: "84101"
+            },
+            recipient: {
+              name: "Customer A",
+              address: "456 Market St",
+              city: "Los Angeles",
+              state: "CA",
+              zip: "90210"
+            },
+            packages: [{
+              weight: 10,
+              dimensions: { length: 12, width: 9, height: 6 }
+            }]
+          }
+        })
+      });
+      display(await response.text());
+    }
+
+    async function callSchedulePickup() {
+      display("Calling schedulePickupFlow...");
+      const response = await fetch('/api/shipping/schedule-pickup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientId: "12345",
+          pickupDetails: {
+            contactName: "Jane Doe",
+            phone: "555-123-4567",
+            pickupDate: "2025-07-15",
+            location: {
+              address: "123 Main St",
+              city: "Salt Lake City",
+              state: "UT",
+              zip: "84101"
+            },
+            readyTime: "10:00",
+            closeTime: "17:00"
+          }
+        })
+      });
+      display(await response.text());
+    }
+  </script>
+</body>
+</html>
