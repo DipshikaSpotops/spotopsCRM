@@ -520,6 +520,7 @@ button#sendPOBtn,
 button#sendEmailButton,
 button#voidLabel,
 button#cancelShipment,
+button#partDeliveredEmail
 input#submit {
     height: 42px;
     padding: 0 20px;
