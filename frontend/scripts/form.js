@@ -415,7 +415,8 @@ fetch(`https://www.spotops360.com/orders/${orderNo}`)
 var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
-var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.custRefAmount || 0;  
+var custRefundedAmount = data.custRefAmount;  
+console.log("custRefAmount",custRefAmount)
 var currentActualGp = data.actualGP || 0;
 console.log("order rn",data.orderStatus);
 $("#custRefunds").val(custRefundedAmount)
