@@ -3,7 +3,7 @@ require('dotenv').config();
 
 async function getRates(payload) {
   const url = `${process.env.SPEEDSHIP_API_BASE}/shopFlow`;
-
+  console.log("url",process.env.SPEEDSHIP_API_BASE);
   try {
     const response = await axios.post(url, payload, {
       headers: {

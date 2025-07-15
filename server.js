@@ -17,7 +17,8 @@ require("dotenv").config();
 const shippingRoutes = require('./backend/routes/shippingRoutes');
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const User = require("./backend/models/User"); // Import User model
 const Team = require("./backend/models/Team"); // Import Team model
 const { url } = require("inspector");
