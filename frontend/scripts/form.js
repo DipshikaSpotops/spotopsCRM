@@ -418,7 +418,7 @@ var spMinusTax = data.spMinusTax || 0 || sp - tax;
 var custRefundedAmount = data.custRefAmount;  
 console.log("custRefAmount",custRefundedAmount)
 var currentActualGp = data.actualGP || 0;
-console.log("order rn",data.orderStatus);
+console.log("order rn",data.orderStatus,"currentActualGp",currentActualGp);
 $("#custRefunds").val(custRefundedAmount)
 $("#actualGP").val(currentActualGp.toFixed(2));
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
@@ -429,6 +429,7 @@ if (
 {
 if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
+console.log("===",actualGP)
 $("#actualGP").val(actualGP.toFixed(2));
 
 if (currentActualGp !== actualGP) {
