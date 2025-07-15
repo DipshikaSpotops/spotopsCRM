@@ -3131,7 +3131,7 @@ const { trackingNo, shipperName, firstName ,link, yardIndex} = req.body;
 console.log("trackingInfo", trackingNo, shipperName, firstName,link,"yardIndex",yardIndex);
 var cxTrackingNo = order.additionalInfo[yardIndex - 1].trackingNo;
 var trackingLink = order.additionalInfo[yardIndex - 1].trackingLink;
-var shipperName = order.additionalInfo[yardIndex - 1].shipperName;
+var cxshipperName = order.additionalInfo[yardIndex - 1].shipperName;
 
 const transporter = nodemailer.createTransport({
 service: "gmail",
@@ -3155,7 +3155,7 @@ html: `<p>Hi ${customerName},</p>
 <p>Here’s a quick summary of your order:
 Order Number: ${req.params.orderNo}<br>
 Delivery Date: ${deliveryDate}<br>
-Tracking Info: ${cxTrackingNo} | ${shipperName} -  ${trackingLink}</p>
+Tracking Info: ${cxTrackingNo} | ${cxshipperName} -  ${trackingLink}</p>
 <p>If there’s anything you need, or if you have any questions about your order, feel free to reach out, we’re always happy to help.</p>
 <p>Thanks once again for shopping with us. We look forward to helping you with your auto parts needs in the future!</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
