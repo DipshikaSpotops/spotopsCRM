@@ -1,22 +1,21 @@
 const axios = require('axios');
-require('dotenv').config();
+const { getAccessToken } = require('./tokenService');
 
 async function getRates(payload) {
-  const url = `${process.env.SPEEDSHIP_API_BASE}/shopFlow`;
-  console.log("url",process.env.SPEEDSHIP_API_BASE);
-  try {
-    const response = await axios.post(url, payload, {
+  const token = await getAccessToken();
+
+  const response = await axios.post(
+    'https://api.sandbox.speedship.io/shopFlow',  // update if real path differs
+    payload,
+    {
       headers: {
-        Authorization: `Bearer ${process.env.SPEEDSHIP_API_TOKEN}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
-    });
+    }
+  );
 
-    return response.data;
-  } catch (err) {
-    console.error('shopFlow error:', err.response?.data || err.message);
-    throw err;
-  }
+  return response.data;
 }
 
 module.exports = { getRates };
