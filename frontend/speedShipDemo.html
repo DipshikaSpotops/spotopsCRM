@@ -68,7 +68,7 @@
     const display = (text) => {
       document.getElementById('result').innerText = text;
     };
-
+const BASE_URL = "https://www.spotops360.com";
     async function callGetRates() {
       display("Calling shopFlow (Get Rates)...");
       const response = await fetch('/api/shipping/get-rates', {

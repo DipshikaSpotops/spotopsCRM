@@ -1,5 +1,5 @@
 const axios = require('axios');
-require('dotenv').config();
+const { getAccessToken } = require('./tokenService');
 
 async function createShipment(payload) {
   const url = `${process.env.SPEEDSHIP_API_BASE}/integratedOrderFlow`;

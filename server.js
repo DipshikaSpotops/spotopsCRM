@@ -14,7 +14,7 @@ const fs = require("fs");
 const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 require("dotenv").config();
-const shippingRoutes = require('./backend/routes/shipping');
+const shippingRoutes = require('./backend/routes/shippingRoutes');
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
 
