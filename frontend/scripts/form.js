@@ -2299,6 +2299,7 @@ trackingNo: trackingNo,
 shipperName: shipperName,
 firstName: firstName,
 link:link,
+yardIndex:yardIndex,
 };
 
 fetch(`https://www.spotops360.com/orders/sendDeliveryEmail/${orderNo}`, {

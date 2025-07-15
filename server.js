@@ -3128,8 +3128,8 @@ console.log("no", order);
 if (!order) {
 return res.status(400).send("Order not found");
 }
-const { trackingNo, shipperName, firstName ,link} = req.body;
-console.log("trackingInfo", trackingNo, shipperName, firstName,link);
+const { trackingNo, shipperName, firstName ,link, yardIndex} = req.body;
+console.log("trackingInfo", trackingNo, shipperName, firstName,link,"yardIndex",yardIndex);
 const transporter = nodemailer.createTransport({
 service: "gmail",
 auth: {
