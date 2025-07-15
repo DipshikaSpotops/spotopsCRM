@@ -542,8 +542,13 @@ console.error("Error updating actualGP:", error);
 });
 }
 else if (
-(!data.additionalInfo || data.additionalInfo.length === 0 && yStatus === "PO cancelled") && 
-(data.orderStatus === "Refunded" || data.orderStatus === "Order cancelled")){
+  (
+    !data.additionalInfo ||
+    (data.additionalInfo.length === 0 && yStatus === "PO cancelled")
+  ) &&
+  (data.orderStatus === "Refunded" || data.orderStatus === "Order cancelled")
+)
+{
   console.log("yStatus0",yStatus);
 actualGP =  (soldP - custRefundedAmount) - tax ;
 console.log("actualGPAfter refunnd/cancellation",totalSum,tax)
