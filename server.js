@@ -1,5 +1,4 @@
 require("dotenv").config();
-console.log("Loaded SPEEDSHIP_API_BASE =", process.env.SPEEDSHIP_API_BASE);
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
