@@ -1,3 +1,5 @@
+require("dotenv").config();
+console.log("Loaded SPEEDSHIP_API_BASE =", process.env.SPEEDSHIP_API_BASE);
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -13,7 +15,7 @@ const AWS = require("aws-sdk");
 const fs = require("fs");
 const moment = require('moment-timezone');
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
-require("dotenv").config();
+
 const shippingRoutes = require('./backend/routes/shippingRoutes');
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
@@ -22,8 +24,8 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const User = require("./backend/models/User"); // Import User model
-const Team = require("./backend/models/Team"); // Import Team model
+const User = require("./backend/models/User"); 
+const Team = require("./backend/models/Team");
 const { url } = require("inspector");
 const { getMaxListeners } = require("events");
 const { Server } = require("http");
