@@ -2311,7 +2311,7 @@ body: JSON.stringify(data),
 })
 .then((response) => response.json())
 .then((result) => {
-alert("Deliverr email sent to the customer");
+alert("Delivery email sent to the customer");
 $("#editYardInfo")
 .prop("disabled", false) 
 .css("filter", "none"); 
