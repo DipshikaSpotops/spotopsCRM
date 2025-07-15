@@ -3152,7 +3152,7 @@ html: `<p>Hi ${customerName},</p>
 <p>Thank you so much for choosing 50 Stars Auto Parts. We truly appreciate your trust in us and are grateful for the opportunity to serve you</p>
 <p>Here’s a quick summary of your order:<br>
 Order Number: ${req.params.orderNo}<br>
-Tracking No: ${cxTrackingNo}</br>
+Tracking No: ${cxTrackingNo}<br>
 Tracking Link: ${cxshipperName} -  ${trackingLink}</p>
 <p>If there’s anything you need, or if you have any questions about your order, feel free to reach out, we’re always happy to help.</p>
 <p>Thanks once again for shopping with us. We look forward to helping you with your auto parts needs in the future!</p>
