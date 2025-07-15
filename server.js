@@ -3119,6 +3119,66 @@ console.error("Server error:", error);
 res.status(500).json({ message: "Server error", error });
 }
 });
+// to send delivery email
+app.post("/orders/sendDeliveryEmail/:orderNo", async (req, res) => {
+console.log("send delivery email");
+try {
+const order = await Order.findOne({ orderNo: req.params.orderNo });
+console.log("no", order);
+if (!order) {
+return res.status(400).send("Order not found");
+}
+const { trackingNo, shipperName, firstName ,link} = req.body;
+console.log("trackingInfo", trackingNo, shipperName, firstName,link);
+const transporter = nodemailer.createTransport({
+service: "gmail",
+auth: {
+user: "service@50starsautoparts.com",
+pass: "hweg vrnk qyxx gktv",
+},
+});
+var customerName = order.customerName || order.fName;
+var deliveryDate = order.mainOrderDeliveredDate;
+const mailOptions = {
+from: "service@50starsautoparts.com",
+// to: `${order.email}`,
+to:`dipsikha.spotopsdigital@gmail.com`,
+bcc:`dipsikha.spotopsdigital@gmail.com`,
+subject: `Thank You for Your Order(${req.params.orderNo}) – Delivery Confirmation`,
+html: `<p>Hi ${customerName},</p>
+<p>We’re excited to let you know that your order has been successfully delivered!</p>
+<p>Thank you so much for choosing 50 Stars Auto Parts. We truly appreciate your trust in us and are grateful for the opportunity to serve you</p>
+<p>Here’s a quick summary of your order:
+Order Number: ${req.params.orderNo}<br>
+Delivery Date: ${deliveryDate}<br>
+Tracking Info: ${trackingNo}</p>
+<p>${shipperName} - ${trackingNo} | ${link}</p>
+<p>If there’s anything you need, or if you have any questions about your order, feel free to reach out, we’re always happy to help.</p>
+<p>Thanks once again for shopping with us. We look forward to helping you with your auto parts needs in the future!</p>
+<p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+<p>${firstName}<br>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+attachments: [{
+filename: 'logo.png',
+path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
+cid: 'logo' 
+}]
+};
+
+console.log("mail", mailOptions);
+transporter.sendMail(mailOptions, (error, info) => {
+if (error) {
+console.error("Error sending mail:", error);
+res.status(500).json({ message: `Error sending mail: ${error.message}` });
+} else {
+console.log(" Delivery Email sent successfully:", info.response);
+res.json({ message: `Email sent successfully` });
+}
+});
+} catch (error) {
+console.error("Server error:", error);
+res.status(500).json({ message: "Server error", error });
+}
+});
 // to send notification on csv downloads on a particular page
 app.post("/orders/sendDownloadedNotification", async (req, res) => {
   console.log("send tracking info");

@@ -2145,7 +2145,7 @@ const refundStatus = $(this).val();
 console.log("yardStatus",refundStatus);
 if (refundStatus === "Part shipped") {
 $("#divTrackingEdit").show();
-// $("#sendEmailButton").show();
+$("#partDeliveredEmail").hide();
 $("#sendEmailButton").show();
 $("#voidLabel").hide();
 $("#notesContainer").show();
@@ -2159,6 +2159,7 @@ $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#sendPOContainer").hide();
+$("#partDeliveredEmail").hide();
 } else if (refundStatus === "Escalation") {
 $("#escalation").show();
 $("#divTrackingEdit").hide();
@@ -2166,6 +2167,7 @@ $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#sendPOContainer").hide();
+$("#partDeliveredEmail").hide();
 } else if (refundStatus === "Label created") {
 $("#escalation").hide();    
 $("#divTrackingEdit").show();
@@ -2174,25 +2176,30 @@ $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#voidLabel").show();
 $("#sendPOContainer").hide();
+$("#partDeliveredEmail").hide();
 } else if (refundStatus === "Part delivered") {
 $("#notesContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
 $("#sendPOContainer").hide();
+$("#partDeliveredEmail").show();
 }
 else if (refundStatus === "Collect refund") {
 $("#notesContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
+$("#partDeliveredEmail").hide();
 }
 else if (refundStatus === "Yard PO Sent") {
   $("#sendPOContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
+$("#partDeliveredEmail").hide();
 } else if (refundStatus === "Yard located") {
 $("#divTrackingEdit").hide();
+$("#partDeliveredEmail").hide();
 } else {
 $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
@@ -2277,6 +2284,42 @@ console.error("Error:", error);
 alert("Please fill in all the tracking information fields.");
 $("#editYardInfo,#sendEmailButton").prop("disabled", false).css("filter", "none"); 
 }
+});
+// part delivery email
+$("#partDeliveredEmail").on("click", function () {
+$("#partDeliveredEmail, #editYardInfo").prop("disabled", true).css("filter", "blur(2px)");
+const trackingNo = $("#trackingNoEdit").val();
+var shipperName = $("#shipperNameEdit").val();
+if (shipperName === "Others") {
+shipperName = $("#otherShipperInput").val();
+}
+const link = $("#linkInput").val();
+const data = {
+trackingNo: trackingNo,
+shipperName: shipperName,
+firstName: firstName,
+link:link,
+};
+
+fetch(`https://www.spotops360.com/orders/sendDeliveryEmail/${orderNo}`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(data),
+})
+.then((response) => response.json())
+.then((result) => {
+alert("Deliverr email sent to the customer");
+$("#editYardInfo")
+.prop("disabled", false) 
+.css("filter", "none"); 
+console.log("Success:", result);
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+
 });
 // send Refund Email to the yard
 $("#sendRefundEmailYard").on("click", function () {
