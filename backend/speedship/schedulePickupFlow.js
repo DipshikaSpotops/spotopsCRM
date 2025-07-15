@@ -4,7 +4,7 @@ const { getAccessToken } = require('./tokenService');
 
 async function schedulePickup(payload) {
   const url = `${process.env.SPEEDSHIP_API_BASE}/schedulePickupFlow`;
-
+console.log("process.env.SPEEDSHIP_API_BASE",process.env.SPEEDSHIP_API_BASE);
   try {
     const response = await axios.post(url, payload, {
       headers: {
