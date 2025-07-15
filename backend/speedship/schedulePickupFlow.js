@@ -12,7 +12,7 @@ console.log("process.env.SPEEDSHIP_API_BASE",process.env.SPEEDSHIP_API_BASE);
         'Content-Type': 'application/json'
       }
     });
-    console.lod("res",response)
+    console.log("res",response)
     return response.data;
   } catch (err) {
     console.error('schedulePickupFlow error:', err.response?.data || err.message);
