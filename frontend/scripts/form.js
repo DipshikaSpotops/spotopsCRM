@@ -460,7 +460,7 @@ $("#escTickBox").prop("checked", false);
 pStatus = yard.paymentStatus;
 yStatus = yard.status;
 var rStatus = yard.refundStatus;
-console.log("pStatus", pStatus, rStatus);
+console.log("pStatus", pStatus, rStatus,"yStatus",yStatus);
 if (pStatus === "Card charged" && rStatus === "Refund collected") {
 $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025', 'border': 'none'});
 } 
