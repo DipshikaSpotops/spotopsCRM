@@ -2145,7 +2145,7 @@ const refundStatus = $(this).val();
 console.log("yardStatus",refundStatus);
 if (refundStatus === "Part shipped") {
 $("#divTrackingEdit").show();
-$("#partDeliveredEmail").hide();
+$(".partDeliveredEmail").hide();
 $("#sendEmailButton").show();
 $("#voidLabel").hide();
 $("#notesContainer").show();
@@ -2159,7 +2159,7 @@ $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#sendPOContainer").hide();
-$("#partDeliveredEmail").hide();
+$(".partDeliveredEmail").hide();
 } else if (refundStatus === "Escalation") {
 $("#escalation").show();
 $("#divTrackingEdit").hide();
@@ -2167,7 +2167,7 @@ $("#sendEmailButton").hide();
 $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#sendPOContainer").hide();
-$("#partDeliveredEmail").hide();
+$(".partDeliveredEmail").hide();
 } else if (refundStatus === "Label created") {
 $("#escalation").hide();    
 $("#divTrackingEdit").show();
@@ -2176,30 +2176,30 @@ $("#notesContainer").show();
 $("#cardCharged").hide();
 $("#voidLabel").show();
 $("#sendPOContainer").hide();
-$("#partDeliveredEmail").hide();
+$(".partDeliveredEmail").hide();
 } else if (refundStatus === "Part delivered") {
 $("#notesContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
 $("#sendPOContainer").hide();
-$("#partDeliveredEmail").show();
+$(".partDeliveredEmail").show();
 }
 else if (refundStatus === "Collect refund") {
 $("#notesContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
 $("#cardCharged").hide();
-$("#partDeliveredEmail").hide();
+$(".partDeliveredEmail").hide();
 }
 else if (refundStatus === "Yard PO Sent") {
   $("#sendPOContainer").show();
 $("#escalation").hide();
 $("#divTrackingEdit").hide();
-$("#partDeliveredEmail").hide();
+$(".partDeliveredEmail").hide();
 } else if (refundStatus === "Yard located") {
 $("#divTrackingEdit").hide();
-$("#partDeliveredEmail").hide();
+$(".partDeliveredEmail").hide();
 } else {
 $("#divTrackingEdit").hide();
 $("#sendEmailButton").hide();
