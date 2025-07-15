@@ -512,7 +512,7 @@ button + button {
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-    margin-right: 4px;
+    margin-right: -21px;
 }
 button.btn,
 button#editYardInfo,
@@ -537,7 +537,7 @@ input#submit {
     color: black;
     font-weight: bold;
     border: 2px solid black;
-    margin-left: -8%;
+    margin-left: 9%;
     border-radius: 4px;
 }
 #submitYardNotes:hover {
@@ -624,10 +624,12 @@ cursor: pointer;
 #notesContainer {
     margin-top: 30px;
     text-align: center;
+    margin-left: 5%;
 }
 
 #notesContainer h2 {
     margin-bottom: 10px;
+    margin-left: 10%;
 }
 .input-group-text {
 font-weight: bold;
