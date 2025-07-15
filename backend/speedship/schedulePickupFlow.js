@@ -1,4 +1,5 @@
 const axios = require('axios');
+require('dotenv').config();
 const { getAccessToken } = require('./tokenService');
 
 async function schedulePickup(payload) {

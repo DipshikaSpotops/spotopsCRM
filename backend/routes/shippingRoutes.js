@@ -7,11 +7,11 @@ const { schedulePickup } = require('../speedship/schedulePickupFlow');
 
 router.post('/get-rates', async (req, res) => {
   try {
-    console.log("Received /get-rates with body:", req.body); // ✅ log input
+    console.log("Received /get-rates with body:", req.body); 
     const data = await getRates(req.body);
     res.json(data);
   } catch (err) {
-    console.error("Error in /get-rates:", err); // ✅ log error
+    console.error("Error in /get-rates:", err); 
     res.status(500).json({ error: err.message });
   }
 });
