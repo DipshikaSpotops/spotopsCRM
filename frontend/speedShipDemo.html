@@ -64,87 +64,89 @@
     <pre id="result">Click any button above to see the API response here...</pre>
   </div>
 
-  <script>
-    const display = (text) => {
-      document.getElementById('result').innerText = text;
-    };
-const BASE_URL = "https://www.spotops360.com";
-    async function callGetRates() {
-      display("Calling shopFlow (Get Rates)...");
-      const response = await fetch('/api/shipping/get-rates', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clientId: "12345",
-          shipmentDetails: {
-            originPostalCode: "84101",
-            destinationPostalCode: "90210",
-            serviceType: "GROUND",
-            packageType: "PARCEL",
-            weight: 5,
-            dimensions: { length: 10, width: 8, height: 4 }
-          }
-        })
-      });
-      display(await response.text());
-    }
+<script>
+  const display = (text) => {
+    document.getElementById('result').innerText = text;
+  };
 
-    async function callCreateShipment() {
-      display("Calling integratedOrderFlow (Create Shipment)...");
-      const response = await fetch('/api/shipping/create-shipment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clientId: "12345",
-          shipment: {
-            shipper: {
-              name: "Sender Co",
-              address: "123 Main St",
-              city: "Salt Lake City",
-              state: "UT",
-              zip: "84101"
-            },
-            recipient: {
-              name: "Customer A",
-              address: "456 Market St",
-              city: "Los Angeles",
-              state: "CA",
-              zip: "90210"
-            },
-            packages: [{
-              weight: 10,
-              dimensions: { length: 12, width: 9, height: 6 }
-            }]
-          }
-        })
-      });
-      display(await response.text());
-    }
+  const BASE_URL = "https://www.spotops360.com"; // ✅ Backend root domain
 
-    async function callSchedulePickup() {
-      display("Calling schedulePickupFlow...");
-      const response = await fetch('/api/shipping/schedule-pickup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clientId: "12345",
-          pickupDetails: {
-            contactName: "Jane Doe",
-            phone: "555-123-4567",
-            pickupDate: "2025-07-15",
-            location: {
-              address: "123 Main St",
-              city: "Salt Lake City",
-              state: "UT",
-              zip: "84101"
-            },
-            readyTime: "10:00",
-            closeTime: "17:00"
-          }
-        })
-      });
-      display(await response.text());
-    }
-  </script>
+  async function callGetRates() {
+    display("Calling shopFlow (Get Rates)...");
+    const response = await fetch(`${BASE_URL}/api/shipping/get-rates`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientId: "12345",
+        shipmentDetails: {
+          originPostalCode: "84101",
+          destinationPostalCode: "90210",
+          serviceType: "GROUND",
+          packageType: "PARCEL",
+          weight: 5,
+          dimensions: { length: 10, width: 8, height: 4 }
+        }
+      })
+    });
+    display(await response.text());
+  }
+
+  async function callCreateShipment() {
+    display("Calling integratedOrderFlow (Create Shipment)...");
+    const response = await fetch(`${BASE_URL}/api/shipping/create-shipment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientId: "12345",
+        shipment: {
+          shipper: {
+            name: "Sender Co",
+            address: "123 Main St",
+            city: "Salt Lake City",
+            state: "UT",
+            zip: "84101"
+          },
+          recipient: {
+            name: "Customer A",
+            address: "456 Market St",
+            city: "Los Angeles",
+            state: "CA",
+            zip: "90210"
+          },
+          packages: [{
+            weight: 10,
+            dimensions: { length: 12, width: 9, height: 6 }
+          }]
+        }
+      })
+    });
+    display(await response.text());
+  }
+
+  async function callSchedulePickup() {
+    display("Calling schedulePickupFlow...");
+    const response = await fetch(`${BASE_URL}/api/shipping/schedule-pickup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientId: "12345",
+        pickupDetails: {
+          contactName: "Jane Doe",
+          phone: "555-123-4567",
+          pickupDate: "2025-07-15",
+          location: {
+            address: "123 Main St",
+            city: "Salt Lake City",
+            state: "UT",
+            zip: "84101"
+          },
+          readyTime: "10:00",
+          closeTime: "17:00"
+        }
+      })
+    });
+    display(await response.text());
+  }
+</script>
 </body>
 </html>
