@@ -3124,12 +3124,15 @@ app.post("/orders/sendDeliveryEmail/:orderNo", async (req, res) => {
 console.log("send delivery email");
 try {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
-console.log("no", order);
 if (!order) {
 return res.status(400).send("Order not found");
 }
 const { trackingNo, shipperName, firstName ,link, yardIndex} = req.body;
 console.log("trackingInfo", trackingNo, shipperName, firstName,link,"yardIndex",yardIndex);
+var cxTrackingNo = order.additionalInfo[yardIndex - 1].trackingNo;
+var trackingLink = order.additionalInfo[yardIndex - 1].trackingLink;
+var shipperName = order.additionalInfo[yardIndex - 1].shipperName;
+
 const transporter = nodemailer.createTransport({
 service: "gmail",
 auth: {
@@ -3139,6 +3142,7 @@ pass: "hweg vrnk qyxx gktv",
 });
 var customerName = order.customerName || order.fName;
 var deliveryDate = order.mainOrderDeliveredDate;
+console.log("deliveryDate",deliveryDate);
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: `${order.email}`,
@@ -3151,8 +3155,7 @@ html: `<p>Hi ${customerName},</p>
 <p>Here’s a quick summary of your order:
 Order Number: ${req.params.orderNo}<br>
 Delivery Date: ${deliveryDate}<br>
-Tracking Info: ${trackingNo}</p>
-<p>${shipperName} - ${trackingNo} | ${link}</p>
+Tracking Info: ${cxTrackingNo} | ${shipperName} -  ${trackingLink}</p>
 <p>If there’s anything you need, or if you have any questions about your order, feel free to reach out, we’re always happy to help.</p>
 <p>Thanks once again for shopping with us. We look forward to helping you with your auto parts needs in the future!</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
