@@ -3141,7 +3141,6 @@ pass: "hweg vrnk qyxx gktv",
 },
 });
 var customerName = order.customerName || order.fName;
-var deliveryDate = order.mainOrderDeliveredDate;
 console.log("deliveryDate",deliveryDate);
 const mailOptions = {
 from: "service@50starsautoparts.com",
@@ -3150,12 +3149,12 @@ to:`dipsikha.spotopsdigital@gmail.com`,
 bcc:`dipsikha.spotopsdigital@gmail.com`,
 subject: `Thank You for Your Order(${req.params.orderNo}) – Delivery Confirmation`,
 html: `<p>Hi ${customerName},</p>
-<p>We’re excited to let you know that your order has been successfully delivered!</p>
+<p>We’re excited to let you know that your order has been successfully delivered today!</p>
 <p>Thank you so much for choosing 50 Stars Auto Parts. We truly appreciate your trust in us and are grateful for the opportunity to serve you</p>
-<p>Here’s a quick summary of your order:
+<p>Here’s a quick summary of your order:<br>
 Order Number: ${req.params.orderNo}<br>
-Delivery Date: ${deliveryDate}<br>
-Tracking Info: ${cxTrackingNo} | ${cxshipperName} -  ${trackingLink}</p>
+Tracking No: ${cxTrackingNo} 
+Tracking Link: ${cxshipperName} -  ${trackingLink}</p>
 <p>If there’s anything you need, or if you have any questions about your order, feel free to reach out, we’re always happy to help.</p>
 <p>Thanks once again for shopping with us. We look forward to helping you with your auto parts needs in the future!</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
