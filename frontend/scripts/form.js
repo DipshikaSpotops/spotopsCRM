@@ -428,6 +428,7 @@ if (
 (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
 {
 if (custRefundedAmount) {
+  console.log("ddd");
 actualGP = (sp - custRefundedAmount) - tax;
 console.log("===",actualGP)
 $("#actualGP").val(actualGP.toFixed(2));
