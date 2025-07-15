@@ -3141,7 +3141,6 @@ pass: "hweg vrnk qyxx gktv",
 },
 });
 var customerName = order.customerName || order.fName;
-console.log("deliveryDate",deliveryDate);
 const mailOptions = {
 from: "service@50starsautoparts.com",
 // to: `${order.email}`,
