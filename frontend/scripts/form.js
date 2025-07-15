@@ -432,7 +432,7 @@ actualGP = (sp - custRefundedAmount) - tax;
 console.log("===",actualGP)
 $("#actualGP").val(actualGP.toFixed(2));
 
-if (currentActualGp !== actualGP) {
+// if (currentActualGp !== actualGP) {
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
@@ -440,7 +440,7 @@ axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actua
 .catch(function (error) {
 console.error("Error updating actualGP:", error);
 });
-} 
+// } 
 else {
 console.log("Same actualGPS");
 }
