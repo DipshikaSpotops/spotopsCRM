@@ -17,6 +17,9 @@ require("dotenv").config();
 const shippingRoutes = require('./backend/routes/shippingRoutes');
 const OrderNumber = require("./backend/models/OrderNo");
 // console.log(OrderNumber)
+// Middleware for compression
+const port = 3000;
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const User = require("./backend/models/User"); // Import User model
@@ -25,9 +28,7 @@ const { url } = require("inspector");
 const { getMaxListeners } = require("events");
 const { Server } = require("http");
 const compression = require('compression');
-// Middleware for compression
-const port = 3000;
-const app = express();
+
 app.use(compression());
 app.use('/api/shipping', shippingRoutes);
 app.use(express.static('frontend'));
