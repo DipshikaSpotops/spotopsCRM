@@ -532,6 +532,14 @@ input#submit {
     line-height: 1;
     white-space: nowrap;
 }
+#partDeliveredEmail {
+      background-color: #ff914d;
+    color: black;
+    font-weight: bold;
+    border: 2px solid black;
+    margin-left: -8%;
+    border-radius: 4px;
+}
 #submitYardNotes:hover {
     background-color: #0056b3;
 }
