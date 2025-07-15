@@ -441,9 +441,9 @@ axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actua
 console.error("Error updating actualGP:", error);
 });
 // } 
-else {
-console.log("Same actualGPS");
-}
+// else {
+// console.log("Same actualGPS");
+// }
 }
 }
 
