@@ -411,7 +411,7 @@ setTimeout(function() {
 fetch(`https://www.spotops360.com/orders/${orderNo}`)
 .then(response => response.json())
 .then(data => {
-// console.log("data in setTimeOut", data);
+console.log("data in setTimeOut", data);
 var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
