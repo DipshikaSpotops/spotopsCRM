@@ -1,21 +1,23 @@
 const axios = require('axios');
+const { getSpeedShipToken } = require('../services/tokenService'); // adjust path if needed
 require('dotenv').config();
-const { getAccessToken } = require('./tokenService');
 
 async function schedulePickup(payload) {
-  const url = `${process.env.SPEEDSHIP_API_BASE}/schedulePickupFlow`;
-console.log("process.env.SPEEDSHIP_API_BASE",process.env.SPEEDSHIP_API_BASE);
+  const token = await getSpeedShipToken();
+  const apiBase = process.env.SPEEDSHIP_API_BASE;
+  const url = `${apiBase}/pickups/schedule`;
+
   try {
     const response = await axios.post(url, payload, {
       headers: {
-        Authorization: `Bearer ${process.env.SPEEDSHIP_API_TOKEN}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
-    console.log("res",response)
+
     return response.data;
   } catch (err) {
-    console.error('schedulePickupFlow error:', err.response?.data || err.message);
+    console.error("schedulePickup error:", err.message);
     throw err;
   }
 }

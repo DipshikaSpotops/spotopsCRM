@@ -1,21 +1,23 @@
 const axios = require('axios');
+const { getSpeedShipToken } = require('../services/tokenService'); // adjust path if needed
 require('dotenv').config();
-const { getAccessToken } = require('./tokenService');
 
 async function createShipment(payload) {
-  const url = `${process.env.SPEEDSHIP_API_BASE}/integratedOrderFlow`;
+  const token = await getSpeedShipToken();
+  const apiBase = process.env.SPEEDSHIP_API_BASE;
+  const url = `${apiBase}/orders/create`;
 
   try {
     const response = await axios.post(url, payload, {
       headers: {
-        Authorization: `Bearer ${process.env.SPEEDSHIP_API_TOKEN}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
 
     return response.data;
   } catch (err) {
-    console.error('integratedOrderFlow error:', err.response?.data || err.message);
+    console.error("createShipment error:", err.message);
     throw err;
   }
 }
