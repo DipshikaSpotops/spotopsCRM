@@ -188,7 +188,7 @@ function getDallasToday() {
   }
   }
   if (!token) {
-  await fetchToken();
+   fetchToken();
   }
   // Team-based and role-based restrictions
   if (team === "Team Charlie" || role === "Sales") {
