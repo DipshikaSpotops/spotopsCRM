@@ -2,6 +2,30 @@ $(document).ready(async function () {
     $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
+  flatpickr("#dallasDateRange", {
+  mode: "range",
+  dateFormat: "Y-m-d",
+  defaultDate: [getDallasToday(), getDallasToday()],
+  onChange: function(selectedDates, dateStr, instance) {
+    console.log("Selected:", dateStr);
+  }
+});
+
+function getDallasToday() {
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  const parts = formatter.formatToParts(now);
+  const y = parts.find(p => p.type === "year").value;
+  const m = parts.find(p => p.type === "month").value;
+  const d = parts.find(p => p.type === "day").value;
+  return `${y}-${m}-${d}`;
+}
+
   let sortOrder = {
   orderDate: "asc",
   orderNo: "asc",
@@ -553,46 +577,41 @@ if (team in teamAgentsMap) {
   return orderNoB - orderNoA;
   });
   }
-  $("#filterButton").click(async function () {
-  $("body").append('<div class="modal-overlay"></div>');
-  $("body").addClass("modal-active");    
-  $("#loadingMessage").show();
-  var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
-  const [year, monthNumber] = monthYear.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[parseInt(monthNumber, 10) - 1];
-  console.log("month",month,year);
+ $("#filterButton").click(async function () {
+  const selectedRange = $("#dallasDateRange").val(); // Format: "2025-07-01 to 2025-07-16"
+  if (!selectedRange.includes("to")) {
+    alert("Please select a valid date range.");
+    return;
+  }
+
+  const [start, end] = selectedRange.split(" to ");
+
   try {
-  const ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
-  if (ordersResponse.status !== 200) {
-  throw new Error("Failed to fetch current month's orders");
+    const response = await axios.get(`https://www.spotops360.com/orders/placed?start=${start}&end=${end}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    let allOrders = response.data;
+
+    // ✅ Apply team filter as before
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"]
+    };
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    renderOrders(allOrders);
+    $("#showTotalOrders").text(`Placed Orders - ${allOrders.length}`);
+  } catch (err) {
+    console.error("Error fetching filtered orders:", err);
   }
-  allOrders = ordersResponse.data;
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
-console.log("team",team)
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-  // console.log("allorders at filter btn",allOrders);
-  var allOrdersLength = allOrders.length;
-  document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrdersLength}`;
-  renderOrders(allOrders);
-  } catch (error) {
-  console.error("Error fetching current month's orders:", error);
-  } finally {
-  // Hiding loading overlay regardless of success or error
-  $("#loadingMessage").hide();
-  $(".modal-overlay").remove();
-  $("body").removeClass("modal-active");
-  }
-  });
+});
+
   $('#closeCancelled').on('click', function(e) {
   $("#cancellingOrder").fadeOut();
   $(".modal-overlay").remove();

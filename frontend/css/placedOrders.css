@@ -239,7 +239,7 @@ body {
     background-color: #037894;
     color:white;
     }
-    #monthYearPicker {
+    #monthYearPicker,#dallasDateRange {
       background-color: #037894;
         color: white;
         width: auto;
@@ -270,7 +270,7 @@ min-width: 50px;
 }
 #filterButton,
 #showTotalOrders,
-#monthYearPicker {
+#monthYearPicker,#dallasDateRange {
   min-width: 100px;
   height: 36px;
   padding: 5px 12px;
@@ -290,7 +290,7 @@ min-width: 50px;
 
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover, .previousNext:hover {
+#monthYearPicker:hover,#dallasDateRange:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 .table td:first-child {
@@ -375,7 +375,7 @@ min-width: 50px;
       background-color: #1f2940;
       color: white;
     }
-    .dark-mode #monthYearPicker {
+    .dark-mode #monthYearPicker, .dark-mode #dallasDateRange {
       background-color: #29638c;
       border: none;
     }
@@ -585,7 +585,7 @@ table.table td {
     margin-top: 1%;
     margin-left: 3%;
   }
-  #monthYearPicker {
+  #monthYearPicker,#dallasDateRange {
     font-size: 12px;
   }
 }
