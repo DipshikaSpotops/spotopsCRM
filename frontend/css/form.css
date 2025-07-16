@@ -504,6 +504,14 @@ text-align: center;
 button + button {
     margin-left: 10px;
 }
+h1 {
+font-size: 1.5rem;
+    background-color: #037894;
+    color: white;}
+h6 {
+    font-size: 1rem;
+    text-decoration: underline;
+}
 .submitYardNotes {
     padding: 8px 16px;
     background-color: #ff914d;
