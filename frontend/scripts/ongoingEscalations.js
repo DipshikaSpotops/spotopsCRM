@@ -152,14 +152,17 @@ May: "05", Jun: "06", Jul: "07", Aug: "08",
 Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 };
 var monthNum = monthMap[month];
-const storedMonthYear = localStorage.getItem("selectedMonthYear");
-if (storedMonthYear) {
-  $("#monthYearPicker").val(storedMonthYear);
+const savedMonth = localStorage.getItem("ongoingEscalationMonth");
+if (savedMonth) {
+  $("#monthYearPicker").val(savedMonth);
 } else {
   $("#monthYearPicker").val(`${year}-${monthNum}`);
 }
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/ongoing-escalations?month=${month}&year=${year}`, {
+const [selectedYear, selectedMonthNum] = $("#monthYearPicker").val().split("-");
+const selectedMonthName = months[parseInt(selectedMonthNum) - 1];
+
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/ongoing-escalations?month=${selectedMonthName}&year=${selectedYear}`,  {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {
@@ -231,10 +234,11 @@ $("#infoTable").on("click", ".edit-btn", function () {
 const id = $(this).data("id");
 window.location.href = `form.html?orderNo=${id}`;
 });
+
 $("#infoTable").on("click", ".process-btn", function () {
   const id = $(this).data("id");
-  const selectedMonthYear = $("#monthYearPicker").val(); 
-  localStorage.setItem("selectedMonthYear", selectedMonthYear);
+  const selectedMonthYear = $("#monthYearPicker").val();
+  localStorage.setItem("ongoingEscalationMonth", selectedMonthYear);
 
   window.location.href = `form.html?orderNo=${id}&process=true`;
 });
