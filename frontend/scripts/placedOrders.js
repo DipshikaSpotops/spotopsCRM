@@ -2,98 +2,6 @@ $(document).ready(async function () {
     $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
-
-const tz  = "America/Chicago";
-const dallas     = moment.tz(tz);
-const monthS  = dallas.clone().startOf("month").format("YYYY-MM-DD");
-const monthE  = dallas.clone().endOf("month").format("YYYY-MM-DD");
-
-// flatpickr initialisation
-const picker = flatpickr("#dallasDateRange", {
-  mode        : "range",
-  dateFormat  : "Y-m-d",
-  defaultDate : [monthS, monthE],          // whole current month
-  altInput    : true,                      // pretty text shown to user
-  altFormat   : "F Y",                     // shows e.g. “July 2025” on load
-  locale      : { rangeSeparator: " to " },
-
-  plugins: [
-    // ↔ month header becomes a month-select “wheel”
-    new monthSelectPlugin({
-       shorthand: true,          // “Jul” instead of “July” in header
-       dateFormat: "Y-m-d",      // internally still a full date
-       theme: "light"
-    }),
-    // ➡ shortcut 'Today'
-    new shortcutButtonsPlugin({
-      button: [{
-        label: "Today",
-        onClick: (fp) => {
-          const today = moment.tz(tz).format("YYYY-MM-DD");
-          fp.setDate([today, today], true);
-        }
-      }]
-    })
-  ],
-
-  // fired every time the user picks something
- onChange(selectedDates, str, fp) {
-  if (!selectedDates.length) return;
-
-  // Detect if user picked just a month (via plugin)
-  if (fp.pluginElements && fp.pluginElements.monthSelect) {
-    const first = moment(selectedDates[0]).tz(tz).startOf("month");
-    const last  = first.clone().endOf("month");
-    fp.setDate([first.format("YYYY-MM-DD"), last.format("YYYY-MM-DD")], true);
-    return; // `onChange` will fire again with full range
-  }
-
-  // If only one date is selected, treat it as a single-day range
-  if (selectedDates.length === 1) {
-    const day = moment(selectedDates[0]).tz(tz).format("YYYY-MM-DD");
-    fp.setDate([day, day], true);
-    return;
-  }
-
-  // Full valid range picked – time to fetch data
-  const from = moment(selectedDates[0]).tz(tz).startOf("day").toISOString();
-  const to   = moment(selectedDates[1]).tz(tz).endOf("day").toISOString();
-
-  runFilter(from, to); // 👈 your existing data fetch + render function
-},
-
-  // UI polish – add a “Use This Month” button
-  onReady(_, __, fp) {
-    const btn = fp._createElement("button", "flatpickr-month-btn", "Use This Month");
-    btn.style.width  = "100%";
-    btn.style.marginTop = "4px";
-    btn.addEventListener("click", () => {
-      const first = moment(fp.currentYear + "-" + (fp.currentMonth+1), "YYYY-M")
-                    .tz(tz).startOf("month");
-      const last  = first.clone().endOf("month");
-      fp.setDate([first.format("YYYY-MM-DD"), last.format("YYYY-MM-DD")], true);
-    });
-    fp.calendarContainer.appendChild(btn);
-  }
-});
-function runFilter(startISO, endISO) {
-  console.log("🔍 Filtering from:", startISO, "to", endISO);
-
-  axios.get("/orders/placed", {
-    params: { start: startISO, end: endISO },
-    headers: token ? { Authorization: `Bearer ${token}` } : {}
-  })
-  .then(response => {
-    const allOrders = response.data;
-    document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrders.length}`;
-    renderOrders(allOrders); // ⚙️ your UI rendering logic
-  })
-  .catch(err => {
-    console.error("Error fetching orders:", err);
-    alert("❌ Failed to load data.");
-  });
-}
-
   let sortOrder = {
   orderDate: "asc",
   orderNo: "asc",
@@ -228,7 +136,7 @@ function runFilter(startISO, endISO) {
   }
   }
   if (!token) {
-   fetchToken();
+  await fetchToken();
   }
   // Team-based and role-based restrictions
   if (team === "Team Charlie" || role === "Sales") {
@@ -646,31 +554,45 @@ if (team in teamAgentsMap) {
   });
   }
   $("#filterButton").click(async function () {
-  const dateRange = $("#dallasDateRange").val(); 
-  let url = "";
-  let params = {};
-
-  if (dateRange.includes("to")) {
-    const [from, to] = dateRange.split("to").map(d => d.trim());
-    const start = moment.tz(from, "America/Chicago").startOf("day").toISOString();
-    const end = moment.tz(to, "America/Chicago").endOf("day").toISOString();
-    params = { start, end };
-  } else {
-    const monthYear = $("#monthYearPicker").val(); 
-    const [year, monthNum] = monthYear.split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = months[parseInt(monthNum) - 1];
-    params = { month, year };
-  }
-
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");    
+  $("#loadingMessage").show();
+  var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
+  const [year, monthNumber] = monthYear.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+  console.log("month",month,year);
   try {
-    const response = await axios.get("/orders/placed", { params });
-    renderOrders(response.data);
-  } catch (err) {
-    console.error("Error fetching orders:", err);
+  const ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (ordersResponse.status !== 200) {
+  throw new Error("Failed to fetch current month's orders");
   }
-});
-
+  allOrders = ordersResponse.data;
+const teamAgentsMap = {
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
+};
+console.log("team",team)
+if (team in teamAgentsMap) {
+  allOrders = allOrders.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
+  // console.log("allorders at filter btn",allOrders);
+  var allOrdersLength = allOrders.length;
+  document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrdersLength}`;
+  renderOrders(allOrders);
+  } catch (error) {
+  console.error("Error fetching current month's orders:", error);
+  } finally {
+  // Hiding loading overlay regardless of success or error
+  $("#loadingMessage").hide();
+  $(".modal-overlay").remove();
+  $("body").removeClass("modal-active");
+  }
+  });
   $('#closeCancelled').on('click', function(e) {
   $("#cancellingOrder").fadeOut();
   $(".modal-overlay").remove();
