@@ -210,13 +210,24 @@ id="searchInput"
 placeholder="Search..."
 />
 </div>
-<button id="downloadCsv" class="btn">
+<button id="downloadCsv" class="btn"  ddf>
   <i class="fas fa-download"></i>  <!-- This is the download icon -->
 </button>
 </div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
-<input id="monthYearPicker" type="month" class="form-control"  />
+<div id="dateRangeControls" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+  <button id="prevYear" class="btn btn-outline-secondary">&laquo;</button>
+  
+  <label for="startDateTime">From:</label>
+  <input id="startDateTime" type="datetime-local" class="form-control" />
+  
+  <label for="endDateTime">To:</label>
+  <input id="endDateTime" type="datetime-local" class="form-control" />
+
+  <button id="nextYear" class="btn btn-outline-secondary">&raquo;</button>
+  <button id="todayButton" class="btn btn-info">Today</button>
+</div>
 <button id="filterButton" class="btn btn-primary" >Filter</button>
 <!-- </div> -->
 <div id="showTotalOrders">Placed Orders-</div>

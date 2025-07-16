@@ -553,46 +553,80 @@ if (team in teamAgentsMap) {
   return orderNoB - orderNoA;
   });
   }
-  $("#filterButton").click(async function () {
-  $("body").append('<div class="modal-overlay"></div>');
-  $("body").addClass("modal-active");    
-  $("#loadingMessage").show();
-  var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
-  const [year, monthNumber] = monthYear.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[parseInt(monthNumber, 10) - 1];
-  console.log("month",month,year);
-  try {
-  const ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
-  if (ordersResponse.status !== 200) {
-  throw new Error("Failed to fetch current month's orders");
-  }
-  allOrders = ordersResponse.data;
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
-console.log("team",team)
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
+  function getDallasDateTimeISO(offsetHours = 0) {
+  const now = new Date();
+  const options = {
+    timeZone: 'America/Chicago',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false
+  };
+  const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(now);
+  let date = new Date(`${parts[4].value}-${parts[0].value}-${parts[2].value}T${parts[6].value}:${parts[8].value}:${parts[10].value}`);
+  date.setHours(date.getHours() + offsetHours);
+  return date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
 }
-  // console.log("allorders at filter btn",allOrders);
-  var allOrdersLength = allOrders.length;
-  document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrdersLength}`;
-  renderOrders(allOrders);
-  } catch (error) {
-  console.error("Error fetching current month's orders:", error);
-  } finally {
-  // Hiding loading overlay regardless of success or error
-  $("#loadingMessage").hide();
-  $(".modal-overlay").remove();
-  $("body").removeClass("modal-active");
+
+// On page load
+$("#startDateTime").val(getDallasDateTimeISO(-1)); // 1hr before now
+$("#endDateTime").val(getDallasDateTimeISO());     // now
+
+$("#todayButton").on("click", function () {
+  $("#startDateTime").val(getDallasDateTimeISO(0).split("T")[0] + "T00:00");
+  $("#endDateTime").val(getDallasDateTimeISO());
+});
+$("#filterButton").click(async function () {
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
+
+  const start = $("#startDateTime").val();
+  const end = $("#endDateTime").val();
+
+  if (!start || !end) {
+    alert("Please select both start and end date & time.");
+    return;
   }
-  });
+
+  try {
+    const ordersResponse = await axios.get(
+      `https://www.spotops360.com/orders/placed?start=${start}&end=${end}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      }
+    );
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch filtered orders");
+    }
+
+    let allOrders = ordersResponse.data;
+
+    // 🔐 Here's your original team filter — untouched
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    console.log("team", team);
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter((order) =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    const allOrdersLength = allOrders.length;
+    document.getElementById("showTotalOrders").innerHTML = `Placed Orders - ${allOrdersLength}`;
+
+    renderOrders(allOrders);
+  } catch (error) {
+    console.error("Error fetching filtered orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
+});
   $('#closeCancelled').on('click', function(e) {
   $("#cancellingOrder").fadeOut();
   $(".modal-overlay").remove();

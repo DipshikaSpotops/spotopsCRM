@@ -111,6 +111,13 @@ background-color: #c0c0c0;
 text-align: center;
 padding: 10px;
 }
+/* refund modal */
+#collectRefundContainer{
+  margin: 3% 4%;
+}
+#collectRefundContainer label{
+font-family: inherit;
+}
 #refundCollect {
   background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;
 display: none; /* Initially hidden */
