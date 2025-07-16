@@ -46,7 +46,9 @@ createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filtere
 let filteredOrders = []; 
 $("#userDropdown").on("change", function () {
     const selectedAgent = $(this).val();
-    currentPage = 1; // <--- Add this line here to reset the page to 1
+
+    // Reset page to 1
+    currentPage = 1;
 
     if (selectedAgent && selectedAgent !== "All") {
         filteredOrders = allOrders.filter(order =>
@@ -55,14 +57,23 @@ $("#userDropdown").on("change", function () {
 
         calculateAndUpdateTotals(filteredOrders);
         document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${filteredOrders.length}`;
-        renderTableRows(currentPage, filteredOrders); // using currentPage
-        createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+
+        renderTableRows(currentPage, filteredOrders);
+        createPaginationControls(
+            Math.ceil(filteredOrders.length / rowsPerPage),
+            filteredOrders
+        );
     } else {
         filteredOrders = allOrders;
+
         calculateAndUpdateTotals(allOrders);
         document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${allOrders.length}`;
+
         renderTableRows(currentPage, allOrders);
-        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+        createPaginationControls(
+            Math.ceil(allOrders.length / rowsPerPage),
+            allOrders
+        );
     }
 });
 
@@ -177,7 +188,7 @@ if (!firstName) {
 window.location.href = "login_signup.html";
 }
 // Function to create pagination controls
-function createPaginationControls(totalPages) {
+function createPaginationControls(totalPages,currentPageArg = 1) {
   const paginationControls = $('#pagination-controls');
   paginationControls.empty(); // Clear existing buttons
 
