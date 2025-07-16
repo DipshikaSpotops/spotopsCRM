@@ -170,6 +170,7 @@ display: none;
   border: none;
   font-size: 24px;
   cursor: pointer;
+  margin-top: 2%;
 }
 #cardCharged label {
   display: block;
