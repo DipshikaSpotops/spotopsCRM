@@ -4,7 +4,7 @@ $(document).ready(async function () {
   });
   flatpickr("#dallasDateRange", {
     dateFormat: "Y-m-d", // or "Y-m" if month picker only
-  defaultDate: getDallasTodayISO(),
+  defaultDate: getDallasToday(),
   onReady: function (selectedDates, dateStr, instance) {
     // Create custom "Today" button
     const todayBtn = document.createElement("div");
