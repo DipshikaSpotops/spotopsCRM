@@ -3,11 +3,27 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
   flatpickr("#dallasDateRange", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  defaultDate: [getDallasToday(), getDallasToday()],
-  onChange: function(selectedDates, dateStr, instance) {
-    console.log("Selected:", dateStr);
+    dateFormat: "Y-m-d", // or "Y-m" if month picker only
+  defaultDate: getDallasTodayISO(),
+  onReady: function (selectedDates, dateStr, instance) {
+    // Create custom "Today" button
+    const todayBtn = document.createElement("div");
+    todayBtn.innerText = "Today";
+    todayBtn.style.cssText = "text-align: center; color: #007BFF; cursor: pointer; padding: 5px;";
+    todayBtn.classList.add("flatpickr-today-btn");
+
+    // Append to calendar container
+    instance.calendarContainer.appendChild(todayBtn);
+
+    // Hook the click
+    todayBtn.addEventListener("click", () => {
+      const today = getDallasTodayISO();
+      instance.setDate(today);
+      instance.close();
+
+      // Trigger your filter logic
+      $("#todayButton").trigger("click"); // optional: if using separate logic
+    });
   }
 });
 
@@ -578,7 +594,7 @@ if (team in teamAgentsMap) {
   });
   }
  $("#filterButton").click(async function () {
-  const selectedRange = $("#dallasDateRange").val(); // Format: "2025-07-01 to 2025-07-16"
+  const selectedRange = $("#dallasDateRange").val(); 
   if (!selectedRange.includes("to")) {
     alert("Please select a valid date range.");
     return;

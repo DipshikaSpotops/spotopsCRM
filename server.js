@@ -894,27 +894,43 @@ app.get('/ordersPerPage', async (req, res) => {
 // for only placed orders
 app.get('/orders/placed', async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("placed",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
+    const { month, year, start, end } = req.query;
+    let filter = { orderStatus: "Placed" };
 
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
-
-    const orders = await Order.find({
-      orderDate: {
+    // ✅ Support start & end date (Dallas time range)
+    if (start && end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      endDate.setDate(endDate.getDate() + 1); // include end of the day
+      filter.orderDate = {
         $gte: startDate,
         $lt: endDate
-      },orderStatus: "Placed",
-    });
+      };
+    }
+    // 🗓️ Fallback to month/year logic
+    else if (month && year) {
+      const monthMap = {
+        Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+        Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
+      };
 
+      const paddedMonth = month.length === 3 ? monthMap[month] : month.padStart(2, '0');
+      const startDate = new Date(`${year}-${paddedMonth}-01T00:00:00-06:00`);
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 1);
+
+      filter.orderDate = {
+        $gte: startDate,
+        $lt: endDate
+      };
+    } else {
+      return res.status(400).json({ message: "Provide either month/year or start/end" });
+    }
+
+    const orders = await Order.find(filter);
     res.json(orders);
   } catch (error) {
-    console.error("Error fetching placed orders for specified month and year:", error);
+    console.error("🔥 Error fetching placed orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
