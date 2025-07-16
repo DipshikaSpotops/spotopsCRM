@@ -152,12 +152,14 @@ May: "05", Jun: "06", Jul: "07", Aug: "08",
 Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 };
 var monthNum = monthMap[month];
+const returningFromForm = localStorage.getItem("returningFromForm") === "true";
 const savedMonth = localStorage.getItem("ongoingEscalationMonth");
-if (savedMonth) {
+if (returningFromForm && savedMonth) {
   $("#monthYearPicker").val(savedMonth);
 } else {
   $("#monthYearPicker").val(`${year}-${monthNum}`);
 }
+
 try {
 const [selectedYear, selectedMonthNum] = $("#monthYearPicker").val().split("-");
 const selectedMonthName = months[parseInt(selectedMonthNum) - 1];
@@ -186,6 +188,8 @@ document.getElementById("showTotalOrders").innerHTML = `Ongoing Escalations- ${t
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+localStorage.removeItem("ongoingEscalationMonth");
+localStorage.removeItem("returningFromForm");
 } catch (error) {
 console.error("Error fetching current month's orders:", error);
 }
@@ -237,9 +241,9 @@ window.location.href = `form.html?orderNo=${id}`;
 
 $("#infoTable").on("click", ".process-btn", function () {
   const id = $(this).data("id");
+  localStorage.setItem("returningFromForm", "true");
   const selectedMonthYear = $("#monthYearPicker").val();
   localStorage.setItem("ongoingEscalationMonth", selectedMonthYear);
-
   window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
