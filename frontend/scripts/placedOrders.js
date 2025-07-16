@@ -3,37 +3,41 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
   flatpickr("#dallasDateRange", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  defaultDate: [
-    moment.tz("America/Chicago").startOf("month").format("YYYY-MM-DD"),
-    moment.tz("America/Chicago").endOf("month").format("YYYY-MM-DD")
-  ],
-   plugins: [new shortcutButtonsPlugin({
-    button: [
-      {
-        label: "Today",
-        onClick: (fp) => {
-          const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
-          fp.setDate([today, today], true);
-        }
+    mode: "range",
+    dateFormat: "Y-m-d",
+    defaultDate: [
+      moment.tz("America/Chicago").startOf("month").format("YYYY-MM-DD"),
+      moment.tz("America/Chicago").endOf("month").format("YYYY-MM-DD")
+    ],
+    onReady: function(selectedDates, dateStr, instance) {
+      // Create Today button
+      const todayBtn = document.createElement("button");
+      todayBtn.textContent = "Today";
+      todayBtn.type = "button";
+      todayBtn.className = "flatpickr-today-button";
+      todayBtn.style.marginTop = "5px";
+      todayBtn.style.width = "100%";
+      todayBtn.style.padding = "5px";
+
+      todayBtn.addEventListener("click", () => {
+        const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
+        instance.setDate([today, today], true);
+        instance.close();
+      });
+
+      instance.calendarContainer.appendChild(todayBtn);
+    },
+    onClose: function(selectedDates) {
+      if (selectedDates.length === 2) {
+        const start = moment(selectedDates[0]).tz("America/Chicago").startOf("day").toISOString();
+        const end = moment(selectedDates[1]).tz("America/Chicago").endOf("day").toISOString();
+        console.log("✅ Dallas Start:", start);
+        console.log("✅ Dallas End:", end);
+      } else {
+        alert("⚠️ Please select both From and To dates.");
       }
-    ]
-  })],
-  onClose: function(selectedDates) {
-    if (selectedDates.length === 2) {
-      const dallasStart = moment(selectedDates[0]).tz("America/Chicago").startOf("day").toISOString();
-      const dallasEnd = moment(selectedDates[1]).tz("America/Chicago").endOf("day").toISOString();
-
-      console.log("Dallas Start:", dallasStart);
-      console.log("Dallas End:", dallasEnd);
-
-      // Optional: Call your backend here
-      // axios.get(`/orders/placed?start=${dallasStart}&end=${dallasEnd}`)
-    } else {
-      alert("Please select both From and To dates.");
     }
-  }
+  });
 });
 
 function getDallasToday() {
