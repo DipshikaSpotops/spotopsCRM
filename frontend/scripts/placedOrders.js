@@ -3,60 +3,96 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
 
-const nowDallas = moment.tz("America/Chicago");
-const startOfMonth = nowDallas.clone().startOf("month").format("YYYY-MM-DD");
-const endOfMonth = nowDallas.clone().endOf("month").format("YYYY-MM-DD");
+const tz      = "America/Chicago";
+const dallas     = moment.tz(tz);
+const monthS  = dallas.clone().startOf("month").format("YYYY-MM-DD");
+const monthE  = dallas.clone().endOf("month").format("YYYY-MM-DD");
 
-// Set hidden input to YYYY-MM (in case you're using it elsewhere)
-$("#monthYearPicker").val(nowDallas.format("YYYY-MM"));
+// flatpickr initialisation
+const picker = flatpickr("#dallasDateRange", {
+  mode        : "range",
+  dateFormat  : "Y-m-d",
+  defaultDate : [monthS, monthE],          // whole current month
+  altInput    : true,                      // pretty text shown to user
+  altFormat   : "F Y",                     // shows e.g. “July 2025” on load
+  locale      : { rangeSeparator: " to " },
 
-flatpickr("#dallasDateRange", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  defaultDate: [startOfMonth, endOfMonth],
+  plugins: [
+    // ↔ month header becomes a month-select “wheel”
+    new monthSelectPlugin({
+       shorthand: true,          // “Jul” instead of “July” in header
+       dateFormat: "Y-m-d",      // internally still a full date
+       theme: "light"
+    }),
+    // ➡ shortcut 'Today'
+    new shortcutButtonsPlugin({
+      button: [{
+        label: "Today",
+        onClick: (fp) => {
+          const today = moment.tz(tz).format("YYYY-MM-DD");
+          fp.setDate([today, today], true);
+        }
+      }]
+    })
+  ],
 
-  onReady: function (selectedDates, dateStr, instance) {
-    // 📅 Show "July 2025" instead of range
-    instance._input.value = nowDallas.format("MMMM YYYY");
+  // fired every time the user picks something
+ onChange(selectedDates, str, fp) {
+  if (!selectedDates.length) return;
 
-    // 🧨 Add Today button
-    const todayBtn = document.createElement("button");
-    todayBtn.textContent = "Today";
-    todayBtn.type = "button";
-    todayBtn.className = "flatpickr-today-button";
-    todayBtn.style.marginTop = "5px";
-    todayBtn.style.width = "100%";
-    todayBtn.style.padding = "5px";
+  // Detect if user picked just a month (via plugin)
+  if (fp.pluginElements && fp.pluginElements.monthSelect) {
+    const first = moment(selectedDates[0]).tz(tz).startOf("month");
+    const last  = first.clone().endOf("month");
+    fp.setDate([first.format("YYYY-MM-DD"), last.format("YYYY-MM-DD")], true);
+    return; // `onChange` will fire again with full range
+  }
 
-    todayBtn.addEventListener("click", () => {
-      const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
-      instance.setDate([today, today], true);
-      instance._input.value = moment.tz("America/Chicago").format("MMMM D, YYYY");
-      instance.close();
+  // If only one date is selected, treat it as a single-day range
+  if (selectedDates.length === 1) {
+    const day = moment(selectedDates[0]).tz(tz).format("YYYY-MM-DD");
+    fp.setDate([day, day], true);
+    return;
+  }
+
+  // Full valid range picked – time to fetch data
+  const from = moment(selectedDates[0]).tz(tz).startOf("day").toISOString();
+  const to   = moment(selectedDates[1]).tz(tz).endOf("day").toISOString();
+
+  runFilter(from, to); // 👈 your existing data fetch + render function
+},
+
+  // UI polish – add a “Use This Month” button
+  onReady(_, __, fp) {
+    const btn = fp._createElement("button", "flatpickr-month-btn", "Use This Month");
+    btn.style.width  = "100%";
+    btn.style.marginTop = "4px";
+    btn.addEventListener("click", () => {
+      const first = moment(fp.currentYear + "-" + (fp.currentMonth+1), "YYYY-M")
+                    .tz(tz).startOf("month");
+      const last  = first.clone().endOf("month");
+      fp.setDate([first.format("YYYY-MM-DD"), last.format("YYYY-MM-DD")], true);
     });
-
-    instance.calendarContainer.appendChild(todayBtn);
-  },
-
-  onChange: function (selectedDates, dateStr, instance) {
-    if (selectedDates.length === 2) {
-      const from = moment(selectedDates[0]).tz("America/Chicago").format("YYYY-MM-DD");
-      const to = moment(selectedDates[1]).tz("America/Chicago").format("YYYY-MM-DD");
-      instance._input.value = `${from} to ${to}`;
-    }
-  },
-
-  onClose: function (selectedDates, dateStr, instance) {
-    if (selectedDates.length === 2) {
-      const start = moment(selectedDates[0]).tz("America/Chicago").startOf("day").toISOString();
-      const end = moment(selectedDates[1]).tz("America/Chicago").endOf("day").toISOString();
-      console.log("Dallas Start:", start);
-      console.log("Dallas End:", end);
-    } else {
-      alert("Please select both From and To dates.");
-    }
+    fp.calendarContainer.appendChild(btn);
   }
 });
+function runFilter(startISO, endISO) {
+  console.log("🔍 Filtering from:", startISO, "to", endISO);
+
+  axios.get("/orders/placed", {
+    params: { start: startISO, end: endISO },
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  })
+  .then(response => {
+    const allOrders = response.data;
+    document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrders.length}`;
+    renderOrders(allOrders); // ⚙️ your UI rendering logic
+  })
+  .catch(err => {
+    console.error("Error fetching orders:", err);
+    alert("❌ Failed to load data.");
+  });
+}
 
   let sortOrder = {
   orderDate: "asc",
