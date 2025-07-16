@@ -39,7 +39,7 @@ document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${f
 
 // Render the filtered orders in the table
 renderTableRows(1, filteredOrders);
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), currentPage);
 }
 
 // Attach change event to the dropdown
@@ -214,7 +214,7 @@ $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
     renderTableRows(currentPage, filteredOrders.length ? filteredOrders : allOrders);
-    createPaginationControls(Math.ceil((filteredOrders.length ? filteredOrders.length : allOrders.length) / rowsPerPage), filteredOrders.length ? filteredOrders : allOrders);
+    createPaginationControls(totalPages, currentPage);
   }
 });
 
@@ -223,7 +223,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   if (currentPage < totalPages) {
     currentPage++;
     renderTableRows(currentPage, filteredOrders.length ? filteredOrders : allOrders);
-    createPaginationControls(totalPages, filteredOrders.length ? filteredOrders : allOrders);
+    createPaginationControls(totalPages, currentPage);
   }
 });
 // Token fetching logic
@@ -315,7 +315,7 @@ document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${a
 
 // Calculate totals and render the first page
 calculateAndUpdateTotals(allOrders);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), 1);
 renderTableRows(1, allOrders); // Render the first page
 } catch (error) {
 console.error("Error fetching orders:", error);
@@ -380,7 +380,7 @@ return basicSearch || yardSearch;
 // If a search is active, display the filtered results, otherwise reset to the full dataset
 if (filteredOrders.length > 0 || value === "") {
 renderTableRows(1, filteredOrders); // Render the first page of filtered results
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), currentPage);
 } else {
 $("#infoTable").empty(); // Clear the table if no results are found
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
@@ -501,7 +501,8 @@ $("#filterButton").click(async function () {
      $("#userDropdown").val("Select");
         // Render the filtered orders
         renderTableRows(1, allOrders);
-        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), allOrders);
+        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), 1);
+
 
     } catch (error) {
         console.error("Error fetching filtered orders:", error);
