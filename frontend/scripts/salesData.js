@@ -61,7 +61,7 @@ $("#userDropdown").on("change", function () {
         renderTableRows(currentPage, filteredOrders);
         createPaginationControls(
             Math.ceil(filteredOrders.length / rowsPerPage),
-            filteredOrders
+            currentPage
         );
     } else {
         filteredOrders = allOrders;
