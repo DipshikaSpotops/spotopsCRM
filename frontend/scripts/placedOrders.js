@@ -2,6 +2,8 @@ $(document).ready(async function () {
     $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
+  const nowDallas = moment.tz("America/Chicago");
+$("#monthYearPicker").val(nowDallas.format("YYYY-MM"));
   flatpickr("#dallasDateRange", {
     mode: "range",
     dateFormat: "Y-m-d",
