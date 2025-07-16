@@ -31,8 +31,8 @@ const picker = new Litepicker({
   singleMode: false,
   format: "YYYY-MM-DD",
   autoApply: true,
-  numberOfMonths: 2,
-  numberOfColumns: 2,
+  numberOfMonths: 1,
+  numberOfColumns: 1,
   setup: (picker) => {
     // 🔥 On any date range selected
     picker.on("selected", (startDate, endDate) => {
