@@ -1438,12 +1438,13 @@ if (data) {
 updateOrderHistory(data.orderHistory);
 showYardDetails(selectedYardIndex);
 fetchAndUpdateYardInfo();
-window.location.reload();
 }
 })
 .catch((error) => {
 console.error("Error:", error);
 });
+
+window.location.reload();
 });
 
 // refundCollect part ends here
