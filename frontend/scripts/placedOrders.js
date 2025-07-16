@@ -2,59 +2,61 @@ $(document).ready(async function () {
     $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
-  const nowDallas = moment.tz("America/Chicago");
+
+const nowDallas = moment.tz("America/Chicago");
+const startOfMonth = nowDallas.clone().startOf("month").format("YYYY-MM-DD");
+const endOfMonth = nowDallas.clone().endOf("month").format("YYYY-MM-DD");
+
+// Set hidden input to YYYY-MM (in case you're using it elsewhere)
 $("#monthYearPicker").val(nowDallas.format("YYYY-MM"));
-  flatpickr("#dallasDateRange", {
-    mode: "range",
-    dateFormat: "Y-m-d",
-    defaultDate: [
-      moment.tz("America/Chicago").startOf("month").format("YYYY-MM-DD"),
-      moment.tz("America/Chicago").endOf("month").format("YYYY-MM-DD")
-    ],
-    onReady: function(selectedDates, dateStr, instance) {
-      // Create Today button
-      const todayBtn = document.createElement("button");
-      todayBtn.textContent = "Today";
-      todayBtn.type = "button";
-      todayBtn.className = "flatpickr-today-button";
-      todayBtn.style.marginTop = "5px";
-      todayBtn.style.width = "100%";
-      todayBtn.style.padding = "5px";
 
-      todayBtn.addEventListener("click", () => {
-        const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
-        instance.setDate([today, today], true);
-        instance.close();
-      });
+flatpickr("#dallasDateRange", {
+  mode: "range",
+  dateFormat: "Y-m-d",
+  defaultDate: [startOfMonth, endOfMonth],
 
-      instance.calendarContainer.appendChild(todayBtn);
-    },
-    onClose: function(selectedDates) {
-      if (selectedDates.length === 2) {
-        const start = moment(selectedDates[0]).tz("America/Chicago").startOf("day").toISOString();
-        const end = moment(selectedDates[1]).tz("America/Chicago").endOf("day").toISOString();
-        console.log("✅ Dallas Start:", start);
-        console.log("✅ Dallas End:", end);
-      } else {
-        alert("⚠️ Please select both From and To dates.");
-      }
+  onReady: function (selectedDates, dateStr, instance) {
+    // 📅 Show "July 2025" instead of range
+    instance._input.value = nowDallas.format("MMMM YYYY");
+
+    // 🧨 Add Today button
+    const todayBtn = document.createElement("button");
+    todayBtn.textContent = "Today";
+    todayBtn.type = "button";
+    todayBtn.className = "flatpickr-today-button";
+    todayBtn.style.marginTop = "5px";
+    todayBtn.style.width = "100%";
+    todayBtn.style.padding = "5px";
+
+    todayBtn.addEventListener("click", () => {
+      const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
+      instance.setDate([today, today], true);
+      instance._input.value = moment.tz("America/Chicago").format("MMMM D, YYYY");
+      instance.close();
+    });
+
+    instance.calendarContainer.appendChild(todayBtn);
+  },
+
+  onChange: function (selectedDates, dateStr, instance) {
+    if (selectedDates.length === 2) {
+      const from = moment(selectedDates[0]).tz("America/Chicago").format("YYYY-MM-DD");
+      const to = moment(selectedDates[1]).tz("America/Chicago").format("YYYY-MM-DD");
+      instance._input.value = `${from} to ${to}`;
     }
-  });
+  },
 
-function getDallasToday() {
-  const now = new Date();
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Chicago',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-  const parts = formatter.formatToParts(now);
-  const y = parts.find(p => p.type === "year").value;
-  const m = parts.find(p => p.type === "month").value;
-  const d = parts.find(p => p.type === "day").value;
-  return `${y}-${m}-${d}`;
-}
+  onClose: function (selectedDates, dateStr, instance) {
+    if (selectedDates.length === 2) {
+      const start = moment(selectedDates[0]).tz("America/Chicago").startOf("day").toISOString();
+      const end = moment(selectedDates[1]).tz("America/Chicago").endOf("day").toISOString();
+      console.log("Dallas Start:", start);
+      console.log("Dallas End:", end);
+    } else {
+      alert("Please select both From and To dates.");
+    }
+  }
+});
 
   let sortOrder = {
   orderDate: "asc",
