@@ -17,7 +17,7 @@ $(document).ready(async function () {
 
     // Hook the click
     todayBtn.addEventListener("click", () => {
-      const today = getDallasTodayISO();
+      const today = getDallasToday();
       instance.setDate(today);
       instance.close();
 
