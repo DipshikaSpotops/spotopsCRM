@@ -387,23 +387,14 @@ const token = localStorage.getItem("token");
 const email = localStorage.getItem("email");
 const role = localStorage.getItem("role");
 const team = localStorage.getItem("team");
-// const urlParams = new URLSearchParams(window.location.search);
 const isCancelled = urlParams.get('cancelled') === 'true';
-// const orderNo = urlParams.get("orderNo");
 const process = urlParams.get("process");
-// const newEntry = urlParams.get("newEntry");
 var yardIndex;
 document.getElementById("orderHistory").textContent += orderNo;
 document.getElementById("createTask").textContent += "-" + " " + orderNo;
 $("#deadline").val(`Deadline`);
-// document.getElementById("deadline").textContent = "Deadline";
 document.getElementById("yardModalLabel").textContent += orderNo;
 document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
-// console.log("orderNo:", orderNo); 
-// console.log("process:", process);
-// console.log("newEntry:", newEntry);
-// console.log("team", team, token);
-// part to check the paymentStatus and other things
 var totalSpend = []; 
 var totalSum = 0;    
 var pStatus;
@@ -542,6 +533,16 @@ console.error("Error updating actualGP:", error);
 else{
 console.log("same actyal gp foe card charged")
 }
+}else if(pStatus === "Card not charged"){
+  actualGP =  0;
+console.log("actualGPAfterDispute",totalSum,tax)
+axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+.then(function (response) {
+$("#actualGP").val(actualGP.toFixed(2));
+})
+.catch(function (error) {
+console.error("Error updating actualGP:", error);
+});
 }
 // else{
 //   actualGP = sp - tax - custRefundedAmount;
@@ -1366,6 +1367,7 @@ alert("Yard details have been updated");
 updateOrderHistory(data.orderHistory);
 showYardDetails(selectedYardIndex);
 fetchAndUpdateYardInfo();
+window.location.reload();
 }
 })
 .catch((error) => {
@@ -3668,16 +3670,12 @@ const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
 const notificationList = $("#notificationList");
 const notificationCountElement = $("#notificationCount");
-
 let unreadCount = 0;
-
-// Fetch notifications from the backend
 async function fetchNotifications() {
   try {
     const response = await axios.get("https://www.spotops360.com/notifications");
         const notifications = response.data;
- // Filter unread notifications for the logged-in user
- const unreadNotifications = notifications.filter(
+ const unreadNotifications = notifications.filter( // Filter unread notifications for the logged-in user
         (notification) => !notification.readBy.includes(firstName)
       );
     unreadCount = unreadNotifications.length;
@@ -3687,13 +3685,10 @@ async function fetchNotifications() {
     console.error("Error fetching notifications:", error);
   }
 }
-
-// Render notifications in the dropdown
-function renderNotifications(notifications) {
-  notificationList.empty(); // Clear the notification list
+function renderNotifications(notifications) {// Render notifications in the dropdown
+  notificationList.empty();
   const role = localStorage.getItem('role');
   const firstName = localStorage.getItem('firstName');
-  // Filter notifications based on role and firstName
   const filteredNotifications = notifications.filter(notification => {
     if (role === 'Admin') {
       return true; 
@@ -3710,8 +3705,7 @@ function renderNotifications(notifications) {
     `);
     return;
   }
-  // Render the last 5 notifications
-  lastFiveNotifications.forEach((notification) => {
+  lastFiveNotifications.forEach((notification) => { // Render the last 5 notifications
     let backgroundColor;
     if (notification.message.includes("Warning")) {
       backgroundColor = "#db634a";
@@ -3730,22 +3724,18 @@ function renderNotifications(notifications) {
     } else {
       backgroundColor = "black";
     }
-
     // Split the message into lines
     const lines = notification.message.split("\n");
     const firstLine = `<b>${lines[0]}</b>`;
     const remainingLines = lines.slice(1).join("<br>");
     const formattedMessage = `${firstLine}<br>${remainingLines}`;
-
-    // Create the notification item
     const notificationItem = `
       <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: black; width: 100%; border: 1px solid black;">
         ${formattedMessage}
       </li>
     `;
     notificationList.append(notificationItem);
-  });
-}
+  });}
 async function markNotificationsAsRead() {
   try {
     const role = localStorage.getItem('role');
@@ -3785,7 +3775,6 @@ async function updateUnreadCount() {
 // Toggle notification dropdown visibility
 notificationIcon.on("click", async function () {
   const isVisible = notificationDropdown.is(":visible");
-
   if (isVisible) {
     notificationDropdown.hide();
   } else {
@@ -3802,7 +3791,6 @@ $("body").addClass("modal-active");
     await markNotificationsAsRead();
   }
 });
-
 // Close dropdown when clicking outside
 $(document).on("click", function (event) {
   if (
@@ -3818,24 +3806,13 @@ fetchNotifications();
 // upload pictures to an s3 bucket
 $(".floating-icon").on("click", async function () {
   console.log("Floating icon clicked", orderNo);
-
-  // Set the order number in the input field
   $("#orderNoForPictures").val(`Order No: ${orderNo}`);
-
-  // Display the file upload modal
   document.getElementById("fileUploadModal").style.display = "flex";
   document.getElementById("fileUploadModal").style.textAlign = "center";
-
-  // Fetch and display the images from MongoDB
   try {
     const response = await axios.get(`https://www.spotops360.com/getImages?orderNo=${orderNo}`);
-    
-    console.log("orderImages", response.data);  // Correctly logging images
-    
-    // Clear any existing images in the container
+    console.log("orderImages", response.data); 
     $("#uploadedImagesContainer").empty();
-
-    // Append images to the container
     response.data.forEach((image) => {
       const imgElement = `
         <div style="margin: 5px;">
@@ -3850,48 +3827,38 @@ $(".floating-icon").on("click", async function () {
     console.error("Error fetching and displaying images:", error);
   }
 });
-
   $("#closeUploadModal").on("click",function(){ 
     document.getElementById("fileUploadModal").style.display = "none";
   })
   $(".uploadPicturesToS3").on("click", async function () {
   const files = document.getElementById("fileInput").files;
-
   if (!orderNo || files.length === 0) {
     alert("Please provide Order No and select at least one picture.");
     return;
   }
-
   const formData = new FormData();
   formData.append("orderNo", orderNo);
   Array.from(files).forEach((file) => {
     formData.append("pictures", file);
   });
-
   try {
     const response = await fetch(`https://www.spotops360.com/uploadToS3?orderNo=${orderNo}`, {
       method: "POST",
       body: formData,
     });
-
     if (!response.ok) {
       throw new Error("Failed to upload pictures");
     }
-
-    // Parse the JSON response to get image URLs
     const data = await response.json();
     console.log("Uploaded Images:", data.uploadedImages);
-
     const imagesContainer = document.getElementById("uploadedImagesContainer");
     imagesContainer.innerHTML = ""; 
-
     // Append each uploaded image
     data.uploadedImages.forEach((url) => {
       const imgElement = document.createElement("div");
       imgElement.style.width = "16.66%";  // 100% divided by 6 images per row
       imgElement.style.boxSizing = "border-box";
       imgElement.style.padding = "5px";
-
       imgElement.innerHTML = `
         <a href="${url}" target="_blank">
           <img src="${url}" alt="Uploaded Image" style="width: 100%; height: auto; border: 1px solid #ccc;" />
@@ -3899,7 +3866,6 @@ $(".floating-icon").on("click", async function () {
       `;
       imagesContainer.appendChild(imgElement);
     });
-
     alert("Pictures uploaded successfully!");
     document.getElementById("fileUploadModal").style.display = "none";
     window.location.reload();
@@ -3918,7 +3884,6 @@ disableDarkMode();
 enableDarkMode();
 }
 });
-
 function enableDarkMode() {
 $("body").addClass("dark-mode");
 $(".navbar").addClass("dark-mode");
@@ -3927,7 +3892,6 @@ $("table").addClass("table-dark");
 $("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
 localStorage.setItem("darkMode", "true");
 }
-
 function disableDarkMode() {
 $("body").removeClass("dark-mode");
 $(".navbar").removeClass("dark-mode");
@@ -3936,18 +3900,15 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
-// Function to Display Uploaded Files as Clickable Links
-function displayUploadedFiles(uploadedFiles, orderNo) {
+function displayUploadedFiles(uploadedFiles, orderNo) {// Function to Display Uploaded Files as Clickable Links
   const uploadedFilesList = document.getElementById("uploadedFilesList");
   uploadedFilesList.innerHTML = ""; // Clear previous list
-
   uploadedFiles.forEach((fileUrl) => {
     const listItem = document.createElement("li");
     const fileName = fileUrl.split("/").pop(); // Extract filename from URL
     listItem.innerHTML = `<a href="${fileUrl}" target="_blank">${fileName}</a>`;
     uploadedFilesList.appendChild(listItem);
   });
-
   document.getElementById("uploadedFilesContainer").style.display = "block";
 }
 $("#cancelShipment").on("click", function () {
@@ -4000,7 +3961,6 @@ $("#cancelShipment").on("click", function () {
       console.error("Error fetching order data:", error);
     });
 });
-
 document.getElementById('sendPOBtn').addEventListener('click', async function () {
     document.getElementById('loadingOverlay').style.display = 'block';
     document.getElementById('refund').value = "Yard PO Sent";
@@ -4012,12 +3972,10 @@ document.getElementById('sendPOBtn').addEventListener('click', async function ()
     month: '2-digit',
     day: '2-digit'
   });
-
   const yard = order.additionalInfo[i];
   const shippingDetails = yard.shippingDetails || '';
   let shipping = 0;
 let shippingValue = "-";
-
 if (shippingDetails.includes("Own shipping")) {
   shippingValue = "Own Shipping (Auto Parts Group Corp)";
 } else if (shippingDetails.includes("Yard shipping")) {
@@ -4026,12 +3984,9 @@ if (shippingDetails.includes("Own shipping")) {
     const parsed = parseFloat(match[1]);
     shipping = parsed;
     shippingValue = parsed === 0 ? "Included" : `$${parsed}`;
-  }
-}
-
+  }}
   const partPrice = parseFloat(yard.partPrice);
   const grandTotal = partPrice + shipping;
-
   const poTemplate = document.getElementById('poTemplate');
   const clone = poTemplate.cloneNode(true);
   clone.id = '';
@@ -4048,8 +4003,6 @@ if (shippingDetails.includes("Own shipping")) {
   clone.style.background = 'white';
 clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
   document.body.appendChild(clone);
-
-  // Fill dynamic data
   clone.querySelector('#po-no').textContent = order.orderNo;
   clone.querySelector('#po-date').textContent = today;
   clone.querySelector('#yard-info').innerHTML = `
@@ -4072,8 +4025,6 @@ clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
   clone.querySelector('#grand-total').innerHTML = `<strong>$${grandTotal}</strong>`;
 await new Promise(resolve => requestAnimationFrame(resolve));
 await new Promise(resolve => setTimeout(resolve, 500)); 
-
-
 const canvas = await html2canvas(clone, {
   scale: 1.5,
   useCORS: true,
@@ -4087,7 +4038,6 @@ const pdf = new jsPDF({
   format: 'a4',
   orientation: 'portrait'
 });
-
 const pdfWidth = 210;
 const pdfHeight = 297; 
 pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297); 
@@ -4096,11 +4046,8 @@ const fileName = `${order.orderNo}-PO.pdf`;
 const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
 const formData = new FormData();
 formData.append('pdfFile', pdfFile);
-    // console.log(clone.outerHTML);
   console.log("PDF blob size:", pdfBlob.size,"File size:", pdfFile.size);
   document.body.removeChild(clone);
-
-  
 for (let [k, v] of formData.entries()) console.log(k, v);
   const images = document.getElementById('poImages').files;
   for (let j = 0; j < images.length; j++) {
@@ -4137,18 +4084,14 @@ var userName  = localStorage.getItem("firstName")
 });
   const searchInput = document.getElementById('searchInputForOrderNo');
   const resultDiv = document.getElementById('searchResult');
-
   searchInput.addEventListener('input', function () {
     const orderNo = searchInput.value.trim();
-
     if (orderNo !== '') {
       resultDiv.innerHTML = `
         <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
       `;
-
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
        window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
-
       });
     } else {
       resultDiv.innerHTML = '';
