@@ -38,7 +38,6 @@ $(document).ready(async function () {
       }
     }
   });
-});
 
 function getDallasToday() {
   const now = new Date();
