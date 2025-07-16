@@ -12,7 +12,7 @@ const monthE  = dallas.clone().endOf("month").format("YYYY-MM-DD");
 const picker = flatpickr("#dallasDateRange", {
    mode: "range",
   dateFormat: "Y-m-d",
-  defaultDate: [startOfMonth, endOfMonth],
+  defaultDate: [monthS, monthE],
   onReady: function(selectedDates, dateStr, instance) {
     // Manually create "Today" button
     const todayBtn = document.createElement("button");
