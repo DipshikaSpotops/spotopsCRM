@@ -213,6 +213,11 @@ function createPaginationControls(totalPages,currentPageArg = 1) {
 $('#pagination-controls').on('click', '#prevPage', function () {
   if (currentPage > 1) {
     currentPage--;
+
+    const totalPages = Math.ceil(
+      (filteredOrders.length ? filteredOrders.length : allOrders.length) / rowsPerPage
+    );
+
     renderTableRows(currentPage, filteredOrders.length ? filteredOrders : allOrders);
     createPaginationControls(totalPages, currentPage);
   }
