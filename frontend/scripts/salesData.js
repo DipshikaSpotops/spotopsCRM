@@ -200,7 +200,7 @@ function createPaginationControls(totalPages,currentPageArg = 1) {
 
     // Page number display: Page X of Y
     paginationControls.append(`
-      <span class="page-info">Page ${currentPageArg} of ${totalPages}</span>
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
     `);
 
     // Right arrow for "Next" page
