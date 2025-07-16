@@ -18,11 +18,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css
 rel="stylesheet"
 />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/shortcutButtons/shortcutButtons.min.css">
 <link rel="stylesheet" href="/css/placedOrders.css" />
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-timezone/builds/moment-timezone-with-data.min.js"></script>
+<!-- Shortcut Buttons Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/shortcutButtons/shortcutButtons.min.js"></script>
 <script src="/scripts/placedOrders.js"></script>
 <script>
 const firstName = localStorage.getItem("firstName");
@@ -208,7 +213,7 @@ placeholder="Search..."
 </div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
-<input id="dallasDateRange" placeholder="Select Date Range" class="form-control" />
+<input type="text" id="dallasDateRange" placeholder="Select Date Range" />
 <button id="filterButton" class="btn btn-primary" >Filter</button>
 <!-- </div> -->
 <div id="showTotalOrders">Placed Orders-</div>

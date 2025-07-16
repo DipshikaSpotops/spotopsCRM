@@ -903,7 +903,7 @@ app.get('/orders/placed', async (req, res) => {
     if (start && end) {
       const startDate = new Date(start);
       const endDate = new Date(end);
-      endDate.setDate(endDate.getDate() + 1); // include the full end day
+      endDate.setDate(endDate.getDate() + 1); 
 
       console.log("🕒 Parsed Start Date (ISO):", startDate.toISOString());
       console.log("🕒 Parsed End Date (+1 day, ISO):", endDate.toISOString());

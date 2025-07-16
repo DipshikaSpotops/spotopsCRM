@@ -3,27 +3,36 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
   flatpickr("#dallasDateRange", {
-    dateFormat: "Y-m-d", // or "Y-m" if month picker only
-  defaultDate: getDallasToday(),
-  onReady: function (selectedDates, dateStr, instance) {
-    // Create custom "Today" button
-    const todayBtn = document.createElement("div");
-    todayBtn.innerText = "Today";
-    todayBtn.style.cssText = "text-align: center; color: #007BFF; cursor: pointer; padding: 5px;";
-    todayBtn.classList.add("flatpickr-today-btn");
+  mode: "range",
+  dateFormat: "Y-m-d",
+  defaultDate: [
+    moment.tz("America/Chicago").startOf("month").format("YYYY-MM-DD"),
+    moment.tz("America/Chicago").endOf("month").format("YYYY-MM-DD")
+  ],
+   plugins: [new shortcutButtonsPlugin({
+    button: [
+      {
+        label: "Today",
+        onClick: (fp) => {
+          const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
+          fp.setDate([today, today], true);
+        }
+      }
+    ]
+  })],
+  onClose: function(selectedDates) {
+    if (selectedDates.length === 2) {
+      const dallasStart = moment(selectedDates[0]).tz("America/Chicago").startOf("day").toISOString();
+      const dallasEnd = moment(selectedDates[1]).tz("America/Chicago").endOf("day").toISOString();
 
-    // Append to calendar container
-    instance.calendarContainer.appendChild(todayBtn);
+      console.log("Dallas Start:", dallasStart);
+      console.log("Dallas End:", dallasEnd);
 
-    // Hook the click
-    todayBtn.addEventListener("click", () => {
-      const today = getDallasToday();
-      instance.setDate(today);
-      instance.close();
-
-      // Trigger your filter logic
-      $("#todayButton").trigger("click"); // optional: if using separate logic
-    });
+      // Optional: Call your backend here
+      // axios.get(`/orders/placed?start=${dallasStart}&end=${dallasEnd}`)
+    } else {
+      alert("Please select both From and To dates.");
+    }
   }
 });
 
@@ -593,38 +602,29 @@ if (team in teamAgentsMap) {
   return orderNoB - orderNoA;
   });
   }
- $("#filterButton").click(async function () {
-  const selectedRange = $("#dallasDateRange").val(); 
-  if (!selectedRange.includes("to")) {
-    alert("Please select a valid date range.");
-    return;
+  $("#filterButton").click(async function () {
+  const dateRange = $("#dallasDateRange").val(); 
+  let url = "";
+  let params = {};
+
+  if (dateRange.includes("to")) {
+    const [from, to] = dateRange.split("to").map(d => d.trim());
+    const start = moment.tz(from, "America/Chicago").startOf("day").toISOString();
+    const end = moment.tz(to, "America/Chicago").endOf("day").toISOString();
+    params = { start, end };
+  } else {
+    const monthYear = $("#monthYearPicker").val(); 
+    const [year, monthNum] = monthYear.split("-");
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = months[parseInt(monthNum) - 1];
+    params = { month, year };
   }
 
-  const [start, end] = selectedRange.split(" to ");
-
   try {
-    const response = await axios.get(`https://www.spotops360.com/orders/placed?start=${start}&end=${end}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
-    });
-
-    let allOrders = response.data;
-
-    // ✅ Apply team filter as before
-    const teamAgentsMap = {
-      Shankar: ["David", "John"],
-      Vinutha: ["Michael", "Mark"]
-    };
-
-    if (team in teamAgentsMap) {
-      allOrders = allOrders.filter(order =>
-        teamAgentsMap[team].includes(order.salesAgent)
-      );
-    }
-
-    renderOrders(allOrders);
-    $("#showTotalOrders").text(`Placed Orders - ${allOrders.length}`);
+    const response = await axios.get("/orders/placed", { params });
+    renderOrders(response.data);
   } catch (err) {
-    console.error("Error fetching filtered orders:", err);
+    console.error("Error fetching orders:", err);
   }
 });
 
