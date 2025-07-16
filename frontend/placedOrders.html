@@ -21,15 +21,6 @@ rel="stylesheet"
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- flatpickr base -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
-<!-- Moment + Timezone -->
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js"></script>
 <script src="/scripts/placedOrders.js"></script>
 <script>
 const firstName = localStorage.getItem("firstName");
@@ -215,7 +206,7 @@ placeholder="Search..."
 </div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
-<input type="text" id="dallasDateRange" placeholder="Select Date Range" />
+<input id="monthYearPicker" type="month" class="form-control"  />
 <button id="filterButton" class="btn btn-primary" >Filter</button>
 <!-- </div> -->
 <div id="showTotalOrders">Placed Orders-</div>
