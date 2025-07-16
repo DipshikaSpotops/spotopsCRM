@@ -111,44 +111,20 @@ background-color: #c0c0c0;
 text-align: center;
 padding: 10px;
 }
-/* refund css */
-#attachPO {
-  background-color: #fff;
-  border: 1px solid #000;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
+#refundCollect {
+  background-color: #ff914d;border-radius: 20px;border: 1px solid black;color: black;
+display: none; /* Initially hidden */
+position: fixed; /* Fixed position relative to the viewport */
+top: 50%; /* Center vertically */
+left: 50%; /* Center horizontally */
+transform: translate(-50%, -50%); 
+background-color: white; 
+padding: 20px; 
+border-radius: 8px; 
+box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+z-index: 1050; 
+width: 40%;
 }
-
-#sendRefundEmailYard {
-  background: transparent;
-  border: none;
-  color: #007BFF;
-  text-decoration: underline;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
-#refundSubmit {
-  background-color: #ff823d;
-  border: none;
-  padding: 10px 16px;
-  font-weight: bold;
-  color: #fff;
-  border-radius: 30px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  display: block;
-  margin: 0 auto;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#refundSubmit:hover {
-  background-color: #e76f1d;
-}
-
-/* refund css till here */
 #cardCharged {
 display: none;
   position: fixed;
@@ -1607,18 +1583,9 @@ border: none;
   }
 
   /* Responsive Design */
+ 
+
   @media screen and (max-width: 480px) {
-      .refund-modal {
-    padding: 15px;
-  }
-
-  .refund-modal h1 {
-    font-size: 1.3rem;
-  }
-
-  #refundSubmit {
-    width: 100%;
-  }
     .floating-icon {
       width: 40px;
       height: 40px;
