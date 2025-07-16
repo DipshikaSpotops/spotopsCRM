@@ -2,6 +2,79 @@ $(document).ready(async function () {
     $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
+  // litepicker setup
+  const tz = "America/Chicago";
+
+// 👇 your global filter function
+async function filterOrders(startISO, endISO) {
+  console.log("📦 Filtering from:", startISO, "to:", endISO);
+  try {
+    const response = await axios.get(`/orders/placed`, {
+      params: {
+        start: startISO,
+        end: endISO
+      },
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    const orders = response.data;
+    document.getElementById("showTotalOrders").innerText = `Placed Orders - ${orders.length}`;
+    renderOrders(orders);
+  } catch (error) {
+    console.error("❌ Error fetching filtered orders:", error);
+  }
+}
+
+// 📅 Litepicker Setup
+const picker = new Litepicker({
+  element: document.getElementById("dallasDateRange"),
+  singleMode: false,
+  format: "YYYY-MM-DD",
+  autoApply: true,
+  numberOfMonths: 2,
+  numberOfColumns: 2,
+  setup: (picker) => {
+    // 🔥 On any date range selected
+    picker.on("selected", (startDate, endDate) => {
+      const from = moment.tz(startDate.format("YYYY-MM-DD"), tz).startOf("day").toISOString();
+      const to = moment.tz(endDate.format("YYYY-MM-DD"), tz).endOf("day").toISOString();
+      filterOrders(from, to);
+    });
+  },
+  // 📦 Add a footer with "Today" button
+  footer: true,
+  plugins: ['ranges']
+});
+
+// 🌟 Add "Today" Button
+setTimeout(() => {
+  const calendarEl = document.querySelector(".litepicker-footer");
+  if (calendarEl) {
+    const todayBtn = document.createElement("button");
+    todayBtn.textContent = "Today";
+    todayBtn.className = "btn btn-sm btn-primary";
+    todayBtn.style.marginTop = "5px";
+    todayBtn.onclick = () => {
+      const today = moment.tz(tz).format("YYYY-MM-DD");
+      picker.setDate(today); // sets both start and end
+      const from = moment.tz(today, tz).startOf("day").toISOString();
+      const to = moment.tz(today, tz).endOf("day").toISOString();
+      filterOrders(from, to);
+    };
+    calendarEl.appendChild(todayBtn);
+  }
+}, 500);
+
+// 📅 Pre-load this month's data
+const dallasNow = moment.tz(tz);
+const defaultStart = dallasNow.clone().startOf("month").toISOString();
+const defaultEnd = dallasNow.clone().endOf("month").toISOString();
+picker.setDateRange(
+  dallasNow.clone().startOf("month").format("YYYY-MM-DD"),
+  dallasNow.clone().endOf("month").format("YYYY-MM-DD")
+);
+filterOrders(defaultStart, defaultEnd);
+  // litepicker setup till here
   let sortOrder = {
   orderDate: "asc",
   orderNo: "asc",
