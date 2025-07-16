@@ -3,65 +3,48 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
 
-const tz      = "America/Chicago";
+const tz  = "America/Chicago";
 const dallas     = moment.tz(tz);
 const monthS  = dallas.clone().startOf("month").format("YYYY-MM-DD");
 const monthE  = dallas.clone().endOf("month").format("YYYY-MM-DD");
 
 // flatpickr initialisation
 const picker = flatpickr("#dallasDateRange", {
-  mode        : "range",
-  dateFormat  : "Y-m-d",
-  defaultDate : [monthS, monthE],          // whole current month
-  altInput    : true,                      // pretty text shown to user
-  altFormat   : "F Y",                     // shows e.g. “July 2025” on load
-  locale      : { rangeSeparator: " to " },
+   mode: "range",
+  dateFormat: "Y-m-d",
+  defaultDate: [startOfMonth, endOfMonth],
+  onReady: function(selectedDates, dateStr, instance) {
+    // Manually create "Today" button
+    const todayBtn = document.createElement("button");
+    todayBtn.textContent = "Today";
+    todayBtn.type = "button";
+    todayBtn.className = "flatpickr-today-button";
+    todayBtn.style.marginTop = "5px";
+    todayBtn.style.width = "100%";
+    todayBtn.style.padding = "5px";
 
-  plugins: [
-    // ↔ month header becomes a month-select “wheel”
-    new monthSelectPlugin({
-       shorthand: true,          // “Jul” instead of “July” in header
-       dateFormat: "Y-m-d",      // internally still a full date
-       theme: "light"
-    }),
-    // ➡ shortcut 'Today'
-    new shortcutButtonsPlugin({
-      button: [{
-        label: "Today",
-        onClick: (fp) => {
-          const today = moment.tz(tz).format("YYYY-MM-DD");
-          fp.setDate([today, today], true);
-        }
-      }]
-    })
-  ],
+    todayBtn.addEventListener("click", () => {
+      const today = moment.tz(tz).format("YYYY-MM-DD");
+      instance.setDate([today, today], true);
+      instance.close();
+    });
 
-  // fired every time the user picks something
- onChange(selectedDates, str, fp) {
-  if (!selectedDates.length) return;
+    instance.calendarContainer.appendChild(todayBtn);
+  },
+  onChange: function(selectedDates, dateStr, instance) {
+    if (!selectedDates.length) return;
 
-  // Detect if user picked just a month (via plugin)
-  if (fp.pluginElements && fp.pluginElements.monthSelect) {
-    const first = moment(selectedDates[0]).tz(tz).startOf("month");
-    const last  = first.clone().endOf("month");
-    fp.setDate([first.format("YYYY-MM-DD"), last.format("YYYY-MM-DD")], true);
-    return; // `onChange` will fire again with full range
-  }
+    if (selectedDates.length === 1) {
+      const day = moment(selectedDates[0]).tz(tz).format("YYYY-MM-DD");
+      instance.setDate([day, day], true); // trigger second time for 2-date logic
+      return;
+    }
 
-  // If only one date is selected, treat it as a single-day range
-  if (selectedDates.length === 1) {
-    const day = moment(selectedDates[0]).tz(tz).format("YYYY-MM-DD");
-    fp.setDate([day, day], true);
-    return;
-  }
+    const from = moment(selectedDates[0]).tz(tz).startOf("day").toISOString();
+    const to = moment(selectedDates[1]).tz(tz).endOf("day").toISOString();
 
-  // Full valid range picked – time to fetch data
-  const from = moment(selectedDates[0]).tz(tz).startOf("day").toISOString();
-  const to   = moment(selectedDates[1]).tz(tz).endOf("day").toISOString();
-
-  runFilter(from, to); // 👈 your existing data fetch + render function
-},
-
+    runFilter(from, to); // 🔁 Replace with your filtering function
+  },
   // UI polish – add a “Use This Month” button
   onReady(_, __, fp) {
     const btn = fp._createElement("button", "flatpickr-month-btn", "Use This Month");
