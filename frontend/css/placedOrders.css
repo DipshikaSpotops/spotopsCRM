@@ -557,7 +557,7 @@ th.sortable {
   cursor: pointer;
 }
 .flatpickr-weekdays,.flatpickr-weekdaycontainer,.flatpickr-months .flatpickr-month {
-    background: #037894;
+    background: #037894 !important;
 }
 .flatpickr-calendar .custom-shortcuts a:hover {
   text-decoration: underline;
