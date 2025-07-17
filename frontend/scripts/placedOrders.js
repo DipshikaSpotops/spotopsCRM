@@ -17,6 +17,11 @@ $(document).ready(async function () {
     years: true
   },
   setup: (picker) => {
+      picker.on('selected', (startDate, endDate) => {
+    const formattedStart = startDate.format('YYYY-MM-DD');
+    const formattedEnd = endDate.format('YYYY-MM-DD');
+    $('#dallasDateRange').val(`${formattedStart} - ${formattedEnd}`);
+  });
     const todayBtn = document.createElement('button');
     todayBtn.innerText = 'Today';
     todayBtn.className = 'btn btn-sm btn-primary ml-2';
