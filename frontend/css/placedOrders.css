@@ -245,6 +245,10 @@ body {
         width: auto;
         text-align: center;
     }
+    #unifiedDatePicker::placeholder {
+  color: white; 
+  opacity: 1;  
+}
     #filterButton {
       background-color: #037894;color:white; border: none; 
       height: 3vh;
