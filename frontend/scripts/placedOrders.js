@@ -1038,11 +1038,13 @@ if (cancelledDate) {
   //     resultDiv.innerHTML = '';
   //   }
   // });
-  searchInput.addEventListener('input', function (e) {
-  const orderNo = searchInput.value.trim();
-
-  if (orderNo !== '' && e.key === 'Enter') {
-    window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+ searchInput.addEventListener('keydown', function (event) {
+  console.log("searching order no");
+  if (event.key === 'Enter') {
+    const orderNo = searchInput.value.trim();
+    if (orderNo !== '') {
+      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+    }
   }
 });
  // sorting 
