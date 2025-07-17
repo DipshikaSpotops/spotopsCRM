@@ -564,7 +564,7 @@ th.sortable {
   transition: filter 0.3s ease;
 }
 .custom-shortcuts{
-  
+  background-color: #ffffff !important;
 }
 .flatpickr-calendar .custom-shortcuts a:hover {
   text-decoration: underline;

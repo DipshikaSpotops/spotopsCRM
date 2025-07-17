@@ -24,7 +24,6 @@ const fp = flatpickr("#unifiedDatePicker", {
   container.style.gap = "10px";
   container.style.marginTop = "0px";
   container.style.padding = "0 10px";
-  container.style.backgroundColor ="#ffffff;"
 
   const momentTz = moment().tz("America/Chicago");
 
