@@ -28,7 +28,10 @@ const fp = flatpickr("#unifiedDatePicker", {
     thisMonthBtn.href = "#";
     thisMonthBtn.innerText = "This Month";
     thisMonthBtn.style.fontSize = "13px";
-
+    const lastMonthBtn = document.createElement("a");
+    lastMonthBtn.href = "#";
+    lastMonthBtn.innerText = "Last Month";
+    lastMonthBtn.className = "shortcut-link";
     // TODAY handler
     todayBtn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -49,9 +52,19 @@ const fp = flatpickr("#unifiedDatePicker", {
       $("#filterButton").click();
       instance.close();
     });
-
+      // LAST MONTH handler
+  lastMonthBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    const start = moment().tz("America/Chicago").subtract(1, 'month').startOf("month").format("YYYY-MM-DD");
+    const end = moment().tz("America/Chicago").subtract(1, 'month').endOf("month").format("YYYY-MM-DD");
+    fp.setDate([start, end], true);
+    $("#unifiedDatePicker").val(`${start} to ${end}`);
+    $("#filterButton").click();
+    instance.close();
+  });
     container.appendChild(todayBtn);
     container.appendChild(thisMonthBtn);
+    container.appendChild(lastMonthBtn);
     instance.calendarContainer.appendChild(container);
   }
 });
