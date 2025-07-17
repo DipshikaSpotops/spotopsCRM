@@ -82,17 +82,15 @@ $("#searchInput").on("keyup", function () {
   const searchQuick = document.getElementById("searchInputForOrderNo");
   const resultDiv = document.getElementById("searchResult");
   if (searchQuick) {
-    searchQuick.addEventListener("input", function () {
-      const val = this.value.trim();
-      resultDiv.innerHTML = val
-        ? `<button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>`
-        : "";
-      if (val) {
-        document.getElementById("viewOrderBtn").onclick = () => {
-          window.location.href = `form.html?orderNo=${encodeURIComponent(val)}&process=true`;
-        };
-      }
-    });
+ searchQuick.addEventListener('keydown', function (event) {
+  console.log("searching order no");
+  if (event.key === 'Enter') {
+    const orderNo = searchQuick.value.trim();
+    if (orderNo !== '') {
+      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+    }
+  }
+});
   }
 
   // Core data loader

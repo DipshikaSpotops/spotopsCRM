@@ -588,7 +588,7 @@ $("#infoTable").empty(); // Clear the table if no results are found
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
 }
 });
-const searchInput = document.getElementById('searchInputForOrderNo');
+  const searchInput = document.getElementById('searchInputForOrderNo');
   const resultDiv = document.getElementById('searchResult');
 
   searchInput.addEventListener('input', function () {

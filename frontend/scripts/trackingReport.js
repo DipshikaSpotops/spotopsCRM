@@ -1014,4 +1014,16 @@ $("#infoTableHeader th.sortable").on("click", function () {
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
 });
+const searchInput = document.getElementById('searchInputForOrderNo');
+  const resultDiv = document.getElementById('searchResult');
+
+  searchInput.addEventListener('keydown', function (event) {
+  console.log("searching order no");
+  if (event.key === 'Enter') {
+    const orderNo = searchInput.value.trim();
+    if (orderNo !== '') {
+      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+    }
+  }
+});
 });
