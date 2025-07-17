@@ -611,7 +611,7 @@ if (team in teamAgentsMap) {
       console.log("Filtering orders between:", startDallas.format(), "to", endDallas.format());
 
       // You’ll need to modify the backend to accept startDate & endDate (ISO)
-      ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?startDate=${startDallas.toISOString()}&endDate=${endDallas.toISOString()}`, {
+      ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?start=${startDallas.toISOString()}&end=${endDallas.toISOString()}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
