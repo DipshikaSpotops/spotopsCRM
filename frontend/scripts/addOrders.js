@@ -132,7 +132,7 @@ function getDallasISOString() {
   const hour = pad(dallasTime.find(p => p.type === 'hour').value);
   const minute = pad(dallasTime.find(p => p.type === 'minute').value);
   const second = pad(dallasTime.find(p => p.type === 'second').value);
-
+  console.log("time",`${year}-${month}-${day}T${hour}:${minute}:${second}.000-06:00`)
   return `${year}-${month}-${day}T${hour}:${minute}:${second}.000-06:00`;
 }
 // var orderDateAdd= `${day}${daySuffix(day)} ${month}, ${year}`;
