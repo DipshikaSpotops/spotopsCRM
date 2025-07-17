@@ -551,45 +551,15 @@ th.sortable {
   font-weight: bold;
 }
 /* calender  */
-.date-filter-group {
+.flatpickr-wrapper {
   display: inline-flex;
-  gap: 5px;
+  gap: 8px;
   align-items: center;
-  background-color: #ffffff;
-  padding: 6px 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
   margin-bottom: 10px;
-  position: relative;
-  z-index: 5;
 }
-
-.date-filter-group input,
-.date-filter-group button {
-  border-radius: 4px;
-  font-size: 14px;
+#flatpickrButtons button {
   height: 36px;
-}
-
-.date-filter-group input {
-  border: 1px solid #ccc;
-  padding: 6px 10px;
-}
-
-#monthYearPicker {
-  max-width: 140px;
-}
-
-#todayFilter {
-  background-color: #037894;
-  color: white;
-  border: none;
-  padding: 0 12px;
   font-weight: bold;
-}
-
-#todayFilter:hover {
-  background-color: #0b4f5f;
 }
 @media (max-width: 992px) {
   .sidebar {

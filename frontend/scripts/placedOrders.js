@@ -2,43 +2,45 @@ $(document).ready(async function () {
     $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
-  // litepicker setup
-   const picker = new Litepicker({
-  element: document.getElementById('dallasDateRange'),
-  singleMode: false,
-  numberOfMonths: 1,
-  numberOfColumns: 1,
-  format: 'YYYY-MM-DD',
-  autoApply: true,
-  dropdowns: {
-    minYear: 2020,
-    maxYear: new Date().getFullYear() + 1,
-    months: true,
-    years: true
-  },
-  setup: (picker) => {
-      picker.on('selected', (startDate, endDate) => {
-    const formattedStart = startDate.format('YYYY-MM-DD');
-    const formattedEnd = endDate.format('YYYY-MM-DD');
-    $('#dallasDateRange').val(`${formattedStart} - ${formattedEnd}`);
-  });
-    const todayBtn = document.createElement('button');
-    todayBtn.innerText = 'Today';
-    todayBtn.className = 'btn btn-sm btn-primary ml-2';
-    todayBtn.addEventListener('click', () => {
-      const today = moment().format('YYYY-MM-DD');
-      picker.setDateRange(today, today);
-      picker.hide();
-    });
-    setTimeout(() => {
-      const footer = document.querySelector('.litepicker-footer');
-      if (footer && !footer.querySelector('button')) {
-        footer.appendChild(todayBtn);
+  // flatpickr setup
+  document.addEventListener("DOMContentLoaded", function () {
+  const fp = flatpickr("#unifiedDatePicker", {
+    mode: "range",
+    dateFormat: "Y-m-d",
+    allowInput: true,
+    onChange: function(selectedDates) {
+      if (selectedDates.length === 2) {
+        const start = moment.tz(selectedDates[0], "America/Chicago").format("YYYY-MM-DD");
+        const end = moment.tz(selectedDates[1], "America/Chicago").format("YYYY-MM-DD");
+        console.log("Filter: Range from", start, "to", end);
+        // Call your backend here
+        fetchOrdersByRange(start, end);
       }
-    }, 100);
+    }
+  });
+
+  document.getElementById("todayBtn").addEventListener("click", function () {
+    const today = moment().tz("America/Chicago").format("YYYY-MM-DD");
+    fp.setDate([today, today], true); // Set both start and end to today
+    fetchOrdersByRange(today, today);
+  });
+
+  document.getElementById("monthFilterBtn").addEventListener("click", function () {
+    const now = moment().tz("America/Chicago");
+    const startOfMonth = now.clone().startOf("month").format("YYYY-MM-DD");
+    const endOfMonth = now.clone().endOf("month").format("YYYY-MM-DD");
+    fp.setDate([startOfMonth, endOfMonth], true);
+    fetchOrdersByRange(startOfMonth, endOfMonth);
+  });
+
+  // Dummy function: Replace with your actual axios logic
+  function fetchOrdersByRange(start, end) {
+    console.log("📡 Fetching orders from", start, "to", end);
+    // You can call axios.get(...) here
+    // axios.get(`/orders/placed?start=${start}&end=${end}`)
   }
 });
-  // litepicker setup till here
+  // flatpickr setup till here
   let sortOrder = {
   orderDate: "asc",
   orderNo: "asc",
@@ -591,42 +593,50 @@ if (team in teamAgentsMap) {
   });
   }
   console.log("filterButton found?", $("#filterButton").length);
-  $("#filterButton").click(async function () {
+// Filter button click event
+$("#filterButton").click(async function () {
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");
   $("#loadingMessage").show();
 
   try {
     let ordersResponse;
-    const rangeValue = $("#dallasDateRange").val().trim();
-    console.log("📅 Range input value:", rangeValue);
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    console.log("📅 Unified picker value:", rangeValue);
+
+    let url = "";
 
     const isToday = $(this).data("filter") === "today";
-    let url = "";
-    
+    const tz = "America/Chicago";
+
     if (isToday) {
-      const today = moment().tz("America/Chicago").format("YYYY-MM-DD");
-      url = `https://www.spotops360.com/orders/placed?start=${today}T00:00:00-06:00&end=${today}T23:59:59-06:00`;
+      const today = moment().tz(tz).format("YYYY-MM-DD");
+      url = `https://www.spotops360.com/orders/placed?start=${today}&end=${today}`;
       console.log("🔘 Fetching today's orders");
     }
-    else if (rangeValue.includes(" - ")) {
-      const [startStr, endStr] = rangeValue.split(" - ");
-      const start = moment.tz(startStr, "YYYY-MM-DD", "America/Chicago").startOf("day").toISOString();
-      const end = moment.tz(endStr, "YYYY-MM-DD", "America/Chicago").endOf("day").toISOString();
+
+    else if (rangeValue.includes(" to ")) {
+      // Flatpickr's default range format
+      const [startStr, endStr] = rangeValue.split(" to ");
+      const start = moment.tz(startStr, tz).startOf("day").toISOString();
+      const end = moment.tz(endStr, tz).endOf("day").toISOString();
 
       url = `https://www.spotops360.com/orders/placed?start=${start}&end=${end}`;
       console.log("🗓️ Filtering orders from:", startStr, "to", endStr);
     }
-    else if (moment(rangeValue, "MMMM YYYY", true).isValid()) {
-      // Handle month-year like "July 2025"
-      const month = moment(rangeValue, "MMMM YYYY").format("MMM");
-      const year = moment(rangeValue, "MMMM YYYY").format("YYYY");
+
+    else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      // Optional: if you let users input YYYY-MM manually (fallback)
+      const momentObj = moment(rangeValue, "YYYY-MM");
+      const month = momentObj.format("MMM");
+      const year = momentObj.format("YYYY");
 
       url = `https://www.spotops360.com/orders/placed?month=${month}&year=${year}`;
       console.log("📆 Filtering orders for month:", month, "year:", year);
     }
+
     else {
-      alert("⚠️ Please select a valid date range or month/year.");
+      alert("⚠️ Please select a valid date range or click 'Today'.");
       return;
     }
 
@@ -653,12 +663,10 @@ if (team in teamAgentsMap) {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
-    $(this).data("filter", ""); // reset filter state
+    $(this).data("filter", ""); // Reset state
   }
 });
-$("#todayFilter").click(function () {
-  $("#filterButton").data("filter", "today").trigger("click");
-});
+
 
 
   $('#closeCancelled').on('click', function(e) {

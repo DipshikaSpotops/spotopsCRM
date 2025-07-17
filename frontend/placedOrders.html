@@ -17,10 +17,12 @@ rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
 rel="stylesheet"
 />
-<!-- Litepicker -->
-<link href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
-
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Flatpickr Theme (optional but nice) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- Moment + Timezone -->
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js"></script>
@@ -214,10 +216,12 @@ placeholder="Search..."
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
 <!-- Date Range Picker -->
-<div class="date-filter-group">
-  <input id="dallasDateRange" class="form-control" placeholder="Select date range" readonly/>
-  <input type="month" id="monthYearPicker" class="form-control" />
-  <button id="todayFilter" class="btn btn-info">Today</button>
+<div class="flatpickr-wrapper">
+  <input id="unifiedDatePicker" class="form-control" placeholder="Select date, range or month" />
+  <div id="flatpickrButtons">
+    <button id="todayBtn" class="btn btn-info">Today</button>
+    <button id="monthFilterBtn" class="btn btn-secondary">This Month</button>
+  </div>
 </div>
 <!-- Filter Button -->
 <button id="filterButton" class="btn btn-primary" >Filter</button>
