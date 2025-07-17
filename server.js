@@ -94,12 +94,13 @@ const hours = date.getHours().toString().padStart(2, '0');
 const minutes = date.getMinutes().toString().padStart(2, '0');
 const formattedDate = `${day} ${month}, ${year}`;
 const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
+const dallasTime = moment().tz('America/Chicago').format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+console.log("dallas time:",dallasTime);
 try {
 console.log("Create a new order:", req.body);
 
 const {
 orderNo,
-orderDate,
 salesAgent,
 customerName,
 fName,
@@ -148,7 +149,6 @@ programmingCostQuoted
 
 const newOrder = new Order({
 orderNo,
-orderDate,
 salesAgent,
 customerName,
 bAddressStreet,
@@ -194,7 +194,7 @@ dsCall,
 programmingRequired,
 programmingCostQuoted
 });
-
+newOrder.orderDate = moment().tz('America/Chicago').format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 // Increment the order count and assign the team
 orderCount += 1;
 console.log("orderCount", orderCount);

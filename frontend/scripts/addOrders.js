@@ -275,7 +275,7 @@ const newEntry = urlParams.get("newEntry");
             // Create a new order
             const newOrderData = {
                 orderNo: orderNoInput,
-                orderDate: $("#orderDate").val(getDallasISOString()),
+                // orderDate: $("#orderDate").val(getDallasISOString()),
                 salesAgent: $("#salesAgent").val(),
                 // customerName: customerName,
                 fName: $("#fName").val(),
