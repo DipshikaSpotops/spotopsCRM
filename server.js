@@ -918,13 +918,15 @@ app.get('/orders/placed', async (req, res) => {
         Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
       };
       let paddedMonth;
-      if (month.length === 3) {
+      // Handle both 'Jul' and '07' gracefully
+      if (month.length === 3 && monthMap[month]) {
         paddedMonth = monthMap[month]; 
       } else if (!isNaN(month)) {
         paddedMonth = month.padStart(2, '0'); 
       } else {
         return res.status(400).json({ message: "Invalid month format" });
       }
+      console.log("month",paddedMonth);
       const startDate = new Date(`${year}-${paddedMonth}-01T00:00:00-06:00`);
       const endDate = new Date(startDate);
       endDate.setMonth(endDate.getMonth() + 1);
