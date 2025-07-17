@@ -556,7 +556,7 @@ th.sortable {
   text-decoration: none;
   cursor: pointer;
 }
-.flatpickr-weekdays,.flatpickr-weekdaycontainer,.flatpickr-months .flatpickr-month,.flatpickr-current-month .flatpickr-monthDropdown-months,.flatpickr-weekdays .flatpickr-weekdaycontainer,..flatpickr-weekdays .flatpickr-weekdaycontainer {
+.flatpickr-weekdays,.flatpickr-weekdaycontainer,.flatpickr-months .flatpickr-month,.flatpickr-current-month .flatpickr-monthDropdown-months,.flatpickr-weekdays .flatpickr-weekdaycontainer,.flatpickr-weekdays .flatpickr-weekdaycontainer {
     background: #037894 !important;
 }
 .flatpickr-calendar .custom-shortcuts a:hover {
