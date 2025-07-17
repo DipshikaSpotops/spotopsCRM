@@ -3,42 +3,36 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
   // flatpickr setup
-  document.addEventListener("DOMContentLoaded", function () {
-  const fp = flatpickr("#unifiedDatePicker", {
-    mode: "range",
-    dateFormat: "Y-m-d",
-    allowInput: true,
-    onChange: function(selectedDates) {
-      if (selectedDates.length === 2) {
-        const start = moment.tz(selectedDates[0], "America/Chicago").format("YYYY-MM-DD");
-        const end = moment.tz(selectedDates[1], "America/Chicago").format("YYYY-MM-DD");
-        console.log("Filter: Range from", start, "to", end);
-        // Call your backend here
-        fetchOrdersByRange(start, end);
-      }
+  // Flatpickr Unified Picker Setup
+const fp = flatpickr("#unifiedDatePicker", {
+  mode: "range",
+  dateFormat: "Y-m-d",
+  allowInput: true,
+  onClose: function (selectedDates) {
+    // Ensure correct format is shown in the input
+    if (selectedDates.length === 2) {
+      const start = moment(selectedDates[0]).format("YYYY-MM-DD");
+      const end = moment(selectedDates[1]).format("YYYY-MM-DD");
+      $("#unifiedDatePicker").val(`${start} to ${end}`);
     }
-  });
-
-  document.getElementById("todayBtn").addEventListener("click", function () {
-    const today = moment().tz("America/Chicago").format("YYYY-MM-DD");
-    fp.setDate([today, today], true); // Set both start and end to today
-    fetchOrdersByRange(today, today);
-  });
-
-  document.getElementById("monthFilterBtn").addEventListener("click", function () {
-    const now = moment().tz("America/Chicago");
-    const startOfMonth = now.clone().startOf("month").format("YYYY-MM-DD");
-    const endOfMonth = now.clone().endOf("month").format("YYYY-MM-DD");
-    fp.setDate([startOfMonth, endOfMonth], true);
-    fetchOrdersByRange(startOfMonth, endOfMonth);
-  });
-
-  // Dummy function: Replace with your actual axios logic
-  function fetchOrdersByRange(start, end) {
-    console.log("📡 Fetching orders from", start, "to", end);
-    // You can call axios.get(...) here
-    // axios.get(`/orders/placed?start=${start}&end=${end}`)
   }
+});
+
+// Today button
+$("#todayBtn").on("click", function () {
+  const today = moment().tz("America/Chicago").format("YYYY-MM-DD");
+  fp.setDate([today, today], true);
+  $("#unifiedDatePicker").val(`${today} to ${today}`);
+  $("#filterButton").data("filter", "today").click();
+});
+
+// This Month button
+$("#monthFilterBtn").on("click", function () {
+  const start = moment().tz("America/Chicago").startOf("month").format("YYYY-MM-DD");
+  const end = moment().tz("America/Chicago").endOf("month").format("YYYY-MM-DD");
+  fp.setDate([start, end], true);
+  $("#unifiedDatePicker").val(`${start} to ${end}`);
+  $("#filterButton").click();
 });
   // flatpickr setup till here
   let sortOrder = {
