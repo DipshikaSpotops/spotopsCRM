@@ -1022,22 +1022,29 @@ if (cancelledDate) {
     const searchInput = document.getElementById('searchInputForOrderNo');
   const resultDiv = document.getElementById('searchResult');
 
-  searchInput.addEventListener('input', function () {
-    const orderNo = searchInput.value.trim();
+  // searchInput.addEventListener('input', function () {
+  //   const orderNo = searchInput.value.trim();
 
-    if (orderNo !== '') {
-      resultDiv.innerHTML = `
-        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
-      `;
+  //   if (orderNo !== '') {
+  //     resultDiv.innerHTML = `
+  //       <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
+  //     `;
 
-      document.getElementById('viewOrderBtn').addEventListener('click', function () {
-       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+  //     document.getElementById('viewOrderBtn').addEventListener('click', function () {
+  //      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
 
-      });
-    } else {
-      resultDiv.innerHTML = '';
-    }
-  });
+  //     });
+  //   } else {
+  //     resultDiv.innerHTML = '';
+  //   }
+  // });
+  searchInput.addEventListener('input', function (e) {
+  const orderNo = searchInput.value.trim();
+
+  if (orderNo !== '' && e.key === 'Enter') {
+    window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+  }
+});
  // sorting 
 let currentSortColumn = '';
 let sortAsc = true;
