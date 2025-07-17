@@ -188,7 +188,7 @@ if (team in teamAgentsMap) {
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
 document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
+// sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 } catch (error) {
