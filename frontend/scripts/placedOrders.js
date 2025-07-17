@@ -585,6 +585,7 @@ if (team in teamAgentsMap) {
   return orderNoB - orderNoA;
   });
   }
+  console.log("filterButton found?", $("#filterButton").length);
   $("#filterButton").click(async function () {
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");

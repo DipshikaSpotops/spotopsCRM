@@ -896,17 +896,14 @@ app.get('/orders/placed', async (req, res) => {
   try {
     const { month, year, start, end } = req.query;
     let filter = { orderStatus: "Placed" };
-
-    console.log("📩 Incoming Query Params:", { month, year, start, end });
-
-    // ✅ If using start & end (e.g. Today or custom range)
+    console.log("Incoming Query Params:", { month, year, start, end });
     if (start && end) {
       const startDate = new Date(start);
       const endDate = new Date(end);
       endDate.setDate(endDate.getDate() + 1); 
 
-      console.log("🕒 Parsed Start Date (ISO):", startDate.toISOString());
-      console.log("🕒 Parsed End Date (+1 day, ISO):", endDate.toISOString());
+      console.log("Parsed Start Date (ISO):", startDate.toISOString());
+      console.log("Parsed End Date (+1 day, ISO):", endDate.toISOString());
 
       filter.orderDate = {
         $gte: startDate,
@@ -914,7 +911,7 @@ app.get('/orders/placed', async (req, res) => {
       };
     }
 
-    // 🗓️ Fallback to month/year logic
+    // Fallback to month/year logic
     else if (month && year) {
       const monthMap = {
         Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
@@ -926,29 +923,27 @@ app.get('/orders/placed', async (req, res) => {
       const endDate = new Date(startDate);
       endDate.setMonth(endDate.getMonth() + 1);
 
-      console.log("🗓️ Parsed Start Date (Month-based):", startDate.toISOString());
-      console.log("🗓️ Parsed End Date (Month-based):", endDate.toISOString());
+      console.log("Parsed Start Date (Month-based):", startDate.toISOString());
+      console.log("Parsed End Date (Month-based):", endDate.toISOString());
 
       filter.orderDate = {
         $gte: startDate,
         $lt: endDate
       };
     }
-
-    // ❌ No valid query params
     else {
       console.warn("⚠️ Invalid query: must provide either month/year or start/end");
       return res.status(400).json({ message: "Provide either month/year or start/end" });
     }
 
-    console.log("🔍 MongoDB Filter:", JSON.stringify(filter, null, 2));
+    console.log("MongoDB Filter:", JSON.stringify(filter, null, 2));
 
     const orders = await Order.find(filter);
-    console.log(`✅ Orders fetched: ${orders.length}`);
+    console.log(`Orders fetched: ${orders.length}`);
 
     res.json(orders);
   } catch (error) {
-    console.error("🔥 Error fetching placed orders:", error);
+    console.error("Error fetching placed orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
