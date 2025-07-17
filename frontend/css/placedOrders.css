@@ -559,6 +559,10 @@ th.sortable {
 .flatpickr-weekdays,.flatpickr-weekdaycontainer,.flatpickr-months .flatpickr-month,.flatpickr-current-month .flatpickr-monthDropdown-months,.flatpickr-weekdays .flatpickr-weekdaycontainer,.flatpickr-weekdays .flatpickr-weekdaycontainer,span.flatpickr-weekday {
     background: #037894 !important;
 }
+.table-blur {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+}
 .flatpickr-calendar .custom-shortcuts a:hover {
   text-decoration: underline;
 }

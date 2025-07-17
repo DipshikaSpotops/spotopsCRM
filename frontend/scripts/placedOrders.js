@@ -7,6 +7,12 @@ const fp = flatpickr("#unifiedDatePicker", {
   mode: "range",
   dateFormat: "Y-m-d",
   allowInput: true,
+    onOpen: function () {
+    document.querySelector(".table-wrapper").classList.add("table-blur");
+  },
+  onClose: function () {
+    document.querySelector(".table-wrapper").classList.remove("table-blur");
+  }
   onReady: function (selectedDates, dateStr, instance) {
   if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
 
