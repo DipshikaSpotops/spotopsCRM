@@ -3,39 +3,36 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
   // litepicker setup
-   document.addEventListener('DOMContentLoaded', function () {
-    const picker = new Litepicker({
-      element: document.getElementById('dallasDateRange'),
-      singleMode: false,
-      numberOfMonths: 2,
-      numberOfColumns: 2,
-      format: 'YYYY-MM-DD',
-      autoApply: true,
-      dropdowns: {
-        minYear: 2020,
-        maxYear: new Date().getFullYear() + 1,
-        months: true,
-        years: true
-      },
-      setup: (picker) => {
-        const todayBtn = document.createElement('button');
-        todayBtn.innerText = 'Today';
-        todayBtn.className = 'btn btn-sm btn-primary ml-2';
-        todayBtn.addEventListener('click', () => {
-          const today = moment().format('YYYY-MM-DD');
-          picker.setDateRange(today, today);
-          picker.hide();
-        });
-        // Add the Today button to the picker footer
-        setTimeout(() => {
-          const footer = document.querySelector('.litepicker-footer');
-          if (footer && !footer.querySelector('button')) {
-            footer.appendChild(todayBtn);
-          }
-        }, 100);
-      }
+   const picker = new Litepicker({
+  element: document.getElementById('dallasDateRange'),
+  singleMode: false,
+  numberOfMonths: 2,
+  numberOfColumns: 2,
+  format: 'YYYY-MM-DD',
+  autoApply: true,
+  dropdowns: {
+    minYear: 2020,
+    maxYear: new Date().getFullYear() + 1,
+    months: true,
+    years: true
+  },
+  setup: (picker) => {
+    const todayBtn = document.createElement('button');
+    todayBtn.innerText = 'Today';
+    todayBtn.className = 'btn btn-sm btn-primary ml-2';
+    todayBtn.addEventListener('click', () => {
+      const today = moment().format('YYYY-MM-DD');
+      picker.setDateRange(today, today);
+      picker.hide();
     });
-  });
+    setTimeout(() => {
+      const footer = document.querySelector('.litepicker-footer');
+      if (footer && !footer.querySelector('button')) {
+        footer.appendChild(todayBtn);
+      }
+    }, 100);
+  }
+});
   // litepicker setup till here
   let sortOrder = {
   orderDate: "asc",
