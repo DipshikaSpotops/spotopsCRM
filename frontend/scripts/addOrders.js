@@ -111,37 +111,30 @@ $("#submenu-dashboards .view-All-orders-link").show();
 $("#submenu-dashboards .view-All-orders-link").hide();
 }
 // Get the current date in America/Chicago time
-const now = new Date();
+function getDallasISOString() {
+  const now = new Date();
+  const dallasTime = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(now);
 
-// Options to adjust to Dallas time (America/Chicago)
-const options = {
-  timeZone: 'America/Chicago',
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  hour12: false,
-};
+  const pad = (n) => n.toString().padStart(2, "0");
 
-// Format the date to match 'YYYY-MM-DDTHH:mm:ss.sssZ'
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const formattedParts = formatter.formatToParts(now);
+  const year = dallasTime.find(p => p.type === 'year').value;
+  const month = pad(dallasTime.find(p => p.type === 'month').value);
+  const day = pad(dallasTime.find(p => p.type === 'day').value);
+  const hour = pad(dallasTime.find(p => p.type === 'hour').value);
+  const minute = pad(dallasTime.find(p => p.type === 'minute').value);
+  const second = pad(dallasTime.find(p => p.type === 'second').value);
 
-// Extract and combine the parts to form ISO-style date
-const year = formattedParts.find((part) => part.type === 'year').value;
-const month = formattedParts.find((part) => part.type === 'month').value.padStart(2, '0');
-const day = formattedParts.find((part) => part.type === 'day').value.padStart(2, '0');
-const hour = formattedParts.find((part) => part.type === 'hour').value.padStart(2, '0');
-const minute = formattedParts.find((part) => part.type === 'minute').value.padStart(2, '0');
-const second = formattedParts.find((part) => part.type === 'second').value.padStart(2, '0');
-
-// Construct ISO string without timezone offset
-const isoString = `${year}-${month}-${day}T${hour}:${minute}:${second}.000-06:00`;
-
-console.log("ISO String in Dallas Time (America/Chicago):", isoString);
-
+  return `${year}-${month}-${day}T${hour}:${minute}:${second}.000-06:00`;
+}
 // var orderDateAdd= `${day}${daySuffix(day)} ${month}, ${year}`;
 console.log("orderDate",isoString);
 
@@ -301,7 +294,7 @@ const newEntry = urlParams.get("newEntry");
             // Create a new order
             const newOrderData = {
                 orderNo: orderNoInput,
-                orderDate: $("#orderDate").val(),
+                orderDate: $("#orderDate").val(getDallasISOString()),
                 salesAgent: $("#salesAgent").val(),
                 // customerName: customerName,
                 fName: $("#fName").val(),
