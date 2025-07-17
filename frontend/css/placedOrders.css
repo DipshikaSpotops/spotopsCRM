@@ -551,18 +551,13 @@ th.sortable {
   font-weight: bold;
 }
 /* calender  */
-.flatpickr-calendar .flatpickr-months {
-  background-color: #333 !important; /* ← Change this to any color */
-}
-
-/* Optional: change font color too */
-.flatpickr-calendar .flatpickr-months .flatpickr-month {
-  color: #fff !important;
-}
 .flatpickr-calendar .custom-shortcuts a {
   color: #007BFF;
   text-decoration: none;
   cursor: pointer;
+}
+.flatpickr-weekdays,.flatpickr-weekdaycontainer,.flatpickr-months .flatpickr-month {
+    background: #037894;
 }
 .flatpickr-calendar .custom-shortcuts a:hover {
   text-decoration: underline;
