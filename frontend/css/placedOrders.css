@@ -564,12 +564,6 @@ th.sortable {
 .flatpickr-weekdays,.flatpickr-weekdaycontainer,.flatpickr-months .flatpickr-month,.flatpickr-current-month .flatpickr-monthDropdown-months,.flatpickr-weekdays .flatpickr-weekdaycontainer,.flatpickr-weekdays .flatpickr-weekdaycontainer,span.flatpickr-weekday {
     background: #037894 !important;
 }
-.flatpickr-months {
-  justify-content: center !important;
-}
-.flatpickr-month {
-  flex: unset !important;
-}
 .flatpickr-weekday{
  text-decoration: underline;
 }
@@ -581,11 +575,11 @@ th.sortable {
   background-color: #ffffff !important;
 }
 .flatpickr-current-month {
-  display: flex !important;
-  align-items: center;
+  display: flex;
   justify-content: center;
-  gap: 6px;
-}
+  align-items: center;
+  gap: 4px !important; 
+
 .flatpickr-current-month .cur-month {
   margin-right: 0 !important; 
 }
