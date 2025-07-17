@@ -596,8 +596,9 @@ if (team in teamAgentsMap) {
 
     // Check if date range is filled
     const rangeValue = $("#dallasDateRange").val();
+    console.log("Date range value from input:", rangeValue);
     if (rangeValue) {
-      // 🌐 Dallas Time Date Range
+      //  Dallas Time Date Range
       const [startStr, endStr] = rangeValue.split(" - ");
       const startDallas = moment.tz(startStr, "YYYY-MM-DD", "America/Chicago").startOf("day");
       const endDallas = moment.tz(endStr, "YYYY-MM-DD", "America/Chicago").endOf("day");
