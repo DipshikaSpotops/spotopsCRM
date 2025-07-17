@@ -598,40 +598,37 @@ if (team in teamAgentsMap) {
 
   try {
     let ordersResponse;
-
-    // Check if date range is filled
     const rangeValue = $("#dallasDateRange").val();
     console.log("Date range value from input:", rangeValue);
-    if (rangeValue) {
-      //  Dallas Time Date Range
+
+    if (rangeValue && rangeValue.includes(" - ")) {
+      // 📅 Full date range selected
       const [startStr, endStr] = rangeValue.split(" - ");
       const startDallas = moment.tz(startStr, "YYYY-MM-DD", "America/Chicago").startOf("day");
       const endDallas = moment.tz(endStr, "YYYY-MM-DD", "America/Chicago").endOf("day");
 
       console.log("Filtering orders between:", startDallas.format(), "to", endDallas.format());
 
-      // You’ll need to modify the backend to accept startDate & endDate (ISO)
-      ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?start=${startDallas.toISOString()}&end=${endDallas.toISOString()}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      ordersResponse = await axios.get(
+        `https://www.spotops360.com/orders/placed?start=${startDallas.toISOString()}&end=${endDallas.toISOString()}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      );
 
+    } else if (rangeValue) {
+      // 📅 Only month-year selected (e.g., from calendar's header)
+      const selectedDate = moment.tz(rangeValue, "YYYY-MM-DD", "America/Chicago");
+      const month = selectedDate.format("MMM"); // 'Jul', 'Feb', etc.
+      const year = selectedDate.format("YYYY");
+
+      console.log("Filtering using month:", month, "year:", year);
+
+      ordersResponse = await axios.get(
+        `https://www.spotops360.com/orders/placed?month=${month}&year=${year}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      );
     } else {
-      // 🗓️ Fall back to Month-Year filtering
-      const monthYear = $("#monthYearPicker").val(); // format: YYYY-MM
-      if (!monthYear) {
-        alert("Please select a date range or month-year.");
-        return;
-      }
-
-      const [year, monthNumber] = monthYear.split("-");
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const month = months[parseInt(monthNumber, 10) - 1];
-
-      console.log("Filtering orders for month:", month, "year:", year);
-
-      ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      alert("Please select a date range or month-year.");
+      return;
     }
 
     if (ordersResponse.status !== 200) {
@@ -640,7 +637,6 @@ if (team in teamAgentsMap) {
 
     allOrders = ordersResponse.data;
 
-    // Optional: Filter team-specific agents
     const teamAgentsMap = {
       Shankar: ["David", "John"],
       Vinutha: ["Michael", "Mark"],
