@@ -580,6 +580,10 @@ th.sortable {
   align-items: center;
   gap: 4px !important; 
 }
+.flatpickr-monthDropdown-months,.numInput cur-year {
+    font-weight: bold;
+    font-size: 15px;
+}
 .flatpickr-current-month .cur-month {
   margin-right: 0 !important; 
 }
