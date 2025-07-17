@@ -579,7 +579,7 @@ th.sortable {
   justify-content: center;
   align-items: center;
   gap: 4px !important; 
-
+}
 .flatpickr-current-month .cur-month {
   margin-right: 0 !important; 
 }
