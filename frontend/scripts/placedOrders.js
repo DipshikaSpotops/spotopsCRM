@@ -3,77 +3,39 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
   // litepicker setup
-  const tz = "America/Chicago";
-
-// 👇 your global filter function
-async function filterOrders(startISO, endISO) {
-  console.log("📦 Filtering from:", startISO, "to:", endISO);
-  try {
-    const response = await axios.get(`/orders/placed`, {
-      params: {
-        start: startISO,
-        end: endISO
+   document.addEventListener('DOMContentLoaded', function () {
+    const picker = new Litepicker({
+      element: document.getElementById('dallasDateRange'),
+      singleMode: false,
+      numberOfMonths: 2,
+      numberOfColumns: 2,
+      format: 'YYYY-MM-DD',
+      autoApply: true,
+      dropdowns: {
+        minYear: 2020,
+        maxYear: new Date().getFullYear() + 1,
+        months: true,
+        years: true
       },
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
+      setup: (picker) => {
+        const todayBtn = document.createElement('button');
+        todayBtn.innerText = 'Today';
+        todayBtn.className = 'btn btn-sm btn-primary ml-2';
+        todayBtn.addEventListener('click', () => {
+          const today = moment().format('YYYY-MM-DD');
+          picker.setDateRange(today, today);
+          picker.hide();
+        });
+        // Add the Today button to the picker footer
+        setTimeout(() => {
+          const footer = document.querySelector('.litepicker-footer');
+          if (footer && !footer.querySelector('button')) {
+            footer.appendChild(todayBtn);
+          }
+        }, 100);
+      }
     });
-
-    const orders = response.data;
-    document.getElementById("showTotalOrders").innerText = `Placed Orders - ${orders.length}`;
-    renderOrders(orders);
-  } catch (error) {
-    console.error("❌ Error fetching filtered orders:", error);
-  }
-}
-
-// 📅 Litepicker Setup
-const picker = new Litepicker({
-  element: document.getElementById("dallasDateRange"),
-  singleMode: false,
-  format: "YYYY-MM-DD",
-  autoApply: true,
-  numberOfMonths: 1,
-  numberOfColumns: 1,
-  setup: (picker) => {
-    // 🔥 On any date range selected
-    picker.on("selected", (startDate, endDate) => {
-      const from = moment.tz(startDate.format("YYYY-MM-DD"), tz).startOf("day").toISOString();
-      const to = moment.tz(endDate.format("YYYY-MM-DD"), tz).endOf("day").toISOString();
-      filterOrders(from, to);
-    });
-  },
-  // 📦 Add a footer with "Today" button
-  footer: true,
-  plugins: ['ranges']
-});
-
-// 🌟 Add "Today" Button
-setTimeout(() => {
-  const calendarEl = document.querySelector(".litepicker-footer");
-  if (calendarEl) {
-    const todayBtn = document.createElement("button");
-    todayBtn.textContent = "Today";
-    todayBtn.className = "btn btn-sm btn-primary";
-    todayBtn.style.marginTop = "5px";
-    todayBtn.onclick = () => {
-      const today = moment.tz(tz).format("YYYY-MM-DD");
-      picker.setDate(today); // sets both start and end
-      const from = moment.tz(today, tz).startOf("day").toISOString();
-      const to = moment.tz(today, tz).endOf("day").toISOString();
-      filterOrders(from, to);
-    };
-    calendarEl.appendChild(todayBtn);
-  }
-}, 500);
-
-// 📅 Pre-load this month's data
-const dallasNow = moment.tz(tz);
-const defaultStart = dallasNow.clone().startOf("month").toISOString();
-const defaultEnd = dallasNow.clone().endOf("month").toISOString();
-picker.setDateRange(
-  dallasNow.clone().startOf("month").format("YYYY-MM-DD"),
-  dallasNow.clone().endOf("month").format("YYYY-MM-DD")
-);
-filterOrders(defaultStart, defaultEnd);
+  });
   // litepicker setup till here
   let sortOrder = {
   orderDate: "asc",
@@ -628,44 +590,76 @@ if (team in teamAgentsMap) {
   }
   $("#filterButton").click(async function () {
   $("body").append('<div class="modal-overlay"></div>');
-  $("body").addClass("modal-active");    
+  $("body").addClass("modal-active");
   $("#loadingMessage").show();
-  var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
-  const [year, monthNumber] = monthYear.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[parseInt(monthNumber, 10) - 1];
-  console.log("month",month,year);
+
   try {
-  const ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
-  if (ordersResponse.status !== 200) {
-  throw new Error("Failed to fetch current month's orders");
-  }
-  allOrders = ordersResponse.data;
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
-console.log("team",team)
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-  // console.log("allorders at filter btn",allOrders);
-  var allOrdersLength = allOrders.length;
-  document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrdersLength}`;
-  renderOrders(allOrders);
+    let ordersResponse;
+
+    // Check if date range is filled
+    const rangeValue = $("#dallasDateRange").val();
+    if (rangeValue) {
+      // 🌐 Dallas Time Date Range
+      const [startStr, endStr] = rangeValue.split(" - ");
+      const startDallas = moment.tz(startStr, "YYYY-MM-DD", "America/Chicago").startOf("day");
+      const endDallas = moment.tz(endStr, "YYYY-MM-DD", "America/Chicago").endOf("day");
+
+      console.log("Filtering orders between:", startDallas.format(), "to", endDallas.format());
+
+      // You’ll need to modify the backend to accept startDate & endDate (ISO)
+      ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?startDate=${startDallas.toISOString()}&endDate=${endDallas.toISOString()}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+    } else {
+      // 🗓️ Fall back to Month-Year filtering
+      const monthYear = $("#monthYearPicker").val(); // format: YYYY-MM
+      if (!monthYear) {
+        alert("Please select a date range or month-year.");
+        return;
+      }
+
+      const [year, monthNumber] = monthYear.split("-");
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const month = months[parseInt(monthNumber, 10) - 1];
+
+      console.log("Filtering orders for month:", month, "year:", year);
+
+      ordersResponse = await axios.get(`https://www.spotops360.com/orders/placed?month=${month}&year=${year}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    }
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch orders");
+    }
+
+    allOrders = ordersResponse.data;
+
+    // Optional: Filter team-specific agents
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrders.length}`;
+    renderOrders(allOrders);
+
   } catch (error) {
-  console.error("Error fetching current month's orders:", error);
+    console.error("Error fetching orders:", error);
   } finally {
-  // Hiding loading overlay regardless of success or error
-  $("#loadingMessage").hide();
-  $(".modal-overlay").remove();
-  $("body").removeClass("modal-active");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
   }
-  });
+});
+
   $('#closeCancelled').on('click', function(e) {
   $("#cancellingOrder").fadeOut();
   $(".modal-overlay").remove();
