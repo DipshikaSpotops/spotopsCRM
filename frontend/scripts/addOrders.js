@@ -112,28 +112,9 @@ $("#submenu-dashboards .view-All-orders-link").hide();
 }
 // Get the current date in America/Chicago time
 function getDallasISOString() {
-  const now = new Date();
-  const dallasTime = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/Chicago",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  }).formatToParts(now);
-
-  const pad = (n) => n.toString().padStart(2, "0");
-
-  const year = dallasTime.find(p => p.type === 'year').value;
-  const month = pad(dallasTime.find(p => p.type === 'month').value);
-  const day = pad(dallasTime.find(p => p.type === 'day').value);
-  const hour = pad(dallasTime.find(p => p.type === 'hour').value);
-  const minute = pad(dallasTime.find(p => p.type === 'minute').value);
-  const second = pad(dallasTime.find(p => p.type === 'second').value);
-  console.log("time",`${year}-${month}-${day}T${hour}:${minute}:${second}.000-06:00`)
-  return `${year}-${month}-${day}T${hour}:${minute}:${second}.000-06:00`;
+   const { DateTime } = luxon;
+  const dallasTime = DateTime.now().setZone('America/Chicago');
+  return dallasTime.toISO({ suppressMilliseconds: true });
 }
 // var orderDateAdd= `${day}${daySuffix(day)} ${month}, ${year}`;
 console.log("orderDate",isoString);
