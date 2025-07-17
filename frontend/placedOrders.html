@@ -213,7 +213,16 @@ placeholder="Search..."
 </div>
 <div id="filterAndTotal">
 <!-- <div class="filter-bar"> -->
-  <input id="dallasDateRange" type="text" class="form-control" placeholder="Select Date Range" readonly/>
+<!-- Date Range Picker -->
+<input id="dallasDateRange" class="form-control" placeholder="Select date range" />
+
+<!-- Month-Year Picker -->
+<input type="month" id="monthYearOnly" class="form-control" />
+
+<!-- Today Button -->
+<button id="todayFilter" class="btn btn-info">Today</button>
+
+<!-- Filter Button -->
 <button id="filterButton" class="btn btn-primary" >Filter</button>
 <!-- </div> -->
 <div id="showTotalOrders">Placed Orders-</div>

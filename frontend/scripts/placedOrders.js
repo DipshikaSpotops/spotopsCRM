@@ -599,67 +599,82 @@ if (team in teamAgentsMap) {
   try {
     let ordersResponse;
     const rangeValue = $("#dallasDateRange").val();
-    console.log("Date range value from input:", rangeValue);
+    const monthYearVal = $("#monthYearOnly").val();
+    const isTodayClicked = $(this).data("filter") === "today"; // we’ll set this when Today is clicked
 
-    if (rangeValue && rangeValue.includes(" - ")) {
-      // 📅 Full date range selected
+    // --- Option 1: Today
+    if (isTodayClicked) {
+      const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
+      const start = moment.tz(today, "YYYY-MM-DD", "America/Chicago").startOf("day");
+      const end = moment.tz(today, "YYYY-MM-DD", "America/Chicago").endOf("day");
+
+      ordersResponse = await axios.get(
+        `https://www.spotops360.com/orders/placed?start=${start.toISOString()}&end=${end.toISOString()}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      );
+    }
+
+    // --- Option 2: Full Date Range
+    else if (rangeValue && rangeValue.includes(" - ")) {
       const [startStr, endStr] = rangeValue.split(" - ");
       const startDallas = moment.tz(startStr, "YYYY-MM-DD", "America/Chicago").startOf("day");
       const endDallas = moment.tz(endStr, "YYYY-MM-DD", "America/Chicago").endOf("day");
-
-      console.log("Filtering orders between:", startDallas.format(), "to", endDallas.format());
 
       ordersResponse = await axios.get(
         `https://www.spotops360.com/orders/placed?start=${startDallas.toISOString()}&end=${endDallas.toISOString()}`,
         { headers: token ? { Authorization: `Bearer ${token}` } : {} }
       );
+    }
 
-    } else if (rangeValue) {
-      // 📅 Only month-year selected (e.g., from calendar's header)
-      const selectedDate = moment.tz(rangeValue, "YYYY-MM-DD", "America/Chicago");
-      const month = selectedDate.format("MMM"); // 'Jul', 'Feb', etc.
-      const year = selectedDate.format("YYYY");
-
-      console.log("Filtering using month:", month, "year:", year);
+    // --- Option 3: Month-Year selected
+    else if (monthYearVal) {
+      const [year, monthNum] = monthYearVal.split("-");
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const month = monthNames[parseInt(monthNum, 10) - 1];
 
       ordersResponse = await axios.get(
         `https://www.spotops360.com/orders/placed?month=${month}&year=${year}`,
         { headers: token ? { Authorization: `Bearer ${token}` } : {} }
       );
-    } else {
-      alert("Please select a date range or month-year.");
+    }
+
+    else {
+      alert("Please select a date range, month-year, or click Today.");
       return;
     }
 
+    // --- Handle Response
     if (ordersResponse.status !== 200) {
       throw new Error("Failed to fetch orders");
     }
 
     allOrders = ordersResponse.data;
 
+    // Filter by team (if needed)
     const teamAgentsMap = {
       Shankar: ["David", "John"],
       Vinutha: ["Michael", "Mark"],
     };
-
     if (team in teamAgentsMap) {
       allOrders = allOrders.filter(order =>
         teamAgentsMap[team].includes(order.salesAgent)
       );
     }
 
-    document.getElementById("showTotalOrders").innerHTML = `Placed Orders- ${allOrders.length}`;
+    $("#showTotalOrders").text(`Placed Orders - ${allOrders.length}`);
     renderOrders(allOrders);
-
   } catch (error) {
-    console.error("Error fetching orders:", error);
+    console.error("Error fetching filtered orders:", error);
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
+    $("#filterButton").data("filter", ""); // reset flag
   }
 });
-
+$("#todayFilter").click(function () {
+  $("#filterButton").data("filter", "today").trigger("click");
+});
   $('#closeCancelled').on('click', function(e) {
   $("#cancellingOrder").fadeOut();
   $(".modal-overlay").remove();
