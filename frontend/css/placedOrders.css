@@ -551,15 +551,13 @@ th.sortable {
   font-weight: bold;
 }
 /* calender  */
-.flatpickr-wrapper {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 10px;
+.flatpickr-calendar .custom-shortcuts a {
+  color: #007BFF;
+  text-decoration: none;
+  cursor: pointer;
 }
-#flatpickrButtons button {
-  height: 36px;
-  font-weight: bold;
+.flatpickr-calendar .custom-shortcuts a:hover {
+  text-decoration: underline;
 }
 @media (max-width: 992px) {
   .sidebar {

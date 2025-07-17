@@ -3,36 +3,57 @@ $(document).ready(async function () {
     window.location.href = "viewAllTasks.html";
   });
   // flatpickr setup
-  // Flatpickr Unified Picker Setup
 const fp = flatpickr("#unifiedDatePicker", {
   mode: "range",
   dateFormat: "Y-m-d",
   allowInput: true,
-  onClose: function (selectedDates) {
-    // Ensure correct format is shown in the input
-    if (selectedDates.length === 2) {
-      const start = moment(selectedDates[0]).format("YYYY-MM-DD");
-      const end = moment(selectedDates[1]).format("YYYY-MM-DD");
+  onReady: function (selectedDates, dateStr, instance) {
+    // Avoid duplication if calendar is reopened
+    if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
+
+    const container = document.createElement("div");
+    container.className = "custom-shortcuts";
+    container.style.display = "flex";
+    container.style.justifyContent = "flex-end";
+    container.style.gap = "10px";
+    container.style.marginTop = "8px";
+    container.style.paddingRight = "10px";
+
+    const todayBtn = document.createElement("a");
+    todayBtn.href = "#";
+    todayBtn.innerText = "Today";
+    todayBtn.style.fontSize = "13px";
+
+    const thisMonthBtn = document.createElement("a");
+    thisMonthBtn.href = "#";
+    thisMonthBtn.innerText = "This Month";
+    thisMonthBtn.style.fontSize = "13px";
+
+    // TODAY handler
+    todayBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const today = moment().tz("America/Chicago").format("YYYY-MM-DD");
+      fp.setDate([today, today], true);
+      $("#unifiedDatePicker").val(`${today} to ${today}`);
+      $("#filterButton").data("filter", "today").click();
+      instance.close();
+    });
+
+    // THIS MONTH handler
+    thisMonthBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const start = moment().tz("America/Chicago").startOf("month").format("YYYY-MM-DD");
+      const end = moment().tz("America/Chicago").endOf("month").format("YYYY-MM-DD");
+      fp.setDate([start, end], true);
       $("#unifiedDatePicker").val(`${start} to ${end}`);
-    }
+      $("#filterButton").click();
+      instance.close();
+    });
+
+    container.appendChild(todayBtn);
+    container.appendChild(thisMonthBtn);
+    instance.calendarContainer.appendChild(container);
   }
-});
-
-// Today button
-$("#todayBtn").on("click", function () {
-  const today = moment().tz("America/Chicago").format("YYYY-MM-DD");
-  fp.setDate([today, today], true);
-  $("#unifiedDatePicker").val(`${today} to ${today}`);
-  $("#filterButton").data("filter", "today").click();
-});
-
-// This Month button
-$("#monthFilterBtn").on("click", function () {
-  const start = moment().tz("America/Chicago").startOf("month").format("YYYY-MM-DD");
-  const end = moment().tz("America/Chicago").endOf("month").format("YYYY-MM-DD");
-  fp.setDate([start, end], true);
-  $("#unifiedDatePicker").val(`${start} to ${end}`);
-  $("#filterButton").click();
 });
   // flatpickr setup till here
   let sortOrder = {
