@@ -6,8 +6,8 @@ $(document).ready(async function () {
    const picker = new Litepicker({
   element: document.getElementById('dallasDateRange'),
   singleMode: false,
-  numberOfMonths: 2,
-  numberOfColumns: 2,
+  numberOfMonths: 1,
+  numberOfColumns: 1,
   format: 'YYYY-MM-DD',
   autoApply: true,
   dropdowns: {
