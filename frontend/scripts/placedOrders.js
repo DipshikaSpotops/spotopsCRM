@@ -660,6 +660,7 @@ $("#todayFilter").click(function () {
   $("#filterButton").data("filter", "today").trigger("click");
 });
 
+
   $('#closeCancelled').on('click', function(e) {
   $("#cancellingOrder").fadeOut();
   $(".modal-overlay").remove();
