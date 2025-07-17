@@ -12,7 +12,7 @@ const fp = flatpickr("#unifiedDatePicker", {
   },
   onClose: function () {
     document.querySelector(".table-wrapper").classList.remove("table-blur");
-  }
+  },
   onReady: function (selectedDates, dateStr, instance) {
   if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
 
