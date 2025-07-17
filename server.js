@@ -1051,7 +1051,7 @@ console.log("yard processing",month,year);
         $gte: startDate,
         $lt: endDate
       },orderStatus: "Yard Processing",
-    });
+    }).sort({ orderDate: 1 });;
 
     res.json(orders);
   } catch (error) {
@@ -1078,7 +1078,7 @@ console.log("transit",month,year);
         $gte: startDate,
         $lt: endDate
       },orderStatus: "In Transit",
-    });
+    }).sort({ orderDate: 1 });;
 
     res.json(orders);
   } catch (error) {
