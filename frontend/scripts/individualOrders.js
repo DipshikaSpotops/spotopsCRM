@@ -101,23 +101,20 @@ return orderBNum - orderANum;
 }
 let totalCount = 0;
 
-async function fetchOrdersByPage(page = 1) {
+async function fetchAllOrdersForStats() {
   const rangeValue = $("#unifiedDatePicker").val().trim();
   const tz = "America/Chicago";
   const loggedInUser = localStorage.getItem("firstName");
-  const isFetchAll = $("#fetchAllToggle").is(":checked");
-  const effectiveLimit = isFetchAll ? 0 : rowsPerPage;
+
+  if (!rangeValue) {
+    alert("Please select a valid date or range.");
+    return;
+  }
 
   let queryParams = {
     salesAgent: loggedInUser,
-    page,
-    limit: effectiveLimit,
+    limit: "all"
   };
-
-  if (!rangeValue) {
-    alert("Invalid date format. Please pick a valid date or range.");
-    return;
-  }
 
   if (rangeValue.includes(" to ")) {
     const [startStr, endStr] = rangeValue.split(" to ");
@@ -132,32 +129,25 @@ async function fetchOrdersByPage(page = 1) {
     queryParams.start = date.startOf("day").toISOString();
     queryParams.end = date.endOf("day").toISOString();
   } else {
-    alert("Invalid date format. Please pick a valid date or range.");
+    alert("Invalid date format.");
     return;
   }
 
   try {
-    const response = await axios.get(`https://www.spotops360.com/salespersonWiseOrders`, {
+    const response = await axios.get("https://www.spotops360.com/salespersonWiseOrders", {
       params: queryParams,
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
 
-    const { orders, totalCount: fetchedCount } = response.data;
-    totalCount = fetchedCount;
+    const { orders } = response.data;
     sortedData = sortOrdersByOrderNoDesc(orders);
-    currentPage = page;
 
+    updateOrderStats(sortedData); // ✅ Stats now use all data
+    currentPage = 1;
     renderTableRows(currentPage, sortedData);
-
-    if (!isFetchAll) {
-      createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
-    } else {
-      $("#pagination-controls").empty();
-    }
-
-    updateOrderStats(orders);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage), sortedData);
   } catch (error) {
-    console.error("Error fetching paginated orders:", error);
+    console.error("Error fetching all orders for stats:", error);
   }
 }
 
@@ -384,7 +374,7 @@ const thisMonthEnd = momentTz.clone().endOf("month").format("YYYY-MM-DD");
 $("#unifiedDatePicker").val(`${thisMonthStart} to ${thisMonthEnd}`);
 // Fetch orders specific to the logged-in salesperson
 try {
-  await fetchOrdersByPage(1); 
+  await fetchAllOrdersForStats();
 } catch (error) {
   console.error("Error fetching orders:", error);
 }
