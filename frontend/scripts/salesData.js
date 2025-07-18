@@ -372,7 +372,7 @@ const formatter = new Intl.DateTimeFormat('en-US', options);
 const parts = formatter.formatToParts(now);
 const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 const date = new Date(formattedDate);
-
+1
 const month = moment().tz("America/Chicago").format("MMM");
 const year = moment().tz("America/Chicago").format("YYYY");
 

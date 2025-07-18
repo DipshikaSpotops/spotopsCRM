@@ -1,4 +1,22 @@
 $(document).ready(async function () {
+  const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
+
+if (lastVisitedPage === "cancelledOrders" && document.referrer.includes("form.html")) {
+  const savedRange = sessionStorage.getItem("selectedDateRange");
+  const savedSearch = sessionStorage.getItem("searchValue");
+  const savedPage = sessionStorage.getItem("currentPage");
+
+  if (savedRange) $("#unifiedDatePicker").val(savedRange);
+  if (savedSearch) {
+    $("#searchInput").val(savedSearch);
+    setTimeout(() => {
+      $("#searchInput").trigger("keyup");
+    }, 200);
+  }
+  if (savedPage) currentPage = parseInt(savedPage);
+
+  sessionStorage.removeItem("lastVisitedPage");
+}
   // flatpickr setup
 const fp = flatpickr("#unifiedDatePicker", {
   mode: "range",
@@ -514,6 +532,10 @@ return orderNoB - orderNoA;
 
 $("#infoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
+sessionStorage.setItem("lastVisitedPage", "cancelledOrders");
+sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
+sessionStorage.setItem("searchValue", $("#searchInput").val());
+sessionStorage.setItem("currentPage", currentPage);
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
@@ -655,6 +677,7 @@ $("#filterButton").click(async function () {
 $(".sidebar .nav-link").on("click", function () {
     localStorage.removeItem('selectedMonthYear');
     localStorage.removeItem('currentPage');
+    sessionStorage.removeItem('lastVisitedPage');
     console.log("Cleared saved month and page number");
   });
 

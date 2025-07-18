@@ -337,82 +337,41 @@ const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
         sessionStorage.removeItem("lastVisitedPage"); // Clear after restoring
     } else {
         // If coming from another menu, set it to the current month
-        const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-        const date = new Date(now);
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-        $("#monthYearPicker").val(`${year}-${String(date.getMonth() + 1).padStart(2, "0")}`);
+        const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
+        $("#unifiedDatePicker").val(`${today} to ${today}`);
     }
 
-    const [year, monthNumber] = $("#monthYearPicker").val().split("-");
-    const month = months[parseInt(monthNumber, 10) - 1];
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+const tz = "America/Chicago";
 
-    try {
-        const ordersResponse = await axios.get(`https://www.spotops360.com/orders/refunded?month=${month}&year=${year}`, {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+let queryParams = {};
 
-        if (ordersResponse.status !== 200) {
-            throw new Error("Failed to fetch current month's orders");
-        }
-
-allOrders = ordersResponse.data.map(order => {
-  const yardSpent = (order.additionalInfo || []).reduce((sum, info) => {
-    const shippingCost = info.shippingDetails 
-      ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 
-      : 0;
-    const partPrice = parseFloat(info.partPrice || 0);
-    const others = parseFloat(info.others || 0);
-    const refundedAmount = parseFloat(info.refundedAmount || 0);
-    const yardOwnShipping = parseFloat(info.yardOwnShipping || 0);
-    const custOwnShippingReturn = parseFloat(info.custOwnShippingReturn || 0);
-    const custOwnShipReplacement = parseFloat(info.custOwnShipReplacement || 0);
-
-    return sum + partPrice + shippingCost + others - refundedAmount + yardOwnShipping + custOwnShippingReturn - custOwnShipReplacement;
-  }, 0);
-
-  const refundedBy = (order.orderHistory || []).filter(entry =>
-    entry.includes("Order status changed to Refunded")
-  ).map(entry => {
-    const parts = entry.split(" by ");
-    return parts[1]?.split(" on ")[0] || "Unknown";
-  })[0] || "";
-
-  const refundedDateRaw = new Date(order.custRefundDate).getTime();
-
-  return {
-    ...order,
-    yardSpent: parseFloat(yardSpent.toFixed(2)),
-    refundedBy,
-    refundedDateRaw
-  };
-});
-        var team = localStorage.getItem("team");
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
-
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
+if (rangeValue.includes(" to ")) {
+  const [startStr, endStr] = rangeValue.split(" to ");
+  const start = moment.tz(startStr, tz).startOf("day").toISOString();
+  const end = moment.tz(endStr, tz).endOf("day").toISOString();
+  queryParams.start = start;
+  queryParams.end = end;
+} else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+  const date = moment.tz(rangeValue, tz);
+  queryParams.start = date.startOf("day").toISOString();
+  queryParams.end = date.endOf("day").toISOString();
+} else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+  const m = moment(rangeValue, "YYYY-MM");
+  queryParams.month = m.format("MMM");
+  queryParams.year = m.format("YYYY");
+} else {
+  alert("Invalid date format");
+  return;
 }
-const totalRefundedAmount = allOrders.reduce((sum, order) => {
-  const amount = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
-  return sum + (isNaN(amount) ? 0 : amount);
-}, 0);
-        document.getElementById("showTotalOrders").innerHTML = `Refunded Orders- ${allOrders.length}`;
 
-        renderTableRows(currentPage);
-        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-    } catch (error) {
-        console.error("Error fetching current month's orders:", error);
-    }
-
+const ordersResponse = await axios.get("https://www.spotops360.com/orders/refunded", {
+  params: queryParams,
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
     // Clear stored filters when visiting another menu
     $(".nav-link").on("click", function () {
-        sessionStorage.removeItem("selectedMonthYear");
+        sessionStorage.removeItem("selectedDateRange");
         sessionStorage.removeItem("currentPage");
     });
 
@@ -468,7 +427,7 @@ return orderNoB - orderNoA;
 $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
     sessionStorage.setItem("lastVisitedPage", window.location.href);
-    sessionStorage.setItem("selectedMonthYear", $("#monthYearPicker").val());
+    sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
     sessionStorage.setItem("currentPage", currentPage);
     window.location.href = `form.html?orderNo=${id}&process=true`;
 });
@@ -542,51 +501,86 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
+// filter buttom
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");    
+  $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/refunded?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var team = localStorage.getItem("team");
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+  const tz = "America/Chicago";
+  let queryParams = { limit: "all" };
 
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-var allOrdersLength = allOrders.length;
-const totalRefundedAmount = allOrders.reduce((sum, order) => {
-  const amount = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
-  return sum + (isNaN(amount) ? 0 : amount);
-}, 0);
+  if (!rangeValue) {
+    alert("Please select a date, range, or month.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
 
-document.getElementById("showTotalOrders").innerHTML = `Refunded Orders - ${allOrdersLength} | Amount: $${totalRefundedAmount.toFixed(2)}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams.start = date.startOf("day").toISOString();
+    queryParams.end = date.endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    queryParams.month = m.format("MMM");
+    queryParams.year = m.format("YYYY");
+  } else {
+    alert("Invalid date format.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  try {
+    const ordersResponse = await axios.get("https://www.spotops360.com/orders/refunded", {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch refunded orders.");
+    }
+
+    allOrders = ordersResponse.data;
+
+    const team = localStorage.getItem("team");
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    const totalRefundedAmount = allOrders.reduce((sum, order) => {
+      const amt = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+      return sum + (isNaN(amt) ? 0 : amt);
+    }, 0);
+
+    document.getElementById("showTotalOrders").innerHTML = 
+      `Refunded Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`;
+
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  } catch (error) {
+    console.error("Error fetching filtered orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
 
 $("#logoutLink").click(function () {
