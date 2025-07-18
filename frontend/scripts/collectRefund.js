@@ -36,7 +36,6 @@ const fp = flatpickr("#unifiedDatePicker", {
     const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
     const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
     fp.setDate([start, end], true);
-    $("#unifiedDatePicker").val(`${start} to ${end}`);
     $("#filterButton").click();
     instance.close();
   });
@@ -50,7 +49,6 @@ const fp = flatpickr("#unifiedDatePicker", {
 
     const monthBtn = makeLink(monthName, () => {
       fp.setDate([start, end], true);
-      $("#unifiedDatePicker").val(`${start} to ${end}`);
       $("#filterButton").click();
       instance.close();
     });
