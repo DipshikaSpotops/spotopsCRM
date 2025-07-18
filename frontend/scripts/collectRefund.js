@@ -495,24 +495,19 @@ async function fetchYardInfo(month, year) {
   // Build query params
   let queryParams = { limit: 25 };
   if (rangeValue.includes(" to ")) {
-    const [startStr, endStr] = rangeValue.split(" to ");
-    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
-    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
-  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-    const m = moment(rangeValue, "YYYY-MM");
-    queryParams.month = m.format("MM");
-    queryParams.year = m.format("YYYY");
-  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-    const date = moment.tz(rangeValue, tz);
-    queryParams.start = date.startOf("day").toISOString();
-    queryParams.end = date.endOf("day").toISOString();
+  const parts = rangeValue.split(" to ");
+  if (parts.length === 2) {
+    const [startStr, endStr] = parts;
+    queryParams.start = moment.tz(startStr.trim(), tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr.trim(), tz).endOf("day").toISOString();
   } else {
-    alert("Invalid date format selected.");
+    alert("Invalid date range format. Please select using the calendar.");
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
     return;
   }
+}
 
   try {
     const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
