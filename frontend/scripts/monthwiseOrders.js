@@ -546,7 +546,7 @@ $("#filterButton").click(async function () {
     renderTableRows(currentPage, allOrders);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   } catch (error) {
-    console.error("❌ Error fetching orders:", error);
+    console.error("Error fetching orders:", error);
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();

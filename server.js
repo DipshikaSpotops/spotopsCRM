@@ -1392,25 +1392,38 @@ res.status(500).json({ message: "Server error", error });
 //   mongoose.connection.close();  
 // }
 // });
-
-
-
 app.get('/salespersonWiseOrders', async (req, res) => {
   try {
-    const { month, year, salesAgent, page = 1, limit = 25 } = req.query;
+    const {
+      month,
+      year,
+      start,
+      end,
+      salesAgent,
+      page = 1,
+      limit = 25,
+    } = req.query;
 
-    if (!month || !year || !salesAgent) {
-      return res.status(400).json({ message: "Month, year, and salesAgent are required" });
+    if (!salesAgent) {
+      return res.status(400).json({ message: "salesAgent is required" });
     }
 
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);
+    // Determine date range
+    let startDate, endDate;
+
+    if (start && end) {
+      startDate = new Date(start);
+      endDate = new Date(end);
+    } else if (month && year) {
+      startDate = new Date(`${year}-${month}-01`);
+      endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 1);
+    } else {
+      return res.status(400).json({ message: "Either start/end or month/year is required" });
+    }
 
     const pageNumber = parseInt(page, 10);
     const pageLimit = parseInt(limit, 10);
-
-    // 🧠 Allow fetching all if limit is 0
     const applyPagination = pageLimit > 0;
     const skip = applyPagination ? (pageNumber - 1) * pageLimit : 0;
 
@@ -1471,6 +1484,7 @@ app.get('/salespersonWiseOrders', async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 
 
