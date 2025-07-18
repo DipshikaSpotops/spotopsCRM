@@ -373,19 +373,9 @@ const parts = formatter.formatToParts(now);
 const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 const date = new Date(formattedDate);
 
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const monthMap = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-May: "05", Jun: "06", Jul: "07", Aug: "08",
-Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-};
-var monthNum = monthMap[month];
+const month = moment().tz("America/Chicago").format("MMM");
+const year = moment().tz("America/Chicago").format("YYYY");
 
-$("#monthYearPicker").val(`${year}-${monthNum}`);
 try {
 const ordersResponse = await axios.get(
   `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&limit=all`,
@@ -556,49 +546,81 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-// function to filter out data with month and year
+// function 
 $("#filterButton").click(async function () {
-    $("body").append('<div class="modal-overlay"></div>');
-    $("body").addClass("modal-active");
-    $("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-    const monthYear = $("#monthYearPicker").val();
-    const [year, monthNumber] = monthYear.split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = months[parseInt(monthNumber, 10) - 1];
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+  const tz = "America/Chicago";
 
-    try {
-        const ordersResponse = await axios.get(
-  `https://www.spotops360.com/orders/monthly?month=${month}&year=${year}&limit=all`,
-  {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  if (!rangeValue) {
+    alert("Please select a valid date, range, or month.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
   }
-);
 
-        if (ordersResponse.status !== 200) {
-            throw new Error("Failed to fetch filtered orders");
-        }
+  let queryParams = { limit: "all" };
+  let displayMonth = "";
+  let displayYear = "";
 
-        // Update the orders and display them
-        allOrders = ordersResponse.data.orders;
-        document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${allOrders.length}`;
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    const start = moment.tz(startStr, tz);
+    const end = moment.tz(endStr, tz);
+    queryParams.start = start.startOf("day").toISOString();
+    queryParams.end = end.endOf("day").toISOString();
+    displayMonth = start.format("MMM");
+    displayYear = start.format("YYYY");
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    displayMonth = m.format("MMM");
+    displayYear = m.format("YYYY");
+    queryParams.month = displayMonth;
+    queryParams.year = displayYear;
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams.start = date.startOf("day").toISOString();
+    queryParams.end = date.endOf("day").toISOString();
+    displayMonth = date.format("MMM");
+    displayYear = date.format("YYYY");
+  } else {
+    alert("Invalid date format selected.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
 
-        // Recalculate totals and update them
-        calculateAndUpdateTotals(allOrders);
-     $("#userDropdown").val("Select");
-        // Render the filtered orders
-        renderTableRows(1, allOrders);
-        createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), 1);
+  try {
+    const ordersResponse = await axios.get(
+      "https://www.spotops360.com/orders/monthly",
+      {
+        params: queryParams,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      }
+    );
 
-
-    } catch (error) {
-        console.error("Error fetching filtered orders:", error);
-    } finally {
-        // Hide the loading message and overlay
-        $("#loadingMessage").hide();
-        $(".modal-overlay").remove();
-        $("body").removeClass("modal-active");
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch filtered orders");
     }
+
+    allOrders = ordersResponse.data.orders;
+    document.getElementById("showTotalOrders").innerHTML = `Total No. of Orders: ${allOrders.length}`;
+    calculateAndUpdateTotals(allOrders);
+    $("#userDropdown").val("Select");
+    renderTableRows(1, allOrders);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage), 1);
+  } catch (error) {
+    console.error("Error fetching filtered orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
 
 $("#logoutLink").click(function () {
