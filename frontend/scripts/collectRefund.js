@@ -481,52 +481,54 @@ async function fetchYardInfo(month, year) {
   $("#loadingMessage").show();
 
   try {
-    const $picker = $("#unifiedDatePicker");
-    if ($picker.length === 0) {
-      throw new Error("💥 #unifiedDatePicker not found in DOM!");
-    }
+    const rangeValue = $("#unifiedDatePicker").val()?.trim();
+    const tz = "America/Chicago";
+    let queryParams = {};
 
-    const rangeValue = $picker.val()?.trim();
     if (!rangeValue) {
-      alert("⚠️ Please select a valid date or range.");
+      alert("⚠️ Please select a date or range first.");
       return;
     }
 
-    console.log("🔎 rangeValue:", rangeValue);
-
-    let month, year;
-    const tz = "America/Chicago";
-
     if (rangeValue.includes(" to ")) {
-      const parts = rangeValue.split(" to ");
-      if (parts.length < 2 || !parts[0]) {
-        throw new Error("Date range is improperly formatted.");
-      }
-      const momentStart = moment.tz(parts[0], tz);
-      month = momentStart.format("MMM");
-      year = momentStart.format("YYYY");
+      const [startStr, endStr] = rangeValue.split(" to ");
+      const start = moment.tz(startStr, tz);
+      const end = moment.tz(endStr, tz);
+      queryParams = {
+        month: start.format("MMM"),
+        year: start.format("YYYY"),
+        start: start.startOf("day").toISOString(),
+        end: end.endOf("day").toISOString()
+      };
     } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
       const m = moment(rangeValue, "YYYY-MM");
-      month = m.format("MMM");
-      year = m.format("YYYY");
+      queryParams = {
+        month: m.format("MMM"),
+        year: m.format("YYYY")
+      };
     } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
       const d = moment.tz(rangeValue, tz);
-      month = d.format("MMM");
-      year = d.format("YYYY");
+      queryParams = {
+        month: d.format("MMM"),
+        year: d.format("YYYY"),
+        start: d.startOf("day").toISOString(),
+        end: d.endOf("day").toISOString()
+      };
     } else {
       alert("Invalid date format selected.");
       return;
     }
 
-    console.log("Final Parsed Month/Year:", { month, year });
+    // 🔥 Call your existing fetch method with just month/year
+    await fetchYardInfo(queryParams.month, queryParams.year);
 
-    await fetchYardInfo(month, year);
+    // 🔁 Update view
     currentPage = 1;
     renderTable(currentPage);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
   } catch (error) {
-    console.error("Filter Button Error:", error);
-    alert("An error occurred while filtering. Check the console for more details.");
+    console.error("Error during filtering:", error);
+    alert("Something went wrong while filtering. Check console for details.");
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
