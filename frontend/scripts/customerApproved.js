@@ -501,47 +501,78 @@ const orderNoB = parseInt(b.orderNo.replace(/\D/g, ""), 10);
 return orderNoB - orderNoA;
 });
 }
+// filterButton
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
-var monthYear = $("#monthYearPicker").val(); // format like 2024-10 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-console.log("month",month,year);
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/customerApproved?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-// console.log("allorders at filter btn",allOrders);4
-const teamAgentsMap = {
-Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-  // etc.
-};
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Customer Approved Orders- ${allOrdersLength}`;
-renderOrders(allOrders);
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
+  try {
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    const tz = "America/Chicago";
+    let queryParams = {};
+
+    if (!rangeValue) {
+      alert("⚠️ Please select a date or range first.");
+      return;
+    }
+
+    if (rangeValue.includes(" to ")) {
+      const [startStr, endStr] = rangeValue.split(" to ");
+      queryParams = {
+        start: moment.tz(startStr, tz).startOf("day").toISOString(),
+        end: moment.tz(endStr, tz).endOf("day").toISOString()
+      };
+    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      const m = moment(rangeValue, "YYYY-MM");
+      queryParams = {
+        month: m.format("MMM"),
+        year: m.format("YYYY")
+      };
+    } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+      const date = moment.tz(rangeValue, tz);
+      queryParams = {
+        start: date.startOf("day").toISOString(),
+        end: date.endOf("day").toISOString()
+      };
+    } else {
+      alert("Invalid date format selected.");
+      return;
+    }
+
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/customerApproved`, {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch filtered orders");
+    }
+
+    allOrders = ordersResponse.data;
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+    const totalOrders = allOrders.length;
+    $("#showTotalOrders").text(`Customer Approved Orders - ${totalOrders}`);
+    allOrders = sortOrdersByOrderNoDesc(allOrders);
+    renderOrders(allOrders);
+
+  } catch (error) {
+    console.error("Error during filtering:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
+
 $('#closeCancelled').on('click', function(e) {
 $("#cancellingOrder").fadeOut();
 $(".modal-overlay").remove();
