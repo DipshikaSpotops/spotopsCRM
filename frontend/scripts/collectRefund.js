@@ -392,17 +392,49 @@ async function fetchYardInfo(month, year) {
   createPaginationControls(totalPages);
   }
   });
-  // Filter by month and year
+  // Filter
   $("#filterButton").click(async function () {
-  const monthYear = $("#monthYearPicker").val(); 
-  const [year, monthNumber] = monthYear.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const month = months[parseInt(monthNumber, 10) - 1];
-  await fetchYardInfo(month, year);
-  currentPage = 1;
-  renderTable(currentPage);
-  createPaginationControls(Math.ceil(yardOrders.length / 25));
-  });
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
+  try {
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    const tz = "America/Chicago";
+    if (!rangeValue) {
+      alert("Please select a valid date or range.");
+      return;
+    }
+    let month, year;
+    if (rangeValue.includes(" to ")) {
+      const [startStr] = rangeValue.split(" to ");
+      const momentStart = moment.tz(startStr, tz);
+      month = momentStart.format("MMM");
+      year = momentStart.format("YYYY");
+    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      const momentMonth = moment(rangeValue, "YYYY-MM");
+      month = momentMonth.format("MMM");
+      year = momentMonth.format("YYYY");
+    } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+      const singleDate = moment.tz(rangeValue, tz);
+      month = singleDate.format("MMM");
+      year = singleDate.format("YYYY");
+    } else {
+      alert("Invalid date format selected.");
+      return;
+    }
+    await fetchYardInfo(month, year);
+    currentPage = 1;
+    renderTable(currentPage);
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+  } catch (error) {
+    console.error("Error while filtering by date:", error);
+    alert("Something went wrong while filtering. Please try again.");
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
+});
   
   
   const firstName = localStorage.getItem("firstName");
