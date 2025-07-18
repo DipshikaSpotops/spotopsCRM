@@ -109,34 +109,32 @@ const fp = flatpickr("#unifiedDatePicker", {
   let yardData = [];
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-  
-  if (lastVisitedPage && document.referrer.includes("form.html")) {
-      let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
-      let savedPage = sessionStorage.getItem("currentPage");
-      let savedSearch = sessionStorage.getItem("searchValue"); 
-      if (savedMonthYear) $("#monthYearPicker").val(savedMonthYear);
-      if (savedPage) currentPage = parseInt(savedPage);
-  
-      if (savedSearch) {
-          $("#searchInput").val(savedSearch);
-          setTimeout(() => {
-              $("#searchInput").trigger("keyup"); 
-          }, 200); // Ensure DOM is ready
-      }
-  
-      sessionStorage.removeItem("lastVisitedPage");
-  } else {
-          // If coming from another menu, set it to the current month
-          const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-          const date = new Date(now);
-          const month = months[date.getMonth()];
-          const year = date.getFullYear();
-          $("#monthYearPicker").val(`${year}-${String(date.getMonth() + 1).padStart(2, "0")}`);
-      }
-  
-      const [year, monthNumber] = $("#monthYearPicker").val().split("-");
-      const month = months[parseInt(monthNumber, 10) - 1];
-  await fetchYardInfo(month, year);
+  let savedDateRange = sessionStorage.getItem("selectedDateRange");
+if (savedDateRange) {
+  $("#unifiedDatePicker").val(savedDateRange);
+}
+  let unifiedVal = $("#unifiedDatePicker").val().trim();
+let defaultMonth, defaultYear;
+
+if (unifiedVal.includes(" to ")) {
+  const [startStr] = unifiedVal.split(" to ");
+  const m = moment.tz(startStr, "YYYY-MM-DD", "America/Chicago");
+  defaultMonth = m.format("MMM");
+  defaultYear = m.format("YYYY");
+} else if (moment(unifiedVal, "YYYY-MM", true).isValid()) {
+  const m = moment(unifiedVal, "YYYY-MM");
+  defaultMonth = m.format("MMM");
+  defaultYear = m.format("YYYY");
+} else if (moment(unifiedVal, "YYYY-MM-DD", true).isValid()) {
+  const m = moment(unifiedVal, "YYYY-MM-DD");
+  defaultMonth = m.format("MMM");
+  defaultYear = m.format("YYYY");
+} else {
+  const now = moment.tz("America/Chicago");
+  defaultMonth = now.format("MMM");
+  defaultYear = now.format("YYYY");
+}
+  await fetchYardInfo(defaultMonth, defaultYear);
   async function fetchAllMonthlyOrders({ month, year, token, filterBy = null, salesAgent = null }) {
   const limit = 25;
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -430,7 +428,7 @@ async function fetchYardInfo(month, year) {
   // Save session data
   sessionStorage.setItem("lastVisitedPage", "collectRefund");
       sessionStorage.setItem("currentPage", currentPage);
-      sessionStorage.setItem("selectedMonthYear", $("#monthYearPicker").val());
+      sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
       sessionStorage.setItem("searchValue", $("#searchInput").val());
   window.location.href = `form.html?orderNo=${id}&process=true`;
   });
