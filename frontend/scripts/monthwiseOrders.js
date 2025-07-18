@@ -467,14 +467,94 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-// function to filter out data with month and year
+// function to filter out data 
 $("#filterButton").click(async function () {
-    const monthYear = $("#monthYearPicker").val();  // e.g., "2025-01"
-    localStorage.setItem('selectedMonthYear', monthYear); 
-    $("#loadingMessage").show(); 
-    await fetchOrdersForSelectedMonth(monthYear);
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");    
+  $("#loadingMessage").show();
+
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+  const tz = "America/Chicago";
+
+  if (!rangeValue) {
+    alert("Please select a valid date, range, or month.");
     $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  // Build query parameters based on input format
+  let queryParams = { limit: 25 };
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    queryParams.month = m.format("MM");
+    queryParams.year = m.format("YYYY");
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams.start = date.startOf("day").toISOString();
+    queryParams.end = date.endOf("day").toISOString();
+  } else {
+    alert("Invalid date format selected.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  try {
+    const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
+      params: { ...queryParams, page: 1 },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    const totalCount = firstResponse.data.totalCount;
+    const totalPages = Math.ceil(totalCount / 25);
+    let orders = [...firstResponse.data.orders];
+
+    const requests = [];
+    for (let p = 2; p <= totalPages; p++) {
+      requests.push(
+        axios.get("https://www.spotops360.com/orders/monthly", {
+          params: { ...queryParams, page: p },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
+      );
+    }
+
+    const responses = await Promise.all(requests);
+    responses.forEach(res => {
+      orders.push(...res.data.orders);
+    });
+
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+    if (team in teamAgentsMap) {
+      orders = orders.filter(order => teamAgentsMap[team].includes(order.salesAgent));
+    }
+
+    allOrders = orders;
+    currentPage = 1;
+
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${allOrders.length}`;
+    renderTableRows(currentPage, allOrders);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  } catch (error) {
+    console.error("❌ Error fetching orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
+
+
 
 // On page load, check for previously selected month/year
     const savedMonthYear = localStorage.getItem('selectedMonthYear');

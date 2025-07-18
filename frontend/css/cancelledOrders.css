@@ -250,10 +250,14 @@ text-align: center;
 font-size: 1.5em;
 color: #333;
 }
-#monthYearPicker{
+#unifiedDatePicker{
   background-color: #35554f;
     color: white;
     width: auto;
+}
+    #unifiedDatePicker::placeholder {
+  color: white; 
+  opacity: 1;  
 }
 #filterAndTotal{
   display: flex;
@@ -270,7 +274,7 @@ color: #333;
     margin-bottom: 1%;
     margin-top: 2%;
   }
-  #monthYearPicker,
+  #unifiedDatePicker,
 #filterButton,#showTotalOrders {
       min-width: 100px;
     height: 36px;
@@ -290,7 +294,7 @@ color: #333;
 }
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover, .previousNext:hover {
+#unifiedDatePicker:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 h1 {
@@ -354,7 +358,7 @@ color: #999999;
     color: #007413;
     font-weight: 500;
 }
-.dark-mode #monthYearPicker{
+.dark-mode #unifiedDatePicker{
 background-color: #29638c;
 color: white;
 border: none;
@@ -636,7 +640,7 @@ table.table td {
     margin-top: 1%;
     margin-left: 3%;
   }
-  #monthYearPicker {
+  #unifiedDatePicker {
     font-size: 12px;
   }
 }

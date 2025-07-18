@@ -241,7 +241,7 @@ body {
     }
     
     /* Month picker in dark mode */
-    [data-theme="dark"] #monthYearPicker {
+    [data-theme="dark"] #unifiedDatePicker {
       background-color: var(--month-picker-bg);
       color: #aa9e9e;;
       border: none;
@@ -265,11 +265,15 @@ body {
       background-color: var(--sidebar-bg);
       color: var(--sidebar-text);
     }
-    #monthYearPicker{
+    #unifiedDatePicker{
       background-color: #35554f;
         color: white;
         min-width: 180px;
     }
+        #unifiedDatePicker::placeholder {
+  color: white; 
+  opacity: 1;  
+}
     #filterButton {
       background-color: #35554f;
         color: white;
@@ -282,7 +286,7 @@ body {
       margin-left: 0%;
       text-decoration: underline;
     }
-    #monthYearPicker,
+    #unifiedDatePicker,
 #filterButton,#showTotalOrders {
       min-width: 100px;
     height: 36px;
@@ -302,7 +306,7 @@ body {
 }
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover, .previousNext:hover {
+#unifiedDatePicker:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 h1 {
@@ -366,7 +370,7 @@ font-size: 13px;
         color: #007413;
         font-weight: 500;
     }
-    .dark-mode #monthYearPicker{
+    .dark-mode #unifiedDatePicker{
     background-color: #29638c;
     color: white;
     border: none;

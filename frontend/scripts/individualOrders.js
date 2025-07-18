@@ -546,76 +546,106 @@ if (activeLink) {
 
 // function to filter out data with month and year
 $("#filterButton").click(async function () {
-// $("#showTotalOrders").hide();
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); // format like 2024-10 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+  const tz = "America/Chicago";
 
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/salespersonWiseOrders`, {
-  params: {
-    month: monthNumber,
-    year: year,
-    limit: "all", 
+  let queryParams = {
+    limit: "all",
     salesAgent: firstName,
-  },
-  headers: token ? { Authorization: `Bearer ${token}` } : {},
+  };
+
+  if (!rangeValue) {
+    alert("Please select a valid date, range, or month.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    queryParams.month = m.format("MM");
+    queryParams.year = m.format("YYYY");
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams.start = date.startOf("day").toISOString();
+    queryParams.end = date.endOf("day").toISOString();
+  } else {
+    alert("Invalid date format selected.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  try {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/salespersonWiseOrders`, {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch orders");
+    }
+
+    const { orders, totalCount } = ordersResponse.data;
+    sortedData = sortOrdersByOrderNoDesc(orders);
+
+    let totalGrossProfit = 0;
+    let totalActualGP = 0;
+    let totalCancelled = 0;
+    let totalRefunded = 0;
+    let totalDisputed = 0;
+
+    orders.forEach((item) => {
+      const estGP = parseFloat(item.grossProfit) || 0;
+      const actualGP = parseFloat(item.actualGP) || 0;
+      totalGrossProfit += estGP;
+      totalActualGP += actualGP;
+
+      switch (item.orderStatus) {
+        case "Order Cancelled":
+          totalCancelled++;
+          break;
+        case "Refunded":
+          totalRefunded++;
+          break;
+        case "Dispute":
+          totalDisputed++;
+          break;
+      }
+    });
+
+    const totalOrders = orders.length;
+    const cancellationRate = totalOrders > 0
+      ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100
+      : 0;
+
+    $("#showTotalOrders").text(`Total Orders- ${totalOrders}`);
+    $("#showTotalEstGP").text(`Est GP- ${totalGrossProfit.toFixed(2)}`);
+    $("#showTotalActualGP").text(`Actual GP- ${totalActualGP.toFixed(2)}`);
+    $("#showCancellationRate").text(`Cancellation Rate- ${cancellationRate.toFixed(2)}%`);
+
+    renderTableRows(1, sortedData);
+    createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
+
+  } catch (error) {
+    console.error("Error fetching filtered orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
 
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch orders");
-}
-
-// Update both allOrders and sortedData with the new filtered data
-const { orders, totalCount } = ordersResponse.data;
-sortedData = sortOrdersByOrderNoDesc(orders);
-var totalOrders = orders.length;
-console.log("totalOrders",totalOrders);
-let totalGrossProfit = 0; // Total gross profit for current page
-let totalEstGP = 0; // Total estGP for all orders
-let totalActualGP = 0;
-let totalCancelled = 0;
-let totalRefunded = 0;
-let totalDisputed = 0;
-orders.forEach((item) => {
-const estGP = item.grossProfit || 0;
-const actualGP = item.actualGP || 0;
-totalActualGP += actualGP;
-totalGrossProfit += estGP;
-// totalEstGP += estGP;
-if (item.orderStatus === "Order Cancelled") {
-        totalCancelled++;
-    } else if (item.orderStatus === "Refunded") {
-        totalRefunded++;
-    }
-    else if (item.orderStatus === "Dispute") {
-        totalDisputed++;
-    }
-})
-console.log("rate",totalCancelled,totalRefunded,totalDisputed,totalOrders);
-let cancellationRate = totalOrders > 0 ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100 : 0;
-
-document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${totalOrders}`;
-document.getElementById("showTotalEstGP").innerHTML = `Est GP- ${totalGrossProfit.toFixed(2)}`;
-document.getElementById("showTotalActualGP").innerHTML = `Actual GP- ${totalActualGP.toFixed(2)}`;
-document.getElementById("showCancellationRate").innerHTML = `Cancellation Rate- ${cancellationRate.toFixed(2)}%`;
-// Render the new filtered data
-renderTableRows(1, sortedData);
-createPaginationControls(Math.ceil(sortedData.length / rowsPerPage));
-
-} catch (error) {
-console.error("Error fetching filtered orders:", error);
-} finally {
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
-});
 $("#infoTable").on("click", ".edit-btn", function () {
 const id = $(this).data("id");
 window.location.href = `addOrders.html?orderNo=${id}`;

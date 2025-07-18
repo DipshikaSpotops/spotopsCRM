@@ -331,11 +331,15 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     scrollbar-gutter: stable;
     margin-top: 0%;
 }
-#monthYearPicker{
+#unifiedDatePicker{
   background-color: #35554f;
     color: white;
     width: auto;
     margin-top: 1%;
+}
+    #unifiedDatePicker::placeholder {
+  color: white; 
+  opacity: 1;  
 }
 #filterAndTotal{
   display: flex;
@@ -349,7 +353,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     margin-left: 1%;
     margin-top: 1%;
 }
-#monthYearPicker,
+#unifiedDatePicker,
 #filterButton,#showTotalOrders {
       min-width: 100px;
     height: 36px;
@@ -369,7 +373,7 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
 }
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover, .previousNext:hover {
+#unifiedDatePicker:hover, .previousNext:hover {
   background-color: #0b4f5f;
 }
 h1 {
@@ -433,7 +437,7 @@ color: #999999;
     color: #007413;
     font-weight: 500;
 }
-.dark-mode #monthYearPicker{
+.dark-mode #unifiedDatePicker{
 background-color: #29638c;
 color: white;
 border: none;
