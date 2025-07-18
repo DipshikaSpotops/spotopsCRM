@@ -332,11 +332,9 @@ async function fetchYardInfo(month, year) {
                       if (shippingDetails) {
                           shippingCharge = parseFloat(shippingDetails.split(":")[1]?.trim() || 0);
                       }
-  
                     if (parseFloat(refunds || 0) === 0 && parseFloat(toBeRefunded || 0) > 0) {
-    totalRefundToCollect += parseFloat(toBeRefunded);
-}
-  
+                     totalRefundToCollect += parseFloat(toBeRefunded);
+                     }
                       totalPartPrice += partPrice;
                       totalShipping += shippingCharge;
                       otherCharges += otherC;
@@ -479,60 +477,51 @@ async function fetchYardInfo(month, year) {
   $("#loadingMessage").show();
 
   try {
-    const rangeValue = $("#unifiedDatePicker").val()?.trim();
     const tz = "America/Chicago";
     let queryParams = {};
 
-    if (!rangeValue) {
-      alert("⚠️ Please select a date or range first.");
+    const selectedDates = fp.selectedDates;
+    if (!selectedDates || selectedDates.length === 0) {
+      alert("⚠️ Please select a valid date or range.");
       return;
     }
 
-    if (rangeValue.includes(" to ")) {
-      const [startStr, endStr] = rangeValue.split(" to ");
-      const start = moment.tz(startStr, tz);
-      const end = moment.tz(endStr, tz);
+    if (selectedDates.length === 2) {
+      const start = moment.tz(selectedDates[0], tz).startOf("day");
+      const end = moment.tz(selectedDates[1], tz).endOf("day");
       queryParams = {
+        start: start.toISOString(),
+        end: end.toISOString(),
         month: start.format("MMM"),
-        year: start.format("YYYY"),
-        start: start.startOf("day").toISOString(),
-        end: end.endOf("day").toISOString()
+        year: start.format("YYYY")
       };
-    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-      const m = moment(rangeValue, "YYYY-MM");
+    } else if (selectedDates.length === 1) {
+      const date = moment.tz(selectedDates[0], tz);
       queryParams = {
-        month: m.format("MMM"),
-        year: m.format("YYYY")
-      };
-    } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-      const d = moment.tz(rangeValue, tz);
-      queryParams = {
-        month: d.format("MMM"),
-        year: d.format("YYYY"),
-        start: d.startOf("day").toISOString(),
-        end: d.endOf("day").toISOString()
+        start: date.startOf("day").toISOString(),
+        end: date.endOf("day").toISOString(),
+        month: date.format("MMM"),
+        year: date.format("YYYY")
       };
     } else {
-      alert("Invalid date format selected.");
+      alert("Invalid date range selected.");
       return;
     }
 
-    // 🔥 Call your existing fetch method with just month/year
     await fetchYardInfo(queryParams.month, queryParams.year);
-
-    // 🔁 Update view
     currentPage = 1;
     renderTable(currentPage);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
   } catch (error) {
     console.error("Error during filtering:", error);
-    alert("Something went wrong while filtering. Check console for details.");
+    alert("Something went wrong while filtering. Check the console for details.");
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
   }
 });
+
 
   const firstName = localStorage.getItem("firstName");
   const lastName = localStorage.getItem("lastName");
