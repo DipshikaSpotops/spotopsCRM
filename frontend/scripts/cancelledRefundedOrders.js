@@ -34,18 +34,15 @@ $(document).ready(async function () {
       day: "2-digit"
     }).format(new Date()).replace(/(\d+)\/(\d+)\/(\d+)/, "$3-$1-$2")
   );
-  const defaultMonth = dallasDate.toISOString().slice(0, 7);
-  $("#monthYearPicker").val(defaultMonth);
+  const defaultMonth = moment().tz("America/Chicago").format("YYYY-MM");
+  $("#unifiedDatePicker").val(defaultMonth);
 
   // Load data on page load
-  await loadOrders(defaultMonth);
-
+  await loadOrdersFromPicker();
   // Filter button
-  $("#filterButton").click(async function () {
-    const selected = $("#monthYearPicker").val();
-    if (selected) await loadOrders(selected);
-  });
-
+$("#filterButton").click(async function () {
+  await loadOrdersFromPicker();
+});
   // Search input
 $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
@@ -82,69 +79,97 @@ $("#searchInput").on("keyup", function () {
   const searchQuick = document.getElementById("searchInputForOrderNo");
   const resultDiv = document.getElementById("searchResult");
   if (searchQuick) {
- searchQuick.addEventListener('keydown', function (event) {
-  console.log("searching order no");
-  if (event.key === 'Enter') {
-    const orderNo = searchQuick.value.trim();
-    if (orderNo !== '') {
-      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
-    }
-  }
-});
+    searchQuick.addEventListener("input", function () {
+      const val = this.value.trim();
+      resultDiv.innerHTML = val
+        ? `<button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>`
+        : "";
+      if (val) {
+        document.getElementById("viewOrderBtn").onclick = () => {
+          window.location.href = `form.html?orderNo=${encodeURIComponent(val)}&process=true`;
+        };
+      }
+    });
   }
 
   // Core data loader
-  async function loadOrders(monthYear) {
-    const [year, monthNum] = monthYear.split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = months[parseInt(monthNum, 10) - 1];
-    const [cancelled, refunded] = await Promise.all([
-      fetchOrders("cancelled-by-date", month, year),
-      fetchOrders("refunded-by-date", month, year)
-    ]);
-    const combined = [...cancelled, ...refunded];
-    const unique = {};
+async function loadOrdersFromPicker() {
+  const pickerVal = $("#unifiedDatePicker").val().trim();
+  const tz = "America/Chicago";
 
-    combined.forEach(order => {
-      const o = unique[order.orderNo] ??= {
-        orderNo: order.orderNo,
-        orderDate: order.orderDate,
-        cancellationReason: order.cancellationReason,
-        custRefAmount: order.custRefAmount,
-        custRefundDate: order.custRefundDate,
-        cancelledDate: order.cancelledDate,
-        customerName: order.customerName,
-        orderHistory: order.orderHistory || [],
-      };
-      order.orderHistory?.forEach(entry => {
-        if (entry.includes("cancelled") && !o.cancelledDate) o.cancelledDate = extractDate(entry);
-        if (entry.includes("refunded") && !o.custRefundDate) o.custRefundDate = extractDate(entry);
-      });
+  let queryParams = {};
+
+  if (pickerVal.includes(" to ")) {
+    const [startStr, endStr] = pickerVal.split(" to ");
+    queryParams = {
+      start: moment.tz(startStr, tz).startOf("day").toISOString(),
+      end: moment.tz(endStr, tz).endOf("day").toISOString()
+    };
+  } else if (moment(pickerVal, "YYYY-MM", true).isValid()) {
+    const m = moment(pickerVal, "YYYY-MM");
+    queryParams = {
+      month: m.format("MMM"),
+      year: m.format("YYYY")
+    };
+  } else if (moment(pickerVal, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(pickerVal, tz);
+    queryParams = {
+      start: date.startOf("day").toISOString(),
+      end: date.endOf("day").toISOString()
+    };
+  } else {
+    alert("⚠️ Please select a valid date, range, or month.");
+    return;
+  }
+
+  const [cancelled, refunded] = await Promise.all([
+    fetchOrders("cancelled-by-date", queryParams),
+    fetchOrders("refunded-by-date", queryParams)
+  ]);
+
+  const combined = [...cancelled, ...refunded];
+  const unique = {};
+
+  combined.forEach(order => {
+    const o = unique[order.orderNo] ??= {
+      orderNo: order.orderNo,
+      orderDate: order.orderDate,
+      cancellationReason: order.cancellationReason,
+      custRefAmount: order.custRefAmount,
+      custRefundDate: order.custRefundDate,
+      cancelledDate: order.cancelledDate,
+      customerName: order.customerName,
+      orderHistory: order.orderHistory || [],
+    };
+    order.orderHistory?.forEach(entry => {
+      if (entry.includes("cancelled") && !o.cancelledDate) o.cancelledDate = extractDate(entry);
+      if (entry.includes("refunded") && !o.custRefundDate) o.custRefundDate = extractDate(entry);
     });
+  });
 
-    allOrders = Object.values(unique);
-const totalRefundedAmount = allOrders
-  .filter(order => order.custRefundDate)
-  .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
+  allOrders = Object.values(unique);
+  const totalRefundedAmount = allOrders
+    .filter(order => order.custRefundDate)
+    .reduce((sum, order) => sum + (parseFloat(order.custRefAmount) || 0), 0);
 
-$("#showTotalOrders").text(`Total Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
-    renderTableRows(1);
-    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  $("#showTotalOrders").text(`Total Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`);
+  renderTableRows(1);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+}
+
+async function fetchOrders(type, queryParams) {
+  try {
+    const res = await axios.get(`https://www.spotops360.com/orders/${type}`, {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    return res.data;
+  } catch (err) {
+    console.error(`Error fetching ${type}`, err);
+    return [];
   }
+}
 
-  async function fetchOrders(type, month, year) {
-    try {
-      const res = await axios.get(`https://www.spotops360.com/orders/${type}`, {
-        params: { month, year },
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      return res.data;
-    } catch (err) {
-      console.error(`Error fetching ${type}`, err);
-      return [];
-    }
-  }
 
   function extractDate(text) {
     const match = text.match(/on (\\d{1,2}) (\\w+), (\\d{4})/);

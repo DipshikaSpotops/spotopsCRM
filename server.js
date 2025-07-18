@@ -890,7 +890,37 @@ app.get('/ordersPerPage', async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+function getDateRange({ start, end, month, year }) {
+  if (start && end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    endDate.setDate(endDate.getDate() + 1); // make end exclusive
 
+    return { startDate, endDate };
+  } else if (month && year) {
+    const monthMap = {
+      Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+      Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
+    };
+
+    let paddedMonth;
+    if (month.length === 3 && monthMap[month]) {
+      paddedMonth = monthMap[month];
+    } else if (!isNaN(month)) {
+      paddedMonth = month.padStart(2, '0');
+    } else {
+      throw new Error("Invalid month format");
+    }
+
+    const startDate = new Date(`${year}-${paddedMonth}-01T00:00:00-06:00`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    return { startDate, endDate };
+  } else {
+    throw new Error("Provide either start/end or month/year");
+  }
+}
 // for only placed orders
 app.get('/orders/placed', async (req, res) => {
   try {
@@ -1008,228 +1038,146 @@ console.log("orderNo for which storeCredit value should be updated",orderNo,"ord
 // for customerApproved
 app.get("/orders/customerApproved", async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("customer approved",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    const { start, end, month, year } = req.query;
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
-      },orderStatus: "Customer approved",
+      orderDate: { $gte: startDate, $lt: endDate },
+      orderStatus: "Customer approved"
     });
 
     res.json(orders);
   } catch (error) {
-console.error("Error fetching customerApproved orders:", error);
-res.status(500).json({ message: "Server error", error });
-}
+    console.error("Error fetching customerApproved orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 // for yardProcessing
 app.get("/orders/yardProcessing", async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("yard processing",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    const { start, end, month, year } = req.query;
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
-      },orderStatus: "Yard Processing",
-    }).sort({ orderDate: 1 });;
+      orderDate: { $gte: startDate, $lt: endDate },
+      orderStatus: "Yard Processing"
+    }).sort({ orderDate: 1 });
 
     res.json(orders);
   } catch (error) {
-console.error("Error fetching yardProcessing orders:", error);
-res.status(500).json({ message: "Server error", error });
-}
+    console.error("Error fetching yardProcessing orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 // for in Transit
 app.get("/orders/inTransit", async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("transit",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    const { start, end, month, year } = req.query;
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
-      },orderStatus: "In Transit",
-    }).sort({ orderDate: 1 });;
+      orderDate: { $gte: startDate, $lt: endDate },
+      orderStatus: "In Transit"
+    }).sort({ orderDate: 1 });
 
     res.json(orders);
   } catch (error) {
-console.error("Error fetching inTransit orders:", error);
-res.status(500).json({ message: "Server error", error });
-}  
+    console.error("Error fetching inTransit orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 // for fulfilled
 app.get("/orders/fulfilled", async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("fulfilled",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    const { start, end, month, year } = req.query;
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
-      },orderStatus: "Order Fulfilled",
+      orderDate: { $gte: startDate, $lt: endDate },
+      orderStatus: "Order Fulfilled"
     });
 
     res.json(orders);
   } catch (error) {
-console.error("Error fetching fulfilled orders:", error);
-res.status(500).json({ message: "Server error", error });
-}    
+    console.error("Error fetching fulfilled orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 // for orders which were in escalation atleast once
-app.get('/orders/escalated', async (req, res) => {
+app.get("/orders/escalated", async (req, res) => {
+  try {
+    const { start, end, month, year } = req.query;
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
-try {
-  const month = req.query.month;
-  const year = req.query.year;
-  if (!month || !year) {
-  return res.status(400).json({ message: "Month and year are required" });
-  }
-  
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
-  
     const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
-      },
+      orderDate: { $gte: startDate, $lt: endDate },
       additionalInfo: { $elemMatch: { escTicked: "Yes" } }
     });
-  
+
     res.json(orders);
-  }catch (error) {
-console.error("Error fetching fulfilled orders:", error);
-res.status(500).json({ message: "Server error", error });
-}    
+  } catch (error) {
+    console.error("Error fetching escalated orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 // for ongoing escalation with escTicked(yes) and orderStatus to be either in Customer Aproved,Yard Processing,In Transit or Escalation
-app.get('/orders/ongoing-escalations', async (req, res) => {
-try {
-const month = req.query.month;
-const year = req.query.year;
-const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
-if (!month || !year) {
-return res.status(400).json({ message: "Month and year are required" });
-}
+app.get("/orders/ongoing-escalations", async (req, res) => {
+  try {
+    const { start, end, month, year } = req.query;
+    const validStatuses = ["Customer approved", "Yard Processing", "In Transit", "Escalation"];
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
-  if (!month || !year) {
-    return res.status(400).json({ message: "Month and year are required" });
+    const orders = await Order.find({
+      orderDate: { $gte: startDate, $lt: endDate },
+      orderStatus: { $in: validStatuses },
+      additionalInfo: { $elemMatch: { escTicked: "Yes" } }
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching ongoing escalations:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-  const startDate = new Date(`${year}-${month}-01`);
-  const endDate = new Date(startDate);
-  endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
-
-  const orders = await Order.find({
-    orderDate: {
-      $gte: startDate,
-      $lt: endDate
-    },
-    orderStatus: { $in: validStatuses },
-    additionalInfo: { $elemMatch: { escTicked: "Yes" } }
-  });
-
-  res.json(orders);
-} catch (error) {
-console.error("Error fetching fulfilled orders:", error);
-res.status(500).json({ message: "Server error", error });
-}    
 });
 // for salespersonWise data
 app.get("/orders/salesPersonWise", async (req, res) => {
-var salesAgent = req.query.firstName;
-try {
-  const { month, year } = req.query;
-console.log("salesPersonWise",month,year);
-  if (!month || !year) {
-    return res.status(400).json({ message: "Month and year are required" });
+  try {
+    const { start, end, month, year, firstName: salesAgent } = req.query;
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
+
+    const orders = await Order.find({
+      orderDate: { $gte: startDate, $lt: endDate },
+      salesAgent
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching salesPersonOrders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-
-  // Construct the start and end date for the range
-  const startDate = new Date(`${year}-${month}-01`);
-  const endDate = new Date(startDate);
-  endDate.setMonth(endDate.getMonth() + 1);  
-
-  const orders = await Order.find({
-    orderDate: {
-      $gte: startDate,
-      $lt: endDate
-    },salesAgent: salesAgent,
-  });
-
-  res.json(orders);
-} catch (error) {
-console.error("Error fetching salesPersonOrders:", error);
-res.status(500).json({ message: "Server error", error });
-}
 });
 app.get("/orders/monthly", async (req, res) => {
   try {
-    const { month, year, page = 1, limit = 25, filterBy, salesAgent } = req.query;
+    const { start, end, month, year, page = 1, limit = 25, filterBy, salesAgent } = req.query;
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    // Construct the date range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);
-
-    // Base query
     const query = {
       orderDate: { $gte: startDate, $lt: endDate },
     };
+
     if (filterBy === "collectRefund") {
       query["additionalInfo.collectRefundCheckbox"] = "Ticked";
+    }
+
+    if (salesAgent) {
+      query.salesAgent = salesAgent;
     }
 
     const totalCount = await Order.countDocuments(query);
     const orders = await Order.find(query)
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
-      .lean(); 
+      .lean();
 
     res.json({
       totalCount,
@@ -1239,65 +1187,37 @@ app.get("/orders/monthly", async (req, res) => {
     });
   } catch (err) {
     console.error("Error fetching monthly orders:", err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error", error: err.message });
   }
 });
 // for cancelled
 app.get("/orders/cancelled", async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("cancelled",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
+    const { start, end, month, year } = req.query;
+    console.log("Cancelled orders query:", { start, end, month, year });
 
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
       orderDate: {
         $gte: startDate,
         $lt: endDate
-      },orderStatus: "Order Cancelled",
+      },
+      orderStatus: "Order Cancelled",
     });
 
     res.json(orders);
   } catch (error) {
-console.error("Error fetching cancelled orders:", error);
-res.status(500).json({ message: "Server error", error });
-}  
+    console.error("Error fetching cancelled orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 app.get("/orders/cancelled-by-date", async (req, res) => {
   try {
-    const { month, year } = req.query;
+    const { start, end, month, year } = req.query;
+    console.log("Incoming Query Params (cancelled):", { start, end, month, year });
 
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    // Support both numeric and string month formats
-    const monthMap = {
-      Jan: "01", January: "01",
-      Feb: "02", February: "02",
-      Mar: "03", March: "03",
-      Apr: "04", April: "04",
-      May: "05",
-      Jun: "06", June: "06",
-      Jul: "07", July: "07",
-      Aug: "08", August: "08",
-      Sep: "09", September: "09",
-      Oct: "10", October: "10",
-      Nov: "11", November: "11",
-      Dec: "12", December: "12"
-    };
-
-    const normalizedMonth = monthMap[month] || month.padStart(2, "0");
-    console.log("normalizedMonth:",normalizedMonth);
-    const startDate = new Date(`${year}-${normalizedMonth}`);
-    const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth), 1));
-    endDate.setMonth(endDate.getMonth() + 1);
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
       cancelledDate: {
@@ -1306,43 +1226,19 @@ app.get("/orders/cancelled-by-date", async (req, res) => {
       }
     });
 
+    console.log(`Cancelled orders fetched: ${orders.length}`);
     res.json(orders);
   } catch (error) {
-    console.error(" Error fetching cancelled-by-date orders:", error);
+    console.error("Error fetching cancelled-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
 app.get("/orders/refunded-by-date", async (req, res) => {
   try {
-    const { month, year } = req.query;
+    const { start, end, month, year } = req.query;
+    console.log("Incoming Query Params (refunded):", { start, end, month, year });
 
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-
-    const monthMap = {
-      Jan: "01", January: "01",
-      Feb: "02", February: "02",
-      Mar: "03", March: "03",
-      Apr: "04", April: "04",
-      May: "05",
-      Jun: "06", June: "06",
-      Jul: "07", July: "07",
-      Aug: "08", August: "08",
-      Sep: "09", September: "09",
-      Oct: "10", October: "10",
-      Nov: "11", November: "11",
-      Dec: "12", December: "12"
-    };
-
-    const normalizedMonth = monthMap[month] || month.padStart(2, "0");
-    console.log("normalizedMonth:",normalizedMonth);
-    const startDate = new Date(`${year}-${normalizedMonth}`);
-    const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth), 1));
-    console.log("startDate:", startDate.toISOString());
-console.log("endDate:", endDate.toISOString());
-
-    endDate.setMonth(endDate.getMonth() + 1);
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
       custRefundDate: {
@@ -1351,48 +1247,21 @@ console.log("endDate:", endDate.toISOString());
       }
     });
 
+    console.log(`Refunded orders fetched: ${orders.length}`);
     res.json(orders);
   } catch (error) {
     console.error("Error fetching refunded-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 app.get("/orders/disputes-by-date", async (req, res) => {
-  console.log("disputes-by-date");
   try {
-    const { month, year } = req.query;
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
-    // Support both numeric and string month formats
-    const monthMap = {
-      Jan: "01", January: "01",
-      Feb: "02", February: "02",
-      Mar: "03", March: "03",
-      Apr: "04", April: "04",
-      May: "05",
-      Jun: "06", June: "06",
-      Jul: "07", July: "07",
-      Aug: "08", August: "08",
-      Sep: "09", September: "09",
-      Oct: "10", October: "10",
-      Nov: "11", November: "11",
-      Dec: "12", December: "12"
-    };
+    const { start, end, month, year } = req.query;
+    console.log("Incoming Query Params (disputes):", { start, end, month, year });
 
-    const normalizedMonth = monthMap[month] || month.padStart(2, "0");
-    console.log("normalizedMonth:",normalizedMonth);
-    const startDate = new Date(`${year}-${normalizedMonth}`);
-    const endDate = new Date(Date.UTC(parseInt(year), parseInt(normalizedMonth, 10) - 1, 1));
-    endDate.setMonth(endDate.getMonth() + 1);
-    console.log("<<<",startDate,endDate);
-    // const disputedOrders = Order.find({ disputedDate: { $exists: true } }).limit(5)
-    // console.log("disputed",disputedOrders);
-    const testOrders = await Order.find({ disputedDate: { $ne: null } })
-  .sort({ disputedDate: -1 })
-  .limit(5);
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
-console.log("Recent disputes:", testOrders);
     const orders = await Order.find({
       disputedDate: {
         $gte: startDate,
@@ -1400,9 +1269,10 @@ console.log("Recent disputes:", testOrders);
       }
     });
 
+    console.log(`Disputed orders fetched: ${orders.length}`);
     res.json(orders);
   } catch (error) {
-    console.error(" Error fetching disputed-by-date orders:", error);
+    console.error("Error fetching disputed-by-date orders:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });

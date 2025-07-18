@@ -2,6 +2,7 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+
 $(document).ready(function () {
   // Apply dark mode on page load
   if (localStorage.getItem("darkMode") === "true") {

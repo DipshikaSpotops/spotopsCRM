@@ -831,7 +831,14 @@ placeholder="Search..."
 />
 </div>
 <div id="filterAndTotal">
-<input id="monthYearPicker" type="month" class="form-control" style="width: auto; min-width: 140px;" />
+<!-- Date Range Picker -->
+<div class="flatpickr-wrapper">
+  <input id="unifiedDatePicker" class="form-control" placeholder="Select date, range or month" readonly/>
+  <!-- <div id="flatpickrButtons">
+    <button id="todayBtn" class="btn btn-info">Today</button>
+    <button id="monthFilterBtn" class="btn btn-secondary">This Month</button>
+  </div> -->
+</div>
 <button id="filterButton" class="btn btn-primary" style="white-space: nowrap;">Filter</button>
 <select id="userDropdown" class="form-control">
       <option value="">Select user</option>

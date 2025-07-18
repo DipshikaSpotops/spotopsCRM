@@ -503,6 +503,43 @@ th.sortable {
   color: #000; /* Bold black or use accent color */
   font-weight: bold;
 }
+/* calender  */
+.flatpickr-calendar .custom-shortcuts a {
+  color: #007BFF;
+  text-decoration: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.flatpickr-weekdays,.flatpickr-weekdaycontainer,.flatpickr-months .flatpickr-month,.flatpickr-current-month .flatpickr-monthDropdown-months,.flatpickr-weekdays .flatpickr-weekdaycontainer,.flatpickr-weekdays .flatpickr-weekdaycontainer,span.flatpickr-weekday {
+    background: #037894 !important;
+}
+.flatpickr-weekday{
+ text-decoration: underline;
+}
+.table-blur {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+}
+.custom-shortcuts{
+  background-color: #ffffff !important;
+}
+.flatpickr-current-month {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px !important; 
+}
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+    font-weight: bold;
+    font-size: 15px;
+}
+.flatpickr-current-month .cur-month {
+  margin-right: 0 !important; 
+}
+.flatpickr-calendar .custom-shortcuts a:hover {
+  text-decoration: underline;
+}
 @media (max-width: 992px) {
   .sidebar {
     font-size: 10px;

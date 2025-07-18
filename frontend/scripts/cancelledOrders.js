@@ -493,48 +493,81 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
+// Filter button click event for Cancelled Orders using unifiedDatePicker
 $("#filterButton").click(async function () {
-    const monthYear = $("#monthYearPicker").val();
-    localStorage.setItem('selectedMonthYear', monthYear);
-    $("body").append('<div class="modal-overlay"></div>');
-    $("body").addClass("modal-active");    
-    $("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-    const [year, monthNumber] = monthYear.split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = months[parseInt(monthNumber, 10) - 1];
+  try {
+    let ordersResponse;
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    console.log("Unified picker value (cancelled):", rangeValue);
 
-    try {
-      const ordersResponse = await axios.get(`https://www.spotops360.com/orders/cancelled?month=${month}&year=${year}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      if (ordersResponse.status !== 200) {
-        throw new Error("Failed to fetch current month's orders");
-      }
-      allOrders = ordersResponse.data;
-      var team = localStorage.getItem("team");
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
+    let url = "";
+    const tz = "America/Chicago";
+    const isToday = $(this).data("filter") === "today";
 
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-      var allOrdersLength = allOrders.length;
-      document.getElementById("showTotalOrders").innerHTML = `Total Cancelled Orders This Month- ${allOrdersLength}`;
-      renderTableRows(currentPage);
-      createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-    } catch (error) {
-      console.error("Error fetching current month's orders:", error);
-    } finally {
-      $("#loadingMessage").hide();
-      $(".modal-overlay").remove();
-      $("body").removeClass("modal-active");
+    if (isToday) {
+      const today = moment().tz(tz).format("YYYY-MM-DD");
+      url = `https://www.spotops360.com/orders/cancelled?start=${today}&end=${today}`;
+      console.log("Fetching today's cancelled orders");
     }
-  });
+
+    else if (rangeValue.includes(" to ")) {
+      const [startStr, endStr] = rangeValue.split(" to ");
+      const start = moment.tz(startStr, tz).startOf("day").toISOString();
+      const end = moment.tz(endStr, tz).endOf("day").toISOString();
+
+      url = `https://www.spotops360.com/orders/cancelled?start=${start}&end=${end}`;
+      console.log("Filtering cancelled orders from:", startStr, "to", endStr);
+    }
+
+    else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      const momentObj = moment(rangeValue, "YYYY-MM");
+      const month = momentObj.format("MMM");
+      const year = momentObj.format("YYYY");
+
+      url = `https://www.spotops360.com/orders/cancelled?month=${month}&year=${year}`;
+      console.log("Filtering cancelled orders for month:", month, "year:", year);
+    }
+
+    else {
+      alert("Please select a valid date range or click 'Today'.");
+      return;
+    }
+
+    const response = await axios.get(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    allOrders = response.data;
+
+    const team = localStorage.getItem("team");
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order => teamAgentsMap[team].includes(order.salesAgent));
+    }
+
+    document.getElementById("showTotalOrders").innerHTML =
+      `Total Cancelled Orders - ${allOrders.length}`;
+
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  } catch (error) {
+    console.error("Error fetching filtered cancelled orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    $(this).data("filter", ""); // Reset state
+  }
+});
 
 
 $(".sidebar .nav-link").on("click", function () {
@@ -761,15 +794,22 @@ $(document).on("click", "#infoTable tr", function () {
   const searchInput = document.getElementById('searchInputForOrderNo');
   const resultDiv = document.getElementById('searchResult');
 
-  searchInput.addEventListener('keydown', function (event) {
-  console.log("searching order no");
-  if (event.key === 'Enter') {
+  searchInput.addEventListener('input', function () {
     const orderNo = searchInput.value.trim();
+
     if (orderNo !== '') {
-      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+      resultDiv.innerHTML = `
+        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
+      `;
+
+      document.getElementById('viewOrderBtn').addEventListener('click', function () {
+       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+
+      });
+    } else {
+      resultDiv.innerHTML = '';
     }
-  }
-});
+  });
   // sorting 
 let currentSortColumn = '';
 let sortAsc = true;
