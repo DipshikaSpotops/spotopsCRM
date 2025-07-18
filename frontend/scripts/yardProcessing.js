@@ -478,24 +478,26 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 
 $("#filterButton").click(async function () {
-  const selectedMonthYear = $("#monthYearPicker").val();
-  localStorage.setItem("selectedMonth", selectedMonthYear);
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+  localStorage.setItem("selectedMonth", rangeValue);
 
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");
   $("#loadingMessage").show();
 
-  const [year, monthNumber] = selectedMonthYear.split("-");
-  const month = months[parseInt(monthNumber, 10) - 1];
+  const tz = "America/Chicago";
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  let queryParams = {};
 
+  // Handle session restore if coming back from form.html
   const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-
   if (lastVisitedPage && document.referrer.includes("form.html")) {
     const savedMonthYear = sessionStorage.getItem("selectedMonthYear");
     const savedPage = sessionStorage.getItem("currentPage");
     const savedSearch = sessionStorage.getItem("searchValue");
 
-    if (savedMonthYear) $("#monthYearPicker").val(savedMonthYear);
+    if (savedMonthYear) $("#unifiedDatePicker").val(savedMonthYear);
     if (savedPage) currentPage = parseInt(savedPage);
     if (savedSearch) {
       $("#searchInput").val(savedSearch);
@@ -507,35 +509,65 @@ $("#filterButton").click(async function () {
     sessionStorage.removeItem("lastVisitedPage");
   }
 
+  // Determine query parameters
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams = {
+      start: moment.tz(startStr, tz).startOf("day").toISOString(),
+      end: moment.tz(endStr, tz).endOf("day").toISOString()
+    };
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    queryParams = {
+      month: m.format("MMM"),
+      year: m.format("YYYY")
+    };
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams = {
+      start: date.startOf("day").toISOString(),
+      end: date.endOf("day").toISOString()
+    };
+  } else {
+    alert("Please select a valid date, range, or month.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
   try {
     const ordersResponse = await axios.get(
-      `https://www.spotops360.com/orders/yardProcessing?month=${month}&year=${year}`,
+      "https://www.spotops360.com/orders/yardProcessing",
       {
+        params: queryParams,
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       }
     );
 
     if (ordersResponse.status !== 200) {
-      throw new Error("Failed to fetch current month's orders");
+      throw new Error("Failed to fetch filtered orders");
     }
 
     allOrders = ordersResponse.data;
+
     const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
-var team = localStorage.getItem("team");
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+    const team = localStorage.getItem("team");
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
     const total = allOrders.length;
     $("#showTotalOrders").text(`Total Orders - ${total}`);
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
   } catch (error) {
-    console.error("Error fetching current month's orders:", error);
+    console.error("Error fetching yardProcessing orders:", error);
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();

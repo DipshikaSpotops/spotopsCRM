@@ -391,47 +391,88 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
+// filterButton
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/inTransit?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-var team = localStorage.getItem("team");
-allOrders = ordersResponse.data;
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+  const tz = "America/Chicago";
+  let queryParams = {};
 
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Orders- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
+  if (!rangeValue) {
+    alert("Please select a valid date, range, or month.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams = {
+      start: moment.tz(startStr, tz).startOf("day").toISOString(),
+      end: moment.tz(endStr, tz).endOf("day").toISOString()
+    };
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    queryParams = {
+      month: m.format("MMM"),
+      year: m.format("YYYY")
+    };
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams = {
+      start: date.startOf("day").toISOString(),
+      end: date.endOf("day").toISOString()
+    };
+  } else {
+    alert("Invalid date format selected.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  try {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/inTransit`, {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch filtered orders");
+    }
+
+    allOrders = ordersResponse.data;
+
+    const team = localStorage.getItem("team");
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    const total = allOrders.length;
+    document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${total}`;
+    renderTableRows(currentPage);
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  } catch (error) {
+    console.error("Error fetching inTransit orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
+
 $("#logoutLink").click(function () {
 window.localStorage.clear();
 window.location.href = "login_signup.html";
