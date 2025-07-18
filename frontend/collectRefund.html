@@ -13,15 +13,6 @@
 href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 rel="stylesheet"
 />
-<!-- Flatpickr CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<!-- Flatpickr Theme (optional but nice) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<!-- Moment + Timezone -->
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js"></script>
 <link rel="stylesheet" href="/css/collectRefund.css" />
 <link
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -196,13 +187,14 @@ window.location.href = "login_signup.html";
       <div id="filterAndTotal">
         <div class="filter-bar">
 <!-- Date Range Picker -->
-<div class="flatpickr-wrapper">
-  <input id="unifiedDatePicker" class="form-control" placeholder="Select date, range or month" readonly/>
+<!-- <div class="flatpickr-wrapper"> -->
+  <!-- <input id="unifiedDatePicker" class="form-control" placeholder="Select date, range or month" readonly/> -->
   <!-- <div id="flatpickrButtons">
     <button id="todayBtn" class="btn btn-info">Today</button>
-    <button id="monthFilterBtn" class="btn btn-secondary">This Month</button>
+    
   </div> -->
-</div>
+<!-- </div> -->
+ <button id="monthFilterBtn" class="btn btn-secondary">This Month</button>
           <button id="filterButton" class="btn btn-primary">Filter</button>
         </div>
         <div id="showTotalOrders">Total Refund To Collect - </div>

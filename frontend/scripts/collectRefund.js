@@ -1,84 +1,4 @@
 $(document).ready(async function () {
-    // flatpickr setup
-  const fp = flatpickr("#unifiedDatePicker", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  allowInput: true,
-  onOpen: function () {
-    document.querySelector(".table-wrapper").classList.add("table-blur");
-  },
-  onClose: function () {
-    document.querySelector(".table-wrapper").classList.remove("table-blur");
-  },
-  onReady: function (selectedDates, dateStr, instance) {
-    if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
-
-    const container = document.createElement("div");
-    container.className = "custom-shortcuts";
-    container.style.display = "flex";
-    container.style.justifyContent = "flex-end";
-    container.style.flexWrap = "wrap";
-    container.style.gap = "10px";
-    container.style.marginTop = "0px";
-    container.style.padding = "0 10px";
-
-    const momentTz = moment().tz("America/Chicago");
-
-    const todayBtn = makeLink("Today", () => {
-      const today = momentTz.format("YYYY-MM-DD");
-      fp.setDate([today, today], true);
-      // ❌ Removed manual .val() — flatpickr handles it
-      $("#filterButton").data("filter", "today").click();
-      instance.close();
-    });
-
-    const thisMonthBtn = makeLink("This Month", () => {
-      const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-      const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-      fp.setDate([start, end], true);
-      // ❌ No need to manually set .val()
-      $("#filterButton").click();
-      instance.close();
-    });
-
-    for (let i = 1; i <= 3; i++) {
-      const monthMoment = momentTz.clone().subtract(i, "months");
-      const monthName = monthMoment.format("MMMM");
-      const start = monthMoment.startOf("month").format("YYYY-MM-DD");
-      const end = monthMoment.endOf("month").format("YYYY-MM-DD");
-
-      const monthBtn = makeLink(monthName, () => {
-        fp.setDate([start, end], true);
-        // ✅ Let flatpickr handle input display
-        $("#filterButton").click();
-        instance.close();
-      });
-
-      container.appendChild(monthBtn);
-    }
-
-    container.prepend(thisMonthBtn);
-    container.prepend(todayBtn);
-    instance.calendarContainer.appendChild(container);
-
-    function makeLink(label, handler) {
-      const link = document.createElement("a");
-      link.href = "#";
-      link.innerText = label;
-      link.className = "shortcut-link";
-      link.style.margin = "2px 5px";
-      link.style.fontSize = "13px";
-      link.style.color = "#007BFF";
-      link.style.cursor = "pointer";
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        handler();
-      });
-      return link;
-    }
-  }
-});
-  // flatpickr setup till here
 $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
@@ -332,9 +252,11 @@ async function fetchYardInfo(month, year) {
                       if (shippingDetails) {
                           shippingCharge = parseFloat(shippingDetails.split(":")[1]?.trim() || 0);
                       }
+  
                     if (parseFloat(refunds || 0) === 0 && parseFloat(toBeRefunded || 0) > 0) {
-                     totalRefundToCollect += parseFloat(toBeRefunded);
-                     }
+    totalRefundToCollect += parseFloat(toBeRefunded);
+}
+  
                       totalPartPrice += partPrice;
                       totalShipping += shippingCharge;
                       otherCharges += otherC;
@@ -470,59 +392,19 @@ async function fetchYardInfo(month, year) {
   createPaginationControls(totalPages);
   }
   });
-  // Filter
+  // Filter by month and year
   $("#filterButton").click(async function () {
-  $("body").append('<div class="modal-overlay"></div>');
-  $("body").addClass("modal-active");
-  $("#loadingMessage").show();
-
-  try {
-    const tz = "America/Chicago";
-    let queryParams = {};
-
-    const selectedDates = fp.selectedDates;
-    if (!selectedDates || selectedDates.length === 0) {
-      alert("⚠️ Please select a valid date or range.");
-      return;
-    }
-
-    if (selectedDates.length === 2) {
-      const start = moment.tz(selectedDates[0], tz).startOf("day");
-      const end = moment.tz(selectedDates[1], tz).endOf("day");
-      queryParams = {
-        start: start.toISOString(),
-        end: end.toISOString(),
-        month: start.format("MMM"),
-        year: start.format("YYYY")
-      };
-    } else if (selectedDates.length === 1) {
-      const date = moment.tz(selectedDates[0], tz);
-      queryParams = {
-        start: date.startOf("day").toISOString(),
-        end: date.endOf("day").toISOString(),
-        month: date.format("MMM"),
-        year: date.format("YYYY")
-      };
-    } else {
-      alert("Invalid date range selected.");
-      return;
-    }
-
-    await fetchYardInfo(queryParams.month, queryParams.year);
-    currentPage = 1;
-    renderTable(currentPage);
-    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-  } catch (error) {
-    console.error("Error during filtering:", error);
-    alert("Something went wrong while filtering. Check the console for details.");
-  } finally {
-    $("#loadingMessage").hide();
-    $(".modal-overlay").remove();
-    $("body").removeClass("modal-active");
-  }
-});
-
-
+  const monthYear = $("#monthYearPicker").val(); 
+  const [year, monthNumber] = monthYear.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[parseInt(monthNumber, 10) - 1];
+  await fetchYardInfo(month, year);
+  currentPage = 1;
+  renderTable(currentPage);
+  createPaginationControls(Math.ceil(yardOrders.length / 25));
+  });
+  
+  
   const firstName = localStorage.getItem("firstName");
   const lastName = localStorage.getItem("lastName");
   const role = localStorage.getItem("role");
