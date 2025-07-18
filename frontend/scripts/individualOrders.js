@@ -377,37 +377,14 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-const date = new Date(formattedDate);
-// Array of month names
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const monthMap = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-May: "05", Jun: "06", Jul: "07", Aug: "08",
-Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-};
-var monthNum = monthMap[month];
-
-$("#monthYearPicker").val(`${year}-${monthNum}`);
+const tz = "America/Chicago";
+const momentTz = moment().tz(tz);
+const thisMonthStart = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+const thisMonthEnd = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+$("#unifiedDatePicker").val(`${thisMonthStart} to ${thisMonthEnd}`);
 // Fetch orders specific to the logged-in salesperson
 try {
-  await fetchOrdersByPage(1); // ✅ this already fetches and processes everything
+  await fetchOrdersByPage(1); 
 } catch (error) {
   console.error("Error fetching orders:", error);
 }
