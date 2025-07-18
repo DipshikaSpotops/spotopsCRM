@@ -397,16 +397,21 @@ async function fetchYardInfo(month, year) {
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");
   $("#loadingMessage").show();
+
   try {
-    const rangeValue = $("#unifiedDatePicker").val().trim();
+    const rangeValue = $("#unifiedDatePicker").val()?.trim();
     const tz = "America/Chicago";
+
     if (!rangeValue) {
       alert("Please select a valid date or range.");
       return;
     }
+
     let month, year;
+
     if (rangeValue.includes(" to ")) {
       const [startStr] = rangeValue.split(" to ");
+      if (!startStr) throw new Error("Start date missing from range.");
       const momentStart = moment.tz(startStr, tz);
       month = momentStart.format("MMM");
       year = momentStart.format("YYYY");
@@ -422,21 +427,24 @@ async function fetchYardInfo(month, year) {
       alert("Invalid date format selected.");
       return;
     }
+
+    console.log("Parsed Date:", { month, year });
+
+    // 🔄 Fetch and re-render
     await fetchYardInfo(month, year);
     currentPage = 1;
     renderTable(currentPage);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
   } catch (error) {
-    console.error("Error while filtering by date:", error);
-    alert("Something went wrong while filtering. Please try again.");
+    console.error("Error in filter handler:", error);
+    alert("Something went wrong while filtering. Check the console for details.");
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
   }
 });
-  
-  
+
   const firstName = localStorage.getItem("firstName");
   const lastName = localStorage.getItem("lastName");
   const role = localStorage.getItem("role");
