@@ -555,7 +555,6 @@ $("#filterButton").click(async function () {
 });
 
 
-
 // On page load, check for previously selected month/year
     const savedMonthYear = localStorage.getItem('selectedMonthYear');
     if (savedMonthYear) {
