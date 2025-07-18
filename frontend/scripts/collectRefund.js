@@ -399,45 +399,52 @@ async function fetchYardInfo(month, year) {
   $("#loadingMessage").show();
 
   try {
-    const rangeValue = $("#unifiedDatePicker").val()?.trim();
-    const tz = "America/Chicago";
+    const $picker = $("#unifiedDatePicker");
+    if ($picker.length === 0) {
+      throw new Error("💥 #unifiedDatePicker not found in DOM!");
+    }
 
+    const rangeValue = $picker.val()?.trim();
     if (!rangeValue) {
-      alert("Please select a valid date or range.");
+      alert("⚠️ Please select a valid date or range.");
       return;
     }
 
+    console.log("🔎 rangeValue:", rangeValue);
+
     let month, year;
+    const tz = "America/Chicago";
 
     if (rangeValue.includes(" to ")) {
-      const [startStr] = rangeValue.split(" to ");
-      if (!startStr) throw new Error("Start date missing from range.");
-      const momentStart = moment.tz(startStr, tz);
+      const parts = rangeValue.split(" to ");
+      if (parts.length < 2 || !parts[0]) {
+        throw new Error("Date range is improperly formatted.");
+      }
+      const momentStart = moment.tz(parts[0], tz);
       month = momentStart.format("MMM");
       year = momentStart.format("YYYY");
     } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-      const momentMonth = moment(rangeValue, "YYYY-MM");
-      month = momentMonth.format("MMM");
-      year = momentMonth.format("YYYY");
+      const m = moment(rangeValue, "YYYY-MM");
+      month = m.format("MMM");
+      year = m.format("YYYY");
     } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-      const singleDate = moment.tz(rangeValue, tz);
-      month = singleDate.format("MMM");
-      year = singleDate.format("YYYY");
+      const d = moment.tz(rangeValue, tz);
+      month = d.format("MMM");
+      year = d.format("YYYY");
     } else {
       alert("Invalid date format selected.");
       return;
     }
 
-    console.log("Parsed Date:", { month, year });
+    console.log("Final Parsed Month/Year:", { month, year });
 
-    // 🔄 Fetch and re-render
     await fetchYardInfo(month, year);
     currentPage = 1;
     renderTable(currentPage);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
   } catch (error) {
-    console.error("Error in filter handler:", error);
-    alert("Something went wrong while filtering. Check the console for details.");
+    console.error("Filter Button Error:", error);
+    alert("An error occurred while filtering. Check the console for more details.");
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
