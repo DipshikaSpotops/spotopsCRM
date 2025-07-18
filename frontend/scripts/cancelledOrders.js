@@ -1,4 +1,86 @@
 $(document).ready(async function () {
+  // flatpickr setup
+const fp = flatpickr("#unifiedDatePicker", {
+  mode: "range",
+  dateFormat: "Y-m-d",
+  allowInput: true,
+    onOpen: function () {
+    document.querySelector(".table-wrapper").classList.add("table-blur");
+  },
+  onClose: function () {
+    document.querySelector(".table-wrapper").classList.remove("table-blur");
+  },
+  onReady: function (selectedDates, dateStr, instance) {
+  if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
+
+  const container = document.createElement("div");
+  container.className = "custom-shortcuts";
+  container.style.display = "flex";
+  container.style.justifyContent = "flex-end";
+  container.style.flexWrap = "wrap";
+  container.style.gap = "10px";
+  container.style.marginTop = "0px";
+  container.style.padding = "0 10px";
+
+  const momentTz = moment().tz("America/Chicago");
+
+  const todayBtn = makeLink("Today", () => {
+    const today = momentTz.format("YYYY-MM-DD");
+    fp.setDate([today, today], true);
+    $("#unifiedDatePicker").val(`${today} to ${today}`);
+    $("#filterButton").data("filter", "today").click();
+    instance.close();
+  });
+
+  const thisMonthBtn = makeLink("This Month", () => {
+    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+    fp.setDate([start, end], true);
+    $("#unifiedDatePicker").val(`${start} to ${end}`);
+    $("#filterButton").click();
+    instance.close();
+  });
+
+  // Generate last 3 months dynamically
+  for (let i = 1; i <= 3; i++) {
+    const monthMoment = momentTz.clone().subtract(i, "months");
+    const monthName = monthMoment.format("MMMM"); // e.g., "June"
+    const start = monthMoment.startOf("month").format("YYYY-MM-DD");
+    const end = monthMoment.endOf("month").format("YYYY-MM-DD");
+
+    const monthBtn = makeLink(monthName, () => {
+      fp.setDate([start, end], true);
+      $("#unifiedDatePicker").val(`${start} to ${end}`);
+      $("#filterButton").click();
+      instance.close();
+    });
+
+    container.appendChild(monthBtn);
+  }
+
+  container.prepend(thisMonthBtn);
+  container.prepend(todayBtn);
+  instance.calendarContainer.appendChild(container);
+
+  // Utility to make a styled link
+  function makeLink(label, handler) {
+    const link = document.createElement("a");
+    link.href = "#";
+    link.innerText = label;
+    link.className = "shortcut-link";
+    link.style.margin = "2px 5px";
+    link.style.fontSize = "13px";
+    link.style.color = "#007BFF";
+    link.style.cursor = "pointer";
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      handler();
+    });
+    return link;
+  }
+}
+});
+  // flatpickr setup till here
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
