@@ -492,22 +492,22 @@ $("#filterButton").click(async function () {
 
   // Handle session restore if coming back from form.html
   const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-  if (lastVisitedPage && document.referrer.includes("form.html")) {
-    const savedMonthYear = sessionStorage.getItem("selectedMonthYear");
-    const savedPage = sessionStorage.getItem("currentPage");
-    const savedSearch = sessionStorage.getItem("searchValue");
+if (lastVisitedPage === "collectRefund" && document.referrer.includes("form.html")) {
+  const savedDateRange = sessionStorage.getItem("selectedDateRange");
+  const savedPage = sessionStorage.getItem("currentPage");
+  const savedSearch = sessionStorage.getItem("searchValue");
 
-    if (savedMonthYear) $("#unifiedDatePicker").val(savedMonthYear);
-    if (savedPage) currentPage = parseInt(savedPage);
-    if (savedSearch) {
-      $("#searchInput").val(savedSearch);
-      setTimeout(() => {
-        $("#searchInput").trigger("keyup");
-      }, 200);
-    }
-
-    sessionStorage.removeItem("lastVisitedPage");
+  if (savedDateRange) $("#unifiedDatePicker").val(savedDateRange);
+  if (savedPage) currentPage = parseInt(savedPage);
+  if (savedSearch) {
+    $("#searchInput").val(savedSearch);
+    setTimeout(() => {
+      $("#searchInput").trigger("keyup");
+    }, 200);
   }
+
+  sessionStorage.removeItem("lastVisitedPage");
+}
 
   // Determine query parameters
   if (rangeValue.includes(" to ")) {

@@ -2,6 +2,23 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
+const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
+if (lastVisitedPage === "inTransit" && document.referrer.includes("form.html")) {
+  const savedPage = sessionStorage.getItem("currentPage");
+  const savedRange = sessionStorage.getItem("selectedDateRange");
+  const savedSearch = sessionStorage.getItem("searchValue");
+
+  if (savedPage) currentPage = parseInt(savedPage);
+  if (savedRange) $("#unifiedDatePicker").val(savedRange);
+  if (savedSearch) {
+    $("#searchInput").val(savedSearch);
+    setTimeout(() => {
+      $("#searchInput").trigger("keyup");
+    }, 200);
+  }
+
+  sessionStorage.removeItem("lastVisitedPage");
+}
 // flatpickr setup
 const fp = flatpickr("#unifiedDatePicker", {
   mode: "range",
@@ -106,6 +123,16 @@ if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
 escalationStyle = 'style="background-color: lightgreen;"';
 }
 const team = localStorage.getItem('team');
+let myLastNote = "";
+if (Array.isArray(item.supportNotes) && item.supportNotes.length > 0) {
+  const rawNote = item.supportNotes[item.supportNotes.length - 1];
+  if (typeof rawNote === "string" && rawNote.trim()) {
+    const words = rawNote.trim().split(/\s+/); 
+    myLastNote = words.reduce((acc, word, idx) => {
+      return acc + word + ((idx + 1) % 5 === 0 ? "<br>" : " ");
+    }, "").trim();
+  }
+}
 const actions = `
 <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 const yardlength = item.additionalInfo.length;
@@ -142,6 +169,7 @@ $("#infoTable").append(`
   .join("<br>")
   : ""
   }</td>
+  <td>${myLastNote}</td>
   <td>${item.orderStatus}</td>
 <td>${actions}</td>
 </tr>
@@ -328,6 +356,10 @@ window.location.href = `form.html?orderNo=${id}`;
 
 $("#infoTable").on("click", ".process-btn", function () {
 const id = $(this).data("id");
+sessionStorage.setItem("lastVisitedPage", "inTransit"); 
+sessionStorage.setItem("currentPage", currentPage);
+sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
+sessionStorage.setItem("searchValue", $("#searchInput").val());
 window.location.href = `form.html?orderNo=${id}&process=true`;
 });
 
