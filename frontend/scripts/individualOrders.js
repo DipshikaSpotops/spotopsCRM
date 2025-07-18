@@ -102,8 +102,28 @@ return orderBNum - orderANum;
 let totalCount = 0;
 
 async function fetchOrdersByPage(page = 1) {
-  const monthYear = $("#monthYearPicker").val();
-  const [year, monthNumber] = monthYear.split("-");
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+const tz = "America/Chicago";
+let year, monthNumber;
+
+if (rangeValue.includes(" to ")) {
+  const [startStr, endStr] = rangeValue.split(" to ");
+  const start = moment.tz(startStr, tz).startOf("day").toISOString();
+  const end = moment.tz(endStr, tz).endOf("day").toISOString();
+  queryParams.start = start;
+  queryParams.end = end;
+} else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+  const m = moment(rangeValue, "YYYY-MM");
+  monthNumber = m.format("MM");
+  year = m.format("YYYY");
+} else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+  const date = moment.tz(rangeValue, tz);
+  queryParams.start = date.startOf("day").toISOString();
+  queryParams.end = date.endOf("day").toISOString();
+} else {
+  alert("Invalid date format. Please pick a valid date or range.");
+  return;
+}
   const loggedInUser = localStorage.getItem("firstName");
   const isFetchAll = $("#fetchAllToggle").is(":checked");
   const effectiveLimit = isFetchAll ? 0 : rowsPerPage;
