@@ -103,54 +103,54 @@ let totalCount = 0;
 
 async function fetchOrdersByPage(page = 1) {
   const rangeValue = $("#unifiedDatePicker").val().trim();
-const tz = "America/Chicago";
-let year, monthNumber;
-
-if (rangeValue.includes(" to ")) {
-  const [startStr, endStr] = rangeValue.split(" to ");
-  const start = moment.tz(startStr, tz).startOf("day").toISOString();
-  const end = moment.tz(endStr, tz).endOf("day").toISOString();
-  queryParams.start = start;
-  queryParams.end = end;
-} else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-  const m = moment(rangeValue, "YYYY-MM");
-  monthNumber = m.format("MM");
-  year = m.format("YYYY");
-} else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-  const date = moment.tz(rangeValue, tz);
-  queryParams.start = date.startOf("day").toISOString();
-  queryParams.end = date.endOf("day").toISOString();
-} else {
-  alert("Invalid date format. Please pick a valid date or range.");
-  return;
-}
+  const tz = "America/Chicago";
   const loggedInUser = localStorage.getItem("firstName");
   const isFetchAll = $("#fetchAllToggle").is(":checked");
   const effectiveLimit = isFetchAll ? 0 : rowsPerPage;
 
-  try {
-    
-    const response = await axios.get(
-      `https://www.spotops360.com/salespersonWiseOrders`,
-      {
-        params: {
-          month: monthNumber,
-          year: year,
-          page: page,
-          limit: "all",
-          salesAgent: loggedInUser,
-        },
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      }
-    );
+  let queryParams = {
+    salesAgent: loggedInUser,
+    page,
+    limit: effectiveLimit,
+  };
 
-const { orders, totalCount: fetchedCount } = response.data;
-totalCount = fetchedCount; 
+  if (!rangeValue) {
+    alert("Invalid date format. Please pick a valid date or range.");
+    return;
+  }
+
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    queryParams.month = m.format("MM");
+    queryParams.year = m.format("YYYY");
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams.start = date.startOf("day").toISOString();
+    queryParams.end = date.endOf("day").toISOString();
+  } else {
+    alert("Invalid date format. Please pick a valid date or range.");
+    return;
+  }
+
+  try {
+    const response = await axios.get(`https://www.spotops360.com/salespersonWiseOrders`, {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    const { orders, totalCount: fetchedCount } = response.data;
+    totalCount = fetchedCount;
     sortedData = sortOrdersByOrderNoDesc(orders);
     currentPage = page;
 
-renderTableRows(currentPage, sortedData);        if (!isFetchAll) {
-createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
+    renderTableRows(currentPage, sortedData);
+
+    if (!isFetchAll) {
+      createPaginationControls(Math.ceil(totalCount / rowsPerPage), sortedData);
     } else {
       $("#pagination-controls").empty();
     }
