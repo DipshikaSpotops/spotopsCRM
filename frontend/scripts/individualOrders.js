@@ -13,7 +13,7 @@ const fp = flatpickr("#unifiedDatePicker", {
   onClose: function () {
     document.querySelector(".table-wrapper").classList.remove("table-blur");
   },
-  onReady: function (selectedDates, dateStr, instance) {
+ onReady: function (selectedDates, dateStr, instance) {
   if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
 
   const container = document.createElement("div");
@@ -47,7 +47,7 @@ const fp = flatpickr("#unifiedDatePicker", {
   // Generate last 3 months dynamically
   for (let i = 1; i <= 3; i++) {
     const monthMoment = momentTz.clone().subtract(i, "months");
-    const monthName = monthMoment.format("MMMM"); // e.g., "June"
+    const monthName = monthMoment.format("MMMM");
     const start = monthMoment.startOf("month").format("YYYY-MM-DD");
     const end = monthMoment.endOf("month").format("YYYY-MM-DD");
 
@@ -81,6 +81,17 @@ const fp = flatpickr("#unifiedDatePicker", {
     });
     return link;
   }
+  // Auto-select current month and trigger filter on page load
+  const defaultStart = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+  const defaultEnd = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+
+  fp.setDate([defaultStart, defaultEnd], true);
+  $("#unifiedDatePicker").val(`${defaultStart} to ${defaultEnd}`);
+
+  // Give Flatpickr time to sync before triggering filter
+  setTimeout(() => {
+    $("#filterButton").click();
+  }, 100);
 }
 });
   // flatpickr setup till here
