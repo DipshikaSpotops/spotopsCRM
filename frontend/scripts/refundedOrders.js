@@ -39,7 +39,8 @@ const fp = flatpickr("#unifiedDatePicker", {
     const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
     const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
     fp.setDate([start, end], true);
-    $("#unifiedDatePicker").val(`${start} to ${end}`);
+    $("#unifiedDatePicker").val("");
+    $("#unifiedDatePicker").attr("placeholder", "Select date, range or month");
     $("#filterButton").click();
     instance.close();
   });
@@ -81,7 +82,16 @@ const fp = flatpickr("#unifiedDatePicker", {
     });
     return link;
   }
-}
+},
+  onChange: function (selectedDates, dateStr, instance) {
+    if (selectedDates.length === 2) {
+      const start = moment(selectedDates[0]).format("YYYY-MM-DD");
+      const end = moment(selectedDates[1]).format("YYYY-MM-DD");
+      $("#unifiedDatePicker").val(`${start} to ${end}`);
+    } else {
+      $("#unifiedDatePicker").val("");
+    }
+  }
 });
   // flatpickr setup till here
   // Set default date range to current month on initial load
