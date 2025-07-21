@@ -134,14 +134,14 @@ async function fetchAllOrdersForStats() {
   }
 
   try {
-    const response = await axios.get("https://www.spotops360.com/orders/salesPersonWise", {
+    const response = await axios.get("https://www.spotops360.com/orders/monthly", {
       params: queryParams,
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
 
     const  orders  = response.data;
     console.log("allOrders",orders,"response:",response);
-    sortedData = sortOrdersByOrderNoDesc(orders);
+    sortedData = sortOrdersByOrderNoDesc(filteredOrders);
     console.log("sortedData");
     updateOrderStats(sortedData); 
     currentPage = 1;
@@ -575,7 +575,7 @@ $("#filterButton").click(async function () {
   }
 
   try {
-    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/salesPersonWise`, {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/monthly`, {
       params: queryParams,
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
@@ -583,17 +583,15 @@ $("#filterButton").click(async function () {
     if (ordersResponse.status !== 200) {
       throw new Error("Failed to fetch orders");
     }
-
-    const { orders, totalCount } = ordersResponse.data;
-    sortedData = sortOrdersByOrderNoDesc(orders);
-
+    const { orders = [], totalCount = 0 } = ordersResponse.data;
+    const filteredOrders = orders.filter(order => order.salesAgent === firstName);
+    sortedData = sortOrdersByOrderNoDesc(filteredOrders);
     let totalGrossProfit = 0;
     let totalActualGP = 0;
     let totalCancelled = 0;
     let totalRefunded = 0;
     let totalDisputed = 0;
-
-    orders.forEach((item) => {
+    filteredOrders.forEach((item) => {
       const estGP = parseFloat(item.grossProfit) || 0;
       const actualGP = parseFloat(item.actualGP) || 0;
       totalGrossProfit += estGP;
@@ -612,7 +610,7 @@ $("#filterButton").click(async function () {
       }
     });
 
-    const totalOrders = orders.length;
+    const totalOrders = filteredOrders.length;
     const cancellationRate = totalOrders > 0
       ? ((totalCancelled + totalRefunded + totalDisputed) / totalOrders) * 100
       : 0;
