@@ -374,6 +374,7 @@ const momentTz = moment().tz(tz);
 const thisMonthStart = momentTz.clone().startOf("month").format("YYYY-MM-DD");
 const thisMonthEnd = momentTz.clone().endOf("month").format("YYYY-MM-DD");
 $("#unifiedDatePicker").val(`${thisMonthStart} to ${thisMonthEnd}`);
+$("#filterButton").click();
 // Fetch orders specific to the logged-in salesperson
 try {
   await fetchAllOrdersForStats();
