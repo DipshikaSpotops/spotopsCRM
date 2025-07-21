@@ -1,4 +1,5 @@
 $(document).ready(async function () {
+  let team = localStorage.getItem('team');
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
@@ -140,9 +141,6 @@ function renderTableRows(page, orders = allOrders) {
         if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
             escalationStyle = 'style="background-color: lightgreen;"';
         }
-
-        var team = localStorage.getItem('team');
-     
         const actions = `
             <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
@@ -403,7 +401,6 @@ const ordersResponse = await axios.get("https://www.spotops360.com/orders/refund
 allOrders = ordersResponse.data;
 
 // Optional team filtering
-const team = localStorage.getItem("team");
 const teamAgentsMap = {
   Shankar: ["David", "John"],
   Vinutha: ["Michael", "Mark"],
@@ -510,8 +507,7 @@ if (activeLink) {
   activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-role = localStorage.getItem("role");
-team = localStorage.getItem("team");
+const role = localStorage.getItem("role");
 if (team === "Team Charlie" || role === "Sales") {
 // Hide specific reports links for Team Charlie
 $("#submenu-reports .nav-link")
@@ -607,8 +603,6 @@ $("#filterButton").click(async function () {
     }
 
     allOrders = ordersResponse.data;
-
-    const team = localStorage.getItem("team");
     const teamAgentsMap = {
       Shankar: ["David", "John"],
       Vinutha: ["Michael", "Mark"],
