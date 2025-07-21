@@ -1324,56 +1324,46 @@ app.get("/migrate-dates", async (req, res) => {
 // for disputes
 app.get("/orders/disputes", async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("dispute",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
+    const { start, end, month, year } = req.query;
+    console.log("Dispute orders query:", { start, end, month, year });
 
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
       orderDate: {
         $gte: startDate,
         $lt: endDate
-      },orderStatus: "Dispute",
+      },
+      orderStatus: "Dispute",
     });
 
     res.json(orders);
   } catch (error) {
-  console.error("Error fetching disputed orders:", error);
-  res.status(500).json({ message: "Server error", error });
-  }  
-  });
+    console.error("Error fetching disputed orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 // for refunded
 app.get("/orders/refunded", async (req, res) => {
   try {
-    const { month, year } = req.query;
-console.log("refunded",month,year);
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year are required" });
-    }
+    const { start, end, month, year } = req.query;
+    console.log("Refunded orders query:", { start, end, month, year });
 
-    // Construct the start and end date for the range
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);  // Move to the next month
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
       orderDate: {
         $gte: startDate,
         $lt: endDate
-      },orderStatus: "Refunded",
+      },
+      orderStatus: "Refunded",
     });
 
     res.json(orders);
   } catch (error) {
-console.error("Error fetching cancelled orders:", error);
-res.status(500).json({ message: "Server error", error });
-}  
+    console.error("Error fetching refunded orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 // monthly orders
 

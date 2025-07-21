@@ -84,15 +84,6 @@ const fp = flatpickr("#unifiedDatePicker", {
 }
 });
   // flatpickr setup till here
-  // Set default date range to current month on initial load
-if (!sessionStorage.getItem("selectedDateRange")) {
-  const momentTz = moment().tz("America/Chicago");
-  const startOfMonth = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-  const endOfMonth = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-  
-  fp.setDate([startOfMonth, endOfMonth], true); 
-  $("#unifiedDatePicker").val(`${startOfMonth} to ${endOfMonth}`);
-}
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
@@ -344,13 +335,11 @@ const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
         }
 
         sessionStorage.removeItem("lastVisitedPage"); // Clear after restoring
-    }else {
-    const momentTz = moment().tz("America/Chicago");
-    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-    $("#unifiedDatePicker").val(`${start} to ${end}`);
-    fp.setDate([start, end], true);
-}
+    } else {
+        // If coming from another menu, set it to the current month
+        const today = moment.tz("America/Chicago").format("YYYY-MM-DD");
+        $("#unifiedDatePicker").val(`${today} to ${today}`);
+    }
 
     const rangeValue = $("#unifiedDatePicker").val().trim();
 const tz = "America/Chicago";
@@ -372,7 +361,7 @@ if (rangeValue.includes(" to ")) {
   queryParams.month = m.format("MMM");
   queryParams.year = m.format("YYYY");
 } else {
-  alert("Invalid or missing date. Please select a valid date range.");
+  alert("Invalid date format");
   return;
 }
 
