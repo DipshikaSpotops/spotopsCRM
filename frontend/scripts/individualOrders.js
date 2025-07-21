@@ -850,7 +850,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
 
   const actualColumn = columnMap[column] || column;
 
-  allOrders.sort((a, b) => {
+  filteredOrders.sort((a, b) => {
     let valA = a[actualColumn];
     let valB = b[actualColumn];
 
