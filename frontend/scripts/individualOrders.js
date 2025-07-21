@@ -140,6 +140,7 @@ async function fetchAllOrdersForStats() {
     });
 
     const { orders } = response.data;
+    console.log("allOrders",orders);
     sortedData = sortOrdersByOrderNoDesc(orders);
     console.log("sortedData");
     updateOrderStats(sortedData); 
