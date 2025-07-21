@@ -561,6 +561,7 @@ $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // filter buttom
 $("#filterButton").click(async function () {
+  log("clicked on filter button");
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");    
   $("#loadingMessage").show();
