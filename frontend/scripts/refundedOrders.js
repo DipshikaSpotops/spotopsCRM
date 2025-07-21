@@ -558,7 +558,87 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 // filter buttom
+$("#filterButton").click(async function () {
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
+  const rangeValue = $("#unifiedDateRangeRaw").val().trim();
+  const tz = "America/Chicago";
+  const queryParams = { limit: "all" };
+
+  if (!rangeValue) {
+    alert("⚠️ Please select a valid date, range, or month.");
+    cleanupOverlay();
+    return;
+  }
+
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const singleDate = moment.tz(rangeValue, tz);
+    queryParams.start = singleDate.startOf("day").toISOString();
+    queryParams.end = singleDate.endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const monthMoment = moment(rangeValue, "YYYY-MM");
+    queryParams.month = monthMoment.format("MMM");
+    queryParams.year = monthMoment.format("YYYY");
+  } else {
+    alert("⚠️ Invalid date format. Please use YYYY-MM-DD or YYYY-MM.");
+    cleanupOverlay();
+    return;
+  }
+
+  try {
+    const response = await axios.get("https://www.spotops360.com/orders/refunded", {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch refunded orders.");
+    }
+
+    allOrders = response.data;
+
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    const totalRefunded = allOrders.reduce((sum, order) => {
+      const amount = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+      return sum + (isNaN(amount) ? 0 : amount);
+    }, 0);
+
+    $("#showTotalOrders").text(
+      `Refunded Orders - ${allOrders.length} | Amount: $${totalRefunded.toFixed(2)}`
+    );
+
+    renderTableRows(1); // Reset to page 1
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  } catch (error) {
+    console.error("❌ Error fetching filtered refunded orders:", error);
+    alert("An error occurred while fetching refunded orders. Please try again.");
+  } finally {
+    cleanupOverlay();
+  }
+
+  function cleanupOverlay() {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
+});
 
 $("#logoutLink").click(function () {
 window.localStorage.clear();
