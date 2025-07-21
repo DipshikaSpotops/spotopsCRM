@@ -34,16 +34,16 @@ const fp = flatpickr("#unifiedDatePicker", {
     $("#filterButton").data("filter", "today").click();
     instance.close();
   });
-
   const thisMonthBtn = makeLink("This Month", () => {
-    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-    fp.setDate([start, end], true);
-    $("#unifiedDatePicker").val("");
-    $("#unifiedDatePicker").attr("placeholder", "Select date, range or month");
-    $("#filterButton").click();
-    instance.close();
-  });
+  const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+  const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+  fp.setDate([start, end], true);
+  const label = moment(start).format("MMMM YYYY"); // "July 2025"
+  $("#unifiedDatePicker").val(label);
+  $("#filterButton").click();
+  instance.close();
+});
+
 
   // Generate last 3 months dynamically
   for (let i = 1; i <= 3; i++) {
@@ -51,14 +51,13 @@ const fp = flatpickr("#unifiedDatePicker", {
     const monthName = monthMoment.format("MMMM"); // e.g., "June"
     const start = monthMoment.startOf("month").format("YYYY-MM-DD");
     const end = monthMoment.endOf("month").format("YYYY-MM-DD");
-
+    const label = moment(start).format("MMMM YYYY"); // "June 2025"
     const monthBtn = makeLink(monthName, () => {
       fp.setDate([start, end], true);
-      $("#unifiedDatePicker").val(`${start} to ${end}`);
+      $("#unifiedDatePicker").val(label);
       $("#filterButton").click();
       instance.close();
     });
-
     container.appendChild(monthBtn);
   }
 
@@ -83,15 +82,19 @@ const fp = flatpickr("#unifiedDatePicker", {
     return link;
   }
 },
-  onChange: function (selectedDates, dateStr, instance) {
-    if (selectedDates.length === 2) {
-      const start = moment(selectedDates[0]).format("YYYY-MM-DD");
-      const end = moment(selectedDates[1]).format("YYYY-MM-DD");
-      $("#unifiedDatePicker").val(`${start} to ${end}`);
-    } else {
-      $("#unifiedDatePicker").val("");
-    }
+onChange: function (selectedDates) {
+  if (selectedDates.length === 2) {
+    const start = moment(selectedDates[0]);
+    const end = moment(selectedDates[1]);
+    const sameMonth = start.month() === end.month() && start.year() === end.year();
+    const label = sameMonth
+      ? start.format("MMMM YYYY")          // Show "July 2025"
+      : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`; // "Jul 1 - Jul 31, 2025"
+    $("#unifiedDatePicker").val(label);
+  } else {
+    $("#unifiedDatePicker").val("");
   }
+}
 });
   // flatpickr setup till here
   // Set default date range to current month on initial load
