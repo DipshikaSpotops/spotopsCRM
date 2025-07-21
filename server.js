@@ -890,34 +890,40 @@ app.get('/ordersPerPage', async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-function getDateRange({ start, end, month, year }) {
-  if (start && end) {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    endDate.setDate(endDate.getDate() + 1); // make end exclusive
+const moment = require("moment-timezone");
 
+function getDateRange({ start, end, month, year }) {
+  const tz = "America/Chicago";
+
+  if (start && end) {
+    const startDate = moment.tz(start, tz).startOf("day").utc().toDate();
+    const endDate = moment.tz(end, tz).endOf("day").utc().toDate();
     return { startDate, endDate };
-  } else if (month && year) {
+  } 
+  
+  else if (month && year) {
+    // Normalize month input (e.g., "Jul" or "07")
     const monthMap = {
-      Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
-      Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
+      Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05", Jun: "06",
+      Jul: "07", Aug: "08", Sep: "09", Oct: "10", Nov: "11", Dec: "12"
     };
 
     let paddedMonth;
     if (month.length === 3 && monthMap[month]) {
       paddedMonth = monthMap[month];
     } else if (!isNaN(month)) {
-      paddedMonth = month.padStart(2, '0');
+      paddedMonth = month.padStart(2, "0");
     } else {
       throw new Error("Invalid month format");
     }
 
-    const startDate = new Date(`${year}-${paddedMonth}-01T00:00:00-06:00`);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);
+    const startDate = moment.tz(`${year}-${paddedMonth}-01`, tz).startOf("month").utc().toDate();
+    const endDate = moment.tz(`${year}-${paddedMonth}-01`, tz).endOf("month").utc().toDate();
 
     return { startDate, endDate };
-  } else {
+  } 
+  
+  else {
     throw new Error("Provide either start/end or month/year");
   }
 }
