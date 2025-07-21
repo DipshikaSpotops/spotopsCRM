@@ -619,7 +619,7 @@ window.location.href = "login_signup.html";
 <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
 <!-- <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a> -->
 <a class="nav-link view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
-<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewyardOrders.html">View All Orders</a>
+<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
 <a class="nav-link yard-located-orders" id="yard-located-orders-linl" href="yardLocatedOrders.html">Yard Located Orders</a>
 <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
 <a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
@@ -850,88 +850,6 @@ $(document).ready(async function () {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
-// flatpickr setup
-const fp = flatpickr("#unifiedDatePicker", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  allowInput: true,
-    onOpen: function () {
-    document.querySelector(".table-wrapper").classList.add("table-blur");
-  },
-  onClose: function () {
-    document.querySelector(".table-wrapper").classList.remove("table-blur");
-  },
-  onReady: function (selectedDates, dateStr, instance) {
-  if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
-
-  const container = document.createElement("div");
-  container.className = "custom-shortcuts";
-  container.style.display = "flex";
-  container.style.justifyContent = "flex-end";
-  container.style.flexWrap = "wrap";
-  container.style.gap = "10px";
-  container.style.marginTop = "0px";
-  container.style.padding = "0 10px";
-
-  const momentTz = moment().tz("America/Chicago");
-
-  const todayBtn = makeLink("Today", () => {
-    const today = momentTz.format("YYYY-MM-DD");
-    fp.setDate([today, today], true);
-    $("#unifiedDatePicker").val(`${today} to ${today}`);
-    $("#filterButton").data("filter", "today").click();
-    instance.close();
-  });
-
-  const thisMonthBtn = makeLink("This Month", () => {
-    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-    fp.setDate([start, end], true);
-    $("#unifiedDatePicker").val(`${start} to ${end}`);
-    $("#filterButton").click();
-    instance.close();
-  });
-
-  // Generate last 3 months dynamically
-  for (let i = 1; i <= 3; i++) {
-    const monthMoment = momentTz.clone().subtract(i, "months");
-    const monthName = monthMoment.format("MMMM"); // e.g., "June"
-    const start = monthMoment.startOf("month").format("YYYY-MM-DD");
-    const end = monthMoment.endOf("month").format("YYYY-MM-DD");
-
-    const monthBtn = makeLink(monthName, () => {
-      fp.setDate([start, end], true);
-      $("#unifiedDatePicker").val(`${start} to ${end}`);
-      $("#filterButton").click();
-      instance.close();
-    });
-
-    container.appendChild(monthBtn);
-  }
-
-  container.prepend(thisMonthBtn);
-  container.prepend(todayBtn);
-  instance.calendarContainer.appendChild(container);
-
-  // Utility to make a styled link
-  function makeLink(label, handler) {
-    const link = document.createElement("a");
-    link.href = "#";
-    link.innerText = label;
-    link.className = "shortcut-link";
-    link.style.margin = "2px 5px";
-    link.style.fontSize = "13px";
-    link.style.color = "#007BFF";
-    link.style.cursor = "pointer";
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      handler();
-    });
-    return link;
-  }
-}
-});
-  // flatpickr setup till here
 let yardOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;  
@@ -1333,7 +1251,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   }
 });
 
-// Filter
+// Filter by month and year
 $("#filterButton").click(async function () {
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");
@@ -1341,58 +1259,45 @@ $("#filterButton").click(async function () {
 
   try {
     const rangeValue = $("#unifiedDatePicker").val().trim();
-    let url = "";
-    const isToday = $(this).data("filter") === "today";
     const tz = "America/Chicago";
 
-    if (isToday) {
-      const today = moment().tz(tz).format("YYYY-MM-DD");
-      url = `https://www.spotops360.com/orders/fulfilled?start=${today}&end=${today}`;
-    } else if (rangeValue.includes(" to ")) {
-      const [startStr, endStr] = rangeValue.split(" to ");
-      const start = moment.tz(startStr, tz).startOf("day").toISOString();
-      const end = moment.tz(endStr, tz).endOf("day").toISOString();
-      url = `https://www.spotops360.com/orders/fulfilled?start=${start}&end=${end}`;
-    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    let month, year;
+
+    // If input is a single day
+    if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+      const momentObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
+      month = momentObj.format("MMM");
+      year = momentObj.format("YYYY");
+    } 
+    // If input is a range
+    else if (rangeValue.includes(" to ")) {
+      const [startStr, _] = rangeValue.split(" to ");
+      const momentObj = moment.tz(startStr, "YYYY-MM-DD", tz);
+      month = momentObj.format("MMM");
+      year = momentObj.format("YYYY");
+    } 
+    // If input is just month (YYYY-MM)
+    else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
       const momentObj = moment(rangeValue, "YYYY-MM");
-      const month = momentObj.format("MMM");
-      const year = momentObj.format("YYYY");
-      url = `https://www.spotops360.com/orders/fulfilled?month=${month}&year=${year}`;
-    } else {
-      alert("⚠️ Please select a valid date range or click 'Today'.");
+      month = momentObj.format("MMM");
+      year = momentObj.format("YYYY");
+    } 
+    else {
+      alert("⚠️ Please select a valid date, range, or month.");
       return;
     }
 
-    const response = await axios.get(url, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
-    });
-
-    yardOrders = response.data;
-
-    const team = localStorage.getItem("team");
-    const teamAgentsMap = {
-      Shankar: ["David", "John"],
-      Vinutha: ["Michael", "Mark"],
-    };
-
-    if (team in teamAgentsMap) {
-      yardOrders = yardOrders.filter(order =>
-        teamAgentsMap[team].includes(order.salesAgent)
-      );
-    }
-
-    const total = yardOrders.length;
-    document.getElementById("showTotalOrders").innerHTML = `Total Fulfilled Orders - ${total}`;
-
-    renderTableRows(1, yardOrders); // First page
-    createPaginationControls(Math.ceil(total / rowsPerPage));
+    currentPage = 1;
+    await fetchYardInfo(month, year);
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
   } catch (error) {
-    console.error("Error fetching fulfilled orders:", error);
+    console.error("Error filtering Card Not Charged data:", error);
+    alert("Something went wrong while filtering data.");
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
-    $(this).data("filter", ""); // reset the custom filter
+    $(this).data("filter", "");
   }
 });
 
