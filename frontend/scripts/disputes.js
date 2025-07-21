@@ -434,45 +434,66 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/disputes?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var team = localStorage.getItem("team");
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
+  try {
+    let ordersResponse;
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    console.log("📅 Unified picker value:", rangeValue);
 
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Disputes This Month- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
+    let url = "";
+    const isToday = $(this).data("filter") === "today";
+    const tz = "America/Chicago";
+
+    if (isToday) {
+      const today = moment().tz(tz).format("YYYY-MM-DD");
+      url = `https://www.spotops360.com/orders/disputes?start=${today}&end=${today}`;
+    } else if (rangeValue.includes(" to ")) {
+      const [startStr, endStr] = rangeValue.split(" to ");
+      const start = moment.tz(startStr, tz).startOf("day").toISOString();
+      const end = moment.tz(endStr, tz).endOf("day").toISOString();
+      url = `https://www.spotops360.com/orders/disputes?start=${start}&end=${end}`;
+    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      const momentObj = moment(rangeValue, "YYYY-MM");
+      const month = momentObj.format("MMM");
+      const year = momentObj.format("YYYY");
+      url = `https://www.spotops360.com/orders/disputes?month=${month}&year=${year}`;
+    } else {
+      alert("⚠️ Please select a valid date range or click 'Today'.");
+      return;
+    }
+
+    const response = await axios.get(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    allOrders = response.data;
+
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    const team = localStorage.getItem("team");
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order => teamAgentsMap[team].includes(order.salesAgent));
+    }
+
+    const filteredDisputes = allOrders.filter(item => item.orderStatus === "Dispute");
+
+    document.getElementById("showTotalOrders").innerHTML = `Total Disputes - ${filteredDisputes.length}`;
+    renderTableRows(1, filteredDisputes);
+    createPaginationControls(Math.ceil(filteredDisputes.length / rowsPerPage));
+  } catch (error) {
+    console.error("Error fetching filtered disputes:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    $(this).data("filter", ""); 
+  }
 });
 
 $("#logoutLink").click(function () {
