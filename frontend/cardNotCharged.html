@@ -284,10 +284,14 @@ color: #999999;
     color: #007413;
     font-weight: 500;
 }
-.dark-mode #monthYearPicker{
+.dark-mode #unifiedDatePicker{
 background-color: #29638c;
 color: white;
 border: none;
+}
+#unifiedDatePicker::placeholder {
+  color: white; 
+  opacity: 1;  
 }
 .dark-mode .table-wrapper{
   scrollbar-color: #29638c #141b2d;
@@ -383,7 +387,7 @@ scrollbar-color: #29638c #141b2d;
   white-space: nowrap;
   margin-left: 0%;
   text-decoration: underline;}
-#monthYearPicker{
+#unifiedDatePicker{
   background-color: #35554f;
     color: white;
     width: auto;
@@ -394,7 +398,7 @@ scrollbar-color: #29638c #141b2d;
     border: none;
     margin-left: 1%;
 }
-#monthYearPicker,
+#unifiedDatePicker,
 #filterButton,#showTotalOrders {
       min-width: 100px;
     height: 36px;
@@ -459,7 +463,7 @@ font-size: 13px;
 } */
 #filterButton:hover,
 #showTotalOrders:hover,
-#monthYearPicker:hover {
+#unifiedDatePicker:hover {
   background-color: #0b4f5f;
 }
 .topHeads{
@@ -998,7 +1002,7 @@ Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 };
 var monthNum = monthMap[month];
 
-$("#monthYearPicker").val(`${year}-${monthNum}`);
+$("#unifiedDatePicker").val(`${year}-${monthNum}`);
 await fetchYardInfo(month, year);
 
 // Fetch yard info data for a specific month and 
@@ -1247,16 +1251,69 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   }
 });
 
-// Filter by month and year
+// Filter
 $("#filterButton").click(async function () {
-    const monthYear = $("#monthYearPicker").val();
-    const [year, monthNumber] = monthYear.split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = months[parseInt(monthNumber, 10) - 1];
-    await fetchYardInfo(month, year);
-    currentPage = 1; 
-    
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
+
+  try {
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    let url = "";
+    const isToday = $(this).data("filter") === "today";
+    const tz = "America/Chicago";
+
+    if (isToday) {
+      const today = moment().tz(tz).format("YYYY-MM-DD");
+      url = `https://www.spotops360.com/orders/fulfilled?start=${today}&end=${today}`;
+    } else if (rangeValue.includes(" to ")) {
+      const [startStr, endStr] = rangeValue.split(" to ");
+      const start = moment.tz(startStr, tz).startOf("day").toISOString();
+      const end = moment.tz(endStr, tz).endOf("day").toISOString();
+      url = `https://www.spotops360.com/orders/fulfilled?start=${start}&end=${end}`;
+    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      const momentObj = moment(rangeValue, "YYYY-MM");
+      const month = momentObj.format("MMM");
+      const year = momentObj.format("YYYY");
+      url = `https://www.spotops360.com/orders/fulfilled?month=${month}&year=${year}`;
+    } else {
+      alert("⚠️ Please select a valid date range or click 'Today'.");
+      return;
+    }
+
+    const response = await axios.get(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+
+    allOrders = response.data;
+
+    const team = localStorage.getItem("team");
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    const total = allOrders.length;
+    document.getElementById("showTotalOrders").innerHTML = `Total Fulfilled Orders - ${total}`;
+
+    renderTableRows(1, allOrders); // First page
+    createPaginationControls(Math.ceil(total / rowsPerPage));
+  } catch (error) {
+    console.error("Error fetching fulfilled orders:", error);
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    $(this).data("filter", ""); // reset the custom filter
+  }
 });
+
 
 // Search functionality
 $("#searchInput").on("keyup", function () {
