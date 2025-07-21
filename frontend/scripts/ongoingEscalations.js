@@ -243,37 +243,45 @@ if (returningFromForm && savedMonth) {
 }
 
 try {
-const [selectedYear, selectedMonthNum] = $("#monthYearPicker").val().split("-");
-const selectedMonthName = months[parseInt(selectedMonthNum) - 1];
+  const tz = "America/Chicago";
+  const start = moment().tz(tz).startOf("month").toISOString();
+  const end = moment().tz(tz).endOf("month").toISOString();
 
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/ongoing-escalations?month=${selectedMonthName}&year=${selectedYear}`,  {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var team = localStorage.getItem("team");
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
+  const ordersResponse = await axios.get("https://www.spotops360.com/orders/ongoing-escalations", {
+    params: { start, end },
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
 
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Ongoing Escalations- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-localStorage.removeItem("ongoingEscalationMonth");
-localStorage.removeItem("returningFromForm");
+  if (ordersResponse.status !== 200) {
+    throw new Error("Failed to fetch current month's orders");
+  }
+
+  allOrders = ordersResponse.data;
+
+  const teamAgentsMap = {
+    Shankar: ["David", "John"],
+    Vinutha: ["Michael", "Mark"],
+  };
+
+  const team = localStorage.getItem("team");
+  if (team in teamAgentsMap) {
+    allOrders = allOrders.filter(order =>
+      teamAgentsMap[team].includes(order.salesAgent)
+    );
+  }
+
+  const totalOrders = allOrders.length;
+  console.log("totalOrders", totalOrders);
+  document.getElementById("showTotalOrders").innerHTML = `Ongoing Escalations - ${totalOrders}`;
+
+  sortedData = sortOrdersByOrderNoDesc(allOrders);
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  
+  localStorage.removeItem("ongoingEscalationMonth");
+  localStorage.removeItem("returningFromForm");
 } catch (error) {
-console.error("Error fetching current month's orders:", error);
+  console.error("Error fetching current month's orders:", error);
 }
 
 $("#searchInput").on("keyup", function () {
