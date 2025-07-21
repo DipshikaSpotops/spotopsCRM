@@ -134,15 +134,15 @@ async function fetchAllOrdersForStats() {
   }
 
   try {
-    const response = await axios.get("https://www.spotops360.com/salespersonWiseOrders", {
+    const response = await axios.get("https://www.spotops360.com/salesPersonWise", {
       params: queryParams,
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
 
     const { orders } = response.data;
     sortedData = sortOrdersByOrderNoDesc(orders);
-
-    updateOrderStats(sortedData); // ✅ Stats now use all data
+    console.log("sortedData");
+    updateOrderStats(sortedData); 
     currentPage = 1;
     renderTableRows(currentPage, sortedData);
     createPaginationControls(Math.ceil(sortedData.length / rowsPerPage), sortedData);
