@@ -1151,6 +1151,7 @@ app.get("/orders/salesPersonWise", async (req, res) => {
     };
 
     const orders = await Order.find(query).lean();
+    console.log("salesperson orders",orders);
     const totalCount = orders.length;
 
     res.json({
