@@ -380,6 +380,33 @@ const ordersResponse = await axios.get("https://www.spotops360.com/orders/refund
   params: queryParams,
   headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
+allOrders = ordersResponse.data;
+
+// Optional team filtering
+const team = localStorage.getItem("team");
+const teamAgentsMap = {
+  Shankar: ["David", "John"],
+  Vinutha: ["Michael", "Mark"],
+};
+
+if (team in teamAgentsMap) {
+  allOrders = allOrders.filter(order =>
+    teamAgentsMap[team].includes(order.salesAgent)
+  );
+}
+
+// Show total
+const totalRefundedAmount = allOrders.reduce((sum, order) => {
+  const amt = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+  return sum + (isNaN(amt) ? 0 : amt);
+}, 0);
+
+document.getElementById("showTotalOrders").innerHTML = 
+  `Refunded Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`;
+
+// Show results
+renderTableRows(currentPage);
+createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
     // Clear stored filters when visiting another menu
     $(".nav-link").on("click", function () {
         sessionStorage.removeItem("selectedDateRange");
