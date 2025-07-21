@@ -37,9 +37,11 @@ const fp = flatpickr("#unifiedDatePicker", {
   const thisMonthBtn = makeLink("This Month", () => {
   const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
   const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+  const label = moment(start).format("MMMM YYYY"); // July 2025
+
   fp.setDate([start, end], true);
-  const label = moment(start).format("MMMM YYYY"); // "July 2025"
-  $("#unifiedDatePicker").val(label);
+  $("#unifiedDatePicker").val(label); // Show pretty label
+  $("#unifiedDateRangeRaw").val(`${start} to ${end}`); // Store real range
   $("#filterButton").click();
   instance.close();
 });
@@ -88,11 +90,14 @@ onChange: function (selectedDates) {
     const end = moment(selectedDates[1]);
     const sameMonth = start.month() === end.month() && start.year() === end.year();
     const label = sameMonth
-      ? start.format("MMMM YYYY")          // Show "July 2025"
-      : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`; // "Jul 1 - Jul 31, 2025"
+      ? start.format("MMMM YYYY")
+      : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+    
     $("#unifiedDatePicker").val(label);
+    $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
   } else {
     $("#unifiedDatePicker").val("");
+    $("#unifiedDateRangeRaw").val("");
   }
 }
 });
@@ -104,7 +109,9 @@ if (!sessionStorage.getItem("selectedDateRange")) {
   const endOfMonth = momentTz.clone().endOf("month").format("YYYY-MM-DD");
   
   fp.setDate([startOfMonth, endOfMonth], true); 
-  $("#unifiedDatePicker").val(`${startOfMonth} to ${endOfMonth}`);
+  const label = moment(startOfMonth).format("MMMM YYYY"); // "July 2025"
+  $("#unifiedDatePicker").val(label); // Show pretty label
+  $("#unifiedDateRangeRaw").val(`${startOfMonth} to ${endOfMonth}`); 
 }
 // Pagination related variables
 let allOrders = [];
@@ -365,7 +372,7 @@ const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
     fp.setDate([start, end], true);
 }
 
-    const rangeValue = $("#unifiedDatePicker").val().trim();
+    const rangeValue = $("#unifiedDateRangeRaw").val().trim();
 const tz = "America/Chicago";
 
 let queryParams = {};
@@ -557,11 +564,9 @@ $("#filterButton").click(async function () {
   $("body").append('<div class="modal-overlay"></div>');
   $("body").addClass("modal-active");    
   $("#loadingMessage").show();
-
-  const rangeValue = $("#unifiedDatePicker").val().trim();
+  const rangeValue = $("#unifiedDateRangeRaw").val().trim();
   const tz = "America/Chicago";
   let queryParams = { limit: "all" };
-
   if (!rangeValue) {
     alert("Please select a date, range, or month.");
     $("#loadingMessage").hide();
