@@ -575,7 +575,7 @@ $("#filterButton").click(async function () {
   }
 
   try {
-    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/salespersonWise`, {
+    const ordersResponse = await axios.get(`https://www.spotops360.com/orders/salesPersonWise`, {
       params: queryParams,
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
