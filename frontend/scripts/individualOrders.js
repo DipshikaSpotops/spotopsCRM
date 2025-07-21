@@ -141,6 +141,7 @@ async function fetchAllOrdersForStats() {
 
     const  orders  = response.data;
     console.log("allOrders",orders,"response:",response);
+    const filteredOrders = orders.filter(order => order.salesAgent === firstName);
     sortedData = sortOrdersByOrderNoDesc(filteredOrders);
     console.log("sortedData");
     updateOrderStats(sortedData); 
