@@ -86,41 +86,42 @@ const fp = flatpickr("#unifiedDatePicker", {
   }
 },
 onChange: function (selectedDates, dateStr, instance) {
-    if (selectedDates.length === 1) {
-      const clickedDate = moment(selectedDates[0]);
-      const monthKey = clickedDate.format("YYYY-MM");
+  // When one date is selected
+  if (selectedDates.length === 1) {
+    const clickedDate = moment(selectedDates[0]);
+    const monthKey = clickedDate.format("YYYY-MM");
 
-      // Avoid recursive loop
-      if (lastAutoFilledMonth !== monthKey) {
-        lastAutoFilledMonth = monthKey;
+    // Only auto-fill the full month if this month wasn't just auto-filled
+    if (lastAutoFilledMonth !== monthKey) {
+      const start = clickedDate.clone().startOf("month");
+      const end = clickedDate.clone().endOf("month");
 
-        // Delay execution to allow Flatpickr to complete its click logic
-        setTimeout(() => {
-          const start = clickedDate.clone().startOf("month");
-          const end = clickedDate.clone().endOf("month");
+      lastAutoFilledMonth = monthKey; // Track this so we don’t loop infinitely
 
-          fp.setDate([start.toDate(), end.toDate()], true);
+      // Programmatically set full month
+      fp.setDate([start.toDate(), end.toDate()], true);
 
-          const label = start.format("MMMM YYYY");
-          $("#unifiedDatePicker").val(label);
-          $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
-        }, 10);
-      }
-    }
-
-    if (selectedDates.length === 2) {
-      const start = moment(selectedDates[0]);
-      const end = moment(selectedDates[1]);
-      const sameMonth = start.month() === end.month() && start.year() === end.year();
-
-      const label = sameMonth
-        ? start.format("MMMM YYYY")
-        : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
-
+      // Update visible and hidden inputs
+      const label = start.format("MMMM YYYY");
       $("#unifiedDatePicker").val(label);
       $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
     }
   }
+
+  // When the user selects a custom range (manually)
+  else if (selectedDates.length === 2) {
+    const start = moment(selectedDates[0]);
+    const end = moment(selectedDates[1]);
+    const sameMonth = start.month() === end.month() && start.year() === end.year();
+
+    const label = sameMonth
+      ? start.format("MMMM YYYY")
+      : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+
+    $("#unifiedDatePicker").val(label);
+    $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
+  }
+}
 });
   // flatpickr setup till here
   // Set default date range to current month on initial load
