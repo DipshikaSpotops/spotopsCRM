@@ -568,7 +568,7 @@ $("#filterButton").click(async function () {
   const queryParams = { limit: "all" };
 
   if (!rangeValue) {
-    alert("⚠️ Please select a valid date, range, or month.");
+    alert("Please select a valid date, range, or month.");
     cleanupOverlay();
     return;
   }
@@ -586,7 +586,7 @@ $("#filterButton").click(async function () {
     queryParams.month = monthMoment.format("MMM");
     queryParams.year = monthMoment.format("YYYY");
   } else {
-    alert("⚠️ Invalid date format. Please use YYYY-MM-DD or YYYY-MM.");
+    alert("Invalid date format. Please use YYYY-MM-DD or YYYY-MM.");
     cleanupOverlay();
     return;
   }
@@ -627,7 +627,7 @@ $("#filterButton").click(async function () {
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
   } catch (error) {
-    console.error("❌ Error fetching filtered refunded orders:", error);
+    console.error("Error fetching filtered refunded orders:", error);
     alert("An error occurred while fetching refunded orders. Please try again.");
   } finally {
     cleanupOverlay();

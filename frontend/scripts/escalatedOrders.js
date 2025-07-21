@@ -503,46 +503,82 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
 
+// filter button
 $("#filterButton").click(async function () {
-$("body").append('<div class="modal-overlay"></div>');
-$("body").addClass("modal-active");    
-$("#loadingMessage").show();
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
 
-const monthYear = $("#monthYearPicker").val(); 
-const [year, monthNumber] = monthYear.split("-");
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const month = months[parseInt(monthNumber, 10) - 1];
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/escalated?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
-}
-allOrders = ordersResponse.data;
-var team = localStorage.getItem("team");
-const teamAgentsMap = {
-  Shankar: ["David", "John"],
-  Vinutha: ["Michael", "Mark"],
-};
+  const rangeValue = $("#unifiedDatePicker").val().trim();
+  const tz = "America/Chicago";
+  const queryParams = {};
 
-if (team in teamAgentsMap) {
-  allOrders = allOrders.filter(order =>
-    teamAgentsMap[team].includes(order.salesAgent)
-  );
-}
-var allOrdersLength = allOrders.length;
-document.getElementById("showTotalOrders").innerHTML = `Total Escalated Orders- ${allOrdersLength}`;
-renderTableRows(currentPage);
-createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-} finally {
-// Hiding loading overlay regardless of success or error
-$("#loadingMessage").hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-}
+  if (!rangeValue) {
+    alert("Please select a valid date, range, or month.");
+    cleanupOverlay();
+    return;
+  }
+
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams.start = date.startOf("day").toISOString();
+    queryParams.end = date.endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const monthMoment = moment(rangeValue, "YYYY-MM");
+    queryParams.month = monthMoment.format("MMM");
+    queryParams.year = monthMoment.format("YYYY");
+  } else {
+    alert("Invalid date format.");
+    cleanupOverlay();
+    return;
+  }
+
+  try {
+    const response = await axios.get("https://www.spotops360.com/orders/escalated", {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch escalated orders.");
+    }
+
+    allOrders = response.data;
+
+    const teamAgentsMap = {
+      Shankar: ["David", "John"],
+      Vinutha: ["Michael", "Mark"],
+    };
+
+    const team = localStorage.getItem("team");
+    if (team in teamAgentsMap) {
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
+    }
+
+    document.getElementById("showTotalOrders").innerHTML =
+      `Total Escalated Orders - ${allOrders.length}`;
+
+    renderTableRows(1); // Reset to page 1
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+  } catch (error) {
+    console.error("Error fetching escalated orders:", error);
+    alert("An error occurred while fetching escalated orders. Please try again.");
+  } finally {
+    cleanupOverlay();
+  }
+
+  function cleanupOverlay() {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+  }
 });
 $("#logoutLink").click(function () {
 window.localStorage.clear();
