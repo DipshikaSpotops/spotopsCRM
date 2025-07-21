@@ -619,7 +619,7 @@ window.location.href = "login_signup.html";
 <a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
 <!-- <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a> -->
 <a class="nav-link view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
-<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewyardOrders.html">View All Orders</a>
 <a class="nav-link yard-located-orders" id="yard-located-orders-linl" href="yardLocatedOrders.html">Yard Located Orders</a>
 <a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
 <a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
@@ -1367,7 +1367,7 @@ $("#filterButton").click(async function () {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
 
-    allOrders = response.data;
+    yardOrders = response.data;
 
     const team = localStorage.getItem("team");
     const teamAgentsMap = {
@@ -1376,15 +1376,15 @@ $("#filterButton").click(async function () {
     };
 
     if (team in teamAgentsMap) {
-      allOrders = allOrders.filter(order =>
+      yardOrders = yardOrders.filter(order =>
         teamAgentsMap[team].includes(order.salesAgent)
       );
     }
 
-    const total = allOrders.length;
+    const total = yardOrders.length;
     document.getElementById("showTotalOrders").innerHTML = `Total Fulfilled Orders - ${total}`;
 
-    renderTableRows(1, allOrders); // First page
+    renderTableRows(1, yardOrders); // First page
     createPaginationControls(Math.ceil(total / rowsPerPage));
   } catch (error) {
     console.error("Error fetching fulfilled orders:", error);
