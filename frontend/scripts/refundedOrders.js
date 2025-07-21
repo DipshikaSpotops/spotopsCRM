@@ -1,23 +1,8 @@
 $(document).ready(async function () {
-  const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-
-if (lastVisitedPage === "cancelledOrders" && document.referrer.includes("form.html")) {
-  const savedRange = sessionStorage.getItem("selectedDateRange");
-  const savedSearch = sessionStorage.getItem("searchValue");
-  const savedPage = sessionStorage.getItem("currentPage");
-
-  if (savedRange) $("#unifiedDatePicker").val(savedRange);
-  if (savedSearch) {
-    $("#searchInput").val(savedSearch);
-    setTimeout(() => {
-      $("#searchInput").trigger("keyup");
-    }, 200);
-  }
-  if (savedPage) currentPage = parseInt(savedPage);
-
-  sessionStorage.removeItem("lastVisitedPage");
-}
-  // flatpickr setup
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
+// flatpickr setup
 const fp = flatpickr("#unifiedDatePicker", {
   mode: "range",
   dateFormat: "Y-m-d",
@@ -49,15 +34,18 @@ const fp = flatpickr("#unifiedDatePicker", {
     $("#filterButton").data("filter", "today").click();
     instance.close();
   });
-
   const thisMonthBtn = makeLink("This Month", () => {
-    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-    fp.setDate([start, end], true);
-    $("#unifiedDatePicker").val(`${start} to ${end}`);
-    $("#filterButton").click();
-    instance.close();
-  });
+  const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+  const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+  const label = moment(start).format("MMMM YYYY"); // July 2025
+
+  fp.setDate([start, end], true);
+  $("#unifiedDatePicker").val(label); // Show pretty label
+  $("#unifiedDateRangeRaw").val(`${start} to ${end}`); // Store real range
+  $("#filterButton").click();
+  instance.close();
+});
+
 
   // Generate last 3 months dynamically
   for (let i = 1; i <= 3; i++) {
@@ -65,14 +53,13 @@ const fp = flatpickr("#unifiedDatePicker", {
     const monthName = monthMoment.format("MMMM"); // e.g., "June"
     const start = monthMoment.startOf("month").format("YYYY-MM-DD");
     const end = monthMoment.endOf("month").format("YYYY-MM-DD");
-
+    const label = moment(start).format("MMMM YYYY"); // "June 2025"
     const monthBtn = makeLink(monthName, () => {
       fp.setDate([start, end], true);
-      $("#unifiedDatePicker").val(`${start} to ${end}`);
+      $("#unifiedDatePicker").val(label);
       $("#filterButton").click();
       instance.close();
     });
-
     container.appendChild(monthBtn);
   }
 
@@ -96,179 +83,71 @@ const fp = flatpickr("#unifiedDatePicker", {
     });
     return link;
   }
+},
+onChange: function (selectedDates) {
+  if (selectedDates.length === 2) {
+    const start = moment(selectedDates[0]);
+    const end = moment(selectedDates[1]);
+    const sameMonth = start.month() === end.month() && start.year() === end.year();
+    const label = sameMonth
+      ? start.format("MMMM YYYY")
+      : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+    
+    $("#unifiedDatePicker").val(label);
+    $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
+  } else {
+    $("#unifiedDatePicker").val("");
+    $("#unifiedDateRangeRaw").val("");
+  }
 }
 });
   // flatpickr setup till here
-  $("#viewAlltasks").on("click", function () {
-  window.location.href = "viewAllTasks.html";
-});
+  // Set default date range to current month on initial load
+if (!sessionStorage.getItem("selectedDateRange")) {
+  const momentTz = moment().tz("America/Chicago");
+  const startOfMonth = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+  const endOfMonth = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+  
+  fp.setDate([startOfMonth, endOfMonth], true); 
+  const label = moment(startOfMonth).format("MMMM YYYY"); // "July 2025"
+  $("#unifiedDatePicker").val(label); // Show pretty label
+  $("#unifiedDateRangeRaw").val(`${startOfMonth} to ${endOfMonth}`); 
+}
 // Pagination related variables
 let allOrders = [];
 const rowsPerPage = 25;
 let currentPage = 1;
-
-// Sorting Order Object
-var team, role;
-let sortOrder = {
-orderDate: "asc",
-orderNo: "asc",
-agentName: "asc",
-customerName: "asc",
-partName: "asc",
-yard: "asc",
-orderStatus: "asc",
-email: "asc",
-};
-
-function parseCustomDate(dateString) {
-const months = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05",
-Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10",
-Nov: "11", Dec: "12"
-};
-const parts = dateString.match(/(\d+)(?:st|nd|rd|th)\s(\w+),\s(\d+)\s(\d{2}):(\d{2})/);
-if (parts) {
-const day = parts[1].padStart(2, '0'); 
-const month = months[parts[2]];
-const year = parts[3];
-const hour = parts[4];
-const minute = parts[5];
-return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-}
-
-return null;
-}
-function sortTableByDate() {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray(); 
-
-rows.sort((a, b) => {
-let dateA = parseCustomDate($(a).find("td").eq(0).text().trim()); 
-let dateB = parseCustomDate($(b).find("td").eq(0).text().trim());
-if (!dateA) return 1;
-if (!dateB) return -1;
-if (sortOrder.orderDate === "asc") {
-return dateA - dateB;
-} else {
-return dateB - dateA;
-}
-});
-$.each(rows, function (index, row) {
-table.append(row);
-});
-sortOrder.orderDate = sortOrder.orderDate === "asc" ? "desc" : "asc";
-updateSortIcons(0, sortOrder.orderDate);
-}
-function sortTable(column, type) {
-const table = $("#infoTable");
-const rows = table.find("tr").toArray();
-
-rows.sort((a, b) => {
-let valA = $(a).find("td").eq(column).text().trim();
-let valB = $(b).find("td").eq(column).text().trim();
-
-if (type === "number") {
-valA = parseInt(valA.replace(/\D/g, ""), 10);
-valB = parseInt(valB.replace(/\D/g, ""), 10);
-}
-
-if (sortOrder[type] === "asc") {
-return valA > valB ? 1 : -1;
-} else {
-return valA < valB ? 1 : -1;
-}
-});
-
-$.each(rows, function (index, row) {
-table.append(row);
-});
-
-// Toggle sort order
-sortOrder[type] = sortOrder[type] === "asc" ? "desc" : "asc";
-
-// Update the sort icon
-updateSortIcons(column, sortOrder[type]);
-}
-
-function updateSortIcons(columnIndex, order) {
-$("th .sort-icon").html("&#9650;"); // Reset all icons to ascending
-$("th").each(function (index) {
-if (index === columnIndex) {
-$(this).find(".sort-icon").html(order === "asc" ? "&#9650;" : "&#9660;");
-}
-});
-}
-
-// Event listeners for sorting
-$("th").each(function (index) {
-const th = $(this);
-let type = th.text().trim().toLowerCase().replace(/\s/g, "");
-
-if (type === "orderdate") {
-th.on("click", function () {
-sortTable(index, "date");
-});
-} else if (type === "orderno") {
-th.on("click", function () {
-sortTable(index, "number");
-});
-} else {
-th.on("click", function () {
-sortTable(index, type);
-});
-}
-});
-
 // Function to render rows based on the page
 function renderTableRows(page, orders = allOrders) {
-// Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
-const filteredOrders = orders.filter(item => {
-return (item.orderStatus === "Order Cancelled");
-});
+    // Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
+    const filteredOrders = orders.filter(item => {
+        return (item.orderStatus === "Refunded");
+    });
 
-// Pagination logic after filtering
-const start = (page - 1) * rowsPerPage;
-const end = start + rowsPerPage;
-const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
+    // Pagination logic after filtering
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const ordersForPage = filteredOrders.slice(start, end); // Slice filtered orders for pagination
 
-$('#infoTable').empty(); 
-function formatToPrettyDate(isoString) {
-  const date = new Date(isoString);
+    $('#infoTable').empty(); // Clear the table
 
-  const day = date.getUTCDate();
-  const month = date.toLocaleString("default", { month: "long", timeZone: "UTC" });
-  const year = date.getUTCFullYear();
+    ordersForPage.forEach((item) => {
+        const escalationStatus = item.additionalInfo &&
+            item.additionalInfo[0] &&
+            item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
 
-  // Determine suffix
-  const getSuffix = (d) => {
-    if (d > 3 && d < 21) return 'th';
-    switch (d % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
-    }
-  };
+        let escalationStyle = '';
+        if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
+            escalationStyle = 'style="background-color: lightgreen;"';
+        }
 
-  return `${day}${getSuffix(day)} ${month}, ${year}`;
-}
-ordersForPage.forEach((item) => {
-const escalationStatus = item.additionalInfo &&
-item.additionalInfo[0] &&
-item.additionalInfo[0].escTicked === "Yes" ? "Yes" : "";
+        var team = localStorage.getItem('team');
+     
+        const actions = `
+            <button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
 
-let escalationStyle = '';
-if (item.orderStatus === "Order Fulfilled" && escalationStatus === "Yes") {
-escalationStyle = 'style="background-color: lightgreen;"';
-}
-
-const team = localStorage.getItem('team');
-
-const actions = `
-<button class="btn btn-success btn-sm process-btn" data-id="${item.orderNo}" ${item.orderStatus === "Placed" || item.orderStatus === "Customer approved" ? "disabled" : ""}>View</button>`;
-
-const yardlength = item.additionalInfo.length;
-const datetime = item.orderDate;
+        const yardlength = item.additionalInfo.length;
+        const datetime = item.orderDate;
 const date = new Date(datetime);
 const day = date.getUTCDate();  // Use UTC day
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -283,33 +162,53 @@ const suffix = (day) => {
     default: return "th";
   }
 };
+const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+        const custRefundDatedateOnly = item.custRefundDate;
+const dateObj = new Date(custRefundDatedateOnly);
 
+const day1 = dateObj.getUTCDate();
+const month1 = dateObj.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
+const year1 = dateObj.getUTCFullYear();
+const hours = String(dateObj.getUTCHours()).padStart(2, '0');
+const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+
+const getDaySuffix = (d) => {
+  if (d > 3 && d < 21) return 'th';
+  switch (d % 10) {
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
+  }
+};
+
+const formattedDate = `${day1}${getDaySuffix(day1)} ${month1}, ${year1} ${hours}:${minutes}`;
+console.log(formattedDate); 
 $("#infoTable").append(`
 <tr>
-<td>${formatToPrettyDate(item.orderDate)}</td>
+<td>${formattedOrderDate}</td>
 <td>${item.orderNo}</td>
-<td>${item.soldP}</td>
+<td>$${item.soldP}</td>
 <td>${item.salesAgent}</td>
 <td>${
-(item.fName && item.lName)
-? `${item.fName} ${item.lName}`
-: (item.customerName || "")
-}</td>
+    (item.fName && item.lName) ? `${item.fName} ${item.lName}` : item.customerName || ""
+  }</td>
 <td>${item.pReq || item.partName}</td>
 <td>${
-item.additionalInfo && item.additionalInfo.length > 0
-? item.additionalInfo
-.map((info, index) => {
-const yardName = info.yardName || "Unknown Yard";
-const shippingDetails = info.shippingDetails || "Unknown Shipping Details";
-const partPrice = info.partPrice || 0;
-const others = info.others || 0;
-const refundedAmount = info.refundedAmount || 0;
-const custOwnShipReplacement = info.custOwnShipReplacement || 0;
-const yardOwnShipping = info.yardOwnShipping || 0;
-const custOwnShippingReturn = info.custOwnShippingReturn || 0;
-const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
-const yardSpendTotal =
+  item.additionalInfo && item.additionalInfo.length > 0
+    ? item.additionalInfo
+        .map((info, index) => {
+          const yardName = info.yardName || "Unknown Yard";
+          const shippingCost = info.shippingDetails 
+            ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 
+            : 0;
+          const partPrice = parseFloat(info.partPrice || 0);
+          const others = parseFloat(info.others || 0);
+          const refundedAmount = parseFloat(info.refundedAmount || 0);
+          const custOwnShipReplacement = parseFloat(info.custOwnShipReplacement || 0);
+          const yardOwnShipping = parseFloat(info.yardOwnShipping || 0);
+          const custOwnShippingReturn = parseFloat(info.custOwnShippingReturn || 0);
+          const yardSpendTotal =
             partPrice + 
             shippingCost + 
             others - 
@@ -317,16 +216,20 @@ const yardSpendTotal =
             yardOwnShipping + 
             custOwnShippingReturn - 
             custOwnShipReplacement;
-return `
-<b>Yard ${index + 1}</b>: ${yardName}<br> 
-Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
-Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
-Yard Spend: ${yardSpendTotal}<br>
-Yard refund: ${refundedAmount}
-`;
-})
-.join("<br>")
-: "No Yard Info"
+            const escSpending = yardOwnShipping + 
+            custOwnShippingReturn + 
+            custOwnShipReplacement;
+          const shippingDetails = info.shippingDetails || "";
+          return `
+            <b>Yard ${index + 1}</b>: ${yardName}<br> 
+            Part price: $${partPrice} | ${shippingDetails} <br>
+            Others: $${others} | Esc spending: ${escSpending}<br>
+            Yard Spend: $${yardSpendTotal.toFixed(2)}<br>
+            Yard refund: $${refundedAmount}
+          `;
+        })
+        .join("<br>")
+    : "No Yard Info"
 }</td>
 <td>
 ${
@@ -334,13 +237,13 @@ item.orderHistory
 .filter(entry => entry.includes("Order status changed to Refunded"))
 .map(entry => {
 const parts = entry.split(" by ");
-return parts[1]?.split(" on ")[0] || "";
+return parts[1]?.split(" on ")[0] || "Unknown";
 })
 .join(", ") || ""
 }
 </td>
-<td>${formatToPrettyDate(item.custRefundDate)}</td>
-<td>$${item.custRefAmount || 0}</td>
+<td>${formattedDate}</td>
+<td>$${item.custRefAmount || item.custRefundedAmount || ""}</td>
 <td>${item.orderStatus}</td>
 <td>
 ${
@@ -375,50 +278,50 @@ return `Yard ${index + 1} Spend: $${yardSpendTotal.toFixed(2)}`;
 <td style="justify-content: center;">${actions}</td>
 </tr>
 `);
-});
+    });
 
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+    createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
 }
 
 // Function to create pagination controls based on filtered data
-function createPaginationControls(totalPages, filteredOrders = allOrders) {
-const paginationControls = $('#pagination-controls');
-paginationControls.empty(); 
-if (totalPages > 1) {
-paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>`);
-for (let i = 1; i <= totalPages; i++) {
-paginationControls.append(`<button class="pageNos btn ${i === currentPage ? 'active-page' : ''} page-btn" data-page="${i}">${i}</button>`);        }
-paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`);
-}
+function createPaginationControls(totalPages) {
+  const paginationControls = $('#pagination-controls');
+  console.log("pages",totalPages,"currentPage",currentPage);
+  paginationControls.empty(); 
+  if (totalPages > 1) {
+    // Left arrow for "Previous" page
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
+
+    // Page number display: Page X of Y
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
+
+    // Right arrow for "Next" page
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);
+  }
 }
 
-// Event listener for pagination buttons
-$('#pagination-controls').on('click', '.page-btn', function () {
-    const page = $(this).data('page');
-    currentPage = page;
-    localStorage.setItem('currentPage', currentPage);
+$('#pagination-controls').on('click', '#prevPage', function () {
+  if (currentPage > 1) {
+    currentPage--;
     renderTableRows(currentPage);
-  });
-const activeLink = $(".nav-link.active")[0];
-if (activeLink) {
-  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
-}
-  $('#pagination-controls').on('click', '#prevPage', function () {
-    if (currentPage > 1) {
-      currentPage--;
-      localStorage.setItem('currentPage', currentPage);
-      renderTableRows(currentPage);
-    }
-  });
+    createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  }
+});
 
-  $('#pagination-controls').on('click', '#nextPage', function () {
-    const totalPages = Math.ceil(allOrders.length / rowsPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      localStorage.setItem('currentPage', currentPage);
-      renderTableRows(currentPage);
-    }
-  });
+$('#pagination-controls').on('click', '#nextPage', function () {
+  const totalPages = Math.ceil(allOrders.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage);
+    createPaginationControls(totalPages);
+  }
+});
 var firstname = localStorage.getItem("firstName");
 if (firstName) {
 $("#user-name").text(firstName);
@@ -445,46 +348,62 @@ if (!token) {
 await fetchToken();
 token = localStorage.getItem("token");
 }
-
-// Fetch orders and apply pagination
-const now = new Date();
-const options = {
-timeZone: 'America/Chicago',
-year: 'numeric',
-month: '2-digit',
-day: '2-digit',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit',
-hour12: false,
-};
-const formatter = new Intl.DateTimeFormat('en-US', options);
-const parts = formatter.formatToParts(now);
-const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-const date = new Date(formattedDate);
-// Array of month names
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const monthMap = {
-Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-May: "05", Jun: "06", Jul: "07", Aug: "08",
-Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-};
-var monthNum = monthMap[month];
+const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
 
-$("#monthYearPicker").val(`${year}-${monthNum}`);
-//orders for the current month
-try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/refunded?month=${month}&year=${year}`, {
-headers: token ? { Authorization: `Bearer ${token}` } : {},
-});
-if (ordersResponse.status !== 200) {
-throw new Error("Failed to fetch current month's orders");
+    if (lastVisitedPage && document.referrer.includes("form.html")) {
+        let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
+        let savedPage = sessionStorage.getItem("currentPage");
+
+        if (savedMonthYear) {
+            $("#monthYearPicker").val(savedMonthYear); // Restore month filter
+        }
+
+        if (savedPage) {
+            currentPage = parseInt(savedPage); // Restore page
+        }
+
+        sessionStorage.removeItem("lastVisitedPage"); // Clear after restoring
+    }else {
+    const momentTz = moment().tz("America/Chicago");
+    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+    $("#unifiedDatePicker").val(`${start} to ${end}`);
+    fp.setDate([start, end], true);
 }
+
+    const rangeValue = $("#unifiedDateRangeRaw").val().trim();
+const tz = "America/Chicago";
+
+let queryParams = {};
+
+if (rangeValue.includes(" to ")) {
+  const [startStr, endStr] = rangeValue.split(" to ");
+  const start = moment.tz(startStr, tz).startOf("day").toISOString();
+  const end = moment.tz(endStr, tz).endOf("day").toISOString();
+  queryParams.start = start;
+  queryParams.end = end;
+} else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+  const date = moment.tz(rangeValue, tz);
+  queryParams.start = date.startOf("day").toISOString();
+  queryParams.end = date.endOf("day").toISOString();
+} else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+  const m = moment(rangeValue, "YYYY-MM");
+  queryParams.month = m.format("MMM");
+  queryParams.year = m.format("YYYY");
+} else {
+  alert("Invalid or missing date. Please select a valid date range.");
+  return;
+}
+
+const ordersResponse = await axios.get("https://www.spotops360.com/orders/refunded", {
+  params: queryParams,
+  headers: token ? { Authorization: `Bearer ${token}` } : {},
+});
 allOrders = ordersResponse.data;
-var team = localStorage.getItem("team");
+
+// Optional team filtering
+const team = localStorage.getItem("team");
 const teamAgentsMap = {
   Shankar: ["David", "John"],
   Vinutha: ["Michael", "Mark"],
@@ -495,19 +414,30 @@ if (team in teamAgentsMap) {
     teamAgentsMap[team].includes(order.salesAgent)
   );
 }
-var totalOrders = allOrders.length;
-console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Orders This Month- ${totalOrders}`;
-sortedData = sortOrdersByOrderNoDesc(allOrders);
+
+// Show total
+const totalRefundedAmount = allOrders.reduce((sum, order) => {
+  const amt = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+  return sum + (isNaN(amt) ? 0 : amt);
+}, 0);
+
+document.getElementById("showTotalOrders").innerHTML = 
+  `Refunded Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`;
+
+// Show results
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-} catch (error) {
-console.error("Error fetching current month's orders:", error);
-}
+    // Clear stored filters when visiting another menu
+    $(".nav-link").on("click", function () {
+        sessionStorage.removeItem("selectedDateRange");
+        sessionStorage.removeItem("currentPage");
+    });
+
 // Filtering functionality for  the search bar
 $("#searchInput").on("keyup", function () {
   const value = $(this).val().toLowerCase();
 
+  // Filter the entire allOrders dataset based on the search term
   const filteredOrders = allOrders.filter(order => {
     return (
       (order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
@@ -516,24 +446,27 @@ $("#searchInput").on("keyup", function () {
       (order.cancellationReason && order.cancellationReason.toLowerCase().includes(value)) ||
       (order.customerName && order.customerName.toLowerCase().includes(value)) ||
       ((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName && order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[order.additionalInfo.length - 1].yardName &&
+        order.additionalInfo[order.additionalInfo.length - 1].yardName.toLowerCase().includes(value)) ||
       (order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
       (order.additionalInfo && order.additionalInfo.some(info =>
         (info.trackingNo && String(info.trackingNo).toLowerCase().includes(value))
       )) ||
-      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked && order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
+      (order.additionalInfo.length > 0 && order.additionalInfo[0].escTicked &&
+        order.additionalInfo[0].escTicked.toLowerCase().includes(value)) ||
       (order.email && order.email.toLowerCase().includes(value))
     );
   });
 
-  // Update the Total Orders count
+  // Update the Total Orders count display
   document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${filteredOrders.length}`;
 
+  // If a search is active, display the filtered results, otherwise reset to the full dataset
   if (filteredOrders.length > 0 || value === "") {
-    renderTableRows(1, filteredOrders);
+    renderTableRows(1, filteredOrders); // Render the first page of filtered results
     createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
   } else {
-    $("#infoTable").empty();
+    $("#infoTable").empty(); // Clear the table if no results are found
     $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
   }
 });
@@ -550,16 +483,21 @@ return orderNoB - orderNoA;
 }
 
 $("#infoTable").on("click", ".process-btn", function () {
-const id = $(this).data("id");
-sessionStorage.setItem("lastVisitedPage", "cancelledOrders");
-sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
-sessionStorage.setItem("searchValue", $("#searchInput").val());
-sessionStorage.setItem("currentPage", currentPage);
-window.location.href = `form.html?orderNo=${id}&process=true`;
+    const id = $(this).data("id");
+    sessionStorage.setItem("lastVisitedPage", window.location.href);
+    sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
+    sessionStorage.setItem("currentPage", currentPage);
+    window.location.href = `form.html?orderNo=${id}&process=true`;
 });
+$(document).on("click", "#infoTable tr", function () {
+  const isSelected = $(this).hasClass("selected");
 
+  $("#infoTable tr").removeClass("selected");
 
-
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
+});
 const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)
 $(".nav-link").each(function () {
@@ -567,6 +505,11 @@ if (currentPath.includes($(this).attr("href"))) {
 $(this).addClass("active");
 }
 });
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 role = localStorage.getItem("role");
 team = localStorage.getItem("team");
 if (team === "Team Charlie" || role === "Sales") {
@@ -616,55 +559,53 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-// Filter button click event for Cancelled Orders using unifiedDatePicker
+// filter buttom
 $("#filterButton").click(async function () {
   $("body").append('<div class="modal-overlay"></div>');
-  $("body").addClass("modal-active");
+  $("body").addClass("modal-active");    
   $("#loadingMessage").show();
+  const rangeValue = $("#unifiedDateRangeRaw").val().trim();
+  const tz = "America/Chicago";
+  let queryParams = { limit: "all" };
+  if (!rangeValue) {
+    alert("Please select a date, range, or month.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
+
+  if (rangeValue.includes(" to ")) {
+    const [startStr, endStr] = rangeValue.split(" to ");
+    queryParams.start = moment.tz(startStr, tz).startOf("day").toISOString();
+    queryParams.end = moment.tz(endStr, tz).endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+    const date = moment.tz(rangeValue, tz);
+    queryParams.start = date.startOf("day").toISOString();
+    queryParams.end = date.endOf("day").toISOString();
+  } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    const m = moment(rangeValue, "YYYY-MM");
+    queryParams.month = m.format("MMM");
+    queryParams.year = m.format("YYYY");
+  } else {
+    alert("Invalid date format.");
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    return;
+  }
 
   try {
-    let ordersResponse;
-    const rangeValue = $("#unifiedDatePicker").val().trim();
-    console.log("Unified picker value (cancelled):", rangeValue);
-
-    let url = "";
-    const tz = "America/Chicago";
-    const isToday = $(this).data("filter") === "today";
-
-    if (isToday) {
-      const today = moment().tz(tz).format("YYYY-MM-DD");
-      url = `https://www.spotops360.com/orders/refunded?start=${today}&end=${today}`;
-      console.log("Fetching today's cancelled orders");
-    }
-
-    else if (rangeValue.includes(" to ")) {
-      const [startStr, endStr] = rangeValue.split(" to ");
-      const start = moment.tz(startStr, tz).startOf("day").toISOString();
-      const end = moment.tz(endStr, tz).endOf("day").toISOString();
-
-      url = `https://www.spotops360.com/orders/refunded?start=${start}&end=${end}`;
-      console.log("Filtering cancelled orders from:", startStr, "to", endStr);
-    }
-
-    else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-      const momentObj = moment(rangeValue, "YYYY-MM");
-      const month = momentObj.format("MMM");
-      const year = momentObj.format("YYYY");
-
-      url = `https://www.spotops360.com/orders/refunded?month=${month}&year=${year}`;
-      console.log("Filtering cancelled orders for month:", month, "year:", year);
-    }
-
-    else {
-      alert("Please select a valid date range or click 'Today'.");
-      return;
-    }
-
-    const response = await axios.get(url, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    const ordersResponse = await axios.get("https://www.spotops360.com/orders/refunded", {
+      params: queryParams,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 
-    allOrders = response.data;
+    if (ordersResponse.status !== 200) {
+      throw new Error("Failed to fetch refunded orders.");
+    }
+
+    allOrders = ordersResponse.data;
 
     const team = localStorage.getItem("team");
     const teamAgentsMap = {
@@ -673,49 +614,35 @@ $("#filterButton").click(async function () {
     };
 
     if (team in teamAgentsMap) {
-      allOrders = allOrders.filter(order => teamAgentsMap[team].includes(order.salesAgent));
+      allOrders = allOrders.filter(order =>
+        teamAgentsMap[team].includes(order.salesAgent)
+      );
     }
 
-    document.getElementById("showTotalOrders").innerHTML =
-      `Total Cancelled Orders - ${allOrders.length}`;
+    const totalRefundedAmount = allOrders.reduce((sum, order) => {
+      const amt = parseFloat(order.custRefAmount || order.custRefundedAmount || 0);
+      return sum + (isNaN(amt) ? 0 : amt);
+    }, 0);
+
+    document.getElementById("showTotalOrders").innerHTML = 
+      `Refunded Orders - ${allOrders.length} | Amount: $${totalRefundedAmount.toFixed(2)}`;
 
     renderTableRows(currentPage);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
   } catch (error) {
-    console.error("Error fetching filtered cancelled orders:", error);
+    console.error("Error fetching filtered orders:", error);
   } finally {
     $("#loadingMessage").hide();
     $(".modal-overlay").remove();
     $("body").removeClass("modal-active");
-    $(this).data("filter", ""); // Reset state
   }
 });
 
-
-$(".sidebar .nav-link").on("click", function () {
-    localStorage.removeItem('selectedMonthYear');
-    localStorage.removeItem('currentPage');
-    sessionStorage.removeItem('lastVisitedPage');
-    console.log("Cleared saved month and page number");
-  });
-
-  // Clear saved data and log out
-  $("#logoutLink").click(function () {
-    localStorage.clear();
-    window.location.href = "login_signup.html";
-  });
-
-  // Restore saved page and month/year if available
-  const savedPage = localStorage.getItem('currentPage');
-  currentPage = savedPage ? parseInt(savedPage) : 1;
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-
-  const savedMonthYear = localStorage.getItem('selectedMonthYear');
-  if (savedMonthYear) {
-    $("#monthYearPicker").val(savedMonthYear);
-  }
+$("#logoutLink").click(function () {
+window.localStorage.clear();
+window.location.href = "login_signup.html";
+});
 // notification
 const notificationIcon = $("#notificationIcon");
 const notificationDropdown = $("#notificationDropdown");
@@ -873,16 +800,7 @@ $("body").removeClass("modal-active");
   }
 });
 fetchNotifications();
-$(document).on("click", "#infoTable tr", function () {
-  const isSelected = $(this).hasClass("selected");
-
-  $("#infoTable tr").removeClass("selected");
-
-  if (!isSelected) {
-    $(this).addClass("selected");
-  }
-});
-    if (localStorage.getItem("darkMode") === "true") {
+if (localStorage.getItem("darkMode") === "true") {
     enableDarkMode();
   }
  $("#darkModeIcon").on("click", function () {
@@ -910,59 +828,51 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
-$(document).on("click", "#infoTable tr", function () {
-  console.log("Row clicked:", $(this).text()); // Debugging
-  $("#infoTable tr").removeClass("selected");
-  $(this).addClass("selected");
-});
   const searchInput = document.getElementById('searchInputForOrderNo');
   const resultDiv = document.getElementById('searchResult');
 
-  searchInput.addEventListener('input', function () {
+  searchInput.addEventListener('keydown', function (event) {
+  console.log("searching order no");
+  if (event.key === 'Enter') {
     const orderNo = searchInput.value.trim();
-
     if (orderNo !== '') {
-      resultDiv.innerHTML = `
-        <button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>
-      `;
-
-      document.getElementById('viewOrderBtn').addEventListener('click', function () {
-       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
-
-      });
-    } else {
-      resultDiv.innerHTML = '';
+      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
     }
-  });
+  }
+});
   // sorting 
 let currentSortColumn = '';
 let sortAsc = true;
+const columnMap = {
+  totalYardSpend: "yardSpent",
+  refundedAmount: "custRefAmount",
+  refundedBy: "refundedBy",
+  refundedDate: "refundedDateRaw"
+};
 
+const numericCols = ["yardSpent", "custRefAmount"];
+const dateCols = ["refundedDateRaw"];
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
-  console.log("Current sort column:", currentSortColumn);
-  if (currentSortColumn === column) {
-    sortAsc = !sortAsc;
-  } else {
-    currentSortColumn = column;
-    sortAsc = true;
-  }
 
-  // Sort data
+  currentSortColumn === column ? sortAsc = !sortAsc : (currentSortColumn = column, sortAsc = true);
+
+  const actualColumn = columnMap[column] || column;
+
   allOrders.sort((a, b) => {
-    let valA = a[column] ?? '';
-    let valB = b[column] ?? '';
+    let valA = a[actualColumn];
+    let valB = b[actualColumn];
 
-    if (column.toLowerCase().includes("date")) {
+    if (dateCols.includes(actualColumn)) {
       valA = new Date(valA);
       valB = new Date(valB);
-    } else if (column === "custRefAmount") {
+    } else if (numericCols.includes(actualColumn)) {
       valA = parseFloat(valA) || 0;
       valB = parseFloat(valB) || 0;
     } else {
-      valA = valA.toString().toLowerCase();
-      valB = valB.toString().toLowerCase();
+      valA = valA?.toString().toLowerCase() || "";
+      valB = valB?.toString().toLowerCase() || "";
     }
 
     return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
@@ -972,39 +882,8 @@ $("#infoTableHeader th.sortable").on("click", function () {
   renderTableRows(currentPage);
   createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
-  // Reset all arrows
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
-
-  // Highlight the active arrow
-  const arrowToActivate = sortAsc ? ".asc" : ".desc";
-  $(this).find(arrowToActivate).addClass("active");
+  $(this).find(".sort-icons").children(sortAsc ? ".asc" : ".desc").addClass("active");
 });
 
-$("#reason-popup-trigger").on("click", function () {
-  const statsMap = {};
-
-  allOrders.forEach(order => {
-    const reason = order.cancellationReason || "Unknown";
-    if (!statsMap[reason]) {
-      statsMap[reason] = { count: 0, amount: 0 };
-    }
-    statsMap[reason].count += 1;
-    if (order.custRefundDate) {
-      statsMap[reason].amount += parseFloat(order.custRefAmount || 0);
-    }
-  });
-
-  const tableBody = $("#reasonStatsTable").empty();
-  Object.entries(statsMap).forEach(([reason, data]) => {
-    tableBody.append(`
-      <tr>
-        <td>${reason}</td>
-        <td>${data.count}</td>
-        <td>$${data.amount.toFixed(2)}</td>
-      </tr>
-    `);
-  });
-
-  $("#reasonModal").modal("show");
-});
 });
