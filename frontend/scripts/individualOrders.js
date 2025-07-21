@@ -139,8 +139,8 @@ async function fetchAllOrdersForStats() {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
 
-    const { orders } = response.data;
-    console.log("allOrders",orders);
+    const  orders  = response.data;
+    console.log("allOrders",orders,"response:",response);
     sortedData = sortOrdersByOrderNoDesc(orders);
     console.log("sortedData");
     updateOrderStats(sortedData); 
