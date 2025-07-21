@@ -332,10 +332,8 @@ overflow: hidden; /* Prevents background scrolling when modal is active */
     margin-top: 0%;
 }
 #unifiedDatePicker{
-  background-color: #35554f;
-    color: white;
     width: auto;
-    margin-top: 1%;
+    margin-top: 8%;
 }
     #unifiedDatePicker::placeholder {
   color: white; 
