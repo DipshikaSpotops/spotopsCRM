@@ -3,6 +3,7 @@ $(document).ready(async function () {
   window.location.href = "viewAllTasks.html";
 });
 // flatpickr setup
+let lastAutoFilledMonth = null;
 const fp = flatpickr("#unifiedDatePicker", {
   mode: "range",
   dateFormat: "Y-m-d",
@@ -84,8 +85,6 @@ const fp = flatpickr("#unifiedDatePicker", {
     return link;
   }
 },
-let lastAutoFilledMonth = null;
-
 onChange: function (selectedDates, dateStr, instance) {
   // When one date is selected
   if (selectedDates.length === 1) {
