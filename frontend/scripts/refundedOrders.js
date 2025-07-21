@@ -56,11 +56,13 @@ const fp = flatpickr("#unifiedDatePicker", {
     const end = monthMoment.endOf("month").format("YYYY-MM-DD");
     const label = moment(start).format("MMMM YYYY"); // "June 2025"
     const monthBtn = makeLink(monthName, () => {
-      fp.setDate([start, end], true);
-      $("#unifiedDatePicker").val(label);
-      $("#filterButton").click();
-      instance.close();
-    });
+  fp.setDate([start, end], true);
+  $("#unifiedDatePicker").val(label);
+  $("#unifiedDateRangeRaw").val(`${start} to ${end}`);  // ← Add this line
+  $("#filterButton").click();
+  instance.close();
+});
+
     container.appendChild(monthBtn);
   }
 
