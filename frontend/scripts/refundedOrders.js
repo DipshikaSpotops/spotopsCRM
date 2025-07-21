@@ -29,19 +29,14 @@ const fp = flatpickr("#unifiedDatePicker", {
 
   const todayBtn = makeLink("Today", () => {
     const today = momentTz.format("YYYY-MM-DD");
-    fp.setDate([today, today], true);
-    $("#unifiedDatePicker").val(`${today} to ${today}`);
-    $("#filterButton").data("filter", "today").click();
+    setUnifiedDateRange(today, today, moment(today).format("MMM D, YYYY"));
     instance.close();
   });
   const thisMonthBtn = makeLink("This Month", () => {
   const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
   const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
   const label = moment(start).format("MMMM YYYY"); // July 2025
-
-  fp.setDate([start, end], true);
-  $("#unifiedDatePicker").val(label); // Show pretty label
-  $("#unifiedDateRangeRaw").val(`${start} to ${end}`); // Store real range
+  setUnifiedDateRange(start, end, label);
   $("#filterButton").click();
   instance.close();
 });
@@ -55,11 +50,10 @@ const fp = flatpickr("#unifiedDatePicker", {
     const end = monthMoment.endOf("month").format("YYYY-MM-DD");
     const label = moment(start).format("MMMM YYYY"); // "June 2025"
     const monthBtn = makeLink(monthName, () => {
-      fp.setDate([start, end], true);
-      $("#unifiedDatePicker").val(label);
-      $("#filterButton").click();
-      instance.close();
-    });
+    setUnifiedDateRange(start, end, label);
+    instance.close();
+});
+
     container.appendChild(monthBtn);
   }
 
@@ -86,21 +80,27 @@ const fp = flatpickr("#unifiedDatePicker", {
 },
 onChange: function (selectedDates) {
   if (selectedDates.length === 2) {
-    const start = moment(selectedDates[0]);
-    const end = moment(selectedDates[1]);
-    const sameMonth = start.month() === end.month() && start.year() === end.year();
-    const label = sameMonth
-      ? start.format("MMMM YYYY")
-      : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+    const start = moment(selectedDates[0]).format("YYYY-MM-DD");
+    const end = moment(selectedDates[1]).format("YYYY-MM-DD");
+    const label = moment(start).isSame(end, 'month')
+      ? moment(start).format("MMMM YYYY")
+      : `${moment(start).format("MMM D")} - ${moment(end).format("MMM D, YYYY")}`;
     
-    $("#unifiedDatePicker").val(label);
-    $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
+    setUnifiedDateRange(start, end, label);
   } else {
     $("#unifiedDatePicker").val("");
     $("#unifiedDateRangeRaw").val("");
   }
 }
 });
+// function to show the date format to the users
+function setUnifiedDateRange(start, end, label) {
+  fp.setDate([start, end], true);
+  $("#unifiedDatePicker").val(label);
+  $("#unifiedDateRangeRaw").val(`${start} to ${end}`);
+  $("#filterButton").click();
+  sessionStorage.setItem("selectedDateRange", `${start} to ${end}`);
+}
   // flatpickr setup till here
   // Set default date range to current month on initial load
 if (!sessionStorage.getItem("selectedDateRange")) {
@@ -368,8 +368,8 @@ const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
     const momentTz = moment().tz("America/Chicago");
     const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
     const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-    $("#unifiedDatePicker").val(`${start} to ${end}`);
-    fp.setDate([start, end], true);
+    setUnifiedDateRange(start, end, moment(start).format("MMMM YYYY"));
+
 }
 
     const rangeValue = $("#unifiedDateRangeRaw").val().trim();
