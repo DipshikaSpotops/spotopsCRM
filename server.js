@@ -1145,12 +1145,18 @@ app.get("/orders/salesPersonWise", async (req, res) => {
     const { start, end, month, year, firstName: salesAgent } = req.query;
     const { startDate, endDate } = getDateRange({ start, end, month, year });
 
-    const orders = await Order.find({
+    const query = {
       orderDate: { $gte: startDate, $lt: endDate },
-      salesAgent
-    });
+      salesAgent,
+    };
 
-    res.json(orders);
+    const orders = await Order.find(query).lean();
+    const totalCount = orders.length;
+
+    res.json({
+      totalCount,
+      orders,
+    });
   } catch (error) {
     console.error("Error fetching salesPersonOrders:", error);
     res.status(500).json({ message: "Server error", error: error.message });
