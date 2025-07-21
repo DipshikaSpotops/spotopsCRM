@@ -389,13 +389,6 @@ function renderTableRows(page,data) {
   paginatedData.forEach((item) => {
     const estGrossP = item.grossProfit || 0;
     const actualGP = item.actualGP || 0;
-
-    const datetime = item.orderDate;
-    const date = new Date(datetime);
-    const day = date.getUTCDate();
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const year = date.getUTCFullYear();
-
     const suffix = (day) => {
       if (day > 3 && day < 21) return "th";
       switch (day % 10) {
@@ -405,7 +398,22 @@ function renderTableRows(page,data) {
         default: return "th";
       }
     };
-    const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+    const tz = "America/Chicago";
+    const date = moment.tz(item.orderDate, tz);
+
+    const day = date.date();
+    const month = date.format("MMM"); // e.g., "Jul"
+    const year = date.year();
+    const suffix1 = (day) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    };
+    const formattedOrderDate = `${day}${suffix1(day)} ${month}, ${year}`;
     const actions = `<button class="btn btn-primary btn-sm edit-btn" data-id="${item.orderNo}">Edit</button>`;
 
     $("#infoTable").append(`
@@ -850,7 +858,7 @@ $("#infoTableHeader th.sortable").on("click", function () {
 
   const actualColumn = columnMap[column] || column;
 
-  filteredOrders.sort((a, b) => {
+  allOrders.sort((a, b) => {
     let valA = a[actualColumn];
     let valB = b[actualColumn];
 
