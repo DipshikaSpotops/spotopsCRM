@@ -84,15 +84,25 @@ const fp = flatpickr("#unifiedDatePicker", {
     return link;
   }
 },
-onChange: function (selectedDates) {
-  if (selectedDates.length === 2) {
+onChange: function (selectedDates, dateStr, instance) {
+  if (selectedDates.length === 1) {
+    const start = moment(selectedDates[0]).startOf("month");
+    const end = moment(selectedDates[0]).endOf("month");
+
+    fp.setDate([start.toDate(), end.toDate()], true);
+
+    // Display label like "May 2025"
+    const label = start.format("MMMM YYYY");
+    $("#unifiedDatePicker").val(label);
+    $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
+  } else if (selectedDates.length === 2) {
     const start = moment(selectedDates[0]);
     const end = moment(selectedDates[1]);
     const sameMonth = start.month() === end.month() && start.year() === end.year();
     const label = sameMonth
       ? start.format("MMMM YYYY")
       : `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
-    
+
     $("#unifiedDatePicker").val(label);
     $("#unifiedDateRangeRaw").val(`${start.format("YYYY-MM-DD")} to ${end.format("YYYY-MM-DD")}`);
   } else {
