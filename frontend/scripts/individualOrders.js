@@ -134,7 +134,7 @@ async function fetchAllOrdersForStats() {
   }
 
   try {
-    const response = await axios.get("https://www.spotops360.com/salesPersonWise", {
+    const response = await axios.get("https://www.spotops360.com/orders/salesPersonWise", {
       params: queryParams,
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
