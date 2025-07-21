@@ -87,6 +87,7 @@ const fp = flatpickr("#unifiedDatePicker", {
 let sortedData = [];
 const rowsPerPage = 25;
 let currentPage = 1; 
+console.log("----");
 function sortOrdersByOrderNoDesc(orders) {
 console.log("Sorting orders by orderNo in descending order");
 
