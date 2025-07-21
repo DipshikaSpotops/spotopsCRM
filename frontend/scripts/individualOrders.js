@@ -31,7 +31,7 @@ const fp = flatpickr("#unifiedDatePicker", {
     const today = momentTz.format("YYYY-MM-DD");
     fp.setDate([today, today], true);
     $("#unifiedDatePicker").val(`${today} to ${today}`);
-    $("#filterButton").data("filter", "today").click();
+    $("#filterButton").click();
     instance.close();
   });
 
@@ -369,12 +369,6 @@ $('#submenu-reports .nav-link:contains("Collect Refund")').show();
 // Hide specific dashboards links for Admin
 $("#submenu-dashboards .view-individualOrders-link").hide();
 }
-const tz = "America/Chicago";
-const momentTz = moment().tz(tz);
-const thisMonthStart = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-const thisMonthEnd = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-$("#unifiedDatePicker").val(`${thisMonthStart} to ${thisMonthEnd}`);
-$("#filterButton").click();
 // Fetch orders specific to the logged-in salesperson
 try {
   await fetchAllOrdersForStats();
