@@ -404,7 +404,7 @@ $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
     const selectedMonth = $("#monthYearPicker").val();
     const searchValue = $("#searchInput").val();
-    sessionStorage.setItem("lastVisitedPage", "collectRefund");
+    sessionStorage.setItem("lastVisitedPage", "yardProcessing");
       sessionStorage.setItem("currentPage", currentPage);
       sessionStorage.setItem("selectedMonthYear", $("#monthYearPicker").val());
       sessionStorage.setItem("searchValue", $("#searchInput").val());
@@ -492,7 +492,7 @@ $("#filterButton").click(async function () {
 
   // Handle session restore if coming back from form.html
   const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-if (lastVisitedPage === "collectRefund" && document.referrer.includes("form.html")) {
+if (lastVisitedPage === "yardProcessing" && document.referrer.includes("form.html")) {
   const savedDateRange = sessionStorage.getItem("selectedDateRange");
   const savedPage = sessionStorage.getItem("currentPage");
   const savedSearch = sessionStorage.getItem("searchValue");
