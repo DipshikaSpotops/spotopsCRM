@@ -4079,7 +4079,7 @@ var userName  = localStorage.getItem("firstName")
     })
     .catch(err => {
       console.error('Error sending PO:', err);
-      alert('An error occurred.');
+      alert('An error occurred.Check if the email is valid and try again.');
     })
     .finally(() => {
       document.getElementById('loadingOverlay').style.display = 'none';
