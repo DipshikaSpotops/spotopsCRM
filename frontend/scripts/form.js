@@ -4068,7 +4068,7 @@ var userName  = localStorage.getItem("firstName")
   })
      .then(res => {
       if (res.ok) {
-        if (data.message?.includes("skipped")) {
+        if (data.message?.includes("No yard email provided")) {
           alert("Yard email address is missing. PO was not sent.");
         } else {
           alert("PO sent successfully!");
