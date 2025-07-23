@@ -4067,6 +4067,7 @@ var userName  = localStorage.getItem("firstName")
     body: formData,
   })
      .then(res => {
+      console.log("Response status:", res);
       if (res.ok) {
         if (data.message?.includes("No yard email provided")) {
           alert("Yard email address is missing. PO was not sent.");
