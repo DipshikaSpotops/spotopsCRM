@@ -4318,7 +4318,7 @@ app.post("/sendPOEmailYard/:orderNo", upload.fields([
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const formattedDate = `${date.getDate()} ${months[date.getMonth()]}, ${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
-      const msg = `Yard ${yardIndex + 1} PO NOT sent (missing yard email) by ${firstName} on ${formattedDate}`;
+      const msg = `Yard ${yardIndex + 1} PO not sent (missing yard email) by ${firstName} on ${formattedDate}`;
       order.additionalInfo[yardIndex].notes.push(msg);
       order.orderHistory.push(msg);
       await order.save();
