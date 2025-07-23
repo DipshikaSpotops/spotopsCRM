@@ -4066,8 +4066,16 @@ var userName  = localStorage.getItem("firstName")
     method: 'POST',
     body: formData,
   })
-     .then(res => {
-      console.log("Response status:", res);
+     .then(async res => {
+      console.log("Response status:", res.status);
+
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (err) {
+        console.warn("Failed to parse JSON:", err);
+      }
+
       if (res.ok) {
         if (data.message?.includes("No yard email provided")) {
           alert("Yard email address is missing. PO was not sent.");
