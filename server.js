@@ -4414,26 +4414,26 @@ app.post("/sendPOEmailYard/:orderNo", upload.fields([
         }))
       ]
     };
+    try {
+  const info = await transporter.sendMail(mailOptions);
+  
+  const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+  const date = new Date(centralTime);
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const formattedDate = `${date.getDate()} ${months[date.getMonth()]}, ${date.getFullYear()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
 
-    transporter.sendMail(mailOptions, async (error, info) => {
-      if (error) {
-        console.error("Error sending mail:", error);
-        return res.status(500).json({ message: "Email sending failed", error });
-      }
+  order.additionalInfo[yardIndex].status = "Yard PO Sent";
+  order.additionalInfo[yardIndex].notes.push(`Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDate}`);
+  order.orderHistory.push(`Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDate}`);
 
-      const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-      const date = new Date(centralTime);
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const formattedDate = `${date.getDate()} ${months[date.getMonth()]}, ${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+  await order.save();
+  console.log("PO email sent:", info.response);
+  return res.status(200).json({ message: "PO email sent and status updated successfully" });
 
-      order.additionalInfo[yardIndex].status = "Yard PO Sent";
-      order.additionalInfo[yardIndex].notes.push(`Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDate}`);
-      order.orderHistory.push(`Yard ${yardIndex + 1} PO sent by ${firstName} on ${formattedDate}`);
-
-      await order.save();
-      console.log("PO email sent:", info.response);
-      return res.status(200).json({ message: "PO email sent and status updated successfully" });
-    });
+} catch (error) {
+  console.error("Error sending mail:", error);
+  return res.status(500).json({ message: "Email sending failed", error });
+}
 
   } catch (error) {
     console.error("Server error:", error);
