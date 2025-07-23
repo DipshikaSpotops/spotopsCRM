@@ -4276,16 +4276,17 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   }
   });
  
- app.post("/sendPOEmailYard/:orderNo", upload.fields([
+app.post("/sendPOEmailYard/:orderNo", upload.fields([
   { name: 'pdfFile', maxCount: 1 },
   { name: 'images', maxCount: 10 }
 ]), async (req, res) => {
-  
   try {
     const { orderNo } = req.params;
     const firstName = req.query.firstName;
-    const yardIndex = parseInt(req.body.yardIndex -1);
-    console.log("Sending PO to yard..." ,"yardIndex",yardIndex);
+    const yardIndex = parseInt(req.body.yardIndex, 10) - 1;
+
+    console.log("Sending PO to yard...", "yardIndex", yardIndex);
+
     const order = await Order.findOne({ orderNo });
     if (!order) return res.status(404).send("Order not found");
 
@@ -4304,9 +4305,27 @@ var yardEmail = order.additionalInfo[yardIndex].email;
 
     const {
       agentName, yardName, street, city, state, zipcode,
-      shippingDetails = "", partPrice, email: yardEmail,
+      shippingDetails = "", partPrice, email: rawYardEmail,
       stockNo = "NA", warranty = "30", others = 0
     } = yard;
+
+    const yardEmail = (rawYardEmail || "").trim();
+
+    // If yard email is missing, log it and return success without sending
+    if (!yardEmail) {
+      const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
+      const date = new Date(centralTime);
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const formattedDate = `${date.getDate()} ${months[date.getMonth()]}, ${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+      const msg = `Yard ${yardIndex + 1} PO NOT sent (missing yard email) by ${firstName} on ${formattedDate}`;
+      order.additionalInfo[yardIndex].notes.push(msg);
+      order.orderHistory.push(msg);
+      await order.save();
+
+      console.log(`Email skipped: No yard email for yardIndex ${yardIndex}`);
+      return res.status(200).json({ message: "Failed to send a PO. No yard email provided." });
+    }
 
     let shipping = 0;
     let shippingValue = "-";
@@ -4353,24 +4372,22 @@ var yardEmail = order.additionalInfo[yardIndex].email;
         <strong>Part Price:</strong> $${parseFloat(partPrice).toFixed(2)}<br>
         <strong>Shipping:</strong> ${shippingValue}</p>
         
-         <p style="font-size: 14px;">
-            Notes:<br>
-            Please provide the transaction receipt after you have charged our card.<br>
-            Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.<br>
-            Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.<br>
-            If there are any discrepancies or questions regarding this order, please contact us immediately.
-          </p>
+        <p style="font-size: 14px;">
+          Notes:<br>
+          Please provide the transaction receipt after you have charged our card.<br>
+          Also, make sure it's blind shipping, and don't add any tags or labels during the shipment.<br>
+          Please ensure that the items are delivered as specified above and in accordance with the agreed-upon terms and conditions.<br>
+          If there are any discrepancies or questions regarding this order, please contact us immediately.
+        </p>
 
-          <!-- Highlighted Notes -->
-         <p>
-  <strong style="background-color: #ffff00; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
-    NOTE: BLIND SHIPPING
-  </strong><br>
-
-  <strong style="background-color: #ff0000; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
-    NOTE: PROVIDE PICTURES BEFORE SHIPPING 
-  </strong>
-</p>
+        <p>
+          <strong style="background-color: #ffff00; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
+            NOTE: BLIND SHIPPING
+          </strong><br>
+          <strong style="background-color: #ff0000; font-size: 20px; color: black; font-weight: bold; padding: 4px; display: inline-block;margin-bottom:4px;">
+            NOTE: PROVIDE PICTURES BEFORE SHIPPING 
+          </strong>
+        </p>
 
         <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
         <p style="font-size: 16px;">
