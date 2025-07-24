@@ -1355,5 +1355,42 @@ const handleMigrateDates = async () => {
   });
 fetchNotifications();
 await fetchAndRenderCharts()
+document.getElementById("downloadCsvBtn").addEventListener("click", async () => {
+    try {
+      const response = await fetch("http://localhost:5000/orders/export-csv");
+
+      if (!response.ok) {
+        throw new Error("Download failed.");
+      }
+
+      const blob = await response.blob();
+      const contentDisposition = response.headers.get("Content-Disposition");
+      const fileNameMatch = contentDisposition && contentDisposition.match(/filename="?(.+)"?/);
+      const fileName = fileNameMatch ? fileNameMatch[1] : "orders_export.csv";
+
+      // Count lines in the CSV (excluding header)
+      const textData = await blob.text();
+      const lines = textData.split("\n");
+      const rowCount = lines.length - 1;
+
+      console.log(`📦 Downloaded ${rowCount} orders as CSV`);
+
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([textData]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      // Optional: Show alert or toast
+      alert(`Downloaded ${rowCount} orders as CSV`);
+    } catch (err) {
+      console.error("Error downloading CSV:", err);
+      alert("Failed to download CSV. Please try again.");
+    }
+  });
 });
 
