@@ -78,42 +78,6 @@ console.error("Connection failed", err);
 const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
-// exportcsv
-app.get("/export-json", async (req, res) => {
-  console.log("=== /export-json route HIT");
-
-  try {
-    const orders = await Order.find({});
-    console.log("All humongous orders:", orders.length);
-    const formattedOrders = orders.map(order => {
-      const fullName = order.fName && order.lName
-        ? `${order.fName} ${order.lName}`
-        : order.customerName || "N/A";
-
-      return {
-        name: fullName,
-        email: order.email || "N/A",
-        phone: order.phone || "N/A",
-        altPhone: order.altPhone || ""
-      };
-    });
-
-    const filePath = path.join(__dirname, "../orders_export.json");
-    fs.writeFileSync(filePath, JSON.stringify(formattedOrders, null, 2)); // pretty-print
-
-    res.download(filePath, "orders_export.json", err => {
-      if (err) {
-        console.error("Download error:", err);
-        res.status(500).send("Could not download JSON.");
-      }
-      fs.unlinkSync(filePath); // clean up
-    });
-
-  } catch (error) {
-    console.error("Error exporting JSON:", error);
-    res.status(500).json({ error: "Failed to export JSON" });
-  }
-});
 
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
@@ -768,6 +732,7 @@ const MonthlyLockedGPSchema = new mongoose.Schema({
 const MonthlyLockedGP = mongoose.model('MonthlyLockedGP', MonthlyLockedGPSchema);
 app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
+console.log("Fetching all orders");
 res.json(orders);
 });
 app.post('/lockedGP', async (req, res) => {
