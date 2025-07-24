@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const json2csv = require("json2csv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -77,45 +78,6 @@ console.error("Connection failed", err);
 const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
-// exportcsv
-app.get("/export-csv", async (req, res) => {
-  console.log("/orders/export-csv route HIT");
-  try {
-    const orders = await Order.find({});
-
-    const csvData = orders.map(order => {
-      const fullName = order.fName && order.lName
-        ? `${order.fName} ${order.lName}`
-        : order.customerName || "N/A";
-
-      return {
-        name: fullName,
-        email: order.email || "N/A",
-        phone: order.phone || "N/A",
-        altPhone: order.altPhone || ""
-      };
-    });
-
-    const fields = ["name", "email", "phone", "altPhone"];
-    const parser = new Parser({ fields });
-    const csv = parser.parse(csvData);
-
-    const filePath = path.join(__dirname, "../orders_export.csv");
-    fs.writeFileSync(filePath, csv);
-
-    res.download(filePath, "orders_export.csv", err => {
-      if (err) {
-        console.error("Download error:", err);
-        res.status(500).send("Could not download CSV.");
-      }
-      fs.unlinkSync(filePath);
-    });
-
-  } catch (error) {
-    console.error("Error exporting CSV:", error);
-    res.status(500).json({ error: "Failed to export CSV" });
-  }
-});
 
 // Add a new order and update the order number
 app.post("/orders", async (req, res) => {
@@ -770,6 +732,7 @@ const MonthlyLockedGPSchema = new mongoose.Schema({
 const MonthlyLockedGP = mongoose.model('MonthlyLockedGP', MonthlyLockedGPSchema);
 app.get("/orders", async (req, res) => {
 const orders = await Order.find({});
+console.log("Fetching all orders");
 res.json(orders);
 });
 app.post('/lockedGP', async (req, res) => {
