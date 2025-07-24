@@ -1357,7 +1357,7 @@ fetchNotifications();
 await fetchAndRenderCharts()
 document.getElementById("downloadCsvBtn").addEventListener("click", async () => {
     try {
-      const response = await fetch("http://localhost:5000/orders/export-csv");
+      const response = await fetch("https://www.spotops360.com/export-csv");
 
       if (!response.ok) {
         throw new Error("Download failed.");
