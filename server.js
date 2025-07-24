@@ -79,13 +79,13 @@ const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
 // exportcsv
-const Parser = json2csv.Parser;
-app.get("/export-csv", async (req, res) => {
-  console.log("/ordersDDD/export-csv route HIT");
+app.get("/export-json", async (req, res) => {
+  console.log("=== /export-json route HIT");
+
   try {
     const orders = await Order.find({});
 
-    const csvData = orders.map(order => {
+    const formattedOrders = orders.map(order => {
       const fullName = order.fName && order.lName
         ? `${order.fName} ${order.lName}`
         : order.customerName || "N/A";
@@ -98,24 +98,20 @@ app.get("/export-csv", async (req, res) => {
       };
     });
 
-    const fields = ["name", "email", "phone", "altPhone"];
-    const parser = new Parser({ fields });
-    const csv = parser.parse(csvData);
+    const filePath = path.join(__dirname, "../orders_export.json");
+    fs.writeFileSync(filePath, JSON.stringify(formattedOrders, null, 2)); // pretty-print
 
-    const filePath = path.join(__dirname, "../orders_export.csv");
-    fs.writeFileSync(filePath, csv);
-
-    res.download(filePath, "orders_export.csv", err => {
+    res.download(filePath, "orders_export.json", err => {
       if (err) {
         console.error("Download error:", err);
-        res.status(500).send("Could not download CSV.");
+        res.status(500).send("Could not download JSON.");
       }
-      fs.unlinkSync(filePath);
+      fs.unlinkSync(filePath); // clean up
     });
 
   } catch (error) {
-    console.error("Error exporting CSV:", error);
-    res.status(500).json({ error: "Failed to export CSV" });
+    console.error("Error exporting JSON:", error);
+    res.status(500).json({ error: "Failed to export JSON" });
   }
 });
 
