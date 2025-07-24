@@ -84,7 +84,7 @@ app.get("/export-json", async (req, res) => {
 
   try {
     const orders = await Order.find({});
-
+    console.log("All humongous orders:", orders.length);
     const formattedOrders = orders.map(order => {
       const fullName = order.fName && order.lName
         ? `${order.fName} ${order.lName}`
