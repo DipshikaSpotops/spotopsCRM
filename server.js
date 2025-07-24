@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const { Parser } = require("json2csv");
+const json2csv = require("json2csv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -79,6 +79,7 @@ const db = mongoose.connection;
 console.log("my db",db);
 let orderCount = 0;
 // exportcsv
+const Parser = json2csv.Parser;
 app.get("/export-csv", async (req, res) => {
   console.log("/orders/export-csv route HIT");
   try {
