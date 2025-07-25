@@ -1356,7 +1356,7 @@ const handleMigrateDates = async () => {
 fetchNotifications();
 await fetchAndRenderCharts()
 document.getElementById("downloadCsvBtn").addEventListener("click", async () => {
-  console.log("Download CSV button clicked");
+  con
     try {
       const response = await fetch("https://www.spotops360.com/export-json");
 
