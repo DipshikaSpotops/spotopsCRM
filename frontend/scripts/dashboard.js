@@ -1394,239 +1394,333 @@
 //   });
 // });
 
-$(document).ready(async function () {
-  console.log("✅ Page ready");
 
-  // Global caches
+$(document).ready(async function () {
+  console.log(" Ready function started");
+
+  /* =============================
+      🔹 GLOBAL VARIABLES
+  ============================== */
   let cachedDailyOrders = [];
   let cachedDallasDate = null;
+  let dailyOrdersChartInstance = null;
+  let monthlySalesProgressChartInstance = null;
+  let doughnutChartInstance = null;
+  let allFetchedMonthlyData = [];
+  let doughnutMonthIndex = 0;
+  let latestMonthLabels = [];
+  let latestMonthlyGPData = [];
 
-  // ===== 1️⃣ Session check =====
-  checkSession();
+  /* =============================
+      🔹 BASIC NAVIGATION / AUTH
+  ============================== */
+  $("#viewAlltasks").on("click", function () {
+    window.location.href = "viewAllTasks.html";
+  });
 
-  // ===== 2️⃣ Setup UI & Navigation =====
-  setupNavigation();
-  setupSidebar();
-  setupProfile();
-  setupLogout();
-  setupDarkMode();
-
-  // ===== 3️⃣ Apply Role-Based Restrictions =====
-  applyRoleAndTeamRestrictions();
-
-  // ===== 4️⃣ Init Notifications & Fetch Initial Data =====
-  setupNotifications();
-
-  // ===== 5️⃣ Heavy tasks (Charts, Monthly Data) =====
-  preloadLastThreeMonths();
-  await fetchAndRenderCharts();
-  fetchNotifications();
-
-  // ===== 6️⃣ Misc. Setup =====
-  setupCSVDownload();
-  setupSearch();
-});
-
-/* =============================
-   ✅ SESSION & NAVIGATION 
-============================= */
-function checkSession() {
+  // Session check
   const currentTime = Date.now();
   const loginTimestamp = localStorage.getItem("loginTimestamp");
-
-  if (!loginTimestamp) return redirectLogin();
-
-  const hours = (currentTime - loginTimestamp) / (1000 * 60 * 60);
-  if (hours >= 12) {
-    alert("Session expired. Redirecting...");
-    localStorage.clear();
-    redirectLogin();
+  if (loginTimestamp) {
+    const timeDifference = (currentTime - loginTimestamp) / (1000 * 60 * 60);
+    if (timeDifference >= 12) {
+      alert("Your session has expired. You will be redirected to the login page.");
+      window.localStorage.clear();
+      window.location.href = "login_signup.html";
+    }
+  } else {
+    window.location.href = "login_signup.html";
   }
-}
 
-function redirectLogin() {
-  window.location.href = "login_signup.html";
-}
+  const firstName = localStorage.getItem("firstName");
+  $("#user-name").text(firstName);
+  const lastName = localStorage.getItem("lastName");
+  const email = localStorage.getItem("email");
+  const role = localStorage.getItem("role");
+  const team = localStorage.getItem("team");
+  const token = localStorage.getItem("token");
 
-function setupNavigation() {
-  $("#viewAlltasks").click(() => window.location.href = "viewAllTasks.html");
+  /* =============================
+      🔹 ROLE-BASED VISIBILITY
+  ============================== */
+  console.log("role:", role);
+  if (role === "Sales") {
+    $("#submenu-reports .nav-link").each(function () {
+      const text = $(this).text().trim();
+      if (text !== "My Sales Report" && text !== "Incentives Report") {
+        $(this).hide();
+      }
+    });
+    $("#submenu-dashboards .in-transit-link, #submenu-dashboards .view-fulfilled-link, .escalation, .view-ordersSheet-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .refunded-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .escalated-orders, #submenu-dashboards .ongoingEscalated-orders, #submenu-dashboards .yard-located-orders, #submenu-dashboards .sales-data-link, #submenu-dashboards .view-myTasks-link").hide();
+    $(".nav-item:has(#submenu-teams)").hide();
+    $(".nav-item:has(#submenu-users)").hide();
+    $(".nav-item:has(#submenu-invoices)").hide();
+  } else if (team === "Team Mark") {
+    $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+    $(".nav-item:has(#submenu-teams)").hide();
+    $(".nav-item:has(#submenu-users)").hide();
+    $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link").hide();
+    $('#submenu-reports .nav-link:contains("Incentives Report")').hide();
+  } else if (team === "Team Sussane") {
+    $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+    $(".nav-item:has(#submenu-teams)").hide();
+    $(".nav-item:has(#submenu-users)").hide();
+    $('#submenu-reports .nav-link:contains("Escalation Resolutions")').hide();
+    $('#submenu-reports .nav-link:contains("Incentives Report")').hide();
+    $("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link").hide();
+  } else if (role === "Admin") {
+    $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+    $('#submenu-reports .nav-link:contains("Refund Report")').show();
+    $('#submenu-reports .nav-link:contains("Collect Refund")').show();
+    $("#submenu-dashboards .view-individualOrders-link").hide();
+  }
+
+  /* =============================
+      🔹 SIDEBAR TOGGLE
+  ============================== */
+  $(".toggle-sidebar").on("click", function () {
+    $("#offcanvasSidebar").toggleClass("show");
+    if ($("#offcanvasSidebar").hasClass("show")) {
+      $("body").addClass("no-scroll");
+      $("body").append('<div class="modal-overlay"></div>');
+    } else {
+      $("body").removeClass("no-scroll");
+      $(".modal-overlay").remove();
+    }
+  });
 
   $(".nav-link").on("click", function () {
     $(".nav-link").removeClass("active selected");
     $(this).addClass("selected");
-    $(".main-content > div").addClass("d-none");
+
     const contentMap = {
       "default-link": "#default-content",
       "add-order-link": "#add-order-content",
-      "view-order-link": "#view-order-content"
+      "view-order-link": "#view-order-content",
     };
+
+    $(".main-content > div").addClass("d-none");
     $(contentMap[this.id]).removeClass("d-none");
     $("#offcanvasSidebar").removeClass("show");
   });
-}
 
-function setupSidebar() {
-  $(".toggle-sidebar").click(function () {
-    $("#offcanvasSidebar").toggleClass("show");
-    $("body").toggleClass("no-scroll");
-
-    if ($("#offcanvasSidebar").hasClass("show")) {
-      $("body").append('<div class="modal-overlay"></div>');
-    } else {
-      $(".modal-overlay").remove();
-    }
-  });
-}
-
-function setupProfile() {
-  const firstName = localStorage.getItem("firstName");
-  const lastName = localStorage.getItem("lastName");
-  const email = localStorage.getItem("email");
-  const role = localStorage.getItem("role");
-
-  $("#user-name").text(firstName);
-  $("#profile").click(() => {
-    $("#profileFirstName").val(firstName);
-    $("#profileLastName").val(lastName);
-    $("#profileEmail").val(email);
-    $("#profileRole").val(role);
-    $("#profileModal").modal("show");
-  });
-
-  $(".close").click(() => location.reload());
-}
-
-function setupLogout() {
-  $("#logoutLink").click(() => {
-    localStorage.clear();
-    redirectLogin();
-  });
-}
-
-/* =============================
-   ✅ ROLE/TEAM RESTRICTIONS 
-============================= */
-function applyRoleAndTeamRestrictions() {
-  const role = localStorage.getItem("role");
-  const team = localStorage.getItem("team");
-
-  const hideLinks = (selector) => $(selector).hide();
-
-  if (role === "Sales") {
-    $("#submenu-reports .nav-link").each(function () {
-      const text = $(this).text().trim();
-      if (text !== "My Sales Report" && text !== "Incentives Report") $(this).hide();
-    });
-    hideLinks(`#submenu-dashboards .in-transit-link,
-      .view-fulfilled-link,.escalation,.view-ordersSheet-link,
-      .customer-approved-link,.teamA-orders-link,.teamB-orders-link,
-      .placed-orders-link,.cancelled-orders-link,.refunded-orders-link,
-      .yard-info-link,.escalated-orders,.ongoingEscalated-orders,
-      .yard-located-orders,.sales-data-link,.view-myTasks-link`);
-    $(".nav-item:has(#submenu-teams), .nav-item:has(#submenu-users), .nav-item:has(#submenu-invoices)").hide();
-  }
-
-  if (team === "Team Mark") {
-    hideLinks('#submenu-reports .nav-link:contains("My Sales Report")');
-    hideLinks('#submenu-reports .nav-link:contains("Incentives Report")');
-    $(".nav-item:has(#submenu-teams), .nav-item:has(#submenu-users)").hide();
-    hideLinks("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link");
-  }
-
-  if (team === "Team Sussane") {
-    hideLinks('#submenu-reports .nav-link:contains("My Sales Report")');
-    hideLinks('#submenu-reports .nav-link:contains("Escalation Resolutions")');
-    hideLinks('#submenu-reports .nav-link:contains("Incentives Report")');
-    $(".nav-item:has(#submenu-teams), .nav-item:has(#submenu-users)").hide();
-    hideLinks("#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link");
-  }
-
-  if (role === "Admin") {
-    hideLinks('#submenu-reports .nav-link:contains("My Sales Report")');
-    $('#submenu-reports .nav-link:contains("Refund Report"), #submenu-reports .nav-link:contains("Collect Refund")').show();
-    hideLinks("#submenu-dashboards .view-individualOrders-link");
-  }
-}
-
-/* =============================
-   ✅ NOTIFICATIONS
-============================= */
-function setupNotifications() {
-  const notificationIcon = $("#notificationIcon");
-  const notificationDropdown = $("#notificationDropdown");
-
-  notificationIcon.click(async () => {
-    notificationDropdown.toggle();
-    if (notificationDropdown.is(":visible")) {
-      await fetchNotifications();
-      await markNotificationsAsRead();
-    }
-  });
-
-  $(document).click((e) => {
-    if (!$(e.target).closest("#notificationIcon, #notificationDropdown").length) {
-      notificationDropdown.hide();
-      $(".modal-overlay").remove();
-      $("body").removeClass("modal-active");
-    }
-  });
-}
-
-/* =============================
-   ✅ DARK MODE
-============================= */
-function setupDarkMode() {
+  /* =============================
+      🔹 DARK MODE
+  ============================== */
   const darkModeToggle = $("#darkModeIcon");
   if (localStorage.getItem("darkMode") === "true") {
     $("body").addClass("dark-mode");
     darkModeToggle.removeClass("fa-moon").addClass("fa-sun");
   }
-  darkModeToggle.click(toggleDarkMode);
-}
+  darkModeToggle.on("click", function () {
+    $("body").toggleClass("dark-mode");
+    const isDark = $("body").hasClass("dark-mode");
+    localStorage.setItem("darkMode", isDark ? "true" : "false");
+    $(this).toggleClass("fa-moon", !isDark).toggleClass("fa-sun", isDark);
+    fetchDailyOrders();
+    updateDoughnutChart(doughnutMonthIndex);
+    drawBarChart(latestMonthLabels, latestMonthlyGPData);
+  });
 
-function toggleDarkMode() {
-  $("body").toggleClass("dark-mode");
-  const isDark = $("body").hasClass("dark-mode");
-  localStorage.setItem("darkMode", isDark);
-  $("#darkModeIcon").toggleClass("fa-moon fa-sun");
-  fetchDailyOrders();
-  updateDoughnutChart(doughnutMonthIndex);
-  drawBarChart(latestMonthLabels, latestMonthlyGPData);
-}
+  /* =============================
+      🔹 FETCH CHARTS ON LOAD
+  ============================== */
+  await preloadLastThreeMonths();
+  await fetchAndRenderCharts();
 
-/* =============================
-   ✅ CSV DOWNLOAD & SEARCH
-============================= */
-function setupCSVDownload() {
-  $("#downloadCsvBtn").click(async () => {
+  /* =============================
+      🔹 NOTIFICATIONS
+  ============================== */
+  const notificationIcon = $("#notificationIcon");
+  const notificationDropdown = $("#notificationDropdown");
+  const notificationList = $("#notificationList");
+  const notificationCountElement = $("#notificationCount");
+
+  notificationIcon.on("click", async function () {
+    const isVisible = notificationDropdown.is(":visible");
+    if (isVisible) {
+      notificationDropdown.hide();
+    } else {
+      notificationDropdown.show();
+      $("body").append('<div class="modal-overlay"></div>');
+      $("body").addClass("modal-active");
+      await fetchNotifications();
+      await markNotificationsAsRead();
+    }
+  });
+
+  $(document).on("click", function (event) {
+    if (!$(event.target).closest("#notificationIcon").length &&
+        !$(event.target).closest("#notificationDropdown").length) {
+      notificationDropdown.hide();
+      $(".modal-overlay").remove();
+      $("body").removeClass("modal-active");
+    }
+  });
+
+  /* =============================
+      🔹 DOWNLOAD CSV BUTTON
+  ============================== */
+  $("#downloadCsvBtn").on("click", async () => {
     try {
       const response = await fetch("https://www.spotops360.com/export-json");
       if (!response.ok) throw new Error("Download failed.");
-      const blob = await response.blob();
-      const textData = await blob.text();
-      const rowCount = textData.split("\n").length - 1;
-      console.log(`📦 Downloaded ${rowCount} orders`);
 
-      const url = window.URL.createObjectURL(new Blob([textData]));
+      const blob = await response.blob();
+      const contentDisposition = response.headers.get("Content-Disposition");
+      const fileNameMatch = contentDisposition && contentDisposition.match(/filename="?(.+)"?/);
+      const fileName = fileNameMatch ? fileNameMatch[1] : "orders_export.csv";
+
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "orders_export.csv";
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      alert(`Downloaded ${rowCount} orders as CSV`);
+
+      alert("✅ Orders CSV downloaded");
     } catch (err) {
-      console.error("CSV download failed:", err);
-      alert("CSV download failed");
+      console.error("❌ Error downloading CSV:", err);
+      alert("Failed to download CSV. Please try again.");
     }
   });
-}
 
-function setupSearch() {
-  $("#searchInput").on("input", function () {
-    const orderNo = $(this).val().trim();
-    $("#searchResult").html(orderNo ? `<button id="viewOrderBtn" class="btn btn-primary btn-sm">View Order</button>` : "");
-    $("#viewOrderBtn").click(() => window.location.href = `form.html?orderNo=${encodeURIComponent(orderNo)}&process=true`);
-  });
-}
+  /* =============================
+      🔹 CHART FUNCTIONS (MUST LOAD FIRST)
+  ============================== */
+  async function preloadLastThreeMonths() {
+    const lastThree = getLastThreeMonths();
+    allFetchedMonthlyData = [];
+    for (let month of lastThree) {
+      const orders = await fetchMonthlyOrders(month.month, month.year);
+      allFetchedMonthlyData.push({ label: month.label, orders });
+    }
+    doughnutMonthIndex = allFetchedMonthlyData.length - 1;
+    updateDoughnutChart(doughnutMonthIndex);
+  }
+
+  async function fetchAndRenderCharts() {
+    const result = await fetchDailyOrders();
+    if (!result) return;
+    const { orders, currentDallasDate } = result;
+    cachedDailyOrders = orders;
+    cachedDallasDate = currentDallasDate;
+    await fetchAndDisplayThreeMonthsData();
+  }
+
+  function getLastThreeMonths() {
+    const now = new Date();
+    const months = [];
+    for (let i = 2; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      months.push({
+        label: date.toLocaleString("default", { month: "long", year: "numeric" }),
+        month: date.toLocaleString("default", { month: "short" }),
+        year: date.getFullYear()
+      });
+    }
+    return months;
+  }
+
+  async function fetchMonthlyOrders(month, year) {
+    try {
+      const res = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: { month, year, limit: 500 }
+      });
+      return res.data.orders || [];
+    } catch (err) {
+      console.error("❌ Error fetching monthly data:", err);
+      return [];
+    }
+  }
+
+  async function fetchDailyOrders(monthShort = null, year = null) {
+    const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+    const currentDallasDate = new Date(now);
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    if (!monthShort || !year) {
+      monthShort = months[currentDallasDate.getMonth()];
+      year = currentDallasDate.getFullYear();
+    }
+    try {
+      const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+        params: { month: monthShort, year, limit: 1000 },
+      });
+      const { orders } = response.data;
+      cachedDailyOrders = orders;
+      cachedDallasDate = currentDallasDate;
+      drawDailyOrdersChart(orders, currentDallasDate, monthShort);
+      return { orders, currentDallasDate };
+    } catch (err) {
+      console.error("❌ Error fetching daily orders:", err);
+    }
+  }
+
+  function drawDailyOrdersChart(orders, currentDallasDate, monthShort) {
+    const ctx = document.getElementById("dailyOrdersChart");
+    if (!ctx) return;
+    if (dailyOrdersChartInstance) dailyOrdersChartInstance.destroy();
+
+    const colors = getChartColors();
+    const labels = Array.from({ length: new Date(currentDallasDate.getFullYear(), currentDallasDate.getMonth() + 1, 0).getDate() }, (_, i) => `${i + 1}`);
+    const totalOrdersData = Array(labels.length).fill(0);
+
+    orders.forEach(order => {
+      const date = new Date(new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" }));
+      if (date.getMonth() === currentDallasDate.getMonth()) {
+        totalOrdersData[date.getDate() - 1]++;
+      }
+    });
+
+    dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Total Orders",
+          borderColor: colors.totalOrdersColor,
+          backgroundColor: colors.totalOrdersBg,
+          data: totalOrdersData,
+          stepped: true,
+          tension: 0.4,
+          pointRadius: 4
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  }
+
+  function updateDoughnutChart(monthIndex) {
+    const monthData = allFetchedMonthlyData[monthIndex];
+    if (!monthData) return;
+
+    const { label, orders } = monthData;
+    const ctx = document.getElementById("monthlyDoughnutChart").getContext("2d");
+    if (doughnutChartInstance) doughnutChartInstance.destroy();
+
+    const colors = getChartColors();
+    const statusLabels = ["Placed","Customer Approved","Yard Processing","In Transit","Escalation","Order Fulfilled","Order Cancelled","Refunded","Dispute"];
+    const statusCounts = statusLabels.map(status => orders.filter(order => order.orderStatus === status).length);
+
+    doughnutChartInstance = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: statusLabels,
+        datasets: [{ data: statusCounts, backgroundColor: colors.pieChartBgColors }]
+      }
+    });
+  }
+
+  function getChartColors() {
+    const isDarkMode = $("body").hasClass("dark-mode");
+    return {
+      totalOrdersColor: isDarkMode ? "#696ffb" : "#037894",
+      totalOrdersBg: isDarkMode ? "#2c3e50" : "#fff",
+      pieChartBgColors: isDarkMode
+        ? ["#8B5CF6","#A78BFA","#6366F1","#60A5FA","#22D3EE","#34D399","#F87171","#FACC15","#E879F9"]
+        : ["#037894","#ffe5a0","#1c80b6","#7887a4","#b27473","#60978c","#780914","#5a3286","#9251b4"]
+    };
+  }
+});
