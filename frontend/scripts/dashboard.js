@@ -22,6 +22,56 @@ async function fetchCancelledOrders(month, year) {
   });
   return res.data;
 }
+function updateSummaryCards(orders) {
+  let totalSales = 0;
+  let totalGrossProfit = 0;
+  let totalActualGP = 0;
+  let totalPurchases = 0;
+
+  orders.forEach(order => {
+    // Sales (soldP)
+    const soldP = parseFloat(order.soldP) || 0;
+    totalSales += soldP;
+
+    // Gross Profit
+    const gp = parseFloat(order.grossProfit) || 0;
+    totalGrossProfit += gp;
+
+    // Actual GP (if present)
+    if (order.actualGP !== undefined && !isNaN(order.actualGP)) {
+      totalActualGP += parseFloat(order.actualGP);
+    }
+
+    // Purchases (if any)
+    if (Array.isArray(order.additionalInfo)) {
+      order.additionalInfo.forEach(info => {
+        if (info.paymentStatus === "Card charged") {
+          const partPrice = parseFloat(info.partPrice) || 0;
+
+          // extract shipping number from shippingDetails
+          let shipping = 0;
+          const shippingStr = info.shippingDetails || "";
+          const shippingMatch = shippingStr.match(/(\d+(\.\d+)?)/);
+          if (shippingMatch) {
+            shipping = parseFloat(shippingMatch[1]);
+          }
+
+          const others = parseFloat(info.others) || 0;
+          const refundedAmount = parseFloat(info.refundedAmount) || 0;
+
+          totalPurchases += partPrice + shipping + others - refundedAmount;
+        }
+      });
+    }
+  });
+
+  // ✅ Update the UI
+  document.getElementById("salesTotal").innerText = `$${totalSales.toFixed(2)}`;
+  document.getElementById("grossProfitTotal").innerText = `$${totalGrossProfit.toFixed(2)}`;
+  document.getElementById("actualGPTotal").innerText = `$${totalActualGP.toFixed(2)}`;
+  document.getElementById("purchaseTotal").innerText = `$${totalPurchases.toFixed(2)}`;
+}
+
 async function fetchAndRenderCharts() {
   const result = await fetchDailyOrders();
   if (!result) return;
@@ -437,6 +487,7 @@ function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
     </div>
   `;
 }
+
 async function preloadLastThreeMonths() {
   const lastThree = getLastThreeMonths();
   allFetchedMonthlyData = [];
