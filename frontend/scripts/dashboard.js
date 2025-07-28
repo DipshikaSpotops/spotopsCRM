@@ -382,6 +382,22 @@ if (chartSection) {
   });
   observer.observe(chartSection);
 }
+function getLastThreeMonths() {
+  const now = new Date();
+  const months = [];
+  
+  for (let i = 2; i >= 0; i--) {  // Get current month, last month, month before that
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({
+      label: date.toLocaleString("default", { month: "long", year: "numeric" }),
+      month: date.toLocaleString("default", { month: "short" }),
+      year: date.getFullYear()
+    });
+  }
+
+  return months;
+}
+
 async function preloadLastThreeMonths() {
   const lastThree = getLastThreeMonths();
   allFetchedMonthlyData = [];
