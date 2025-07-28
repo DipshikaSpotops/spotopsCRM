@@ -397,7 +397,46 @@ function getLastThreeMonths() {
 
   return months;
 }
+async function fetchMonthlyOrders(month, year) {
+  try {
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month, year, limit: 500 }
+    });
+    return response.data.orders || [];
+  } catch (err) {
+    console.error("Error fetching monthly data:", err);
+    return [];
+  }
+}
+async function loadMonthlyCancellationRefundData(monthShort, year) {
+  const [cancelledOrders, refundedOrders] = await Promise.all([
+    fetchCancelledOrders(monthShort, year),
+    fetchRefundedOrders(monthShort, year)
+  ]);
 
+  analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders);
+}
+function analyzeMonthlyCancelRefunds(cancelledOrders, refundedOrders) {
+  const cancelled = cancelledOrders.length;
+  const refunded = refundedOrders.length;
+  const totalRefundAmount = refundedOrders.reduce((sum, order) => {
+    const amt = parseFloat(order.custRefAmount || 0);
+    return sum + (isNaN(amt) ? 0 : amt);
+  }, 0);
+
+  console.log(`Cancelled Orders This Month: ${cancelled}`);
+  console.log(`Refunded Orders This Month: ${refunded}`);
+  console.log(`Totals → Cancelled: ${cancelled}, Refunded: ${refunded}, Refund Amount: $${totalRefundAmount.toFixed(2)}`);
+
+  document.getElementById("monthlyCancelRefundBox").innerHTML = `
+    <div class="text-center p-2">
+      <h5 class="text-warning" style="color: #ffffff !important;">Monthly Cancellations & Refunds</h5>
+      <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
+      <p><strong>Refunded Orders:</strong> ${refunded}</p>
+      <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
+    </div>
+  `;
+}
 async function preloadLastThreeMonths() {
   const lastThree = getLastThreeMonths();
   allFetchedMonthlyData = [];
