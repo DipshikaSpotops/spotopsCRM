@@ -322,8 +322,6 @@ $(document).ready(async function () {
     }
   });
 
-  // ✅ Role-based restrictions (this whole Sales / Admin / Team Mark logic goes here exactly as is)
-  console.log("role:", role);
   // ✅ Role-based restrictions (Sales, Admin, Team Mark, Team Sussane)
   console.log("role:", role);
   if (role === "Sales") {
@@ -341,7 +339,18 @@ $(document).ready(async function () {
     $(".nav-item:has(#submenu-invoices)").hide();
 
   } else if (team === "Team Mark") {
+    // 👉 Team Mark restrictions code goes here (currently empty)
+    // example:
+    // $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+    // $(".nav-item:has(#submenu-teams)").hide();
+    // ...
 
+  } else if (team === "Team Sussane") {
+    // 👉 Team Sussane restrictions code goes here
+
+  } else if (role === "Admin") {
+    // 👉 Admin restrictions code goes here
+  }
 
   // ✅ Profile modal
   $("#profile").click(function () {
@@ -354,6 +363,7 @@ $(document).ready(async function () {
 
   $(".close").click(() => location.reload());
 });
+
 setTimeout(async () => {
   console.log("Deferred: Loading heavy data...");
   
