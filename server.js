@@ -69,7 +69,7 @@ const mongoURI =
 mongoose
 .connect(mongoURI)
 .then(() => {
-console.log("MongoDB connected =====");
+console.log("MongoDB connected =----");
 })
 .catch((err) => {
 console.error("Connection failed", err);
