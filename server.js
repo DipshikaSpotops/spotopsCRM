@@ -1171,22 +1171,32 @@ app.get("/orders/salesPersonWise", async (req, res) => {
 });
 app.get("/orders/monthly", async (req, res) => {
   try {
-    const { start, end, month, year, page = 1, limit = 25, filterBy, salesAgent } = req.query;
+    const { start, end, month, year, page = 1, limit = 25, filterBy, salesAgent, team, role } = req.query;
     const { startDate, endDate } = getDateRange({ start, end, month, year });
 
-    const query = {
-      orderDate: { $gte: startDate, $lt: endDate },
-    };
+    const query = { orderDate: { $gte: startDate, $lt: endDate } };
 
     if (filterBy === "collectRefund") {
       query["additionalInfo.collectRefundCheckbox"] = "Ticked";
     }
 
+    // ✅ If a single salesAgent filter is applied
     if (salesAgent) {
       query.salesAgent = salesAgent;
     }
 
+    // ✅ Team filter only for non-admin users
+    if (role !== "Admin") {
+      if (team === "Shankar") {
+        query.salesAgent = { $in: ["David", "John"] };
+      } else if (team === "Vinutha") {
+        query.salesAgent = { $in: ["Michael", "Mark"] };
+      }
+      // You can add more teams here...
+    }
+
     const totalCount = await Order.countDocuments(query);
+
     const orders = await Order.find(query)
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
