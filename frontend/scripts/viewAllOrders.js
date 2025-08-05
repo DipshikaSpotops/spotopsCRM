@@ -4,14 +4,12 @@ $(document).ready(async function () {
 });
 
 $(document).ready(function () {
-  // Apply dark mode on page load
   if (localStorage.getItem("darkMode") === "true") {
     enableDarkMode();
   } else {
     disableDarkMode();
   }
 
-  // Toggle on icon click
   $("#darkModeIcon").on("click", function () {
     if ($("body").hasClass("dark-mode")) {
       disableDarkMode();
@@ -44,7 +42,7 @@ let debounceTimer;
 $("#searchInput").on("input", function () {
   clearTimeout(debounceTimer);
   const searchTerm = $(this).val().trim();
-  localStorage.setItem("viewAllOrdersSearch", searchTerm); // Save to localStorage
+  localStorage.setItem("viewAllOrdersSearch", searchTerm);
   debounceTimer = setTimeout(() => {
     currentPage = 1;
     fetchOrders(currentPage, searchTerm);

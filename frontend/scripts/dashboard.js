@@ -769,7 +769,10 @@ async function fetchAndDisplayThreeMonthsData() {
 
       if (response.status === 200) {
         const orders = response.data.orders || [];
-        const totalGP = orders.reduce((sum, order) => sum + (order.actualGP || 0), 0);
+        const totalGP = orders.reduce((sum, order) => {
+        const gp = parseFloat(order.actualGP);
+        return !isNaN(gp) ? sum + gp : sum;
+        }, 0);
         monthlyGPData.push(totalGP);
       } else {
         console.warn(`Failed to fetch data for ${monthStr} ${currentYear}`);
@@ -779,7 +782,8 @@ async function fetchAndDisplayThreeMonthsData() {
 
     latestMonthLabels = monthLabels;
     latestMonthlyGPData = monthlyGPData;
-
+    console.log("MONTH LABELS:", monthLabels);
+    console.log("MONTH GP DATA:", monthlyGPData);
     drawBarChart(monthLabels, monthlyGPData);
   } catch (err) {
     console.error("Error fetching and displaying YTD data:", err);
