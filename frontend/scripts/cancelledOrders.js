@@ -356,7 +356,6 @@ ${
     : ""
 }
 </td>
-</td>
 <td style="justify-content: center;">${actions}</td>
 </tr>
 `);
