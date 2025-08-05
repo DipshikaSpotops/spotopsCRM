@@ -303,7 +303,11 @@ const yardSpendTotal =
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
 Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
-Esc spending: ${custOwnShipReplacement} + ${yardOwnShipping} + ${custOwnShippingReturn}<br>
+Esc spending: ${
+  (parseFloat(custOwnShipReplacement) || 0) +
+  (parseFloat(yardOwnShipping) || 0) +
+  (parseFloat(custOwnShippingReturn) || 0)
+}
 Yard Spend: ${yardSpendTotal}<br>
 Yard refund: ${refundedAmount}
 `;
