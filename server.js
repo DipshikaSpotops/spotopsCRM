@@ -2986,7 +2986,7 @@ html: `<p>Hi ${customerName},</p>
 <p>Here’s a quick summary of your order:<br>
 Order Number: ${req.params.orderNo}<br>
 Tracking No: ${cxTrackingNo}<br>
-Tracking Link: ${cxshipperName} -  ${trackingLink}</p>
+Tracking Link: ${cxshipperName || ""} -  ${trackingLink || ""}</p>
 <p>If there’s anything you need, or if you have any questions about your order, feel free to reach out, we’re always happy to help.</p>
 <p>Thanks once again for shopping with us. We look forward to helping you with your auto parts needs in the future!</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
