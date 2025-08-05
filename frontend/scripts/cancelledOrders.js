@@ -293,13 +293,13 @@ const yardOwnShipping = info.yardOwnShipping || 0;
 const custOwnShippingReturn = info.custOwnShippingReturn || 0;
 const shippingCost = parseFloat(shippingDetails.match(/\d+/)?.[0]) || 0;
 const yardSpendTotal =
-            partPrice + 
-            shippingCost + 
-            others - 
-            refundedAmount + 
-            yardOwnShipping + 
-            custOwnShippingReturn - 
-            custOwnShipReplacement;
+  parseFloat(partPrice) +
+  parseFloat(shippingCost) +
+  parseFloat(others) -
+  parseFloat(refundedAmount) +
+  parseFloat(yardOwnShipping) +
+  parseFloat(custOwnShippingReturn) -
+  parseFloat(custOwnShipReplacement);
 return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
 Part price: $${partPrice} | ${shippingDetails} | Others: $${others}<br>
