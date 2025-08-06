@@ -645,7 +645,7 @@ const partSchema = new mongoose.Schema({
   name: {
       type: String,
       required: true,
-      unique: true, // Prevent duplicate part names
+      unique: true,
       trim: true
   }
 });
