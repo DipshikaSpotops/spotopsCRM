@@ -53,6 +53,7 @@ const fp = flatpickr("#unifiedDatePicker", {
 
     const monthBtn = makeLink(monthName, () => {
       fp.setDate([start, end], true);
+      console.log(`Month button clicked: ${monthName}, Setting value: ${start} to ${end}`);
       $("#unifiedDatePicker").val(`${start} to ${end}`);
       $("#filterButton").click();
       instance.close();
