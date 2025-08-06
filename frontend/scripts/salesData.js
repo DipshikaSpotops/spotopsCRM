@@ -96,9 +96,9 @@ function calculateAndUpdateTotals(orders) {
     let totalActualGP = 0;
 
     orders.forEach(order => {
-        totalEstGP += order.grossProfit || 0;
+        totalEstGP += parseFloat(order.grossProfit || 0);
         totalCurrentGP += calculateCurrentGP(order);
-        totalActualGP += order.actualGP || 0;
+        totalActualGP += parseFloat(order.actualGP) || 0;
     });
 
     // Update the totals in the UI
