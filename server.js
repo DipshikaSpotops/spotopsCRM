@@ -4192,6 +4192,7 @@ app.post("/orders/sendRefundEmailYard/:orderNo", upload.single("pdfFile"), async
   return res.status(400).send("Order not found");
   }
   const pdfFile = req.file; 
+  var firstName = req.firstName
 if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var orderDate = order.orderDate;
   var yardIndex = req.query.yardIndex - 1;
@@ -4199,7 +4200,7 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var returnTracking = req.query.returnTracking;
   var refundToCollect = req.query.refundToCollect;
   var shipperName = req.query.shipper;
-  var firstName = req.params.firstName
+  
   console.log("yardIndex",yardIndex);
   // const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
   // date.setDate(date.getDate() - 1);
