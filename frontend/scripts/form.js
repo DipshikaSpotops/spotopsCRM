@@ -2357,9 +2357,9 @@ if (!file) {
 console.log("yardddd",selectedYardIndex,yardIndex);
 const formData = new FormData();
 formData.append("pdfFile", file);
-formData.append("firstName", firstName);
+// formData.append("firstName", firstName);
 console.log("firstName",firstName);
-fetch(`https://www.spotops360.com/orders/sendRefundEmailYard/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}&shipper=${shipper}&refundReason=${refundReason}`, {
+fetch(`https://www.spotops360.com/orders/sendRefundEmailYard/${orderNo}?yardIndex=${selectedYardIndex}&returnTracking=${returnTracking}&refundToCollect=${refundToCollect}&shipper=${shipper}&refundReason=${refundReason}&firstName=${firstName}`, {
 method: "POST",
 body: formData,
 
