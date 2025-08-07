@@ -173,11 +173,8 @@ $("#infoTable").empty(); // Clear the table
 
 ordersForPage.forEach(order => {
 const currentGP = calculateCurrentGP(order); // Dynamically calculate `currentGP`
-let actualG = order.actualGP;
-if(actualG !== undefined){
-  actualG = order.actualGP;
-  actualG.toFixed(2)
-}else{
+let actualG = parseFloat(order.actualGP);
+if (isNaN(actualG)) {
   actualG = 0;
 }
 console.log("actualG",actualG);
