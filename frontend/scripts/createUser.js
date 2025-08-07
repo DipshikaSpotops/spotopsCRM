@@ -39,12 +39,12 @@ $('.teams').addClass('disabled');
 $('.teamA-orders-link').addClass('disabled');
 $('.teamB-orders-link').addClass('disabled');
 break;
-case 'Team Mark':
+case 'Shankar':
 $('.teams').addClass('disabled');
 $('.add-order-link').addClass('disabled');
 $('.teamB-orders-link').addClass('disabled');
 break;
-case 'Team Sussane':
+case 'Vinutha':
 $('.teams').addClass('disabled');
 $('.add-order-link').addClass('disabled');
 $('.teamA-orders-link').addClass('disabled');

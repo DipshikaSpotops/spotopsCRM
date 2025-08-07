@@ -373,7 +373,7 @@ min-width: 50px;
 font-size: 13px;
 }
 .table-wrapper {
-  max-height: 80vh;
+  max-height: 78vh;
   overflow-y: auto;
   scrollbar-color: #037894 white;
   position: relative;
