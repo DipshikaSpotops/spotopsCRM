@@ -61,6 +61,7 @@ $(".nav-item:has(#submenu-users)").hide();
 $(
 "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link"
 ).hide();
+$("#submenu-invoices .nav-link").hide()
 $('#submenu-reports .nav-link:contains("Incentives Report")').hide();
 } else if (team === "Vinutha") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
@@ -68,6 +69,7 @@ $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 $('#submenu-reports .nav-link:contains("Escalation Resolutions")').hide();
 $('#submenu-reports .nav-link:contains("Incentives Report")').hide();
+$("#submenu-invoices .nav-link").hide()
 // escalationResolvingTime
 $(
 "#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
