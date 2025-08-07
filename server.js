@@ -4192,7 +4192,7 @@ app.post("/orders/sendRefundEmailYard/:orderNo", upload.single("pdfFile"), async
   return res.status(400).send("Order not found");
   }
   const pdfFile = req.file; 
-  var firstName = req.firstName
+  var firstName = req.firstName;
 if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var orderDate = order.orderDate;
   var yardIndex = req.query.yardIndex - 1;
@@ -4247,7 +4247,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   <p>Note : If you have another company name or DBA, please do let us know. Purchase Order has been attached below for your reference.</p>
              
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-  <p>${firstName}</p>,
+  <p>${firstName || ""}</p>,
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
   attachments: [
     {
