@@ -59,7 +59,7 @@ $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
 $(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link"
+"#submenu-dashboards #add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link"
 ).hide();
 $(".nav-item:has(#submenu-invoices)").hide();
 $('#submenu-reports .nav-link:contains("Incentives Report")').hide();
@@ -72,7 +72,7 @@ $('#submenu-reports .nav-link:contains("Incentives Report")').hide();
 $(".nav-item:has(#submenu-invoices)").hide();
 // escalationResolvingTime
 $(
-"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
+"#submenu-dashboards #add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
 ).hide();
 
 } 

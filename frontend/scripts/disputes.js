@@ -417,12 +417,12 @@ $(".nav-item:has(#submenu-users)").hide();
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
-$("#submenu-dashboards .add-orderS-link, #submenu-dashboards .view-individualOrders-link, .teamB-orders-link").hide();
+$("#submenu-dashboards #add-orderS-link, #submenu-dashboards .view-individualOrders-link, .teamB-orders-link").hide();
 } else if (team === "Vinutha") {
 $('#submenu-reports .nav-link:contains("My Sales Report")').hide();
 $(".nav-item:has(#submenu-teams)").hide();
 $(".nav-item:has(#submenu-users)").hide();
-$("#submenu-dashboards .add-orderS-link, #submenu-dashboards .view-individualOrders-link, .teamA-orders-link").hide();
+$("#submenu-dashboards #add-orderS-link, #submenu-dashboards .view-individualOrders-link, .teamA-orders-link").hide();
 } else if (role === "Admin" && firstName === "John") {
   console.log("===");
 $('#submenu-reports .nav-link:contains("My Sales Report")').show();
