@@ -458,7 +458,6 @@ $('#submenu-reports .nav-link:contains("Escalation Resolutions")').hide();
 $(
 "#submenu-dashboards #add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
 ).hide();
-
 } 
 // else if (role === "Admin" && firstName === "John") {
 //   console.log("===");

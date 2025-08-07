@@ -4199,6 +4199,7 @@ if (!pdfFile) return res.status(400).send("No PDF file uploaded");
   var returnTracking = req.query.returnTracking;
   var refundToCollect = req.query.refundToCollect;
   var shipperName = req.query.shipper;
+  var firstName = req.query.firstName
   console.log("yardIndex",yardIndex);
   // const date = new Date(orderDate.replace(/(\d+)(st|nd|rd|th)/, '$1'));
   // date.setDate(date.getDate() - 1);
@@ -4245,6 +4246,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
   <p>Note : If you have another company name or DBA, please do let us know. Purchase Order has been attached below for your reference.</p>
              
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
+  <p>${firstName}</p>,
   <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
   attachments: [
     {
