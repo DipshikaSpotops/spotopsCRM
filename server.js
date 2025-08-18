@@ -2255,6 +2255,7 @@ yardInfo.refundedAmount = refundedAmount;
 yardInfo.storeCredit = storeCredit || null;
 yardInfo.refundedDate = refundedDate || "" ;
 yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
+yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
 yardInfo.refundToCollect = refundToCollect || "" ;
 yardInfo.refundReason = refundReason || "" ;
 if(refundToCollect || collectRefundCheckbox === "Ticked"){

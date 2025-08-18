@@ -993,9 +993,11 @@ Save
 <h6 id="actualRefundToCollect" style="text-align: center;"></h6>
 
 
-<div id="collectRefundContainer">
+<div id="collectRefundContainer" style="display: flex;">
 <input type="checkbox" id="collectRefundCheckbox"/>
 <label for="collectRefundContainer" style="font-family: inherit;"> Collect Refund</label>
+<input type="checkbox" id="upsClaimCheckbox"/>
+<label for="collectRefundContainer" style="font-family: inherit;"> UPS Claim</label>
 </div>  
 <div id="refundToCollectContainer" style="display:flex;margin: 4%;white-space: nowrap;">
 <label for="refundToCollect" style="font-family: inherit;"> Refund To Be Collected:</label>
@@ -1024,6 +1026,7 @@ Save
 <option value="Damaged">Damaged</option>
 <option value="Defective">Defective</option>
 <option value="Incorrect">Incorrect</option>
+<option value="Lost">Lost</option>
 <option value="Not programming">Not programming</option>
 <option value="Personal reason">Personal reason</option>
 <option value="PO cancelled">PO cancelled</option>

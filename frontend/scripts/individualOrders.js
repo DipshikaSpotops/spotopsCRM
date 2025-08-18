@@ -163,8 +163,8 @@ function updateOrderStats(filteredData) {
   let totalDisputed = 0;
 
   filteredData.forEach((item) => {
-    const estGP = item.grossProfit || 0;
-    const actualGP = item.actualGP || 0;
+    const estGP    = parseFloat(item.grossProfit) || 0;
+    const actualGP = parseFloat(item.actualGP)    || 0;
     totalActualGP += actualGP;
     totalGrossProfit += estGP;
     if (item.orderStatus === "Order Cancelled") totalCancelled++;
@@ -387,8 +387,8 @@ function renderTableRows(page,data) {
   const paginatedData = data.slice(start, end);
 
   paginatedData.forEach((item) => {
-    const estGrossP = item.grossProfit || 0;
-    const actualGP = item.actualGP || 0;
+  const estGrossP = parseFloat(item.grossProfit) || 0;
+  const actualGP  = parseFloat(item.actualGP)   || 0;
     const suffix = (day) => {
       if (day > 3 && day < 21) return "th";
       switch (day % 10) {
