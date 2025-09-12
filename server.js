@@ -2706,7 +2706,7 @@ res.sendFile(path.join(__dirname, "frontend", "orders.html"));
 });
 
 app.listen(port, () => {
-console.log(`Server is running on ${port}`);
+console.log(`Server is running on ${port} Dip's new server`);
 });
 
 // Update password

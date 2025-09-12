@@ -600,6 +600,7 @@ for (let p = 2; p <= totalPages; p++) {
   );
 }
 
+
 const responses = await Promise.all(requests);
 responses.forEach(res => {
   yardOrdersRaw.push(...res.data.orders);
@@ -702,7 +703,6 @@ pageData.forEach(order => {
                 ${info.yardName || ""}<br>
                 Shipping: ${shippingDetails}<br>
                 Part price: $${partPrice} | Others: $${others}<br>
-                PO sent on: ${info.poSentDate || "N/A"}
             </td>`;
         } else {
             yardInfoHtml += "<td></td>"; // Empty cell
