@@ -1455,6 +1455,7 @@ $('#refundSubmit').on('click', function () {
     .finally(() => {
       $btn.prop('disabled', false);
     });
+    window.location.reload();
 });
 
 // refundCollect part ends here
