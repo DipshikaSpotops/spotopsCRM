@@ -1381,79 +1381,80 @@ window.location.reload();
 });
 //  card charged part till here
 // refundCollect part 
-$('#refundSubmit').on('click', function() {
-$('#refundCollect').hide();
-$(".modal-overlay").remove();
-$("body").removeClass("modal-active");
-const refundStatus = $(".paymentStatusRefund")
-.map(function () {
-return $(this).val();
-})
-.get()
-.filter(function (value) {
-return value !== "";
-})
-.join();
+$('#refundSubmit').on('click', function () {
+  // Optional: guard against double clicks
+  const $btn = $(this).prop('disabled', true);
 
-const refundedAmount = $("#refundedAmount").val();
-const isStoreCredit = $("#storeCreditCheckbox").is(":checked");
-const collectRefundCheckbox = $("#collectRefundCheckbox").is(":checked");
-const upsClaimCheckbox = $("#upsClaimCheckbox".is(":checked"));
-const refundToCollect = $("#refundToCollect").val();
-const refundedDate = $("#refundedDate").val();
-const refundReason = $("#refundReasonYard").val();
-console.log("refund reason",refundReason);
-console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect,"upsClaimCheckbox", upsClaimCheckbox);
-if (collectRefundCheckbox === true){
-var collectRefundChecked = "Ticked"
-}
+  // Close modal/overlay
+  $('#refundCollect').hide();
+  $('.modal-overlay').remove();
+  $('body').removeClass('modal-active');
 
-if (upsClaimCheckbox === true){
-var upsClaimChecked = "Ticked"
-}
-if (refundStatus === "Refund collected") {
-$(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
-}
+  // If there is only one status input, just read its value
+  const refundStatus = $('.paymentStatusRefund').first().val() || '';
 
-const data1 = {
-refundStatus: refundStatus,
-refundedAmount: refundedAmount,
-storeCredit: isStoreCredit ? refundedAmount : null,
-refundedDate: refundedDate || "",
-collectRefundCheckbox: collectRefundChecked,
-upsClaimCheckbox: upsClaimChecked,
-refundToCollect:refundToCollect,
-refundReason: refundReason
+  const refundedAmount = $('#refundedAmount').val();
+  const isStoreCredit = $('#storeCreditCheckbox').is(':checked');
+  const collectRefundCheckbox = $('#collectRefundCheckbox').is(':checked');
+  const upsClaimCheckbox = $('#upsClaimCheckbox').is(':checked'); // <-- fixed
+  const refundToCollect = $('#refundToCollect').val();
+  const refundedDate = $('#refundedDate').val();
+  const refundReason = $('#refundReasonYard').val();
 
-};
+  console.log('refund reason', refundReason);
+  console.log('collectRefundCheckbox', collectRefundCheckbox, 'refundToCollect', refundToCollect, 'upsClaimCheckbox', upsClaimCheckbox);
 
-const updateOrder = (url) => {
-return fetch(url, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(data1),
-});
-};
+  if (refundStatus === 'Refund collected') {
+    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
+  }
 
-// Try updating in orders collection first
-updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${firstName}`)
-// .then((response) => 
-//   return response.json(); // Successful update in orders
-// })
-.then((data) => {
-if (data) {
-updateOrderHistory(data.orderHistory);
-showYardDetails(selectedYardIndex);
-fetchAndUpdateYardInfo();
-}
-})
-.catch((error) => {
-console.error("Error:", error);
-});
+  const data1 = {
+    refundStatus: refundStatus,
+    refundedAmount: refundedAmount,
+    storeCredit: isStoreCredit ? refundedAmount : null,
+    refundedDate: refundedDate || '',
+    collectRefundCheckbox: collectRefundCheckbox ? 'Ticked' : 'Unticked',
+    upsClaimCheckbox: upsClaimCheckbox ? 'Ticked' : 'Unticked',
+    refundToCollect: refundToCollect,
+    refundReason: refundReason
+  };
 
-window.location.reload();
+  const updateOrder = (url) => {
+    return fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data1)
+    }).then(async (res) => {
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        throw new Error(`HTTP ${res.status} ${res.statusText} ${text}`);
+      }
+      // If your API returns JSON, parse it; if it returns nothing, handle gracefully
+      try { return await res.json(); } catch { return null; }
+    });
+  };
+
+  // Do NOT reload immediately; wait for success
+  updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${encodeURIComponent(firstName)}`)
+    .then((data) => {
+      if (data && data.orderHistory) {
+        updateOrderHistory(data.orderHistory);
+      }
+      // Update UI without reload
+      showYardDetails(selectedYardIndex);
+      fetchAndUpdateYardInfo();
+      // If you really need a reload, do it here after success:
+      // window.location.reload();
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      // Optional: show a toast/banner here
+    })
+    .finally(() => {
+      $btn.prop('disabled', false);
+    });
 });
 
 // refundCollect part ends here
