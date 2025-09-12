@@ -154,8 +154,8 @@ $("#userDropdown").on("change", function () {
 
         renderTableRows(currentPage, allOrders);
         createPaginationControls(
-            Math.ceil(allOrders.length / rowsPerPage),
-            allOrders
+          Math.ceil(allOrders.length / rowsPerPage),
+          currentPage
         );
     }
 });
@@ -401,7 +401,7 @@ await fetchOrders();
 
 $("#searchInput").on("keyup", function () {
 const value = $(this).val().toLowerCase();
-const filteredOrders = allOrders.filter(order => {
+const searchFiltered  = allOrders.filter(order => {
 const basicSearch = (
 (order.soldP && String(order.soldP).toLowerCase().includes(value)) || // Converting soldP to string
 (order.grossProfit && String(order.grossProfit).toLowerCase().includes(value)) || 
@@ -453,9 +453,9 @@ return basicSearch || yardSearch;
 });
 
 // If a search is active, display the filtered results, otherwise reset to the full dataset
-if (filteredOrders.length > 0 || value === "") {
-renderTableRows(1, filteredOrders); // Render the first page of filtered results
-createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), currentPage);
+if (searchFiltered.length > 0 || value === "") {
+renderTableRows(1, searchFiltered); // Render the first page of filtered results
+createPaginationControls(Math.ceil(searchFiltered.length / rowsPerPage), currentPage);
 } else {
 $("#infoTable").empty(); // Clear the table if no results are found
 $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
@@ -832,54 +832,76 @@ fetchNotifications();
   }
 });
   // sorting
-  let currentSortColumn = '';
+ // ---- sorting (REPLACED) ----
+let currentSortColumn = '';
 let sortAsc = true;
+
 const columnMap = {
   salePrice: "soldP",
   estGp: "grossProfit",
-  currGp: "currentGP",
+  currGp: "currentGP",           // derived
   actualGp: "actualGP",
   custRefAmount: "custRefundedAmount"
 };
+
 const numericCols = ["salePrice", "estGp", "currGp", "actualGp", "custRefAmount"];
+
+// Use the agent-filtered list if an agent is selected; otherwise use allOrders
+function getActiveDataset() {
+  const agentVal = $("#userDropdown").val();
+  if (agentVal && agentVal !== "All" && agentVal !== "Select" && filteredOrders.length) {
+    return filteredOrders;
+  }
+  return allOrders;
+}
+
+function getSortValue(order, column) {
+  const actualColumn = columnMap[column] || column;
+
+  if (actualColumn === "currentGP") return calculateCurrentGP(order);
+  if (actualColumn === "orderDate") return new Date(order.orderDate || 0);
+
+  if (actualColumn === "customerName") {
+    const name = (order.fName && order.lName) ? `${order.fName} ${order.lName}` : (order.customerName || "");
+    return name.toLowerCase();
+  }
+
+  if (actualColumn === "partName") {
+    return ((order.pReq || order.partName) || "").toLowerCase();
+  }
+
+  if (numericCols.includes(column)) {
+    return parseFloat(order[actualColumn]) || 0;
+  }
+
+  const v = order[actualColumn];
+  return (typeof v === "string") ? v.toLowerCase() : (v ?? "");
+}
+
 $("#infoTableHeader th.sortable").on("click", function () {
   const column = $(this).data("column");
   if (!column) return;
 
-  currentSortColumn === column ? sortAsc = !sortAsc : (currentSortColumn = column, sortAsc = true);
+  currentSortColumn === column ? (sortAsc = !sortAsc) : (currentSortColumn = column, sortAsc = true);
 
-  const actualColumn = columnMap[column] || column;
-
-  allOrders.sort((a, b) => {
-    let valA = a[actualColumn];
-    let valB = b[actualColumn];
-
-    // Handle dates
-    if (column.toLowerCase().includes("date")) {
-      valA = new Date(valA);
-      valB = new Date(valB);
-    }
-    // Handle numbers
-    else if (numericCols.includes(column)) {
-      valA = parseFloat(valA) || 0;
-      valB = parseFloat(valB) || 0;
-    }
-    // Default string sorting
-    else {
-      valA = valA?.toString().toLowerCase() || "";
-      valB = valB?.toString().toLowerCase() || "";
-    }
-
-    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  const data = getActiveDataset();
+  data.sort((a, b) => {
+    const A = getSortValue(a, column);
+    const B = getSortValue(b, column);
+    if (A < B) return sortAsc ? -1 : 1;
+    if (A > B) return sortAsc ? 1 : -1;
+    return 0;
   });
 
   currentPage = 1;
-  renderTableRows(currentPage);
-  createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+  renderTableRows(currentPage, data);
+  createPaginationControls(totalPages, currentPage);
 
   // Update arrows
   $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
   $(this).find(".sort-icons").children(sortAsc ? ".asc" : ".desc").addClass("active");
 });
+
 
 });
