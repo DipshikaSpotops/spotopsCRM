@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Leads</title>
+
+  <!-- Reuse your app’s libs -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <style>
+    :root { --left-width: 360px; }
+    body { background:#eaf6ff; }
+    .navbar { position: fixed; top:0; left:0; right:0; z-index:1001; }
+    .sidebar { position: fixed; top:0; left:0; bottom:0; z-index:1000; }
+    .page-wrap { margin-top: 72px; margin-left: 13%; padding: 16px; } /* matches your layout */
+    .leads-layout { display:flex; gap:16px; }
+
+    /* Left column: list */
+    .lead-list {
+      width: var(--left-width);
+      max-width: 100%;
+      border:1px solid #cfd8dc; border-radius:8px; background:#fff;
+      height: calc(100vh - 120px); overflow:auto; padding:8px;
+    }
+    .lead-item {
+      border:1px solid #e0e0e0; border-radius:8px; padding:10px; margin-bottom:10px;
+      background:#fff; display:flex; align-items:center; justify-content:space-between;
+    }
+    .lead-item.selected { outline:2px solid #017b82; }
+    .lead-meta { font-size:12px; color:#666; }
+    .lead-name { font-weight:600; margin-bottom:2px; }
+    .lead-actions .btn { font-size:12px; padding:4px 8px; }
+
+    /* Right column: detail */
+    .lead-detail {
+      flex:1; min-width: 320px;
+      border:1px solid #cfd8dc; border-radius:8px; background:#fff; padding:16px;
+      display:none; /* hidden until a lead is viewed */
+      height: calc(100vh - 120px); overflow:auto;
+    }
+    .detail-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .status-dot { width:10px; height:10px; display:inline-block; border-radius:50%; margin-right:6px; }
+    .status-live { background:#28a745; }
+    .status-off { background:#dc3545; }
+    .muted { color:#6c757d; }
+
+    @media (max-width: 992px){
+      .leads-layout { flex-direction:column; }
+      .lead-list, .lead-detail { height:auto; }
+      :root { --left-width: 100%; }
+    }
+
+    /* Dark mode (optional – matches your theme) */
+    .dark-mode body, .dark-mode .lead-list, .dark-mode .lead-detail { background:#141b2d; color:#e0e0e0; }
+    .dark-mode .lead-item { background:#1f2940; border-color:#333; }
+  </style>
+
+  <script>
+    if (localStorage.getItem('darkMode') === "true"){
+      document.documentElement.classList.add('dark-mode');
+    }
+  </script>
+</head>
+<body>
+  <!-- ===== PASTE YOUR EXISTING NAVBAR BLOCK HERE ===== -->
+  <!-- <div class="navbar"> ... </div> -->
+
+  <!-- ===== PASTE YOUR EXISTING SIDEBAR BLOCK HERE ===== -->
+  <!-- <div class="sidebar" id="offcanvasSidebar"> ... </div> -->
+
+  <div class="page-wrap">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <h2 class="order-heading" style="text-decoration:underline;color:#037894;">Live Leads</h2>
+      <div>
+        <span id="connDot" class="status-dot status-off"></span>
+        <span id="connText" class="muted">disconnected</span>
+        <button id="pauseBtn" class="btn btn-sm btn-outline-secondary ml-2">Pause</button>
+      </div>
+    </div>
+
+    <div class="leads-layout">
+      <!-- Left: list -->
+      <div class="lead-list">
+        <div class="d-flex mb-2" style="gap:8px;">
+          <input id="leadSearch" class="form-control form-control-sm" placeholder="Search name, phone, part…">
+          <select id="sourceFilter" class="form-control form-control-sm" style="max-width:150px;">
+            <option value="">All sources</option>
+            <option>webform</option>
+            <option>phone</option>
+            <option>partner</option>
+          </select>
+        </div>
+        <div id="leadItems"></div>
+      </div>
+
+      <!-- Right: detail -->
+      <div class="lead-detail" id="leadDetail">
+        <div class="detail-header">
+          <h5 class="mb-0"><span id="detailName"></span> <small class="muted" id="detailTime"></small></h5>
+          <div>
+            <button id="closeAssignBtn" class="btn btn-sm btn-primary">Close & Assign</button>
+          </div>
+        </div>
+        <hr/>
+        <dl class="row mb-0">
+          <dt class="col-sm-3">Phone</dt><dd class="col-sm-9" id="detailPhone"></dd>
+          <dt class="col-sm-3">Part</dt><dd class="col-sm-9" id="detailPart"></dd>
+          <dt class="col-sm-3">Source</dt><dd class="col-sm-9" id="detailSource"></dd>
+          <dt class="col-sm-3">Notes</dt><dd class="col-sm-9" id="detailNotes"></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+  (function(){
+    // ===== CONFIG =====
+    const sseUrl = "https://<YOUR-CLOUD-RUN-DOMAIN>/sse";   // << set this
+    const ASSIGN_API = "https://<YOUR-API>/leads/assign";    // << replace with your real API
+
+    // ===== STATE =====
+    const user = localStorage.getItem("firstName");
+    if (!user) { window.location.href = "login_signup.html"; return; }
+
+    let es = null;
+    let paused = false;
+    let leads = [];            // {id,name,phone,part,source,notes,ts,assignedTo?,assignedMonth?}
+    let selectedId = null;
+
+    // ===== UI refs =====
+    const $items = $("#leadItems");
+    const $detail = $("#leadDetail");
+    const $connDot = $("#connDot");
+    const $connText = $("#connText");
+
+    // ===== Helpers =====
+    const tz = "America/Chicago";
+    function chicagoNow(){ return new Date(new Date().toLocaleString("en-US",{timeZone:tz})); }
+    function monthKey(d=new Date()){ const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,"0"); return `${y}-${m}`; }
+    function tsToString(ts){
+      try {
+        const d = typeof ts === "number" ? new Date(ts*1000) : new Date(ts);
+        return d.toLocaleString("en-US",{ hour12:false, timeZone: tz });
+      } catch { return ""; }
+    }
+    function setConn(on) {
+      $connDot.toggleClass("status-live", on).toggleClass("status-off", !on);
+      $connText.text(on ? "live" : "disconnected").toggleClass("muted", !on);
+    }
+
+    function ensureId(lead){
+      if (lead.id) return lead.id;
+      return `${lead.phone || "lead"}-${lead.ts || Date.now()}`; // deterministic-ish fallback
+    }
+
+    function renderList() {
+      const q = ($("#leadSearch").val() || "").toLowerCase();
+      const src = $("#sourceFilter").val();
+      $items.empty();
+
+      const filtered = leads.filter(l=>{
+        const text = `${l.name||""} ${l.phone||""} ${l.part||""}`.toLowerCase();
+        if (q && !text.includes(q)) return false;
+        if (src && l.source !== src) return false;
+        return true;
+      });
+
+      if (!filtered.length) {
+        $items.append(`<div class="text-muted small p-2">No leads yet.</div>`);
+        return;
+      }
+
+      filtered
+        .sort((a,b)=> (b.ts||0) - (a.ts||0))
+        .forEach(l=>{
+          const assignedBadge = l.assignedTo ? `<span class="badge badge-success ml-2">Assigned to ${l.assignedTo}</span>` : "";
+          const row = $(`
+            <div class="lead-item ${l.id===selectedId?'selected':''}" data-id="${l.id}">
+              <div style="min-width:0;">
+                <div class="lead-name text-truncate">${l.name || '(No name)'} ${assignedBadge}</div>
+                <div class="lead-meta">${tsToString(l.ts)} • ${l.source || 'source?'} • ${l.phone || ''}</div>
+              </div>
+              <div class="lead-actions">
+                <button class="btn btn-sm btn-outline-primary view-btn">View</button>
+              </div>
+            </div>
+          `);
+          $items.append(row);
+        });
+    }
+
+    function showDetail(lead){
+      selectedId = lead.id;
+      $("#detailName").text(lead.name || "(No name)");
+      $("#detailTime").text(`• ${tsToString(lead.ts)}`);
+      $("#detailPhone").text(lead.phone || "");
+      $("#detailPart").text(lead.part || "");
+      $("#detailSource").text(lead.source || "");
+      $("#detailNotes").text(lead.notes || "");
+      $(".lead-item").removeClass("selected");
+      $(`.lead-item[data-id="${lead.id}"]`).addClass("selected");
+      $detail.show();
+    }
+
+    async function assignLeadAndClose(lead){
+      if (lead.assignedTo) { $detail.hide(); return; } // already assigned
+      const nowChi = chicagoNow();
+      const payload = {
+        leadId: lead.id,
+        salesperson: user,
+        assignedMonth: monthKey(nowChi),  // e.g. "2025-09"
+        assignedAt: nowChi.toISOString()
+      };
+
+      try {
+        // If you need auth, include token from localStorage like your other pages:
+        // const token = localStorage.getItem("token");
+        // const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        await axios.post(ASSIGN_API, payload/*, { headers }*/);
+        // Update local state
+        lead.assignedTo = user;
+        lead.assignedMonth = payload.assignedMonth;
+      } catch (e) {
+        console.error("Assign failed:", e);
+        alert("Failed to assign lead. Please try again.");
+        return;
+      } finally {
+        $detail.hide();
+        selectedId = null;
+        renderList();
+      }
+    }
+
+    // ===== Event wiring =====
+    $("#pauseBtn").on("click", function(){
+      paused = !paused;
+      $(this).text(paused ? "Resume" : "Pause");
+    });
+
+    $("#leadSearch, #sourceFilter").on("input change", renderList);
+
+    $items.on("click", ".view-btn", function(){
+      const id = $(this).closest(".lead-item").data("id");
+      const lead = leads.find(l=>l.id===id);
+      if (lead) showDetail(lead);
+    });
+
+    $("#closeAssignBtn").on("click", function(){
+      if (!selectedId) { $detail.hide(); return; }
+      const lead = leads.find(l=>l.id===selectedId);
+      if (lead) assignLeadAndClose(lead);
+    });
+
+    // ===== SSE connect =====
+    function connectSSE(){
+      if (es) es.close();
+      es = new EventSource(sseUrl);
+      es.addEventListener("open", ()=> setConn(true));
+      es.addEventListener("hello", ()=> setConn(true));
+      es.addEventListener("ping", ()=> {});
+
+      es.addEventListener("lead", (ev)=>{
+        if (paused) return;
+        try {
+          const data = JSON.parse(ev.data);
+          const id = ensureId(data);
+          const ts = data.ts ?? Date.now();
+          // de-dup by id
+          if (!leads.some(l=>l.id===id)) {
+            leads.unshift({ id, ...data, ts });
+            renderList();
+          }
+        } catch(e){ console.error("bad lead payload", e); }
+      });
+
+      es.addEventListener("error", ()=> setConn(false));
+    }
+
+    // ===== Kick off =====
+    connectSSE();
+    renderList(); // initial (empty) render
+  })();
+  </script>
+</body>
+</html>
