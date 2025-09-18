@@ -4192,7 +4192,6 @@ function renderAllNotesForActiveYard() {
     // Each note as its own card-ish block
     $list.append(`
       <div class="border rounded p-2">
-        <div class="small text-muted mb-1">#${i + 1}</div>
         <div style="white-space:pre-wrap;">${typeof n === "string" ? n : JSON.stringify(n)}</div>
       </div>
     `);
