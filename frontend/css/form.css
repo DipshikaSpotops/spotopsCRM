@@ -13,6 +13,20 @@ background-color: #f8f9fa;
     flex-direction: column;
     font-weight: bolder;
 }
+  .yard-note-card{
+    border:1px solid #dcdcdc;
+    border-radius:10px;
+    padding:12px 14px;
+    background:#fff;
+  }
+  .yard-note-card .note-line{
+    min-height: 38px;
+  }
+  .yard-note-card .btn{
+    border-radius: 999px;
+    padding: 4px 14px;
+  }
+  .dark-mode .yard-note-card{ background:#121212; border-color:#2b2b2b; }
 #escRMA {
 display: none; 
 position: fixed; 
