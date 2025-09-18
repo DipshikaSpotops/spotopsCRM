@@ -13,20 +13,22 @@ background-color: #f8f9fa;
     flex-direction: column;
     font-weight: bolder;
 }
-  .yard-note-card{
-    border:1px solid #dcdcdc;
-    border-radius:10px;
-    padding:12px 14px;
-    background:#fff;
-  }
-  .yard-note-card .note-line{
-    min-height: 38px;
-  }
-  .yard-note-card .btn{
-    border-radius: 999px;
-    padding: 4px 14px;
-  }
-  .dark-mode .yard-note-card{ background:#121212; border-color:#2b2b2b; }
+/* One-teal style for yard tabs */
+.yard-notes-btn{
+  background:#19a7b5;     /* teal */
+  color:#fff;
+  border:2px solid #2c3e50;
+  border-radius:20px;
+  font-weight:600;
+}
+.yard-notes-btn:hover,
+.yard-notes-btn:focus,
+.yard-notes-btn.active{
+  background:#19a7b5;     /* keep same teal even when active */
+  color:#fff;
+  box-shadow:none;
+  outline:none;
+}
 #escRMA {
 display: none; 
 position: fixed; 

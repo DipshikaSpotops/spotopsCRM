@@ -4147,7 +4147,7 @@ async function loadYardNotes(orderNo) {
     yardNotesState.notesByYard.forEach((notes, i) => {
       if (notes.length > 0) {
         $btnWrap.append(
-          `<button type="button" class="btn btn-sm btn-info m-1 yard-notes-btn" data-idx="${i}">Yard ${i + 1}</button>`
+          `<button type="button" class="btn btn-sm m-1 yard-notes-btn" data-idx="${i}">Yard ${i + 1}</button>`
         );
       }
     });
@@ -4168,10 +4168,8 @@ async function loadYardNotes(orderNo) {
 function setActiveYardForNotes(idx) {
   yardNotesState.activeYardIndex = idx;
 
-  $("#yardNotesButtons .yard-notes-btn")
-    .removeClass("btn-dark active").addClass("btn-info");
-  $(`#yardNotesButtons .yard-notes-btn[data-idx="${idx}"]`)
-    .removeClass("btn-info").addClass("btn-dark active");
+  $("#yardNotesButtons .yard-notes-btn").removeClass("active");
+  $(`#yardNotesButtons .yard-notes-btn[data-idx="${idx}"]`).addClass("active");
 
   renderAllNotesForActiveYard();
 }
