@@ -395,11 +395,23 @@ style="margin-right: 94px;margin-top: -9px;"
 </div>
 </form>
 </div>
-<!-- Yard Notes  -->
-<div id="yardNotesWrap" class="container mb-4">
-  <h4 class="font-weight-bold mb-3">Yard Notes</h4>
-  <div id="yardNotesList" class="d-flex flex-column" style="gap:12px;"></div>
-  <div id="noYardNotes" class="text-muted">No yard notes to show.</div>
+<!-- Yard Notes -->
+<div id="yardNotesSection" style="margin: 20px;">
+  <h4 class="font-weight-bold mb-2" style="text-align:center;">Yard Notes</h4>
+
+  <div id="yardNotesButtons" class="d-flex flex-wrap justify-content-center mb-2">
+    <!-- Yard buttons (Yard 1, Yard 2, ...) will be injected here -->
+  </div>
+
+  <div id="yardNotesViewer" class="border rounded p-2" style="display:none;">
+    <div id="yardNotesHeader" class="small text-muted mb-2"></div>
+    <div id="yardNoteBody" style="min-height:80px; white-space: pre-wrap;"></div>
+    <div class="d-flex align-items-center justify-content-between mt-2">
+      <button id="prevNote" type="button" class="btn btn-sm btn-outline-secondary">Prev</button>
+      <span id="noteCounter" class="small text-muted"></span>
+      <button id="nextNote" type="button" class="btn btn-sm btn-outline-secondary">Next</button>
+    </div>
+  </div>
 </div>
 <!-- /Yard Notes -->
 <!-- create task part -->
