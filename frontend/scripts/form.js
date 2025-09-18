@@ -4120,61 +4120,43 @@ var userName  = localStorage.getItem("firstName")
     }
   }
 });
-// ---- Yard Notes state ----
+// ---- Yard Notes (stacked) ----
 const yardNotesState = {
-  activeYardIndex: null,   // 0-based index into additionalInfo
-  noteIndex: 0,            // 0-based index into the selected yard's notes
-  notesByYard: []          // Array<Array<string>>
+  activeYardIndex: null,          // 0-based
+  notesByYard: []                 // Array<Array<string>>
 };
 
-// Load yard notes for this order; show buttons only for yards that have notes
 async function loadYardNotes(orderNo) {
   try {
-    // try main orders
     let res = await fetch(`https://www.spotops360.com/orders/${orderNo}`);
     let data = await res.json();
-
-    // fallback to cancelledOrders if needed
     if (!data || !data.additionalInfo) {
-      const resp2 = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
-      if (!resp2.ok) { $("#yardNotesSection").hide(); return; }
-      data = await resp2.json();
+      const r2 = await fetch(`https://www.spotops360.com/cancelledOrders/${orderNo}`);
+      if (!r2.ok) { $("#yardNotesSection").hide(); return; }
+      data = await r2.json();
     }
+    if (!Array.isArray(data?.additionalInfo)) { $("#yardNotesSection").hide(); return; }
 
-    if (!data || !Array.isArray(data.additionalInfo)) {
-      $("#yardNotesSection").hide();
-      return;
-    }
-
-    // Build notes array per yard; keep only truthy, non-empty strings
     yardNotesState.notesByYard = data.additionalInfo.map(y =>
       Array.isArray(y?.notes)
-        ? y.notes.filter(n => n !== null && n !== undefined && String(n).trim() !== "")
+        ? y.notes.filter(n => String(n ?? "").trim() !== "")
         : []
     );
 
-    // Create Yard buttons only where notes exist
     const $btnWrap = $("#yardNotesButtons").empty();
     yardNotesState.notesByYard.forEach((notes, i) => {
       if (notes.length > 0) {
         $btnWrap.append(
-          `<button type="button" class="btn btn-sm btn-info m-1 yard-notes-btn" data-idx="${i}">
-             Yard ${i + 1}
-           </button>`
+          `<button type="button" class="btn btn-sm btn-info m-1 yard-notes-btn" data-idx="${i}">Yard ${i + 1}</button>`
         );
       }
     });
 
-    // Hide whole section if no yards have notes
-    if ($("#yardNotesButtons").children().length === 0) {
-      $("#yardNotesSection").hide();
-      return;
-    }
+    if ($btnWrap.children().length === 0) { $("#yardNotesSection").hide(); return; }
 
     $("#yardNotesSection").show();
     $("#yardNotesViewer").show();
 
-    // Select the first yard with notes by default
     const firstIdx = Number($("#yardNotesButtons .yard-notes-btn").first().data("idx"));
     setActiveYardForNotes(firstIdx);
   } catch (e) {
@@ -4185,58 +4167,41 @@ async function loadYardNotes(orderNo) {
 
 function setActiveYardForNotes(idx) {
   yardNotesState.activeYardIndex = idx;
-  yardNotesState.noteIndex = 0;
 
   $("#yardNotesButtons .yard-notes-btn")
-    .removeClass("btn-dark active")
-    .addClass("btn-info");
-
+    .removeClass("btn-dark active").addClass("btn-info");
   $(`#yardNotesButtons .yard-notes-btn[data-idx="${idx}"]`)
-    .removeClass("btn-info")
-    .addClass("btn-dark active");
+    .removeClass("btn-info").addClass("btn-dark active");
 
-  renderCurrentYardNote();
+  renderAllNotesForActiveYard();
 }
 
-function renderCurrentYardNote() {
+function renderAllNotesForActiveYard() {
   const yardIdx = yardNotesState.activeYardIndex;
-  if (yardIdx === null) return;
-
   const notes = yardNotesState.notesByYard[yardIdx] || [];
-  const i = yardNotesState.noteIndex;
 
   $("#yardNotesHeader").text(`Yard ${yardIdx + 1} • ${notes.length} note${notes.length !== 1 ? "s" : ""}`);
 
+  const $list = $("#yardNotesList").empty();
   if (notes.length === 0) {
-    $("#yardNoteBody").html("<em>No notes for this yard.</em>");
-    $("#noteCounter").text("");
+    $list.append(`<div class="text-muted"><em>No notes for this yard.</em></div>`);
     return;
   }
 
-  const note = notes[i];
-  // notes are saved as strings in your backend; show as-is
-  $("#yardNoteBody").html(typeof note === "string" ? note : JSON.stringify(note));
-  $("#noteCounter").text(`${i + 1} / ${notes.length}`);
+  notes.forEach((n, i) => {
+    // Each note as its own card-ish block
+    $list.append(`
+      <div class="border rounded p-2">
+        <div class="small text-muted mb-1">#${i + 1}</div>
+        <div style="white-space:pre-wrap;">${typeof n === "string" ? n : JSON.stringify(n)}</div>
+      </div>
+    `);
+  });
 }
 
-// Button handlers
+// Button click: switch yard
 $("#yardNotesButtons").on("click", ".yard-notes-btn", function () {
-  const idx = Number($(this).data("idx"));
-  setActiveYardForNotes(idx);
-});
-
-$("#prevNote").on("click", function () {
-  const notes = yardNotesState.notesByYard[yardNotesState.activeYardIndex] || [];
-  if (!notes.length) return;
-  yardNotesState.noteIndex = (yardNotesState.noteIndex - 1 + notes.length) % notes.length;
-  renderCurrentYardNote();
-});
-
-$("#nextNote").on("click", function () {
-  const notes = yardNotesState.notesByYard[yardNotesState.activeYardIndex] || [];
-  if (!notes.length) return;
-  yardNotesState.noteIndex = (yardNotesState.noteIndex + 1) % notes.length;
-  renderCurrentYardNote();
+  setActiveYardForNotes(Number($(this).data("idx")));
 });
 loadYardNotes(orderNo);
 });
