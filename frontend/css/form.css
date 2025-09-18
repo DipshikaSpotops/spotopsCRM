@@ -13,22 +13,38 @@ background-color: #f8f9fa;
     flex-direction: column;
     font-weight: bolder;
 }
-/* One-teal style for yard tabs */
+/* one teal look */
 .yard-notes-btn{
-  background:#19a7b5;     /* teal */
+  background:#19a7b5;
   color:#fff;
   border:2px solid #2c3e50;
   border-radius:20px;
   font-weight:600;
+  cursor:pointer;
+  transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
 }
+
+/* hover / focus */
 .yard-notes-btn:hover,
-.yard-notes-btn:focus,
-.yard-notes-btn.active{
-  background:#19a7b5;     /* keep same teal even when active */
-  color:#fff;
-  box-shadow:none;
-  outline:none;
+.yard-notes-btn:focus{
+  filter: brightness(0.95);      /* slightly darker */
+  transform: translateY(-1px);   /* tiny lift */
+  box-shadow: 0 2px 6px rgba(0,0,0,.18);
+  outline: none;
 }
+
+/* keep same color when active (selected) */
+.yard-notes-btn.active{
+  background:#19a7b5;
+  color:#fff;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.12);
+}
+
+/* keyboard focus ring for accessibility */
+.yard-notes-btn:focus-visible{
+  box-shadow: 0 0 0 3px rgba(25,167,181,.35);
+}
+.yard-notes-btn:active{ transform: translateY(0); box-shadow:none; }
 #escRMA {
 display: none; 
 position: fixed; 
