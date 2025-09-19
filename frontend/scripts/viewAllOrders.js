@@ -142,7 +142,7 @@ ${item.attention ? `<b>Attention</b>: ${item.attention}<br>` : ""}
 ${item.sAddress || ""} ${item.sAddressStreet || ""},<br>${item.sAddressCity || ""}, ${item.sAddressState || ""},<br> ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
 Phone: ${item.phone} | Email: ${item.email}
 </td>
-<td>Part Req: ${item.pReq}</br> Year: ${item.year} | Make: ${item.make} | Model: ${item.model}</br>
+<td>Part Req: ${item.pReq}</br> Year/Make/Model: ${item.year} ${item.make} ${item.model}</br>
 Part Description: ${item.desc}</br>
 Part No: ${item.partNo} | VIN: ${item.vin}</br>
 Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
