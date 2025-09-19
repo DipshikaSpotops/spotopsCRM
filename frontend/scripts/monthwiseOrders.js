@@ -156,7 +156,7 @@ function renderTableRows(page, orders = allOrders) {
           ${item.sAddressZip || ""}, ${item.sAddressAcountry || ""}<br>
           Phone: ${item.phone} | Email: ${item.email}
         </td>
-        <td>${item.pReq}</br>Year/Make/Model: ${item.year} ${item.make} ${item.model}</br>
+        <td>Part Req: ${item.pReq}</br>Year/Make/Model: ${item.year} ${item.make} ${item.model}</br>
 Part Description: ${item.desc}</br>
 Part No: ${item.partNo} | VIN: ${item.vin}</br>
 Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
