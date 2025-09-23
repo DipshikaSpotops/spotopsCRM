@@ -2226,8 +2226,6 @@ res.status(500).json({ message: "Server error", error });
 }
 });
 // to update update refunds
-app.use(express.json());
-
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, res) => {
   try {
     const ts = require('moment-timezone')().tz('America/Chicago').format('D MMM, YYYY HH:mm');
@@ -2240,53 +2238,124 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
       return res.status(400).json({ message: "Invalid yard index" });
     }
 
-    const {
-      refundStatus,
-      refundedAmount,
-      storeCredit,
-      refundedDate,
-      collectRefundCheckbox,
-      upsClaimCheckbox,
-      storeCreditCheckbox,
-      refundToCollect,
-      refundReason
-    } = req.body;
-
     const firstName = req.query.firstName || "Unknown User";
-    const yardInfo = order.additionalInfo[yardIndex]; // define before logs
+    const body = req.body;
+    const has = (k) => Object.prototype.hasOwnProperty.call(body, k);
 
-    // Normalize (optional but safer)
-    const toNum = v => (v === '' || v == null ? null : Number(v));
-    yardInfo.refundStatus          = refundStatus || "";
-    yardInfo.refundedAmount        = toNum(refundedAmount);
-    yardInfo.storeCredit           = storeCredit == null ? null : toNum(storeCredit);
-    yardInfo.refundedDate          = refundedDate || "";
-    yardInfo.collectRefundCheckbox = collectRefundCheckbox || "";
-    yardInfo.upsClaimCheckbox      = upsClaimCheckbox || "";
-    yardInfo.storeCreditCheckbox   = storeCreditCheckbox || "";
-    yardInfo.refundToCollect       = refundToCollect || "";
-    yardInfo.refundReason          = refundReason || "";
+    const yardInfo = order.additionalInfo[yardIndex];
 
-    if (refundToCollect || collectRefundCheckbox === "Ticked") {
-      order.orderHistory.push(
-        `Yard ${yardIndex + 1} refund status updated to ${refundStatus || "Collect Refund"} by ${firstName} on ${ts}`
-      );
-    } else {
-      order.orderHistory.push(
-        `Yard ${yardIndex + 1} removed from Collect Refund by ${firstName} on ${ts}`
-      );
+    // helpers
+    const normTick = (v) => (v === 'Ticked' ? 'Ticked' : 'Unticked');
+    const toNum = (v) => (v === '' || v == null ? null : Number(v));
+
+    // --- REFUND STATUS ---
+    if (has('refundStatus')) {
+      const oldVal = yardInfo.refundStatus || '';
+      const newVal = body.refundStatus || '';
+      if (newVal !== oldVal) {
+        yardInfo.refundStatus = newVal;
+        order.orderHistory.push(
+          `Yard ${yardIndex + 1} refund status updated to ${newVal || 'Cleared'} by ${firstName} on ${ts}`
+        );
+      }
     }
-  console.log("collectRefundCheckbox",collectRefundCheckbox,"upsClaimCheckbox",upsClaimCheckbox,"storeCreditCheckbox",storeCreditCheckbox)
-    if (upsClaimCheckbox === "Ticked") {
-      order.orderHistory.push(`Yard ${yardIndex + 1} added for UPS claims by ${firstName} on ${ts}`);
-    } else {
-      order.orderHistory.push(`Yard ${yardIndex + 1} removed from UPS Claims by ${firstName} on ${ts}`);
+
+    // --- REFUNDED AMOUNT ---
+    if (has('refundedAmount')) {
+      const oldVal = yardInfo.refundedAmount ?? null;
+      const newVal = toNum(body.refundedAmount);
+      if (newVal !== oldVal) {
+        yardInfo.refundedAmount = newVal;
+        // (optional) add a history line if you want:
+        // order.orderHistory.push(`Yard ${yardIndex + 1} refunded amount set to ${newVal ?? '—'} by ${firstName} on ${ts}`);
+      }
     }
-    if (storeCreditCheckbox === "Ticked") {
-      order.orderHistory.push(`Yard ${yardIndex + 1} added to Store credits by ${firstName} on ${ts}`);
-    } else {
-      order.orderHistory.push(`Yard ${yardIndex + 1} removed from Store Credits by ${firstName} on ${ts}`);
+
+    // --- STORE CREDIT (amount) ---
+    if (has('storeCredit')) {
+      const oldVal = yardInfo.storeCredit ?? null;
+      const newVal = toNum(body.storeCredit);
+      if (newVal !== oldVal) {
+        yardInfo.storeCredit = newVal;
+        // optional history
+      }
     }
+
+    // --- REFUNDED DATE ---
+    if (has('refundedDate')) {
+      const oldVal = yardInfo.refundedDate || '';
+      const newVal = body.refundedDate || '';
+      if (newVal !== oldVal) {
+        yardInfo.refundedDate = newVal;
+      }
+    }
+
+    // --- COLLECT REFUND TOGGLE ---
+    if (has('collectRefundCheckbox')) {
+      const oldVal = normTick(yardInfo.collectRefundCheckbox);
+      const newVal = normTick(body.collectRefundCheckbox);
+      if (newVal !== oldVal) {
+        yardInfo.collectRefundCheckbox = newVal;
+        if (newVal === 'Ticked') {
+          const label = (has('refundStatus') ? (body.refundStatus || 'Collect Refund') : 'Collect Refund');
+          order.orderHistory.push(
+            `Yard ${yardIndex + 1} refund status updated to ${label} by ${firstName} on ${ts}`
+          );
+        } else {
+          order.orderHistory.push(
+            `Yard ${yardIndex + 1} removed from Collect Refund by ${firstName} on ${ts}`
+          );
+        }
+      }
+    }
+
+    // --- REFUND TO COLLECT (free text/amount) ---
+    if (has('refundToCollect')) {
+      const oldVal = yardInfo.refundToCollect || '';
+      const newVal = body.refundToCollect || '';
+      if (newVal !== oldVal) {
+        yardInfo.refundToCollect = newVal;
+        // optional history
+      }
+    }
+
+    // --- UPS CLAIM TOGGLE ---
+    if (has('upsClaimCheckbox')) {
+      const oldVal = normTick(yardInfo.upsClaimCheckbox);
+      const newVal = normTick(body.upsClaimCheckbox);
+      if (newVal !== oldVal) {
+        yardInfo.upsClaimCheckbox = newVal;
+        order.orderHistory.push(
+          newVal === 'Ticked'
+            ? `Yard ${yardIndex + 1} added for UPS claims by ${firstName} on ${ts}`
+            : `Yard ${yardIndex + 1} removed from UPS Claims by ${firstName} on ${ts}`
+        );
+      }
+    }
+
+    // --- STORE CREDIT TOGGLE (checkbox you added) ---
+    if (has('storeCreditCheckbox')) {
+      const oldVal = normTick(yardInfo.storeCreditCheckbox);
+      const newVal = normTick(body.storeCreditCheckbox);
+      if (newVal !== oldVal) {
+        yardInfo.storeCreditCheckbox = newVal;
+        order.orderHistory.push(
+          newVal === 'Ticked'
+            ? `Yard ${yardIndex + 1} added to Store credits by ${firstName} on ${ts}`
+            : `Yard ${yardIndex + 1} removed from Store Credits by ${firstName} on ${ts}`
+        );
+      }
+    }
+
+    // --- REFUND REASON ---
+    if (has('refundReason')) {
+      const oldVal = yardInfo.refundReason || '';
+      const newVal = body.refundReason || '';
+      if (newVal !== oldVal) {
+        yardInfo.refundReason = newVal;
+      }
+    }
+
     order.markModified("additionalInfo");
     await order.save();
     res.json(order);
@@ -2295,6 +2364,8 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
     res.status(500).json({ message: "Server error", error: err });
   }
 });
+
+
 
 // to update escalation in order history
 app.put("/orders/:orderNo/escalation", async (req, res) => {
