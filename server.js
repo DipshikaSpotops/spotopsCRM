@@ -466,6 +466,7 @@ storeCreditUsedFor: [
 refundedDate:String,
 collectRefundCheckbox: String,
 upsClaimCheckbox: String,
+storeCreditCheckbox: String,
 refundToCollect: Number,
 refundReason: String,
 trackingNo: [String],
@@ -2245,7 +2246,8 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
       storeCredit,
       refundedDate,
       collectRefundCheckbox,
-      upsClaimCheckbox,        // <-- include this
+      upsClaimCheckbox,
+      storeCreditCheckbox,
       refundToCollect,
       refundReason
     } = req.body;
@@ -2261,6 +2263,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
     yardInfo.refundedDate          = refundedDate || "";
     yardInfo.collectRefundCheckbox = collectRefundCheckbox || "";
     yardInfo.upsClaimCheckbox      = upsClaimCheckbox || "";
+    yardInfo.storeCreditCheckbox   = storeCreditCheckbox || "";
     yardInfo.refundToCollect       = refundToCollect || "";
     yardInfo.refundReason          = refundReason || "";
 
@@ -2279,7 +2282,11 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
     } else {
       order.orderHistory.push(`Yard ${yardIndex + 1} removed from UPS Claims by ${firstName} on ${ts}`);
     }
-
+    if (storeCreditCheckbox === "Ticked") {
+      order.orderHistory.push(`Yard ${yardIndex + 1} added to Store credits by ${firstName} on ${ts}`);
+    } else {
+      order.orderHistory.push(`Yard ${yardIndex + 1} removed from Store Credits by ${firstName} on ${ts}`);
+    }
     order.markModified("additionalInfo");
     await order.save();
     res.json(order);

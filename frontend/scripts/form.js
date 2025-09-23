@@ -1200,6 +1200,9 @@ $("#collectRefundCheckbox").prop('checked', true);
 if(yardData.upsClaimCheckbox !== "Unticked"){
 $("#upsClaimCheckbox").prop('checked', true);
 }
+if(yardData.storeCreditCheckbox !== "Unticked"){
+$("#upsClaimCheckbox").prop('checked', true);
+}
 if(yardData.refundedDate){
 $("#refundedDate").val(yardData.refundedDate);
 }
@@ -1399,6 +1402,7 @@ $('#refundSubmit').on('click', async function (e) {
   const isStoreCredit = $('#storeCreditCheckbox').is(':checked');
   const collectRefundCheckbox = $('#collectRefundCheckbox').is(':checked');
   const upsClaimCheckbox = $('#upsClaimCheckbox').is(':checked'); 
+  const storeCreditCheckbox = $('#storeCreditCheckbox').is(':checked');
   const refundToCollect = $('#refundToCollect').val();
   const refundedDate = $('#refundedDate').val();
   const refundReason = $('#refundReasonYard').val();
@@ -1411,7 +1415,8 @@ $('#refundSubmit').on('click', async function (e) {
     collectRefundCheckbox: collectRefundCheckbox ? 'Ticked' : 'Unticked',
     upsClaimCheckbox: upsClaimCheckbox ? 'Ticked' : 'Unticked',
     refundToCollect,
-    refundReason
+    refundReason,
+    storeCreditCheckbox: storeCreditCheckbox ? 'Ticked' : 'Unticked'
   };
 
   try {
