@@ -617,6 +617,9 @@ responses.forEach(res => {
 });
 
         // inside fetchYardInfo, replace filteredAdditionalInfo logic:
+        // Treat true / "Ticked" / "true" (case-insensitive) as ON
+const isOn = v => v === true || v === 'Ticked' || (typeof v === 'string' && v.toLowerCase() === 'true');
+
 const yardOrdersProcessed = yardOrdersRaw.map(order => {
   const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
   return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
