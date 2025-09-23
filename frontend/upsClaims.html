@@ -336,6 +336,18 @@ Close
 </div>
 <script>
 $(document).ready(async function () {
+    // Treat booleans and messy strings like "Ticked," " true " etc. as ON
+const isOn = (v) => {
+  if (v === true) return true;
+  if (typeof v === 'string') {
+    // trim, lower, remove punctuation/spaces
+    const norm = v.trim().toLowerCase().replace(/[^\w]/g, '');
+    // accept common truthy synonyms
+    return norm === 'ticked' || norm === 'true' || norm === 'yes' || norm === 'on' || norm === 'checked';
+  }
+  return false;
+};
+
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
@@ -616,16 +628,13 @@ responses.forEach(res => {
   yardOrdersRaw.push(...res.data.orders);
 });
 
-        // inside fetchYardInfo, replace filteredAdditionalInfo logic:
-        // Treat true / "Ticked" / "true" (case-insensitive) as ON
-const isOn = v => v === true || v === 'Ticked' || (typeof v === 'string' && v.toLowerCase() === 'true');
-
 const yardOrdersProcessed = yardOrdersRaw.map(order => {
   const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
   return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
 }).filter(Boolean);
 
 yardOrders = yardOrdersProcessed;
+
 
 
         const maxYards = yardOrders.length > 0
@@ -706,12 +715,12 @@ function renderTableRows(page, data = yardOrders) {
 let lines = [];
 let totalRefund = 0;
 
-yards.forEach((info, idx) => {
-  if (!isOn(info.upsClaimCheckbox)) return;               
-  const amt = Number(info.refundToCollect) || 0;        
-  totalRefund += amt;
-  lines.push(`Yard ${idx + 1}: $${amt.toFixed(2)}`);
-});
+const yardOrdersProcessed = yardOrdersRaw.map(order => {
+  const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
+  return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
+}).filter(Boolean);
+
+yardOrders = yardOrdersProcessed;
 
 const toBeRefundedCell = lines.length
   ? `<div class="refund-multiline">
