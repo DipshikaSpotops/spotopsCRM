@@ -2225,72 +2225,68 @@ res.status(500).json({ message: "Server error", error });
 }
 });
 // to update update refunds
+app.use(express.json());
+
 app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, res) => {
-console.log("Updating refund status for yard");
-const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
-console.log('US Central Time:', centralTime);
-const date = new Date(centralTime);
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const day = date.getDate();
-const month = months[date.getMonth()];
-const year = date.getFullYear();
-const hours = date.getHours().toString().padStart(2, '0');
-const minutes = date.getMinutes().toString().padStart(2, '0');
-const formattedDate = `${day} ${month}, ${year}`;
-const formattedDateTime = `${formattedDate} ${hours}:${minutes}`;
-try {
-const order = await Order.findOne({ orderNo: req.params.orderNo });
-const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+  try {
+    const ts = require('moment-timezone')().tz('America/Chicago').format('D MMM, YYYY HH:mm');
+    const order = await Order.findOne({ orderNo: req.params.orderNo });
+    if (!order) return res.status(404).send("Order not found");
 
-if (!order) return res.status(404).send("Order not found");
-if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
-return res.status(400).json({ message: "Invalid yard index" });
-}
+    // If client is 0-based, remove the -1
+    const yardIndex = parseInt(req.params.yardIndex, 10) - 1;
+    if (yardIndex < 0 || yardIndex >= order.additionalInfo.length) {
+      return res.status(400).json({ message: "Invalid yard index" });
+    }
 
-const { refundStatus, refundedAmount, storeCredit, refundedDate, collectRefundCheckbox, refundToCollect , refundReason} = req.body;
-const firstName = req.query.firstName || "Unknown User";
-console.log("collectRefundCheckbox",collectRefundCheckbox,"refundToCollect",refundToCollect,"reason", refundReason,"yardInfo.upsClaimCheckbox",yardInfo.upsClaimCheckbox);
-const yardInfo = order.additionalInfo[yardIndex];
-yardInfo.refundStatus = refundStatus;
-yardInfo.refundedAmount = refundedAmount;
-yardInfo.storeCredit = storeCredit || null;
-yardInfo.refundedDate = refundedDate || "" ;
-yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
-yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
-yardInfo.upsClaimCheckbox = upsClaimCheckbox || "" ;
-yardInfo.refundToCollect = refundToCollect || "" ;
-yardInfo.refundReason = refundReason || "" ;
-if(refundToCollect || collectRefundCheckbox === "Ticked"){
-var collectRefund = "Collect Refund"
-order.orderHistory.push(
-`Yard ${yardIndex + 1} refund status updated to ${refundStatus || collectRefund} by ${firstName} on ${formattedDateTime}`
-);
-}
-else{
-var collectRefund= "";
-order.orderHistory.push(
-`Yard ${yardIndex + 1} removed from Collect Refund by ${firstName} on ${formattedDateTime}`
-);
-}
-if(upsClaimCheckbox === "Ticked"){
-  order.orderHistory.push(
-`Yard ${yardIndex + 1} added for UPS claims by ${firstName} on ${formattedDateTime}`
-);
-}
-else{
-  order.orderHistory.push(
-`Yard ${yardIndex + 1} removed from UPS Claims by ${firstName} on ${formattedDateTime}`
-);
-}
+    const {
+      refundStatus,
+      refundedAmount,
+      storeCredit,
+      refundedDate,
+      collectRefundCheckbox,
+      upsClaimCheckbox,        // <-- include this
+      refundToCollect,
+      refundReason
+    } = req.body;
 
-order.markModified("additionalInfo");
-await order.save();
+    const firstName = req.query.firstName || "Unknown User";
+    const yardInfo = order.additionalInfo[yardIndex]; // define before logs
 
-res.json(order);
-} catch (error) {
-console.error("Error updating refund status:", error);
-res.status(500).json({ message: "Server error", error });
-}
+    // Normalize (optional but safer)
+    const toNum = v => (v === '' || v == null ? null : Number(v));
+    yardInfo.refundStatus          = refundStatus || "";
+    yardInfo.refundedAmount        = toNum(refundedAmount);
+    yardInfo.storeCredit           = storeCredit == null ? null : toNum(storeCredit);
+    yardInfo.refundedDate          = refundedDate || "";
+    yardInfo.collectRefundCheckbox = collectRefundCheckbox || "";
+    yardInfo.upsClaimCheckbox      = upsClaimCheckbox || "";
+    yardInfo.refundToCollect       = refundToCollect || "";
+    yardInfo.refundReason          = refundReason || "";
+
+    if (refundToCollect || collectRefundCheckbox === "Ticked") {
+      order.orderHistory.push(
+        `Yard ${yardIndex + 1} refund status updated to ${refundStatus || "Collect Refund"} by ${firstName} on ${ts}`
+      );
+    } else {
+      order.orderHistory.push(
+        `Yard ${yardIndex + 1} removed from Collect Refund by ${firstName} on ${ts}`
+      );
+    }
+
+    if (upsClaimCheckbox === "Ticked") {
+      order.orderHistory.push(`Yard ${yardIndex + 1} added for UPS claims by ${firstName} on ${ts}`);
+    } else {
+      order.orderHistory.push(`Yard ${yardIndex + 1} removed from UPS Claims by ${firstName} on ${ts}`);
+    }
+
+    order.markModified("additionalInfo");
+    await order.save();
+    res.json(order);
+  } catch (err) {
+    console.error("Error updating refund status:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
 });
 
 // to update escalation in order history

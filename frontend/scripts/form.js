@@ -1382,8 +1382,11 @@ window.location.reload();
 });
 //  card charged part till here
 // refundCollect part 
-$('#refundSubmit').on('click', function () {
-  // Optional: guard against double clicks
+$('#refundSubmit').on('click', async function (e) {
+  // If this button sits in a <form>, stop the native submit + reload
+  e.preventDefault();
+  e.stopPropagation();
+
   const $btn = $(this).prop('disabled', true);
 
   // Close modal/overlay
@@ -1391,9 +1394,7 @@ $('#refundSubmit').on('click', function () {
   $('.modal-overlay').remove();
   $('body').removeClass('modal-active');
 
-  // If there is only one status input, just read its value
   const refundStatus = $('.paymentStatusRefund').first().val() || '';
-
   const refundedAmount = $('#refundedAmount').val();
   const isStoreCredit = $('#storeCreditCheckbox').is(':checked');
   const collectRefundCheckbox = $('#collectRefundCheckbox').is(':checked');
@@ -1402,62 +1403,51 @@ $('#refundSubmit').on('click', function () {
   const refundedDate = $('#refundedDate').val();
   const refundReason = $('#refundReasonYard').val();
 
-  console.log('refund reason', refundReason,"upsClaimCheckbox",upsClaimCheckbox);
-  console.log('collectRefundCheckbox', collectRefundCheckbox, 'refundToCollect', refundToCollect, 'upsClaimCheckbox', upsClaimCheckbox);
-
-  if (refundStatus === 'Refund collected') {
-    $(`.yard-btn[data-yard-index="${selectedYardIndex}"]`).css('background-color', '#fe8025');
-  }
-
-  const data1 = {
-    refundStatus: refundStatus,
-    refundedAmount: refundedAmount,
+  const payload = {
+    refundStatus,
+    refundedAmount,
     storeCredit: isStoreCredit ? refundedAmount : null,
     refundedDate: refundedDate || '',
     collectRefundCheckbox: collectRefundCheckbox ? 'Ticked' : 'Unticked',
     upsClaimCheckbox: upsClaimCheckbox ? 'Ticked' : 'Unticked',
-    refundToCollect: refundToCollect,
-    refundReason: refundReason
+    refundToCollect,
+    refundReason
   };
 
-  const updateOrder = (url) => {
-    return fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data1)
-    }).then(async (res) => {
-      if (!res.ok) {
-        const text = await res.text().catch(() => '');
-        throw new Error(`HTTP ${res.status} ${res.statusText} ${text}`);
+  try {
+    const res = await fetch(
+      `https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${encodeURIComponent(firstName)}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       }
-      // If your API returns JSON, parse it; if it returns nothing, handle gracefully
-      try { return await res.json(); } catch { return null; }
-    });
-  };
+    );
 
-  // Do NOT reload immediately; wait for success
-  updateOrder(`https://www.spotops360.com/orders/${orderNo}/additionalInfo/${selectedYardIndex}/refundStatus?firstName=${encodeURIComponent(firstName)}`)
-    .then((data) => {
-      if (data && data.orderHistory) {
-        updateOrderHistory(data.orderHistory);
-      }
-      // Update UI without reload
-      showYardDetails(selectedYardIndex);
-      fetchAndUpdateYardInfo();
-      // If you really need a reload, do it here after success:
-      // window.location.reload();
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      // Optional: show a toast/banner here
-    })
-    .finally(() => {
-      $btn.prop('disabled', false);
-    });
-    window.location.reload();
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`HTTP ${res.status} ${res.statusText} ${text}`);
+    }
+
+    const data = await res.json().catch(() => null);
+
+    if (data && data.orderHistory) updateOrderHistory(data.orderHistory);
+
+    // Update UI WITHOUT hard reload
+    showYardDetails(selectedYardIndex);
+    fetchAndUpdateYardInfo();
+
+    // If you truly must reload, do it *after* success:
+    // window.location.reload();
+
+  } catch (err) {
+    console.error('Error:', err);
+    // show toast/banner if you have one
+  } finally {
+    $btn.prop('disabled', false);
+  }
 });
+
 
 // refundCollect part ends here
 $("#yardInfoContainer").on("click", ".edit-yard", function () {
