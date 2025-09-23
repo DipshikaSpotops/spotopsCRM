@@ -620,7 +620,7 @@ responses.forEach(res => {
 const yardOrdersProcessed = yardOrdersRaw.map(order => {
   // keep only yards that have refund to collect OR flagged for collect refund
   const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => {
-    const needsByFlag = (info.collectRefundCheckbox === "Ticked");
+    const needsByFlag = (info.upsClaimCheckbox === "Ticked");
     const needsByAmount = Number(info.refundToCollect) > 0;
     return needsByFlag || needsByAmount;
   });
@@ -713,7 +713,7 @@ function renderTableRows(page, data = yardOrders) {
     yards.forEach((info, idx) => {
       const amt = Number(info.refundToCollect) || 0;
       // show line if flagged OR amount present
-      if (info.collectRefundCheckbox === "Ticked" || amt > 0) {
+      if (info.upsClaimCheckbox === "Ticked" || amt > 0) {
         totalRefund += amt;
         const line = `Yard ${idx + 1}: $${amt.toFixed(2)}`;
         lines.push(line);
