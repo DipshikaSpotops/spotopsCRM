@@ -1187,12 +1187,13 @@ var yardShippingValue = "";
 }
 // Ensure all values are treated as numbers
 var actualRefund = yardData.yardName  + "" + "|" + yardData.phone + "" + "|" + yardData.email;
-console.log("actualRefund", actualRefund);
+console.log("actualRefund", actualRefund,yardData.collectRefundCheckbox);
 // $("#actualRefundToCollect").text(`To be collected: $${actualRefund}`);
 $("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
 $("#storeCreditCheckbox").prop('checked', true);
 }
+console.log("yardData.collectRefundCheckbox", yardData.collectRefundCheckbox);
 if(yardData.collectRefundCheckbox){
 $("#collectRefundCheckbox").prop('checked', true);
 }
@@ -1396,7 +1397,7 @@ $('#refundSubmit').on('click', function () {
   const refundedAmount = $('#refundedAmount').val();
   const isStoreCredit = $('#storeCreditCheckbox').is(':checked');
   const collectRefundCheckbox = $('#collectRefundCheckbox').is(':checked');
-  const upsClaimCheckbox = $('#upsClaimCheckbox').is(':checked'); // <-- fixed
+  const upsClaimCheckbox = $('#upsClaimCheckbox').is(':checked'); 
   const refundToCollect = $('#refundToCollect').val();
   const refundedDate = $('#refundedDate').val();
   const refundReason = $('#refundReasonYard').val();
