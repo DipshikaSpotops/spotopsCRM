@@ -1203,13 +1203,16 @@ if(yardData.upsClaimCheckbox !== "Unticked"){
 $("#upsClaimCheckbox").prop('checked', true);
 }
 else{
+  
   $("#upsClaimCheckbox").prop('checked', false);
 }
-if(yardData.storeCreditCheckbox !== "Unticked"){
-$("#storeCreditCheckbox").prop('checked', true);
-}else{
-  $("#storeCreditCheckbox").prop('checked', false);
-}
+// storecredit checkbox
+const v = yardData.storeCreditCheckbox;
+const isChecked =
+  v === true ||
+  v === "Ticked" ||
+  (typeof v === "string" && v.toLowerCase() === "true");
+$("#storeCreditCheckbox").prop("checked", !!isChecked);
 if(yardData.refundedDate){
 $("#refundedDate").val(yardData.refundedDate);
 }
