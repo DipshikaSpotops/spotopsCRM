@@ -2276,7 +2276,7 @@ app.put("/orders/:orderNo/additionalInfo/:yardIndex/refundStatus", async (req, r
         `Yard ${yardIndex + 1} removed from Collect Refund by ${firstName} on ${ts}`
       );
     }
-
+  console.log("collectRefundCheckbox",collectRefundCheckbox,"upsClaimCheckbox",upsClaimCheckbox,"storeCreditCheckbox",storeCreditCheckbox)
     if (upsClaimCheckbox === "Ticked") {
       order.orderHistory.push(`Yard ${yardIndex + 1} added for UPS claims by ${firstName} on ${ts}`);
     } else {
