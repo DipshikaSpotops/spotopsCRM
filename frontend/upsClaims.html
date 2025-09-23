@@ -628,14 +628,19 @@ responses.forEach(res => {
   yardOrdersRaw.push(...res.data.orders);
 });
 console.log("Raw Yard Orders:", yardOrdersRaw);
-const yardOrdersProcessed = yardOrdersRaw.map(order => {
-  const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
-  return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
-}).filter(Boolean);
-console.log("Processed Yard Orders:", yardOrdersProcessed,month,year);
-yardOrders = yardOrdersProcessed;
+yardOrders = yardOrdersRaw.map(order => {
+            const filteredAdditionalInfo = order.additionalInfo.filter(
+                info =>
+                    (info.upsClaimCheckbox || info.upsClaimCheckbox === "Ticked") &&
+                    info.status !== "PO cancelled"
+            );
+            if (filteredAdditionalInfo.length > 0) {
+                return { ...order, additionalInfo: filteredAdditionalInfo };
+            }
+            return null;
+        }).filter(order => order !== null);
 
-
+console.log("Filtered Yard Orders:", yardOrders);
 
         const maxYards = yardOrders.length > 0
             ? yardOrders.reduce(
