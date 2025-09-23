@@ -1402,7 +1402,7 @@ $('#refundSubmit').on('click', function () {
   const refundedDate = $('#refundedDate').val();
   const refundReason = $('#refundReasonYard').val();
 
-  console.log('refund reason', refundReason);
+  console.log('refund reason', refundReason,"upsClaimCheckbox",upsClaimCheckbox);
   console.log('collectRefundCheckbox', collectRefundCheckbox, 'refundToCollect', refundToCollect, 'upsClaimCheckbox', upsClaimCheckbox);
 
   if (refundStatus === 'Refund collected') {

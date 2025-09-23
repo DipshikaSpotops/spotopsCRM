@@ -465,6 +465,7 @@ storeCreditUsedFor: [
 ],
 refundedDate:String,
 collectRefundCheckbox: String,
+upsClaimCheckbox: String,
 refundToCollect: Number,
 refundReason: String,
 trackingNo: [String],
@@ -2256,16 +2257,31 @@ yardInfo.storeCredit = storeCredit || null;
 yardInfo.refundedDate = refundedDate || "" ;
 yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
 yardInfo.collectRefundCheckbox = collectRefundCheckbox || "" ;
+yardInfo.upsClaimCheckbox = upsClaimCheckbox || "" ;
 yardInfo.refundToCollect = refundToCollect || "" ;
 yardInfo.refundReason = refundReason || "" ;
 if(refundToCollect || collectRefundCheckbox === "Ticked"){
 var collectRefund = "Collect Refund"
-}else{
-var collectRefund= "";
-}
 order.orderHistory.push(
 `Yard ${yardIndex + 1} refund status updated to ${refundStatus || collectRefund} by ${firstName} on ${formattedDateTime}`
 );
+}
+else{
+var collectRefund= "";
+order.orderHistory.push(
+`Yard ${yardIndex + 1} removed from Collect Refund by ${firstName} on ${formattedDateTime}`
+);
+}
+if(upsClaimCheckbox === "Ticked"){
+  order.orderHistory.push(
+`Yard ${yardIndex + 1} added for UPS claims by ${firstName} on ${formattedDateTime}`
+);
+}
+else{
+  order.orderHistory.push(
+`Yard ${yardIndex + 1} removed from UPS Claims by ${firstName} on ${formattedDateTime}`
+);
+}
 
 order.markModified("additionalInfo");
 await order.save();
