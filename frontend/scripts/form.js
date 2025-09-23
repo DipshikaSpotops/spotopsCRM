@@ -1187,7 +1187,7 @@ var yardShippingValue = "";
 }
 // Ensure all values are treated as numbers
 var actualRefund = yardData.yardName  + "" + "|" + yardData.phone + "" + "|" + yardData.email;
-console.log("actualRefund", actualRefund,yardData.collectRefundCheckbox);
+console.log("actualRefund", actualRefund,yardData.collectRefundCheckbox),yardData.storeCreditCheckbox;
 // $("#actualRefundToCollect").text(`To be collected: $${actualRefund}`);
 $("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
