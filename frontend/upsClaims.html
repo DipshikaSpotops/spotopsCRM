@@ -632,7 +632,7 @@ const yardOrdersProcessed = yardOrdersRaw.map(order => {
   const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
   return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
 }).filter(Boolean);
-console.log("Processed Yard Orders:", yardOrdersProcessed);
+console.log("Processed Yard Orders:", yardOrdersProcessed,month,year);
 yardOrders = yardOrdersProcessed;
 
 
