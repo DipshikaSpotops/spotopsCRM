@@ -1171,7 +1171,6 @@ if (!data || !data.additionalInfo || !data.additionalInfo[yardIndex - 1]) {
 return;
 }
 const yardData = data.additionalInfo[yardIndex - 1];
-console.log("yardData for refund", yardData);
 $("#paymentStatusSelect").val("Refund collected");
 $("#refundedAmountContainer").show()
 // Prefill input fields
@@ -1188,14 +1187,14 @@ var yardShippingValue = "";
 }
 // Ensure all values are treated as numbers
 var actualRefund = yardData.yardName  + "" + "|" + yardData.phone + "" + "|" + yardData.email;
-console.log("actualRefund", actualRefund);
+console.log("actualRefund", actualRefund,yardData.collectRefundCheckbox);
 // $("#actualRefundToCollect").text(`To be collected: $${actualRefund}`);
 $("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
 $("#storeCreditCheckbox").prop('checked', true);
 }
 console.log("yardData.collectRefundCheckbox", yardData.collectRefundCheckbox);
-if(yardData.collectRefundCheckbox){
+if(yardData.collectRefundCheckbox !== "Unticked"){
 $("#collectRefundCheckbox").prop('checked', true);
 }
 if(yardData.upsClaimCheckbox){
