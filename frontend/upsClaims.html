@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UPS Claims</title>
+ <script>
+    if (localStorage.getItem('darkMode') === "true"){
+      document.documentElement.classList.add('dark-mode');
+    }
+      </script>
+<link
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+rel="stylesheet"
+/>
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+rel="stylesheet"
+/>
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Flatpickr Theme (optional but nice) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- Moment + Timezone -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js"></script>
+<link rel="stylesheet" href="/css/monthwiseOrders.css" />
+<style>
+
+</style>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+var firstName = localStorage.getItem("firstName");
+if (!firstName) {
+window.location.href = "login_signup.html";
+}
+</script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="index.html">
+            <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+            </a>   
+            </div>
+        <div class="toggle-sidebar">
+        <i class="fas fa-bars"></i>
+        </div>
+        
+        
+        <div class="user-info dropdown" style="display: flex;">
+            <div style="display: flex;">
+      <div style="margin-left: -28%;"> <input
+      type="text"
+      class="form-control"
+      id="searchInputForOrderNo"
+      placeholder="Search order no."
+      />
+      </div>
+<div id="searchResult" style="margin-left: 10px; margin-top: 5px;"></div>
+</div>
+        <span style="white-space: nowrap;margin-left: -14%;">Hi <span id="user-name"></span></span>
+        <!-- for dark mode -->
+        <div class="dark-mode-toggle">
+          <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
+        </div>
+        <!--dark mode till here  -->
+        <div class="notification-container" style="margin: 0% 7%;">
+          <i class="fas fa-bell" id="notificationIcon" style="cursor: pointer; position: relative; color: white;margin-left: -19%;font-size: x-large;"></i>
+          <span id="notificationCount" class="notification-badge" style="display:block;margin-right: 20%;margin-top: -3%;">0</span>
+        </div>
+        <div class="notification-dropdown" id="notificationDropdown">
+          <ul id="notificationList"></ul>
+          <button id="viewAlltasks">View All Tasks</button>
+        </div>
+        <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: -4%;font-size: x-large;"></i>
+        <div
+        class="dropdown-menu dropdown-menu-right"
+        aria-labelledby="userMenu"
+        >
+        <a class="dropdown-item" href="#" id="profile"
+        ><i class="fas fa-user"></i> My Profile</a
+        >
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#" id="logoutLink"
+        ><i class="fas fa-sign-out-alt"></i> Log Out</a
+        >
+        </div>
+        </div>
+        </div>
+<div class="sidebar" id="offcanvasSidebar">
+<div class="offcanvas-body">
+<nav class="nav flex-column">
+<div class="nav-item dashboards">
+<a class="nav-link menu" href="#" id="default-link">
+<i class="fas fa-home"></i> Dashboards
+<span class="chevron-icon"
+><i class="fas fa-chevron-down"></i
+></span>
+</a>
+<div class="submenu" id="submenu-dashboards">
+<a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
+<a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+<a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
+<!-- <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a> -->
+<a class="nav-link view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
+<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+<a class="nav-link yard-located-orders" id="yard-located-orders-linl" href="yardLocatedOrders.html">Yard Located Orders</a>
+<a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
+<a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
+<a class="nav-link sales-data-link" id="in-transit-link" href="salesData.html">Sales Data</a>
+<!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
+<!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
+<!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
+<a class="nav-link cancelled-orders-link"  id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+<a class="nav-link refunded-orders-link" id="refunded-orders-link" href="refundedOrders.html">Refunded Orders</a>
+<a class="nav-link refunded-orders-link" id="disputed-orders-link" href="disputes.html">Disputed Orders</a>
+<!-- <a class="nav-link view-ordersSheet-link" href="viewyardOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
+<a class="nav-link view-fulfilled-link" href="fulfilledOrders.html">Fulfilled Orders</a>
+<a class="nav-link escalated-orders" href="escalatedOrders.html">Overall Escalation</a>
+<a class="nav-link ongoingEscalated-orders" href="ongoingEscalations.html">Ongoing Escalation</a>
+<a class="nav-link view-myTasks-link" id="view-myTasks-link" href="viewMyTasks.html">View My Tasks</a>
+<a class="nav-link view-myTasks-link" id="view-myTasks-link" href="viewAllTasks.html">View All Tasks</a>
+</div>
+</div>
+<div class="nav-item">
+<a class="nav-link menu" href="#">
+<i class="fas fa-users"></i> Users
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+</a>
+<div class="submenu" id="submenu-users">
+<a class="nav-link" href="createUser.html">Create User</a>
+<a class="nav-link" href="viewallUsers.html">View Users</a>
+<a class="nav-link" href="individualTaskTracking.html">View User Activity</a>
+</div>
+</div>
+<div class="nav-item teams">
+<a class="nav-link menu" href="#">
+<i class="fas fa-users"></i> Teams
+<span class="chevron-icon"
+><i class="fas fa-chevron-down"></i
+></span>
+</a>
+<div class="submenu" id="submenu-teams">
+<a class="nav-link" href="teams.html">View Teams</a>
+</div>
+</div>
+<div class="nav-item">
+<a class="nav-link menu" href="#">
+<i class="fas fa-chart-bar"></i> Reports
+<span class="chevron-icon"
+><i class="fas fa-chevron-down"></i
+></span>
+</a>
+<div class="submenu" id="submenu-reports">
+      <a class="nav-link" href="cancelledRefundedReport.html">Cancellations & Refunds</a>
+    <a class="nav-link" href="cardNotCharged.html">Card not Charged</a>
+  <a class="nav-link" href="collectRefund.html">Collect Refunds</a>
+  <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
+  <a class="nav-link" href="escalationResolvingTime.html">Escalation Resolutions</a>
+  <a class="nav-link" href="overallMonthlyDisputes.html">Monthly Disputes</a>
+  <!-- <a class="nav-link" href="refundReport.html">Refund Report</a> -->
+  <a class="nav-link" href="poReport.html">PO Report</a>
+  <!-- <a class="nav-link" href="poSentNotUpdated.html">Pending Labels</a>
+  <a class="nav-link" href="partShippedNotUpdated.html">Pending Shipouts</a>
+  <a class="nav-link" href="pendingYardLocates.html">Pending Yard Locates</a> -->
+  <a class="nav-link" href="purchases.html">Purchases</a>
+  <!-- <a class="nav-link" href="purchasesAndRefunfReport.html">Purchases and Refunds</a> -->
+  <a class="nav-link" href="salesReport.html">My Sales Report</a>
+  <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+  <a class="nav-link" href="storeCredit.html">Store Credits</a>
+  <a class="nav-link" href="trackingInfo.html">Tracking Report</a>
+  <a class="nav-link" href="incentiveCalculation.html">Incentives Report</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+<div class="main-content">
+<!-- <div id="purchases-content"> -->
+ <div class="topHeads">
+    <div>
+<h1 id="mainHeading">
+UPS Claims</h1>
+</div>
+<div>
+<input
+type="text"
+class="form-control"
+id="searchInput"
+placeholder="Search..."
+/>
+</div>
+<!-- <button id="downloadCsv" class="btn"> -->
+  <!-- <i class="fas fa-download"></i>  This is the download icon -->
+<!-- </button> -->
+</div>
+<div id="filterAndTotal">
+<!-- <div class="filter-bar"> -->
+<!-- Date Range Picker -->
+<div class="flatpickr-wrapper">
+  <input id="unifiedDatePicker" class="form-control" placeholder="Select date, range or month" readonly/>
+  <!-- <div id="flatpickrButtons">
+    <button id="todayBtn" class="btn btn-info">Today</button>
+    <button id="monthFilterBtn" class="btn btn-secondary">This Month</button>
+  </div> -->
+</div>
+<button id="filterButton" class="btn btn-primary" >Filter</button>
+<!-- </div> -->
+<div id="showTotalOrders">Total Orders This Month-</div>
+<div id="pagination-controls"></div>
+<div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+</div>
+<div class="table-wrapper">
+<table class="table table-bordered">
+<thead id="infoTableHeader">
+<tr id="tableHeader" style="background-color: #f2f2f2">
+<th class="sortable" data-column="orderDate" style="background-color: #037894;">Order No.
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+</th>
+<th class="sortable" data-column="orderNo" style="background-color: #037894;">Order Date 
+    <span class="sort-icons">
+      <span class="asc">&#9650;</span>
+      <span class="desc">&#9660;</span>
+    </span>
+</th>
+</tr>
+</thead>
+<tbody id="yardInfoTable" style="text-align: center">
+<!-- Yard information will be appended here -->
+</tbody>
+<tfoot id="tableFooter">
+<tr>
+<!-- Footer content will be generated dynamically -->
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+
+<div id="profile-content" class="d-none">
+<h1>User Profile</h1>
+<div class="profile-table">
+<label for="profileName">Name:</label>
+<input type="text" id="profileName" readonly />
+<label for="profileRole">Team:</label>
+<input type="text" id="profileRole" readonly />
+<label for="profileEmail">Email Id:</label>
+<input type="text" id="profileEmail" readonly />
+<button class="btn btn-primary" id="backToOrders">Back</button>
+</div>
+</div>
+<!-- </div> -->
+<!-- Profile Modal -->
+<div
+class="modal fade"
+id="profileModal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="profileModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="profileModalLabel">My Profile</h5>
+<button
+type="button"
+class="close"
+data-dismiss="modal"
+aria-label="Close"
+>
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<form id="profileForm">
+<div class="form-group">
+<label for="profileFirstName">First Name</label>
+<input
+type="text"
+class="form-control"
+id="profileFirstName"
+readonly
+/>
+</div>
+<div class="form-group">
+<label for="profileLastName">Last Name</label>
+<input
+type="text"
+class="form-control"
+id="profileLastName"
+readonly
+/>
+</div>
+<div class="form-group">
+<label for="profileEmail">Email</label>
+<input
+type="email"
+class="form-control"
+id="profileEmail"
+readonly
+/>
+</div>
+<div class="form-group">
+<label for="profileRole">Role</label>
+<input
+type="text"
+class="form-control"
+id="profileRole"
+readonly
+/>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button
+type="button"
+class="btn btn-secondary close"
+data-dismiss="modal"
+>
+Close
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+$(document).ready(async function () {
+  $("#viewAlltasks").on("click", function () {
+  window.location.href = "viewAllTasks.html";
+});
+// flatpickr setup
+const fp = flatpickr("#unifiedDatePicker", {
+  mode: "range",
+  dateFormat: "Y-m-d",
+  allowInput: true,
+    onOpen: function () {
+    document.querySelector(".table-wrapper").classList.add("table-blur");
+  },
+  onClose: function () {
+    document.querySelector(".table-wrapper").classList.remove("table-blur");
+  },
+  onReady: function (selectedDates, dateStr, instance) {
+  if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
+
+  const container = document.createElement("div");
+  container.className = "custom-shortcuts";
+  container.style.display = "flex";
+  container.style.justifyContent = "flex-end";
+  container.style.flexWrap = "wrap";
+  container.style.gap = "10px";
+  container.style.marginTop = "0px";
+  container.style.padding = "0 10px";
+
+  const momentTz = moment().tz("America/Chicago");
+
+  const todayBtn = makeLink("Today", () => {
+    const today = momentTz.format("YYYY-MM-DD");
+    fp.setDate([today, today], true);
+    $("#unifiedDatePicker").val(`${today} to ${today}`);
+    $("#filterButton").data("filter", "today").click();
+    instance.close();
+  });
+
+  const thisMonthBtn = makeLink("This Month", () => {
+    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+    fp.setDate([start, end], true);
+    $("#unifiedDatePicker").val(`${start} to ${end}`);
+    $("#filterButton").click();
+    instance.close();
+  });
+
+  // Generate last 3 months dynamically
+  for (let i = 1; i <= 3; i++) {
+    const monthMoment = momentTz.clone().subtract(i, "months");
+    const monthName = monthMoment.format("MMMM"); // e.g., "June"
+    const start = monthMoment.startOf("month").format("YYYY-MM-DD");
+    const end = monthMoment.endOf("month").format("YYYY-MM-DD");
+
+    const monthBtn = makeLink(monthName, () => {
+      fp.setDate([start, end], true);
+      $("#unifiedDatePicker").val(`${start} to ${end}`);
+      $("#filterButton").click();
+      instance.close();
+    });
+
+    container.appendChild(monthBtn);
+  }
+
+  container.prepend(thisMonthBtn);
+  container.prepend(todayBtn);
+  instance.calendarContainer.appendChild(container);
+
+  // Utility to make a styled link
+  function makeLink(label, handler) {
+    const link = document.createElement("a");
+    link.href = "#";
+    link.innerText = label;
+    link.className = "shortcut-link";
+    link.style.margin = "2px 5px";
+    link.style.fontSize = "13px";
+    link.style.color = "#007BFF";
+    link.style.cursor = "pointer";
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      handler();
+    });
+    return link;
+  }
+}
+});
+  // flatpickr setup till here
+let yardOrders = [];
+const rowsPerPage = 25;
+let currentPage = 1;  
+let currentSort = {
+column: "",
+order: "asc", // ascending by default
+};
+
+function sortTable(column, order, isDateColumn, isYardColumn,isRefundTotalColumn) {
+const tbody = $("#yardInfoTable");
+const rows = tbody.find("tr").toArray();
+
+rows.sort(function (a, b) {
+let cellA = $(a).find("td").eq(column).text().trim();
+let cellB = $(b).find("td").eq(column).text().trim();
+
+if (isDateColumn) {
+// Convert date strings into Date objects for sorting
+cellA = new Date(cellA);
+cellB = new Date(cellB);
+return order === "asc" ? cellA - cellB : cellB - cellA;
+} else if (isYardColumn) {
+// Sort Yard columns alphabetically
+return order === "asc"
+? cellA.localeCompare(cellB)
+: cellB.localeCompare(cellA);
+} else if (isRefundTotalColumn) {
+  // parse total at the last line "Total: $X.XX"
+  const num = (text) => {
+    const m = text.match(/Total:\s*\$([\d.,]+)/i);
+    return m ? parseFloat(m[1].replace(/,/g,'')) : 0;
+  };
+  return order === "asc" ? num(cellA) - num(cellB) : num(cellB) - num(cellA);
+}
+
+ else {
+// General string comparison for other columns
+return order === "asc"
+? cellA.localeCompare(cellB)
+: cellB.localeCompare(cellA);
+}
+});
+
+// Append sorted rows back to the table body
+$.each(rows, function (index, row) {
+tbody.append(row);
+});
+}
+
+// Click event for sorting columns with numerical values and dates
+$(document).on("click", ".onlyNumber", function () {
+const column = $(this).closest("th").index();
+const sortBy = $(this).closest("th").data("sort");
+
+// Ensure sortBy is defined before using it
+if (!sortBy) return;
+
+// Determine if the column is a date column or Yard column
+const isDateColumn = sortBy === "orderDate";
+const isYardColumn = sortBy.startsWith("yard");
+const isRefundTotalColumn = sortBy === "toBeRefunded";
+
+// Toggle the sort order
+currentSort.order =
+currentSort.column === sortBy && currentSort.order === "asc"
+? "desc"
+: "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+
+// Update sort icon
+$(".sort-icon").html("&#9650;"); 
+$(this)
+.find(".sort-icon")
+.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
+});
+// Click event for sorting Yard columns
+$(document).on("click", ".fYardName", function () {
+const column = $(this).closest("th").index();
+const sortBy = $(this).closest("th").data("sort");
+const isYardColumn = sortBy.startsWith("yard");
+currentSort.order =
+currentSort.column === sortBy && currentSort.order === "asc"
+? "desc"
+: "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, false, isYardColumn);
+$(".fYardName").html("&#9650;");
+$(this).html(currentSort.order === "asc" ? "&#9650;" : "&#9660;");
+});
+
+$(document).on(
+"click",
+"th[data-sort], th[data-sort] .sort-icon",
+function (event) {
+const $target = $(event.target);
+const $th = $target.closest("th");
+const column = $th.index();
+const sortBy = $th.data("sort");
+const isDateColumn = sortBy === "orderDate";
+const isYardColumn = sortBy.startsWith("yard");
+currentSort.order =
+currentSort.column === sortBy && currentSort.order === "asc"
+? "desc"
+: "asc";
+currentSort.column = sortBy;
+
+sortTable(column, currentSort.order, isDateColumn, isYardColumn);
+$("th[data-sort] .sort-icon").html("&#9650;"); 
+$th
+.find(".sort-icon")
+.html(currentSort.order === "asc" ? "&#9650;" : "&#9660;"); 
+}
+);
+
+const currentTime = Date.now();
+const loginTimestamp = localStorage.getItem("loginTimestamp");
+if (loginTimestamp) {
+const timeDifference =
+(currentTime - loginTimestamp) / (1000 * 60 * 60);
+if (timeDifference >= 12) {
+alert(
+"Your session has expired. You will be redirected to the login page."
+);
+window.localStorage.clear();
+window.location.href = "login_signup.html";
+}
+} else {
+window.location.href = "login_signup.html";
+}
+
+const token = localStorage.getItem("token");
+var team;
+const now = new Date();
+const options = {
+timeZone: 'America/Chicago',
+year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+hour: '2-digit',
+minute: '2-digit',
+second: '2-digit',
+hour12: false,
+};
+const formatter = new Intl.DateTimeFormat('en-US', options);
+const parts = formatter.formatToParts(now);
+const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+const date = new Date(formattedDate);
+// Array of month names
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const day = date.getDate();
+const month = months[date.getMonth()];
+const year = date.getFullYear();
+const monthMap = {
+Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+May: "05", Jun: "06", Jul: "07", Aug: "08",
+Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+};
+var monthNum = monthMap[month];
+
+$("#unifiedDatePicker").val(`${year}-${monthNum}`);
+await fetchYardInfo(month, year);
+
+// Fetch yard info data for a specific month and 
+async function fetchYardInfo(month, year) {
+    try {
+        $("#loadingMessage").show(); // Show loading message
+
+        const limit = 25;
+const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
+  params: { month, year, page: 1, limit },
+  headers: { Authorization: `Bearer ${token}` },
+});
+
+let yardOrdersRaw = [...firstResponse.data.orders];
+const totalPages = Math.ceil(firstResponse.data.totalCount / limit);
+
+const requests = [];
+for (let p = 2; p <= totalPages; p++) {
+  requests.push(
+    axios.get("https://www.spotops360.com/orders/monthly", {
+      params: { month, year, page: p, limit },
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
+}
+
+
+const responses = await Promise.all(requests);
+responses.forEach(res => {
+  yardOrdersRaw.push(...res.data.orders);
+});
+
+        // inside fetchYardInfo, replace filteredAdditionalInfo logic:
+const yardOrdersProcessed = yardOrdersRaw.map(order => {
+  // keep only yards that have refund to collect OR flagged for collect refund
+  const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => {
+    const needsByFlag = (info.collectRefundCheckbox === "Ticked");
+    const needsByAmount = Number(info.refundToCollect) > 0;
+    return needsByFlag || needsByAmount;
+  });
+
+  if (filteredAdditionalInfo.length > 0) {
+    return { ...order, additionalInfo: filteredAdditionalInfo };
+  }
+  return null;
+}).filter(Boolean);
+
+yardOrders = yardOrdersProcessed;
+
+        const maxYards = yardOrders.length > 0
+            ? yardOrders.reduce(
+                  (max, order) => Math.max(max, order.additionalInfo.length),
+                  0
+              )
+            : 0;
+
+        console.log("Yard Orders:", yardOrders, "Max Yards:", maxYards);
+
+        renderTableRows(currentPage, yardOrders, maxYards);
+        createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    } catch (error) {
+        console.error("Error fetching yard info:", error);
+        alert("Failed to fetch data. Please try again.");
+    } finally {
+        $("#loadingMessage").hide(); // Hide loading message
+    }
+}
+
+function renderTableRows(page, data = yardOrders) {
+  const rowsPerPage = 25;
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const pageData = data.slice(start, end);
+
+  // max yards in THIS PAGE
+  const maxYards = pageData.reduce((max, order) => (
+    Math.max(max, (order.additionalInfo || []).length)
+  ), 0);
+
+  const tableHeader = $("#tableHeader");
+  $("#yardInfoTable").empty();
+
+  // ---- HEADERS ----
+  tableHeader.find("th:gt(1)").remove(); // remove old dynamic headers after fixed cols (Order No, Order Date)
+
+  for (let i = 1; i <= maxYards; i++) {
+    tableHeader.append(`
+      <th class="sortable" scope="col" data-sort="yard${i}" style="background-color:#037894;">
+        Yard ${i}
+        <span class="sort-icons"><span class="asc">▲</span><span class="desc">▼</span></span>
+      </th>
+    `);
+  }
+
+  // “To be refunded” column
+  tableHeader.append(`
+    <th class="sortable" scope="col" data-sort="toBeRefunded" style="background-color:#037894;">
+      To be refunded
+      <span class="sort-icons"><span class="asc">▲</span><span class="desc">▼</span></span>
+    </th>
+  `);
+
+  // Actions column
+  tableHeader.append(`
+    <th class="sortable" scope="col" style="background-color:#037894;">Actions</th>
+  `);
+
+  // ---- ROWS ----
+  pageData.forEach(order => {
+    // Yard name columns
+    let yardColsHtml = "";
+    const yards = order.additionalInfo || [];
+
+    for (let i = 0; i < maxYards; i++) {
+      if (yards[i]) {
+        const info = yards[i];
+        yardColsHtml += `<td>${info.yardName || ""}</td>`;
+      } else {
+        yardColsHtml += `<td></td>`;
+      }
+    }
+
+    // Build multiline “To be refunded” + total
+    let lines = [];
+    let totalRefund = 0;
+
+    yards.forEach((info, idx) => {
+      const amt = Number(info.refundToCollect) || 0;
+      // show line if flagged OR amount present
+      if (info.collectRefundCheckbox === "Ticked" || amt > 0) {
+        totalRefund += amt;
+        const line = `Yard ${idx + 1}: $${amt.toFixed(2)}`;
+        lines.push(line);
+      }
+    });
+
+    const toBeRefundedCell = lines.length
+      ? `<div class="refund-multiline">${lines.map(l => `<div>${l}</div>`).join("")}
+           <div style="margin-top:4px;font-weight:600;">Total: $${totalRefund.toFixed(2)}</div>
+         </div>`
+      : `<span>—</span>`;
+
+    // format order date (your existing formatting kept)
+    const datetime = order.orderDate;
+    const date = new Date(datetime);
+    const day = date.getUTCDate();
+    const year = date.getUTCFullYear();
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const suffix = (d) => (d>3 && d<21) ? "th" : (["th","st","nd","rd"][Math.min(d%10,4)] || "th");
+    const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+
+    $("#yardInfoTable").append(`
+      <tr>
+        <td>${order.orderNo}</td>
+        <td>${formattedOrderDate}</td>
+        ${yardColsHtml}
+        <td>${toBeRefundedCell}</td>
+        <td>
+          <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button>
+        </td>
+      </tr>
+    `);
+  });
+
+  document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${yardOrders.length}`;
+}
+
+
+$("#yardInfoTable").on("click", ".process-btn", function () {
+const id = $(this).data("id");
+window.location.href = `form.html?orderNo=${id}&process=true`;
+});
+// function createPaginationControls(totalPages, data = yardOrders) {
+//   const paginationControls = $("#pagination-controls");
+//   paginationControls.empty();
+
+//   if (totalPages > 1) {
+//     paginationControls.append(
+//       `<button class="previousNext" id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>`
+//     );
+
+//     for (let i = 1; i <= totalPages; i++) {
+//       paginationControls.append(
+//         `<button class="pageNos btn ${i === currentPage ? "active-page" : ""} page-btn" data-page="${i}">${i}</button>`
+//       );
+//     }
+
+//     paginationControls.append(
+//       `<button class="previousNext" id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>`
+//     );
+
+//     // Save the latest dataset used for pagination
+//     paginationControls.data("pagedata", data);
+//   }
+// }
+function createPaginationControls(totalPages) {
+  const paginationControls = $('#pagination-controls');
+  paginationControls.empty(); 
+
+  if (totalPages > 1) {
+    // Left arrow for "Previous" page
+    paginationControls.append(`
+      <button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+    `);
+
+    // Page number display: Page X of Y
+    paginationControls.append(`
+      <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    `);
+
+    // Right arrow for "Next" page
+    paginationControls.append(`
+      <button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>
+    `);
+  }
+}
+
+$('#pagination-controls').on('click', '.page-btn', function () {
+  const page = $(this).data('page');
+  currentPage = page;
+  const data = $('#pagination-controls').data("pagedata") || yardOrders;
+  renderTableRows(currentPage, data);
+  createPaginationControls(Math.ceil(data.length / rowsPerPage), data);
+});
+
+$('#pagination-controls').on('click', '#prevPage', function () {
+  if (currentPage > 1) {
+    currentPage--;
+    const data = $('#pagination-controls').data("pagedata") || yardOrders;
+    renderTableRows(currentPage, data);
+    createPaginationControls(Math.ceil(data.length / rowsPerPage), data);
+  }
+});
+
+$('#pagination-controls').on('click', '#nextPage', function () {
+  const data = $('#pagination-controls').data("pagedata") || yardOrders;
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTableRows(currentPage, data);
+    createPaginationControls(totalPages, data);
+  }
+});
+
+// Filter by month and year
+$("#filterButton").click(async function () {
+  $("body").append('<div class="modal-overlay"></div>');
+  $("body").addClass("modal-active");
+  $("#loadingMessage").show();
+
+  try {
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    const tz = "America/Chicago";
+
+    let month, year;
+
+    // If input is a single day
+    if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+      const momentObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
+      month = momentObj.format("MMM");
+      year = momentObj.format("YYYY");
+    } 
+    // If input is a range
+    else if (rangeValue.includes(" to ")) {
+      const [startStr, _] = rangeValue.split(" to ");
+      const momentObj = moment.tz(startStr, "YYYY-MM-DD", tz);
+      month = momentObj.format("MMM");
+      year = momentObj.format("YYYY");
+    } 
+    // If input is just month (YYYY-MM)
+    else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      const momentObj = moment(rangeValue, "YYYY-MM");
+      month = momentObj.format("MMM");
+      year = momentObj.format("YYYY");
+    } 
+    else {
+      alert("⚠️ Please select a valid date, range, or month.");
+      return;
+    }
+
+    currentPage = 1;
+    await fetchYardInfo(month, year);
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+  } catch (error) {
+    console.error("Error filtering Card Not Charged data:", error);
+    alert("Something went wrong while filtering data.");
+  } finally {
+    $("#loadingMessage").hide();
+    $(".modal-overlay").remove();
+    $("body").removeClass("modal-active");
+    $(this).data("filter", "");
+  }
+});
+
+// Search functionality
+$("#searchInput").on("keyup", function () {
+const value = $(this).val().toLowerCase();
+const filteredOrders = yardOrders.filter(order => {
+const basicSearch = (
+(order.soldP && String(order.soldP).toLowerCase().includes(value)) || // Converting soldP to string
+(order.grossProfit && String(order.grossProfit).toLowerCase().includes(value)) || 
+(order.actualGP && String(order.actualGP).toLowerCase().includes(value)) || 
+(order.orderDate && order.orderDate.toLowerCase().includes(value)) ||
+(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+(order.bAddressStreet && order.bAddressStreet.toLowerCase().includes(value)) ||
+(order.bAddressCity && order.bAddressCity.toLowerCase().includes(value)) ||
+(order.bAddressState && order.bAddressState.toLowerCase().includes(value)) ||
+(order.bAddressZip && order.bAddressZip.toLowerCase().includes(value)) ||
+(order.bAddressAcountry && order.bAddressAcountry.toLowerCase().includes(value)) ||
+(order.sAddressStreet && order.sAddressStreet.toLowerCase().includes(value)) ||
+(order.sAddressState && order.sAddressState.toLowerCase().includes(value)) ||
+(order.sAddressZip && order.sAddressZip.toLowerCase().includes(value)) ||
+(order.sAddressAcountry && order.sAddressAcountry.toLowerCase().includes(value)) ||
+(order.attention && order.attention.toLowerCase().includes(value)) ||
+(order.orderNo && order.orderNo.toLowerCase().includes(value)) ||
+(order.salesAgent && order.salesAgent.toLowerCase().includes(value)) ||
+(order.customerName && order.customerName.toLowerCase().includes(value)) ||
+(order.fName && order.fName.toLowerCase().includes(value)) ||
+(order.lName && order.lName.toLowerCase().includes(value)) ||
+(order.bName && order.bName.toLowerCase().includes(value)) ||
+(order.bAddress && order.bAddress.toLowerCase().includes(value)) ||
+(order.sAddress && order.sAddress.toLowerCase().includes(value)) ||
+((order.pReq || order.partName) && (order.pReq || order.partName).toLowerCase().includes(value)) ||
+(order.orderStatus && order.orderStatus.toLowerCase().includes(value)) ||
+(order.email && order.email.toLowerCase().includes(value)) ||
+(order.additionalInfo && order.additionalInfo.some(info => 
+(info.trackingNo && String(info.trackingNo).toLowerCase().includes(value)) // Safely handle trackingNo
+)) ||
+(order.phone && order.phone.toLowerCase().includes(value)) ||  // Added phone
+(order.make && order.make.toLowerCase().includes(value)) ||    // Added make
+(order.year && order.year.toString().toLowerCase().includes(value)) || // Added year
+(order.model && order.model.toLowerCase().includes(value))     // Added model
+);
+
+// Check if any yard detail (including stockNo) matches the search term
+const yardSearch = order.additionalInfo && order.additionalInfo.some((info, index) => {
+const yardLabel = `yard ${index + 1}`; // e.g., "Yard 1", "Yard 2"
+return (
+yardLabel.includes(value) || 
+(info.yardName && info.yardName.toLowerCase().includes(value)) ||
+(info.phone && String(info.phone).toLowerCase().includes(value)) || 
+(info.email && info.email.toLowerCase().includes(value)) || 
+(info.escTicked && info.escTicked.toLowerCase().includes(value)) || 
+(info.status && info.status.toLowerCase().includes(value)) ||
+(info.stockNo && info.stockNo.toLowerCase().includes(value)) // Added stockNo
+);
+});
+
+// Return true if any of the basic fields or yard details match the search term
+return basicSearch || yardSearch;
+});
+
+// If a search is active, display the filtered results, otherwise reset to the full dataset
+if (filteredOrders.length > 0 || value === "") {
+renderTableRows(1, filteredOrders); // Render the first page of filtered results
+createPaginationControls(Math.ceil(filteredOrders.length / rowsPerPage), filteredOrders);
+} else {
+$("#infoTable").empty(); // Clear the table if no results are found
+$("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>`);
+}
+});
+
+
+
+var firstName = localStorage.getItem("firstName");
+const lastName = localStorage.getItem("lastName");
+const role = localStorage.getItem("role");
+const email = localStorage.getItem("email");
+
+if (firstName) {
+$("#user-name").text(firstName);
+}
+if (!firstName) {
+window.location.href = "login_signup.html";
+}
+
+const currentPath = window.location.pathname;
+$(".nav-link").each(function () {
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
+});
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+$("#profileLink").click(function () {
+$("#profileFirstName").val(firstName);
+$("#profileLastName").val(lastName);
+$("#profileEmail").val(email);
+$("#profileRole").val(role);
+$("#profileModal").modal("show");
+});
+
+$("#backToOrders").click(function () {
+$("#profile-content").addClass("d-none");
+$("#purchases-content").removeClass("d-none");
+});
+
+$("#searchInput").on("keyup", function () {
+let value = $(this).val().toLowerCase();
+let totalPartPriceSum = 0;
+let totalShippingSum = 0;
+let totalOthersSum = 0;
+let totalOverallSum = 0;
+let totalRefundsSum = 0;
+
+$("#yardInfoTable tr").filter(function () {
+const isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+$(this).toggle(isMatch);
+
+if (isMatch) {
+const partPrice =
+parseFloat($(this).find("td").eq(-6).text().replace("$", "")) ||
+0;
+const shipping =
+parseFloat($(this).find("td").eq(-5).text().replace("$", "")) ||
+0;
+const others =
+parseFloat($(this).find("td").eq(-3).text().replace("$", "")) ||
+0;
+const refunds =
+parseFloat($(this).find("td").eq(-2).text().replace("$", "")) ||
+0;
+const overall =
+parseFloat($(this).find("td").eq(-1).text().replace("$", "")) ||
+0;
+
+totalPartPriceSum += partPrice;
+totalShippingSum += shipping;
+totalOthersSum += others;
+totalOverallSum += overall;
+totalRefundsSum += refunds;
+}
+});
+
+$("#totalPartPrice").text(`$${totalPartPriceSum.toFixed(2)}`);
+$("#totalShipping").text(`$${totalShippingSum.toFixed(2)}`);
+$("#others").text(`$${totalOthersSum.toFixed(2)}`);
+$("#overallSum").text(`$${totalOverallSum.toFixed(2)}`);
+$("#overallSum").text(`$${totalRefundsSum.toFixed(2)}`);
+});
+
+$(".toggle-sidebar").on("click", function () {
+$("#offcanvasSidebar").toggleClass("show");
+});
+
+$(".nav-link").on("click", function () {
+$(".nav-link").removeClass("active selected");
+$(this).addClass("selected");
+
+const contentMap = {
+"default-link": "#purchases-content",
+"add-order-link": "#add-order-content",
+"view-order-link": "#view-order-content",
+};
+
+$(".main-content > div").addClass("d-none");
+$(contentMap[this.id]).removeClass("d-none");
+$("#offcanvasSidebar").removeClass("show");
+});
+
+$(".chevron-icon, .nav-link").on("click", function (event) {
+event.stopPropagation();
+const submenu = $(this).closest(".nav-item").find(".submenu");
+submenu.toggle();
+$(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");
+$(this).closest(".nav-link").toggleClass("selected");
+});
+
+team = localStorage.getItem("team");
+if (team === "Team Charlie" || role === "Sales") {
+// Hide specific reports links for Team Charlie
+$("#submenu-reports .nav-link")
+.not(':contains("My Sales Report")')
+.hide();
+// Hide specific dashboards links for Team Charlie
+$(
+"#submenu-dashboards .in-transit-link, #submenu-dashboards .view-fulfilled-link,.escalation,.view-ordersSheet-link, .customer-approved-link, #submenu-dashboards .teamA-orders-link, #submenu-dashboards .teamB-orders-link, #submenu-dashboards .placed-orders-link, #submenu-dashboards .cancelled-orders-link, #submenu-dashboards .refunded-orders-link, #submenu-dashboards .yard-info-link, #submenu-dashboards .escalated-orders, #submenu-dashboards .ongoingEscalated-orders,#submenu-dashboards .yard-located-orders, #submenu-dashboards .sales-data-link, #submenu-dashboards .view-myTasks-link, #submenu-dashboards .view-myTasks-link"
+).hide();
+// Hide teams and users sections for Team Charlie
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+$(".nav-item:has(#submenu-invoices)").hide();
+} else if (team === "Team Mark") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamB-orders-link, .sales-data-link"
+).hide();
+} else if (team === "Team Sussane") {
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$(".nav-item:has(#submenu-teams)").hide();
+$(".nav-item:has(#submenu-users)").hide();
+$('#submenu-reports .nav-link:contains("Escalation Resolutions")').hide();
+// escalationResolvingTime
+$(
+"#submenu-dashboards .add-order-link, .view-individualOrders-link, .teamA-orders-link, .sales-data-link"
+).hide();
+
+} 
+// else if (role === "Admin" && firstName === "John") {
+//   console.log("===");
+// // Hide specific reports links for Admin
+// $('#submenu-reports .nav-link:contains("My Sales Report")').show();
+// $("#submenu-dashboards .view-individualOrders-link").show();
+// // Hide specific dashboards links for Admin
+// }
+else if (role === "Admin") {
+  console.log("=D==");
+// Hide specific reports links for Admin
+$('#submenu-reports .nav-link:contains("My Sales Report")').hide();
+$('#submenu-reports .nav-link:contains("Refund Report")').show();
+$('#submenu-reports .nav-link:contains("Collect Refund")').show();
+// Hide specific dashboards links for Admin
+$("#submenu-dashboards .view-individualOrders-link").hide();
+}
+
+$("#logoutLink").on("click", function () {
+window.localStorage.clear();
+window.location.href = "login_signup.html";
+});
+// notification
+const notificationIcon = $("#notificationIcon");
+const notificationDropdown = $("#notificationDropdown");
+const notificationList = $("#notificationList");
+const notificationCountElement = $("#notificationCount");
+
+let unreadCount = 0;
+
+// Fetch notifications from the backend
+async function fetchNotifications() {
+  try {
+    const response = await axios.get("https://www.spotops360.com/notifications");
+        const notifications = response.data;
+ // Filter unread notifications for the logged-in user
+ const unreadNotifications = notifications.filter(
+        (notification) => !notification.readBy.includes(firstName)
+      );
+
+    // Update the unread count
+    unreadCount = unreadNotifications.length;
+    updateUnreadCount();
+    renderNotifications(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
+}
+
+// Render notifications in the dropdown
+function renderNotifications(notifications) {
+  notificationList.empty(); // Clear the notification list
+  const role = localStorage.getItem('role');
+  const firstName = localStorage.getItem('firstName');
+
+  // Filter notifications based on role and firstName
+  const filteredNotifications = notifications.filter(notification => {
+    if (role === 'Admin') {
+      return true; 
+    } else {
+      return notification.message.includes(firstName); 
+    }
+  });
+
+  const lastFiveNotifications = filteredNotifications.slice(-5);
+  if (lastFiveNotifications.length === 0) {
+    notificationList.append(`
+      <li style="margin-bottom: 5px; padding: 10px; background-color: #f0f0f0; color: black; width: 100%; border: 1px solid black;">
+        No notifications
+      </li>
+    `);
+    return; // Exit the function early
+  }
+
+  // Render the last 5 notifications
+  lastFiveNotifications.forEach((notification) => {
+    let backgroundColor;
+    if (notification.message.includes("Warning")) {
+      backgroundColor = "#db634a";
+    } else if (notification.message.includes("Alert")) {
+      backgroundColor = "#fdb044";
+    } else if (notification.message.includes("Task Completed")) {
+      backgroundColor = "#aae3c0";
+    } else if (notification.message.includes("New Task added")) {
+      backgroundColor = "#c6c6c6";
+    } else if (notification.message.includes("Task still in Processing past deadline")) {
+      backgroundColor = "#5fa33a";
+    } else if (notification.message.includes("Task status changed to Processing")) {
+      backgroundColor = "#d24949";
+    } else if (notification.message.includes("Task marked as Incomplete (Missed Deadline)")) {
+      backgroundColor = "#d24949";
+    } else {
+      backgroundColor = "black";
+    }
+
+    // Split the message into lines
+    const lines = notification.message.split("\n");
+    const firstLine = `<b>${lines[0]}</b>`;
+    const remainingLines = lines.slice(1).join("<br>");
+    const formattedMessage = `${firstLine}<br>${remainingLines}`;
+
+    // Create the notification item
+    const notificationItem = `
+      <li style="margin-bottom: 5px; padding: 10px; background-color: ${backgroundColor}; color: black; width: 100%; border: 1px solid black;">
+        ${formattedMessage}
+      </li>
+    `;
+    notificationList.append(notificationItem);
+  });
+}
+async function markNotificationsAsRead() {
+  try {
+    const role = localStorage.getItem('role');
+    const firstName = localStorage.getItem('firstName');
+    if (!firstName) {
+      console.error("User ID not found. Cannot mark notifications as read.");
+      return;
+    }
+    await axios.post(`https://www.spotops360.com/mark-notifications-read`, null, {
+      params: { firstName, role }, 
+    });
+    unreadCount = 0;
+    updateUnreadCount();
+    console.log("Notifications marked as read successfully.");
+  } catch (error) {
+    console.error("Error marking notifications as read:", error);
+  }
+}
+async function updateUnreadCount() {
+  try {
+    const role = localStorage.getItem('role');
+    const firstName = localStorage.getItem('firstName');
+    const response = await axios.get(`https://www.spotops360.com/unread-notifications-count`, {
+      params: { firstName, role },
+    });
+    const unreadCount = response.data.count;
+    if (unreadCount > 0) {
+      notificationCountElement.text(unreadCount);
+      notificationCountElement.show();
+    } else {
+      notificationCountElement.hide();
+    }
+  } catch (error) {
+    console.error("Error fetching unread notifications count:", error);
+  }
+}
+/// Toggle notification dropdown visibility
+notificationIcon.on("click", async function () {
+  const isVisible = notificationDropdown.is(":visible");
+
+  if (isVisible) {
+    notificationDropdown.hide();
+  } else {
+    notificationDropdown.show();
+    $("table.table th").css({
+     "z-index": 0,
+    });
+    $(".modal-overlay").css({
+      "z-index":1,
+    })
+    $("body").append('<div class="modal-overlay"></div>');
+$("body").addClass("modal-active");    
+    await fetchNotifications();
+    await markNotificationsAsRead();
+  }
+});
+
+// Close dropdown when clicking outside
+$(document).on("click", function (event) {
+  if (
+    !$(event.target).closest("#notificationIcon").length &&
+    !$(event.target).closest("#notificationDropdown").length
+  ) {
+    notificationDropdown.hide();
+    $(".modal-overlay").remove();
+$("body").removeClass("modal-active");
+  }
+});
+
+
+// Toggle Dark Mode
+if (localStorage.getItem("darkMode") === "true") {
+    enableDarkMode();
+  }
+ $("#darkModeIcon").on("click", function () {
+if ($("body").hasClass("dark-mode")) {
+disableDarkMode();
+} else {
+enableDarkMode();
+}
+});
+
+function enableDarkMode() {
+$("body").addClass("dark-mode");
+$(".navbar").addClass("dark-mode");
+$(".sidebar").addClass("dark-mode");
+$("table").addClass("table-dark");
+$("#darkModeIcon").removeClass("fa-moon").addClass("fa-sun");
+localStorage.setItem("darkMode", "true");
+}
+
+function disableDarkMode() {
+$("body").removeClass("dark-mode");
+$(".navbar").removeClass("dark-mode");
+$(".sidebar").removeClass("dark-mode");
+$("table").removeClass("table-dark");
+$("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
+localStorage.setItem("darkMode", "false");
+}
+$(document).on("click", "#infoTable tr", function () {
+  const isSelected = $(this).hasClass("selected");
+
+  $("#infoTable tr").removeClass("selected");
+
+  if (!isSelected) {
+    $(this).addClass("selected");
+  }
+});
+fetchNotifications();
+  // sorting 
+let currentSortColumn = '';
+let sortAsc = true;
+
+$("#infoTableHeader th.sortable").on("click", function () {
+  const column = $(this).data("column");
+  if (!column) return;
+  console.log("Current sort column:", currentSortColumn);
+  if (currentSortColumn === column) {
+    sortAsc = !sortAsc;
+  } else {
+    currentSortColumn = column;
+    sortAsc = true;
+  }
+
+  // Sort data
+  yardOrders.sort((a, b) => {
+    let valA = a[column] ?? '';
+    let valB = b[column] ?? '';
+
+    if (column.toLowerCase().includes("date")) {
+      valA = new Date(valA);
+      valB = new Date(valB);
+    } else if (column === "custRefAmount") {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA.toString().toLowerCase();
+      valB = valB.toString().toLowerCase();
+    }
+
+    return sortAsc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
+  });
+
+  currentPage = 1;
+  renderTableRows(currentPage);
+  createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+
+  // Reset all arrows
+  $("#infoTableHeader .sort-icons .asc, .sort-icons .desc").removeClass("active");
+
+  // Highlight the active arrow
+  const arrowToActivate = sortAsc ? ".asc" : ".desc";
+  $(this).find(arrowToActivate).addClass("active");
+});
+});
+</script>
+</body>
+</html>
