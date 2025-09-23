@@ -631,8 +631,7 @@ console.log("Raw Yard Orders:", yardOrdersRaw);
 yardOrders = yardOrdersRaw.map(order => {
             const filteredAdditionalInfo = order.additionalInfo.filter(
                 info =>
-                    (info.upsClaimCheckbox === "Ticked") &&
-                    info.status !== "PO cancelled"
+                    (info.upsClaimCheckbox === "Ticked")
             );
             if (filteredAdditionalInfo.length > 0) {
                 return { ...order, additionalInfo: filteredAdditionalInfo };
