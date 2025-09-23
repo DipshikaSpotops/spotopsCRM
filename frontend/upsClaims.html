@@ -618,20 +618,12 @@ responses.forEach(res => {
 
         // inside fetchYardInfo, replace filteredAdditionalInfo logic:
 const yardOrdersProcessed = yardOrdersRaw.map(order => {
-  // keep only yards that have refund to collect OR flagged for collect refund
-  const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => {
-    const needsByFlag = (info.upsClaimCheckbox === "Ticked");
-    const needsByAmount = Number(info.refundToCollect) > 0;
-    return needsByFlag || needsByAmount;
-  });
-
-  if (filteredAdditionalInfo.length > 0) {
-    return { ...order, additionalInfo: filteredAdditionalInfo };
-  }
-  return null;
+  const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
+  return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
 }).filter(Boolean);
 
 yardOrders = yardOrdersProcessed;
+
 
         const maxYards = yardOrders.length > 0
             ? yardOrders.reduce(
@@ -707,24 +699,23 @@ function renderTableRows(page, data = yardOrders) {
     }
 
     // Build multiline “To be refunded” + total
-    let lines = [];
-    let totalRefund = 0;
+    // Build multiline “To be refunded” + total (UPS claims only)
+let lines = [];
+let totalRefund = 0;
 
-    yards.forEach((info, idx) => {
-      const amt = Number(info.refundToCollect) || 0;
-      // show line if flagged OR amount present
-      if (info.upsClaimCheckbox === "Ticked" || amt > 0) {
-        totalRefund += amt;
-        const line = `Yard ${idx + 1}: $${amt.toFixed(2)}`;
-        lines.push(line);
-      }
-    });
+yards.forEach((info, idx) => {
+  if (!isOn(info.upsClaimCheckbox)) return;               
+  const amt = Number(info.refundToCollect) || 0;        
+  totalRefund += amt;
+  lines.push(`Yard ${idx + 1}: $${amt.toFixed(2)}`);
+});
 
-    const toBeRefundedCell = lines.length
-      ? `<div class="refund-multiline">${lines.map(l => `<div>${l}</div>`).join("")}
-           <div style="margin-top:4px;font-weight:600;">Total: $${totalRefund.toFixed(2)}</div>
-         </div>`
-      : `<span>—</span>`;
+const toBeRefundedCell = lines.length
+  ? `<div class="refund-multiline">
+       ${lines.map(l => `<div>${l}</div>`).join("")}
+       <div style="margin-top:4px;font-weight:600;">Total: $${totalRefund.toFixed(2)}</div>
+     </div>`
+  : `<span>—</span>`;
 
     // format order date (your existing formatting kept)
     const datetime = order.orderDate;
