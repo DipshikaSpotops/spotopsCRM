@@ -1197,7 +1197,7 @@ console.log("yardData.collectRefundCheckbox", yardData.storeCredit);
 if(yardData.collectRefundCheckbox !== "Unticked"){
 $("#collectRefundCheckbox").prop('checked', true);
 }
-if(yardData.upsClaimCheckbox){
+if(yardData.upsClaimCheckbox !== "Unticked"){
 $("#upsClaimCheckbox").prop('checked', true);
 }
 if(yardData.refundedDate){
@@ -1438,7 +1438,7 @@ $('#refundSubmit').on('click', async function (e) {
     fetchAndUpdateYardInfo();
 
     // If you truly must reload, do it *after* success:
-    // window.location.reload();
+    window.location.reload();
 
   } catch (err) {
     console.error('Error:', err);
