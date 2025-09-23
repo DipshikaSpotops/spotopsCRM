@@ -1194,25 +1194,21 @@ if(yardData.storeCredit){
 $("#storeCreditCheckbox").prop('checked', true);
 }
 console.log("yardData.collectRefundCheckbox", yardData.storeCredit);
-if(yardData.collectRefundCheckbox !== "Unticked"){
-$("#collectRefundCheckbox").prop('checked', true);
-}else{
-  $("#collectRefundCheckbox").prop('checked', false);
-}
-if(yardData.upsClaimCheckbox !== "Unticked"){
-$("#upsClaimCheckbox").prop('checked', true);
-}
-else{
-  
-  $("#upsClaimCheckbox").prop('checked', false);
-}
-// storecredit checkbox
-const v = yardData.storeCreditCheckbox;
-const isChecked =
+const isOn = (v) =>
   v === true ||
-  v === "Ticked" ||
-  (typeof v === "string" && v.toLowerCase() === "true");
-$("#storeCreditCheckbox").prop("checked", !!isChecked);
+  v === 'Ticked' ||
+  (typeof v === 'string' && v.toLowerCase() === 'true');
+
+// Tiny helper to set a checkbox
+const setCb = (selector, v) => $(selector).prop('checked', !!isOn(v));
+
+const yd = yardData || {};
+
+// Apply to all
+setCb('#collectRefundCheckbox', yd.collectRefundCheckbox);
+setCb('#upsClaimCheckbox',      yd.upsClaimCheckbox);
+setCb('#storeCreditCheckbox',   yd.storeCreditCheckbox);
+
 if(yardData.refundedDate){
 $("#refundedDate").val(yardData.refundedDate);
 }
