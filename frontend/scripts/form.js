@@ -1196,12 +1196,19 @@ $("#storeCreditCheckbox").prop('checked', true);
 console.log("yardData.collectRefundCheckbox", yardData.storeCredit);
 if(yardData.collectRefundCheckbox !== "Unticked"){
 $("#collectRefundCheckbox").prop('checked', true);
+}else{
+  $("#collectRefundCheckbox").prop('checked', false);
 }
 if(yardData.upsClaimCheckbox !== "Unticked"){
 $("#upsClaimCheckbox").prop('checked', true);
 }
+else{
+  $("#upsClaimCheckbox").prop('checked', false);
+}
 if(yardData.storeCreditCheckbox !== "Unticked"){
 $("#storeCreditCheckbox").prop('checked', true);
+}else{
+  $("#storeCreditCheckbox").prop('checked', false);
 }
 if(yardData.refundedDate){
 $("#refundedDate").val(yardData.refundedDate);
