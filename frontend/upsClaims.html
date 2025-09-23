@@ -627,7 +627,7 @@ const responses = await Promise.all(requests);
 responses.forEach(res => {
   yardOrdersRaw.push(...res.data.orders);
 });
-
+console.log("Raw Yard Orders:", yardOrdersRaw);
 const yardOrdersProcessed = yardOrdersRaw.map(order => {
   const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
   return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
