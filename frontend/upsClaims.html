@@ -671,7 +671,7 @@ function renderTableRows(page, data = yardOrders) {
   $("#yardInfoTable").empty();
 
   // ---- HEADERS ----
-  tableHeader.find("th:gt(1)").remove(); // remove old dynamic headers after fixed cols (Order No, Order Date)
+  tableHeader.find("th:gt(1)").remove(); // after Order No, Order Date
 
   for (let i = 1; i <= maxYards; i++) {
     tableHeader.append(`
@@ -682,61 +682,49 @@ function renderTableRows(page, data = yardOrders) {
     `);
   }
 
-  // “To be refunded” column
   tableHeader.append(`
     <th class="sortable" scope="col" data-sort="toBeRefunded" style="background-color:#037894;">
       To be refunded
       <span class="sort-icons"><span class="asc">▲</span><span class="desc">▼</span></span>
     </th>
   `);
-
-  // Actions column
   tableHeader.append(`
     <th class="sortable" scope="col" style="background-color:#037894;">Actions</th>
   `);
 
   // ---- ROWS ----
   pageData.forEach(order => {
-    // Yard name columns
-    let yardColsHtml = "";
     const yards = order.additionalInfo || [];
 
+    // Yard name columns
+    let yardColsHtml = "";
     for (let i = 0; i < maxYards; i++) {
-      if (yards[i]) {
-        const info = yards[i];
-        yardColsHtml += `<td>${info.yardName || ""}</td>`;
-      } else {
-        yardColsHtml += `<td></td>`;
-      }
+      yardColsHtml += `<td>${yards[i]?.yardName || ""}</td>`;
     }
 
-    // Build multiline “To be refunded” + total
-    // Build multiline “To be refunded” + total (UPS claims only)
-let lines = [];
-let totalRefund = 0;
+    // Build multiline “To be refunded” + total (UPS-claims-only)
+    let lines = [];
+    let totalRefund = 0;
+    yards.forEach((info, idx) => {
+      if (!isOn(info.upsClaimCheckbox)) return;      // only ticked
+      const amt = Number(info.refundToCollect) || 0; // handle undefined/""
+      totalRefund += amt;
+      lines.push(`Yard ${idx + 1}: $${amt.toFixed(2)}`);
+    });
 
-const yardOrdersProcessed = yardOrdersRaw.map(order => {
-  const filteredAdditionalInfo = (order.additionalInfo || []).filter(info => isOn(info.upsClaimCheckbox));
-  return filteredAdditionalInfo.length ? { ...order, additionalInfo: filteredAdditionalInfo } : null;
-}).filter(Boolean);
+    const toBeRefundedCell = lines.length
+      ? `<div class="refund-multiline">
+           ${lines.map(l => `<div>${l}</div>`).join("")}
+           <div style="margin-top:4px;font-weight:600;">Total: $${totalRefund.toFixed(2)}</div>
+         </div>`
+      : `<span>—</span>`;
 
-yardOrders = yardOrdersProcessed;
-
-const toBeRefundedCell = lines.length
-  ? `<div class="refund-multiline">
-       ${lines.map(l => `<div>${l}</div>`).join("")}
-       <div style="margin-top:4px;font-weight:600;">Total: $${totalRefund.toFixed(2)}</div>
-     </div>`
-  : `<span>—</span>`;
-
-    // format order date (your existing formatting kept)
-    const datetime = order.orderDate;
-    const date = new Date(datetime);
-    const day = date.getUTCDate();
-    const year = date.getUTCFullYear();
+    // Format date
+    const dateObj = new Date(order.orderDate);
     const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const suffix = (d) => (d>3 && d<21) ? "th" : (["th","st","nd","rd"][Math.min(d%10,4)] || "th");
-    const formattedOrderDate = `${day}${suffix(day)} ${monthNames[date.getUTCMonth()]}, ${year}`;
+    const d = dateObj.getUTCDate();
+    const suffix = (n)=> (n>3 && n<21) ? "th" : (["th","st","nd","rd"][Math.min(n%10,4)] || "th");
+    const formattedOrderDate = `${d}${suffix(d)} ${monthNames[dateObj.getUTCMonth()]}, ${dateObj.getUTCFullYear()}`;
 
     $("#yardInfoTable").append(`
       <tr>
@@ -744,15 +732,14 @@ const toBeRefundedCell = lines.length
         <td>${formattedOrderDate}</td>
         ${yardColsHtml}
         <td>${toBeRefundedCell}</td>
-        <td>
-          <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button>
-        </td>
+        <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
       </tr>
     `);
   });
 
   document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${yardOrders.length}`;
 }
+
 
 
 $("#yardInfoTable").on("click", ".process-btn", function () {
