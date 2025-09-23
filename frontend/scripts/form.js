@@ -1193,7 +1193,7 @@ $("#actualRefundToCollect").text(actualRefund);
 if(yardData.storeCredit){
 $("#storeCreditCheckbox").prop('checked', true);
 }
-console.log("yardData.collectRefundCheckbox", yardData.collectRefundCheckbox);
+console.log("yardData.collectRefundCheckbox", yardData.storeCredit);
 if(yardData.collectRefundCheckbox !== "Unticked"){
 $("#collectRefundCheckbox").prop('checked', true);
 }
