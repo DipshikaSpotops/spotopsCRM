@@ -1032,7 +1032,7 @@ const noteHtml = `
   <div>
     <p><strong>Sale Note:</strong> ${notes}</p>
     <p><strong>Programming Required:</strong> ${programmingRequiredText || ""}</p>
-    <p><strong>Programming Cost:</strong> $${programmingCostQuoted || ""}</p>
+    <p><strong>Programming Cost:</strong> $${programmingCostQuoted || 0}</p>
     <p><strong>Expedite Shipping:</strong> ${expediteShippingText || ""}</p>
   </div>
 `;
