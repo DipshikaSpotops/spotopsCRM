@@ -1025,7 +1025,7 @@ const notes = data.notes;
 const programmingCostQuoted = data.programmingCostQuoted;
 const saleNoteDiv = $("#saleNote"); // jQuery selector
 
-const programmingRequiredText = programmingRequired ? "Yes" : "No";
+const programmingRequiredText = programmingRequired === true ? "Yes" : "No";
 const expediteShippingText = expediteShipping === "true" ? "Yes" : "No";
 
 const noteHtml = `
