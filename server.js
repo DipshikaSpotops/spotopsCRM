@@ -3664,6 +3664,7 @@ res.status(500).json({ message: 'Server error', error });
 // Update support notes
 app.put('/orders/:orderNo/supportNotes', async (req, res) => {
 const { orderNo } = req.params;
+console.log("Updating support notes for order:", orderNo);
 const { note, author, timestamp } = req.body;
 var supportNote = `${author},${timestamp} : ${note}` 
 try {

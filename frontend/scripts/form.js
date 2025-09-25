@@ -2780,7 +2780,7 @@ $("#closeBtnEditYard, .close").on("click", function () {
 $("#editYardPopup").hide();
 });
 
-// support comment atsrts here
+// support comment starts here
 const commentSupport = document.getElementById("comment-boxSupport");
 function handleSubmit(event) {
 const content1 = $("#commentInput").val();
