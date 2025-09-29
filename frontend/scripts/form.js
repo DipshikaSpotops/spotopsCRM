@@ -1750,7 +1750,7 @@ $("#saveEsc").on("click", async function () {
         isReimbursedChecked: $("#reimbursed").prop("checked"),
         reimbursedDate: $(iso)
     };
-
+console.log("reimbursedDate",iso)
     try {
       console.log("orderNo",orderNo,yardIndex);
       const response = await axios.get(
