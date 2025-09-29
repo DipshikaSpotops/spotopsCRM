@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Reimbursements</title>
 <script>
-  if (localStorage.getItem('darkMode') === "true") {
-    document.documentElement.classList.add('dark-mode');
-  }
+if (localStorage.getItem('darkMode') === "true"){
+  document.documentElement.classList.add('dark-mode');
+}
 </script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
@@ -21,62 +21,49 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  var firstName = localStorage.getItem("firstName");
-  if (!firstName) {
-    window.location.href = "login_signup.html";
-  }
+var firstName = localStorage.getItem("firstName");
+if (!firstName) {
+  window.location.href = "login_signup.html";
+}
 </script>
 </head>
 <body>
-  <!-- ===== NAVBAR / SIDEBAR kept same as your original (unchanged) ===== -->
-
-<div class="main-content">
- <div class="topHeads">
-    <div>
-      <h1 id="mainHeading">Reimbursements</h1>
+    <!-- navbar + sidebar code unchanged -->
+    <div class="main-content">
+      <div class="topHeads">
+        <div>
+          <h1 id="mainHeading">Reimbursements</h1>
+        </div>
+        <div>
+          <input type="text" class="form-control" id="searchInput" placeholder="Search..."/>
+        </div>
+      </div>
+      <div id="filterAndTotal">
+        <div class="flatpickr-wrapper">
+          <input id="unifiedDatePicker" class="form-control" placeholder="Select date, range or month" readonly/>
+        </div>
+        <button id="filterButton" class="btn btn-primary" >Filter</button>
+        <div id="showTotalOrders">Total Orders -</div>
+        <div id="pagination-controls"></div>
+        <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
+      </div>
+      <div class="table-wrapper">
+        <table class="table table-bordered">
+          <thead id="infoTableHeader">
+            <tr id="tableHeader" style="background-color: #f2f2f2">
+              <th class="sortable" data-column="orderDate" style="background-color: #037894;">Order No.</th>
+              <th class="sortable" data-column="orderNo" style="background-color: #037894;">Order Date</th>
+            </tr>
+          </thead>
+          <tbody id="yardInfoTable" style="text-align: center"></tbody>
+          <tfoot id="tableFooter"><tr></tr></tfoot>
+        </table>
+      </div>
     </div>
-    <div>
-      <input type="text" class="form-control" id="searchInput" placeholder="Search..."/>
-    </div>
- </div>
-
- <div id="filterAndTotal">
-  <div class="flatpickr-wrapper">
-    <input id="unifiedDatePicker" class="form-control" placeholder="Select date, range or month" readonly/>
-  </div>
-  <button id="filterButton" class="btn btn-primary">Filter</button>
-  <div id="showTotalOrders">Total Orders This Month -</div>
-  <div id="pagination-controls"></div>
-  <div id="loadingMessage" style="display: none;"><b>Loading, please wait...</b></div>
- </div>
-
- <div class="table-wrapper">
-  <table class="table table-bordered">
-    <thead id="infoTableHeader">
-      <tr id="tableHeader" style="background-color: #f2f2f2">
-        <th class="sortable" data-column="orderNo" style="background-color: #037894;">Order No.
-          <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
-        </th>
-        <th class="sortable" data-column="orderDate" style="background-color: #037894;">Order Date
-          <span class="sort-icons"><span class="asc">&#9650;</span><span class="desc">&#9660;</span></span>
-        </th>
-      </tr>
-    </thead>
-    <tbody id="yardInfoTable" style="text-align: center"></tbody>
-    <tfoot id="tableFooter"><tr></tr></tfoot>
-  </table>
- </div>
-</div>
-
-<!-- ===== PROFILE MODAL kept same as original (unchanged) ===== -->
 
 <script>
 $(document).ready(async function () {
-  $("#viewAlltasks").on("click", function () {
-    window.location.href = "viewAllTasks.html";
-  });
-
-  // --- Flatpickr setup ---
+  // flatpickr setup
   const fp = flatpickr("#unifiedDatePicker", {
     mode: "range",
     dateFormat: "Y-m-d",
@@ -86,94 +73,32 @@ $(document).ready(async function () {
     },
     onClose: function () {
       document.querySelector(".table-wrapper").classList.remove("table-blur");
-    },
-    onReady: function (selectedDates, dateStr, instance) {
-      if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
-      const container = document.createElement("div");
-      container.className = "custom-shortcuts";
-      container.style.display = "flex";
-      container.style.justifyContent = "flex-end";
-      container.style.flexWrap = "wrap";
-      container.style.gap = "10px";
-      container.style.marginTop = "0px";
-      container.style.padding = "0 10px";
-      const momentTz = moment().tz("America/Chicago");
-
-      const todayBtn = makeLink("Today", () => {
-        const today = momentTz.format("YYYY-MM-DD");
-        fp.setDate([today, today], true);
-        $("#unifiedDatePicker").val(`${today} to ${today}`);
-        $("#filterButton").data("filter", "today").click();
-        instance.close();
-      });
-
-      const thisMonthBtn = makeLink("This Month", () => {
-        const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-        const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-        fp.setDate([start, end], true);
-        $("#unifiedDatePicker").val(`${start} to ${end}`);
-        $("#filterButton").click();
-        instance.close();
-      });
-
-      for (let i = 1; i <= 3; i++) {
-        const monthMoment = momentTz.clone().subtract(i, "months");
-        const monthName = monthMoment.format("MMMM");
-        const start = monthMoment.startOf("month").format("YYYY-MM-DD");
-        const end = monthMoment.endOf("month").format("YYYY-MM-DD");
-        const monthBtn = makeLink(monthName, () => {
-          fp.setDate([start, end], true);
-          $("#unifiedDatePicker").val(`${start} to ${end}`);
-          $("#filterButton").click();
-          instance.close();
-        });
-        container.appendChild(monthBtn);
-      }
-
-      container.prepend(thisMonthBtn);
-      container.prepend(todayBtn);
-      instance.calendarContainer.appendChild(container);
-
-      function makeLink(label, handler) {
-        const link = document.createElement("a");
-        link.href = "#";
-        link.innerText = label;
-        link.className = "shortcut-link";
-        link.style.margin = "2px 5px";
-        link.style.fontSize = "13px";
-        link.style.color = "#007BFF";
-        link.style.cursor = "pointer";
-        link.addEventListener("click", (e) => {
-          e.preventDefault();
-          handler();
-        });
-        return link;
-      }
     }
   });
 
   let yardOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;
-  const token = localStorage.getItem("token");
 
-  // --- Fetch Yard Info (filtered by reimbursedDate) ---
+  // Fetch yard info (filtered by reimbursedDate)
   async function fetchYardInfo(month, year) {
     try {
       $("#loadingMessage").show();
       const limit = 25;
       const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
         params: { month, year, page: 1, limit },
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+
       let yardOrdersRaw = [...firstResponse.data.orders];
       const totalPages = Math.ceil(firstResponse.data.totalCount / limit);
+
       const requests = [];
       for (let p = 2; p <= totalPages; p++) {
         requests.push(
           axios.get("https://www.spotops360.com/orders/monthly", {
             params: { month, year, page: p, limit },
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           })
         );
       }
@@ -182,23 +107,20 @@ $(document).ready(async function () {
         yardOrdersRaw.push(...res.data.orders);
       });
 
-      yardOrders = yardOrdersRaw.map(order => {
-        const filteredAdditionalInfo = order.additionalInfo.filter(info => {
-          if (!info.reimbursedDate) return false;
-          const reimbursedMoment = moment.tz(info.reimbursedDate, "America/Chicago");
-          return reimbursedMoment.format("MMM") === month && reimbursedMoment.format("YYYY") === year;
-        });
-        if (filteredAdditionalInfo.length > 0) {
-          return { ...order, additionalInfo: filteredAdditionalInfo };
-        }
-        return null;
-      }).filter(order => order !== null);
+      yardOrders = yardOrdersRaw
+        .map(order => {
+          // only keep additionalInfo with reimbursedDate
+          const filteredInfo = order.additionalInfo.filter(
+            info => info.reimbursedDate && info.reimbursedDate.trim() !== ""
+          );
+          if (filteredInfo.length > 0) {
+            return { ...order, additionalInfo: filteredInfo };
+          }
+          return null;
+        })
+        .filter(order => order !== null);
 
-      const maxYards = yardOrders.length > 0
-        ? yardOrders.reduce((max, order) => Math.max(max, order.additionalInfo.length), 0)
-        : 0;
-
-      renderTableRows(currentPage, yardOrders, maxYards);
+      renderTableRows(currentPage, yardOrders);
       createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     } catch (error) {
       console.error("Error fetching yard info:", error);
@@ -208,128 +130,97 @@ $(document).ready(async function () {
     }
   }
 
-  // --- Render Table Rows + Totals ---
-  function renderTableRows(page, data = yardOrders, maxYards = 0) {
+  // Render table + totals
+  function renderTableRows(page, data = yardOrders) {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const pageData = data.slice(start, end);
-    $("#yardInfoTable").empty();
-    const tableHeader = $("#tableHeader");
-    tableHeader.find("th:gt(1)").remove();
 
-    for (let i = 1; i <= maxYards; i++) {
-      tableHeader.append(`<th class="sortable" scope="col" data-sort="yard${i}" style="background-color: #037894;">Yard ${i}</th>`);
-    }
-    tableHeader.append(`<th style="background-color: #037894;">Approximate Card Charged($)</th>`);
-    tableHeader.append(`<th style="background-color: #037894;">Actions</th>`);
+    $("#yardInfoTable").empty();
+    $("#tableHeader th:gt(1)").remove();
 
     pageData.forEach(order => {
       let yardInfoHtml = "";
       let totalCardCharged = 0;
-      for (let i = 0; i < maxYards; i++) {
-        if (order.additionalInfo[i]) {
-          const info = order.additionalInfo[i];
-          const partPrice = parseFloat(info.partPrice || 0);
-          const others = parseFloat(info.others || 0);
-          let shippingValueYard = 0;
-          if (info.shippingDetails && info.shippingDetails.includes("Yard shipping")) {
-            shippingValueYard = parseFloat(info.shippingDetails.split(":")[1].trim()) || 0;
-          }
-          totalCardCharged += partPrice + shippingValueYard + others;
-          yardInfoHtml += `<td>
-            ${info.yardName || ""}<br>
-            Shipping: ${info.shippingDetails || ""}<br>
-            Part price: $${partPrice} | Others: $${others}<br>
-            <span style="color:green;">Reimbursed: ${info.reimbursedDate ? moment(info.reimbursedDate).tz("America/Chicago").format("DD MMM YYYY, HH:mm") : "-"}</span>
-          </td>`;
-        } else {
-          yardInfoHtml += "<td></td>";
-        }
-      }
+      order.additionalInfo.forEach(info => {
+        const partPrice = parseFloat(info.partPrice || 0);
+        const others = parseFloat(info.others || 0);
+        totalCardCharged += partPrice + others;
+        yardInfoHtml += `<td>${info.yardName || ""}<br>Part price: $${partPrice} | Others: $${others}</td>`;
+      });
+
       const date = new Date(order.orderDate);
-      const formattedOrderDate = `${date.getUTCDate()} ${date.toLocaleString('en-US',{month:'short'})}, ${date.getUTCFullYear()}`;
-      $("#yardInfoTable").append(`
-        <tr>
+      const formattedOrderDate = `${date.getUTCDate()}-${date.getUTCMonth()+1}-${date.getUTCFullYear()}`;
+
+      $("#yardInfoTable").append(
+        `<tr>
           <td>${order.orderNo}</td>
           <td>${formattedOrderDate}</td>
           ${yardInfoHtml}
           <td>$${totalCardCharged.toFixed(2)}</td>
           <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
-        </tr>
-      `);
+        </tr>`
+      );
     });
 
+    // Totals: total orders − reimbursed amount
+    const totalOrders = yardOrders.length;
     let totalReimbursed = 0;
     yardOrders.forEach(order => {
       order.additionalInfo.forEach(info => {
-        if (info.reimbursedDate && info.reimbursementAmount) {
-          totalReimbursed += parseFloat(info.reimbursementAmount) || 0;
-        }
+        const amt = parseFloat(info.reimbursementAmount || 0);
+        totalReimbursed += isNaN(amt) ? 0 : amt;
       });
     });
+
     document.getElementById("showTotalOrders").innerHTML =
-      `Total Orders - ${yardOrders.length} | Total Reimbursed Amount - $${totalReimbursed.toFixed(2)}`;
+      `Total Orders: ${totalOrders} | Net: ${totalOrders - totalReimbursed}`;
   }
 
-  // --- Pagination ---
   function createPaginationControls(totalPages) {
     const paginationControls = $('#pagination-controls');
-    paginationControls.empty();
+    paginationControls.empty(); 
     if (totalPages > 1) {
-      paginationControls.append(`<button class="previousNext" id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>`);
-      paginationControls.append(`<span class="page-info">Page ${currentPage} of ${totalPages}</span>`);
-      paginationControls.append(`<button class="previousNext" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>`);
+      paginationControls.append(`<button id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>`);
+      paginationControls.append(`<span>Page ${currentPage} of ${totalPages}</span>`);
+      paginationControls.append(`<button id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>`);
     }
   }
-  $('#pagination-controls').on('click', '#prevPage', function () {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTableRows(currentPage, yardOrders);
-      createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-    }
-  });
-  $('#pagination-controls').on('click', '#nextPage', function () {
-    const totalPages = Math.ceil(yardOrders.length / rowsPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderTableRows(currentPage, yardOrders);
-      createPaginationControls(totalPages);
-    }
-  });
 
-  // --- Filter Button ---
+  // Filter button → uses reimbursedDate
   $("#filterButton").click(async function () {
-    $("#loadingMessage").show();
     try {
       const rangeValue = $("#unifiedDatePicker").val().trim();
       const tz = "America/Chicago";
       let month, year;
       if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-        const m = moment.tz(rangeValue, "YYYY-MM-DD", tz);
-        month = m.format("MMM"); year = m.format("YYYY");
+        const mObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
       } else if (rangeValue.includes(" to ")) {
         const [startStr] = rangeValue.split(" to ");
-        const m = moment.tz(startStr, "YYYY-MM-DD", tz);
-        month = m.format("MMM"); year = m.format("YYYY");
+        const mObj = moment.tz(startStr, "YYYY-MM-DD", tz);
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
       } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-        const m = moment(rangeValue, "YYYY-MM");
-        month = m.format("MMM"); year = m.format("YYYY");
+        const mObj = moment(rangeValue, "YYYY-MM");
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
       } else {
-        alert("⚠️ Please select a valid date, range, or month."); return;
+        alert("⚠️ Please select a valid date, range, or month.");
+        return;
       }
       currentPage = 1;
       await fetchYardInfo(month, year);
       createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     } catch (err) {
-      console.error(err); alert("Something went wrong while filtering data.");
-    } finally {
-      $("#loadingMessage").hide();
+      console.error(err);
+      alert("Error filtering data");
     }
   });
 
-  // --- Init default (this month) ---
+  // init
   const now = moment().tz("America/Chicago");
-  $("#unifiedDatePicker").val(`${now.format("YYYY-MM")}`);
   await fetchYardInfo(now.format("MMM"), now.format("YYYY"));
 });
 </script>
