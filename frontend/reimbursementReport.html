@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reimbursement Report</title>
+
+  <!-- Dark mode -->
+  <script>
+    if (localStorage.getItem("darkMode") === "true") {
+      document.documentElement.classList.add("dark-mode");
+    }
+  </script>
+
+  <!-- Styles + libs -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css"/>
+  <link rel="stylesheet" href="/css/monthwiseOrders.css" />
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js"></script>
+</head>
+<body>
+  <!-- ✅ Navbar + Sidebar (copied from your template) -->
+  <div class="navbar">
+    <div class="logo">
+      <a href="index.html">
+        <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo"/>
+      </a>
+    </div>
+    <div class="toggle-sidebar"><i class="fas fa-bars"></i></div>
+    <div class="user-info dropdown" style="display: flex;">
+      <span style="white-space: nowrap;">Hi <span id="user-name"></span></span>
+      <div class="dark-mode-toggle">
+        <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
+      </div>
+      <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown"></i>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+        <a class="dropdown-item" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar" id="offcanvasSidebar">
+    <div class="offcanvas-body">
+      <!-- Keep your existing menu here -->
+      <nav class="nav flex-column">
+        <div class="nav-item"><a class="nav-link" href="monthwiseOrders.html"><i class="fas fa-table"></i> Monthly Orders</a></div>
+        <div class="nav-item"><a class="nav-link" href="reimbursementReport.html"><i class="fas fa-dollar-sign"></i> Reimbursement Report</a></div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ✅ Main Content -->
+  <div class="main-content container-fluid mt-3">
+    <div class="topHeads d-flex justify-content-between">
+      <h1>Reimbursement Report</h1>
+      <input type="text" class="form-control w-25" id="unifiedDatePicker" placeholder="Select date, range or month" readonly/>
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between align-items-center">
+      <div id="showTotalOrders" class="font-weight-bold">Loading...</div>
+      <div id="pagination-controls"></div>
+    </div>
+
+    <div id="loadingMessage" style="display:none;"><b>Loading, please wait...</b></div>
+
+    <div class="table-wrapper mt-3">
+      <table class="table table-bordered">
+        <thead id="infoTableHeader">
+          <tr style="background-color:#f2f2f2;">
+            <th data-column="orderNo" style="background-color:#037894;">Order No</th>
+            <th data-column="orderDate" style="background-color:#037894;">Order Date</th>
+            <th data-column="reimbursedDate" style="background-color:#037894;">Reimbursed Date</th>
+            <th data-column="reimbursementAmount" style="background-color:#037894;">Reimbursement Amount</th>
+            <th data-column="isReimbursedChecked" style="background-color:#037894;">Reimbursed?</th>
+          </tr>
+        </thead>
+        <tbody id="yardInfoTable" style="text-align:center;"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+  $(document).ready(async function () {
+    const token = localStorage.getItem("token");
+    const firstName = localStorage.getItem("firstName");
+    if (!firstName) window.location.href = "login_signup.html";
+    $("#user-name").text(firstName);
+
+    const rowsPerPage = 25;
+    let yardOrders = [];
+    let currentPage = 1;
+
+    // Flatpickr with Today / This Month buttons
+    const fp = flatpickr("#unifiedDatePicker", {
+      mode: "range",
+      dateFormat: "Y-m-d",
+      onReady: function(selectedDates, dateStr, instance) {
+        const tzNow = moment().tz("America/Chicago");
+
+        const todayBtn = makeLink("Today", () => {
+          const today = tzNow.format("YYYY-MM-DD");
+          fp.setDate([today, today], true);
+          loadData(today, today);
+          instance.close();
+        });
+
+        const thisMonthBtn = makeLink("This Month", () => {
+          const start = tzNow.clone().startOf("month").format("YYYY-MM-DD");
+          const end = tzNow.clone().endOf("month").format("YYYY-MM-DD");
+          fp.setDate([start, end], true);
+          loadData(start, end);
+          instance.close();
+        });
+
+        const container = document.createElement("div");
+        container.className = "custom-shortcuts";
+        container.appendChild(todayBtn);
+        container.appendChild(thisMonthBtn);
+        instance.calendarContainer.appendChild(container);
+      }
+    });
+
+    function makeLink(label, handler) {
+      const link = document.createElement("a");
+      link.href = "#"; link.innerText = label;
+      link.style.margin = "0 8px"; link.style.color = "#007BFF";
+      link.addEventListener("click", e => { e.preventDefault(); handler(); });
+      return link;
+    }
+
+    // Fetch data (monthly or daily range)
+    async function loadData(start, end) {
+      $("#loadingMessage").show();
+      try {
+        const resp = await axios.get("https://www.spotops360.com/orders/monthly", {
+         params: { month, year, page: 1, limit },
+      headers: { Authorization: `Bearer ${token}` },
+        });
+
+        yardOrders = resp.data.orders || [];
+        currentPage = 1;
+        renderTableRows();
+      } catch (err) {
+        console.error("Error loading data:", err);
+        alert("Failed to load reimbursement data.");
+      } finally {
+        $("#loadingMessage").hide();
+      }
+    }
+
+    function renderTableRows() {
+      $("#yardInfoTable").empty();
+      const start = (currentPage - 1) * rowsPerPage;
+      const pageData = yardOrders.slice(start, start + rowsPerPage);
+
+      let totalReimbursed = 0;
+
+      pageData.forEach(order => {
+        (order.additionalInfo || []).forEach(info => {
+          const orderDate = order.orderDate ? moment(order.orderDate).tz("America/Chicago").format("YYYY-MM-DD") : "—";
+          const reimbDate = info.reimbursedDate ? moment(info.reimbursedDate).tz("America/Chicago").format("YYYY-MM-DD HH:mm") : "—";
+          const amount = parseFloat(info.reimbursementAmount || 0);
+          const reimbursed = info.isReimbursedChecked ? "Yes" : "No";
+
+          if (info.isReimbursedChecked) totalReimbursed += amount;
+
+          $("#yardInfoTable").append(`
+            <tr>
+              <td>${order.orderNo}</td>
+              <td>${orderDate}</td>
+              <td>${reimbDate}</td>
+              <td>$${amount.toFixed(2)}</td>
+              <td>${reimbursed}</td>
+            </tr>
+          `);
+        });
+      });
+
+      $("#showTotalOrders").text(`Total Orders: ${yardOrders.length} — Total Reimbursed: $${totalReimbursed.toFixed(2)}`);
+    }
+
+    // Default: load this month
+    const tzNow = moment().tz("America/Chicago");
+    await loadData(tzNow.startOf("month").format("YYYY-MM-DD"), tzNow.endOf("month").format("YYYY-MM-DD"));
+
+    $("#logoutLink").on("click", function () {
+      window.localStorage.clear();
+      window.location.href = "login_signup.html";
+    });
+  });
+  </script>
+</body>
+</html>
