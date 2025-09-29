@@ -1748,7 +1748,7 @@ $("#saveEsc").on("click", async function () {
         custReturnDelivery: $("#custReturnDelivery").val(),
         reimbursementAmount: $("#reimAmount").val(),
         isReimbursedChecked: $("#reimbursed").prop("checked"),
-        reimbursedDate: $(iso)
+        reimbursedDate: moment().tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss.SSSZ")
     };
 console.log("reimbursedDate",iso)
     try {
