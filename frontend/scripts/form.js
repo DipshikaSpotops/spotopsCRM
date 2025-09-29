@@ -1722,8 +1722,9 @@ $("#saveEsc").on("click", async function () {
     const orderNo = urlParams.get("orderNo");
     const firstName = localStorage.getItem("firstName");
     const token = localStorage.getItem("token");
-    // custOwnShippingReturn
-    console.log("custOwnShippingReturn")
+
+    const currentDateTime = moment().tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+
     const updatedFields = {
         escalationProcess: $("#escProcess").val(),
         custReason: $("#custReason").val(),
@@ -1747,32 +1748,26 @@ $("#saveEsc").on("click", async function () {
         custOwnShippingReturn: $("#custOwnShippingReturn").val(),
         custReturnDelivery: $("#custReturnDelivery").val(),
         reimbursementAmount: $("#reimAmount").val(),
-        isReimbursedChecked: $("#reimbursed").prop("checked"),
-        reimbursedDate: moment().tz("America/Chicago").format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+        isReimbursedChecked: $("#reimbursed").prop("checked")
+        // ❌ don’t include reimbursedDate here always
     };
-console.log("reimbursedDate",iso)
+
     try {
-      console.log("orderNo",orderNo,yardIndex);
-      const response = await axios.get(
+        const response = await axios.get(
             `https://www.spotops360.com/orders/${orderNo}`,
             { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        console.log("Response Status:", response.status);
-
         if (response.status !== 200) {
-            console.error("Response Body:", response.data);
             alert("Failed to fetch current order data.");
             return;
         }
 
         const data = response.data;
-        const currentAdditionalInfo = data.additionalInfo[yardIndex - 1]
-        console.log("response",data,"Current Additional Info:", currentAdditionalInfo);
+        const currentAdditionalInfo = data.additionalInfo[yardIndex - 1];
         const updatedData = {};
         let hasChanges = false;
 
-        // Helper function to normalize values for comparison
         const normalizeValue = (value) => {
             if (value === null || value === undefined) return "";
             if (typeof value === "boolean") return value ? "true" : "false";
@@ -1780,40 +1775,30 @@ console.log("reimbursedDate",iso)
             return value.toString().trim();
         };
 
-        const hasValueChanged = (oldValue, newValue) => normalizeValue(oldValue) !== normalizeValue(newValue);
+        const hasValueChanged = (oldValue, newValue) =>
+            normalizeValue(oldValue) !== normalizeValue(newValue);
 
         for (const [key, newValue] of Object.entries(updatedFields)) {
             const oldValue = currentAdditionalInfo[key];
 
             if (hasValueChanged(oldValue, newValue)) {
-                if (key === "customerTrackingNumberReplacement") {
-                    if (!currentAdditionalInfo.escRepCustTrackingDate && normalizeValue(newValue).length > 4) {
-                        updatedData.escRepCustTrackingDate = currentDateTime;
-                        console.log("Setting escRepCustTrackingDate:", currentDateTime);
-                    }
+                if (key === "customerTrackingNumberReplacement" &&
+                    !currentAdditionalInfo.escRepCustTrackingDate &&
+                    normalizeValue(newValue).length > 4) {
+                    updatedData.escRepCustTrackingDate = currentDateTime;
                 }
 
-                if (key === "yardTrackingNumber") {
-                    if (!currentAdditionalInfo.escRepYardTrackingDate && normalizeValue(newValue).length > 4) {
-                        updatedData.escRepYardTrackingDate = currentDateTime;
-                        console.log("Setting escRepYardTrackingDate:", currentDateTime);
-                    }
+                if (key === "yardTrackingNumber" &&
+                    !currentAdditionalInfo.escRepYardTrackingDate &&
+                    normalizeValue(newValue).length > 4) {
+                    updatedData.escRepYardTrackingDate = currentDateTime;
                 }
 
-                if (key === "returnTrackingCust") {
-    console.log("Current escRetTrackingDate value:", currentAdditionalInfo, currentAdditionalInfo.escRetTrackingDate);
-
-    // Ensure escRetTrackingDate is not set and newValue meets the length criteria
-    if (!currentAdditionalInfo.escRetTrackingDate) {
-        if (normalizeValue(newValue).length > 4) {
-            updatedData.escRetTrackingDate = currentDateTime;
-            console.log("Setting escRetTrackingDate for the first time:", currentDateTime);
-        }
-        
-    } else {
-        console.log("escRetTrackingDate is already set, skipping update.");
-    }
-}
+                if (key === "returnTrackingCust" &&
+                    !currentAdditionalInfo.escRetTrackingDate &&
+                    normalizeValue(newValue).length > 4) {
+                    updatedData.escRetTrackingDate = currentDateTime;
+                }
 
                 if (key === "custreplacementDelivery") {
                     if (newValue === "In Transit" && !currentAdditionalInfo.inTransitpartCustDate) {
@@ -1844,26 +1829,29 @@ console.log("reimbursedDate",iso)
             }
         }
 
-        // Handle reimbursement separately
-        if (updatedFields.reimbursementAmount && hasValueChanged(currentAdditionalInfo.reimbursementAmount, updatedFields.reimbursementAmount, updatedFields.reimbursedDate)) {
-            const yardStatus = "Part delivered";
-            const newOrderStatus = "Order Fulfilled";
+        // ✅ Handle reimbursement and reimbursedDate only when escProcess = "Reimbursement"
+        if (
+            updatedFields.escalationProcess === "Reimbursement" &&
+            updatedFields.reimbursementAmount &&
+            hasValueChanged(currentAdditionalInfo.reimbursementAmount, updatedFields.reimbursementAmount)
+        ) {
+            if (!currentAdditionalInfo.reimbursedDate) {
+                updatedData.reimbursedDate = currentDateTime;
+                console.log("Setting reimbursedDate:", currentDateTime);
+            }
+
             const reimbursementUpdate = {
-                orderStatus: newOrderStatus,
-                yardStatus: yardStatus,
+                orderStatus: "Order Fulfilled",
+                yardStatus: "Part delivered",
                 yardIndex: yardIndex,
             };
-
-            console.log("Sending data for reimbursement:", reimbursementUpdate);
 
             try {
                 const reimbursementResponse = await fetch(
                     `https://www.spotops360.com/orderAndYardStatus/${orderNo}?firstName=${firstName}`,
                     {
                         method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
+                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(reimbursementUpdate),
                     }
                 );
@@ -1874,7 +1862,6 @@ console.log("reimbursedDate",iso)
 
                 const reimbursementData = await reimbursementResponse.json();
                 console.log("Order and Yard status updated successfully:", reimbursementData);
-window.location.reload();
                 if (reimbursementData.orderHistory) {
                     updateOrderHistory(reimbursementData.orderHistory);
                 }
@@ -1884,9 +1871,7 @@ window.location.reload();
             }
         }
 
-        // Send updated data to backend
         if (hasChanges) {
-            console.log("Changes detected. Sending updated data:", updatedData);
             const patchResponse = await axios.put(
                 `https://www.spotops360.com/orders/${orderNo}/escalation?firstName=${firstName}`,
                 { ...updatedData, yardIndex, firstName, orderNo },
@@ -1898,15 +1883,15 @@ window.location.reload();
             } else {
                 alert("Failed to update Yard Index information and orderHistory.");
             }
-        } else {
-            console.log("No changes detected, no update required.");
         }
     } catch (error) {
         console.error("Error saving Yard Index information", error);
         alert("Error saving Yard Index information.");
     }
+
     window.location.reload();
 });
+
 
 
 async function fetchAndDisplayNotes(yardIndex) {
