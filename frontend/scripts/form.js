@@ -45,6 +45,11 @@ const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${p
 const date = new Date(formattedDate);
 console.log("Current date and time in US Central Time:", formattedDate);
 
+
+// parse as US Central time (your backend does this a lot)
+const iso = moment.tz(formattedDate, "YYYY-MM-DD HH:mm:ss", "America/Chicago")
+                  .toISOString(true);
+console.log(iso);
 // Array of month names
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const day = date.getDate();
@@ -1743,7 +1748,7 @@ $("#saveEsc").on("click", async function () {
         custReturnDelivery: $("#custReturnDelivery").val(),
         reimbursementAmount: $("#reimAmount").val(),
         isReimbursedChecked: $("#reimbursed").prop("checked"),
-        // reimbursedDate:${formattedDateTime}
+        reimbursedDate: $(iso)
     };
 
     try {
