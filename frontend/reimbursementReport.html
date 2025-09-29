@@ -200,43 +200,62 @@ if (!firstName) {
         </table>
       </div>
     </div>
+
 <script>
 $(document).ready(async function () {
+  // flatpickr setup
   const fp = flatpickr("#unifiedDatePicker", {
     mode: "range",
     dateFormat: "Y-m-d",
-    allowInput: true
+    allowInput: true,
+    onOpen: function () {
+      document.querySelector(".table-wrapper").classList.add("table-blur");
+    },
+    onClose: function () {
+      document.querySelector(".table-wrapper").classList.remove("table-blur");
+    }
   });
 
   let yardOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;
-
-  // Global filter range (start & end dates in Chicago TZ)
-  let filterStart = null;
-  let filterEnd = null;
-
+$("#yardInfoTable").on("click", ".process-btn", function () {
+const id = $(this).data("id");
+window.location.href = `form.html?orderNo=${id}&process=true`;
+});
+  // Fetch yard info (filtered by reimbursedDate)
   async function fetchYardInfo(month, year) {
     try {
-      const token = localStorage.getItem("token");
-      const limit = 50;
-      const response = await axios.get("https://www.spotops360.com/orders/monthly", {
+      $("#loadingMessage").show();
+      const limit = 25;
+      const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
         params: { month, year, page: 1, limit },
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
-      let yardOrdersRaw = [...response.data.orders];
+      let yardOrdersRaw = [...firstResponse.data.orders];
+      const totalPages = Math.ceil(firstResponse.data.totalCount / limit);
 
-      // filter by reimbursedDate instead of orderDate
+      const requests = [];
+      for (let p = 2; p <= totalPages; p++) {
+        requests.push(
+          axios.get("https://www.spotops360.com/orders/monthly", {
+            params: { month, year, page: p, limit },
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          })
+        );
+      }
+      const responses = await Promise.all(requests);
+      responses.forEach(res => {
+        yardOrdersRaw.push(...res.data.orders);
+      });
+
       yardOrders = yardOrdersRaw
         .map(order => {
-          const filteredInfo = order.additionalInfo.filter(info => {
-            if (!info.reimbursedDate) return false;
-            const reimbursedMoment = moment(info.reimbursedDate).tz("America/Chicago");
-            if (filterStart && reimbursedMoment.isBefore(filterStart)) return false;
-            if (filterEnd && reimbursedMoment.isAfter(filterEnd)) return false;
-            return true;
-          });
+          // only keep additionalInfo with reimbursedDate
+          const filteredInfo = order.additionalInfo.filter(
+            info => info.reimbursedDate && info.reimbursedDate.trim() !== ""
+          );
           if (filteredInfo.length > 0) {
             return { ...order, additionalInfo: filteredInfo };
           }
@@ -244,90 +263,107 @@ $(document).ready(async function () {
         })
         .filter(order => order !== null);
 
-      renderTableRows(yardOrders);
-    } catch (err) {
-      console.error("Error fetching reimbursements:", err);
-      alert("Failed to fetch reimbursements.");
+      renderTableRows(currentPage, yardOrders);
+      createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    } catch (error) {
+      console.error("Error fetching yard info:", error);
+      alert("Failed to fetch data. Please try again.");
+    } finally {
+      $("#loadingMessage").hide();
     }
   }
 
-  function renderTableRows(data) {
+  // Render table + totals
+  function renderTableRows(page, data = yardOrders) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const pageData = data.slice(start, end);
+
     $("#yardInfoTable").empty();
+    $("#tableHeader th:gt(1)").remove();
 
-    let totalOrders = data.length;
-    let grandTotalReimbursed = 0;
-
-    data.forEach(order => {
-      let totalReimbursedForOrder = 0;
-      let yardBreakdownHtml = "";
-
-      order.additionalInfo.forEach((info, idx) => {
-        if (info.reimbursedDate) {
-          const amt = parseFloat(info.reimbursementAmount || 0);
-          totalReimbursedForOrder += isNaN(amt) ? 0 : amt;
-          grandTotalReimbursed += isNaN(amt) ? 0 : amt;
-
-          yardBreakdownHtml += `
-            <div>
-              Yard ${idx + 1} (${info.yardName || "N/A"}): 
-              $${amt.toFixed(2)} 
-              <small class="text-muted">(${moment(info.reimbursedDate).format("YYYY-MM-DD")})</small>
-            </div>`;
-        }
+    pageData.forEach(order => {
+      let yardInfoHtml = "";
+      let totalCardCharged = 0;
+      order.additionalInfo.forEach(info => {
+        const partPrice = parseFloat(info.partPrice || 0);
+        const others = parseFloat(info.others || 0);
+        totalCardCharged += partPrice + others;
+        yardInfoHtml += `<td>${info.yardName || ""}<br>Part price: $${partPrice} | Others: $${others}</td>`;
       });
 
       const date = new Date(order.orderDate);
       const formattedOrderDate = `${date.getUTCDate()}-${date.getUTCMonth()+1}-${date.getUTCFullYear()}`;
 
-      $("#yardInfoTable").append(`
-        <tr>
+      $("#yardInfoTable").append(
+        `<tr>
           <td>${order.orderNo}</td>
           <td>${formattedOrderDate}</td>
-          <td>
-            <b>Total: $${totalReimbursedForOrder.toFixed(2)}</b>
-            <hr style="margin:4px 0;">
-            ${yardBreakdownHtml || "<i>No reimbursed yards</i>"}
-          </td>
-          <td>
-            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button>
-          </td>
-        </tr>
-      `);
+          ${yardInfoHtml}
+          <td>$${totalCardCharged.toFixed(2)}</td>
+          <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
+        </tr>`
+      );
     });
 
-    // show totals
-    $("#showTotalOrders").html(
-      `Total Orders: ${totalOrders} | Grand Reimbursed: $${grandTotalReimbursed.toFixed(2)}`
-    );
+    // Totals: total orders − reimbursed amount
+    const totalOrders = yardOrders.length;
+    let totalReimbursed = 0;
+    yardOrders.forEach(order => {
+      order.additionalInfo.forEach(info => {
+        const amt = parseFloat(info.reimbursementAmount || 0);
+        totalReimbursed += isNaN(amt) ? 0 : amt;
+      });
+    });
+
+    document.getElementById("showTotalOrders").innerHTML =
+      `Total Orders: ${totalOrders} | Net: ${totalOrders - totalReimbursed}`;
   }
 
-  // Filter button handler
-  $("#filterButton").click(async function () {
-    const rangeValue = $("#unifiedDatePicker").val().trim();
-    const tz = "America/Chicago";
-
-    if (rangeValue.includes(" to ")) {
-      const [startStr, endStr] = rangeValue.split(" to ");
-      filterStart = moment.tz(startStr, "YYYY-MM-DD", tz).startOf("day");
-      filterEnd = moment.tz(endStr, "YYYY-MM-DD", tz).endOf("day");
-    } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-      filterStart = moment.tz(rangeValue, "YYYY-MM-DD", tz).startOf("day");
-      filterEnd = moment.tz(rangeValue, "YYYY-MM-DD", tz).endOf("day");
-    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-      filterStart = moment(rangeValue, "YYYY-MM", tz).startOf("month");
-      filterEnd = moment(rangeValue, "YYYY-MM", tz).endOf("month");
-    } else {
-      alert("⚠️ Please select a valid date, range, or month.");
-      return;
+  function createPaginationControls(totalPages) {
+    const paginationControls = $('#pagination-controls');
+    paginationControls.empty(); 
+    if (totalPages > 1) {
+      paginationControls.append(`<button id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>`);
+      paginationControls.append(`<span>Page ${currentPage} of ${totalPages}</span>`);
+      paginationControls.append(`<button id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>`);
     }
+  }
 
-    await fetchYardInfo(filterStart.format("MMM"), filterStart.format("YYYY"));
+  // Filter button → uses reimbursedDate
+  $("#filterButton").click(async function () {
+    try {
+      const rangeValue = $("#unifiedDatePicker").val().trim();
+      const tz = "America/Chicago";
+      let month, year;
+      if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+        const mObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
+      } else if (rangeValue.includes(" to ")) {
+        const [startStr] = rangeValue.split(" to ");
+        const mObj = moment.tz(startStr, "YYYY-MM-DD", tz);
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
+      } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+        const mObj = moment(rangeValue, "YYYY-MM");
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
+      } else {
+        alert("⚠️ Please select a valid date, range, or month.");
+        return;
+      }
+      currentPage = 1;
+      await fetchYardInfo(month, year);
+      createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    } catch (err) {
+      console.error(err);
+      alert("Error filtering data");
+    }
   });
 
-  // Initial load → this month by reimbursedDate
+  // init
   const now = moment().tz("America/Chicago");
-  filterStart = now.clone().startOf("month");
-  filterEnd = now.clone().endOf("month");
   await fetchYardInfo(now.format("MMM"), now.format("YYYY"));
 });
 </script>
