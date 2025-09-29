@@ -1887,7 +1887,7 @@ try {
 const order = await Order.findOne({ orderNo: req.params.orderNo });
 if (!order) return res.status(404).send("Order not found");
 const oldStatus = order.orderStatus;
-const oldYardStatus = order.additionalInfo[yardIndex + 1].status;
+const oldYardStatus = order.additionalInfo[yardIndex - 1].status;
 console.log("oldYarsStatus",oldYardStatus)
 // Update the order status and yard status
 order.orderStatus = orderStatus;
