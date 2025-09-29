@@ -43,6 +43,7 @@ const formatter = new Intl.DateTimeFormat('en-US', options);
 const parts = formatter.formatToParts(now);
 const formattedDate = `${parts[4].value}-${parts[0].value}-${parts[2].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
 const date = new Date(formattedDate);
+console.log("Current date and time in US Central Time:", formattedDate);
 // Array of month names
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const day = date.getDate();
@@ -1741,6 +1742,7 @@ $("#saveEsc").on("click", async function () {
         custReturnDelivery: $("#custReturnDelivery").val(),
         reimbursementAmount: $("#reimAmount").val(),
         isReimbursedChecked: $("#reimbursed").prop("checked"),
+        // reimbursedDate:${formattedDateTime}
     };
 
     try {
