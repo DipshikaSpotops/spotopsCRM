@@ -520,7 +520,7 @@ returnDeliveredDate: String,
 // reimburesement part
 reimbursementAmount: String,
 isReimbursedChecked: String,
-reimbursedDate: String,
+reimbursedDate: Date,
 custShipToRet: String,
 custShipToRep: String,
 // for voiding labels
