@@ -1892,7 +1892,6 @@ console.log("oldYarsStatus",oldYardStatus)
 // Update the order status and yard status
 order.orderStatus = orderStatus;
 order.additionalInfo[yardIndex - 1].status = yardStatus;
-order.additionalInfo[yardIndex - 1].reimbursedDate = moment().tz('America/Chicago').format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 
 // Add the change to the order history if the status has changed
 if (oldStatus !== orderStatus || oldYardStatus !== yardStatus) {
