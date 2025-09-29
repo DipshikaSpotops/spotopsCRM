@@ -520,6 +520,7 @@ returnDeliveredDate: String,
 // reimburesement part
 reimbursementAmount: String,
 isReimbursedChecked: String,
+reimbursedDate: String,
 custShipToRet: String,
 custShipToRep: String,
 // for voiding labels
@@ -1869,7 +1870,7 @@ res.status(400).send(err.message);
 app.put("/orderAndYardStatus/:orderNo", async (req, res) => {
 const { orderStatus, yardStatus, yardIndex } = req.body;
 const firstName = req.query.firstName;
-console.log("changing order and yardStatus",orderStatus,yardStatus,yardIndex + 1,firstName);
+console.log("changing order and yardStatus",orderStatus,yardStatus,yardIndex,firstName);
 // Get the current date and time in US Central Time
 const centralTime = moment().tz('America/Chicago').format('YYYY-MM-DD HH:mm:ss');
 console.log('US Central Time:', centralTime);
@@ -1890,7 +1891,8 @@ const oldYardStatus = order.additionalInfo[yardIndex + 1].status;
 console.log("oldYarsStatus",oldYardStatus)
 // Update the order status and yard status
 order.orderStatus = orderStatus;
-order.additionalInfo[yardIndex + 1].status = yardStatus;
+order.additionalInfo[yardIndex - 1].status = yardStatus;
+order.additionalInfo[yardIndex - 1].reimbursedDate = moment().tz('America/Chicago').format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 
 // Add the change to the order history if the status has changed
 if (oldStatus !== orderStatus || oldYardStatus !== yardStatus) {
