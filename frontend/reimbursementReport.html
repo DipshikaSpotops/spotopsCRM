@@ -29,6 +29,146 @@ if (!firstName) {
 </head>
 <body>
     <!-- navbar + sidebar code unchanged -->
+     <div class="navbar">
+        <div class="logo">
+            <a href="index.html">
+            <img id="logoImg" src="https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/darkLogo.png" alt="Logo" />
+            </a>   
+            </div>
+        <div class="toggle-sidebar">
+        <i class="fas fa-bars"></i>
+        </div>
+        
+        
+        <div class="user-info dropdown" style="display: flex;">
+            <div style="display: flex;">
+      <div style="margin-left: -28%;"> <input
+      type="text"
+      class="form-control"
+      id="searchInputForOrderNo"
+      placeholder="Search order no."
+      />
+      </div>
+<div id="searchResult" style="margin-left: 10px; margin-top: 5px;"></div>
+</div>
+        <span style="white-space: nowrap;margin-left: -14%;">Hi <span id="user-name"></span></span>
+        <!-- for dark mode -->
+        <div class="dark-mode-toggle">
+          <i id="darkModeIcon" class="fas fa-moon" style="cursor: pointer; color: white; font-size: 20px;"></i>
+        </div>
+        <!--dark mode till here  -->
+        <div class="notification-container" style="margin: 0% 7%;">
+          <i class="fas fa-bell" id="notificationIcon" style="cursor: pointer; position: relative; color: white;margin-left: -19%;font-size: x-large;"></i>
+          <span id="notificationCount" class="notification-badge" style="display:block;margin-right: 20%;margin-top: -3%;">0</span>
+        </div>
+        <div class="notification-dropdown" id="notificationDropdown">
+          <ul id="notificationList"></ul>
+          <button id="viewAlltasks">View All Tasks</button>
+        </div>
+        <i class="fas fa-user-circle fa-2x user-icon" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: -4%;font-size: x-large;"></i>
+        <div
+        class="dropdown-menu dropdown-menu-right"
+        aria-labelledby="userMenu"
+        >
+        <a class="dropdown-item" href="#" id="profile"
+        ><i class="fas fa-user"></i> My Profile</a
+        >
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#" id="logoutLink"
+        ><i class="fas fa-sign-out-alt"></i> Log Out</a
+        >
+        </div>
+        </div>
+        </div>
+<div class="sidebar" id="offcanvasSidebar">
+<div class="offcanvas-body">
+<nav class="nav flex-column">
+<div class="nav-item dashboards">
+<a class="nav-link menu" href="#" id="default-link">
+<i class="fas fa-home"></i> Dashboards
+<span class="chevron-icon"
+><i class="fas fa-chevron-down"></i
+></span>
+</a>
+<div class="submenu" id="submenu-dashboards">
+<a class="nav-link add-order-link" id="add-order-link" href="addOrders.html?newEntry=true">Add New Order</a>
+<a class="nav-link placed-orders-link" id="placed-orders-link" href="placedOrders.html">Placed Orders</a>
+<a class="nav-link customer-approved-link" id="customer-approved-link" href="customerApproved.html">Customer Approved</a>
+<!-- <a class="nav-link view-orders-link" id="view-orders-link" href="orders.html">View Orders</a> -->
+<a class="nav-link view-orders-monthly-link" id="view-orders-monthly-link" href="monthwiseOrders.html">View Orders- Monthly</a>
+<a class="nav-link view-all-orders-link" id="view-all-orders-link" href="viewAllOrders.html">View All Orders</a>
+<a class="nav-link yard-located-orders" id="yard-located-orders-linl" href="yardLocatedOrders.html">Yard Located Orders</a>
+<a class="nav-link yard-info-link" id="yard-info-link" href="yardInfo.html">Yard Processing Orders</a>
+<a class="nav-link in-transit-link" id="in-transit-link" href="inTransit.html">In Transit Orders</a>
+<a class="nav-link sales-data-link" id="in-transit-link" href="salesData.html">Sales Data</a>
+<!-- <a class="nav-link view-individualOrders-link" id="view-individualOrders-link" href="individualOrders.html">View My Orders</a> -->
+<!-- <a class="nav-link teamA-orders-link" id="teamA-orders-link" href="ordersMark.html">TeamA Orders</a> -->
+<!-- <a class="nav-link teamB-orders-link" id="teamB-orders-link" href="ordersSussane.html">TeamB Orders</a> -->
+<a class="nav-link cancelled-orders-link"  id="cancelled-orders-link" href="cancelledOrders.html">Cancelled Orders</a>
+<a class="nav-link refunded-orders-link" id="refunded-orders-link" href="refundedOrders.html">Refunded Orders</a>
+<a class="nav-link refunded-orders-link" id="disputed-orders-link" href="disputes.html">Disputed Orders</a>
+<!-- <a class="nav-link view-ordersSheet-link" href="viewyardOrdersSheetMode.html">View All Orders- Sheet Mode</a> -->
+<a class="nav-link view-fulfilled-link" href="fulfilledOrders.html">Fulfilled Orders</a>
+<a class="nav-link escalated-orders" href="escalatedOrders.html">Overall Escalation</a>
+<a class="nav-link ongoingEscalated-orders" href="ongoingEscalations.html">Ongoing Escalation</a>
+<a class="nav-link view-myTasks-link" id="view-myTasks-link" href="viewMyTasks.html">View My Tasks</a>
+<a class="nav-link view-myTasks-link" id="view-myTasks-link" href="viewAllTasks.html">View All Tasks</a>
+</div>
+</div>
+<div class="nav-item">
+<a class="nav-link menu" href="#">
+<i class="fas fa-users"></i> Users
+<span class="chevron-icon"><i class="fas fa-chevron-down"></i></span>
+</a>
+<div class="submenu" id="submenu-users">
+<a class="nav-link" href="createUser.html">Create User</a>
+<a class="nav-link" href="viewallUsers.html">View Users</a>
+<a class="nav-link" href="individualTaskTracking.html">View User Activity</a>
+</div>
+</div>
+<div class="nav-item teams">
+<a class="nav-link menu" href="#">
+<i class="fas fa-users"></i> Teams
+<span class="chevron-icon"
+><i class="fas fa-chevron-down"></i
+></span>
+</a>
+<div class="submenu" id="submenu-teams">
+<a class="nav-link" href="teams.html">View Teams</a>
+</div>
+</div>
+<div class="nav-item">
+<a class="nav-link menu" href="#">
+<i class="fas fa-chart-bar"></i> Reports
+<span class="chevron-icon"
+><i class="fas fa-chevron-down"></i
+></span>
+</a>
+<div class="submenu" id="submenu-reports">
+      <a class="nav-link" href="cancelledRefundedReport.html">Cancellations & Refunds</a>
+    <a class="nav-link" href="cardNotCharged.html">Card not Charged</a>
+  <a class="nav-link" href="collectRefund.html">Collect Refunds</a>
+  <a class="nav-link" href="deliveryTime.html">Delivery Report</a>
+  <a class="nav-link" href="escalationResolvingTime.html">Escalation Resolutions</a>
+  <a class="nav-link" href="overallMonthlyDisputes.html">Monthly Disputes</a>
+  <!-- <a class="nav-link" href="refundReport.html">Refund Report</a> -->
+  <a class="nav-link" href="poReport.html">PO Report</a>
+  <!-- <a class="nav-link" href="poSentNotUpdated.html">Pending Labels</a>
+  <a class="nav-link" href="partShippedNotUpdated.html">Pending Shipouts</a>
+  <a class="nav-link" href="pendingYardLocates.html">Pending Yard Locates</a> -->
+  <a class="nav-link" href="purchases.html">Purchases</a>
+  <!-- <a class="nav-link" href="purchasesAndRefunfReport.html">Purchases and Refunds</a> -->
+  <a class="nav-link" href="salesReport.html">My Sales Report</a>
+  <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
+  <a class="nav-link" href="storeCredit.html">Store Credits</a>
+  <a class="nav-link" href="trackingInfo.html">Tracking Report</a>
+  <a class="nav-link" href="incentiveCalculation.html">Incentives Report</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+</div>
     <div class="main-content">
       <div class="topHeads">
         <div>
@@ -60,59 +200,43 @@ if (!firstName) {
         </table>
       </div>
     </div>
-
 <script>
 $(document).ready(async function () {
-  // flatpickr setup
   const fp = flatpickr("#unifiedDatePicker", {
     mode: "range",
     dateFormat: "Y-m-d",
-    allowInput: true,
-    onOpen: function () {
-      document.querySelector(".table-wrapper").classList.add("table-blur");
-    },
-    onClose: function () {
-      document.querySelector(".table-wrapper").classList.remove("table-blur");
-    }
+    allowInput: true
   });
 
   let yardOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;
 
-  // Fetch yard info (filtered by reimbursedDate)
+  // Global filter range (start & end dates in Chicago TZ)
+  let filterStart = null;
+  let filterEnd = null;
+
   async function fetchYardInfo(month, year) {
     try {
-      $("#loadingMessage").show();
-      const limit = 25;
-      const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
+      const token = localStorage.getItem("token");
+      const limit = 50;
+      const response = await axios.get("https://www.spotops360.com/orders/monthly", {
         params: { month, year, page: 1, limit },
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      let yardOrdersRaw = [...firstResponse.data.orders];
-      const totalPages = Math.ceil(firstResponse.data.totalCount / limit);
+      let yardOrdersRaw = [...response.data.orders];
 
-      const requests = [];
-      for (let p = 2; p <= totalPages; p++) {
-        requests.push(
-          axios.get("https://www.spotops360.com/orders/monthly", {
-            params: { month, year, page: p, limit },
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-          })
-        );
-      }
-      const responses = await Promise.all(requests);
-      responses.forEach(res => {
-        yardOrdersRaw.push(...res.data.orders);
-      });
-
+      // filter by reimbursedDate instead of orderDate
       yardOrders = yardOrdersRaw
         .map(order => {
-          // only keep additionalInfo with reimbursedDate
-          const filteredInfo = order.additionalInfo.filter(
-            info => info.reimbursedDate && info.reimbursedDate.trim() !== ""
-          );
+          const filteredInfo = order.additionalInfo.filter(info => {
+            if (!info.reimbursedDate) return false;
+            const reimbursedMoment = moment(info.reimbursedDate).tz("America/Chicago");
+            if (filterStart && reimbursedMoment.isBefore(filterStart)) return false;
+            if (filterEnd && reimbursedMoment.isAfter(filterEnd)) return false;
+            return true;
+          });
           if (filteredInfo.length > 0) {
             return { ...order, additionalInfo: filteredInfo };
           }
@@ -120,107 +244,90 @@ $(document).ready(async function () {
         })
         .filter(order => order !== null);
 
-      renderTableRows(currentPage, yardOrders);
-      createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-    } catch (error) {
-      console.error("Error fetching yard info:", error);
-      alert("Failed to fetch data. Please try again.");
-    } finally {
-      $("#loadingMessage").hide();
+      renderTableRows(yardOrders);
+    } catch (err) {
+      console.error("Error fetching reimbursements:", err);
+      alert("Failed to fetch reimbursements.");
     }
   }
 
-  // Render table + totals
-  function renderTableRows(page, data = yardOrders) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const pageData = data.slice(start, end);
-
+  function renderTableRows(data) {
     $("#yardInfoTable").empty();
-    $("#tableHeader th:gt(1)").remove();
 
-    pageData.forEach(order => {
-      let yardInfoHtml = "";
-      let totalCardCharged = 0;
-      order.additionalInfo.forEach(info => {
-        const partPrice = parseFloat(info.partPrice || 0);
-        const others = parseFloat(info.others || 0);
-        totalCardCharged += partPrice + others;
-        yardInfoHtml += `<td>${info.yardName || ""}<br>Part price: $${partPrice} | Others: $${others}</td>`;
+    let totalOrders = data.length;
+    let grandTotalReimbursed = 0;
+
+    data.forEach(order => {
+      let totalReimbursedForOrder = 0;
+      let yardBreakdownHtml = "";
+
+      order.additionalInfo.forEach((info, idx) => {
+        if (info.reimbursedDate) {
+          const amt = parseFloat(info.reimbursementAmount || 0);
+          totalReimbursedForOrder += isNaN(amt) ? 0 : amt;
+          grandTotalReimbursed += isNaN(amt) ? 0 : amt;
+
+          yardBreakdownHtml += `
+            <div>
+              Yard ${idx + 1} (${info.yardName || "N/A"}): 
+              $${amt.toFixed(2)} 
+              <small class="text-muted">(${moment(info.reimbursedDate).format("YYYY-MM-DD")})</small>
+            </div>`;
+        }
       });
 
       const date = new Date(order.orderDate);
       const formattedOrderDate = `${date.getUTCDate()}-${date.getUTCMonth()+1}-${date.getUTCFullYear()}`;
 
-      $("#yardInfoTable").append(
-        `<tr>
+      $("#yardInfoTable").append(`
+        <tr>
           <td>${order.orderNo}</td>
           <td>${formattedOrderDate}</td>
-          ${yardInfoHtml}
-          <td>$${totalCardCharged.toFixed(2)}</td>
-          <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
-        </tr>`
-      );
+          <td>
+            <b>Total: $${totalReimbursedForOrder.toFixed(2)}</b>
+            <hr style="margin:4px 0;">
+            ${yardBreakdownHtml || "<i>No reimbursed yards</i>"}
+          </td>
+          <td>
+            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button>
+          </td>
+        </tr>
+      `);
     });
 
-    // Totals: total orders − reimbursed amount
-    const totalOrders = yardOrders.length;
-    let totalReimbursed = 0;
-    yardOrders.forEach(order => {
-      order.additionalInfo.forEach(info => {
-        const amt = parseFloat(info.reimbursementAmount || 0);
-        totalReimbursed += isNaN(amt) ? 0 : amt;
-      });
-    });
-
-    document.getElementById("showTotalOrders").innerHTML =
-      `Total Orders: ${totalOrders} | Net: ${totalOrders - totalReimbursed}`;
+    // show totals
+    $("#showTotalOrders").html(
+      `Total Orders: ${totalOrders} | Grand Reimbursed: $${grandTotalReimbursed.toFixed(2)}`
+    );
   }
 
-  function createPaginationControls(totalPages) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); 
-    if (totalPages > 1) {
-      paginationControls.append(`<button id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>`);
-      paginationControls.append(`<span>Page ${currentPage} of ${totalPages}</span>`);
-      paginationControls.append(`<button id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>`);
-    }
-  }
-
-  // Filter button → uses reimbursedDate
+  // Filter button handler
   $("#filterButton").click(async function () {
-    try {
-      const rangeValue = $("#unifiedDatePicker").val().trim();
-      const tz = "America/Chicago";
-      let month, year;
-      if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-        const mObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
-        month = mObj.format("MMM");
-        year = mObj.format("YYYY");
-      } else if (rangeValue.includes(" to ")) {
-        const [startStr] = rangeValue.split(" to ");
-        const mObj = moment.tz(startStr, "YYYY-MM-DD", tz);
-        month = mObj.format("MMM");
-        year = mObj.format("YYYY");
-      } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-        const mObj = moment(rangeValue, "YYYY-MM");
-        month = mObj.format("MMM");
-        year = mObj.format("YYYY");
-      } else {
-        alert("⚠️ Please select a valid date, range, or month.");
-        return;
-      }
-      currentPage = 1;
-      await fetchYardInfo(month, year);
-      createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-    } catch (err) {
-      console.error(err);
-      alert("Error filtering data");
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    const tz = "America/Chicago";
+
+    if (rangeValue.includes(" to ")) {
+      const [startStr, endStr] = rangeValue.split(" to ");
+      filterStart = moment.tz(startStr, "YYYY-MM-DD", tz).startOf("day");
+      filterEnd = moment.tz(endStr, "YYYY-MM-DD", tz).endOf("day");
+    } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+      filterStart = moment.tz(rangeValue, "YYYY-MM-DD", tz).startOf("day");
+      filterEnd = moment.tz(rangeValue, "YYYY-MM-DD", tz).endOf("day");
+    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      filterStart = moment(rangeValue, "YYYY-MM", tz).startOf("month");
+      filterEnd = moment(rangeValue, "YYYY-MM", tz).endOf("month");
+    } else {
+      alert("⚠️ Please select a valid date, range, or month.");
+      return;
     }
+
+    await fetchYardInfo(filterStart.format("MMM"), filterStart.format("YYYY"));
   });
 
-  // init
+  // Initial load → this month by reimbursedDate
   const now = moment().tz("America/Chicago");
+  filterStart = now.clone().startOf("month");
+  filterEnd = now.clone().endOf("month");
   await fetchYardInfo(now.format("MMM"), now.format("YYYY"));
 });
 </script>
