@@ -1837,7 +1837,7 @@ $("#saveEsc").on("click", async function () {
         }
 
         // Handle reimbursement separately
-        if (updatedFields.reimbursementAmount && hasValueChanged(currentAdditionalInfo.reimbursementAmount, updatedFields.reimbursementAmount)) {
+        if (updatedFields.reimbursementAmount && hasValueChanged(currentAdditionalInfo.reimbursementAmount, updatedFields.reimbursementAmount, updatedFields.reimbursedDate)) {
             const yardStatus = "Part delivered";
             const newOrderStatus = "Order Fulfilled";
             const reimbursementUpdate = {
