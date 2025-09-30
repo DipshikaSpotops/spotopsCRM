@@ -448,21 +448,35 @@ $(document).ready(async function () {
       if (order.type === "Reimbursed") {
         tbody.append(`
           <tr>
-            <td>${order.orderNo}</td>
-            <td>${order.reimbursedDate}</td>
-            <td>$${order.reimbursementAmount.toFixed(2)}</td>
-            <td>${order.type}</td>
-            <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
+            <td style="text-align:center">${order.orderNo}</td>
+            <td style="text-align:center">${new Date(order.orderDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+          <td style="text-align:center">${new Date(order.reimbursedDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+            <td style="text-align:center">$${order.reimbursementAmount.toFixed(2)}</td>
+            <td style="text-align:center">${order.type}</td>
+            <td style="text-align:center"><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
           </tr>
         `);
       } else {
         tbody.append(`
           <tr>
-            <td>${order.orderNo}</td>
-            <td>${order.custRefundDate}</td>
-            <td>$${order.custRefAmount.toFixed(2)}</td>
-            <td>${order.type}</td>
-            <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
+            <td style="text-align:center">${order.orderNo}</td>
+            <td style="text-align:center">${new Date(order.orderDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+          <td style="text-align:center">${new Date(order.custRefundDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+            <td style="text-align:center">$${order.custRefAmount.toFixed(2)}</td>
+            <td style="text-align:center">${order.type}</td>
+            <td style="text-align:center"><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
           </tr>
         `);
       }
