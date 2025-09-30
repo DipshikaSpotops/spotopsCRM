@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Reimbursements</title>
+<title>Refunds/Reimbursements</title>
 <script>
 if (localStorage.getItem('darkMode') === "true"){
   document.documentElement.classList.add('dark-mode');
@@ -157,6 +157,7 @@ if (!firstName) {
   <a class="nav-link" href="partShippedNotUpdated.html">Pending Shipouts</a>
   <a class="nav-link" href="pendingYardLocates.html">Pending Yard Locates</a> -->
   <a class="nav-link" href="purchases.html">Purchases</a>
+  <a class="nav-link" href="reimbursementReport.html">Refunds/Reimbursements</a>
   <!-- <a class="nav-link" href="purchasesAndRefunfReport.html">Purchases and Refunds</a> -->
   <a class="nav-link" href="salesReport.html">My Sales Report</a>
   <a class="nav-link" href="shippingExpenses.html">Shipping Expenses</a>
@@ -193,7 +194,7 @@ if (!firstName) {
   <tr id="tableHeader" style="background-color: #f2f2f2">
     <th style="background-color: #037894;">Order No</th>
     <th style="background-color: #037894;">Order Date</th>
-    <th style="background-color: #037894;">Reimbursed Date</th>
+    <th style="background-color: #037894;">Refunded/Reimbursed Date</th>
     <th style="background-color: #037894;">Reimbursement Amount ($)</th>
     <th style="background-color: #037894;">Action</th>
   </tr>
@@ -445,7 +446,14 @@ $(document).ready(async function () {
         tbody.append(`
           <tr>
             <td>${order.orderNo}</td>
-            <td>${order.reimbursedDate}</td>
+            <td style="text-align:center">${new Date(order.orderDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+            <td style="text-align:center">${new Date(order.reimbursedDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
             <td>$${order.reimbursementAmount.toFixed(2)}</td>
             <td>${order.type}</td>
             <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
@@ -454,11 +462,18 @@ $(document).ready(async function () {
       } else {
         tbody.append(`
           <tr>
-            <td>${order.orderNo}</td>
-            <td>${order.custRefundDate}</td>
-            <td>$${order.custRefAmount.toFixed(2)}</td>
-            <td>${order.type}</td>
-            <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
+            <td style="text-align:center">${order.orderNo}</td>
+            <td style="text-align:center">${new Date(order.orderDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+              <td style="text-align:center">${new Date(order.custRefundDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+            <td style="text-align:center">$${order.custRefAmount.toFixed(2)}</td>
+            <td style="text-align:center">${order.type}</td>
+            <td style="text-align:center"><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
           </tr>
         `);
       }
