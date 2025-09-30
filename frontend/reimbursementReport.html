@@ -173,11 +173,11 @@ if (!firstName) {
     <div class="main-content">
       <div class="topHeads">
         <div>
-          <h1 id="mainHeading">Reimbursements</h1>
+          <h1 id="mainHeading">Refunds/Reimbursements</h1>
         </div>
-        <div>
+        <!-- <div>
           <input type="text" class="form-control" id="searchInput" placeholder="Search..."/>
-        </div>
+        </div> -->
       </div>
       <div id="filterAndTotal">
         <div class="flatpickr-wrapper">
@@ -532,6 +532,17 @@ $(document).ready(async function () {
     const id = $(this).data("id");
     window.location.href = `form.html?orderNo=${id}&process=true`;
   });
+    const currentPath = window.location.pathname + "?newEntry=true";
+console.log("currentPath",currentPath)
+$(".nav-link").each(function () {
+if (currentPath.includes($(this).attr("href"))) {
+$(this).addClass("active");
+}
+});
+const activeLink = $(".nav-link.active")[0];
+if (activeLink) {
+  activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+}
 });
 </script>
 </body>
