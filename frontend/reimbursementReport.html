@@ -206,9 +206,9 @@ if (!firstName) {
 
 <script>
 $(document).ready(async function () {
-  /* ======================
-     Flatpickr setup
-  ====================== */
+  // =========================
+  // Flatpickr setup
+  // =========================
   const fp = flatpickr("#unifiedDatePicker", {
     mode: "range",
     dateFormat: "Y-m-d",
@@ -250,9 +250,10 @@ $(document).ready(async function () {
         instance.close();
       });
 
+      // Generate last 3 months dynamically
       for (let i = 1; i <= 3; i++) {
         const monthMoment = momentTz.clone().subtract(i, "months");
-        const monthName = monthMoment.format("MMMM");
+        const monthName = monthMoment.format("MMMM"); // e.g., "June"
         const start = monthMoment.startOf("month").format("YYYY-MM-DD");
         const end = monthMoment.endOf("month").format("YYYY-MM-DD");
 
@@ -270,6 +271,7 @@ $(document).ready(async function () {
       container.prepend(todayBtn);
       instance.calendarContainer.appendChild(container);
 
+      // Utility to make a styled link
       function makeLink(label, handler) {
         const link = document.createElement("a");
         link.href = "#";
@@ -285,12 +287,12 @@ $(document).ready(async function () {
         });
         return link;
       }
-    }
+    },
   });
 
-  /* ======================
-     Globals & Auth
-  ====================== */
+  // =========================
+  // Globals
+  // =========================
   let allOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;
@@ -303,10 +305,13 @@ $(document).ready(async function () {
   }
   $("#user-name").text(firstName);
 
+  // Token logic
   let token = localStorage.getItem("token");
   if (!token) {
     try {
-      const response = await axios.get(`https://www.spotops360.com/auth/token/${userId}`);
+      const response = await axios.get(
+        `https://www.spotops360.com/auth/token/${userId}`
+      );
       if (response.status === 200) {
         token = response.data.token;
         localStorage.setItem("token", token);
@@ -316,68 +321,99 @@ $(document).ready(async function () {
     }
   }
 
-  // Dallas default month
-  const defaultMonth = moment().tz("America/Chicago").format("YYYY-MM");
-  $("#unifiedDatePicker").val(defaultMonth);
-
-  // Initial load
+  // =========================
+  // Load on page load
+  // =========================
   await loadOrdersFromPicker();
 
+  // Filter button
   $("#filterButton").click(async function () {
     await loadOrdersFromPicker();
   });
 
-  /* ======================
-     Core loader
-  ====================== */
+  // =========================
+  // Core data loader
+  // =========================
   async function loadOrdersFromPicker() {
     const pickerVal = $("#unifiedDatePicker").val().trim();
     const tz = "America/Chicago";
 
     let queryParams = {};
+
     if (pickerVal.includes(" to ")) {
       const [startStr, endStr] = pickerVal.split(" to ");
       queryParams = {
         start: moment.tz(startStr, tz).startOf("day").toISOString(),
-        end: moment.tz(endStr, tz).endOf("day").toISOString()
+        end: moment.tz(endStr, tz).endOf("day").toISOString(),
       };
     } else if (moment(pickerVal, "YYYY-MM", true).isValid()) {
       const m = moment(pickerVal, "YYYY-MM");
       queryParams = {
         month: m.format("MMM"),
-        year: m.format("YYYY")
+        year: m.format("YYYY"),
       };
     } else if (moment(pickerVal, "YYYY-MM-DD", true).isValid()) {
       const date = moment.tz(pickerVal, tz);
       queryParams = {
         start: date.startOf("day").toISOString(),
-        end: date.endOf("day").toISOString()
+        end: date.endOf("day").toISOString(),
       };
     } else {
       alert("⚠️ Please select a valid date, range, or month.");
       return;
     }
 
-    const reimbursed = await fetchOrders("reimbursed-by-date", queryParams);
-    console.log("Fetched reimbursed orders:", reimbursed);
-    allOrders = reimbursed.map(order => {
-      console.log("Flattening order:", order.orderNo, order.additionalInfo);
-      const reimbursedEntries = (order.additionalInfo || []).filter(i => i.reimbursedDate);
-      return reimbursedEntries.map(i => ({
-        orderNo: order.orderNo,
-        orderDate: order.orderDate,
-        reimbursedDate: i.reimbursedDate,
-        reimbursementAmount: parseFloat(i.reimbursementAmount) || 0
-      }));
-    }).flat();
+    // Fetch both reimbursements & refunds
+    const [reimbursed, refunded] = await Promise.all([
+      fetchOrders("reimbursed-by-date", queryParams),
+      fetchOrders("refunded-by-date", queryParams),
+    ]);
+
+    // Flatten reimbursed
+    const flatReimbursed = reimbursed.flatMap(order =>
+      (order.additionalInfo || [])
+        .filter(info => info.reimbursedDate)
+        .map(info => ({
+          orderNo: order.orderNo,
+          reimbursedDate: info.reimbursedDate,
+          reimbursementAmount: parseFloat(info.reimbursementAmount || 0),
+          type: "Reimbursed",
+        }))
+    );
+
+    // Flatten refunded
+    const flatRefunded = refunded.map(order => ({
+      orderNo: order.orderNo,
+      custRefundDate: order.custRefundDate,
+      custRefAmount: parseFloat(order.custRefAmount || 0),
+      type: "Refunded",
+    }));
+
+    allOrders = [...flatReimbursed, ...flatRefunded];
+
+    // Totals
+    const totalReimbursed = flatReimbursed.reduce(
+      (sum, r) => sum + (r.reimbursementAmount || 0),
+      0
+    );
+    const totalRefunded = flatRefunded.reduce(
+      (sum, r) => sum + (r.custRefAmount || 0),
+      0
+    );
+
+    $("#showTotalOrders").text(
+      `Total Reimbursements (${flatReimbursed.length}): $${totalReimbursed.toFixed(
+        2
+      )} | Total Refunds (${flatRefunded.length}): $${totalRefunded.toFixed(2)}`
+    );
 
     renderTableRows(1);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
-
-    const totalReimbursed = allOrders.reduce((sum, o) => sum + (o.reimbursementAmount || 0), 0);
-    $("#showTotalOrders").text(`Total Orders: ${allOrders.length} | Total Reimbursements: $${totalReimbursed.toFixed(2)}`);
   }
 
+  // =========================
+  // Fetch orders helper
+  // =========================
   async function fetchOrders(type, queryParams) {
     try {
       const res = await axios.get(`https://www.spotops360.com/orders/${type}`, {
@@ -391,65 +427,63 @@ $(document).ready(async function () {
     }
   }
 
-  function formatDate(str) {
-    if (!str) return "-";
-    const d = new Date(str);
-    return isNaN(d) ? "-" : d.toLocaleString("en-US", {
-      year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+  // =========================
+  // Render rows
+  // =========================
+  function renderTableRows(page, orders = allOrders) {
+    const start = (page - 1) * rowsPerPage;
+    const data = orders.slice(start, start + rowsPerPage);
+    const tbody = $("#infoTable").empty();
+
+    if (!data.length) {
+      tbody.append(`<tr><td colspan="5">No orders found.</td></tr>`);
+      return;
+    }
+
+    data.forEach(order => {
+      if (order.type === "Reimbursed") {
+        tbody.append(`
+          <tr>
+            <td>${order.orderNo}</td>
+            <td>${order.reimbursedDate}</td>
+            <td>$${order.reimbursementAmount.toFixed(2)}</td>
+            <td>${order.type}</td>
+            <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
+          </tr>
+        `);
+      } else {
+        tbody.append(`
+          <tr>
+            <td>${order.orderNo}</td>
+            <td>${order.custRefundDate}</td>
+            <td>$${order.custRefAmount.toFixed(2)}</td>
+            <td>${order.type}</td>
+            <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
+          </tr>
+        `);
+      }
     });
   }
 
-  /* ======================
-     Table rendering
-  ====================== */
-function renderTableRows(page, orders = allOrders) {
-  const start = (page - 1) * rowsPerPage;
-  const data = orders.slice(start, start + rowsPerPage);
-  const tbody = $("#infoTable").empty();
-
-  if (!data.length) {
-    tbody.append(`<tr><td colspan="4">No reimbursements found.</td></tr>`);
-    return;
-  }
-
-  console.log("Rendering page", page, "with data:", data);
-
-  data.forEach(order => {
-    if (order.reimbursedDate) {
-      tbody.append(`
-        <tr>
-          <td style="text-align:center" >${order.orderNo}</td>
-          <td style="text-align:center">${new Date(order.orderDate).toLocaleString("en-US", { 
-            timeZone: "America/Chicago", 
-            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
-          })}</td>
-          <td style="text-align:center">${new Date(order.reimbursedDate).toLocaleString("en-US", { 
-            timeZone: "America/Chicago", 
-            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
-          })}</td>
-          <td style="text-align:center">$${order.reimbursementAmount || 0}</td>
-          <td style="text-align:center">
-            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">
-              View
-            </button>
-          </td>
-        </tr>
-      `);
-    }
-  });
-}
-
-
-  /* ======================
-     Pagination
-  ====================== */
+  // =========================
+  // Pagination
+  // =========================
   function createPaginationControls(totalPages) {
-    const paginationControls = $('#pagination-controls');
+    const paginationControls = $("#pagination-controls");
     paginationControls.empty();
+
     if (totalPages > 1) {
-      paginationControls.append(`<button id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>`);
-      paginationControls.append(`<span>Page ${currentPage} of ${totalPages}</span>`);
-      paginationControls.append(`<button id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>`);
+      paginationControls.append(
+        `<button id="prevPage" ${currentPage === 1 ? "disabled" : ""}>←</button>`
+      );
+      paginationControls.append(
+        `<span>Page ${currentPage} of ${totalPages}</span>`
+      );
+      paginationControls.append(
+        `<button id="nextPage" ${
+          currentPage === totalPages ? "disabled" : ""
+        }>→</button>`
+      );
     }
   }
 
@@ -470,20 +504,15 @@ function renderTableRows(page, orders = allOrders) {
     }
   });
 
-  /* ======================
-     Row interactions
-  ====================== */
-  $(document).on("click", "#infoTable tr", function () {
-    $("#infoTable tr").removeClass("selected");
-    $(this).addClass("selected");
-  });
-
+  // =========================
+  // View button click
+  // =========================
   $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
     window.location.href = `form.html?orderNo=${id}&process=true`;
   });
 });
-
 </script>
+
 </body>
 </html>
