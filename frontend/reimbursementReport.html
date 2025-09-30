@@ -375,7 +375,7 @@ $(document).ready(async function () {
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
 
     const totalReimbursed = allOrders.reduce((sum, o) => sum + (o.reimbursementAmount || 0), 0);
-    $("#showTotalOrders").text(`Total No.: ${allOrders.length} | Total Reimbursements: $${totalReimbursed.toFixed(2)}`);
+    $("#showTotalOrders").text(`Total Orders: ${allOrders.length} | Total Reimbursements: $${totalReimbursed.toFixed(2)}`);
   }
 
   async function fetchOrders(type, queryParams) {
