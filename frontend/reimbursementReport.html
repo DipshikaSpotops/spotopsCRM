@@ -403,7 +403,6 @@ $(document).ready(async function () {
 function renderTableRows(page, orders = allOrders) {
   const start = (page - 1) * rowsPerPage;
   const data = orders.slice(start, start + rowsPerPage);
-  console.log("Rendering page", page, "with data:", data);
   const tbody = $("#infoTable").empty();
 
   if (!data.length) {
@@ -411,26 +410,26 @@ function renderTableRows(page, orders = allOrders) {
     return;
   }
 
+  console.log("Rendering page", page, "with data:", data);
+
   data.forEach(order => {
-    order.additionalInfo.forEach(info => {
-      if (info.reimbursedDate) {
-        tbody.append(`
-          <tr>
-            <td>${order.orderNo}</td>
-            <td>${new Date(info.reimbursedDate).toLocaleString("en-US", { 
-              timeZone: "America/Chicago", 
-              year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
-            })}</td>
-            <td>$${info.reimbursementAmount || 0}</td>
-            <td>
-              <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">
-                View
-              </button>
-            </td>
-          </tr>
-        `);
-      }
-    });
+    if (order.reimbursedDate) {
+      tbody.append(`
+        <tr>
+          <td>${order.orderNo}</td>
+          <td>${new Date(order.reimbursedDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
+          <td>$${order.reimbursementAmount || 0}</td>
+          <td>
+            <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">
+              View
+            </button>
+          </td>
+        </tr>
+      `);
+    }
   });
 }
 
