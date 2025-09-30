@@ -205,6 +205,91 @@ if (!firstName) {
 
 <script>
 $(document).ready(async function () {
+  /* ======================
+     Flatpickr setup
+  ====================== */
+  const fp = flatpickr("#unifiedDatePicker", {
+    mode: "range",
+    dateFormat: "Y-m-d",
+    allowInput: true,
+    onOpen: function () {
+      document.querySelector(".table-wrapper").classList.add("table-blur");
+    },
+    onClose: function () {
+      document.querySelector(".table-wrapper").classList.remove("table-blur");
+    },
+    onReady: function (selectedDates, dateStr, instance) {
+      if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
+
+      const container = document.createElement("div");
+      container.className = "custom-shortcuts";
+      container.style.display = "flex";
+      container.style.justifyContent = "flex-end";
+      container.style.flexWrap = "wrap";
+      container.style.gap = "10px";
+      container.style.marginTop = "0px";
+      container.style.padding = "0 10px";
+
+      const momentTz = moment().tz("America/Chicago");
+
+      const todayBtn = makeLink("Today", () => {
+        const today = momentTz.format("YYYY-MM-DD");
+        fp.setDate([today, today], true);
+        $("#unifiedDatePicker").val(`${today} to ${today}`);
+        $("#filterButton").data("filter", "today").click();
+        instance.close();
+      });
+
+      const thisMonthBtn = makeLink("This Month", () => {
+        const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+        const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+        fp.setDate([start, end], true);
+        $("#unifiedDatePicker").val(`${start} to ${end}`);
+        $("#filterButton").click();
+        instance.close();
+      });
+
+      for (let i = 1; i <= 3; i++) {
+        const monthMoment = momentTz.clone().subtract(i, "months");
+        const monthName = monthMoment.format("MMMM");
+        const start = monthMoment.startOf("month").format("YYYY-MM-DD");
+        const end = monthMoment.endOf("month").format("YYYY-MM-DD");
+
+        const monthBtn = makeLink(monthName, () => {
+          fp.setDate([start, end], true);
+          $("#unifiedDatePicker").val(`${start} to ${end}`);
+          $("#filterButton").click();
+          instance.close();
+        });
+
+        container.appendChild(monthBtn);
+      }
+
+      container.prepend(thisMonthBtn);
+      container.prepend(todayBtn);
+      instance.calendarContainer.appendChild(container);
+
+      function makeLink(label, handler) {
+        const link = document.createElement("a");
+        link.href = "#";
+        link.innerText = label;
+        link.className = "shortcut-link";
+        link.style.margin = "2px 5px";
+        link.style.fontSize = "13px";
+        link.style.color = "#007BFF";
+        link.style.cursor = "pointer";
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          handler();
+        });
+        return link;
+      }
+    }
+  });
+
+  /* ======================
+     Globals & Auth
+  ====================== */
   let allOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;
@@ -217,7 +302,6 @@ $(document).ready(async function () {
   }
   $("#user-name").text(firstName);
 
-  // Token logic
   let token = localStorage.getItem("token");
   if (!token) {
     try {
@@ -231,20 +315,25 @@ $(document).ready(async function () {
     }
   }
 
-  // Load initial data
+  // Dallas default month
+  const defaultMonth = moment().tz("America/Chicago").format("YYYY-MM");
+  $("#unifiedDatePicker").val(defaultMonth);
+
+  // Initial load
   await loadOrdersFromPicker();
 
-  // Filter button
   $("#filterButton").click(async function () {
     await loadOrdersFromPicker();
   });
 
-  // Main loader (uses new reimbursed endpoint)
+  /* ======================
+     Core loader
+  ====================== */
   async function loadOrdersFromPicker() {
     const pickerVal = $("#unifiedDatePicker").val().trim();
     const tz = "America/Chicago";
-    let queryParams = {};
 
+    let queryParams = {};
     if (pickerVal.includes(" to ")) {
       const [startStr, endStr] = pickerVal.split(" to ");
       queryParams = {
@@ -270,23 +359,22 @@ $(document).ready(async function () {
 
     const reimbursed = await fetchOrders("reimbursed-by-date", queryParams);
 
-    // Transform orders: collect reimbursement data
     allOrders = reimbursed.map(order => {
-      // gather reimbursed entries only
-      const reimbursedEntries = (order.additionalInfo || []).filter(info => info.reimbursedDate);
-
-      return {
+      const reimbursedEntries = (order.additionalInfo || []).filter(i => i.reimbursedDate);
+      return reimbursedEntries.map(i => ({
         orderNo: order.orderNo,
-        reimbursedDate: reimbursedEntries.length ? reimbursedEntries[0].reimbursedDate : null,
-        reimbursementAmount: reimbursedEntries.reduce((sum, i) => sum + (parseFloat(i.reimbursementAmount) || 0), 0)
-      };
-    });
+        reimbursedDate: i.reimbursedDate,
+        reimbursementAmount: parseFloat(i.reimbursementAmount) || 0
+      }));
+    }).flat();
 
     renderTableRows(1);
     createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
+
+    const totalReimbursed = allOrders.reduce((sum, o) => sum + (o.reimbursementAmount || 0), 0);
+    $("#showTotalOrders").text(`Total Reimbursements: ${totalReimbursed.toFixed(2)} USD`);
   }
 
-  // Generic fetch function (calls our new endpoint)
   async function fetchOrders(type, queryParams) {
     try {
       const res = await axios.get(`https://www.spotops360.com/orders/${type}`, {
@@ -300,7 +388,17 @@ $(document).ready(async function () {
     }
   }
 
-  // Render table rows
+  function formatDate(str) {
+    if (!str) return "-";
+    const d = new Date(str);
+    return isNaN(d) ? "-" : d.toLocaleString("en-US", {
+      year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+    });
+  }
+
+  /* ======================
+     Table rendering
+  ====================== */
   function renderTableRows(page, orders = allOrders) {
     const start = (page - 1) * rowsPerPage;
     const data = orders.slice(start, start + rowsPerPage);
@@ -315,7 +413,7 @@ $(document).ready(async function () {
       tbody.append(`
         <tr>
           <td>${order.orderNo}</td>
-          <td>${order.reimbursedDate ? formatDate(order.reimbursedDate) : "-"}</td>
+          <td>${formatDate(order.reimbursedDate)}</td>
           <td>$${(order.reimbursementAmount || 0).toFixed(2)}</td>
           <td>
             <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button>
@@ -323,20 +421,11 @@ $(document).ready(async function () {
         </tr>
       `);
     });
-
-    const totalReimbursed = orders.reduce((sum, o) => sum + (o.reimbursementAmount || 0), 0);
-    $("#showTotalOrders").text(`Total Reimbursements: ${totalReimbursed.toFixed(2)} USD`);
   }
 
-  function formatDate(str) {
-    if (!str) return "-";
-    const d = new Date(str);
-    return isNaN(d) ? "-" : d.toLocaleString("en-US", {
-      year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
-    });
-  }
-
-  // Pagination logic (same as your existing)
+  /* ======================
+     Pagination
+  ====================== */
   function createPaginationControls(totalPages) {
     const paginationControls = $('#pagination-controls');
     paginationControls.empty();
@@ -364,7 +453,14 @@ $(document).ready(async function () {
     }
   });
 
-  // View button → go to form
+  /* ======================
+     Row interactions
+  ====================== */
+  $(document).on("click", "#infoTable tr", function () {
+    $("#infoTable tr").removeClass("selected");
+    $(this).addClass("selected");
+  });
+
   $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
     window.location.href = `form.html?orderNo=${id}&process=true`;
