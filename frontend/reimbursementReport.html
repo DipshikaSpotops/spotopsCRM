@@ -205,104 +205,135 @@ if (!firstName) {
 
 <script>
 $(document).ready(async function () {
-  // flatpickr setup
-const fp = flatpickr("#unifiedDatePicker", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  allowInput: true,
+  /* ==============================
+     Dark mode, user info, logout
+  ============================== */
+  if (localStorage.getItem("darkMode") === "true") {
+    document.documentElement.classList.add("dark-mode");
+  }
+
+  const firstName = localStorage.getItem("firstName");
+  if (!firstName) {
+    window.location.href = "login_signup.html";
+  } else {
+    $("#user-name").text(firstName);
+  }
+
+  $("#logoutLink").click(function () {
+    localStorage.clear();
+    window.location.href = "login_signup.html";
+  });
+
+  // toggle dark mode
+  $("#darkModeIcon").on("click", function () {
+    const isDark = document.documentElement.classList.toggle("dark-mode");
+    localStorage.setItem("darkMode", isDark);
+  });
+
+  /* ==============================
+     Flatpickr setup
+  ============================== */
+  const fp = flatpickr("#unifiedDatePicker", {
+    mode: "range",
+    dateFormat: "Y-m-d",
+    allowInput: true,
     onOpen: function () {
-    document.querySelector(".table-wrapper").classList.add("table-blur");
-  },
-  onClose: function () {
-    document.querySelector(".table-wrapper").classList.remove("table-blur");
-  },
-  onReady: function (selectedDates, dateStr, instance) {
-  if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
+      document.querySelector(".table-wrapper").classList.add("table-blur");
+    },
+    onClose: function () {
+      document.querySelector(".table-wrapper").classList.remove("table-blur");
+    },
+    onReady: function (selectedDates, dateStr, instance) {
+      if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
 
-  const container = document.createElement("div");
-  container.className = "custom-shortcuts";
-  container.style.display = "flex";
-  container.style.justifyContent = "flex-end";
-  container.style.flexWrap = "wrap";
-  container.style.gap = "10px";
-  container.style.marginTop = "0px";
-  container.style.padding = "0 10px";
+      const container = document.createElement("div");
+      container.className = "custom-shortcuts";
+      container.style.display = "flex";
+      container.style.justifyContent = "flex-end";
+      container.style.flexWrap = "wrap";
+      container.style.gap = "10px";
+      container.style.marginTop = "0px";
+      container.style.padding = "0 10px";
 
-  const momentTz = moment().tz("America/Chicago");
+      const momentTz = moment(); // Already stored in Dallas TZ, no need to force tz
 
-  const todayBtn = makeLink("Today", () => {
-    const today = momentTz.format("YYYY-MM-DD");
-    fp.setDate([today, today], true);
-    $("#unifiedDatePicker").val(`${today} to ${today}`);
-    $("#filterButton").data("filter", "today").click();
-    instance.close();
+      const todayBtn = makeLink("Today", () => {
+        const today = momentTz.format("YYYY-MM-DD");
+        fp.setDate([today, today], true);
+        $("#unifiedDatePicker").val(`${today} to ${today}`);
+        $("#filterButton").data("filter", "today").click();
+        instance.close();
+      });
+
+      const thisMonthBtn = makeLink("This Month", () => {
+        const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
+        const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
+        fp.setDate([start, end], true);
+        $("#unifiedDatePicker").val(`${start} to ${end}`);
+        $("#filterButton").click();
+        instance.close();
+      });
+
+      // Last 3 months
+      for (let i = 1; i <= 3; i++) {
+        const monthMoment = momentTz.clone().subtract(i, "months");
+        const monthName = monthMoment.format("MMMM");
+        const start = monthMoment.startOf("month").format("YYYY-MM-DD");
+        const end = monthMoment.endOf("month").format("YYYY-MM-DD");
+
+        const monthBtn = makeLink(monthName, () => {
+          fp.setDate([start, end], true);
+          $("#unifiedDatePicker").val(`${start} to ${end}`);
+          $("#filterButton").click();
+          instance.close();
+        });
+
+        container.appendChild(monthBtn);
+      }
+
+      container.prepend(thisMonthBtn);
+      container.prepend(todayBtn);
+      instance.calendarContainer.appendChild(container);
+
+      function makeLink(label, handler) {
+        const link = document.createElement("a");
+        link.href = "#";
+        link.innerText = label;
+        link.className = "shortcut-link";
+        link.style.margin = "2px 5px";
+        link.style.fontSize = "13px";
+        link.style.color = "#007BFF";
+        link.style.cursor = "pointer";
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          handler();
+        });
+        return link;
+      }
+    },
   });
 
-  const thisMonthBtn = makeLink("This Month", () => {
-    const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
-    const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
-    fp.setDate([start, end], true);
-    $("#unifiedDatePicker").val(`${start} to ${end}`);
-    $("#filterButton").click();
-    instance.close();
-  });
-
-  // Generate last 3 months dynamically
-  for (let i = 1; i <= 3; i++) {
-    const monthMoment = momentTz.clone().subtract(i, "months");
-    const monthName = monthMoment.format("MMMM"); // e.g., "June"
-    const start = monthMoment.startOf("month").format("YYYY-MM-DD");
-    const end = monthMoment.endOf("month").format("YYYY-MM-DD");
-
-    const monthBtn = makeLink(monthName, () => {
-      fp.setDate([start, end], true);
-      $("#unifiedDatePicker").val(`${start} to ${end}`);
-      $("#filterButton").click();
-      instance.close();
-    });
-
-    container.appendChild(monthBtn);
-  }
-
-  container.prepend(thisMonthBtn);
-  container.prepend(todayBtn);
-  instance.calendarContainer.appendChild(container);
-
-  // Utility to make a styled link
-  function makeLink(label, handler) {
-    const link = document.createElement("a");
-    link.href = "#";
-    link.innerText = label;
-    link.className = "shortcut-link";
-    link.style.margin = "2px 5px";
-    link.style.fontSize = "13px";
-    link.style.color = "#007BFF";
-    link.style.cursor = "pointer";
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      handler();
-    });
-    return link;
-  }
-}
-});
-  // flatpickr setup till here
-
+  /* ==============================
+     Data + Pagination
+  ============================== */
   let yardOrders = [];
   const rowsPerPage = 25;
   let currentPage = 1;
-$("#yardInfoTable").on("click", ".process-btn", function () {
-const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}&process=true`;
-});
-  // Fetch yard info (filtered by reimbursedDate)
+
+  $("#yardInfoTable").on("click", ".process-btn", function () {
+    const id = $(this).data("id");
+    window.location.href = `form.html?orderNo=${id}&process=true`;
+  });
+
   async function fetchYardInfo(month, year) {
     try {
       $("#loadingMessage").show();
       const limit = 25;
+      const token = localStorage.getItem("token");
+
       const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
         params: { month, year, page: 1, limit },
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       let yardOrdersRaw = [...firstResponse.data.orders];
@@ -313,27 +344,27 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
         requests.push(
           axios.get("https://www.spotops360.com/orders/monthly", {
             params: { month, year, page: p, limit },
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            headers: { Authorization: `Bearer ${token}` },
           })
         );
       }
       const responses = await Promise.all(requests);
-      responses.forEach(res => {
+      responses.forEach((res) => {
         yardOrdersRaw.push(...res.data.orders);
       });
 
+      // Keep only orders that have reimbursedDate entries
       yardOrders = yardOrdersRaw
-        .map(order => {
-          // only keep additionalInfo with reimbursedDate
+        .map((order) => {
           const filteredInfo = order.additionalInfo.filter(
-            info => info.reimbursedDate && info.reimbursedDate.trim() !== ""
+            (info) => info.reimbursedDate && info.reimbursedDate.trim() !== ""
           );
           if (filteredInfo.length > 0) {
             return { ...order, additionalInfo: filteredInfo };
           }
           return null;
         })
-        .filter(order => order !== null);
+        .filter((order) => order !== null);
 
       renderTableRows(currentPage, yardOrders);
       createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
@@ -345,105 +376,95 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
     }
   }
 
-function renderTableRows(page, data = yardOrders) {
-  const start = (page - 1) * rowsPerPage;
-  const end = start + rowsPerPage;
-  const pageData = data.slice(start, end);
+  function renderTableRows(page, data = yardOrders) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const pageData = data.slice(start, end);
 
-  $("#yardInfoTable").empty();
+    $("#yardInfoTable").empty();
 
-  pageData.forEach(order => {
-    order.additionalInfo.forEach(info => {
-      if (info.reimbursedDate && info.reimbursedDate.trim() !== "") {
-        const reimbursedDate = moment(info.reimbursedDate)
-          .tz("America/Chicago")
-          .format("YYYY-MM-DD HH:mm");
-
-        const reimbursedAmount = parseFloat(info.reimbursementAmount || 0).toFixed(2);
+    pageData.forEach((order) => {
+      order.additionalInfo.forEach((info) => {
+        const reimbursedDate = info.reimbursedDate
+          ? moment(info.reimbursedDate).format("YYYY-MM-DD HH:mm")
+          : "";
+        const reimbursementAmount = parseFloat(info.reimbursementAmount || 0);
 
         $("#yardInfoTable").append(
           `<tr>
             <td>${order.orderNo}</td>
             <td>${reimbursedDate}</td>
-            <td>$${reimbursedAmount}</td>
-            <td>
-              <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">
-                View
-              </button>
-            </td>
+            <td>$${reimbursementAmount.toFixed(2)}</td>
+            <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
           </tr>`
         );
-      }
+      });
     });
-  });
 
-  // Totals (only reimbursed amounts)
-  let totalReimbursed = 0;
-  yardOrders.forEach(order => {
-    order.additionalInfo.forEach(info => {
-      if (info.reimbursedDate && info.reimbursedDate.trim() !== "") {
-        totalReimbursed += parseFloat(info.reimbursementAmount || 0) || 0;
-      }
+    // Totals
+    let totalReimbursed = 0;
+    yardOrders.forEach((order) => {
+      order.additionalInfo.forEach((info) => {
+        const amt = parseFloat(info.reimbursementAmount || 0);
+        totalReimbursed += isNaN(amt) ? 0 : amt;
+      });
     });
-  });
 
-  document.getElementById("showTotalOrders").innerHTML =
-    `Total Reimbursements: ${totalReimbursed.toFixed(2)} USD`;
-}
-
+    document.getElementById("showTotalOrders").innerHTML =
+      `Total Reimbursements: ${totalReimbursed.toFixed(2)} USD`;
+  }
 
   function createPaginationControls(totalPages) {
-    const paginationControls = $('#pagination-controls');
-    paginationControls.empty(); 
+    const paginationControls = $("#pagination-controls");
+    paginationControls.empty();
     if (totalPages > 1) {
-      paginationControls.append(`<button id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>←</button>`);
+      paginationControls.append(
+        `<button id="prevPage" ${currentPage === 1 ? "disabled" : ""}>←</button>`
+      );
       paginationControls.append(`<span>Page ${currentPage} of ${totalPages}</span>`);
-      paginationControls.append(`<button id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>→</button>`);
+      paginationControls.append(
+        `<button id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>→</button>`
+      );
     }
   }
 
-  // Filter button → uses reimbursedDate
-$("#filterButton").click(async function () {
-  try {
-    const rangeValue = $("#unifiedDatePicker").val().trim();
-    const tz = "America/Chicago";
+  /* ==============================
+     Filtering
+  ============================== */
+  $("#filterButton").click(async function () {
+    try {
+      const rangeValue = $("#unifiedDatePicker").val().trim();
+      let month, year;
 
-    let startDate, endDate;
-    if (rangeValue.includes(" to ")) {
-      const [startStr, endStr] = rangeValue.split(" to ");
-      startDate = moment.tz(startStr, "YYYY-MM-DD", tz).startOf("day");
-      endDate = moment.tz(endStr, "YYYY-MM-DD", tz).endOf("day");
-    } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-      startDate = moment.tz(rangeValue, "YYYY-MM-DD", tz).startOf("day");
-      endDate = moment.tz(rangeValue, "YYYY-MM-DD", tz).endOf("day");
-    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-      startDate = moment(rangeValue, "YYYY-MM").startOf("month");
-      endDate = moment(rangeValue, "YYYY-MM").endOf("month");
-    } else {
-      alert("⚠️ Please select a valid date, range, or month.");
-      return;
+      if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+        const mObj = moment(rangeValue, "YYYY-MM-DD");
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
+      } else if (rangeValue.includes(" to ")) {
+        const [startStr] = rangeValue.split(" to ");
+        const mObj = moment(startStr, "YYYY-MM-DD");
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
+      } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+        const mObj = moment(rangeValue, "YYYY-MM");
+        month = mObj.format("MMM");
+        year = mObj.format("YYYY");
+      } else {
+        alert("⚠️ Please select a valid date, range, or month.");
+        return;
+      }
+
+      currentPage = 1;
+      await fetchYardInfo(month, year);
+      createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    } catch (err) {
+      console.error(err);
+      alert("Error filtering data");
     }
-
-    // ✅ filter only reimbursed entries
-    const filtered = yardOrders.filter(order =>
-      order.additionalInfo.some(info => {
-        if (!info.reimbursedDate) return false;
-        const rDate = moment(info.reimbursedDate);
-        return rDate.isBetween(startDate, endDate, null, "[]");
-      })
-    );
-
-    currentPage = 1;
-    renderTableRows(currentPage, filtered);
-    createPaginationControls(Math.ceil(filtered.length / rowsPerPage));
-  } catch (err) {
-    console.error(err);
-    alert("Error filtering data");
-  }
-});
+  });
 
   // init
-  const now = moment().tz("America/Chicago");
+  const now = moment();
   await fetchYardInfo(now.format("MMM"), now.format("YYYY"));
 });
 </script>
