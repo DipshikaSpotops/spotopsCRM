@@ -191,7 +191,8 @@ if (!firstName) {
         <table class="table table-bordered">
           <thead id="infoTableHeader">
   <tr id="tableHeader" style="background-color: #f2f2f2">
-    <th style="background-color: #037894;">Order No.</th>
+    <th style="background-color: #037894;">Order No</th>
+    <th style="background-color: #037894;">Order Date</th>
     <th style="background-color: #037894;">Reimbursed Date</th>
     <th style="background-color: #037894;">Reimbursement Amount ($)</th>
     <th style="background-color: #037894;">Action</th>
@@ -364,6 +365,7 @@ $(document).ready(async function () {
       const reimbursedEntries = (order.additionalInfo || []).filter(i => i.reimbursedDate);
       return reimbursedEntries.map(i => ({
         orderNo: order.orderNo,
+        orderDate: order.orderDate,
         reimbursedDate: i.reimbursedDate,
         reimbursementAmount: parseFloat(i.reimbursementAmount) || 0
       }));
@@ -415,8 +417,12 @@ function renderTableRows(page, orders = allOrders) {
   data.forEach(order => {
     if (order.reimbursedDate) {
       tbody.append(`
-        <tr>
+        <tr style=:text-align:center;>
           <td>${order.orderNo}</td>
+          <td>${new Date(order.orderDate).toLocaleString("en-US", { 
+            timeZone: "America/Chicago", 
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
+          })}</td>
           <td>${new Date(order.reimbursedDate).toLocaleString("en-US", { 
             timeZone: "America/Chicago", 
             year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" 
