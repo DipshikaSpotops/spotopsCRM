@@ -190,12 +190,14 @@ if (!firstName) {
       <div class="table-wrapper">
         <table class="table table-bordered">
           <thead id="infoTableHeader">
-            <tr id="tableHeader" style="background-color: #f2f2f2">
-              <th class="sortable" data-column="orderDate" style="background-color: #037894;">Order No.</th>
-              <th class="sortable" data-column="orderNo" style="background-color: #037894;">Order Date</th>
-            </tr>
-          </thead>
-          <tbody id="yardInfoTable" style="text-align: center"></tbody>
+  <tr id="tableHeader" style="background-color: #f2f2f2">
+    <th style="background-color: #037894;">Order No.</th>
+    <th style="background-color: #037894;">Reimbursed Date</th>
+    <th style="background-color: #037894;">Reimbursement Amount ($)</th>
+    <th style="background-color: #037894;">Action</th>
+  </tr>
+</thead>
+<tbody id="yardInfoTable" style="text-align: center"></tbody>
           <tfoot id="tableFooter"><tr></tr></tfoot>
         </table>
       </div>
@@ -343,52 +345,52 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
     }
   }
 
-  // Render table + totals
-  function renderTableRows(page, data = yardOrders) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const pageData = data.slice(start, end);
+function renderTableRows(page, data = yardOrders) {
+  const start = (page - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const pageData = data.slice(start, end);
 
-    $("#yardInfoTable").empty();
-    $("#tableHeader th:gt(1)").remove();
+  $("#yardInfoTable").empty();
 
-    pageData.forEach(order => {
-      let yardInfoHtml = "";
-      let totalCardCharged = 0;
-      order.additionalInfo.forEach(info => {
-        const partPrice = parseFloat(info.partPrice || 0);
-        const others = parseFloat(info.others || 0);
-        totalCardCharged += partPrice + others;
-        yardInfoHtml += `<td>${info.yardName || ""}<br>Part price: $${partPrice} | Others: $${others}</td>`;
-      });
+  pageData.forEach(order => {
+    order.additionalInfo.forEach(info => {
+      if (info.reimbursedDate && info.reimbursedDate.trim() !== "") {
+        const reimbursedDate = moment(info.reimbursedDate)
+          .tz("America/Chicago")
+          .format("YYYY-MM-DD HH:mm");
 
-      const date = new Date(order.orderDate);
-      const formattedOrderDate = `${date.getUTCDate()}-${date.getUTCMonth()+1}-${date.getUTCFullYear()}`;
+        const reimbursedAmount = parseFloat(info.reimbursementAmount || 0).toFixed(2);
 
-      $("#yardInfoTable").append(
-        `<tr>
-          <td>${order.orderNo}</td>
-          <td>${formattedOrderDate}</td>
-          ${yardInfoHtml}
-          <td>$${totalCardCharged.toFixed(2)}</td>
-          <td><button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">View</button></td>
-        </tr>`
-      );
+        $("#yardInfoTable").append(
+          `<tr>
+            <td>${order.orderNo}</td>
+            <td>${reimbursedDate}</td>
+            <td>$${reimbursedAmount}</td>
+            <td>
+              <button class="btn btn-success btn-sm process-btn" data-id="${order.orderNo}">
+                View
+              </button>
+            </td>
+          </tr>`
+        );
+      }
     });
+  });
 
-    // Totals: total orders − reimbursed amount
-    const totalOrders = yardOrders.length;
-    let totalReimbursed = 0;
-    yardOrders.forEach(order => {
-      order.additionalInfo.forEach(info => {
-        const amt = parseFloat(info.reimbursementAmount || 0);
-        totalReimbursed += isNaN(amt) ? 0 : amt;
-      });
+  // Totals (only reimbursed amounts)
+  let totalReimbursed = 0;
+  yardOrders.forEach(order => {
+    order.additionalInfo.forEach(info => {
+      if (info.reimbursedDate && info.reimbursedDate.trim() !== "") {
+        totalReimbursed += parseFloat(info.reimbursementAmount || 0) || 0;
+      }
     });
+  });
 
-    document.getElementById("showTotalOrders").innerHTML =
-      `Total Orders: ${totalOrders} | Net: ${totalOrders - totalReimbursed}`;
-  }
+  document.getElementById("showTotalOrders").innerHTML =
+    `Total Reimbursements: ${totalReimbursed.toFixed(2)} USD`;
+}
+
 
   function createPaginationControls(totalPages) {
     const paginationControls = $('#pagination-controls');
@@ -401,36 +403,44 @@ window.location.href = `form.html?orderNo=${id}&process=true`;
   }
 
   // Filter button → uses reimbursedDate
-  $("#filterButton").click(async function () {
-    try {
-      const rangeValue = $("#unifiedDatePicker").val().trim();
-      const tz = "America/Chicago";
-      let month, year;
-      if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-        const mObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
-        month = mObj.format("MMM");
-        year = mObj.format("YYYY");
-      } else if (rangeValue.includes(" to ")) {
-        const [startStr] = rangeValue.split(" to ");
-        const mObj = moment.tz(startStr, "YYYY-MM-DD", tz);
-        month = mObj.format("MMM");
-        year = mObj.format("YYYY");
-      } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-        const mObj = moment(rangeValue, "YYYY-MM");
-        month = mObj.format("MMM");
-        year = mObj.format("YYYY");
-      } else {
-        alert("⚠️ Please select a valid date, range, or month.");
-        return;
-      }
-      currentPage = 1;
-      await fetchYardInfo(month, year);
-      createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-    } catch (err) {
-      console.error(err);
-      alert("Error filtering data");
+$("#filterButton").click(async function () {
+  try {
+    const rangeValue = $("#unifiedDatePicker").val().trim();
+    const tz = "America/Chicago";
+
+    let startDate, endDate;
+    if (rangeValue.includes(" to ")) {
+      const [startStr, endStr] = rangeValue.split(" to ");
+      startDate = moment.tz(startStr, "YYYY-MM-DD", tz).startOf("day");
+      endDate = moment.tz(endStr, "YYYY-MM-DD", tz).endOf("day");
+    } else if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
+      startDate = moment.tz(rangeValue, "YYYY-MM-DD", tz).startOf("day");
+      endDate = moment.tz(rangeValue, "YYYY-MM-DD", tz).endOf("day");
+    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      startDate = moment(rangeValue, "YYYY-MM").startOf("month");
+      endDate = moment(rangeValue, "YYYY-MM").endOf("month");
+    } else {
+      alert("⚠️ Please select a valid date, range, or month.");
+      return;
     }
-  });
+
+    // ✅ filter only reimbursed entries
+    const filtered = yardOrders.filter(order =>
+      order.additionalInfo.some(info => {
+        if (!info.reimbursedDate) return false;
+        const rDate = moment(info.reimbursedDate);
+        return rDate.isBetween(startDate, endDate, null, "[]");
+      })
+    );
+
+    currentPage = 1;
+    renderTableRows(currentPage, filtered);
+    createPaginationControls(Math.ceil(filtered.length / rowsPerPage));
+  } catch (err) {
+    console.error(err);
+    alert("Error filtering data");
+  }
+});
 
   // init
   const now = moment().tz("America/Chicago");
