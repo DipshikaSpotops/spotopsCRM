@@ -1270,7 +1270,32 @@ app.get("/orders/refunded-by-date", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+// Get reimbursed orders by date range
+app.get("/orders/reimbursed-by-date", async (req, res) => {
+  try {
+    const { start, end, month, year } = req.query;
 
+    let match = { "additionalInfo.reimbursedDate": { $exists: true, $ne: "" } };
+
+    if (start && end) {
+      match["additionalInfo.reimbursedDate"] = {
+        $gte: new Date(start),
+        $lte: new Date(end),
+      };
+    } else if (month && year) {
+      const mStart = moment.tz(`${year}-${month}-01`, "YYYY-MMM-DD", "America/Chicago").startOf("month").toDate();
+      const mEnd = moment(mStart).endOf("month").toDate();
+      match["additionalInfo.reimbursedDate"] = { $gte: mStart, $lte: mEnd };
+    }
+
+    const reimbursedOrders = await Order.find(match).lean();
+
+    res.json(reimbursedOrders);
+  } catch (err) {
+    console.error("Error fetching reimbursed orders:", err);
+    res.status(500).send("Server error");
+  }
+});
 app.get("/orders/disputes-by-date", async (req, res) => {
   try {
     const { start, end, month, year } = req.query;
