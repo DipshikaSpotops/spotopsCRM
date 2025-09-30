@@ -403,6 +403,7 @@ $(document).ready(async function () {
 function renderTableRows(page, orders = allOrders) {
   const start = (page - 1) * rowsPerPage;
   const data = orders.slice(start, start + rowsPerPage);
+  console.log("Rendering page", page, "with data:", data);
   const tbody = $("#infoTable").empty();
 
   if (!data.length) {
