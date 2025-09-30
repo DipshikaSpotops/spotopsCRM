@@ -379,6 +379,7 @@ $(document).ready(async function () {
         .filter(info => info.reimbursedDate)
         .map(info => ({
           orderNo: order.orderNo,
+          orderDate: order.orderDate,
           reimbursedDate: info.reimbursedDate,
           reimbursementAmount: parseFloat(info.reimbursementAmount || 0),
           type: "Reimbursed",
@@ -388,6 +389,7 @@ $(document).ready(async function () {
     // Flatten refunded
     const flatRefunded = refunded.map(order => ({
       orderNo: order.orderNo,
+      orderDate: order.orderDate,
       custRefundDate: order.custRefundDate,
       custRefAmount: parseFloat(order.custRefAmount || 0),
       type: "Refunded",
