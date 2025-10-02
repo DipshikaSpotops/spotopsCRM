@@ -198,7 +198,7 @@ $("#infoTable").append(`
   item.additionalInfo && item.additionalInfo.length > 0
     ? item.additionalInfo
         .map((info, index) => {
-          const yardName = info.yardName || "Unknown Yard";
+          const yardName = info.yardName || "";
           const shippingCost = info.shippingDetails 
             ? parseFloat(info.shippingDetails.split(":")[1]?.trim()) || 0 
             : 0;

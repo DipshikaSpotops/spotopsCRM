@@ -279,33 +279,29 @@ document.getElementById("salesInfoIcon").addEventListener("click", () => {
 });
 function calculateTopAgent(orders) {
   const agentSales = {};
-  const todayDallas = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-const todayDate = new Date(todayDallas).toISOString().split("T")[0];
+  const todayDateYMD = todayDallasYMD(); // "YYYY-MM-DD" Dallas
 
-orders.forEach(order => {
-  const orderDate = new Date(order.orderDate).toISOString().split("T")[0];
-  if (orderDate !== todayDate) return;
+  orders.forEach(order => {
+    const orderYMD = dallasYMDFromISO(order.orderDate);
+    if (orderYMD !== todayDateYMD) return;
     const agent = order.salesAgent;
-    const value = parseFloat(order.grossProfit || 0);  
+    const value = parseFloat(order.grossProfit || 0);
     if (!agentSales[agent]) agentSales[agent] = 0;
     agentSales[agent] += value;
   });
 
-  let topAgent = Object.entries(agentSales).sort((a, b) => b[1] - a[1])[0];
-  return topAgent;
+  return Object.entries(agentSales).sort((a, b) => b[1] - a[1])[0];
 }
 
 function calculateBestSalesDay(orders) {
   const dailySales = {};
   orders.forEach(order => {
-    const dateKey = new Date(order.orderDate).toISOString().split("T")[0];
-    const value = parseFloat(order.grossProfit || 0);  
-    if (!dailySales[dateKey]) dailySales[dateKey] = 0;
-    dailySales[dateKey] += value;
+    const ymd = dallasYMDFromISO(order.orderDate); // "YYYY-MM-DD" Dallas
+    const value = parseFloat(order.grossProfit || 0);
+    if (!dailySales[ymd]) dailySales[ymd] = 0;
+    dailySales[ymd] += value;
   });
-
-  let bestDay = Object.entries(dailySales).sort((a, b) => b[1] - a[1])[0];
-  return bestDay;
+  return Object.entries(dailySales).sort((a, b) => b[1] - a[1])[0];
 }
 
 document.getElementById("closeInsightsModal").addEventListener("click", () => {
@@ -345,104 +341,106 @@ function getChartColors() {
 let month;
 let year;
 async function fetchDailyOrders(monthShort = null, year = null) {
-  const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-  const currentDallasDate = new Date(now);
+  // Dallas "now" for current context (title + current-month checks)
+  const nowDallas = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+  const currentDallasDate = new Date(nowDallas);
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-if (!monthShort || !year) {
-  monthShort = months[currentDallasDate.getMonth()];
-  year = currentDallasDate.getFullYear();
-}
-const displayMonthName = new Date(`${monthShort} 1, ${year}`).toLocaleString("default", {
-  month: "long",
-  year: "numeric"
-});
-document.getElementById("dailyOrdersTitle").innerText = `Daily Orders (${displayMonthName})`;
-console.log("month",monthShort,"year",year);
+  // Default to Dallas current month/year if not provided
+  if (!monthShort || !year) {
+    monthShort = months[currentDallasDate.getMonth()];
+    year = currentDallasDate.getFullYear();
+  }
+
+  // === KEY: normalize month for API compatibility ===
+  monthShort = normalizeMonthToMMM(monthShort);
+
+  const displayMonthName = new Date(`${monthShort} 1, ${year}`).toLocaleString("default", {
+    month: "long",
+    year: "numeric"
+  });
+  document.getElementById("dailyOrdersTitle").innerText = `Daily Orders (${displayMonthName})`;
+  console.log("month", monthShort, "year", year);
+
   try {
     console.log(`Fetching data for ${monthShort} ${year}`);
-const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-  params: { month: monthShort, year, limit: 1000 },
-});
+    const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
+      params: { month: monthShort, year, limit: 1000 },
+    });
 
-const { orders } = response.data;
-cachedDailyOrders = orders;
-cachedDallasDate = currentDallasDate;
+    const { orders } = response.data;
+    cachedDailyOrders = orders;
+    cachedDallasDate = currentDallasDate;
     if (!orders || !Array.isArray(orders)) {
       console.error("Invalid orders data.");
       return;
     }
 
-const daysInMonth = new Date(currentDallasDate.getFullYear(), currentDallasDate.getMonth() + 1, 0).getDate();
-const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
-const totalOrdersData = Array.from({ length: daysInMonth }, (_, i) => {
-  const isCurrentMonth = monthShort === months[currentDallasDate.getMonth()] && year === currentDallasDate.getFullYear();
-  const isFutureDay = isCurrentMonth && i + 1 > currentDallasDate.getDate();
-  return isFutureDay ? null : 0; // Null for future days, 0 for past/today
-});
-orders.forEach(order => {
-  const orderDateInDallas = new Date(
-    new Date(order.orderDate).toLocaleString("en-US", { timeZone: "America/Chicago" })
-  );
-  const orderMonth = orderDateInDallas.getMonth();
-  const expectedMonthIndex = months.indexOf(monthShort);
+    // Days in selected month/year (NOT current)
+    const selectedMonthIndex = months.indexOf(monthShort); // 0..11
+    const daysInMonth = new Date(year, selectedMonthIndex + 1, 0).getDate();
 
-  if (orderMonth === expectedMonthIndex) {
-    const day = orderDateInDallas.getDate() - 1;
-    if (day >= 0 && day < totalOrdersData.length) {
-      totalOrdersData[day] = (totalOrdersData[day] || 0) + 1;
-    }
-  }
-});
+    // Build labels 1..days
+    const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
+
+    // Decide if we should null future days (only when selected month === today's Dallas month/year)
+    const todayYMD = todayDallasYMD();                            // e.g., "2025-10-02"
+    const todayParts = todayYMD.split("-");                       // ["2025","10","02"]
+    const todayYear = parseInt(todayParts[0], 10);
+    const todayMonthIndex = parseInt(todayParts[1], 10) - 1;      // 0..11
+    const todayDate = parseInt(todayParts[2], 10);
+
+    const selectedIsCurrentDallasMonth =
+      (parseInt(year, 10) === todayYear) && (selectedMonthIndex === todayMonthIndex);
+
+    const totalOrdersData = Array.from({ length: daysInMonth }, (_, i) => {
+      if (selectedIsCurrentDallasMonth && (i + 1) > todayDate) return null; // future day in current month
+      return 0; // past/today or any day in non-current month
+    });
+
+    // Count orders per day using Dallas **date-only**
+    orders.forEach(order => {
+      const ymd = dallasYMDFromISO(order.orderDate); // "YYYY-MM-DD" in Dallas
+      const [oYear, oMonth, oDay] = ymd.split("-").map(n => parseInt(n, 10));
+      if (oYear === parseInt(year, 10) && (oMonth - 1) === selectedMonthIndex) {
+        const idx = oDay - 1;
+        if (idx >= 0 && idx < totalOrdersData.length) {
+          totalOrdersData[idx] = (totalOrdersData[idx] || 0) + 1;
+        }
+      }
+    });
+
     console.log("Total Orders Data (daily):", totalOrdersData);
     const ctx = document.getElementById("dailyOrdersChart");
     if (!ctx) {
       console.error("dailyOrdersChart element not found.");
       return;
     }
-    // Destroying the previous chart instance if it exists
-    if (dailyOrdersChartInstance) {
-      dailyOrdersChartInstance.destroy();
-    }
+    if (dailyOrdersChartInstance) dailyOrdersChartInstance.destroy();
+
     const colors = getChartColors();
 
-    // Create new chart
     dailyOrdersChartInstance = new Chart(ctx.getContext("2d"), {
-        type: "line", // change to stepLine style via options
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: "Total Orders",
-              backgroundColor: colors.totalOrdersBg,
-              borderColor: colors.totalOrdersColor,
-              pointBackgroundColor: colors.totalOrdersColor,
-              pointBorderColor: colors.totalOrdersColor,
-              data: totalOrdersData,
-              fill: true,
-              tension: 0, // <-- remove smooth curves
-              stepped: true ,
-              // pointBackgroundColor: "#fff",
-                pointBorderWidth: 2,
-                pointHoverBorderWidth: 3,
-                pointRadius: 5,
-                fill: true,
-                tension: 0.4,
-            },
-            // {
-            //   label: "Actual GP",
-            //   backgroundColor: colors.actualGPBg,
-            //   borderColor: colors.actualGPColor,
-            //   pointBackgroundColor: colors.actualGPColor,
-            //   pointBorderColor: "#fff",
-            //   data: totalGPData,
-            //   fill: true,
-            //   tension: 0, // <-- remove smooth curves
-            //   stepped: true // <-- ADD THIS LINE for step look
-            // }
-          ]
-        },
-      
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Total Orders",
+            backgroundColor: colors.totalOrdersBg,
+            borderColor: colors.totalOrdersColor,
+            pointBackgroundColor: colors.totalOrdersColor,
+            pointBorderColor: colors.totalOrdersColor,
+            data: totalOrdersData,
+            fill: true,
+            tension: 0,
+            stepped: true,
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 3,
+            pointRadius: 5,
+          },
+        ]
+      },
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -456,21 +454,20 @@ orders.forEach(order => {
             title: { display: true, text: "Actual GP", color: colors.axisColor },
             ticks: { color: colors.axisColor },
             grid: { color: colors.gridColor },
-            min: -1, 
+            min: -1,
           },
         },
         plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-                align: 'center',
-                labels: {
-                  color: colors.legendColor,
-                  boxWidth: 20,
-                  padding: 20 
-                }
-              }
-              ,
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'center',
+            labels: {
+              color: colors.legendColor,
+              boxWidth: 20,
+              padding: 20
+            }
+          },
           title: {
             display: true,
             color: colors.axisColor,
@@ -492,16 +489,11 @@ orders.forEach(order => {
             bodyFont: { weight: 'bold' },
           },
         },
-        interaction: {
-            mode: 'index',
-            intersect: false,
-          },
-          hover: {
-            mode: 'index',
-            intersect: false,
-          },          
+        interaction: { mode: 'index', intersect: false },
+        hover: { mode: 'index', intersect: false },
       },
     });
+
     console.log("Chart rendered successfully.");
     return { orders, currentDallasDate };
   } catch (error) {
@@ -862,13 +854,15 @@ function getLastThreeMonths() {
 }
 
 async function fetchMonthlyOrders(month, year) {
-  console.log("month'''",month,year)
+  console.log("month'''", month, year)
   try {
+    // === ADD THIS LINE ===
+    month = normalizeMonthToMMM(month);
+
     const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-      params: { month, year, limit: 500 } 
+      params: { month, year, limit: 500 }
     });
     return response.data.orders || [];
-
   } catch (err) {
     console.error("Error fetching monthly data:", err);
     return [];
@@ -906,6 +900,48 @@ function updateDoughnutChart(monthIndex) {
   if (doughnutChartInstance) doughnutChartInstance.destroy();
 
   const colors = getChartColors();
+// === NEW: normalize 3-letter month for API ===
+function normalizeMonthToMMM(input) {
+  if (!input) return "";
+  const m = String(input).trim().replace(/['"`]/g, "").toLowerCase();
+  const map = {
+    jan: "Jan", january: "Jan",
+    feb: "Feb", february: "Feb",
+    mar: "Mar", march: "Mar",
+    apr: "Apr", april: "Apr",
+    may: "May",
+    jun: "Jun", june: "Jun",
+    jul: "Jul", july: "Jul",
+    aug: "Aug", august: "Aug",
+    sep: "Sep", sept: "Sep", september: "Sep",
+    oct: "Oct", october: "Oct",
+    nov: "Nov", november: "Nov",
+    dec: "Dec", december: "Dec",
+  };
+  if (map[m]) return map[m];
+  return m.slice(0,3).replace(/^\w/, c => c.toUpperCase());
+}
+// === NEW: normalize 3-letter month for API ===
+function normalizeMonthToMMM(input) {
+  if (!input) return "";
+  const m = String(input).trim().replace(/['"`]/g, "").toLowerCase();
+  const map = {
+    jan: "Jan", january: "Jan",
+    feb: "Feb", february: "Feb",
+    mar: "Mar", march: "Mar",
+    apr: "Apr", april: "Apr",
+    may: "May",
+    jun: "Jun", june: "Jun",
+    jul: "Jul", july: "Jul",
+    aug: "Aug", august: "Aug",
+    sep: "Sep", sept: "Sep", september: "Sep",
+    oct: "Oct", october: "Oct",
+    nov: "Nov", november: "Nov",
+    dec: "Dec", december: "Dec",
+  };
+  if (map[m]) return map[m];
+  return m.slice(0,3).replace(/^\w/, c => c.toUpperCase());
+}
 
   doughnutChartInstance = new Chart(ctx, {
     type: "doughnut",
@@ -1039,7 +1075,7 @@ document.getElementById("prevMonthBtn").addEventListener("click", async () => {
 
     const { label } = allFetchedMonthlyData[doughnutMonthIndex];
     const [monthName, yearStr] = label.split(" ");
-    const monthShort = monthName.slice(0, 3);
+    const monthShort = normalizeMonthToMMM(monthName.slice(0, 3));
 
     await loadMonthlyCancellationRefundData(monthShort, parseInt(yearStr));
     await fetchDailyOrders(monthShort, parseInt(yearStr)); // 👈 Update chart here
