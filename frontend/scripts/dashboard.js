@@ -574,7 +574,7 @@ $(document).ready(async function () {
 
     document.getElementById("monthlyCancelRefundBox").innerHTML = `
       <div class="text-center p-2">
-        <h5 class="text-warning" style="color: #ffffff !important;">Monthly Cancellations & Refunds</h5>
+        <h5 class="text-warning" style="color: black !important;">Monthly Cancellations & Refunds</h5>
         <p><strong>Cancelled Orders:</strong> ${cancelled}</p>
         <p><strong>Refunded Orders:</strong> ${refunded}</p>
         <p><strong>Total Refund Amount:</strong> $${totalRefundAmount.toFixed(2)}</p>
