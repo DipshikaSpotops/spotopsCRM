@@ -3046,7 +3046,7 @@ html: `<p>Hi ${customerName},</p>
 <p>ETA(YYYY-MM-DD) - ${eta}</p>
 <p>Link - <a href="${link}">${link}</a></p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3107,7 +3107,7 @@ Tracking Link: ${cxshipperName || ""} -  ${trackingLink || ""}</p>
 <p>If there’s anything you need, or if you have any questions about your order, feel free to reach out, we’re always happy to help.</p>
 <p>Thanks once again for shopping with us. We look forward to helping you with your auto parts needs in the future!</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>${firstName}<br>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>${firstName}<br>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3234,7 +3234,7 @@ html: `<p>Dear ${customerName},</p>
 <p>If you have any questions or need further assistance with the return process, please feel free to reach out.</p>
 <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3294,7 +3294,7 @@ ${remainingPart}</p>
 <p>If you have any questions about the process or need further assistance, please feel free to contact us.</p>
 <p>Thank you for giving us an opportunity to make this right.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3347,7 +3347,7 @@ html: `<p>Dear ${customerName},</p>
 <p>Thank you again, and please don’t hesitate to reach out anytime.</p>
 <p>If you have any questions or need further assistance, please feel free to reach out.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -3409,7 +3409,7 @@ html: `<p>Dear ${customerName},</p>
 <p>If you have any questions or need further assistance with the return process, please feel free to reach out</p>
 <p>Thank you for your cooperation and understanding. We value your business and hope to have the opportunity to serve you again in the future.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [
 {
 filename: pdfFile.originalname,
@@ -3468,7 +3468,7 @@ html: `
 <p>If you need assistance or have any questions, please feel free to reach out.</p>
 <p>Thank you for allowing us the opportunity to make this right for you.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [
 {
 filename: pdfFile.originalname,
@@ -3539,7 +3539,7 @@ html: `<p>Dear ${customerName},</p>
 <p>Please allow 3-5 business days for the refund to reflect on your source account, as processing time may vary based on the financial institution. If you have any questions or need further assistane,feel free to contact us. </p>
 <p>Thank you for choosing 50 Stars Auto Parts. We hope to have the opportunity to serve you again in the future.</p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [
 {
 filename: pdfFile.originalname,
@@ -4271,10 +4271,10 @@ ${order.model} ${order.pReq}</b> with <b>50 Stars Auto Parts</b>.
 <b>We have cancelled your order and will refund you $${cancelledRefAmount}  to the same source account.</b>
 Please call us if you have any questions. Rest assured, any payment made for the cancelled order will be promptly refunded to your original payment method. You can expect to see the refund reflected in your account within 3-5 business days.<br>
 <p>We understand the importance of timely and efficient service, and we sincerely apologize for any inconvenience this cancellation may have caused. Our team is working diligently to prevent such occurrences in the future.<br>
-If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1 (888) 732-8680</b>]. We are here to assist you in any way we can.Thank you for your understanding and continued support.<br></p>
+If you have any questions or require further assistance, please don't hesitate to contact our customer support team at [<b>+1 (866) 207-5533</b>]. We are here to assist you in any way we can.Thank you for your understanding and continued support.<br></p>
 <p><b>Please reply to this email with a quick confirmation to acknowledge and approve this cancellation request.</b></p>
 <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
-<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+<p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
 attachments: [{
 filename: 'logo.png',
 path: 'https://assets-autoparts.s3.ap-south-1.amazonaws.com/images/logo.png',
@@ -4366,7 +4366,7 @@ var yardEmail = order.additionalInfo[yardIndex].email;
              
   <p><img src="cid:logo" alt="logo" style="width: 180px; height: 100px;"></p>
   <p>${firstName || ""}</p>
-  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (888) 732-8680<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
+  <p>Customer Service Team<br>50 STARS AUTO PARTS<br>+1 (866) 207-5533<br>service@50starsautoparts.com<br>www.50starsautoparts.com</p>`,
   attachments: [
     {
     filename: pdfFile.originalname,
@@ -4515,7 +4515,7 @@ app.post("/sendPOEmailYard/:orderNo", upload.fields([
         <p style="font-size: 16px;">
           ${firstName}<br>
           Auto Parts Group Corp<br>
-          +1 (888) 732-8680 | purchase@auto-partsgroup.com
+          +1 (866) 207-5533 | purchase@auto-partsgroup.com
         </p>
       `,
       attachments: [
