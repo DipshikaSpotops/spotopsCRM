@@ -817,7 +817,7 @@ $(document).ready(async function () {
     const statusCounts = statusLabels.map(status =>
       orders.filter(order => order.orderStatus === status).length
     );
-
+    console.log("totalOrders",statusCounts);
     const totalOrders = orders.length;
     const totalFulfilled = orders.filter(o => o.orderStatus === "Order Fulfilled").length;
     const totalEscalated = orders.filter(o => o.orderStatus === "Escalation").length;
