@@ -793,7 +793,7 @@ $(document).ready(async function () {
     try {
       month = normalizeMonthToMMM(month);
       const response = await axios.get(`https://www.spotops360.com/orders/monthly`, {
-        params: { month, year, limit: 500 }
+        params: { month, year, limit: 1000 }
       });
       return response.data.orders || [];
     } catch (err) {
