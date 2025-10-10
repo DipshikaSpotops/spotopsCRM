@@ -823,7 +823,7 @@ $(document).ready(async function () {
     const totalEscalated = orders.filter(o => o.orderStatus === "Escalation").length;
     const totalCancelled = orders.filter(o =>
       ["Order Cancelled", "Refunded", "Dispute"].includes(o.orderStatus)).length;
-    console.log("totalCancelled",totalCancelled);
+    console.log("totalCancelled",totalCancelled,"totalOrders",totalOrders);
     const successRate = totalOrders ? ((totalFulfilled / totalOrders) * 100).toFixed(2) : 0;
     const escalationRate = totalOrders ? ((totalEscalated / totalOrders) * 100).toFixed(2) : 0;
     const cancellationRate = totalOrders ? ((totalCancelled / totalOrders) * 100).toFixed(2) : 0;
