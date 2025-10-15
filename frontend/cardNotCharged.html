@@ -705,7 +705,7 @@ function renderTableRows(page, data = yardOrders) {
     $("#yardInfoTable").empty(); 
     
     if (!data || data.length === 0) {
-      $("#yardInfoTable").html(`<tr><td colspan="10">No 'Card Not Charged' orders found.</td></tr>`);
+      $("#yardInfoTable").html(`<tr><td colspan="10">No Card Not Charged orders found.</td></tr>`);
       $("#showTotalOrders").text("Total Orders - 0");
       $("#pagination-controls").empty();
       return;
