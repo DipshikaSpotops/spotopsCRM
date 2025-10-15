@@ -346,8 +346,10 @@ function highlightSavedOrder() {
     const $rows = $("#yardInfoTable tr");
     if ($rows.length) {
       const match = $rows.filter(function () {
+        // Match first column text with saved order number
         return $(this).find("td:first").text().trim() === savedOrderNo;
       });
+
       if (match.length) {
         $rows.removeClass("selected");
         match.addClass("selected");
@@ -356,7 +358,7 @@ function highlightSavedOrder() {
       }
     }
     attempts++;
-    if (attempts > 30) clearInterval(interval); // wait ~6 s max
+    if (attempts > 30) clearInterval(interval); // ~6 seconds max
   }, 200);
 }
 
@@ -609,7 +611,7 @@ setTimeout(() => {
   currentPage = savedPage || 1;
   renderTableRows(currentPage, yardOrders);
   createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-
+  highlightSavedOrder();
   if (savedSearch) {
     $("#searchInput").val(savedSearch).trigger("keyup");
   }
