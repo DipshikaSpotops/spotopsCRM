@@ -544,10 +544,15 @@ console.log("same actyal gp foe card charged")
 }
 }else if (pStatus === "Card not charged") {
   // if order is cancelled/dispute/refunded, calculate actualGP normally
-  if (["Order Cancelled", "Refunded", "Dispute", "Dispute 2"].includes(data.orderStatus)) {
+  if (["Order Cancelled", "Refunded"].includes(data.orderStatus)) {
     actualGP = (sp - custRefundedAmount) - tax;
     console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
-  } else {
+  } 
+  else if ([ "Dispute", "Dispute 2"].includes(data.orderStatus)){
+    actualGP = 0 - (totalSum  + tax);
+    console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
+  }
+    else {
     actualGP = 0;
     console.log("actualGP set to 0 (Card not charged, normal case)");
   }
