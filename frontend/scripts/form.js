@@ -542,7 +542,7 @@ else{
 console.log("same actyal gp foe card charged")
 }
 }else if(pStatus === "Card not charged"){
-  actualGP =  0;
+actualGP =  0;
 console.log("actualGPAfterDispute",totalSum,tax)
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
@@ -558,6 +558,31 @@ console.error("Error updating actualGP:", error);
 //   $("#actualGP").val(actualGP.toFixed(2)); 
 // }
 });
+
+// for scenarios where PO is cancelled but orderSttatus is Dispute, refunded, cancelled
+const isCancelledOrDispute = ["Order Cancelled", "Refunded", "Dispute", "Dispute after Cancellation"].includes(data.orderStatus);
+
+// If order is cancelled/dispute/etc. AND all yards have empty or "Card not charged" payment status
+if (isCancelledOrDispute) {
+  const allYardsNotCharged = !data.additionalInfo || data.additionalInfo.every(yard =>
+    !yard.paymentStatus || yard.paymentStatus === "Card not charged"
+  );
+
+  if (allYardsNotCharged) {
+    let actualGP = (sp - custRefundedAmount) - tax;
+    $("#actualGP").val(actualGP.toFixed(2));
+
+    if (currentActualGp !== actualGP) {
+      axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+      .then(response => {
+        console.log("ActualGP updated for cancelled/dispute with uncharged payment.");
+      })
+      .catch(error => {
+        console.error("Error updating actualGP:", error);
+      });
+    }
+  }
+}
 })
 .catch(error => console.error("Error fetching yard data:", error));
 }, 500);
