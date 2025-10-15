@@ -571,7 +571,7 @@ if (isCancelledOrDispute) {
   if (allYardsNotCharged) {
     let actualGP = (sp - custRefundedAmount) - tax;
     $("#actualGP").val(actualGP.toFixed(2));
-
+     console.log("actual GP",actualGP);
     if (currentActualGp !== actualGP) {
       axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
       .then(response => {
