@@ -422,7 +422,8 @@ $("#actualGP").val(currentActualGp.toFixed(2));
 // console.log("yards",data.additionalInfo)
 if (
 (!data.additionalInfo || data.additionalInfo.length === 0) && 
-(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute"))
+(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute" 
+  || data.orderStatus === "Dispute after Cancellation"))
 {
 if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
@@ -525,7 +526,7 @@ axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actua
 .catch(function (error) {
 console.error("Error updating actualGP:", error);
 });
-}else if (data.orderStatus === "Dispute"){
+}else if (data.orderStatus === "Dispute" || data.orderStatus === "Dispute after Cancellation"){
 actualGP =  0 - (totalSum  + tax);
 console.log("actualGPAfterDispute",totalSum,tax)
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
