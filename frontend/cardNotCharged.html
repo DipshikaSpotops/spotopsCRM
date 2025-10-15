@@ -1340,15 +1340,22 @@ $("table").removeClass("table-dark");
 $("#darkModeIcon").removeClass("fa-sun").addClass("fa-moon");
 localStorage.setItem("darkMode", "false");
 }
-$(document).on("click", "#infoTable tr", function () {
+$(document).on("click", "#yardInfoTable tr", function () {
+  // toggle highlight
   const isSelected = $(this).hasClass("selected");
 
-  $("#infoTable tr").removeClass("selected");
-
+  $("#yardInfoTable tr").removeClass("selected");
   if (!isSelected) {
     $(this).addClass("selected");
   }
+
+  // remember selected order number for later (highlight on reload)
+  const orderNo = $(this).find("td:first").text().trim();
+  if (orderNo) {
+    sessionStorage.setItem("selectedOrderNo", orderNo);
+  }
 });
+
 fetchNotifications();
   // sorting 
 let currentSortColumn = '';
