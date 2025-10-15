@@ -567,7 +567,7 @@ if (isCancelledOrDispute) {
   const allYardsNotCharged = !data.additionalInfo || data.additionalInfo.every(yard =>
     !yard.paymentStatus || yard.paymentStatus === "Card not charged"
   );
-
+  console.log("allYardsNotCharged",allYardsNotCharged);
   if (allYardsNotCharged) {
     let actualGP = (sp - custRefundedAmount) - tax;
     $("#actualGP").val(actualGP.toFixed(2));
