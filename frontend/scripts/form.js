@@ -541,16 +541,23 @@ console.error("Error updating actualGP:", error);
 else{
 console.log("same actyal gp foe card charged")
 }
-}else if(pStatus === "Card not charged"){
-actualGP =  0;
-console.log("actualGPAfterDispute",totalSum,tax)
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-$("#actualGP").val(actualGP.toFixed(2));
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
+}else if (pStatus === "Card not charged") {
+  // if order is cancelled/dispute/refunded, calculate actualGP normally
+  if (["Order Cancelled", "Refunded", "Dispute", "Dispute after Cancellation"].includes(data.orderStatus)) {
+    actualGP = (sp - custRefundedAmount) - tax;
+    console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
+  } else {
+    actualGP = 0;
+    console.log("actualGP set to 0 (Card not charged, normal case)");
+  }
+
+  axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+  .then(function (response) {
+    $("#actualGP").val(actualGP.toFixed(2));
+  })
+  .catch(function (error) {
+    console.error("Error updating actualGP:", error);
+  });
 }
 // else{
 //   actualGP = sp - tax - custRefundedAmount;
