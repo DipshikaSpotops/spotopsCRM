@@ -354,7 +354,7 @@ $(document).ready(async function () {
 
   $("#infoTable").on("click", ".edit-btn", function () {
     const id = $(this).data("id");
-    window.location.href = `form.html?orderNo=${id}`;
+    window.location.href = `formNew.html?orderNo=${id}`;
   });
 
   $("#infoTable").on("click", ".process-btn", function () {
@@ -362,7 +362,7 @@ $(document).ready(async function () {
     localStorage.setItem("returningFromForm", "true");
     const selectedMonthYear = $("#monthYearPicker").val();
     localStorage.setItem("ongoingEscalationMonth", selectedMonthYear);
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+    window.location.href = `formNew.html?orderNo=${id}&process=true`;
   });
 
   $("#infoTable").on("click", ".cancel-btn", function () {
@@ -747,7 +747,7 @@ $(document).ready(async function () {
     if (event.key === 'Enter') {
       const orderNo = searchInput.value.trim();
       if (orderNo !== '') {
-        window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+        window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
       }
     }
   });

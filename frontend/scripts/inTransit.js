@@ -3,7 +3,7 @@ $(document).ready(async function () {
   window.location.href = "viewAllTasks.html";
 });
 const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-if (lastVisitedPage === "inTransit" && document.referrer.includes("form.html")) {
+if (lastVisitedPage === "inTransit" && document.referrer.includes("formNew.html")) {
   const savedPage = sessionStorage.getItem("currentPage");
   const savedRange = sessionStorage.getItem("selectedDateRange");
   const savedSearch = sessionStorage.getItem("searchValue");
@@ -351,7 +351,7 @@ return orderNoB - orderNoA;
 }
 $("#infoTable").on("click", ".edit-btn", function () {
 const id = $(this).data("id");
-window.location.href = `form.html?orderNo=${id}`;
+window.location.href = `formNew.html?orderNo=${id}`;
 });
 
 $("#infoTable").on("click", ".process-btn", function () {
@@ -360,7 +360,7 @@ sessionStorage.setItem("lastVisitedPage", "inTransit");
 sessionStorage.setItem("currentPage", currentPage);
 sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
 sessionStorage.setItem("searchValue", $("#searchInput").val());
-window.location.href = `form.html?orderNo=${id}&process=true`;
+window.location.href = `formNew.html?orderNo=${id}&process=true`;
 });
 
 const currentPath = window.location.pathname + "?newEntry=true";
@@ -710,7 +710,7 @@ $(document).on("click", "#infoTable tr", function () {
   if (event.key === 'Enter') {
     const orderNo = searchInput.value.trim();
     if (orderNo !== '') {
-      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+      window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
     }
   }
 });

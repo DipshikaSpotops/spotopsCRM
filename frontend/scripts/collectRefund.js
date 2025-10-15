@@ -430,7 +430,7 @@ async function fetchYardInfo(month, year) {
       sessionStorage.setItem("currentPage", currentPage);
       sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
       sessionStorage.setItem("searchValue", $("#searchInput").val());
-  window.location.href = `form.html?orderNo=${id}&process=true`;
+  window.location.href = `formNew.html?orderNo=${id}&process=true`;
   });
   
   function createPaginationControls(totalPages, orders = yardOrders) {
@@ -961,7 +961,7 @@ $(document).on("click", "#yardInfoTable tr", function () {
       `;
 
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
-       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+       window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
 
       });
     } else {

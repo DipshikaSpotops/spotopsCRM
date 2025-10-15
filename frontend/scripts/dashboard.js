@@ -1230,7 +1230,7 @@ $(document).ready(async function () {
     if (orderNo !== '') {
       resultDiv.innerHTML = `<button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>`;
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
-        window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+        window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
       });
     } else {
       resultDiv.innerHTML = '';
@@ -1246,7 +1246,7 @@ $(document).ready(async function () {
     if (orderNo !== '') {
       resultOrder.innerHTML = `<button class="btn btn-primary btn-sm" id="viewOrderBtn">View Order</button>`;
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
-        window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+        window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
       });
     } else {
       resultDiv.innerHTML = '';

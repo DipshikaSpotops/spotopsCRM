@@ -265,7 +265,7 @@ console.log("disputes",disputes);
   if (event.key === 'Enter') {
     const orderNo = searchQuick.value.trim();
     if (orderNo !== '') {
-      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+      window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
     }
   }
 });
@@ -274,7 +274,7 @@ console.log("disputes",disputes);
   // View button
   $("#infoTable").on("click", ".view-order", function () {
     const id = $(this).data("id");
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+    window.location.href = `formNew.html?orderNo=${id}&process=true`;
   });
     $("#filterButton").click(async function () {
     const selected = $("#monthYearPicker").val();
@@ -333,7 +333,7 @@ $(document).on("click", "#infoTableHeader th.sortable", function () {
 });
   $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+    window.location.href = `formNew.html?orderNo=${id}&process=true`;
   });
   const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)

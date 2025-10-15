@@ -384,7 +384,7 @@ const searchInput = document.getElementById('searchInputForOrderNo');
   if (event.key === 'Enter') {
     const orderNo = searchInput.value.trim();
     if (orderNo !== '') {
-      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+      window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
     }
   }
 });

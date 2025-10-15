@@ -465,7 +465,7 @@ $(document).ready(async function () {
 
   $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+    window.location.href = `formNew.html?orderNo=${id}&process=true`;
   });
 
   const currentPath = window.location.pathname + "?newEntry=true";
@@ -788,7 +788,7 @@ $(document).ready(async function () {
     if (event.key === 'Enter') {
       const orderNo = searchInput.value.trim();
       if (orderNo !== '') {
-        window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+        window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
       }
     }
   });

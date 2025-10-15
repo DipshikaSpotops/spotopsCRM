@@ -168,7 +168,7 @@ $("#searchInput").on("keyup", function () {
         : "";
       if (val) {
         document.getElementById("viewOrderBtn").onclick = () => {
-          window.location.href = `form.html?orderNo=${encodeURIComponent(val)}&process=true`;
+          window.location.href = `formNew.html?orderNo=${encodeURIComponent(val)}&process=true`;
         };
       }
     });
@@ -344,7 +344,7 @@ $('#pagination-controls').on('click', '#nextPage', function () {
   // View button click
   $("#infoTable").on("click", ".process-btn", function () {
     const id = $(this).data("id");
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+    window.location.href = `formNew.html?orderNo=${id}&process=true`;
   });
   const currentPath = window.location.pathname + "?newEntry=true";
 console.log("currentPath",currentPath)

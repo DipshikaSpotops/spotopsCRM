@@ -1,7 +1,7 @@
 $(document).ready(async function () {
   const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
 
-if (lastVisitedPage === "cancelledOrders" && document.referrer.includes("form.html")) {
+if (lastVisitedPage === "cancelledOrders" && document.referrer.includes("formNew.html")) {
   const savedRange = sessionStorage.getItem("selectedDateRange");
   const savedSearch = sessionStorage.getItem("searchValue");
   const savedPage = sessionStorage.getItem("currentPage");
@@ -539,7 +539,7 @@ sessionStorage.setItem("lastVisitedPage", "cancelledOrders");
 sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
 sessionStorage.setItem("searchValue", $("#searchInput").val());
 sessionStorage.setItem("currentPage", currentPage);
-window.location.href = `form.html?orderNo=${id}&process=true`;
+window.location.href = `formNew.html?orderNo=${id}&process=true`;
 });
 
 
@@ -911,7 +911,7 @@ $(document).on("click", "#infoTable tr", function () {
       `;
 
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
-       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+       window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
 
       });
     } else {

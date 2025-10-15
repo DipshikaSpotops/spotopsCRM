@@ -351,7 +351,7 @@ token = localStorage.getItem("token");
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
 
-    if (lastVisitedPage && document.referrer.includes("form.html")) {
+    if (lastVisitedPage && document.referrer.includes("formNew.html")) {
         let savedMonthYear = sessionStorage.getItem("selectedMonthYear");
         let savedPage = sessionStorage.getItem("currentPage");
 
@@ -486,7 +486,7 @@ $("#infoTable").on("click", ".process-btn", function () {
     sessionStorage.setItem("lastVisitedPage", window.location.href);
     sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
     sessionStorage.setItem("currentPage", currentPage);
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+    window.location.href = `formNew.html?orderNo=${id}&process=true`;
 });
 $(document).on("click", "#infoTable tr", function () {
   const isSelected = $(this).hasClass("selected");
@@ -837,7 +837,7 @@ localStorage.setItem("darkMode", "false");
   if (event.key === 'Enter') {
     const orderNo = searchInput.value.trim();
     if (orderNo !== '') {
-      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+      window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
     }
   }
 });

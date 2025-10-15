@@ -397,7 +397,7 @@ const selectedMonth = $("#monthYearPicker").val();
     const searchValue = $("#searchInput").val();
     localStorage.setItem("selectedMonth", selectedMonth);
     localStorage.setItem("searchValue", searchValue);
-window.location.href = `form.html?orderNo=${id}`;
+window.location.href = `formNew.html?orderNo=${id}`;
 });
 
 $("#infoTable").on("click", ".process-btn", function () {
@@ -411,7 +411,7 @@ $("#infoTable").on("click", ".process-btn", function () {
     localStorage.setItem("selectedMonth", selectedMonth);
     localStorage.setItem("searchValue", searchValue);
 
-    window.location.href = `form.html?orderNo=${id}&process=true`;
+    window.location.href = `formNew.html?orderNo=${id}&process=true`;
 });
 
 
@@ -489,9 +489,9 @@ $("#filterButton").click(async function () {
                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   let queryParams = {};
 
-  // Handle session restore if coming back from form.html
+  // Handle session restore if coming back from formNew.html
   const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-if (lastVisitedPage === "yardProcessing" && document.referrer.includes("form.html")) {
+if (lastVisitedPage === "yardProcessing" && document.referrer.includes("formNew.html")) {
   const savedDateRange = sessionStorage.getItem("selectedDateRange");
   const savedPage = sessionStorage.getItem("currentPage");
   const savedSearch = sessionStorage.getItem("searchValue");
@@ -779,7 +779,7 @@ $(document).on("click", "#infoTable tr", function () {
   if (event.key === 'Enter') {
     const orderNo = searchInput.value.trim();
     if (orderNo !== '') {
-      window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+      window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
     }
   }
 });

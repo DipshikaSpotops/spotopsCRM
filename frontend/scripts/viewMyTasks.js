@@ -600,7 +600,7 @@ $("#infoTable").append(`<tr><td colspan="11">No matching results found</td></tr>
       `;
 
       document.getElementById('viewOrderBtn').addEventListener('click', function () {
-       window.location.href = 'form.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
+       window.location.href = 'formNew.html?orderNo=' + encodeURIComponent(orderNo) + '&process=true';
 
       });
     } else {
