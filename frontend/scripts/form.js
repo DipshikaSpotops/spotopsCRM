@@ -4238,7 +4238,6 @@ function renderAllNotesForActiveYard() {
   }
 
   notes.forEach((n, i) => {
-    // Each note as its own card-ish block
     $list.append(`
       <div class="border rounded p-2">
         <div style="white-space:pre-wrap;">${typeof n === "string" ? n : JSON.stringify(n)}</div>
@@ -4247,7 +4246,6 @@ function renderAllNotesForActiveYard() {
   });
 }
 
-// Button click: switch yard
 $("#yardNotesButtons").on("click", ".yard-notes-btn", function () {
   setActiveYardForNotes(Number($(this).data("idx")));
 });

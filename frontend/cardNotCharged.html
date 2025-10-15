@@ -576,7 +576,37 @@ var monthNum = monthMap[month];
 
 $("#unifiedDatePicker").val(`${year}-${monthNum}`);
 await fetchYardInfo(month, year);
+const savedRange = sessionStorage.getItem("selectedDateRange");
+const savedPage = parseInt(sessionStorage.getItem("currentPage") || "1");
+const savedSearch = sessionStorage.getItem("searchValue");
+const savedOrderNo = sessionStorage.getItem("selectedOrderNo");
 
+if (savedRange) $("#unifiedDatePicker").val(savedRange);
+
+currentPage = savedPage || 1;
+renderTableRows(currentPage, yardOrders);
+createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+
+if (savedSearch) {
+  $("#searchInput").val(savedSearch).trigger("keyup");
+}
+
+// Highlight the previously selected order
+if (savedOrderNo) {
+  $("#yardInfoTable tr").each(function () {
+    const cellText = $(this).find("td:first").text().trim();
+    if (cellText === savedOrderNo) {
+      $(this).addClass("selected");
+      this.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+}
+
+// Clear state after restoring
+sessionStorage.removeItem("selectedDateRange");
+sessionStorage.removeItem("currentPage");
+sessionStorage.removeItem("searchValue");
+sessionStorage.removeItem("selectedOrderNo");
 // Fetch yard info data for a specific month and 
 async function fetchYardInfo(month, year) {
     try {
@@ -748,9 +778,15 @@ document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${yardOrd
 
 
 $("#yardInfoTable").on("click", ".process-btn", function () {
-const id = $(this).data("id");
-window.location.href = `formNew.html?orderNo=${id}&process=true`;
+  const id = $(this).data("id");
+  sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
+  sessionStorage.setItem("currentPage", currentPage);
+  sessionStorage.setItem("searchValue", $("#searchInput").val());
+  sessionStorage.setItem("selectedOrderNo", id);
+
+  window.location.href = `formNew.html?orderNo=${id}&process=true`;
 });
+
 // function createPaginationControls(totalPages, data = yardOrders) {
 //   const paginationControls = $("#pagination-controls");
 //   paginationControls.empty();
@@ -862,6 +898,16 @@ $("#filterButton").click(async function () {
     currentPage = 1;
     await fetchYardInfo(month, year);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    const savedOrderNo = sessionStorage.getItem("selectedOrderNo");
+if (savedOrderNo) {
+  $("#yardInfoTable tr").each(function () {
+    const cellText = $(this).find("td:first").text().trim();
+    if (cellText === savedOrderNo) {
+      $(this).addClass("selected");
+      this.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+}
   } catch (error) {
     console.error("Error filtering Card Not Charged data:", error);
     alert("Something went wrong while filtering data.");
@@ -1343,6 +1389,13 @@ $("#infoTableHeader th.sortable").on("click", function () {
   // Highlight the active arrow
   const arrowToActivate = sortAsc ? ".asc" : ".desc";
   $(this).find(arrowToActivate).addClass("active");
+});
+// Highlight / de-highlight rows on click
+$(document).on("click", "#yardInfoTable tr", function () {
+  const $row = $(this);
+  const isSelected = $row.hasClass("selected");
+  $("#yardInfoTable tr").removeClass("selected");
+  if (!isSelected) $row.addClass("selected");
 });
 });
 </script>

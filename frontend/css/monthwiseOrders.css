@@ -666,6 +666,10 @@ table {
 #downloadCsv i {
   font-size: 18px; 
 }
+.selected {
+  background-color: #ffe7a0 !important;
+  transition: background-color 0.4s ease-in-out;
+}
 @media (max-width: 992px) {
   .sidebar {
     font-size: 10px;

@@ -1014,7 +1014,7 @@ $(document).on("click", "th.sortable", function () {
     order.overallSum = overallSum;
   });
 
-  // 🔃 Sort yardOrders
+  // Sort yardOrders
   yardOrders.sort((a, b) => {
     let valA = a[sortKey] ?? "";
     let valB = b[sortKey] ?? "";
@@ -1041,7 +1041,7 @@ $(document).on("click", "th.sortable", function () {
   renderTable(currentPage, yardOrders);
   createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 
-  // 🔄 Reset sort icons
+  // Reset sort icons
   $(".sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrow = currentSort.order === "asc" ? ".asc" : ".desc";
   $th.find(arrow).addClass("active");
