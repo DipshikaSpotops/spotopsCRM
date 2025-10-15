@@ -980,6 +980,7 @@ last4digits: $("#issueOrder").val(),
 notes: $("#notes").val(),
 firstName: firstName,
 };
+console.log("order status",$("#orderStatus").val())
 // Sending the updated data to the API using the PUT method
 return fetch(`${url}?firstName=${firstName}`, {
 method: "PUT",
