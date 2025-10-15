@@ -414,10 +414,10 @@ var sp = data.soldP;
 var tax = data.salestax;
 var spMinusTax = data.spMinusTax || 0 || sp - tax; 
 var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.custRefAmount || 0;  
-var currentActualGp = data.actualGP || 0;
+var currentActualGP = data.actualGP || 0;
 console.log("order rn",data.orderStatus);
 $("#custRefunds").val(custRefundedAmount)
-$("#actualGP").val(currentActualGp.toFixed(2));
+$("#actualGP").val(currentActualGP.toFixed(2));
 // console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
 // console.log("yards",data.additionalInfo)
 if (
@@ -429,7 +429,7 @@ if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
 $("#actualGP").val(actualGP.toFixed(2));
 
-if (currentActualGp !== actualGP) {
+if (currentActualGP !== actualGP) {
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
@@ -518,7 +518,7 @@ let actualGP = subtractRefund - totalSum;
 // console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
 $("#actualGP").val(actualGP.toFixed(2)); 
 // updateActualGP(orderNo, actualGP);
-if(currentActualGp !== actualGP && data.orderStatus !== "Dispute"){
+if(currentActualGP !== actualGP && data.orderStatus !== "Dispute"){
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
 .then(function (response) {
 // console.log("ActualGP information updated successfully:", response);
@@ -560,26 +560,40 @@ console.error("Error updating actualGP:", error);
 });
 
 // for scenarios where PO is cancelled but orderSttatus is Dispute, refunded, cancelled
-const isCancelledOrDispute = ["Order Cancelled", "Refunded", "Dispute", "Dispute after Cancellation"].includes(data.orderStatus);
+// for scenarios where PO is cancelled but orderStatus is Dispute, refunded, cancelled
+const isCancelledOrDispute = [
+  "Order Cancelled",
+  "Refunded",
+  "Dispute",
+  "Dispute after Cancellation"
+].includes(data.orderStatus);
 
-// If order is cancelled/dispute/etc. AND all yards have empty or "Card not charged" payment status
 if (isCancelledOrDispute) {
-  const allYardsNotCharged = !data.additionalInfo || data.additionalInfo.every(yard =>
-    !yard.paymentStatus || yard.paymentStatus === "Card not charged"
-  );
-  console.log("allYardsNotCharged",allYardsNotCharged);
+  const allYardsNotCharged =
+    !data.additionalInfo ||
+    data.additionalInfo.every(
+      (yard) => !yard.paymentStatus || yard.paymentStatus === "Card not charged"
+    );
+
+  console.log("allYardsNotCharged", allYardsNotCharged);
+
   if (allYardsNotCharged) {
     let actualGP = (sp - custRefundedAmount) - tax;
     $("#actualGP").val(actualGP.toFixed(2));
-     console.log("actual GP",actualGP);
-    if (currentActualGp !== actualGP) {
-      axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-      .then(response => {
-        console.log("ActualGP updated for cancelled/dispute with uncharged payment.");
-      })
-      .catch(error => {
-        console.error("Error updating actualGP:", error);
-      });
+    console.log("actual GP", actualGP);
+
+    if (Number(currentActualGP) !== Number(actualGP)) {
+      console.log("About to update actualGP on server:", actualGP);
+      axios
+        .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+        .then((response) => {
+          console.log("ActualGP updated for cancelled/dispute with uncharged payment.");
+        })
+        .catch((error) => {
+          console.error("Error updating actualGP:", error);
+        });
+    } else {
+      console.log("ActualGP unchanged — no update required.");
     }
   }
 }
