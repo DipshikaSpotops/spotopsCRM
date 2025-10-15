@@ -83,6 +83,7 @@ currentOrderStatus = data.orderStatus;
 .catch(error => console.error("Error fetching yard data:", error));
 // common fetch of orders ends here
 $("#orderStatus").on("change", function () {
+  console.log("Selected status value:", $("#orderStatus").val());
 const newOrderStatus = $(this).val();
 console.log("currentOrderStatus",currentOrderStatus);
 if (["Dispute", "Refunded", "Order Cancelled"].includes(currentOrderStatus)) {
