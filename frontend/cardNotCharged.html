@@ -576,31 +576,36 @@ var monthNum = monthMap[month];
 
 $("#unifiedDatePicker").val(`${year}-${monthNum}`);
 await fetchYardInfo(month, year);
-const savedRange = sessionStorage.getItem("selectedDateRange");
-const savedPage = parseInt(sessionStorage.getItem("currentPage") || "1");
-const savedSearch = sessionStorage.getItem("searchValue");
-const savedOrderNo = sessionStorage.getItem("selectedOrderNo");
+// ---- Restore previous view state (month, page, search, highlight) ----
+setTimeout(() => {
+  const savedRange = sessionStorage.getItem("selectedDateRange");
+  const savedPage = parseInt(sessionStorage.getItem("currentPage") || "1");
+  const savedSearch = sessionStorage.getItem("searchValue");
+  const savedOrderNo = sessionStorage.getItem("selectedOrderNo");
 
-if (savedRange) $("#unifiedDatePicker").val(savedRange);
+  if (savedRange) $("#unifiedDatePicker").val(savedRange);
 
-currentPage = savedPage || 1;
-renderTableRows(currentPage, yardOrders);
-createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+  currentPage = savedPage || 1;
+  renderTableRows(currentPage, yardOrders);
+  createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
 
-if (savedSearch) {
-  $("#searchInput").val(savedSearch).trigger("keyup");
-}
+  // 🔍 reapply search
+  if (savedSearch) {
+    $("#searchInput").val(savedSearch).trigger("keyup");
+  }
 
-// Highlight the previously selected order
-if (savedOrderNo) {
-  $("#yardInfoTable tr").each(function () {
-    const cellText = $(this).find("td:first").text().trim();
-    if (cellText === savedOrderNo) {
-      $(this).addClass("selected");
-      this.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  });
-}
+  // 💡 re-highlight the saved order
+  if (savedOrderNo) {
+    $("#yardInfoTable tr").each(function () {
+      const cellText = $(this).find("td:first").text().trim();
+      if (cellText === savedOrderNo) {
+        $(this).addClass("selected");
+        this.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  }
+}, 600);
+
 
 // Clear state after restoring
 sessionStorage.removeItem("selectedDateRange");
@@ -779,13 +784,18 @@ document.getElementById("showTotalOrders").innerHTML = `Total Orders - ${yardOrd
 
 $("#yardInfoTable").on("click", ".process-btn", function () {
   const id = $(this).data("id");
+
+  // Save current context for restore
   sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
   sessionStorage.setItem("currentPage", currentPage);
   sessionStorage.setItem("searchValue", $("#searchInput").val());
   sessionStorage.setItem("selectedOrderNo", id);
+  $("#yardInfoTable tr").removeClass("selected");
+  $(this).closest("tr").addClass("selected");
 
   window.location.href = `formNew.html?orderNo=${id}&process=true`;
 });
+
 
 // function createPaginationControls(totalPages, data = yardOrders) {
 //   const paginationControls = $("#pagination-controls");
