@@ -1,5 +1,29 @@
 $(document).ready(async function () {
-  
+  function highlightSavedOrder() {
+  const savedOrderNo = sessionStorage.getItem("selectedOrderNo");
+  if (!savedOrderNo) return;
+
+  let attempts = 0;
+  const interval = setInterval(() => {
+    const $rows = $("#yardInfoTable tr");
+    if ($rows.length) {
+      const match = $rows.filter(function () {
+        return $(this).find("td:first").text().trim() === savedOrderNo;
+      });
+
+      if (match.length) {
+        $rows.removeClass("selected");
+        match.addClass("selected");
+        match[0].scrollIntoView({ behavior: "smooth", block: "center" });
+        clearInterval(interval);
+      }
+    }
+
+    attempts++;
+    if (attempts > 30) clearInterval(interval); // ~6 seconds
+  }, 200);
+}
+
 $("#viewAlltasks").on("click", function () {
     window.location.href = "viewAllTasks.html";
   });
@@ -210,6 +234,7 @@ async function fetchYardInfo(month, year) {
     console.log("yardOrders with calculated spends", yardOrders);
     renderTable(currentPage, yardOrders);
     createPaginationControls(Math.ceil(yardOrders.length / 25));
+    highlightSavedOrder();
   } catch (error) {
     console.error("Error fetching yard info:", error);
     alert("Failed to fetch data");
@@ -423,15 +448,15 @@ async function fetchYardInfo(month, year) {
   }
   
   
-  $("#yardInfoTable").on("click", ".process-btn", function () {
+$("#yardInfoTable").on("click", ".process-btn", function () {
   const id = $(this).data("id");
-  // Save session data
+  sessionStorage.setItem("selectedOrderNo", id);
   sessionStorage.setItem("lastVisitedPage", "collectRefund");
-      sessionStorage.setItem("currentPage", currentPage);
-      sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
-      sessionStorage.setItem("searchValue", $("#searchInput").val());
+  sessionStorage.setItem("currentPage", currentPage);
+  sessionStorage.setItem("selectedDateRange", $("#unifiedDatePicker").val());
+  sessionStorage.setItem("searchValue", $("#searchInput").val());
   window.location.href = `formNew.html?orderNo=${id}&process=true`;
-  });
+});
   
   function createPaginationControls(totalPages, orders = yardOrders) {
   const paginationControls = $('#pagination-controls');
@@ -556,6 +581,7 @@ async function fetchYardInfo(month, year) {
     currentPage = 1;
     renderTable(currentPage, yardOrders);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    highlightSavedOrder();
   } catch (error) {
     console.error("Error fetching filtered yard orders:", error);
     alert("Something went wrong while fetching data.");
@@ -904,13 +930,16 @@ if (activeLink) {
   });
   fetchNotifications();
 $(document).on("click", "#yardInfoTable tr", function () {
-  const $row = $(this);
-  const isSelected = $row.hasClass("selected");
+  const isSelected = $(this).hasClass("selected");
 
   $("#yardInfoTable tr").removeClass("selected");
-
   if (!isSelected) {
-    $row.addClass("selected");
+    $(this).addClass("selected");
+  }
+
+  const orderNo = $(this).find("td:first").text().trim();
+  if (orderNo) {
+    sessionStorage.setItem("selectedOrderNo", orderNo);
   }
 });
 
@@ -1040,7 +1069,7 @@ $(document).on("click", "th.sortable", function () {
   currentPage = 1;
   renderTable(currentPage, yardOrders);
   createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-
+  highlightSavedOrder();
   // Reset sort icons
   $(".sort-icons .asc, .sort-icons .desc").removeClass("active");
   const arrow = currentSort.order === "asc" ? ".asc" : ".desc";
