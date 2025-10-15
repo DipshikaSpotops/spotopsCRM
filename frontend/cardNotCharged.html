@@ -337,13 +337,11 @@ Close
 </div>
 <script>
 $(document).ready(async function () {
-  /* ------------------ Persistent highlight helper ------------------ */
 function highlightSavedOrder() {
   const savedOrderNo = sessionStorage.getItem("selectedOrderNo");
   if (!savedOrderNo) return;
 
-  // Keep retrying until table is rendered
-  let tries = 0;
+  let attempts = 0;
   const interval = setInterval(() => {
     const $rows = $("#yardInfoTable tr");
     if ($rows.length) {
@@ -357,9 +355,11 @@ function highlightSavedOrder() {
         clearInterval(interval);
       }
     }
-    if (++tries > 20) clearInterval(interval); // ~4 seconds
+    attempts++;
+    if (attempts > 30) clearInterval(interval); // wait ~6 s max
   }, 200);
 }
+
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
@@ -599,8 +599,22 @@ var monthNum = monthMap[month];
 
 $("#unifiedDatePicker").val(`${year}-${monthNum}`);
 await fetchYardInfo(month, year);
-highlightSavedOrder();
+setTimeout(() => {
+  const savedRange = sessionStorage.getItem("selectedDateRange");
+  const savedPage = parseInt(sessionStorage.getItem("currentPage") || "1");
+  const savedSearch = sessionStorage.getItem("searchValue");
 
+  if (savedRange) $("#unifiedDatePicker").val(savedRange);
+
+  currentPage = savedPage || 1;
+  renderTableRows(currentPage, yardOrders);
+  createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+
+  if (savedSearch) {
+    $("#searchInput").val(savedSearch).trigger("keyup");
+  }
+  highlightSavedOrder();
+}, 1200);
 // Fetch yard info data for a specific month and 
 async function fetchYardInfo(month, year) {
     try {
@@ -654,6 +668,7 @@ responses.forEach(res => {
 
         renderTableRows(currentPage, yardOrders, maxYards);
         createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+        highlightSavedOrder();
     } catch (error) {
         console.error("Error fetching yard info:", error);
         alert("Failed to fetch data. Please try again.");
