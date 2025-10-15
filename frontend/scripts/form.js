@@ -424,7 +424,7 @@ $("#actualGP").val(currentActualGP.toFixed(2));
 if (
 (!data.additionalInfo || data.additionalInfo.length === 0) && 
 (data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute" 
-  || data.orderStatus === "Dispute after Cancellation"))
+  || data.orderStatus === "Dispute 2"))
 {
 if (custRefundedAmount) {
 actualGP = (sp - custRefundedAmount) - tax;
@@ -527,7 +527,7 @@ axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actua
 .catch(function (error) {
 console.error("Error updating actualGP:", error);
 });
-}else if (data.orderStatus === "Dispute" || data.orderStatus === "Dispute after Cancellation"){
+}else if (data.orderStatus === "Dispute" || data.orderStatus === "Dispute 2"){
 actualGP =  0 - (totalSum  + tax);
 console.log("actualGPAfterDispute",totalSum,tax)
 axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
@@ -544,7 +544,7 @@ console.log("same actyal gp foe card charged")
 }
 }else if (pStatus === "Card not charged") {
   // if order is cancelled/dispute/refunded, calculate actualGP normally
-  if (["Order Cancelled", "Refunded", "Dispute", "Dispute after Cancellation"].includes(data.orderStatus)) {
+  if (["Order Cancelled", "Refunded", "Dispute", "Dispute 2"].includes(data.orderStatus)) {
     actualGP = (sp - custRefundedAmount) - tax;
     console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
   } else {
@@ -573,7 +573,7 @@ const isCancelledOrDispute = [
   "Order Cancelled",
   "Refunded",
   "Dispute",
-  "Dispute after Cancellation"
+  "Dispute 2"
 ].includes(data.orderStatus);
 
 if (isCancelledOrDispute) {
