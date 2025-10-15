@@ -514,7 +514,7 @@ totalSum += yardSpent;
 // console.log("Current totalSpend array:", totalSpend);
 // console.log("Total sum of all yards:", totalSum);
 var subtractRefund = spMinusTax - custRefundedAmount;
-actualGP = subtractRefund - totalSum;
+let actualGP = subtractRefund - totalSum;
 // console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
 $("#actualGP").val(actualGP.toFixed(2)); 
 // updateActualGP(orderNo, actualGP);
