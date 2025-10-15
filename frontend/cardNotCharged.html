@@ -648,16 +648,24 @@ responses.forEach(res => {
 });
 
         yardOrders = yardOrdersRaw.map(order => {
-            const filteredAdditionalInfo = order.additionalInfo.filter(
-                info =>
-                    (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
-                    info.status !== "PO cancelled"
-            );
-            if (filteredAdditionalInfo.length > 0) {
-                return { ...order, additionalInfo: filteredAdditionalInfo };
-            }
-            return null;
-        }).filter(order => order !== null);
+  const filteredAdditionalInfo = order.additionalInfo.filter(
+    info =>
+      (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
+      info.status !== "PO cancelled"
+  );
+  if (filteredAdditionalInfo.length > 0) {
+    return { ...order, additionalInfo: filteredAdditionalInfo };
+  }
+  return null;
+}).filter(order => order !== null);
+
+if (yardOrders.length === 0) {
+  $("#yardInfoTable").html(`<tr><td colspan="10">No 'Card Not Charged' orders found.</td></tr>`);
+  $("#showTotalOrders").text("Total Orders - 0");
+  $("#pagination-controls").empty();
+  $("#loadingMessage").hide();
+  return;
+}
 
         const maxYards = yardOrders.length > 0
             ? yardOrders.reduce(
@@ -694,7 +702,14 @@ function renderTableRows(page, data = yardOrders) {
 
     const tableHeader = $("#tableHeader");
     const tableFooter = $("#tableFooter");
-    $("#yardInfoTable").empty(); // Clear previous rows
+    $("#yardInfoTable").empty(); 
+    
+    if (!data || data.length === 0) {
+      $("#yardInfoTable").html(`<tr><td colspan="10">No 'Card Not Charged' orders found.</td></tr>`);
+      $("#showTotalOrders").text("Total Orders - 0");
+      $("#pagination-controls").empty();
+      return;
+    }
 
     // Update table headers dynamically
     tableHeader.find("th:gt(1)").remove(); // Remove previous Yard headers
