@@ -549,6 +549,7 @@ console.log("same actyal gp foe card charged")
     console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
   } 
   else if ([ "Dispute", "Dispute 2"].includes(data.orderStatus)){
+    console.log(totalSum)
     actualGP = 0 - (totalSum  + tax);
     console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
   }
