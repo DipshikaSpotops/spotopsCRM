@@ -406,6 +406,7 @@ document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
 var totalSpend = []; 
 var totalSum = 0;    
 var pStatus;
+function recalcActualGP(orderNo) {
 setTimeout(function () {
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
@@ -619,8 +620,8 @@ setTimeout(function () {
       }
     })
     .catch(error => console.error("Error fetching yard data:", error));
-}, 500);
-
+}, 300);
+}
 // part to check paymentStatus and other things like updated actualGP end here
 
 
@@ -1025,6 +1026,7 @@ return response.json();
 updateOrderHistory(data.orderHistory);
 const team = localStorage.getItem("team");
 alert("Details have been updated");
+recalcActualGP(orderNo);
 window.location.reload();
 // if (team === "Team Charlie") {
 // window.location.href = "individualOrders.html";
