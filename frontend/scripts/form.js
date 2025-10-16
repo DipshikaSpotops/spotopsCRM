@@ -406,214 +406,221 @@ document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
 var totalSpend = []; 
 var totalSum = 0;    
 var pStatus;
-setTimeout(function() {
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then(response => response.json())
-.then(data => {
-// console.log("data in setTimeOut", data);
-var sp = data.soldP;
-var tax = data.salestax;
-var spMinusTax = data.spMinusTax || 0 || sp - tax; 
-var custRefundedAmount = data.custRefundedAmount || data.cancelledRefAmount || data.custRefAmount || 0;  
-var currentActualGP = data.actualGP || 0;
-console.log("order rn",data.orderStatus);
-$("#custRefunds").val(custRefundedAmount)
-$("#actualGP").val(currentActualGP.toFixed(2));
-// console.log("saleP",sp,"custRefund",custRefundedAmount,"tax",tax);
-// console.log("yards",data.additionalInfo)
-if (
-(!data.additionalInfo || data.additionalInfo.length === 0) && 
-(data.orderStatus === "Order Cancelled" || data.orderStatus === "Refunded" || data.orderStatus === "Dispute" 
-  || data.orderStatus === "Dispute 2"))
-{
-if (custRefundedAmount) {
-actualGP = (sp - custRefundedAmount) - tax;
-$("#actualGP").val(actualGP.toFixed(2));
+setTimeout(function () {
+  fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then(response => response.json())
+    .then(data => {
+      var sp = parseFloat(data.soldP) || 0;
+      var tax = parseFloat(data.salestax) || 0;
+      var spMinusTax = parseFloat(data.spMinusTax) || (sp - tax);
+      var custRefundedAmount =
+        parseFloat(data.custRefundedAmount) ||
+        parseFloat(data.cancelledRefAmount) ||
+        parseFloat(data.custRefAmount) ||
+        0;
+      var currentActualGP = parseFloat(data.actualGP) || 0;
 
-if (currentActualGP !== actualGP) {
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
-} 
-else {
-console.log("Same actualGPS");
-}
-}
-}
+      console.log("Order status:", data.orderStatus);
+      $("#custRefunds").val(custRefundedAmount);
+      $("#actualGP").val(currentActualGP.toFixed(2));
 
+      let totalSpend = [];
+      let totalSum = 0;
 
-data.additionalInfo.forEach((yard, index) => {
-const yardIndex = index + 1;
-// Check if any entry in additionalInfo has escTicked set to "Yes"
-const isEscTicked = data.additionalInfo.some(info => info.escTicked === "Yes");
+      // 🧩 Helpers
+      const hasYards = Array.isArray(data.additionalInfo) && data.additionalInfo.length > 0;
+      const isDispute = ["Dispute", "Dispute 2"].includes(data.orderStatus);
+      const isCancelledOrRefunded = ["Order Cancelled", "Refunded"].includes(data.orderStatus);
+      const orderStatusLocked =
+        isDispute || isCancelledOrRefunded; // 🔒 prevent yard-status-based updates in these
 
-if (isEscTicked) {
-$("#escTickBox").prop("checked", true);
-} else {
-$("#escTickBox").prop("checked", false);
-}
-pStatus = yard.paymentStatus;
-var rStatus = yard.refundStatus;
-console.log("pStatus", pStatus, rStatus);
-if (pStatus === "Card charged" && rStatus === "Refund collected") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#fe8025', 'border': 'none'});
-} 
-else if (yard.status === "PO cancelled" && pStatus !== "Card charged") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css({'background-color': '#c3c3c3', 'border': 'none',color: '#ffffff'});
-} 
-else if (pStatus === "Card charged") {
-$(`.yard-btn[data-yard-index="${yardIndex}"]`).css('background-color', '#353d3f');
-}
+      // 🟩 CASE 1 — No yards at all
+      if (!hasYards) {
+        let actualGP;
+        if (isDispute) {
+          actualGP = 0 - tax; // dispute = pure loss
+        } else {
+          actualGP = sp - custRefundedAmount - tax; // normal cancel/refund
+        }
 
-var yardStatus = yard.status;
-// console.log("current yard status", yardStatus);
-// Update order status based on yard status
-// if (yardStatus === "Yard Located" || yardStatus === "Yard PO Sent"){
-// $("#orderStatus").val("Yard Processing");
-// }
-// else if(yardStatus === "Label created") {
-// $("#orderStatus").val("Yard Processing");
-// var labelCreationDate = currentDateTime;
-// }
+        console.log("No yards → actualGP:", actualGP);
 
-// else if (yardStatus === "Part shipped") {
-// $("#orderStatus").val("In Transit");
-// var partShippedDate = currentDateTime;
-// } else if (yardStatus === "Part delivered") {
-// $("#orderStatus").val("Order Fulfilled");
-// } else if (yardStatus === "Escalation") {
-// $("#orderStatus").val("Escalation");
-// } else if (yardStatus === "Collect refund") {
-// $("#orderStatus").val("Escalation");
-// }
-if(pStatus === "Card charged"){
-var yardPP = parseFloat(yard.partPrice) || 0;
-var yardOSorYS = yard.shippingDetails || '';
-var shippingValueYard = 0;  
-if (yardOSorYS.includes("Own shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0; 
-// console.log("own ship", shippingValueYard);
-} else if (yardOSorYS.includes("Yard shipping")) {
-shippingValueYard = parseFloat(yardOSorYS.split(":")[1].trim()) || 0;
-// console.log("yard ship", shippingValueYard);
-}
-var yardOthers = parseFloat(yard.others) || 0;
-var escOwnShipReturn = parseFloat(yard.custOwnShippingReturn) || 0;
-var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
-var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
-var yardRefundAmount = parseFloat(yard.refundedAmount) || 0;
-var escReimbursement = parseFloat(yard.reimbursementAmount) || 0;
-// console.log("add",yardPP,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,"yardrefundAmount:",yardRefundAmount);
-var yardSpent = yardPP + shippingValueYard + yardOthers + escOwnShipReturn + escOwnShipReplacement + yardOwnShippingReplacement + escReimbursement - yardRefundAmount;
-console.log("yardSpent", yardSpent,shippingValueYard,yardOthers,escOwnShipReturn,escOwnShipReplacement,yardOwnShippingReplacement,yardRefundAmount,"escReimbursement",escReimbursement);
-totalSpend.push(yardSpent);
-totalSum += yardSpent;
-// console.log("Current totalSpend array:", totalSpend);
-// console.log("Total sum of all yards:", totalSum);
-var subtractRefund = spMinusTax - custRefundedAmount;
-let actualGP = subtractRefund - totalSum;
-// console.log("Calculated actualGP:", actualGP,"subtractRefund",subtractRefund)
-$("#actualGP").val(actualGP.toFixed(2)); 
-// updateActualGP(orderNo, actualGP);
-if(currentActualGP !== actualGP && data.orderStatus !== "Dispute"){
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
-}else if (data.orderStatus === "Dispute" || data.orderStatus === "Dispute 2"){
-actualGP =  0 - (totalSum  + tax);
-console.log("actualGPAfterDispute",totalSum,tax)
-axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-.then(function (response) {
-// console.log("ActualGP information updated successfully:", response);
-$("#actualGP").val(actualGP.toFixed(2));
-})
-.catch(function (error) {
-console.error("Error updating actualGP:", error);
-});
-}
-else{
-console.log("same actyal gp foe card charged")
-}
-}else if (pStatus === "Card not charged") {
-  // if order is cancelled/dispute/refunded, calculate actualGP normally
-  if (["Order Cancelled", "Refunded"].includes(data.orderStatus)) {
-    actualGP = (sp - custRefundedAmount) - tax;
-    console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
-  } 
-  else if ([ "Dispute", "Dispute 2"].includes(data.orderStatus)){
-    console.log(totalSum)
-    actualGP = 0 - (totalSum  + tax);
-    console.log("actualGP for cancelled/dispute order (Card not charged):", actualGP);
-  }
-    else {
-    actualGP = 0;
-    console.log("actualGP set to 0 (Card not charged, normal case)");
-  }
+        if (Number(currentActualGP) !== Number(actualGP)) {
+          axios
+            .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+            .then(() => console.log("✅ ActualGP updated (no-yard case)"))
+            .catch(err => console.error("❌ Error updating actualGP:", err));
+        } else {
+          console.log("No-yard ActualGP unchanged.");
+        }
+        return;
+      }
 
-  axios.put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-  .then(function (response) {
-    $("#actualGP").val(actualGP.toFixed(2));
-  })
-  .catch(function (error) {
-    console.error("Error updating actualGP:", error);
-  });
-}
-// else{
-//   actualGP = sp - tax - custRefundedAmount;
-//   console.log("Calculated actualGP for card not charged:", actualGP);
-//   $("#actualGP").val(actualGP.toFixed(2)); 
-// }
-});
+      // 🟦 CASE 2 — Iterate through yards
+      data.additionalInfo.forEach((yard, index) => {
+        const yardIndex = index + 1;
 
-// for scenarios where PO is cancelled but orderSttatus is Dispute, refunded, cancelled
-// for scenarios where PO is cancelled but orderStatus is Dispute, refunded, cancelled
-const isCancelledOrDispute = [
-  "Order Cancelled",
-  "Refunded",
-  "Dispute",
-  "Dispute 2"
-].includes(data.orderStatus);
+        // Escalation tick check
+        const isEscTicked = data.additionalInfo.some(info => info.escTicked === "Yes");
+        $("#escTickBox").prop("checked", isEscTicked);
 
-if (isCancelledOrDispute) {
-  const allYardsNotCharged =
-    !data.additionalInfo ||
-    data.additionalInfo.every(
-      (yard) => !yard.paymentStatus || yard.paymentStatus === "Card not charged"
-    );
+        const pStatus = yard.paymentStatus;
+        const rStatus = yard.refundStatus;
+        const yardStatus = yard.status || "";
+        console.log(`Yard ${yardIndex} → status: ${yardStatus}, payment: ${pStatus}`);
 
-  console.log("allYardsNotCharged", allYardsNotCharged);
+        // 🎨 Color coding logic
+        if (pStatus === "Card charged" && rStatus === "Refund collected") {
+          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({
+            backgroundColor: "#fe8025",
+            border: "none"
+          });
+        } else if (yardStatus === "PO cancelled" && pStatus !== "Card charged") {
+          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({
+            backgroundColor: "#c3c3c3",
+            border: "none",
+            color: "#ffffff"
+          });
+        } else if (pStatus === "Card charged") {
+          $(`.yard-btn[data-yard-index="${yardIndex}"]`).css("background-color", "#353d3f");
+        }
 
-  if (allYardsNotCharged) {
-    let actualGP = (sp - custRefundedAmount) - tax;
-    $("#actualGP").val(actualGP.toFixed(2));
-    console.log("actual GP", actualGP);
+        // 🧭 Yard status → Order status (only if orderStatus not locked)
+        if (!orderStatusLocked) {
+          let newOrderStatus = null;
 
-    if (Number(currentActualGP) !== Number(actualGP)) {
-      console.log("About to update actualGP on server:", actualGP);
-      axios
-        .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-        .then((response) => {
-          console.log("ActualGP updated for cancelled/dispute with uncharged payment.");
-        })
-        .catch((error) => {
-          console.error("Error updating actualGP:", error);
-        });
-    } else {
-      console.log("ActualGP unchanged — no update required.");
-    }
-  }
-}
-})
-.catch(error => console.error("Error fetching yard data:", error));
+          if (["Yard Located", "Yard PO Sent", "Label created"].includes(yardStatus)) {
+            newOrderStatus = "Yard Processing";
+          } else if (yardStatus === "Part shipped") {
+            newOrderStatus = "In Transit";
+          } else if (yardStatus === "Part delivered") {
+            newOrderStatus = "Order Fulfilled";
+          } else if (yardStatus === "Escalation" || yardStatus === "Collect refund") {
+            newOrderStatus = "Escalation";
+          }
+
+          if (newOrderStatus && newOrderStatus !== data.orderStatus) {
+            console.log(
+              `🟢 Updating orderStatus → ${newOrderStatus} (from yard ${yardIndex})`
+            );
+            axios
+              .put(
+                `https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=System`,
+                { orderStatus: newOrderStatus }
+              )
+              .catch(err => console.error("❌ Error updating order status:", err));
+          }
+        } else {
+          console.log("⛔ Skipping orderStatus update — locked by Cancelled/Refunded/Dispute");
+        }
+
+        // 💰 GP logic per yard
+        if (pStatus === "Card charged") {
+          var yardPP = parseFloat(yard.partPrice) || 0;
+          var yardOSorYS = yard.shippingDetails || "";
+          var shippingValueYard = 0;
+
+          if (yardOSorYS.includes("Own shipping") || yardOSorYS.includes("Yard shipping")) {
+            shippingValueYard = parseFloat(yardOSorYS.split(":")[1]) || 0;
+          }
+
+          var yardOthers = parseFloat(yard.others) || 0;
+          var escOwnShipReturn = parseFloat(yard.custOwnShippingReturn) || 0;
+          var escOwnShipReplacement = parseFloat(yard.custOwnShipReplacement) || 0;
+          var yardOwnShippingReplacement = parseFloat(yard.yardOwnShipping) || 0;
+          var yardRefundAmount = parseFloat(yard.refundedAmount) || 0;
+          var escReimbursement = parseFloat(yard.reimbursementAmount) || 0;
+
+          var yardSpent =
+            yardPP +
+            shippingValueYard +
+            yardOthers +
+            escOwnShipReturn +
+            escOwnShipReplacement +
+            yardOwnShippingReplacement +
+            escReimbursement -
+            yardRefundAmount;
+
+          totalSpend.push(yardSpent);
+          totalSum += yardSpent;
+
+          var subtractRefund = spMinusTax - custRefundedAmount;
+          let actualGP = subtractRefund - totalSum;
+
+          if (isDispute) {
+            actualGP = 0 - (totalSum + tax);
+            console.log("Dispute (Card charged) → actualGP:", actualGP);
+          } else {
+            console.log("Card charged → actualGP:", actualGP);
+          }
+
+          $("#actualGP").val(actualGP.toFixed(2));
+
+          if (Number(currentActualGP) !== Number(actualGP)) {
+            axios
+              .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+              .then(() => console.log("✅ ActualGP updated for card-charged yard"))
+              .catch(err => console.error("❌ Error updating actualGP:", err));
+          } else {
+            console.log("ActualGP unchanged for card-charged yard");
+          }
+        } else if (pStatus === "Card not charged") {
+          // 🟨 Card not charged cases
+          let actualGP = 0;
+
+          if (isCancelledOrRefunded) {
+            actualGP = sp - custRefundedAmount - tax;
+            console.log("Cancelled/Refunded (Card not charged) → actualGP:", actualGP);
+          } else if (isDispute) {
+            actualGP = 0 - (tax + totalSum);
+            console.log("Dispute (Card not charged) → actualGP:", actualGP);
+          }
+
+          $("#actualGP").val(actualGP.toFixed(2));
+
+          if (Number(currentActualGP) !== Number(actualGP)) {
+            axios
+              .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+              .then(() => console.log("✅ ActualGP updated for card-not-charged yard"))
+              .catch(err => console.error("❌ Error updating actualGP:", err));
+          } else {
+            console.log("ActualGP unchanged for card-not-charged yard");
+          }
+        }
+      });
+
+      // 🟧 CASE 3 — All yards not charged
+      const allYardsNotCharged =
+        data.additionalInfo &&
+        data.additionalInfo.every(
+          (yard) => !yard.paymentStatus || yard.paymentStatus === "Card not charged"
+        );
+
+      if (allYardsNotCharged) {
+        let actualGP = 0;
+        if (isDispute) {
+          actualGP = 0 - tax;
+        } else {
+          actualGP = sp - custRefundedAmount - tax;
+        }
+
+        console.log("All yards not charged → actualGP:", actualGP);
+
+        if (Number(currentActualGP) !== Number(actualGP)) {
+          axios
+            .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
+            .then(() =>
+              console.log("✅ ActualGP updated for all-yards-not-charged (cancel/refund/dispute)")
+            )
+            .catch(err => console.error("❌ Error updating actualGP:", err));
+        } else {
+          console.log("ActualGP unchanged (all yards not charged).");
+        }
+      }
+    })
+    .catch(error => console.error("Error fetching yard data:", error));
 }, 500);
+
 // part to check paymentStatus and other things like updated actualGP end here
 
 
