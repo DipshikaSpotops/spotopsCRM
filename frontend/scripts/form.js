@@ -610,9 +610,9 @@ setTimeout(function () {
           axios
             .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
             .then(() =>
-              console.log("✅ ActualGP updated for all-yards-not-charged (cancel/refund/dispute)")
+              console.log("ActualGP updated for all-yards-not-charged (cancel/refund/dispute)")
             )
-            .catch(err => console.error("❌ Error updating actualGP:", err));
+            .catch(err => console.error(" Error updating actualGP:", err));
         } else {
           console.log("ActualGP unchanged (all yards not charged).");
         }
