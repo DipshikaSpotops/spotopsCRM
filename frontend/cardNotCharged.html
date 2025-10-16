@@ -365,7 +365,6 @@ function highlightSavedOrder() {
   $("#viewAlltasks").on("click", function () {
   window.location.href = "viewAllTasks.html";
 });
-// flatpickr setup
 const fp = flatpickr("#unifiedDatePicker", {
   mode: "range",
   dateFormat: "Y-m-d",
@@ -374,70 +373,81 @@ const fp = flatpickr("#unifiedDatePicker", {
   onOpen: function () {
     document.querySelector(".table-wrapper")?.classList.add("table-blur");
   },
-  onClose: function () {
+
+  onClose: function (selectedDates, dateStr, instance) {
     document.querySelector(".table-wrapper")?.classList.remove("table-blur");
 
-    // ✅ Handle single-date selection manually
-    const rangeValue = $("#unifiedDatePicker").val().trim();
-    if (rangeValue && !rangeValue.includes("to")) {
-      const tz = "America/Chicago";
-      const momentObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
-      const month = momentObj.format("MMM");
-      const year = momentObj.format("YYYY");
-
-      $("#filterButton").data("filter", "single").click();
-      fetchYardInfo(month, year); // <-- ensure single-date fetch
+    // ✅ If user selected a single date manually, normalize to "YYYY-MM-DD to YYYY-MM-DD"
+    if (selectedDates.length === 1) {
+      const oneDay = moment(selectedDates[0]).format("YYYY-MM-DD");
+      $("#unifiedDatePicker").val(`${oneDay} to ${oneDay}`);
+      $("#filterButton").click();
     }
   },
 
   onReady: function (selectedDates, dateStr, instance) {
-    // Prevent duplicate shortcut buttons
     if (instance.calendarContainer.querySelector(".custom-shortcuts")) return;
 
     const container = document.createElement("div");
     container.className = "custom-shortcuts";
-    container.style.display = "flex";
-    container.style.justifyContent = "flex-end";
-    container.style.flexWrap = "wrap";
-    container.style.gap = "10px";
-    container.style.marginTop = "0px";
-    container.style.padding = "0 10px";
+    Object.assign(container.style, {
+      display: "flex",
+      justifyContent: "flex-end",
+      flexWrap: "wrap",
+      gap: "10px",
+      marginTop: "0px",
+      padding: "0 10px",
+    });
 
     const momentTz = moment().tz("America/Chicago");
 
-    // --- “Today” shortcut ---
-    const todayBtn = makeLink("Today", async () => {
+    // Helper to make clickable link buttons
+    function makeLink(label, handler) {
+      const link = document.createElement("a");
+      Object.assign(link, { href: "#", innerText: label, className: "shortcut-link" });
+      Object.assign(link.style, {
+        margin: "2px 5px",
+        fontSize: "13px",
+        color: "#007BFF",
+        cursor: "pointer",
+      });
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        handler();
+      });
+      return link;
+    }
+
+    // --- Today ---
+    const todayBtn = makeLink("Today", () => {
       const today = momentTz.format("YYYY-MM-DD");
       fp.setDate([today, today], true);
       $("#unifiedDatePicker").val(`${today} to ${today}`);
       $("#filterButton").data("filter", "today").click();
-      await fetchYardInfo(momentTz.format("MMM"), momentTz.format("YYYY"));
       instance.close();
     });
 
-    // --- “This Month” shortcut ---
-    const thisMonthBtn = makeLink("This Month", async () => {
+    // --- This Month ---
+    const thisMonthBtn = makeLink("This Month", () => {
       const start = momentTz.clone().startOf("month").format("YYYY-MM-DD");
       const end = momentTz.clone().endOf("month").format("YYYY-MM-DD");
       fp.setDate([start, end], true);
       $("#unifiedDatePicker").val(`${start} to ${end}`);
       $("#filterButton").data("filter", "month").click();
-      await fetchYardInfo(momentTz.format("MMM"), momentTz.format("YYYY"));
       instance.close();
     });
 
-    // --- “Last 3 Months” dynamic buttons ---
+    // --- Last 3 Months dynamically ---
     for (let i = 1; i <= 3; i++) {
       const m = momentTz.clone().subtract(i, "months");
       const start = m.startOf("month").format("YYYY-MM-DD");
       const end = m.endOf("month").format("YYYY-MM-DD");
       const monthName = m.format("MMMM");
 
-      const monthBtn = makeLink(monthName, async () => {
+      const monthBtn = makeLink(monthName, () => {
         fp.setDate([start, end], true);
         $("#unifiedDatePicker").val(`${start} to ${end}`);
         $("#filterButton").data("filter", monthName).click();
-        await fetchYardInfo(m.format("MMM"), m.format("YYYY"));
         instance.close();
       });
 
@@ -447,23 +457,6 @@ const fp = flatpickr("#unifiedDatePicker", {
     container.prepend(thisMonthBtn);
     container.prepend(todayBtn);
     instance.calendarContainer.appendChild(container);
-
-    // Helper to create styled shortcut links
-    function makeLink(label, handler) {
-      const link = document.createElement("a");
-      link.href = "#";
-      link.innerText = label;
-      link.className = "shortcut-link";
-      link.style.margin = "2px 5px";
-      link.style.fontSize = "13px";
-      link.style.color = "#007BFF";
-      link.style.cursor = "pointer";
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        handler();
-      });
-      return link;
-    }
   },
 });
   // flatpickr setup till here
@@ -915,31 +908,29 @@ $("#filterButton").click(async function () {
   $("#loadingMessage").show();
 
   try {
-    const rangeValue = $("#unifiedDatePicker").val().trim();
+    let rangeValue = $("#unifiedDatePicker").val().trim();
     const tz = "America/Chicago";
-
     let month, year;
 
-    // If input is a single day
-    if (moment(rangeValue, "YYYY-MM-DD", true).isValid()) {
-      const momentObj = moment.tz(rangeValue, "YYYY-MM-DD", tz);
-      month = momentObj.format("MMM");
-      year = momentObj.format("YYYY");
-    } 
-    // If input is a range
-    else if (rangeValue.includes(" to ")) {
+    // 🔹 Normalize a single day into "YYYY-MM-DD to YYYY-MM-DD"
+    if (moment(rangeValue, "YYYY-MM-DD", true).isValid() && !rangeValue.includes("to")) {
+      rangeValue = `${rangeValue} to ${rangeValue}`;
+      $("#unifiedDatePicker").val(rangeValue);
+    }
+
+    // 🔹 Handle inputs
+    if (rangeValue.includes(" to ")) {
+      // Range case (also covers single-day range)
       const [startStr, _] = rangeValue.split(" to ");
       const momentObj = moment.tz(startStr, "YYYY-MM-DD", tz);
       month = momentObj.format("MMM");
       year = momentObj.format("YYYY");
-    } 
-    // If input is just month (YYYY-MM)
-    else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+    } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
+      // Month-year picker
       const momentObj = moment(rangeValue, "YYYY-MM");
       month = momentObj.format("MMM");
       year = momentObj.format("YYYY");
-    } 
-    else {
+    } else {
       alert("⚠️ Please select a valid date, range, or month.");
       return;
     }
@@ -948,6 +939,7 @@ $("#filterButton").click(async function () {
     await fetchYardInfo(month, year);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     highlightSavedOrder();
+
   } catch (error) {
     console.error("Error filtering Card Not Charged data:", error);
     alert("Something went wrong while filtering data.");
