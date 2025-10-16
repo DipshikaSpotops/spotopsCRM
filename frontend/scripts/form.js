@@ -960,82 +960,83 @@ showModal("#trackingModal");
 }
 // Listen for form submission
 $("#crmForm").on("submit", function (e) {
-e.preventDefault(); 
-const firstName = localStorage.getItem("firstName");
-var cusFName = document.getElementById("firstName").value;
-var cuLName = document.getElementById("lastname").value;
-var customerName = cusFName + " " + cuLName;
-const updateOrder = (url, existingOrderData) => {
-const updatedData = {
-orderNo: orderNo,
-orderDate: $("#orderDate").val() || existingOrderData.orderDate, 
-salesAgent: $("#salesAgent").val(),
-customerName: customerName,
-bAddress: $("#bAddress").val(),
-sAddress: $("#sAddress").val(),
-attention: $("#attention").val(),
-email: $("#email").val(),
-phone: $("#phone").val(),
-make: $("#make").val(),
-model: $("#model").val(),
-year: $("#year").val(),
-pReq: $("#pReq").val(),
-desc: $("#desc").val(),
-warranty: $("#warranty").val(),
-soldP: $("#soldP").val(),
-costP: $("#costP").val(),
-shippingFee: $("#shippingFee").val(),
-salestax: $("#salestax").val(),
-grossProfit: $("#grossProfit").val(),
-orderStatus: $("#orderStatus").val(),
-vin: document.getElementById("vin").value,
-partNo: document.getElementById("partNo").value,
-last4digits: $("#issueOrder").val(),
-notes: $("#notes").val(),
-firstName: firstName,
-};
-console.log("order status",$("#orderStatus").val())
-// Sending the updated data to the API using the PUT method
-return fetch(`${url}?firstName=${firstName}`, {
-method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(updatedData), 
-});
-};
-fetch(`https://www.spotops360.com/orders/${orderNo}`)
-.then((response) => {
-return response.json();
-})
-.then((existingOrderData) => {
-const isCancelledOrder = existingOrderData.isCancelled || false;
-const updateUrl = isCancelledOrder 
-? `https://www.spotops360.com/cancelledOrders/${orderNo}` 
-: `https://www.spotops360.com/orders/${orderNo}`;
-return updateOrder(updateUrl, existingOrderData);
-})
-.then((response) => {
-if (!response.ok) {
-throw new Error("Network response was not ok");
-}
-return response.json(); 
-})
-.then((data) => {
-updateOrderHistory(data.orderHistory);
-const team = localStorage.getItem("team");
-alert("Details have been updated");
-window.location.reload();
-// if (team === "Team Charlie") {
-// window.location.href = "individualOrders.html";
-// } else {
-// window.location.href = "monthwiseOrders.html";
-// }
-})
-.catch((error) => {
-console.error("Error:", error);
-});
-window.location.reload();
+  e.preventDefault();
+
+  const firstName = localStorage.getItem("firstName");
+  const cusFName = $("#firstName").val();
+  const cuLName = $("#lastname").val();
+  const customerName = `${cusFName} ${cuLName}`;
+  const enteredStatus = $("#orderStatus").val();
+
+  // Guard terminal statuses
+  const lockedStatuses = ["Order Cancelled", "Refunded", "Dispute", "Dispute after Cancellation"];
+
+  const updateOrder = (url, existingOrderData) => {
+    // Preserve status if order is already terminal
+    const finalStatus = lockedStatuses.includes(existingOrderData.orderStatus)
+      ? existingOrderData.orderStatus
+      : enteredStatus;
+
+    const updatedData = {
+      orderNo: orderNo,
+      orderDate: $("#orderDate").val() || existingOrderData.orderDate,
+      salesAgent: $("#salesAgent").val(),
+      customerName,
+      bAddress: $("#bAddress").val(),
+      sAddress: $("#sAddress").val(),
+      attention: $("#attention").val(),
+      email: $("#email").val(),
+      phone: $("#phone").val(),
+      make: $("#make").val(),
+      model: $("#model").val(),
+      year: $("#year").val(),
+      pReq: $("#pReq").val(),
+      desc: $("#desc").val(),
+      warranty: $("#warranty").val(),
+      soldP: $("#soldP").val(),
+      costP: $("#costP").val(),
+      shippingFee: $("#shippingFee").val(),
+      salestax: $("#salestax").val(),
+      grossProfit: $("#grossProfit").val(),
+      orderStatus: finalStatus, // ✅ don't overwrite terminal statuses
+      vin: $("#vin").val(),
+      partNo: $("#partNo").val(),
+      last4digits: $("#issueOrder").val(),
+      notes: $("#notes").val(),
+      firstName,
+    };
+
+    console.log("Saving order with status:", finalStatus);
+
+    return fetch(`${url}?firstName=${firstName}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    });
+  };
+
+  fetch(`https://www.spotops360.com/orders/${orderNo}`)
+    .then(res => res.json())
+    .then(existingOrderData => {
+      const isCancelledOrder = existingOrderData.isCancelled || false;
+      const updateUrl = isCancelledOrder
+        ? `https://www.spotops360.com/cancelledOrders/${orderNo}`
+        : `https://www.spotops360.com/orders/${orderNo}`;
+      return updateOrder(updateUrl, existingOrderData);
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
+    .then(data => {
+      updateOrderHistory(data.orderHistory);
+      alert("✅ Order details updated successfully!");
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error("❌ Error updating order:", error);
+      alert("Failed to save order. Please try again.");
+    });
 });
 
 
