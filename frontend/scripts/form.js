@@ -485,11 +485,11 @@ setTimeout(function () {
           $(`.yard-btn[data-yard-index="${yardIndex}"]`).css("background-color", "#353d3f");
         }
 
-        // 🧭 Yard status → Order status (only if orderStatus not locked)
+        // Yard status → Order status (only if orderStatus not locked)
         if (!orderStatusLocked) {
           let newOrderStatus = null;
 
-          if (["Yard Located", "Yard PO Sent", "Label created"].includes(yardStatus)) {
+          if (["Yard Located", "Yard PO Sent", "Label created","PO cancelled"].includes(yardStatus)) {
             newOrderStatus = "Yard Processing";
           } else if (yardStatus === "Part shipped") {
             newOrderStatus = "In Transit";
@@ -968,11 +968,15 @@ $("#crmForm").on("submit", function (e) {
   const customerName = `${cusFName} ${cuLName}`;
   const enteredStatus = $("#orderStatus").val();
 
-  // Guard terminal statuses
-  const lockedStatuses = ["Order Cancelled", "Refunded", "Dispute", "Dispute after Cancellation"];
+  const lockedStatuses = [
+    "Order Cancelled",
+    "Refunded",
+    "Dispute",
+    "Dispute after Cancellation"
+  ];
 
   const updateOrder = (url, existingOrderData) => {
-    // Preserve status if order is already terminal
+    // 🛑 Only allow status change if not locked
     const finalStatus = lockedStatuses.includes(existingOrderData.orderStatus)
       ? existingOrderData.orderStatus
       : enteredStatus;
@@ -998,7 +1002,7 @@ $("#crmForm").on("submit", function (e) {
       shippingFee: $("#shippingFee").val(),
       salestax: $("#salestax").val(),
       grossProfit: $("#grossProfit").val(),
-      orderStatus: finalStatus, // ✅ don't overwrite terminal statuses
+      orderStatus: finalStatus,
       vin: $("#vin").val(),
       partNo: $("#partNo").val(),
       last4digits: $("#issueOrder").val(),
@@ -1006,7 +1010,7 @@ $("#crmForm").on("submit", function (e) {
       firstName,
     };
 
-    console.log("Saving order with status:", finalStatus);
+    console.log("🟢 Final orderStatus being saved:", finalStatus);
 
     return fetch(`${url}?firstName=${firstName}`, {
       method: "PUT",
@@ -1015,29 +1019,34 @@ $("#crmForm").on("submit", function (e) {
     });
   };
 
-  fetch(`https://www.spotops360.com/orders/${orderNo}`)
-    .then(res => res.json())
-    .then(existingOrderData => {
-      const isCancelledOrder = existingOrderData.isCancelled || false;
-      const updateUrl = isCancelledOrder
+  // 🧩 Fetch fresh order data first
+  fetch(`https://www.spotops360.com/orders/${orderNo}?_=${Date.now()}`) // cache-busting param
+    .then((res) => res.json())
+    .then((existingOrderData) => {
+      const updateUrl = existingOrderData.isCancelled
         ? `https://www.spotops360.com/cancelledOrders/${orderNo}`
         : `https://www.spotops360.com/orders/${orderNo}`;
       return updateOrder(updateUrl, existingOrderData);
     })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
-    .then(data => {
+    .then(async (data) => {
+      console.log("✅ Order saved:", data.orderStatus);
       updateOrderHistory(data.orderHistory);
       alert("✅ Order details updated successfully!");
+
+      // ⏳ wait 500ms before reloading to avoid race condition
+      await new Promise((r) => setTimeout(r, 500));
       window.location.reload();
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("❌ Error updating order:", error);
       alert("Failed to save order. Please try again.");
     });
 });
+
 
 
 partDesc = `
