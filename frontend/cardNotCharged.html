@@ -613,7 +613,8 @@ Sep: "09", Oct: "10", Nov: "11", Dec: "12"
 var monthNum = monthMap[month];
 
 $("#unifiedDatePicker").val(`${year}-${monthNum}`);
-await fetchYardInfo(month, year);
+// Load current month's data by default
+await fetchYardInfo({ month: monthNum, year: year.toString() });ear);
 setTimeout(() => {
   const savedRange = sessionStorage.getItem("selectedDateRange");
   const savedPage = parseInt(sessionStorage.getItem("currentPage") || "1");
