@@ -485,11 +485,11 @@ setTimeout(function () {
           $(`.yard-btn[data-yard-index="${yardIndex}"]`).css("background-color", "#353d3f");
         }
 
-        // Yard status → Order status (only if orderStatus not locked)
+        // 🧭 Yard status → Order status (only if orderStatus not locked)
         if (!orderStatusLocked) {
           let newOrderStatus = null;
 
-          if (["Yard Located", "Yard PO Sent", "Label created","PO cancelled"].includes(yardStatus)) {
+          if (["Yard Located", "Yard PO Sent", "Label created"].includes(yardStatus)) {
             newOrderStatus = "Yard Processing";
           } else if (yardStatus === "Part shipped") {
             newOrderStatus = "In Transit";
@@ -960,93 +960,83 @@ showModal("#trackingModal");
 }
 // Listen for form submission
 $("#crmForm").on("submit", function (e) {
-  e.preventDefault();
-
-  const firstName = localStorage.getItem("firstName");
-  const cusFName = $("#firstName").val();
-  const cuLName = $("#lastname").val();
-  const customerName = `${cusFName} ${cuLName}`;
-  const enteredStatus = $("#orderStatus").val();
-
-  const lockedStatuses = [
-    "Order Cancelled",
-    "Refunded",
-    "Dispute",
-    "Dispute after Cancellation"
-  ];
-
-  const updateOrder = (url, existingOrderData) => {
-    // 🛑 Only allow status change if not locked
-    const finalStatus = lockedStatuses.includes(existingOrderData.orderStatus)
-      ? existingOrderData.orderStatus
-      : enteredStatus;
-
-    const updatedData = {
-      orderNo: orderNo,
-      orderDate: $("#orderDate").val() || existingOrderData.orderDate,
-      salesAgent: $("#salesAgent").val(),
-      customerName,
-      bAddress: $("#bAddress").val(),
-      sAddress: $("#sAddress").val(),
-      attention: $("#attention").val(),
-      email: $("#email").val(),
-      phone: $("#phone").val(),
-      make: $("#make").val(),
-      model: $("#model").val(),
-      year: $("#year").val(),
-      pReq: $("#pReq").val(),
-      desc: $("#desc").val(),
-      warranty: $("#warranty").val(),
-      soldP: $("#soldP").val(),
-      costP: $("#costP").val(),
-      shippingFee: $("#shippingFee").val(),
-      salestax: $("#salestax").val(),
-      grossProfit: $("#grossProfit").val(),
-      orderStatus: finalStatus,
-      vin: $("#vin").val(),
-      partNo: $("#partNo").val(),
-      last4digits: $("#issueOrder").val(),
-      notes: $("#notes").val(),
-      firstName,
-    };
-
-    console.log("🟢 Final orderStatus being saved:", finalStatus);
-
-    return fetch(`${url}?firstName=${firstName}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedData),
-    });
-  };
-
-  // 🧩 Fetch fresh order data first
-  fetch(`https://www.spotops360.com/orders/${orderNo}?_=${Date.now()}`) // cache-busting param
-    .then((res) => res.json())
-    .then((existingOrderData) => {
-      const updateUrl = existingOrderData.isCancelled
-        ? `https://www.spotops360.com/cancelledOrders/${orderNo}`
-        : `https://www.spotops360.com/orders/${orderNo}`;
-      return updateOrder(updateUrl, existingOrderData);
-    })
-    .then((response) => {
-      if (!response.ok) throw new Error("Network response was not ok");
-      return response.json();
-    })
-    .then(async (data) => {
-      console.log("✅ Order saved:", data.orderStatus);
-      updateOrderHistory(data.orderHistory);
-      alert("✅ Order details updated successfully!");
-
-      // ⏳ wait 500ms before reloading to avoid race condition
-      await new Promise((r) => setTimeout(r, 500));
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error("❌ Error updating order:", error);
-      alert("Failed to save order. Please try again.");
-    });
+e.preventDefault(); 
+const firstName = localStorage.getItem("firstName");
+var cusFName = document.getElementById("firstName").value;
+var cuLName = document.getElementById("lastname").value;
+var customerName = cusFName + " " + cuLName;
+const updateOrder = (url, existingOrderData) => {
+const updatedData = {
+orderNo: orderNo,
+orderDate: $("#orderDate").val() || existingOrderData.orderDate, 
+salesAgent: $("#salesAgent").val(),
+customerName: customerName,
+bAddress: $("#bAddress").val(),
+sAddress: $("#sAddress").val(),
+attention: $("#attention").val(),
+email: $("#email").val(),
+phone: $("#phone").val(),
+make: $("#make").val(),
+model: $("#model").val(),
+year: $("#year").val(),
+pReq: $("#pReq").val(),
+desc: $("#desc").val(),
+warranty: $("#warranty").val(),
+soldP: $("#soldP").val(),
+costP: $("#costP").val(),
+shippingFee: $("#shippingFee").val(),
+salestax: $("#salestax").val(),
+grossProfit: $("#grossProfit").val(),
+orderStatus: $("#orderStatus").val(),
+vin: document.getElementById("vin").value,
+partNo: document.getElementById("partNo").value,
+last4digits: $("#issueOrder").val(),
+notes: $("#notes").val(),
+firstName: firstName,
+};
+console.log("order status",$("#orderStatus").val())
+// Sending the updated data to the API using the PUT method
+return fetch(`${url}?firstName=${firstName}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify(updatedData), 
 });
-
+};
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+.then((response) => {
+return response.json();
+})
+.then((existingOrderData) => {
+const isCancelledOrder = existingOrderData.isCancelled || false;
+const updateUrl = isCancelledOrder 
+? `https://www.spotops360.com/cancelledOrders/${orderNo}` 
+: `https://www.spotops360.com/orders/${orderNo}`;
+return updateOrder(updateUrl, existingOrderData);
+})
+.then((response) => {
+if (!response.ok) {
+throw new Error("Network response was not ok");
+}
+return response.json(); 
+})
+.then((data) => {
+updateOrderHistory(data.orderHistory);
+const team = localStorage.getItem("team");
+alert("Details have been updated");
+window.location.reload();
+// if (team === "Team Charlie") {
+// window.location.href = "individualOrders.html";
+// } else {
+// window.location.href = "monthwiseOrders.html";
+// }
+})
+.catch((error) => {
+console.error("Error:", error);
+});
+window.location.reload();
+});
 
 
 partDesc = `
