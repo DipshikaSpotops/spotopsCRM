@@ -406,8 +406,6 @@ document.getElementById("editYardDetailsModalLabel").textContent += orderNo;
 var totalSpend = []; 
 var totalSum = 0;    
 var pStatus;
-function recalcActualGP(orderNo) {
-
 setTimeout(function () {
   fetch(`https://www.spotops360.com/orders/${orderNo}`)
     .then(response => response.json())
