@@ -631,74 +631,70 @@ setTimeout(() => {
   highlightSavedOrder();
 }, 1200);
 // Fetch yard info data for a specific month and 
-async function fetchYardInfo(month, year) {
-    try {
-        $("#loadingMessage").show(); // Show loading message
+async function fetchYardInfo(params) {
+  try {
+    $("#loadingMessage").show();
 
-        const limit = 25;
-const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
-  params: { month, year, page: 1, limit },
-  headers: { Authorization: `Bearer ${token}` },
-});
-
-let yardOrdersRaw = [...firstResponse.data.orders];
-const totalPages = Math.ceil(firstResponse.data.totalCount / limit);
-
-const requests = [];
-for (let p = 2; p <= totalPages; p++) {
-  requests.push(
-    axios.get("https://www.spotops360.com/orders/monthly", {
-      params: { month, year, page: p, limit },
+    const limit = 25;
+    const firstResponse = await axios.get("https://www.spotops360.com/orders/monthly", {
+      params: { ...params, page: 1, limit },
       headers: { Authorization: `Bearer ${token}` },
-    })
-  );
-}
+    });
 
+    let yardOrdersRaw = [...firstResponse.data.orders];
+    const totalPages = Math.ceil(firstResponse.data.totalCount / limit);
 
-const responses = await Promise.all(requests);
-responses.forEach(res => {
-  yardOrdersRaw.push(...res.data.orders);
-});
-
-        yardOrders = yardOrdersRaw.map(order => {
-  const filteredAdditionalInfo = order.additionalInfo.filter(
-    info =>
-      (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
-      info.status !== "PO cancelled"
-  );
-  if (filteredAdditionalInfo.length > 0) {
-    return { ...order, additionalInfo: filteredAdditionalInfo };
-  }
-  return null;
-}).filter(order => order !== null);
-
-if (yardOrders.length === 0) {
-  $("#yardInfoTable").html(`<tr><td colspan="10">No 'Card Not Charged' orders found.</td></tr>`);
-  $("#showTotalOrders").text("Total Orders - 0");
-  $("#pagination-controls").empty();
-  $("#loadingMessage").hide();
-  return;
-}
-
-        const maxYards = yardOrders.length > 0
-            ? yardOrders.reduce(
-                  (max, order) => Math.max(max, order.additionalInfo.length),
-                  0
-              )
-            : 0;
-
-        console.log("Yard Orders:", yardOrders, "Max Yards:", maxYards);
-
-        renderTableRows(currentPage, yardOrders, maxYards);
-        createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
-        highlightSavedOrder();
-    } catch (error) {
-        console.error("Error fetching yard info:", error);
-        alert("Failed to fetch data. Please try again.");
-    } finally {
-        $("#loadingMessage").hide(); // Hide loading message
+    const requests = [];
+    for (let p = 2; p <= totalPages; p++) {
+      requests.push(
+        axios.get("https://www.spotops360.com/orders/monthly", {
+          params: { ...params, page: p, limit },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      );
     }
+
+    const responses = await Promise.all(requests);
+    responses.forEach(res => {
+      yardOrdersRaw.push(...res.data.orders);
+    });
+
+    yardOrders = yardOrdersRaw.map(order => {
+      const filteredAdditionalInfo = order.additionalInfo.filter(
+        info =>
+          (!info.paymentStatus || info.paymentStatus === "Card not charged") &&
+          info.status !== "PO cancelled"
+      );
+      if (filteredAdditionalInfo.length > 0) {
+        return { ...order, additionalInfo: filteredAdditionalInfo };
+      }
+      return null;
+    }).filter(order => order !== null);
+
+    if (yardOrders.length === 0) {
+      $("#yardInfoTable").html(`<tr><td colspan="10">No 'Card Not Charged' orders found.</td></tr>`);
+      $("#showTotalOrders").text("Total Orders - 0");
+      $("#pagination-controls").empty();
+      $("#loadingMessage").hide();
+      return;
+    }
+
+    const maxYards = yardOrders.reduce(
+      (max, order) => Math.max(max, order.additionalInfo.length),
+      0
+    );
+
+    renderTableRows(currentPage, yardOrders, maxYards);
+    createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
+    highlightSavedOrder();
+  } catch (error) {
+    console.error("Error fetching yard info:", error);
+    alert("Failed to fetch data. Please try again.");
+  } finally {
+    $("#loadingMessage").hide();
+  }
 }
+
 
 function renderTableRows(page, data = yardOrders) {
     const rowsPerPage = 25; // Define rows per page
@@ -910,36 +906,32 @@ $("#filterButton").click(async function () {
   try {
     let rangeValue = $("#unifiedDatePicker").val().trim();
     const tz = "America/Chicago";
-    let month, year;
+    const params = {};
 
-    // 🔹 Normalize a single day into "YYYY-MM-DD to YYYY-MM-DD"
+    // Normalize single date → range
     if (moment(rangeValue, "YYYY-MM-DD", true).isValid() && !rangeValue.includes("to")) {
       rangeValue = `${rangeValue} to ${rangeValue}`;
       $("#unifiedDatePicker").val(rangeValue);
     }
 
-    // 🔹 Handle inputs
+    // Detect range / month / day
     if (rangeValue.includes(" to ")) {
-      // Range case (also covers single-day range)
-      const [startStr, _] = rangeValue.split(" to ");
-      const momentObj = moment.tz(startStr, "YYYY-MM-DD", tz);
-      month = momentObj.format("MMM");
-      year = momentObj.format("YYYY");
+      const [startStr, endStr] = rangeValue.split(" to ");
+      params.start = moment.tz(startStr, tz).startOf("day").toISOString();
+      params.end = moment.tz(endStr, tz).endOf("day").toISOString();
     } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
-      // Month-year picker
-      const momentObj = moment(rangeValue, "YYYY-MM");
-      month = momentObj.format("MMM");
-      year = momentObj.format("YYYY");
+      const m = moment(rangeValue, "YYYY-MM");
+      params.month = m.format("MM");
+      params.year = m.format("YYYY");
     } else {
       alert("⚠️ Please select a valid date, range, or month.");
       return;
     }
 
     currentPage = 1;
-    await fetchYardInfo(month, year);
+    await fetchYardInfo(params);
     createPaginationControls(Math.ceil(yardOrders.length / rowsPerPage));
     highlightSavedOrder();
-
   } catch (error) {
     console.error("Error filtering Card Not Charged data:", error);
     alert("Something went wrong while filtering data.");
@@ -950,6 +942,7 @@ $("#filterButton").click(async function () {
     $(this).data("filter", "");
   }
 });
+
 
 // Search functionality
 $("#searchInput").on("keyup", function () {
