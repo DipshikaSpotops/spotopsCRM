@@ -1025,7 +1025,17 @@ return response.json();
 updateOrderHistory(data.orderHistory);
 const team = localStorage.getItem("team");
 alert("Details have been updated");
-window.location.reload();
+fetch(`https://www.spotops360.com/orders/${orderNo}`)
+  .then((res) => res.json())
+  .then((data) => {
+    if (data.actualGP !== undefined && data.actualGP !== null) {
+      $("#actualGP").val(parseFloat(data.actualGP).toFixed(2));
+      console.log("ActualGP refreshed:", data.actualGP);
+    } else {
+      console.warn("No actualGP returned from backend");
+    }
+  })
+  .catch((err) => console.error("error refreshing actualGP:", err));
 // if (team === "Team Charlie") {
 // window.location.href = "individualOrders.html";
 // } else {
