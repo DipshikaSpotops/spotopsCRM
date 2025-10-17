@@ -288,7 +288,7 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/disputesAfterCancellation?month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/ordersdisputesAfterCancellationAfterCancellation?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {
@@ -431,17 +431,17 @@ $("#filterButton").click(async function () {
 
     if (isToday) {
       const today = moment().tz(tz).format("YYYY-MM-DD");
-      url = `https://www.spotops360.com/orders/disputes?start=${today}&end=${today}`;
+      url = `https://www.spotops360.com/ordersdisputesAfterCancellation?start=${today}&end=${today}`;
     } else if (rangeValue.includes(" to ")) {
       const [startStr, endStr] = rangeValue.split(" to ");
       const start = moment.tz(startStr, tz).startOf("day").toISOString();
       const end = moment.tz(endStr, tz).endOf("day").toISOString();
-      url = `https://www.spotops360.com/orders/disputes?start=${start}&end=${end}`;
+      url = `https://www.spotops360.com/ordersdisputesAfterCancellation?start=${start}&end=${end}`;
     } else if (moment(rangeValue, "YYYY-MM", true).isValid()) {
       const momentObj = moment(rangeValue, "YYYY-MM");
       const month = momentObj.format("MMM");
       const year = momentObj.format("YYYY");
-      url = `https://www.spotops360.com/orders/disputes?month=${month}&year=${year}`;
+      url = `https://www.spotops360.com/ordersdisputesAfterCancellation?month=${month}&year=${year}`;
     } else {
       alert("⚠️ Please select a valid date range or click 'Today'.");
       return;
