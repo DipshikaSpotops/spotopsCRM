@@ -93,9 +93,7 @@ var filteredOrders;
 function renderTableRows(page, orders = allOrders) {
     console.log("orders ofr d",orders);
 // Filter orders that don't match "Placed", "Customer approved", or "Order Fulfilled"
- filteredOrders = orders.filter(item => {
-return (item.orderStatus === "Dispute after Cancellation");
-});
+ filteredOrders = orders;
 
 // Pagination logic after filtering
 const start = (page - 1) * rowsPerPage;
@@ -310,7 +308,7 @@ if (team in teamAgentsMap) {
 }
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total Disputes This Month- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Disputes after Cancllation- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -467,7 +465,7 @@ $("#filterButton").click(async function () {
 
     const filteredDisputes = allOrders.filter(item => item.orderStatus === "Dispute");
 
-    document.getElementById("showTotalOrders").innerHTML = `Total Disputes - ${filteredDisputes.length}`;
+    document.getElementById("showTotalOrders").innerHTML = `Total Disputes after Cancllation - ${filteredDisputes.length}`;
     renderTableRows(1, filteredDisputes);
     createPaginationControls(Math.ceil(filteredDisputes.length / rowsPerPage));
   } catch (error) {
