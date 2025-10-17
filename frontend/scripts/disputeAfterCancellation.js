@@ -182,7 +182,11 @@ Yard refund: $${refundedAmount}
 .join("<br>")
 : "No Yard Info"
 }</td>
-<td>${item.orderStatus}</td>
+<td>${
+  item.orderStatus === "Dispute 2"
+    ? "Dispute after Cancellation"
+    : item.orderStatus
+}</td>
 <td style="justify-content: center;">${actions}</td>
 </tr>
 `);
