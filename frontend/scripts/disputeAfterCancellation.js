@@ -290,7 +290,7 @@ var monthNum = monthMap[month];
 $("#monthYearPicker").val(`${year}-${monthNum}`);
 //orders for the current month
 try {
-const ordersResponse = await axios.get(`https://www.spotops360.com/orders/disputes?month=${month}&year=${year}`, {
+const ordersResponse = await axios.get(`https://www.spotops360.com/orders/disputesAfterCancellation?month=${month}&year=${year}`, {
 headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
 if (ordersResponse.status !== 200) {

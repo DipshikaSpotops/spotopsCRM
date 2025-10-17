@@ -1386,7 +1386,7 @@ app.get("/orders/disputes", async (req, res) => {
 });
 // disputes after cancellation
 // for disputes
-app.get("/orders/disputes", async (req, res) => {
+app.get("/orders/disputesAfterCancellation", async (req, res) => {
   try {
     const { start, end, month, year } = req.query;
     console.log("Dispute orders query:", { start, end, month, year });
