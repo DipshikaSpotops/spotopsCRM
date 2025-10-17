@@ -174,7 +174,7 @@ return `
 Part price: $${partPrice} | ${shippingDetails} <br>
 Others: $${others} |Esc spending: $${escSpending}<br>
 Status: ${info.status}<br> ${info.paymentStatus} ${
-  info.paymentStatus === "Card charged" ? | `Yard Spend: $${yardSpendTotal.toFixed(2)}` : ""
+  info.paymentStatus === "Card charged" ? `Yard Spend: $${yardSpendTotal.toFixed(2)}` : ""
 }<br>
 Yard refund: $${refundedAmount.toFixed(2)}
 `;
