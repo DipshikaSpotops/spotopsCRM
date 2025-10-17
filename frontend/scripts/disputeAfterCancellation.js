@@ -101,6 +101,7 @@ return (item.orderStatus === "Dispute after Cancellation");
 const start = (page - 1) * rowsPerPage;
 const end = start + rowsPerPage;
 const ordersForPage = filteredOrders.slice(start, end);
+console.log("ordersForPage",ordersForPage);
 $('#infoTable').empty();
 ordersForPage.forEach((item) => {
 const escalationStatus = item.additionalInfo &&
