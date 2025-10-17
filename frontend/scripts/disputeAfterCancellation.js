@@ -308,7 +308,7 @@ if (team in teamAgentsMap) {
 }
 var totalOrders = allOrders.length;
 console.log("totalOrders",totalOrders)
-document.getElementById("showTotalOrders").innerHTML = `Total disputesAfterCancellation after Cancllation- ${totalOrders}`;
+document.getElementById("showTotalOrders").innerHTML = `Total Disputes after Cancllation- ${totalOrders}`;
 sortedData = sortOrdersByOrderNoDesc(allOrders);
 renderTableRows(currentPage);
 createPaginationControls(Math.ceil(allOrders.length / rowsPerPage));
@@ -465,7 +465,7 @@ $("#filterButton").click(async function () {
 
     const filtereddisputesAfterCancellation = allOrders.filter(item => item.orderStatus === "Dispute");
 
-    document.getElementById("showTotalOrders").innerHTML = `Total disputesAfterCancellation after Cancllation - ${filtereddisputesAfterCancellation.length}`;
+    document.getElementById("showTotalOrders").innerHTML = `Total Disputes after Cancllation - ${filtereddisputesAfterCancellation.length}`;
     renderTableRows(1, filtereddisputesAfterCancellation);
     createPaginationControls(Math.ceil(filtereddisputesAfterCancellation.length / rowsPerPage));
   } catch (error) {
