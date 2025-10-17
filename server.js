@@ -1384,6 +1384,29 @@ app.get("/orders/disputes", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+// disputes after cancellation
+// for disputes
+app.get("/orders/disputes", async (req, res) => {
+  try {
+    const { start, end, month, year } = req.query;
+    console.log("Dispute orders query:", { start, end, month, year });
+
+    const { startDate, endDate } = getDateRange({ start, end, month, year });
+
+    const orders = await Order.find({
+      orderDate: {
+        $gte: startDate,
+        $lt: endDate
+      },
+      orderStatus: "Dispute after Cancellation",
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching disputed orders:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 // for refunded
 app.get("/orders/refunded", async (req, res) => {
   try {
