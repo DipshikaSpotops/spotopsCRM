@@ -463,7 +463,7 @@ $("#filterButton").click(async function () {
       allOrders = allOrders.filter(order => teamAgentsMap[team].includes(order.salesAgent));
     }
 
-    const filtereddisputesAfterCancellation = allOrders.filter(item => item.orderStatus === "Dispute");
+    const filtereddisputesAfterCancellation = allOrders;
 
     document.getElementById("showTotalOrders").innerHTML = `Total Disputes after Cancllation - ${filtereddisputesAfterCancellation.length}`;
     renderTableRows(1, filtereddisputesAfterCancellation);
