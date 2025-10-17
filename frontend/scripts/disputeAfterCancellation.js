@@ -173,10 +173,10 @@ return `
 <b>Yard ${index + 1}</b>: ${yardName}<br> 
 Part price: $${partPrice} | ${shippingDetails} <br>
 Others: $${others} |Esc spending: $${escSpending}<br>
-Status: ${info.status} ${info.paymentStatus} ${
+Status: ${info.status}<br> ${info.paymentStatus} ${
   info.paymentStatus === "Card charged" ? `Yard Spend: $${yardSpendTotal}` : ""
 }<br>
-Yard refund: $${refundedAmount}
+Yard refund: $${refundedAmount.toFixed(2)}
 `;
 })
 .join("<br>")
