@@ -1393,13 +1393,11 @@ app.get("/orders/disputesAfterCancellation", async (req, res) => {
     const { startDate, endDate } = getDateRange({ start, end, month, year });
 
     const orders = await Order.find({
-      orderDate: {
-        $gte: startDate,
-        $lt: endDate
-      },
-      orderStatus: "Dispute 2",
+      orderDate: { $gte: startDate, $lt: endDate },
+      orderStatus: "Dispute 2",    
     });
 
+    console.log("Found disputes after cancellation:", orders.length);
     res.json(orders);
   } catch (error) {
     console.error("Error fetching disputed orders:", error);
