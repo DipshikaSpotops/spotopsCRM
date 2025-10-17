@@ -1397,7 +1397,7 @@ app.get("/orders/disputesAfterCancellation", async (req, res) => {
         $gte: startDate,
         $lt: endDate
       },
-      orderStatus: "Dispute after Cancellation",
+      orderStatus: "Dispute 2",
     });
 
     res.json(orders);
