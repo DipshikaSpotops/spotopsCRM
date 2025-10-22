@@ -434,13 +434,13 @@ setTimeout(function () {
       const orderStatusLocked =
         isDispute || isCancelledOrRefunded; // 🔒 prevent yard-status-based updates in these
 
-      // 🟩 CASE 1 — No yards at all
+      // CASE 1 — No yards at all
       if (!hasYards) {
         let actualGP;
         if (isDispute) {
-          actualGP = 0 - tax; // dispute = pure loss
+          actualGP = 0 - tax;
         } else {
-          actualGP = sp - custRefundedAmount - tax; // normal cancel/refund
+          actualGP = 0
         }
 
         console.log("No yards → actualGP:", actualGP);
@@ -448,8 +448,8 @@ setTimeout(function () {
         if (Number(currentActualGP) !== Number(actualGP)) {
           axios
             .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-            .then(() => console.log("✅ ActualGP updated (no-yard case)"))
-            .catch(err => console.error("❌ Error updating actualGP:", err));
+            .then(() => console.log("ActualGP updated (no-yard case)"))
+            .catch(err => console.error("Error updating actualGP:", err));
         } else {
           console.log("No-yard ActualGP unchanged.");
         }
