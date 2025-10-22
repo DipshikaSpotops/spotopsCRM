@@ -559,13 +559,13 @@ setTimeout(function () {
           if (Number(currentActualGP) !== Number(actualGP)) {
             axios
               .put(`https://www.spotops360.com/orders/${orderNo}/updateActualGP`, { actualGP })
-              .then(() => console.log("✅ ActualGP updated for card-charged yard"))
-              .catch(err => console.error("❌ Error updating actualGP:", err));
+              .then(() => console.log("ActualGP updated for card-charged yard"))
+              .catch(err => console.error("Error updating actualGP:", err));
           } else {
             console.log("ActualGP unchanged for card-charged yard");
           }
-        } else if (pStatus === "Card not charged") {
-          // 🟨 Card not charged cases
+        } else if (!pStatus || pStatus === "Card not charged") {
+          // Card not charged cases
           let actualGP = 0;
 
           if (isCancelledOrRefunded) {
