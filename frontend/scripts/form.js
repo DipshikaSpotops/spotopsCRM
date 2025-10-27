@@ -456,7 +456,7 @@ setTimeout(function () {
         return;
       }
 
-      // 🟦 CASE 2 — Iterate through yards
+      // CASE 2 — Iterate through yards
       data.additionalInfo.forEach((yard, index) => {
         const yardIndex = index + 1;
 
@@ -469,7 +469,7 @@ setTimeout(function () {
         const yardStatus = yard.status || "";
         console.log(`Yard ${yardIndex} → status: ${yardStatus}, payment: ${pStatus}`);
 
-        // 🎨 Color coding logic
+        // Color coding logic
         if (pStatus === "Card charged" && rStatus === "Refund collected") {
           $(`.yard-btn[data-yard-index="${yardIndex}"]`).css({
             backgroundColor: "#fe8025",
@@ -485,36 +485,36 @@ setTimeout(function () {
           $(`.yard-btn[data-yard-index="${yardIndex}"]`).css("background-color", "#353d3f");
         }
 
-        // 🧭 Yard status → Order status (only if orderStatus not locked)
+        //  Yard status → Order status (only if orderStatus not locked)
         if (!orderStatusLocked) {
+          const lastIndex = data.additionalInfo.length - 1;
+          const lastYard = data.additionalInfo[lastIndex] || {};
+          const lastYardStatus = lastYard.status || lastYard.yardStatus || "";
           let newOrderStatus = null;
 
-          if (["Yard Located", "Yard PO Sent", "Label created"].includes(yardStatus)) {
+          if (["Yard Located", "Yard PO Sent", "Label created"].includes(lastYardStatus)) {
             newOrderStatus = "Yard Processing";
-          } else if (yardStatus === "Part shipped") {
+          } else if (lastYardStatus === "Part shipped") {
             newOrderStatus = "In Transit";
-          } else if (yardStatus === "Part delivered") {
+          } else if (lastYardStatus === "Part delivered") {
             newOrderStatus = "Order Fulfilled";
-          } else if (yardStatus === "Escalation" || yardStatus === "Collect refund") {
+          } else if (lastYardStatus === "Escalation" || lastYardStatus === "Collect refund") {
             newOrderStatus = "Escalation";
           }
 
           if (newOrderStatus && newOrderStatus !== data.orderStatus) {
-            console.log(
-              `🟢 Updating orderStatus → ${newOrderStatus} (from yard ${yardIndex})`
-            );
+            console.log(`Updating orderStatus → ${newOrderStatus} (from LAST yard @ index ${lastIndex + 1})`);
             axios
-              .put(
-                `https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=System`,
-                { orderStatus: newOrderStatus }
-              )
-              .catch(err => console.error("❌ Error updating order status:", err));
+              .put(`https://www.spotops360.com/orders/${orderNo}/custRefund?firstName=System`, { orderStatus: newOrderStatus })
+              .catch(err => console.error("Error updating order status:", err));
+          } else {
+            console.log("Order status unchanged based on last yard.");
           }
         } else {
-          console.log("⛔ Skipping orderStatus update — locked by Cancelled/Refunded/Dispute");
+          console.log("Skipping orderStatus update — locked by Cancelled/Refunded/Dispute");
         }
 
-        // 💰 GP logic per yard
+        // GP logic per yard
         if (pStatus === "Card charged") {
           var yardPP = parseFloat(yard.partPrice) || 0;
           var yardOSorYS = yard.shippingDetails || "";
@@ -589,7 +589,7 @@ setTimeout(function () {
         }
       });
 
-      // 🟧 CASE 3 — All yards not charged
+      // CASE 3 — All yards not charged
       const allYardsNotCharged =
         data.additionalInfo &&
         data.additionalInfo.every(
