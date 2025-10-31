@@ -938,8 +938,18 @@ window.location.href = "login_signup.html";
       <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
         <input type="text" class="form-control" id="model" placeholder="Model" required />
       </div>
-      <div class="form-group col-12 col-sm-6 col-md-4 col-lg-2">
-        <input type="text" class="form-control" id="warranty" placeholder="Warranty (in days)" required />
+      <!-- Warranty number -->
+      <div class="form-group col-md-1">
+        <input type="number" min="0" step="1" class="form-control" id="warranty" placeholder="Warranty" required />
+      </div>
+
+      <!-- Warranty unit -->
+      <div class="form-group col-md-1">
+        <select class="form-control" id="warrantyField" required>
+          <option value="days" selected>Day(s)</option>
+          <option value="months">Month(s)</option>
+          <option value="years">Year(s)</option>
+        </select>
       </div>
     </div>
   
@@ -1236,6 +1246,31 @@ alert("Invalid ZIP code. Please check and try again.");
 });
 }
 });
+// Normalize any DB value ('day'/'days' etc.) to our select values ('days'|'months'|'years')
+function dbUnitToSelectValue(dbUnit) {
+  const x = (dbUnit || "").toLowerCase();
+  if (x.startsWith("day"))   return "days";
+  if (x.startsWith("month")) return "months";
+  if (x.startsWith("year"))  return "years";
+  return "days"; // default for legacy/missing
+}
+
+// From UI select value + quantity -> DB value ('day|days|month|months|year|years')
+function selectValueToDbUnit(qty, selectVal) {
+  const base = selectVal.replace(/s$/, ""); // 'day' | 'month' | 'year'
+  return (qty === 1) ? base : (base + "s");
+}
+
+// Cosmetic: switch visible option text to singular when qty===1
+function updateWarrantyOptionLabels() {
+  const qty = parseInt($("#warranty").val(), 10) || 0;
+  $("#warrantyField option[value='days']").text(qty === 1 ? "Day" : "Day(s)");
+  $("#warrantyField option[value='months']").text(qty === 1 ? "Month" : "Month(s)");
+  $("#warrantyField option[value='years']").text(qty === 1 ? "Year" : "Year(s)");
+}
+$("#warranty").on("input blur", updateWarrantyOptionLabels);
+updateWarrantyOptionLabels();
+
 // Get the current time and the login timestamp
 const currentTime = Date.now();
 const loginTimestamp = localStorage.getItem("loginTimestamp");
@@ -1397,6 +1432,10 @@ $("#year").val(data.year);
 $("#pReq").val(data.pReq);
 $("#desc").val(data.desc);
 $("#warranty").val(data.warranty);
+const unitForSelect = dbUnitToSelectValue(data.warrantyField || "days");
+$("#warrantyField").val(unitForSelect);
+// Make labels singular if qty === 1
+updateWarrantyOptionLabels();
 $("#soldP").val(data.soldP);
 $("#costP").val(data.costP);
 $("#shippingFee").val(data.shippingFee);
@@ -1461,6 +1500,8 @@ const newEntry = urlParams.get("newEntry");
         alert("Order No is required. Please enter an order number.");
         return;
     }
+    const qtyWarranty = parseInt($("#warranty").val(), 10) || 0;
+const uiUnit = $("#warrantyField").val(); // 'days' | 'months' | 'years'
             // Create a new order
             const newOrderData = {
                 orderNo: orderNoInput,
@@ -1489,7 +1530,8 @@ const newEntry = urlParams.get("newEntry");
                 year: $("#year").val(),
                 pReq: $("#pReq").val(),
                 desc: $("#desc").val(),
-                warranty: $("#warranty").val(),
+                warranty: qtyWarranty,                                   // Number
+                warrantyField: selectValueToDbUnit(qtyWarranty, uiUnit), // 'day|days|month|months|year|years'
                 soldP: $("#soldP").val(),
                 costP: $("#costP").val(),
                 shippingFee: $("#shippingFee").val(),
@@ -1524,6 +1566,8 @@ const newEntry = urlParams.get("newEntry");
                 });
         } else {
             // Update an existing order
+            const qtyWarrantyU = parseInt($("#warranty").val(), 10) || 0;
+const uiUnitU = $("#warrantyField").val();
             const updatedOrderData = {
                 orderNo: orderNoInput,
                 orderDate: $("#orderDate").val(),
@@ -1551,7 +1595,8 @@ const newEntry = urlParams.get("newEntry");
                 year: $("#year").val(),
                 pReq: $("#pReq").val(),
                 desc: $("#desc").val(),
-                warranty: $("#warranty").val(),
+                warranty: qtyWarrantyU,                                   // Number
+                warrantyField: selectValueToDbUnit(qtyWarrantyU, uiUnitU),
                 soldP: $("#soldP").val(),
                 costP: $("#costP").val(),
                 shippingFee: $("#shippingFee").val(),
