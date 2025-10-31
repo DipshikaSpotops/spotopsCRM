@@ -485,7 +485,7 @@ ${ds ? `<b>DS Call:</b> ${ds}<br>` : ''}
 <td>Year: ${item.year} | Make: ${item.make} | Model: ${item.model}</br>
 Part Description: ${item.desc}</br>
 Part No: ${item.partNo} | VIN: ${item.vin}</br>
-Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
+Warranty: ${item.warranty} ${item.warrantyField || "days"} | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
 </td>
 <td>${item.orderStatus}</td>
 </tr>`

@@ -159,7 +159,7 @@ function renderTableRows(page, orders = allOrders) {
         <td>Part Req: ${item.pReq}</br>Year/Make/Model: ${item.year} ${item.make} ${item.model}</br>
 Part Description: ${item.desc}</br>
 Part No: ${item.partNo} | VIN: ${item.vin}</br>
-Warranty: ${item.warranty} days | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
+Warranty: ${item.warranty} ${item.warrantyField || "days"} | ${item.programmingRequired === "true" ? `Programming required: ${item.programmingRequired}</br>` : ""}
 </td>
         <td>${yardInfo}</td>
         <td>${item.orderStatus}</td>
