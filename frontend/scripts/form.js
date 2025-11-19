@@ -431,6 +431,8 @@ setTimeout(function () {
       const hasYards = Array.isArray(data.additionalInfo) && data.additionalInfo.length > 0;
       const isDispute = ["Dispute", "Dispute 2"].includes(data.orderStatus);
       const isCancelledOrRefunded = ["Order Cancelled", "Refunded"].includes(data.orderStatus);
+      const isRefunded = data.orderStatus === "Refunded";
+      const isCancelled = data.orderStatus === "Order Cancelled";
       const orderStatusLocked =
         isDispute || isCancelledOrRefunded; // 🔒 prevent yard-status-based updates in these
 
@@ -544,7 +546,7 @@ setTimeout(function () {
           totalSpend.push(yardSpent);
           totalSum += yardSpent;
 
-          var subtractRefund = spMinusTax - custRefundedAmount;
+          var subtractRefund = isRefunded ? spMinusTax - custRefundedAmount : spMinusTax;
           let actualGP = subtractRefund - totalSum;
 
           if (isDispute) {
@@ -568,9 +570,12 @@ setTimeout(function () {
           // Card not charged cases
           let actualGP = 0;
 
-          if (isCancelledOrRefunded) {
+          if (isRefunded) {
             actualGP = sp - custRefundedAmount - tax;
-            console.log("Cancelled/Refunded (Card not charged) → actualGP:", actualGP);
+            console.log("Refunded (Card not charged) → actualGP:", actualGP);
+          } else if (isCancelled) {
+            actualGP = sp - tax;
+            console.log("Cancelled (Card not charged) → actualGP:", actualGP);
           } else if (isDispute) {
             actualGP = 0 - (tax + totalSum);
             console.log("Dispute (Card not charged) → actualGP:", actualGP);
@@ -600,8 +605,12 @@ setTimeout(function () {
         let actualGP = 0;
         if (isDispute) {
           actualGP = 0 - tax;
-        } else {
+        } else if (isRefunded) {
           actualGP = sp - custRefundedAmount - tax;
+        } else if (isCancelled) {
+          actualGP = sp - tax;
+        } else {
+          actualGP = sp - tax;
         }
 
         console.log("All yards not charged → actualGP:", actualGP);
@@ -1822,7 +1831,7 @@ $("#saveEsc").on("click", async function () {
         custReturnDelivery: $("#custReturnDelivery").val(),
         reimbursementAmount: $("#reimAmount").val(),
         isReimbursedChecked: $("#reimbursed").prop("checked")
-        // ❌ don’t include reimbursedDate here always
+        // don’t include reimbursedDate here always
     };
 
     try {
@@ -1902,7 +1911,7 @@ $("#saveEsc").on("click", async function () {
             }
         }
 
-        // ✅ Handle reimbursement and reimbursedDate only when escProcess = "Reimbursement"
+        // Handle reimbursement and reimbursedDate only when escProcess = "Reimbursement"
         if (
             updatedFields.escalationProcess === "Reimbursement" &&
             updatedFields.reimbursementAmount &&
